@@ -275,92 +275,159 @@ function pline(x0,y0,x1,y1,t,c){
 function limb(a,b,t,c,ol){if(ol)pline(a.x,a.y,b.x,b.y,t+2,ol);pline(a.x,a.y,b.x,b.y,t,c);}
 function diamond(x,y,r,c){ctx.fillStyle=c;x=Math.round(x);y=Math.round(y);for(let dy=-r;dy<=r;dy++){const w=r-Math.abs(dy);ctx.fillRect(x-w,y+dy,w*2+1,1);}}
 
-/* ---------------- audio (synthesized, no files) ---------------- */
-let AC=null,master=null,sfxBus=null,musicBus=null,NB=null,muted=false;
+/* ---------------- audio (synthesized, no files) ----------------
+   Everything goes through one chain: effects and music buses -> a small room reverb send -> a soft top-end
+   roll-off -> a compressor. Each sound is built from layers (click, body, tail) with a little random pitch,
+   so repeated hits don't sound identical. */
+let AC=null,master=null,sfxBus=null,musicBus=null,echoIn=null,NB=null,CRUNCH=null,muted=false;
+function makeIR(ctx,secs,decay){                 // decaying stereo noise, darkened with a one-pole filter
+  const n=Math.floor(ctx.sampleRate*secs),b=ctx.createBuffer(2,n,ctx.sampleRate);
+  for(let c=0;c<2;c++){const d=b.getChannelData(c);let lp=0;for(let i=0;i<n;i++){lp+=((Math.random()*2-1)-lp)*0.35;d[i]=lp*Math.pow(1-i/n,decay);}}
+  return b;
+}
+function buildAudio(ctx){
+  const comp=ctx.createDynamicsCompressor();comp.threshold.value=-16;comp.knee.value=14;comp.ratio.value=4;comp.attack.value=0.002;comp.release.value=0.2;
+  const tone=ctx.createBiquadFilter();tone.type='highshelf';tone.frequency.value=6500;tone.gain.value=-5;   // takes the fizz off the top
+  master=ctx.createGain();master.connect(tone);tone.connect(comp);comp.connect(ctx.destination);
+  const verb=ctx.createConvolver();verb.buffer=makeIR(ctx,1.0,3.5);const vOut=ctx.createGain();vOut.gain.value=0.5;verb.connect(vOut);vOut.connect(master);
+  sfxBus=ctx.createGain();sfxBus.connect(master);
+  musicBus=ctx.createGain();musicBus.connect(master);
+  const sv=ctx.createGain();sv.gain.value=0.05;sfxBus.connect(sv);sv.connect(verb);
+  const mv=ctx.createGain();mv.gain.value=0.12;musicBus.connect(mv);mv.connect(verb);
+  // dotted-eighth echo for the music's arpeggio and lead
+  echoIn=ctx.createGain();const dl=ctx.createDelay(1);dl.delayTime.value=0.33;const fb=ctx.createGain();fb.gain.value=0.32;
+  const dlp=ctx.createBiquadFilter();dlp.type='lowpass';dlp.frequency.value=2400;const wet=ctx.createGain();wet.gain.value=0.38;
+  echoIn.connect(dl);dl.connect(dlp);dlp.connect(fb);fb.connect(dl);dlp.connect(wet);wet.connect(musicBus);
+  NB=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  CRUNCH=new Float32Array(1024);for(let i=0;i<1024;i++){const x=i/511.5-1;CRUNCH[i]=Math.tanh(x*3.2);}
+}
 function audioInit(){
-  if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();master=AC.createGain();master.connect(AC.destination);
-    sfxBus=AC.createGain();sfxBus.connect(master);musicBus=AC.createGain();musicBus.connect(master);applyVolumes();
-    NB=AC.createBuffer(1,AC.sampleRate,AC.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;}catch(e){AC=null;}}
+  if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});buildAudio(AC);applyVolumes();}catch(e){AC=null;}}
   if(AC&&AC.state==='suspended')AC.resume().catch(()=>{});
 }
 function applyVolumes(){
-  if(!AC)return;
-  master.gain.value=muted?0:1;
-  sfxBus.gain.value=0.55*S.sfx/100;
-  musicBus.gain.value=0.32*(S.music/100)*(mode==='pause'||mode==='over'?0.4:1);
+  if(!AC||!master)return;
+  master.gain.value=muted?0:0.9;
+  sfxBus.gain.value=0.75*S.sfx/100;
+  musicBus.gain.value=0.5*(S.music/100)*(mode==='pause'||mode==='over'?0.4:1);
 }
-function tone(type,f0,f1,dur,vol,when,bus){const t=AC.currentTime+(when||0);const o=AC.createOscillator(),g=AC.createGain();o.type=type;
-  o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(Math.max(30,f1),t+dur);g.gain.setValueAtTime(vol,t);
-  g.gain.exponentialRampToValueAtTime(0.0008,t+dur);o.connect(g);g.connect(bus||sfxBus);o.start(t);o.stop(t+dur+0.03);}
-function noise(dur,vol,ft,f0,f1,q,when,bus){const t=AC.currentTime+(when||0);const s=AC.createBufferSource();s.buffer=NB;const fl=AC.createBiquadFilter();
-  fl.type=ft;fl.frequency.setValueAtTime(f0,t);fl.frequency.exponentialRampToValueAtTime(Math.max(40,f1),t+dur);fl.Q.value=q||1;
-  const g=AC.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.0008,t+dur);s.connect(fl);fl.connect(g);g.connect(bus||sfxBus);
-  s.start(t,Math.random()*0.5);s.stop(t+dur+0.03);}
 
-/* ---------------- music: a tiny step sequencer, all synthesized ----------------
-   Each song is four bars of 16 steps over a chord progression (MIDI notes). */
+/* building blocks; t is an absolute AudioContext time */
+let SFX_T0=0;                                     // offset used when rendering several sounds into one buffer
+const at=w=>AC.currentTime+SFX_T0+(w||0);
+const vary=(v=0.06)=>1+(Math.random()*2-1)*v;
+function amp(dest,t,a,peak,d,hold){const g=AC.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(peak,t+a);
+  if(hold)g.gain.setValueAtTime(peak,t+a+hold);g.gain.exponentialRampToValueAtTime(0.0001,t+a+(hold||0)+d);g.connect(dest);return g;}
+function osc(type,f0,f1,t,dur,dest,glide){const o=AC.createOscillator();o.type=type;o.frequency.setValueAtTime(f0,t);
+  if(f1!==f0)o.frequency.exponentialRampToValueAtTime(Math.max(20,f1),t+(glide||dur));o.connect(dest);o.start(t);o.stop(t+dur+0.05);return o;}
+function filt(type,f0,f1,q,t,dur,dest){const f=AC.createBiquadFilter();f.type=type;f.frequency.setValueAtTime(f0,t);
+  if(f1&&f1!==f0)f.frequency.exponentialRampToValueAtTime(Math.max(30,f1),t+dur);f.Q.value=q||0.7;f.connect(dest);return f;}
+function noiseSrc(t,dur,dest,rate){const s=AC.createBufferSource();s.buffer=NB;s.playbackRate.value=rate||1;s.connect(dest);s.start(t,Math.random()*0.8);s.stop(t+dur+0.05);}
+// a pitched body that drops (kicks, thumps, punches)
+function thump(t,f0,f1,dur,vol,bus){osc('sine',f0,f1,t,dur,amp(bus||sfxBus,t,0.002,vol,dur),dur*0.6);}
+// a filtered noise layer (whooshes, slices, dust)
+function hiss(t,type,f0,f1,q,a,dur,vol,bus){noiseSrc(t,a+dur,filt(type,f0,f1,q,t,a+dur,amp(bus||sfxBus,t,a,vol,dur)));}
+// the very first milliseconds of a hit: a short bright tick
+function click(t,vol,freq){noiseSrc(t,0.02,filt('highpass',freq||3000,freq||3000,0.7,t,0.02,amp(sfxBus,t,0.0005,vol,0.014)));}
+// metal: inharmonic partials with their own decays
+function metal(t,freqs,dur,vol,bus){freqs.forEach((f,i)=>osc(i%2?'sine':'triangle',f,f*0.996,t,dur,amp(bus||sfxBus,t,0.001,vol/(1+i*0.6),dur*(1-i*0.15))));}
+// a gritty mid layer for chops, crates and KOs
+function crunch(t,dur,vol,freq){const ws=AC.createWaveShaper();ws.curve=CRUNCH;ws.connect(filt('lowpass',3500,900,0.7,t,dur,amp(sfxBus,t,0.003,vol,dur)));
+  noiseSrc(t,dur,filt('bandpass',freq||900,(freq||900)*0.6,1.1,t,dur,ws));}
+// a soft musical blip for menus and pickups
+function blip(t,f,dur,vol,type){const lp=filt('lowpass',f*3,f*1.5,0.7,t,dur,amp(sfxBus,t,0.004,vol,dur));osc(type||'triangle',f,f,t,dur,lp);}
+
+let offline=0;                                     // >0 while renderAudio() owns the context; 2 while its callback is scheduling
+function sfx(k,big){
+  if(!AC||muted||(offline?offline!==2:AC.state!=='running'))return;
+  const t=at(0.005),p=vary(),B=big?1.25:1;
+  try{switch(k){
+    // swings: a band of noise sweeping up then fading, lower and longer for heavy moves
+    case 'swing':hiss(t,'bandpass',700*p,2800*p,1.3,0.025,0.09,0.45);hiss(t,'highpass',5000,7000,0.7,0.01,0.05,0.06);break;
+    case 'swingH':hiss(t,'bandpass',260*p,1300*p,1.1,0.06,0.17,0.5);thump(t+0.02,90,60,0.12,0.12);break;
+    // hits, one per weapon: click + body + character
+    case 'blunt':click(t,0.35*B,2200);thump(t,170*p,52,0.12*B,0.9*B);hiss(t,'lowpass',2400,350,0.8,0.002,0.07,0.32*B);
+      if(big)thump(t,85,34,0.22,0.6);break;
+    case 'blade':click(t,0.3*B,4500);hiss(t,'highpass',6000*p,2400,0.8,0.002,0.08*B,0.4*B);hiss(t,'bandpass',2400*p,1300,2,0.002,0.06,0.2);
+      metal(t,[1720*p,2580*p,3870*p],0.24*B,0.13*B);thump(t,140,62,0.07,0.3*B);if(big)thump(t,90,38,0.18,0.45);break;
+    case 'pierce':click(t,0.38*B,3600);hiss(t,'bandpass',3800*p,1300,2.2,0.001,0.05,0.34*B);osc('sine',2300*p,1400,t,0.05,amp(sfxBus,t,0.001,0.08,0.05));
+      thump(t,155*p,68,0.075,0.55*B);if(big){hiss(t,'lowpass',1500,200,0.7,0.002,0.12,0.25);thump(t,95,40,0.18,0.5);}break;
+    case 'heavy':click(t,0.45*B,1400);thump(t,115*p,36,0.24*B,1.0*B);crunch(t,0.15*B,0.42*B,850*p);hiss(t,'lowpass',1300,140,0.7,0.002,0.22*B,0.3*B);
+      if(big)thump(t+0.01,58,28,0.38,0.7);break;
+    case 'hurt':thump(t,150*p,60,0.12,0.75);hiss(t,'lowpass',1000,250,0.7,0.002,0.08,0.3);
+      {const g=amp(sfxBus,t+0.01,0.01,0.11,0.13);const f2=filt('bandpass',1150,1050,4,t,0.14,g),f1=filt('bandpass',680,560,3,t,0.14,g);   // a short "ugh"
+       const o=AC.createOscillator();o.type='sawtooth';o.frequency.setValueAtTime(205*p,t);o.frequency.exponentialRampToValueAtTime(125,t+0.14);o.connect(f1);o.connect(f2);o.start(t);o.stop(t+0.2);}
+      break;
+    case 'armor':click(t,0.3,3000);metal(t,[1260*p,1890*p,2970*p,4150*p],0.3,0.1);thump(t,320,210,0.05,0.25);break;   // shield block / armor clang
+    case 'jump':hiss(t,'bandpass',450,1500,1.2,0.02,0.08,0.12);osc('sine',260,430,t,0.07,amp(sfxBus,t,0.005,0.05,0.06));break;
+    case 'land':thump(t,105*p,58,0.07,0.32);hiss(t,'lowpass',800,250,0.7,0.002,0.06,0.16);break;
+    case 'dash':hiss(t,'bandpass',800*p,2700*p,1.3,0.015,0.15,0.36);hiss(t,'highpass',4500,6500,0.7,0.01,0.08,0.05);break;
+    case 'break':crunch(t,0.13,0.4,1100);[430,310,520].forEach((f,i)=>osc('triangle',f*p,f*0.8,t+i*0.028,0.06,amp(sfxBus,t+i*0.028,0.001,0.1,0.05)));thump(t,150,80,0.08,0.35);break;
+    case 'shatter':metal(t,[2380,3570,5120,6300],0.45,0.07);hiss(t,'highpass',4500,7000,0.7,0.002,0.25,0.16);thump(t,140,70,0.08,0.3);crunch(t,0.1,0.25,1800);break;
+    case 'pickup':[784,988,1319].forEach((f,i)=>blip(t+i*0.06,f,0.14,0.13));blip(t+0.18,1976,0.2,0.05,'sine');break;
+    case 'heal':osc('triangle',523,784,t,0.3,filt('lowpass',2500,2500,0.7,t,0.3,amp(sfxBus,t,0.02,0.14,0.28)),0.18);blip(t+0.12,1047,0.3,0.06,'sine');break;
+    case 'warn':osc('sawtooth',98,92,t,0.14,filt('lowpass',420,300,1.5,t,0.14,amp(sfxBus,t,0.005,0.16,0.13)));break;
+    case 'ko':thump(t,125*p,36,0.36,1.0);crunch(t,0.2,0.38,700);hiss(t,'lowpass',1600,90,0.7,0.002,0.4,0.3);break;
+    case 'boom':thump(t,82,27,0.6,1.0);hiss(t,'lowpass',900,60,0.7,0.004,0.55,0.48);crunch(t,0.25,0.3,500);break;
+    case 'clear':[523,659,784,1047].forEach((f,i)=>{blip(t+i*0.12,f,0.16,0.14);blip(t+i*0.12,f*2,0.12,0.03,'sine');});blip(t+0.5,1047,0.6,0.15);blip(t+0.5,1319,0.6,0.08);blip(t+0.5,1568,0.6,0.06);break;
+    case 'go':blip(t,659,0.09,0.12);blip(t+0.1,988,0.14,0.13);break;
+    case 'charge1':osc('triangle',330,990,t,0.18,filt('lowpass',3000,3000,0.7,t,0.2,amp(sfxBus,t,0.01,0.1,0.17)));hiss(t,'bandpass',700,3200,1.5,0.05,0.1,0.07);break;
+    case 'charge2':[990,1320,1760].forEach((f,i)=>blip(t+i*0.05,f,0.3,0.08));hiss(t,'highpass',6000,8000,0.7,0.01,0.15,0.05);break;
+    case 'release':hiss(t,'bandpass',500,3200,1.2,0.02,0.18,0.36);thump(t,130,55,0.12,0.5);break;
+    case 'ult':{const g=amp(sfxBus,t,0.25,0.06,0.5,0.15);const lp=filt('lowpass',400,4200,1.2,t,0.45,g);[392,523,659,784].forEach(f=>{osc('sawtooth',f,f,t,0.95,lp);osc('sawtooth',f*1.006,f*1.006,t,0.95,lp);});
+      thump(t,70,34,0.7,0.8);hiss(t,'bandpass',300,5000,1.3,0.3,0.5,0.14);break;}
+    case 'warp':osc('sine',1900*p,380,t,0.07,amp(sfxBus,t,0.001,0.08,0.07));hiss(t,'highpass',4000,8000,0.7,0.002,0.06,0.14);break;
+    case 'ultEnd':thump(t,100,28,0.8,1.0);crunch(t,0.3,0.4,600);hiss(t,'lowpass',3000,60,0.7,0.003,0.7,0.45);metal(t,[1600,2400,3600],0.6,0.05);break;
+    case 'ui':blip(t,1175,0.035,0.06);break;
+    case 'uiOk':blip(t,880,0.06,0.08);blip(t+0.05,1320,0.09,0.08);break;
+    case 'uiBack':osc('triangle',720,480,t,0.08,amp(sfxBus,t,0.004,0.07,0.07));break;
+    case 'combo':blip(t,988,0.12,0.09);blip(t+0.07,1480,0.2,0.09);blip(t+0.07,1976,0.16,0.03,'sine');break;
+    case 'lowdur':blip(t,330,0.07,0.1,'square');blip(t+0.11,330,0.07,0.1,'square');break;
+  }}catch(e){}
+}
+
+/* ---------------- music: a small step sequencer, all synthesized ----------------
+   Each song is four bars of 16 steps over a chord progression (MIDI notes): filtered saw bass, a soft pad,
+   an echoing arpeggio, a lead on alternate bars, and kick / snare / hats. */
 const SONGS={
-  title:{bpm:88,prog:[[57,60,64],[53,57,60],[48,52,55],[55,59,62]],bass:[0,8],arp:[0,2,1,2],arpEvery:2,kick:[],snare:[],hat:[],pad:true,lead:[69,0,0,0,67,0,64,0,65,0,0,0,64,0,62,0]},
-  battle:{bpm:136,prog:[[57,60,64],[53,57,60],[48,52,55],[55,59,62]],bass:[0,3,6,8,11,14],arp:[0,1,2,1],arpEvery:1,kick:[0,6,8],snare:[4,12],hat:[0,2,4,6,8,10,12,14],
-    lead:[76,0,74,0,72,0,0,74,0,72,69,0,0,0,67,0]},
-  boss:{bpm:152,prog:[[57,60,64],[58,62,65],[57,60,64],[55,59,62]],bass:[0,2,3,6,8,10,11,14],arp:[0,2,1,2],arpEvery:1,kick:[0,4,8,10,12],snare:[4,12],hat:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
-    lead:[81,0,80,0,81,0,76,0,0,0,77,0,76,0,74,0]},
+  title:{bpm:84,prog:[[57,60,64],[53,57,60],[48,52,55],[55,59,62]],bass:[0,8],arp:[0,2,1,2],arpEvery:2,kick:[],snare:[],hat:[],pad:1,
+    lead:[69,0,0,0,67,0,64,0,65,0,0,0,64,0,62,0],leadType:'triangle'},
+  battle:{bpm:128,prog:[[57,60,64],[53,57,60],[48,52,55],[55,59,62]],bass:[0,3,6,8,11,14],arp:[0,1,2,1],arpEvery:1,kick:[0,8,10],snare:[4,12],hat:[2,6,10,14],pad:0.6,
+    lead:[76,0,74,0,72,0,0,74,0,72,69,0,0,0,67,0],leadType:'sawtooth'},
+  boss:{bpm:144,prog:[[57,60,64],[58,62,65],[57,60,64],[55,59,62]],bass:[0,2,3,6,8,10,11,14],arp:[0,2,1,2],arpEvery:1,kick:[0,4,8,10,12],snare:[4,12],hat:[2,6,10,14],pad:0.6,
+    lead:[81,0,80,0,81,0,76,0,0,0,77,0,76,0,74,0],leadType:'sawtooth'},
 };
 const MUS={name:null,step:0,next:0};
 const mf=n=>440*Math.pow(2,(n-69)/12);
+function musicStep(name,i,t){
+  const song=SONGS[name],dt=60/song.bpm/4,M=musicBus,s=i&15,ch=song.prog[(i>>4)&3],title=name==='title';
+  if(song.bass.includes(s)){const f=mf(ch[0]-24);const g=amp(M,t,0.01,0.3,dt*1.6);const lp=filt('lowpass',900,220,3,t,dt*1.2,g);osc('sawtooth',f,f,t,dt*1.8,lp);osc('triangle',f/2,f/2,t,dt*1.8,amp(M,t,0.01,0.16,dt*1.5));}
+  if(s%song.arpEvery===0){const n=ch[song.arp[(s/song.arpEvery|0)%song.arp.length]]+12,f=mf(n),g=amp(M,t,0.004,0.06,dt*0.9);g.connect(echoIn);osc(title?'triangle':'square',f,f,t,dt,filt('lowpass',2200,1400,0.7,t,dt,g));}
+  if(song.pad&&s===0)for(const n of ch){const f=mf(n),g=amp(M,t,0.35,0.028*song.pad,dt*6,dt*9);const lp=filt('lowpass',1100,700,0.7,t,dt*16,g);osc('sawtooth',f,f,t,dt*16,lp);osc('sawtooth',f*1.007,f*1.007,t,dt*16,lp);}
+  const ln=song.lead[s];
+  if(ln&&((i>>4)&1)){const f=mf(ln),len=dt*(title?3.5:1.7),g=amp(M,t,0.01,title?0.1:0.07,len);g.connect(echoIn);
+    const o=osc(song.leadType,f,f,t,len,filt('lowpass',title?3000:2000,1500,0.8,t,len,g));const lfo=AC.createOscillator(),lg=AC.createGain();lfo.frequency.value=5.5;lg.gain.value=f*0.006;lfo.connect(lg);lg.connect(o.frequency);lfo.start(t);lfo.stop(t+len+0.05);}
+  if(song.kick.includes(s)){osc('sine',150,46,t,0.16,amp(M,t,0.002,0.62,0.15),0.09);noiseSrc(t,0.01,filt('highpass',2500,2500,0.7,t,0.01,amp(M,t,0.0005,0.12,0.008)));}
+  if(song.snare.includes(s)){noiseSrc(t,0.14,filt('bandpass',1900,1500,0.8,t,0.14,amp(M,t,0.002,0.22,0.12)));osc('triangle',200,160,t,0.07,amp(M,t,0.002,0.12,0.07));}
+  const openHat=song.hat.includes(s);
+  if(openHat||!title&&s%2===0)noiseSrc(t,0.04,filt('highpass',8500,8500,0.7,t,0.04,amp(M,t,0.001,openHat?0.05:0.025,openHat?0.06:0.02)));
+}
 function musicTick(){
-  if(!AC||AC.state!=='running'||!MUS.name)return;
-  const song=SONGS[MUS.name],dt=60/song.bpm/4;
+  if(!AC||offline||AC.state!=='running'||!MUS.name)return;
+  const dt=60/SONGS[MUS.name].bpm/4;
   if(MUS.next<AC.currentTime)MUS.next=AC.currentTime+0.05;
   while(MUS.next<AC.currentTime+0.15){
-    const i=MUS.step,s=i&15,ch=song.prog[(i>>4)&3],w=MUS.next-AC.currentTime;
-    try{
-      if(song.bass.includes(s))tone('triangle',mf(ch[0]-24),mf(ch[0]-24),dt*1.8,0.32,w,musicBus);
-      if(s%song.arpEvery===0)tone('square',mf(ch[song.arp[(s/song.arpEvery|0)%song.arp.length]]+12),mf(ch[song.arp[(s/song.arpEvery|0)%song.arp.length]]+12),dt*0.9,0.035,w,musicBus);
-      if(song.pad&&s===0)for(const n of ch)tone('sine',mf(n),mf(n),dt*15,0.05,w,musicBus);
-      const ln=song.lead[s];if(ln&&((i>>4)&1))tone(MUS.name==='title'?'triangle':'square',mf(ln),mf(ln),dt*(MUS.name==='title'?3.5:1.6),MUS.name==='title'?0.07:0.03,w,musicBus);
-      if(song.kick.includes(s))tone('sine',150,42,0.13,0.5,w,musicBus);
-      if(song.snare.includes(s))noise(0.1,0.16,'bandpass',1800,900,0.9,w,musicBus);
-      if(song.hat.includes(s))noise(0.03,s%4===2?0.06:0.035,'highpass',7000,9000,0.7,w,musicBus);
-    }catch(e){}
+    try{musicStep(MUS.name,MUS.step,MUS.next);}catch(e){}
     MUS.step=(MUS.step+1)%64;MUS.next+=dt;
   }
 }
 function playMusic(name){if(MUS.name===name)return;MUS.name=name;MUS.step=0;MUS.next=AC?AC.currentTime+0.08:0;}
-function sfx(k){
-  if(!AC||muted||AC.state!=='running')return;
-  try{switch(k){
-    case 'swing':noise(0.09,0.16,'bandpass',2400,700,1.2);break;
-    case 'swingH':noise(0.16,0.22,'bandpass',1400,300,1);break;
-    case 'blade':noise(0.12,0.32,'highpass',5000,2500,0.7);tone('triangle',1500,700,0.12,0.1);tone('square',220,90,0.06,0.12);break;
-    case 'blunt':tone('sine',190,55,0.12,0.5);noise(0.07,0.3,'lowpass',2200,300,0.8);break;
-    case 'heavy':tone('sine',140,38,0.22,0.6);noise(0.18,0.4,'lowpass',1600,120,0.7);tone('square',90,40,0.1,0.1);break;
-    case 'hurt':tone('sawtooth',260,90,0.14,0.16);noise(0.06,0.25,'lowpass',1800,400);break;
-    case 'jump':tone('square',260,520,0.08,0.05);break;
-    case 'land':noise(0.06,0.18,'lowpass',900,200);break;
-    case 'dash':noise(0.14,0.16,'bandpass',900,2600,1.5);break;
-    case 'break':noise(0.2,0.35,'bandpass',1200,300,0.9);tone('square',140,60,0.08,0.1);break;
-    case 'shatter':noise(0.3,0.3,'highpass',3000,6000,0.5);tone('triangle',1800,400,0.25,0.1);break;
-    case 'pickup':tone('square',660,660,0.06,0.06);tone('square',880,880,0.06,0.06,0.06);tone('square',1320,1320,0.1,0.06,0.12);break;
-    case 'heal':tone('triangle',520,1040,0.25,0.12);break;
-    case 'armor':tone('triangle',1800,1200,0.08,0.14);tone('square',2400,1600,0.05,0.04);break;
-    case 'warn':tone('square',900,900,0.05,0.05);break;
-    case 'ko':tone('sine',220,40,0.5,0.5);noise(0.5,0.35,'lowpass',2000,90,0.6);break;
-    case 'boom':tone('sine',90,30,0.5,0.6);noise(0.4,0.45,'lowpass',900,60,0.6);break;
-    case 'clear':[523,659,784,1047].forEach((f,i)=>tone('square',f,f,0.14,0.07,i*0.12));tone('square',1047,1047,0.4,0.07,0.5);break;
-    case 'go':tone('square',440,440,0.08,0.06);tone('square',660,660,0.12,0.06,0.1);break;
-    case 'charge1':tone('triangle',330,990,0.16,0.1);noise(0.12,0.08,'bandpass',800,3200,1.4);break;
-    case 'charge2':tone('square',660,1320,0.1,0.06);tone('square',990,1980,0.16,0.06,0.08);tone('triangle',1320,1320,0.25,0.06,0.16);break;
-    case 'release':noise(0.18,0.3,'bandpass',600,3600,1.1);tone('sawtooth',180,90,0.12,0.1);break;
-    case 'ult':[392,523,659,784,1047].forEach((f,i)=>tone('sawtooth',f,f,0.45,0.035,i*0.05));noise(0.7,0.22,'bandpass',300,5000,1.3);tone('sine',70,40,0.6,0.5);break;
-    case 'warp':noise(0.07,0.22,'highpass',4000,8000,0.7);tone('square',1400,300,0.07,0.05);break;
-    case 'ultEnd':tone('sine',110,30,0.7,0.7);noise(0.6,0.5,'lowpass',3000,60,0.6);noise(0.4,0.25,'highpass',3000,7000,0.5);break;
-    case 'ui':tone('square',880,880,0.035,0.04);break;
-    case 'uiOk':tone('square',660,660,0.05,0.05);tone('square',990,990,0.07,0.05,0.05);break;
-    case 'uiBack':tone('square',520,390,0.07,0.045);break;
-    case 'combo':tone('square',780,1560,0.12,0.05);tone('triangle',1170,1170,0.18,0.05,0.08);break;
-    case 'lowdur':tone('square',300,300,0.06,0.05);tone('square',300,300,0.06,0.05,0.1);break;
-  }}catch(e){}
+// renders sounds into a buffer without a speaker, for checking levels in tests: fn(at) schedules the sounds
+async function renderAudio(secs,fn){
+  const saved=[AC,master,sfxBus,musicBus,echoIn,NB,CRUNCH];
+  try{AC=new OfflineAudioContext(2,Math.ceil(44100*secs),44100);buildAudio(AC);master.gain.value=0.9;sfxBus.gain.value=0.75;musicBus.gain.value=0.5;
+    offline=2;fn();offline=1;const buf=await AC.startRendering();return [buf.getChannelData(0),buf.getChannelData(1)];}
+  finally{[AC,master,sfxBus,musicBus,echoIn,NB,CRUNCH]=saved;offline=0;}
 }
 
 /* ================================================================
@@ -418,7 +485,7 @@ const WEAPONS={
       C1:mv('Iai Rush',5,6,22,17,[0,-36,34,28],[6.4,-2.4],{knock:true,fwd:5.2,ghost:true,charge:1,spr:['thrust',3]}),
       C2:mv('Crescent Moon',8,4,26,20,[2,-46,30,46],[3,-5.2],{knock:true,wave:14,armor:true,charge:2,spr:['cleave',3]}),
     }},
-  spear:{name:'Spear',row:2,dur:40,trail:'#a8e6ff',hit:'blade',spark:'#bff3ff',blade:true,guard:{a1:1.3,a2:0.2,wa:-0.1},
+  spear:{name:'Spear',row:2,dur:40,trail:'#a8e6ff',hit:'pierce',spark:'#bff3ff',blade:true,guard:{a1:1.3,a2:0.2,wa:-0.1},
     desc:'Longest reach. Keep raiders at the tip.',
     tryCombo:'Hold K to max for Cyclone: it drags nearby raiders in, then launches them all. ↑ to follow',
     moves:{
@@ -1025,7 +1092,7 @@ function applyHit(a,t,m,cx,cy){
   if(S.numbers)nums.push({x:cx+rnd(-3,3),y:cy-6,s:String(dmg),c:a.side==='p'?(dmg>=14?'#ff9a3c':dmg>=9?'#ffe08a':'#ffffff'):'#ff5a4a',t:0,sz:a.side==='p'&&dmg>=14?2:1,vx:f*0.25});
   if(a.side==='p')buzz(big?18:7);
   if(t.side==='p'){hurtT=14;buzz(40);punch(t.x-camX,t.y-18,6,-f*1.5,0);}
-  sfx(wpn?wpn.hit:(a.weapon&&a.weapon.id==='hammer'?'heavy':a.weapon&&a.weapon.id==='knife'?'blade':'blunt'));
+  sfx(wpn?wpn.hit:(a.weapon&&a.weapon.id==='hammer'?'heavy':a.weapon&&a.weapon.id==='knife'?'blade':'blunt'),stop>=9);
   a.hitConfirm=true;
   if(a.side==='p'){
     combo.n++;combo.t=110;combo.dmg+=dmg;combo.bump=6;
@@ -1828,7 +1895,7 @@ function frame(now){
 }
 newGame();player.x=90;camX=0;refreshPose(player);
 requestAnimationFrame(frame);
-window.__sd={tick,render,held,pressed,spawn:(t,s)=>spawnEnemy(t,s||1),get player(){return player;},get F(){return F;},get mode(){return mode;},set mode(v){mode=v;},get state(){return {zoneI,waveI,lock,score,combo,camX,clearT};}};
+window.__sd={tick,render,held,pressed,spawn:(t,s)=>spawnEnemy(t,s||1),audio:{render:renderAudio,sfxAt:(k,big,t0)=>{SFX_T0=t0||0;sfx(k,big);SFX_T0=0;},musicStep,SONGS},get player(){return player;},get F(){return F;},get mode(){return mode;},set mode(v){mode=v;},get state(){return {zoneI,waveI,lock,score,combo,camX,clearT};}};
 
 /* ================================================================
    PAGE: fit the screen, touch controls, menus, settings, how to play
