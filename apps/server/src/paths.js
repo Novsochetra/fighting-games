@@ -1,0 +1,9 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+// Built with node:path instead of new URL(...) because test DOMs such as happy-dom replace the
+// global URL with one that resolves against a fake http origin.
+const SOURCE_FOLDER = path.dirname(fileURLToPath(import.meta.url));
+
+export const WEB_ROOT = path.resolve(SOURCE_FOLDER, '../../web');
+export const GAMES_ROOT = path.join(WEB_ROOT, 'games');

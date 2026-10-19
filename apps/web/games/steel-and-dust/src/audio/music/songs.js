@@ -1,0 +1,72 @@
+// each song is four bars of 16 steps over a chord progression (MIDI notes): filtered saw bass, a
+// soft pad, an echoing arpeggio, a lead on alternate bars (0 = rest), and kick / snare / hats
+const PROGRESSION = [
+  [57, 60, 64],
+  [53, 57, 60],
+  [48, 52, 55],
+  [55, 59, 62],
+];
+
+export const SONGS = {
+  title: {
+    bpm: 84,
+    chords: PROGRESSION,
+    bassSteps: [0, 8],
+    arpeggio: [0, 2, 1, 2],
+    arpeggioEvery: 2,
+    arpeggioWave: 'triangle',
+    kickSteps: [],
+    snareSteps: [],
+    openHatSteps: [],
+    closedHats: false,
+    padLevel: 1,
+    lead: [69, 0, 0, 0, 67, 0, 64, 0, 65, 0, 0, 0, 64, 0, 62, 0],
+    leadWave: 'triangle',
+    leadLength: 3.5,
+    leadLevel: 0.1,
+    leadCutoff: 3000,
+  },
+  battle: {
+    bpm: 128,
+    chords: PROGRESSION,
+    bassSteps: [0, 3, 6, 8, 11, 14],
+    arpeggio: [0, 1, 2, 1],
+    arpeggioEvery: 1,
+    arpeggioWave: 'square',
+    kickSteps: [0, 8, 10],
+    snareSteps: [4, 12],
+    openHatSteps: [2, 6, 10, 14],
+    closedHats: true,
+    padLevel: 0.6,
+    lead: [76, 0, 74, 0, 72, 0, 0, 74, 0, 72, 69, 0, 0, 0, 67, 0],
+    leadWave: 'sawtooth',
+    leadLength: 1.7,
+    leadLevel: 0.07,
+    leadCutoff: 2000,
+  },
+  boss: {
+    bpm: 144,
+    chords: [
+      [57, 60, 64],
+      [58, 62, 65],
+      [57, 60, 64],
+      [55, 59, 62],
+    ],
+    bassSteps: [0, 2, 3, 6, 8, 10, 11, 14],
+    arpeggio: [0, 2, 1, 2],
+    arpeggioEvery: 1,
+    arpeggioWave: 'square',
+    kickSteps: [0, 4, 8, 10, 12],
+    snareSteps: [4, 12],
+    openHatSteps: [2, 6, 10, 14],
+    closedHats: true,
+    padLevel: 0.6,
+    lead: [81, 0, 80, 0, 81, 0, 76, 0, 0, 0, 77, 0, 76, 0, 74, 0],
+    leadWave: 'sawtooth',
+    leadLength: 1.7,
+    leadLevel: 0.07,
+    leadCutoff: 2000,
+  },
+};
+
+export const midiToFrequency = (note) => 440 * Math.pow(2, (note - 69) / 12);

@@ -1,0 +1,6 @@
+{
+  "name": "@arcade/server",
+  "private": true,
+  "type": "module",
+  "main": "src/main.js"
+}

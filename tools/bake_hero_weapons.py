@@ -20,7 +20,7 @@ from PIL import Image
 from scipy import ndimage as nd
 
 ROOT=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..')
-HERO=os.path.join(ROOT,'assets/sprites/hero/')
+HERO=os.path.join(ROOT,'apps/web/games/steel-and-dust/assets/sprites/hero/')
 OUT=os.path.join(HERO,'arsenal/')
 meta=json.load(open(HERO+'hero.json'))
 FW,FH=128,80

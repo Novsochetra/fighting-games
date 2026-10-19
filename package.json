@@ -1,0 +1,35 @@
+{
+  "name": "retro-arcade",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node --watch apps/server/src/main.js",
+    "start": "node apps/server/src/main.js",
+    "build": "node scripts/build-site.js",
+    "lint": "eslint . && stylelint \"apps/**/*.css\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
+    "test:regression": "vitest run --project regression",
+    "check": "npm run lint && npm run format:check && npm test",
+    "prepare": "git config core.hooksPath .githooks || true"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.13.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.13.0",
+    "happy-dom": "^21.0.3",
+    "prettier": "^3.9.10",
+    "stylelint": "^17.16.0",
+    "vitest": "^5.0.5"
+  }
+}

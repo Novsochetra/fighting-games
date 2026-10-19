@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+package-lock.json
+SPRITE_PROMPT.md
+.claude/
+**/test/**/__snapshots__/
+**/test/**/fixtures/
+**/assets/**

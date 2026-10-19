@@ -1,0 +1,44 @@
+import { describe, expect, it } from 'vitest';
+import { attackBox, hurtBox, overlapCenter, overlaps } from '../../../src/sim/combat/boxes.js';
+
+const fighter = (extra) => ({
+  x: 100,
+  y: 184,
+  facing: 1,
+  scale: 1,
+  state: 'idle',
+  removed: false,
+  ...extra,
+});
+
+describe('hit boxes', () => {
+  it('mirrors an attack box when facing left', () => {
+    expect(attackBox(fighter(), [4, -28, 14, 7])).toEqual({ x: 104, y: 156, width: 14, height: 7 });
+    expect(attackBox(fighter({ facing: -1 }), [4, -28, 14, 7])).toEqual({
+      x: 82,
+      y: 156,
+      width: 14,
+      height: 7,
+    });
+  });
+
+  it('scales with the fighter', () => {
+    expect(attackBox(fighter({ scale: 2 }), [4, -28, 14, 7]).width).toBe(28);
+  });
+
+  it('shapes the hurt box by state and drops it on a knock-out', () => {
+    expect(hurtBox(fighter())).toEqual({ x: 94, y: 152, width: 12, height: 32 });
+    expect(hurtBox(fighter({ state: 'down' })).height).toBe(8);
+    expect(hurtBox(fighter({ state: 'dash' })).height).toBe(16);
+    expect(hurtBox(fighter({ state: 'ko' }))).toBeNull();
+    expect(hurtBox(fighter({ removed: true }))).toBeNull();
+  });
+
+  it('finds overlaps and their middle', () => {
+    const first = { x: 0, y: 0, width: 10, height: 10 };
+    const second = { x: 6, y: 4, width: 10, height: 10 };
+    expect(overlaps(first, second)).toBe(true);
+    expect(overlaps(first, { x: 10, y: 0, width: 5, height: 5 })).toBe(false);
+    expect(overlapCenter(first, second)).toEqual({ x: 8, y: 7 });
+  });
+});

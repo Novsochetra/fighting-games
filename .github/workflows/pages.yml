@@ -22,15 +22,16 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      # Publish only the game itself, not repo files such as .mcp.json.
-      - name: Collect site files
-        run: |
-          mkdir _site
-          cp index.html _site/
-          cp -r assets _site/
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # dist/ holds only the public site, so repo files such as .mcp.json never reach Pages.
+      - run: npm run build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: dist
       - id: deployment
         uses: actions/deploy-pages@v4

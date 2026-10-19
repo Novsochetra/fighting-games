@@ -1,0 +1,102 @@
+.mnote {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-align: center;
+  margin: 4px 0 0;
+  max-width: 46ch;
+}
+
+.mnote b {
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 4px 28px;
+  font-family: var(--font-display);
+  font-size: var(--font-size-game-stats);
+  margin: 4px 0 6px;
+}
+
+.stats dt {
+  color: var(--color-text-muted);
+}
+
+.stats dd {
+  margin: 0;
+  text-align: right;
+  color: var(--color-text);
+}
+
+.stats .new {
+  color: var(--color-accent);
+}
+
+.mnote kbd {
+  font-family: var(--font-display);
+  font-size: var(--font-size-2xs);
+  padding: 1px 5px;
+  border: 1px solid var(--color-border);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-md);
+  background: var(--color-panel-raised);
+  color: var(--color-text);
+}
+
+.box {
+  background: var(--color-panel);
+  border: 2px solid var(--color-border);
+  box-shadow: var(--shadow-pixel-lg);
+  width: min(760px, 100%);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.box header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.box h2 {
+  font-family: var(--font-display);
+  font-size: var(--font-size-title-sm);
+  margin: 0;
+  color: var(--color-accent);
+  letter-spacing: var(--tracking-medium);
+}
+
+#menus .box .scroll,
+#menus .box .scroll * {
+  touch-action: pan-y;
+}
+
+.box .scroll {
+  overflow-y: auto;
+  padding: 12px 14px 16px;
+  min-height: 0;
+}
+
+.xbtn {
+  font-family: var(--font-display);
+  font-size: var(--font-size-caption);
+  padding: 7px 12px;
+  background: var(--color-panel-raised);
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+  box-shadow: var(--shadow-pixel-button);
+}
+
+.xbtn:hover,
+.xbtn.sel {
+  background: var(--color-accent);
+  color: var(--color-ink);
+  border-color: var(--color-accent-strong);
+}

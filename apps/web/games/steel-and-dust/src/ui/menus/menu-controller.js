@@ -1,0 +1,100 @@
+import { clamp } from '../../lib/math.js';
+import { navigableItems } from './menu-items.js';
+import { createMenuRefreshers } from './menu-refresh.js';
+
+const MENU_FOR_MODE = { title: 'title', pause: 'pause', over: 'over', clear: 'clear' };
+
+// one base menu per mode; Settings and How to play stack on top of it
+export class MenuController {
+  constructor({ document, game, audio, ui, context, panels }) {
+    Object.assign(this, { document, game, audio, ui, panels });
+    this.state = { stack: [], selected: 0, mode: null };
+    this.refreshers = createMenuRefreshers({ document, game, context });
+  }
+
+  top() {
+    return this.state.stack[this.state.stack.length - 1];
+  }
+
+  items() {
+    return navigableItems(this.document, this.top());
+  }
+
+  isOpen() {
+    return this.state.stack.length > 0;
+  }
+
+  // touch and mouse players get no keyboard highlight unless the list scrolls
+  highlight(scroll) {
+    const items = this.items();
+    this.state.selected = clamp(this.state.selected, 0, Math.max(0, items.length - 1));
+    for (const node of this.document.querySelectorAll('#menus .sel')) {
+      node.classList.remove('sel');
+    }
+    const { lastInput } = this.ui;
+    if (lastInput === 'touch' || (lastInput === 'mouse' && !scroll)) {
+      return;
+    }
+    const current = items[this.state.selected];
+    current?.classList.add('sel');
+    if (scroll) {
+      current?.scrollIntoView({ block: 'nearest' });
+    }
+  }
+
+  refresh() {
+    this.refreshers[this.top()]?.();
+  }
+
+  show() {
+    for (const menu of this.document.querySelectorAll('#menus .menu')) {
+      menu.classList.toggle('open', menu.id === `m-${this.top()}`);
+    }
+    this.refresh();
+    this.state.selected = 0;
+    this.highlight(false);
+  }
+
+  open(id) {
+    this.panels[id].build();
+    this.state.stack.push(id);
+    this.show();
+    this.audio.sfx('uiOk');
+  }
+
+  back() {
+    if (this.state.stack.length > 1) {
+      this.state.stack.pop();
+      this.show();
+      this.audio.sfx('uiBack');
+    } else if (this.state.stack[0] === 'pause') {
+      this.game.mode = 'play';
+      this.audio.sfx('uiBack');
+    }
+  }
+
+  changeSetting(key, step, wrap) {
+    if (!this.panels.settings.change(key, step, wrap)) {
+      return;
+    }
+    const keep = this.state.selected;
+    this.panels.settings.build();
+    this.state.selected = keep;
+    this.highlight(this.ui.usesButtons());
+    if (!this.ui.usesButtons()) {
+      this.items()[keep]?.classList.add('sel');
+    }
+  }
+
+  // returns true when the mode changed, so the caller can show or hide the touch controls
+  sync() {
+    if (this.game.mode === this.state.mode) {
+      return false;
+    }
+    this.state.mode = this.game.mode;
+    const base = MENU_FOR_MODE[this.game.mode];
+    this.state.stack = base ? [base] : [];
+    this.show();
+    return true;
+  }
+}

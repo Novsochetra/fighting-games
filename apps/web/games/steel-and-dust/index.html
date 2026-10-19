@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <title>Steel &amp; Dust</title>
+    <meta
+      name="description"
+      content="A side-scrolling pixel-art brawler. Pick up weapons, chain combos and fight through three zones to the boss."
+    />
+    <meta name="theme-color" content="#0c0910" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Steel &amp; Dust" />
+    <link rel="manifest" href="assets/manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="assets/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Barlow:wght@400;500;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="../../src/design/tokens.css" />
+    <link rel="stylesheet" href="styles/page.css" />
+    <link rel="stylesheet" href="styles/menus.css" />
+    <link rel="stylesheet" href="styles/panels.css" />
+    <link rel="stylesheet" href="styles/settings.css" />
+    <link rel="stylesheet" href="styles/help.css" />
+    <link rel="stylesheet" href="styles/touch.css" />
+    <link rel="stylesheet" href="styles/touch-buttons.css" />
+    <script type="module" src="src/main.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div id="stage">
+        <canvas
+          id="game"
+          width="768"
+          height="432"
+          tabindex="0"
+          aria-label="Steel and Dust game screen"
+        ></canvas>
+      </div>
+
+      <div class="touch live" id="touch" aria-hidden="true">
+        <div class="stick-zone" id="stickZone">
+          <div class="stick-base" id="stickBase"><div class="stick-knob" id="stickKnob"></div></div>
+        </div>
+        <div class="btns">
+          <button class="tb tb-ult" data-action="ult" tabindex="-1">ULT</button>
+          <button class="tb tb-dash" data-action="dash" tabindex="-1">DASH</button>
+          <button class="tb tb-jump" data-action="jump" tabindex="-1">JUMP</button>
+          <button class="tb tb-heavy" data-action="heavy" tabindex="-1">HEAVY</button>
+          <button class="tb tb-atk" data-action="light" tabindex="-1">ATTACK</button>
+        </div>
+        <button class="tb-pause" id="pauseBtn" tabindex="-1" aria-label="Pause">II</button>
+      </div>
+
+      <div id="menus">
+        <section class="menu" id="m-title" aria-label="Main menu">
+          <h1 class="logo">Steel &amp; Dust<span>pixel brawler</span></h1>
+          <div class="mlist">
+            <button class="mbtn primary" data-act="play">Play</button>
+            <button class="mbtn" data-act="help">How to play</button>
+            <button class="mbtn" data-act="settings">Settings</button>
+            <button class="mbtn" data-act="fullscreen" data-fs>Full screen</button>
+            <button class="mbtn" data-act="arcade">Back to arcade</button>
+          </div>
+          <p class="mnote" id="titleNote"></p>
+          <p class="rotate" id="rotateHint">↻ turn your phone sideways for a bigger view</p>
+        </section>
+
+        <section class="menu" id="m-pause" aria-label="Paused">
+          <h2 class="mtitle">Paused</h2>
+          <div class="mlist">
+            <button class="mbtn primary" data-act="resume">Resume</button>
+            <button class="mbtn" data-act="help">How to play</button>
+            <button class="mbtn" data-act="settings">Settings</button>
+            <button class="mbtn" data-act="weapon" id="weaponBtn" hidden>Weapon: Fists</button>
+            <button class="mbtn" data-act="fullscreen" data-fs>Full screen</button>
+            <button class="mbtn" data-act="restart">Restart</button>
+            <button class="mbtn" data-act="quit">Quit to title</button>
+          </div>
+        </section>
+
+        <section class="menu" id="m-over" aria-label="Defeated">
+          <h2 class="mtitle bad">You fell</h2>
+          <p class="mnote" id="overNote"></p>
+          <div class="mlist">
+            <button class="mbtn primary" data-act="continue">Continue</button>
+            <button class="mbtn" data-act="restart">Restart stage</button>
+            <button class="mbtn" data-act="quit">Quit to title</button>
+          </div>
+        </section>
+
+        <section class="menu" id="m-clear" aria-label="Stage clear">
+          <h2 class="mtitle good">Stage clear</h2>
+          <dl class="stats" id="clearStats"></dl>
+          <div class="mlist">
+            <button class="mbtn primary" data-act="restart">Play again</button>
+            <button class="mbtn" data-act="quit">Title</button>
+            <button class="mbtn" data-act="arcade">Back to arcade</button>
+          </div>
+        </section>
+
+        <section class="menu sub" id="m-settings" aria-label="Settings">
+          <div class="box">
+            <header>
+              <h2>Settings</h2>
+              <button class="xbtn" data-act="back">Back</button>
+            </header>
+            <div class="scroll" id="settingsList"></div>
+          </div>
+        </section>
+
+        <section class="menu sub" id="m-help" aria-label="How to play">
+          <div class="box">
+            <header>
+              <h2>How to play</h2>
+              <button class="xbtn" data-act="back">Back</button>
+            </header>
+            <div class="scroll">
+              <div class="tabs" role="tablist" id="helpTabs"></div>
+              <div id="helpBody"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,181 @@
+:root {
+  --color-night: #0c0910;
+  --color-night-deep: #08060b;
+  --color-dusk: #1f1628;
+  --color-panel: #1d1727;
+  --color-panel-raised: #2a2036;
+  --color-line: #3d3150;
+  --color-sand: #f1e7d6;
+  --color-lilac-muted: #a397ae;
+  --color-amber: #f2a33a;
+  --color-amber-light: #ffd38a;
+  --color-rust: #a3301f;
+  --color-teal: #4fb3a9;
+  --color-red: #e0533d;
+  --color-gold: #e8c06a;
+  --color-green: #59c9a5;
+  --color-black: #000000;
+  --color-clear: transparent;
+
+  --color-white: #ffffff;
+  --color-amber-deep: #3a2a18;
+  --color-amber-pale: #ffe2a8;
+  --color-cream: #fff1b8;
+  --color-teal-deep: #2f5f5b;
+  --color-ink: var(--color-night);
+  --color-backdrop: color-mix(in srgb, var(--color-night-deep) 58%, transparent);
+  --color-backdrop-strong: color-mix(in srgb, var(--color-night-deep) 80%, transparent);
+  --color-row-stripe: color-mix(in srgb, var(--color-white) 2.5%, transparent);
+  --color-row-selected: color-mix(in srgb, var(--color-amber) 8%, transparent);
+  --color-stick-fill: color-mix(in srgb, var(--color-sand) 5%, transparent);
+  --color-stick-ring: color-mix(in srgb, var(--color-sand) 10%, transparent);
+  --color-stick-border: color-mix(in srgb, var(--color-sand) 22%, transparent);
+  --color-stick-knob: color-mix(in srgb, var(--color-amber) 35%, transparent);
+  --color-stick-knob-active: color-mix(in srgb, var(--color-amber) 75%, transparent);
+  --color-touch-button: color-mix(in srgb, var(--color-panel) 42%, transparent);
+  --color-touch-border: color-mix(in srgb, var(--color-sand) 40%, transparent);
+  --color-touch-pressed: color-mix(in srgb, var(--color-amber) 85%, transparent);
+  --color-touch-attack: color-mix(in srgb, var(--color-amber) 30%, transparent);
+  --color-touch-attack-border: color-mix(in srgb, var(--color-amber) 95%, transparent);
+  --color-touch-heavy: color-mix(in srgb, var(--color-red) 28%, transparent);
+  --color-coral: #ff8a6a;
+  --color-mint-light: #7fe3cf;
+  --color-touch-heavy-border: color-mix(in srgb, var(--color-coral) 90%, transparent);
+  --color-touch-jump: color-mix(in srgb, var(--color-teal) 28%, transparent);
+  --color-touch-jump-border: color-mix(in srgb, var(--color-mint-light) 90%, transparent);
+  --color-touch-ult-ready: color-mix(in srgb, var(--color-gold) 90%, transparent);
+  --color-touch-pause: color-mix(in srgb, var(--color-panel) 55%, transparent);
+  --color-touch-pause-border: color-mix(in srgb, var(--color-sand) 35%, transparent);
+
+  --color-surface-page: var(--color-night);
+  --color-surface-page-edge: var(--color-night-deep);
+  --color-surface-page-glow: var(--color-dusk);
+  --color-surface-panel: var(--color-panel);
+  --color-surface-raised: var(--color-panel-raised);
+  --color-surface-sunken: var(--color-black);
+  --color-text: var(--color-sand);
+  --color-text-muted: var(--color-lilac-muted);
+  --color-text-inverse: var(--color-night);
+  --color-text-highlight: var(--color-gold);
+  --color-accent: var(--color-amber);
+  --color-accent-strong: var(--color-amber-light);
+  --color-accent-shadow: var(--color-rust);
+  --color-info: var(--color-teal);
+  --color-danger: var(--color-red);
+  --color-success: var(--color-green);
+  --color-border: var(--color-line);
+  --color-border-selected: var(--color-amber);
+  --color-focus: var(--color-amber-light);
+  --color-shadow: var(--color-black);
+  --color-overlay-scanline: color-mix(in srgb, var(--color-black) 26%, transparent);
+  --color-overlay-vignette: color-mix(in srgb, var(--color-black) 72%, transparent);
+  --color-overlay-glare: color-mix(in srgb, var(--color-sand) 5%, transparent);
+
+  --font-display: 'Silkscreen', 'Courier New', monospace;
+  --font-body: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --font-size-2xs: 0.6875rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-display: clamp(2rem, 8.5vw, 4.5rem);
+
+  --font-size-caption: 0.8125rem;
+  --font-size-body-lg: 0.9375rem;
+  --font-size-title-sm: 1.125rem;
+  --font-size-game-logo: clamp(34px, 8.5vmin, 84px);
+  --font-size-logo-tagline: 0.38em;
+  --font-size-game-title: clamp(26px, 6vmin, 52px);
+  --font-size-game-button: clamp(14px, 2.4vmin, 19px);
+  --font-size-game-stats: clamp(13px, 2.2vmin, 17px);
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --leading-none: 1;
+  --leading-logo: 0.95;
+  --leading-tight: 1.15;
+  --leading-snug: 1.3;
+  --leading-normal: 1.45;
+  --leading-relaxed: 1.6;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-slight: 0.02em;
+  --tracking-wide: 0.04em;
+  --tracking-medium: 0.06em;
+  --tracking-wider: 0.1em;
+  --tracking-widest: 0.3em;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  --layout-gutter-narrow: 1rem;
+  --layout-gutter-wide: 2rem;
+  --layout-content-max-width: 72rem;
+  --layout-text-max-width: 60ch;
+
+  --border-width-thin: 1px;
+  --border-width-pixel: 2px;
+  --border-width-thick: 4px;
+
+  --radius-none: 0;
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --radius-round: 50%;
+
+  --shadow-pixel-sm: 2px 2px 0 var(--color-shadow);
+  --shadow-pixel-md: 4px 4px 0 var(--color-shadow);
+  --shadow-pixel-lg: 6px 6px 0 var(--color-shadow);
+  --shadow-pixel-xl: 10px 10px 0 var(--color-shadow);
+  --shadow-inset-sunken: inset 0 4px 0 var(--color-shadow);
+  --shadow-pixel-button: 3px 3px 0 var(--color-shadow);
+  --shadow-stage:
+    0 0 0 1px var(--color-panel),
+    0 18px 60px color-mix(in srgb, var(--color-black) 60%, transparent);
+  --shadow-knob: 0 0 0 3px color-mix(in srgb, var(--color-black) 25%, transparent);
+  --shadow-touch-button: inset 0 -4px 0 color-mix(in srgb, var(--color-black) 25%, transparent);
+  --shadow-ult-ready: 0 0 0 6px color-mix(in srgb, var(--color-gold) 45%, transparent);
+  --shadow-ult-ready-still: 0 0 0 4px color-mix(in srgb, var(--color-gold) 45%, transparent);
+
+  --text-shadow-pixel-xs: 1px 1px 0 var(--color-shadow);
+  --text-shadow-pixel-sm: 2px 2px 0 var(--color-shadow);
+  --text-shadow-pixel-md: 3px 3px 0 var(--color-shadow);
+  --text-shadow-logo: 3px 3px 0 var(--color-accent-shadow), 6px 6px 0 var(--color-shadow);
+
+  --size-scanline-line: 1px;
+  --size-scanline-period: 3px;
+
+  --duration-instant: 60ms;
+  --duration-fast: 120ms;
+  --duration-quick: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 450ms;
+  --duration-logo: 600ms;
+  --duration-pulse: 800ms;
+  --duration-blink: 1.2s;
+  --duration-sweep: 7s;
+
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --easing-overshoot: cubic-bezier(0.2, 1.6, 0.4, 1);
+  --easing-linear: linear;
+  --easing-step: steps(1, end);
+  --easing-step-2: steps(2);
+  --easing-out: ease-out;
+
+  --layer-overlay: 100;
+}

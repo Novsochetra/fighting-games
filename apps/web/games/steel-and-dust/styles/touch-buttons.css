@@ -1,0 +1,117 @@
+.btns {
+  position: absolute;
+  right: calc(14px + var(--sar));
+  bottom: calc(14px + var(--sab));
+  width: calc(258px * var(--btn));
+  height: calc(232px * var(--btn));
+  pointer-events: none;
+}
+
+.tb {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-round);
+  pointer-events: auto;
+  touch-action: none;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: calc(var(--font-size-2xs) * var(--btn));
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-white);
+  text-shadow: var(--text-shadow-pixel-xs);
+  background: var(--color-touch-button);
+  border: 2px solid var(--color-touch-border);
+  box-shadow: var(--shadow-touch-button);
+  transform: translate(50%, 50%);
+}
+
+.tb.on {
+  background: var(--color-touch-pressed);
+  border-color: var(--color-amber-pale);
+  color: var(--color-ink);
+  text-shadow: none;
+  transform: translate(50%, 50%) scale(0.93);
+}
+
+.tb-atk {
+  right: calc(52px * var(--btn));
+  bottom: calc(52px * var(--btn));
+  width: calc(96px * var(--btn));
+  height: calc(96px * var(--btn));
+  font-size: calc(var(--font-size-caption) * var(--btn));
+  background: var(--color-touch-attack);
+  border-color: var(--color-touch-attack-border);
+}
+
+.tb-heavy {
+  right: calc(146px * var(--btn));
+  bottom: calc(40px * var(--btn));
+  width: calc(78px * var(--btn));
+  height: calc(78px * var(--btn));
+  background: var(--color-touch-heavy);
+  border-color: var(--color-touch-heavy-border);
+}
+
+.tb-jump {
+  right: calc(46px * var(--btn));
+  bottom: calc(150px * var(--btn));
+  width: calc(76px * var(--btn));
+  height: calc(76px * var(--btn));
+  background: var(--color-touch-jump);
+  border-color: var(--color-touch-jump-border);
+}
+
+.tb-dash {
+  right: calc(130px * var(--btn));
+  bottom: calc(128px * var(--btn));
+  width: calc(62px * var(--btn));
+  height: calc(62px * var(--btn));
+}
+
+.tb-ult {
+  right: calc(214px * var(--btn));
+  bottom: calc(112px * var(--btn));
+  width: calc(56px * var(--btn));
+  height: calc(56px * var(--btn));
+  color: var(--color-text-muted);
+}
+
+.tb-ult.ready {
+  color: var(--color-ink);
+  background: var(--color-touch-ult-ready);
+  border-color: var(--color-cream);
+  text-shadow: none;
+  animation: ult-ready var(--duration-pulse) var(--easing-step-2) infinite;
+}
+
+@keyframes ult-ready {
+  50% {
+    box-shadow: var(--shadow-ult-ready);
+  }
+}
+
+/* upright phones are narrow: ULT moves up between JUMP and DASH so the cluster clears the stick */
+@media (orientation: portrait) {
+  .btns {
+    height: calc(256px * var(--btn));
+  }
+
+  .tb-ult {
+    right: calc(100px * var(--btn));
+    bottom: calc(212px * var(--btn));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tb-ult.ready {
+    animation: none;
+    box-shadow: var(--shadow-ult-ready-still);
+  }
+
+  .menu.open,
+  .logo {
+    animation: none;
+  }
+}

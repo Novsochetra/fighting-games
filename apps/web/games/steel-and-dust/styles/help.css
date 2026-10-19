@@ -1,0 +1,134 @@
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 12px;
+}
+
+.tabs button {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+  background: var(--color-clear);
+  border: 2px solid var(--color-border);
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.tabs button[aria-selected='true'] {
+  background: var(--color-accent);
+  color: var(--color-ink);
+  border-color: var(--color-accent);
+}
+
+.tabs button.sel {
+  outline: 2px solid var(--color-accent-strong);
+  outline-offset: 1px;
+}
+
+.keys {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-body-lg);
+}
+
+.keys td {
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.keys td:first-child {
+  color: var(--color-text-muted);
+  padding-right: 14px;
+  white-space: nowrap;
+}
+
+kbd.k {
+  font-family: var(--font-display);
+  font-size: var(--font-size-2xs);
+  padding: 1px 6px;
+  border: 1px solid var(--color-border);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-md);
+  background: var(--color-panel-raised);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.wmeta {
+  color: var(--color-text-muted);
+  margin: 0 0 8px;
+  font-size: var(--font-size-sm);
+}
+
+.wmeta b {
+  color: var(--color-text);
+}
+
+.moves {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.moves th {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-2xs);
+  letter-spacing: var(--tracking-medium);
+  color: var(--color-text-muted);
+  text-align: left;
+  padding: 6px 8px;
+  background: var(--color-panel-raised);
+}
+
+.moves td {
+  padding: 6px 8px;
+  border-top: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.moves td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.tag-l {
+  display: inline-block;
+  font-size: var(--font-size-2xs);
+  color: var(--color-teal);
+  border: 1px solid var(--color-teal-deep);
+  border-radius: var(--radius-md);
+  padding: 0 5px;
+  margin: 1px 3px 1px 0;
+  white-space: nowrap;
+}
+
+.tips {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.tips li {
+  margin: 0 0 8px;
+  color: var(--color-text);
+}
+
+.tips b {
+  color: var(--color-accent);
+}
+
+.try {
+  margin: 10px 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.try b {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xs);
+  color: var(--color-accent);
+  margin-right: 6px;
+}

@@ -1,0 +1,502 @@
+{
+ "swingFists": [
+  {
+   "length": 6175,
+   "digest": "b866909603a8389a"
+  },
+  {
+   "length": 6175,
+   "digest": "3e31d1d566dec8ff"
+  },
+  {
+   "length": 6175,
+   "digest": "40bb64b8296ba8b7"
+  },
+  {
+   "length": 6175,
+   "digest": "506191e61a9ee9a3"
+  }
+ ],
+ "swingFistsBig": [
+  {
+   "length": 9261,
+   "digest": "04fd684605916994"
+  },
+  {
+   "length": 9261,
+   "digest": "96cad57164db6073"
+  },
+  {
+   "length": 9261,
+   "digest": "a87d5985126bf32f"
+  },
+  {
+   "length": 9261,
+   "digest": "845b66c2b5e4d336"
+  }
+ ],
+ "swingSword": [
+  {
+   "length": 7056,
+   "digest": "d72717788326f89c"
+  },
+  {
+   "length": 7056,
+   "digest": "525b8137ac939a9b"
+  },
+  {
+   "length": 7056,
+   "digest": "9c3b732275be5f9a"
+  },
+  {
+   "length": 7056,
+   "digest": "365be4ada18130f7"
+  }
+ ],
+ "swingSwordBig": [
+  {
+   "length": 10143,
+   "digest": "cbcd7221f32bb1b9"
+  },
+  {
+   "length": 10143,
+   "digest": "b1f558bfa3be7d2b"
+  },
+  {
+   "length": 10143,
+   "digest": "1cfc6cac4843f85e"
+  },
+  {
+   "length": 10143,
+   "digest": "bb20d5e981a748d5"
+  }
+ ],
+ "swingSpear": [
+  {
+   "length": 5733,
+   "digest": "d1a623f83e45d357"
+  },
+  {
+   "length": 5733,
+   "digest": "63614b8933e3af00"
+  },
+  {
+   "length": 5733,
+   "digest": "7714037bd2c68fe7"
+  },
+  {
+   "length": 5733,
+   "digest": "08681641fbb3aa26"
+  }
+ ],
+ "swingSpearBig": [
+  {
+   "length": 9261,
+   "digest": "a239dc5afaeae408"
+  },
+  {
+   "length": 9261,
+   "digest": "db19c435ab542a67"
+  },
+  {
+   "length": 9261,
+   "digest": "38d4c1f77f5ea35e"
+  },
+  {
+   "length": 9261,
+   "digest": "ec9958ab477e8c1f"
+  }
+ ],
+ "swingAxe": [
+  {
+   "length": 11466,
+   "digest": "b67fd848da03b2dd"
+  },
+  {
+   "length": 11466,
+   "digest": "de6e70253153b326"
+  },
+  {
+   "length": 11466,
+   "digest": "0fd9e343abaaaa73"
+  },
+  {
+   "length": 11466,
+   "digest": "b81e0cdf00016e20"
+  }
+ ],
+ "swingAxeBig": [
+  {
+   "length": 14995,
+   "digest": "a5b46324ecdd06f0"
+  },
+  {
+   "length": 14995,
+   "digest": "91b853d858203020"
+  },
+  {
+   "length": 14995,
+   "digest": "3419e74fe8ac74d8"
+  },
+  {
+   "length": 14995,
+   "digest": "424594557ce1f8d0"
+  }
+ ],
+ "blunt": [
+  {
+   "length": 13230,
+   "digest": "09058e03c47bce69"
+  },
+  {
+   "length": 13230,
+   "digest": "b05013eff3719b0d"
+  },
+  {
+   "length": 13230,
+   "digest": "9e268264a39a0e4a"
+  },
+  {
+   "length": 13230,
+   "digest": "7ff3d309323d9a96"
+  }
+ ],
+ "bluntBig": [
+  {
+   "length": 19845,
+   "digest": "d16ef78a5d714c41"
+  },
+  {
+   "length": 19845,
+   "digest": "0baaf9b35ae737b5"
+  },
+  {
+   "length": 19845,
+   "digest": "7d81c718600a1b19"
+  },
+  {
+   "length": 19845,
+   "digest": "b49c4cd0fa4b5f16"
+  }
+ ],
+ "blade": [
+  {
+   "length": 18522,
+   "digest": "78330c87434f2c94"
+  },
+  {
+   "length": 18522,
+   "digest": "b3a888500cc9ed92"
+  },
+  {
+   "length": 18522,
+   "digest": "01ab23db713b09d8"
+  },
+  {
+   "length": 18522,
+   "digest": "fc8a2afacbc6c9f1"
+  }
+ ],
+ "bladeBig": [
+  {
+   "length": 24697,
+   "digest": "78da4a4ddfb14bec"
+  },
+  {
+   "length": 24697,
+   "digest": "e1876e01ce3a4e80"
+  },
+  {
+   "length": 24697,
+   "digest": "6d14e9c18ed184f1"
+  },
+  {
+   "length": 24697,
+   "digest": "f2f221bb2d6f45f1"
+  }
+ ],
+ "pierce": [
+  {
+   "length": 14112,
+   "digest": "e3d06c76ba8a24a6"
+  },
+  {
+   "length": 14112,
+   "digest": "376482ca5958f6b8"
+  },
+  {
+   "length": 14112,
+   "digest": "f8ec76b1167408a4"
+  },
+  {
+   "length": 14112,
+   "digest": "037a56e5bfecb3b3"
+  }
+ ],
+ "pierceBig": [
+  {
+   "length": 20286,
+   "digest": "d389e7bb449bf90c"
+  },
+  {
+   "length": 20286,
+   "digest": "427b8573b6a8b4d5"
+  },
+  {
+   "length": 20286,
+   "digest": "64bc1f7ff6bdb1d0"
+  },
+  {
+   "length": 20286,
+   "digest": "ef7f1059d67a3e48"
+  }
+ ],
+ "heavy": [
+  {
+   "length": 19404,
+   "digest": "83982e8ade708fd4"
+  },
+  {
+   "length": 19404,
+   "digest": "8054ad5fe330b267"
+  },
+  {
+   "length": 19404,
+   "digest": "92fd8aa3ee498a86"
+  },
+  {
+   "length": 19404,
+   "digest": "17b3e4afe1eae2a0"
+  }
+ ],
+ "heavyBig": [
+  {
+   "length": 27342,
+   "digest": "af50b467ef20fda8"
+  },
+  {
+   "length": 27342,
+   "digest": "ae7b56887d1c0725"
+  },
+  {
+   "length": 27342,
+   "digest": "edef64de83a6ce4e"
+  },
+  {
+   "length": 27342,
+   "digest": "090b62979f8faefe"
+  }
+ ],
+ "armor": [
+  {
+   "length": 26460,
+   "digest": "2487d41affdb0e18"
+  },
+  {
+   "length": 26460,
+   "digest": "8772cad2b35ff080"
+  },
+  {
+   "length": 26460,
+   "digest": "7fd81c7a9572bd16"
+  }
+ ],
+ "jump": [
+  {
+   "length": 5733,
+   "digest": "c9a66a11fdb6f968"
+  },
+  {
+   "length": 5733,
+   "digest": "9bbd657b54503199"
+  }
+ ],
+ "land": [
+  {
+   "length": 7056,
+   "digest": "b05ad4a3b6dc5b6a"
+  },
+  {
+   "length": 7056,
+   "digest": "31f03334439acff4"
+  },
+  {
+   "length": 7056,
+   "digest": "a597f097f8bfab05"
+  }
+ ],
+ "dash": [
+  {
+   "length": 14112,
+   "digest": "b96cbe062de96a68"
+  },
+  {
+   "length": 14112,
+   "digest": "5bc785bbfecada69"
+  },
+  {
+   "length": 14112,
+   "digest": "230fd6f349e0fb73"
+  },
+  {
+   "length": 14112,
+   "digest": "9f577bfe1c83303f"
+  }
+ ],
+ "dashAir": [
+  {
+   "length": 13230,
+   "digest": "6d2ff1f72b6d949a"
+  },
+  {
+   "length": 13230,
+   "digest": "2d0aeb8f6bffd0f5"
+  },
+  {
+   "length": 13230,
+   "digest": "d0cec277ef4159cf"
+  },
+  {
+   "length": 13230,
+   "digest": "cdffba08c52dc1c3"
+  }
+ ],
+ "warp": [
+  {
+   "length": 5733,
+   "digest": "6704279227437751"
+  },
+  {
+   "length": 5733,
+   "digest": "524c7ea9e7b16eff"
+  }
+ ],
+ "release": [
+  {
+   "length": 14112,
+   "digest": "448d401918995670"
+  },
+  {
+   "length": 14112,
+   "digest": "5a4f0b632fcdcdce"
+  }
+ ],
+ "break": [
+  {
+   "length": 14112,
+   "digest": "05ef876753fcc06c"
+  },
+  {
+   "length": 14112,
+   "digest": "13914e3342e56209"
+  }
+ ],
+ "shatter": [
+  {
+   "length": 26460,
+   "digest": "2d682bfed4f9c09c"
+  }
+ ],
+ "ko": [
+  {
+   "length": 24256,
+   "digest": "436589f6a9b04eff"
+  },
+  {
+   "length": 24256,
+   "digest": "1d47a6fac06bfded"
+  },
+  {
+   "length": 24256,
+   "digest": "1d3e2667c473f98c"
+  }
+ ],
+ "boom": [
+  {
+   "length": 37485,
+   "digest": "d419224cadba135f"
+  },
+  {
+   "length": 37485,
+   "digest": "6728dcf492285484"
+  }
+ ],
+ "voiceHurt": [
+  {
+   "length": 11907,
+   "digest": "0817533f00f9866a"
+  },
+  {
+   "length": 11907,
+   "digest": "b0e78a0caf942cc7"
+  },
+  {
+   "length": 11907,
+   "digest": "d30a308e13b52128"
+  },
+  {
+   "length": 11907,
+   "digest": "82a9d6618f7b6631"
+  },
+  {
+   "length": 11907,
+   "digest": "c538cf3e0c5b7b39"
+  },
+  {
+   "length": 11907,
+   "digest": "f62c2398b9b215b1"
+  }
+ ],
+ "voiceDie": [
+  {
+   "length": 39690,
+   "digest": "72750df2199a8ef1"
+  },
+  {
+   "length": 39690,
+   "digest": "1b28225bacbb733c"
+  },
+  {
+   "length": 39690,
+   "digest": "5f0a20a0605a98ad"
+  },
+  {
+   "length": 39690,
+   "digest": "db68b16b657921e5"
+  },
+  {
+   "length": 39690,
+   "digest": "fe27f6ec6bff8931"
+  }
+ ],
+ "voiceHero": [
+  {
+   "length": 10584,
+   "digest": "7182ba267dce11b8"
+  },
+  {
+   "length": 10584,
+   "digest": "146d9ae9443e7081"
+  },
+  {
+   "length": 10584,
+   "digest": "cf6095455d92e119"
+  }
+ ],
+ "voiceBoss": [
+  {
+   "length": 17640,
+   "digest": "7e78da58920855b5"
+  },
+  {
+   "length": 17640,
+   "digest": "fd5a0a1a669322a4"
+  }
+ ],
+ "voiceBossKo": [
+  {
+   "length": 55125,
+   "digest": "7e5df907cc61b810"
+  }
+ ]
+}

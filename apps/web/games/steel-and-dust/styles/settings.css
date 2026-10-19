@@ -1,0 +1,90 @@
+.group {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  letter-spacing: var(--tracking-wider);
+  margin: 14px 0 6px;
+}
+
+.group:first-child {
+  margin-top: 0;
+}
+
+.setrow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 6px 14px;
+  padding: 7px 8px;
+  border: 2px solid var(--color-clear);
+  cursor: default;
+}
+
+.setrow:nth-child(even) {
+  background: var(--color-row-stripe);
+}
+
+.setrow.sel {
+  border-color: var(--color-accent);
+  background: var(--color-row-selected);
+}
+
+.setrow .lbl {
+  font-weight: var(--font-weight-semibold);
+}
+
+.setrow .lbl small {
+  display: block;
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stepper button {
+  width: 34px;
+  height: 34px;
+  font-family: var(--font-display);
+  font-size: var(--font-size-md);
+  background: var(--color-panel-raised);
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+  box-shadow: var(--shadow-pixel-sm);
+}
+
+.stepper button:hover {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+
+.stepper .val {
+  min-width: 96px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: var(--font-size-sm);
+  color: var(--color-accent);
+}
+
+.meter {
+  display: inline-block;
+  width: 60px;
+  height: 8px;
+  background: var(--color-night);
+  border: 1px solid var(--color-border);
+  vertical-align: middle;
+  margin-left: 6px;
+  position: relative;
+}
+
+.meter i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--color-accent);
+}

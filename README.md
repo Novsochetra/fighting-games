@@ -1,88 +1,62 @@
-# Steel & Dust
+# Retro Arcade
 
-A 2D pixel-art melee brawler prototype, inspired by Metal Slug's stages but with weapons instead of guns. It's written in plain JavaScript and Canvas, in a single `index.html` with no build step.
+A small arcade of browser games. A Node server lists the games through an API, the home page shows
+them like a console's game-select screen, and each game lives in its own folder.
+
+Play it online at **https://novsochetra.github.io/fighting-games/**.
+
+## Games
+
+| Game                              | Folder                                                                      |
+| --------------------------------- | --------------------------------------------------------------------------- |
+| Steel & Dust, a pixel-art brawler | [`apps/web/games/steel-and-dust/`](apps/web/games/steel-and-dust/README.md) |
 
 ## Run it
 
-Play it online at **https://novsochetra.github.io/fighting-games/**, or serve the folder and open `index.html` in a browser.
+Node 22 or newer.
 
-The page is just the game: a 16:9 screen that fills the window, with a title menu (Play, How to play, Settings, Full screen), a pause menu, and game over and stage clear screens. On a phone, Play also switches to full screen and landscape where the browser allows it. On iPhone, use *Add to Home Screen* to play full screen.
+```bash
+npm install
+```
 
-## Controls
+```bash
+npm run dev
+```
 
-| Action | Keyboard | Touch | Gamepad |
-| --- | --- | --- | --- |
-| Move | ← → or A D | the stick in the bottom-left corner (or a floating stick, in Settings) | stick or d-pad |
-| Jump | ↑ / W / Space (hold ← or → to jump that way) | JUMP | A |
-| Dash (invincible) | Shift, or tap ← → twice; once more in the air. Hold the other way to turn, or dash again to dash back | DASH | B |
-| Light attack | J or Z | ATTACK (hold to keep the combo going) | X |
-| Heavy attack | tap K or X | HEAVY | Y |
-| Charge attack | hold K, let go (level 1 after 0.4 s, max after 1.1 s) | hold HEAVY | hold Y |
-| Launcher | ↓ + K, or ↑ + K to launch and jump after the enemy | stick up or down + HEAVY | stick + Y |
-| Low sweep | ↓ + J | stick down + ATTACK | stick down + X |
-| Rising strike | ↑ + J together | stick up + ATTACK | stick up + X |
-| Air pogo | in the air, ↓ + J | in the air, stick down + ATTACK | stick down + X |
-| Air dive | in the air, ↓ + K | in the air, stick down + HEAVY | stick down + Y |
-| Dash attack | J during a dash (K for a sliding launcher) | ATTACK during a dash | X during a dash |
-| Ultimate | L or U when the ULT bar is full | ULT | RB or RT |
-| Pause | P or Esc | II | Start |
-| Full screen / sound | F / M | menu | menu |
+Then open http://localhost:8765/. Pick a game with the arrow keys and Enter, a gamepad, or a tap.
 
-Menus work with the arrow keys and Enter (Esc goes back), with a gamepad (A / B), or by touch.
+## Project layout
 
-## Settings
+```
+apps/server/   Node HTTP server: GET /api/games and the static files
+apps/web/      everything the browser loads: the home page, design tokens and the games
+scripts/       the static site build for GitHub Pages
+tools/         the project's own ESLint rules
+docs/          architecture notes
+```
 
-Saved in the browser: music and sound volume, difficulty (Easy, Normal, Hard), auto-aim (attacks turn toward the nearest raider, on by default on touch screens), hold ATTACK to combo, screen shake (off / low / full), flashes, damage numbers, touch controls (auto / on / off), joystick (fixed in the corner, or floating under your thumb), button size, vibration, and **Training tools**. With Training tools on, 1–4 swap weapons, 0 fills the ULT bar, H shows hitboxes and frame data, and the pause menu has a weapon switch.
+`docs/architecture.md` explains how the pieces fit, and `CLAUDE.md` holds the coding rules.
 
-## What's in it
+## Quality checks
 
-- **4 weapons:** Fists (unbreakable), Sword, Spear, Axe, each drawn in the hero's hands with its own smear colour (gold, green, ice, ember). Weapons drop from crates and break after a set number of hits, with a warning when they start to crack.
-- **Combo chains**, each with the same structure:
-  - `J J J J` ground string, and a fifth `J` that rushes after the knocked-back enemy and launches them
-  - `J J K` launcher branch
-  - `K K` heavy follow-up (Hurricane Kick, Crossing Cleave, Meteor Lance, Executioner), and `K K K` to finish (Meteor Fist into the wall, Tempest's slash wave, Dragon Tail's hook launcher, Rampage's pull and launch)
-  - `↑+J` rising strike that lifts you into the air with the enemy, ready for `Air J J J K`
-  - `Air ↓+J` pogo: drop onto an enemy's head and bounce off, up to three times a jump
-  - `↓+J` low sweep that trips the enemy and goes under a Bulwark's shield, then `J J J`
-  - `↑+K` launcher
-  - `Air J J J K`, ending in a spike that bounces the enemy off the ground
-  - `Air ↓+K` dive
-  - `↓+K` launcher, and `↑+K` to launch and follow the enemy up
-- **Charge attacks:** hold K for level 1 or max. Every weapon has its own pair: Burst Straight and Tiger Rush (fists), Iai Rush and Crescent Moon, a slash wave (sword), Comet Lunge and Cyclone, which pulls enemies in (spear), Earthsplitter and Cataclysm, which launches every grounded enemy (axe). Holding K at the end of a string charges straight out of it.
-- **Ultimate, Shade Requiem:** hits and damage taken fill the ULT bar. When it's full, time freezes, the hero teleports through every enemy on screen for eight cuts, then launches them all with a screen-wide slash. The hero is invincible throughout.
-- **Juggles** with decay, one ground bounce and one wall bounce per juggle.
-- **3 zones** of raiders that arrive in waves, plus a boss (Warden Ox) with armor, a charge attack and a shockwave slam.
-- **5 enemy types:** Raiders and Cutters up close, **Slingers** (from zone 2) that keep their distance and throw knives you can jump, dash through or hit back, and **Bulwarks** (zone 3) whose shield blocks light hits from the front until a heavy, charged, launching or diving hit, or a hit from behind, breaks the guard.
-- **Game feel:** hitstop, screen shake, a zoom punch and camera kick on big hits, impact rings and speed lines, damage numbers sized by damage, a combo timer and combo results, a red vignette when hurt or low on health, red wind-up flashes on raiders, red danger zones under the boss's slams and charges, off-screen enemy arrows, pickup beams, KO bursts, footstep dust, and slow motion on the final KO.
-- **Sound:** every effect and the soundtrack (title, battle and boss tracks) are synthesized, no audio files. Combat sounds (swings, hits, shouts) are built sample by sample once, a few takes each, when the sound starts, and then play as one buffer each, so a fast combo costs almost nothing. Each weapon has its own swing and hit. A hit is a sharp crack, a two-band slap near 1.2 kHz and 400 Hz, and a body of struck resonant modes pitched where phone speakers can play it, plus the weapon's own voice: knuckles, a slicing blade that rings, a spear's wooden shaft knocking, an axe crunching through bone. A swing is air plus a thin whistle and starts early, so its peak lands on the strike. The dash is a scuff and thump from the feet, a whoomp of air and the cloak snapping (the air dash has no feet in it). Combat sounds are panned to where they happen on screen, swings and dashes sweep the way they travel, and the hero's hits rise a little in pitch as a combo grows. Effects have their own gentle compressor, so hits keep their punch and do not pump the music. Shouts come from a small voice synth: a glottal pulse through vowel formants, with breath, a rasp and a crackle at the end. Raiders grunt when hit and give a Metal Slug style scream when they go down; the boss roars. How to play → Sounds plays every sound and every take. Sounds fired at the same moment are merged, and each kind has a cap on how many play at once. Everything runs through a small room reverb, a soft top-end roll-off and a compressor.
-- **First-time tips** for new players (moving, crates, weapons, launchers, dashing, knives, shields, the ultimate), shown once each.
+| Command                | What it does                                                                   |
+| ---------------------- | ------------------------------------------------------------------------------ |
+| `npm run check`        | everything below; CI and the git pre-commit hook run it                        |
+| `npm run lint`         | ESLint (size, complexity and comment rules) and Stylelint (design tokens only) |
+| `npm run format:check` | Prettier                                                                       |
+| `npm test`             | all tests; also `npm run test:unit`, `test:integration`, `test:regression`     |
 
-## How it's built
+The lint rules enforce small files (150 lines) and functions (40 lines), complexity 10, no section
+banners, no `/** */` blocks, no `TODO` comments, and no raw colors outside the design tokens
+(`apps/web/src/design/tokens.css`) and a game's art palette.
 
-- **Fixed timestep.** Game logic runs at exactly 60 ticks per second, and rendering is separate. Frame data stays exact on any monitor.
-- **Data-driven moves.** Every move is defined in the `WEAPONS` and `EMOVES` tables near the top of the script. Charge timing is `CH0`/`CH1`/`CH2` and the ultimate's numbers are in `ULT`:
+## Add a game
 
-  ```js
-  // mv(name, startup, active, recovery, damage, hitbox[x,y,w,h], knockback[x,y], extras)
-  L1: mv('Jab', 4, 2, 9, 4, [4,-28,14,7], [1.0,0], { next:{ L:'L2', K:'K1' }, ... })
-  ```
-
-  To balance the game, edit these numbers. `next` defines which move a buffered press cancels into during recovery.
-- **Input buffer.** A press is remembered for 8 frames.
-- **Attack tokens.** Only two enemies attack at once; the rest circle at a distance.
-- **Hero sprites.** The player is the Moss Shade, drawn from the PixelLab sprite strips in `assets/sprites/hero/` (see `hero.json`). The game logic runs at 384×216 and the canvas is 768×432, so the world is drawn at 2× and the hero at its native sprite resolution. Each attack's strike frame is shown while its hitbox is active (`HERO_MOVES`).
-- **Weapon variants.** PixelLab drew every animation with the sword, so `tools/bake_hero_weapons.py` builds the other weapons from those frames: it finds the blade in each frame, erases it, recolours the slash smear, and draws a spear or an axe along the same grip line (fists get the blade removed). The result is `assets/sprites/hero/arsenal/`, one strip per animation with four rows: sword, fists, spear, axe. Frames the detector gets wrong are fixed by hand in the script's `OVERRIDES`. Rebuild with `pip install numpy scipy pillow && python3 tools/bake_hero_weapons.py`.
-- **Procedural pixel art.** Enemies are still drawn from a small skeleton (torso, arms, legs, weapon angle). Each move has a wind-up pose `W` and a strike pose `S`, and the same skeleton still drives hitboxes for the player.
-
-## Porting to Godot later
-
-| Here | Godot |
-| --- | --- |
-| `WEAPONS` / `EMOVES` tables | Resource files |
-| `state` strings | an enum plus a `match` block |
-| `tick()` | `_physics_process` at 60 Hz |
-| `box()` hitboxes on active frames | Area2D shapes switched on during active frames |
+Create `apps/web/games/<id>/` with a `game.json` (id, title, tagline, description, genre, players,
+cover), an `index.html` and the game's files. The server finds it and the home page lists it.
 
 ## Deploy
 
-Every push to `main` publishes `index.html` and `assets/` (sprites, icons and the web app manifest) to GitHub Pages via `.github/workflows/pages.yml`.
+Every push to `main` runs `npm run build`, which writes the static site to `dist/` (including
+`dist/api/games`, the API response as a file), and publishes it to GitHub Pages
+(`.github/workflows/pages.yml`). `.github/workflows/ci.yml` runs `npm run check` on every push and pull request.

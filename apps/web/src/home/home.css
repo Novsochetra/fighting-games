@@ -1,0 +1,122 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  color-scheme: dark;
+  background: var(--color-surface-page-edge);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-block-size: 100vh;
+  overflow-x: hidden;
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  line-height: var(--leading-normal);
+  color: var(--color-text);
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    var(--color-surface-page-glow) 0%,
+    var(--color-surface-page) 50%,
+    var(--color-surface-page-edge) 100%
+  );
+  -webkit-tap-highlight-color: var(--color-clear);
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  inline-size: 100%;
+  max-inline-size: var(--layout-content-max-width);
+  min-block-size: 100vh;
+  margin-inline: auto;
+  padding: var(--space-8) var(--layout-gutter-narrow) var(--space-10);
+}
+
+.marquee {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-6);
+  padding-block-end: var(--space-5);
+  border-block-end: var(--border-width-thick) solid var(--color-border);
+}
+
+.marquee__logo {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-accent);
+  text-shadow: var(--text-shadow-logo);
+}
+
+.marquee__credit,
+.menu__count {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--tracking-wider);
+}
+
+.marquee__credit {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-highlight);
+  text-shadow: var(--text-shadow-pixel-sm);
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.menu__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.menu__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-tight);
+  text-shadow: var(--text-shadow-pixel-sm);
+}
+
+.menu__count {
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 40rem) {
+  .screen {
+    padding-inline: var(--layout-gutter-wide);
+  }
+}
+
+@media (max-width: 39.99rem) {
+  .menu__bar {
+    order: -2;
+  }
+
+  .readout {
+    order: -1;
+  }
+}

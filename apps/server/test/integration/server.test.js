@@ -1,0 +1,122 @@
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { serializeCatalog } from '../../src/catalog/build-catalog.js';
+import { loadCatalog } from '../../src/catalog/read-catalog.js';
+import { GAMES_ROOT, WEB_ROOT } from '../../src/paths.js';
+import { rawRequest, startTestServer } from '../support/test-server.js';
+
+let server;
+
+beforeAll(async () => {
+  server = await startTestServer();
+});
+
+afterAll(() => server.close());
+
+const get = (pathname, init) => fetch(`${server.baseUrl}${pathname}`, init);
+
+describe('GET /api/games', () => {
+  it('returns the real catalog as JSON', async () => {
+    const response = await get('/api/games');
+    expect(response.status).toBe(200);
+    expect(response.headers.get('content-type')).toBe('application/json; charset=utf-8');
+    const payload = await response.json();
+    const steelAndDust = payload.games.find((game) => game.id === 'steel-and-dust');
+    expect(steelAndDust).toMatchObject({
+      title: 'Steel & Dust',
+      path: 'games/steel-and-dust/',
+      cover: 'games/steel-and-dust/assets/icons/icon-512.png',
+    });
+  });
+
+  it('sends exactly what the catalog module serializes', async () => {
+    const expected = serializeCatalog(await loadCatalog({ gamesRoot: GAMES_ROOT, warn: () => {} }));
+    expect(await (await get('/api/games')).text()).toBe(expected);
+  });
+
+  it('points every cover at a file the server serves', async () => {
+    const { games } = await (await get('/api/games')).json();
+    for (const game of games) {
+      const cover = await get(`/${game.cover}`);
+      expect(cover.status, game.cover).toBe(200);
+      expect(cover.headers.get('content-type')).toMatch(/^image\//);
+    }
+  });
+
+  it('answers HEAD with headers and no body', async () => {
+    const response = await rawRequest(server.port, '/api/games', 'HEAD');
+    expect(response.status).toBe(200);
+    expect(Number(response.headers['content-length'])).toBeGreaterThan(0);
+    expect(response.body).toBe('');
+  });
+});
+
+describe('static files from apps/web', () => {
+  it('serves the home page at /', async () => {
+    const response = await get('/');
+    expect(response.status).toBe(200);
+    expect(response.headers.get('content-type')).toBe('text/html; charset=utf-8');
+    expect(response.headers.get('cache-control')).toBe('no-cache');
+    expect(await response.text()).toBe(await readFile(path.join(WEB_ROOT, 'index.html'), 'utf8'));
+  });
+
+  it.each([
+    ['/src/home/main.js', 'text/javascript; charset=utf-8'],
+    ['/src/design/tokens.css', 'text/css; charset=utf-8'],
+    ['/games/steel-and-dust/assets/icons/icon-192.png', 'image/png'],
+    [
+      '/games/steel-and-dust/assets/manifest.webmanifest',
+      'application/manifest+json; charset=utf-8',
+    ],
+  ])('serves %s as %s', async (pathname, contentType) => {
+    const response = await get(pathname);
+    expect(response.status).toBe(200);
+    expect(response.headers.get('content-type')).toBe(contentType);
+  });
+
+  it('redirects a folder URL without the trailing slash', async () => {
+    const response = await get('/games/steel-and-dust?from=test', { redirect: 'manual' });
+    expect(response.status).toBe(301);
+    expect(response.headers.get('location')).toBe('/games/steel-and-dust/?from=test');
+  });
+
+  it('answers 404 with a short plain text body', async () => {
+    const response = await get('/no-such-page.html');
+    expect(response.status).toBe(404);
+    expect(response.headers.get('content-type')).toBe('text/plain; charset=utf-8');
+    expect(await response.text()).toBe('Not found\n');
+  });
+
+  it.each(['POST', 'PUT', 'DELETE'])('answers %s with 405', async (method) => {
+    const response = await get('/', { method });
+    expect(response.status).toBe(405);
+    expect(response.headers.get('allow')).toBe('GET, HEAD');
+  });
+
+  it.each([
+    '/..%2f..%2fpackage.json',
+    '/games/../../package.json',
+    '/%2e%2e/',
+    '/%2e%2e/%2e%2e/package.json',
+    '/games/steel-and-dust/..%2f..%2f..%2f..%2fpackage.json',
+    '/index.html%00.png',
+  ])('refuses the traversal attempt %s', async (rawPath) => {
+    const response = await rawRequest(server.port, rawPath);
+    expect(response.status).toBe(404);
+    expect(response.body).toBe('Not found\n');
+  });
+
+  it('refuses traversal after fetch normalizes the URL as well', async () => {
+    expect((await get('/games/../../package.json')).status).toBe(404);
+  });
+
+  it.each([
+    '/test/unit/home/navigation.test.js',
+    '/games/steel-and-dust/test/',
+    '/package.json',
+    '/games/steel-and-dust/.DS_Store',
+  ])('does not serve the private path %s', async (pathname) => {
+    expect((await rawRequest(server.port, pathname)).status).toBe(404);
+  });
+});

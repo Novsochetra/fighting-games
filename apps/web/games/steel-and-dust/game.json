@@ -1,0 +1,11 @@
+{
+  "id": "steel-and-dust",
+  "title": "Steel & Dust",
+  "tagline": "Pixel brawler",
+  "description": "A side-scrolling pixel-art brawler. Pick up weapons, chain combos and fight through three zones to the boss.",
+  "genre": "Beat 'em up",
+  "players": "1 player",
+  "year": 2026,
+  "controls": ["Keyboard", "Gamepad", "Touch"],
+  "cover": "assets/icons/icon-512.png"
+}

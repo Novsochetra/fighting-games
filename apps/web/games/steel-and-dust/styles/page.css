@@ -1,0 +1,83 @@
+:root {
+  --btn: 1;
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--color-black);
+  color: var(--color-text);
+  overflow: hidden;
+  overscroll-behavior: none;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  line-height: var(--leading-normal);
+  touch-action: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: var(--color-clear);
+}
+
+/* iPhone Safari ignores user-scalable=no and does not pass these down from body reliably */
+#app,
+#app * {
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+#stage,
+#stage *,
+.touch,
+.touch * {
+  touch-action: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  -webkit-tap-highlight-color: var(--color-clear);
+}
+
+#app {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    var(--color-surface-page-glow) 0,
+    var(--color-surface-page-edge) 70%
+  );
+}
+
+#stage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 768px;
+  height: 432px;
+  box-shadow: var(--shadow-stage);
+}
+
+#game {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background: var(--color-night);
+  outline: none;
+}
