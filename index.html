@@ -127,6 +127,9 @@ body.touch-on .touch.live{display:block;}
 .tb-pause:active{background:var(--amber);color:var(--ink);}
 .rotate{display:none;}
 @media (orientation:portrait){
+  /* upright phones are narrow: ULT moves up between JUMP and DASH so the cluster stays clear of the stick */
+  .btns{height:calc(256px*var(--btn));}
+  .tb-ult{right:calc(100px*var(--btn));bottom:calc(212px*var(--btn));}
   body.touch-on .rotate{display:block;position:absolute;left:0;right:0;text-align:center;font-family:var(--display);font-size:12px;color:var(--muted);pointer-events:none;}
 }
 @media (prefers-reduced-motion:reduce){.tb-ult.ready{animation:none;box-shadow:0 0 0 4px rgba(232,192,106,.45);}.menu.open,.logo{animation:none;}}
@@ -649,13 +652,13 @@ function ultUpdate(p){
     if(list.length){
       const tg=list[k%list.length],side=k%2?1:-1;
       p.ghosts.push({x:p.x,y:p.y,f:p.f,spr:p.ultSpr,c:'#ffd36b',l:14});
-      p.x=clamp(tg.x+side*16*tg.S,b[0],b[1]);p.y=tg.y;p.air=p.y<GROUND;p.f=tg.x>=p.x?1:-1;
+      p.x=clamp(tg.x+side*16*tg.S,b[0],b[1]);p.y=tg.y;p.air=p.y<GROUND;p.vx=0;p.vy=0;p.f=tg.x>=p.x?1:-1;
       sfx('warp');applyHit(p,tg,ULT.hit,tg.x-p.f*4,tg.y-18*tg.S);
     }else sparks(p.x+p.f*14,p.y-22,6,'#ffd36b',2.4);
   }
   if(t===s1){                                              // back to the middle of the screen for the finale
     p.ghosts.push({x:p.x,y:p.y,f:p.f,spr:p.ultSpr,c:'#ffd36b',l:14});
-    p.x=clamp(camX+W/2,b[0],b[1]);p.y=GROUND;p.air=false;sfx('warp');
+    p.x=clamp(camX+W/2,b[0],b[1]);p.y=GROUND;p.air=false;p.vx=0;p.vy=0;sfx('warp');
   }
   if(t>=s1){
     const k=t-s1,fa=ULT.finAt;
@@ -664,7 +667,7 @@ function ultUpdate(p){
       flashT=10;bandT=16;shake(6,24);sfx('ultEnd');slowT=Math.max(slowT,36);
       const f0=p.f;for(const tg of ultTargets()){p.f=tg.x>=p.x?1:-1;applyHit(p,tg,ULT.end,tg.x,tg.y-18*tg.S);}p.f=f0;
     }
-    if(k>=ULT.fin){p.iframes=40;p.state='idle';p.ultSpr=null;}
+    if(k>=ULT.fin){p.iframes=40;p.state='idle';p.ultSpr=null;p.vx=0;p.vy=0;}
   }
 }
 
@@ -865,8 +868,9 @@ function updateFighter(e){
   if(e.state==='attack'&&e.move&&e.mt>=e.move.su-1&&e.mt<=e.move.su+e.move.ac+1){
     const tp=tipPoints(e);e.trail.push({tx:tp.t.x,ty:tp.t.y,ix:tp.i.x,iy:tp.i.y});if(e.trail.length>6)e.trail.shift();
   }else if(e.trail.length)e.trail.shift();
-  if(e.state==='dash'||(e.state==='attack'&&e.move&&e.move.ghost&&e.act))
-    e.ghosts.push({x:e.x,y:e.y,J:e.J,f:e.f,pose:e.pose,spr:heroSprite(e)?heroAnim(e):null,row:heroRow(e),l:10});
+  if((e.state==='dash'&&e.st%4===1&&e.st<14)||(e.state==='attack'&&e.move&&e.move.ghost&&e.act&&e.anim%3===0))   // a few spaced echoes, not one per tick
+    e.ghosts.push({x:e.x,y:e.y,J:e.J,f:e.f,pose:e.pose,spr:heroSprite(e)?heroAnim(e):null,row:heroRow(e),l:12});
+  if(e.state==='dash'&&e.st<12&&e.st%2===0)parts.push({k:'streak',x:e.x-e.f*rnd(4,10),y:e.y-rnd(6,30),vx:-e.f*rnd(1.2,2.2),vy:0,l:10,m:10,len:rnd(5,10)|0});   // wind lines behind a dash
   if(e.state==='walk'&&!e.entering&&e.anim%14===0)dust(e.x-e.f*5,GROUND,1);   // footstep puffs
   for(const g of e.ghosts)g.l--;e.ghosts=e.ghosts.filter(g=>g.l>0);
   if(e.scarf)updScarf(e);
@@ -916,6 +920,7 @@ function stateUpdate(e){
 }
 function physics(e){
   if(e.state==='ult')return;                     // the ultimate places the hero itself
+  if(!e.air&&e.y<GROUND-0.5){e.air=true;if(e.state==='idle'||e.state==='walk')e.state='air';}   // anything left above the ground falls
   if(e.air){const g=(e.state==='juggle'||e.state==='ko')?0.26:0.3;e.vy=Math.min(7,e.vy+g);if(e.state==='juggle')e.vx*=0.985;}
   e.x+=e.vx;e.y+=e.vy;
   if(!e.air&&e.state!=='walk'&&e.state!=='dash'&&!(e.state==='attack'&&e.move&&e.move.sustain&&e.act)){e.vx*=0.8;if(Math.abs(e.vx)<0.05)e.vx=0;}
@@ -997,7 +1002,7 @@ function applyHit(a,t,m,cx,cy){
   if(a.side==='p'){
     combo.n++;combo.t=110;combo.dmg+=dmg;combo.bump=6;
     score+=Math.round(dmg*10*(1+Math.min(combo.n,50)/25));
-    if(a.air&&a.airHits<5&&!m.dive){a.vy=Math.min(a.vy,-1.4);a.airHits++;}
+    if(a.air&&a.airHits<5&&!m.dive&&!m.ult){a.vy=Math.min(a.vy,-1.4);a.airHits++;}
   }else{endCombo();sfx('hurt');}
   if(t.hp<=0){t.hp=0;ko(t,f);return true;}
   const armored=(t.T.armor&&!m.launch&&dmg<13&&t.state!=='juggle'&&!t.air)||(t.state==='attack'&&t.move&&t.move.armor&&t.mt<t.move.su+t.move.ac);
@@ -1154,7 +1159,7 @@ function updateParts(){
     if(p.k==='spark'){p.x+=p.vx;p.y+=p.vy;p.vx*=0.86;p.vy*=0.86;}
     else if(p.k==='dust'){p.x+=p.vx;p.y+=p.vy;p.vx*=0.92;p.vy-=0.005;if(p.l%5===0&&p.s<5)p.s++;}
     else if(p.k==='chunk'){p.vy+=0.25;p.x+=p.vx;p.y+=p.vy;if(p.y>GROUND){p.y=GROUND;p.vy*=-0.4;p.vx*=0.7;}}
-    else if(p.k==='mote'){p.x+=p.vx;p.y+=p.vy;}
+    else if(p.k==='mote'||p.k==='streak'){p.x+=p.vx;p.y+=p.vy;}
   }
   parts=parts.filter(p=>p.l>0);if(parts.length>500)parts.splice(0,parts.length-500);
   for(const f of fx)f.t++;fx=fx.filter(f=>f.t<f.max);
@@ -1496,7 +1501,7 @@ function heroAnim(e){
       if(m.multi&&t<m.su+m.ac)return [nm,((t-m.su)>>2)%N];
       if(t<m.su+m.ac)return [nm,k];
       return [nm,Math.min(N-1,k+1+Math.floor((t-m.su-m.ac)/m.re*(N-1-k)))];}
-    case 'dash':return play('dash',4,false);
+    case 'dash':{const r=play('dash',5,false);r[1]=Math.min(3,1+r[1]);return r;}   // frame 0 is a full-body smear, too loud for a move used this often
     case 'hurt':return play('hurt',4,false);
     case 'juggle':return play('juggle',6,true);
     case 'ko':if(e.air)return play('juggle',6,true);e.sprName='ko';return ['ko',3];
@@ -1522,7 +1527,7 @@ function drawFighter(e){
   const ox=(e.shakeHit>0&&e.hitstop>0)?((e.hitstop&1)?1:-1):0;
   if(heroSprite(e)){
     const row=heroRow(e),trail=WEAPONS[e.weapon.id].trail;
-    for(const g of e.ghosts){ctx.globalAlpha=g.l/22;const [gn,gi]=g.spr||['dash',2];drawHero(gn,gi,g.x,g.y,g.f,g.c||trail,g.row!==undefined?g.row:row);}
+    for(const g of e.ghosts){ctx.globalAlpha=(g.c?0.5:0.28)*g.l/12;const [gn,gi]=g.spr||['dash',2];drawHero(gn,gi,g.x,g.y,g.f,g.c||trail,g.row!==undefined?g.row:row);}
     ctx.globalAlpha=1;
     const [nm,i]=heroAnim(e);
     // charge glow: dim blue while charging, blue at level 1, flickering gold at max (and during the ultimate)
@@ -1585,6 +1590,7 @@ function drawParts(){
     else if(p.k==='dust'){ctx.globalAlpha=Math.max(0,p.l/p.m)*0.75;const r=Math.max(1,Math.round(p.s/2)+1);diamond(p.x,p.y,r,p.c);if(r>1)px(p.x-r+1,p.y-r+1,2,1,'#f6dcb0');ctx.globalAlpha=1;}
     else if(p.k==='chunk'){px(p.x,p.y,2,2,p.c);}
     else if(p.k==='mote'){ctx.globalAlpha=Math.max(0,p.l/p.m);px(p.x,p.y,1,2,p.c);ctx.globalAlpha=1;}
+    else if(p.k==='streak'){ctx.globalAlpha=0.45*p.l/p.m;px(p.vx>0?p.x-p.len:p.x,p.y,p.len,1,'#f1e7d6');ctx.globalAlpha=1;}
   }
   for(const f of fx){
     const k=f.t/f.max;
