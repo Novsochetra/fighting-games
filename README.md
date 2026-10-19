@@ -45,9 +45,10 @@ Saved in the browser: music and sound volume, difficulty (Easy, Normal, Hard), a
 - **Ultimate, Shade Requiem:** hits and damage taken fill the ULT bar. When it's full, time freezes, the hero teleports through every enemy on screen for eight cuts, then launches them all with a screen-wide slash. The hero is invincible throughout.
 - **Juggles** with decay, one ground bounce and one wall bounce per juggle.
 - **3 zones** of raiders that arrive in waves, plus a boss (Warden Ox) with armor, a charge attack and a shockwave slam.
+- **5 enemy types:** Raiders and Cutters up close, **Slingers** (from zone 2) that keep their distance and throw knives you can jump, dash through or hit back, and **Bulwarks** (zone 3) whose shield blocks light hits from the front until a heavy, charged, launching or diving hit, or a hit from behind, breaks the guard.
 - **Game feel:** hitstop, screen shake, a zoom punch and camera kick on big hits, impact rings and speed lines, damage numbers sized by damage, a combo timer and combo results, a red vignette when hurt or low on health, red wind-up flashes on raiders, red danger zones under the boss's slams and charges, off-screen enemy arrows, pickup beams, KO bursts, footstep dust, and slow motion on the final KO.
 - **Music:** a small synthesized soundtrack (title, battle and boss tracks), no audio files.
-- **First-time tips** for new players (moving, crates, weapons, launchers, dashing, the ultimate), shown once each.
+- **First-time tips** for new players (moving, crates, weapons, launchers, dashing, knives, shields, the ultimate), shown once each.
 
 ## How it's built
 

@@ -468,6 +468,8 @@ const ULT={name:'Shade Requiem',intro:46,gap:7,strikes:8,fin:30,finAt:10,
 const ETYPES={
   grunt:{name:'Raider',hp:36,spd:.75,range:20,pal:'raider',weapon:'none',guard:{a1:1.0,a2:-0.6}},
   knife:{name:'Cutter',hp:32,spd:.95,range:22,pal:'raiderB',weapon:'knife',lunge:true,guard:{a1:1.2,a2:0.2,wa:0.1}},
+  sling:{name:'Slinger',hp:28,spd:.85,range:110,pal:'raiderC',weapon:'knife',ranged:true,guard:{a1:1.2,a2:0.2,wa:0.1}},     // keeps its distance and throws knives
+  shield:{name:'Bulwark',hp:64,spd:.55,range:24,pal:'raiderD',weapon:'shield',shield:true,move:'bash',scale:1.12,guard:{a1:0.6,a2:-0.9,wa:-1.57}},   // blocks light hits from the front
   brute:{name:'Warden Ox',hp:300,spd:.55,range:36,pal:'brute',weapon:'hammer',scale:1.35,armor:true,boss:true,guard:{a1:1.35,a2:-0.95,wa:-2.4}},
 };
 const EMOVES={
@@ -476,6 +478,8 @@ const EMOVES={
   lunge:mv('Lunge',22,14,24,9,[2,-27,18,8],[3,-1.5],{knock:true,sustain:true,fwd:3.4,W:{a1:1.8,a2:2.8,wa:0,crouch:3},S:{a1:0,a2:0,wa:0,ff:10,bf:-9,torsoA:-1.15}}),
   swipe:mv('Swipe',22,4,24,10,[2,-38,30,26],[3.5,-1.5],{W:{a1:2.8,a2:3.0,wa:2.9,torsoA:-1.75},S:{a1:.1,a2:.1,wa:.15,torsoA:-1.2,ff:8}}),
   slam:mv('Ground Slam',32,4,32,16,[0,-40,34,40],[3,-4],{knock:true,shock:true,W:{a1:-2.5,a2:-2.8,wa:-3.2,torsoA:-1.85},S:{crouch:5,torsoA:-.95,a1:1.0,a2:1.3,wa:1.57,ff:9}}),
+  toss:mv('Knife Toss',20,1,26,0,[0,0,0,0],[0,0],{toss:true,W:{a1:-2.3,a2:-2.5,wa:-2.7,torsoA:-1.7},S:{a1:.3,a2:.1,wa:.2,torsoA:-1.3,ff:6}}),
+  bash:mv('Shield Bash',20,4,24,9,[2,-34,20,30],[4,-2],{knock:true,fwd:2.2,W:{a1:1.4,a2:0.6,torsoA:-1.75,crouch:2},S:{a1:0,a2:-0.6,torsoA:-1.2,ff:9,bf:-7}}),
   charge:mv('Charge',26,44,26,12,[2,-38,18,36],[4,-3],{knock:true,sustain:true,fwd:3.4,W:{crouch:4,torsoA:-1.2,a1:1.5,a2:1.2,wa:.3},S:{torsoA:-1.05,a1:.3,a2:.2,wa:-.2,ff:9,bf:-8}}),
 };
 function normalize(set){for(const id in set){const m=set[id];m.id=id;m.air=id.charAt(0)==='A';if(!m.cw)m.cw=[m.su+m.ac,m.su+m.ac+m.re];}}
@@ -490,6 +494,10 @@ const PAL={
        boot:'#3b2a1e',bootD:'#2a1d14',bracer:'#9a8a58',bracerD:'#6e623c',glove:'#c98b65',belt:'#5a3a22',buckle:'#b9a676',head:'mask',eye:'#ffffff'},
   raiderB:{ol:'#140f1a',skin:'#c98b65',skinD:'#9a6448',hood:'#a3302a',glow:'#e0604a',glowD:'#7e2420',mask:'#b0473a',hair:'#3a2418',jacket:'#5e7080',jacketD:'#3f4c58',
        pants:'#2c313a',pantsD:'#1e2228',boot:'#3b2a1e',bootD:'#2a1d14',bracer:'#5e7080',bracerD:'#3f4c58',glove:'#3a2a22',belt:'#3a2418',buckle:'#8c98a8',head:'hood',eye:'#ffffff',noTabard:true},
+  raiderC:{ol:'#140f1a',skin:'#c98b65',skinD:'#9a6448',hair:'#2e3a2a',mask:'#7fa07a',jacket:'#5a7a4a',jacketD:'#3e5634',pants:'#4a4a36',pantsD:'#33331f',
+       boot:'#3b2a1e',bootD:'#2a1d14',bracer:'#5a7a4a',bracerD:'#3e5634',glove:'#3a2a22',belt:'#5a3a22',buckle:'#c9c3b5',head:'mask',eye:'#ffe08a'},
+  raiderD:{ol:'#140f1a',skin:'#c98b65',skinD:'#9a6448',hair:'#5a6270',mask:'#8c98a8',jacket:'#4a5568',jacketD:'#343c4a',pants:'#3a3a44',pantsD:'#2a2a32',
+       boot:'#2a2a32',bootD:'#1e1e24',bracer:'#8c98a8',bracerD:'#5a6270',glove:'#3a2a22',belt:'#5a3a22',buckle:'#d9a441',head:'mask',eye:'#ff8a6a',pauldron:'#6a7486'},
   brute:{ol:'#140f1a',skin:'#8a4e30',skinD:'#663820',fur:'#8a4a2c',furD:'#663620',snout:'#d09a6a',horn:'#efdcb0',jacket:'#b0302a',jacketD:'#7e2020',pants:'#2e2a36',pantsD:'#201d26',
        boot:'#3a2a22',bootD:'#2a1d18',bracer:'#c9c3b5',bracerD:'#9a958a',glove:'#8a4e30',belt:'#4a2a1e',buckle:'#d9a441',plate:'#9ec3d8',pauldron:'#b0302a',head:'bull',eye:'#ffd36b'},
 };
@@ -499,8 +507,8 @@ const FLASHP=tintPal('#ffffff','#140f1a'), ARMORP=tintPal('#ffd36b','#5a3a10'), 
 
 const ZONES=[
   {at:250,l:150,r:534,label:'Zone 1',waves:[['grunt','grunt','grunt'],['grunt','knife','grunt']]},
-  {at:760,l:660,r:1044,label:'Zone 2',waves:[['grunt','knife','grunt'],['knife','grunt','grunt','knife']]},
-  {at:1280,l:1180,r:1564,label:'Zone 3',waves:[['grunt','grunt','knife','grunt'],['knife','knife','grunt','grunt']]},
+  {at:760,l:660,r:1044,label:'Zone 2',waves:[['grunt','knife','sling'],['knife','grunt','sling','knife']]},
+  {at:1280,l:1180,r:1564,label:'Zone 3',waves:[['grunt','shield','knife','grunt'],['sling','knife','shield','sling']]},
   {at:1720,l:1616,r:2000,label:'Boss',boss:true,waves:[['brute']]},
 ];
 const CRATES=[{x:205,item:'sword'},{x:455,item:'ration'},{x:705,item:'spear'},{x:990,item:'ration'},{x:1225,item:'axe'},{x:1500,item:'sword'},{x:1665,item:'ration'},{x:1950,item:'axe'}];
@@ -734,6 +742,7 @@ function weaponLine(e,J,P){
     case 'spear':return {type:id,a:at(-9),b:at(20),dx,dy};
     case 'axe':return {type:id,a:at(-2),b:at(13),dx,dy};
     case 'knife':return {type:id,a:at(-1),b:at(6),dx,dy};
+    case 'shield':return {type:id,a:h,b:h,dx,dy};
     case 'hammer':return {type:id,a:at(-3),b:at(16),dx,dy};
   }
   return null;
@@ -839,8 +848,16 @@ function thinkEnemy(e){
   if(T.boss){bossThink(e,dist);return;}
   const pDown=p.state==='down'||p.state==='getup';
   if(!e.token&&e.ai.cool<=0&&!pDown&&Math.random()<0.03)takeToken(e);
+  if(T.ranged){                                         // slinger: hold the middle distance and throw
+    if(e.token&&e.ai.cool<=0&&!pDown&&dist>30&&dist<150&&Math.abs(p.y-e.y)<50){startMove(e,'toss');return;}
+    const b=bounds(e),cornered=e.x<=b[0]+2||e.x>=b[1]-2;
+    if(dist<64&&!cornered){e.vx=-e.f*T.spd;e.state='walk';e.walkDir=-1;}
+    else if(dist>125){e.vx=e.f*T.spd;e.state='walk';e.walkDir=1;}
+    else{e.vx*=0.6;e.state='idle';}
+    return;
+  }
   if(e.token&&e.ai.cool<=0&&!pDown&&!p.air){
-    if(dist<=T.range+4){startMove(e,T.weapon==='knife'?'stab':'punch');return;}
+    if(dist<=T.range+4){startMove(e,T.move||(T.weapon==='knife'?'stab':'punch'));return;}
     if(T.lunge&&dist>40&&dist<72&&Math.random()<0.04){startMove(e,'lunge');return;}
   }
   const want=e.token?T.range-4:e.ai.space;
@@ -860,7 +877,7 @@ function bossThink(e,dist){
 function updateFighter(e){
   if(e.hitstop>0){e.hitstop--;return;}         // frozen: logic and pose both pause
   e.shakeHit=0;e.anim++;
-  if(e.flash>0)e.flash--;if(e.armorT>0)e.armorT--;if(e.iframes>0)e.iframes--;if(e.hpShow>0)e.hpShow--;
+  if(e.flash>0)e.flash--;if(e.armorT>0)e.armorT--;if(e.blockT>0)e.blockT--;if(e.iframes>0)e.iframes--;if(e.hpShow>0)e.hpShow--;
   if(e.side==='p')thinkPlayer(e);else thinkEnemy(e);
   stateUpdate(e);
   physics(e);
@@ -887,6 +904,7 @@ function stateUpdate(e){
         if(e.side==='e'&&e.T.boss&&m.id==='slam')shake(2,6);
         if(m.charge){sfx('release');shake(m.charge,6);}
         if(m.wave)spawnWave(e,m);
+        if(m.toss)tossKnife(e);
         if(m.quake)quake(e,m);
       }
       const active=t>=m.su&&t<m.su+m.ac;
@@ -980,7 +998,17 @@ function crateBox(c){return {x:c.x-8,y:GROUND-15,w:16,h:15};}
 function applyHit(a,t,m,cx,cy){
   if(t.iframes>0||t.state==='ko'||t.rm)return false;
   if(!m.ult&&(t.state==='getup'||t.state==='dash'||(t.state==='down'&&t.st>10)))return false;
+  if(blocks(a,t,m)){                                  // a Bulwark's shield stops light hits from the front
+    const sx=t.x+t.f*9*t.S,sy=t.y-20*t.S;t.blockT=10;t.vx=-t.f*0.9;a.hitstop=Math.max(a.hitstop||0,3);t.hitstop=3;
+    sparks(sx,sy,7,'#bfe9ff',2.4);impact(sx,sy,false,'#bfe9ff',false,-t.f);sfx('armor');
+    if(a.side==='p'&&a.state==='attack'){a.hitConfirm=true;if(!a.air)a.vx=-a.f*1.3;}
+    nums.push({x:sx,y:sy-8,s:'block',c:'#bfe9ff',t:0});
+    hint('shield','bulwarks block light hits: use K heavy or hit them from behind','Bulwarks block light hits: use HEAVY or get behind them');
+    return true;
+  }
+  const guardBreak=t.T.shield&&guarding(t)&&(a.x-t.x)*t.f>0;
   const f=m.away?(t.x>=a.x?1:-1):a.f,dmg=t.side==='p'?Math.max(1,Math.round(m.dmg*diff().dmg)):m.dmg;
+  if(guardBreak){floatText(t.x,t.y-44*t.S,'guard break!','#ffb347');sfx('break');}
   const lastMulti=!m.multi||(a.mt>=m.su+m.ac-m.multi);
   const knock=m.knock&&lastMulti,kb=(lastMulti&&m.fkb)||m.kb;
   if(a.side==='p'&&!m.ult)meter=Math.min(100,meter+dmg*0.8);
@@ -1018,6 +1046,12 @@ function applyHit(a,t,m,cx,cy){
   if(t.state==='juggle'){t.juggle++;if(t.juggle>16&&!m.launch)t.vy=Math.max(t.vy,0.5);}
   return true;
 }
+function guarding(t){return !t.air&&(t.state==='idle'||t.state==='walk'||(t.state==='attack'&&t.move&&t.mt<t.move.su));}
+function blocks(a,t,m){
+  if(!t.T.shield||!guarding(t))return false;
+  if(m.ult||m.launch||m.charge||m.spike||m.dive||m.dmg>=12)return false;   // heavy, charged, launching and diving hits break the guard
+  return (a.x-t.x)*t.f>0;                                                  // only from the side it faces
+}
 function ko(t,f){
   t.state='ko';t.air=true;t.vy=-3.6;t.vx=f*2.4;t.st=0;t.koB=false;t.move=null;t.act=false;releaseToken(t);
   if(t.side==='e'){
@@ -1046,6 +1080,9 @@ function resolveHits(){
       if(applyHit(a,t,m,cx,cy)){a.hitIds.add(t);hit=true;}
     }
     if(a.side==='p')for(const c of crates)if(!c.broken&&!a.hitIds.has(c)&&overlap(hb,crateBox(c))){a.hitIds.add(c);breakCrate(c);}
+    if(a.side==='p')for(const w of projs)if(w.kind==='knife'&&w.side==='e'&&overlap(hb,knifeBox(w))){   // hit a thrown knife back at the raiders
+      w.side='p';w.dir=a.f;w.spd=4.6;w.dmg=10;w.c='#ffd36b';w.t=0;w.hitIds.clear();a.hitstop=Math.max(a.hitstop,5);
+      sparks(w.x,w.y,10,'#ffd36b',2.8);ring(w.x,w.y,'#ffd36b');sfx('armor');floatText(w.x,w.y-10,'deflect!','#ffd36b');meter=Math.min(100,meter+4);}
     if(hit&&a.side==='p'){
       if(!a.durUsed){a.durUsed=true;useDur(a);}
       if(m.dive&&m.bounce){a.move=null;a.act=false;a.state='air';a.vy=-3.8;a.vx=-a.f*0.8;}
@@ -1072,7 +1109,7 @@ function updateShocks(){
     w.x+=w.dir*3.6;w.t++;
     if(w.t%2===0)parts.push({k:'dust',x:w.x,y:GROUND-2,vx:-w.dir*0.3,vy:-rnd(0.3,0.9),l:18,m:18,s:2,c:'#e2b57d'});
     const hb={x:w.x-6,y:GROUND-12,w:12,h:12};
-    const proxy={f:w.dir,side:w.side,air:false,mt:0,hitstop:0,hitConfirm:false,airHits:9,weapon:{id:w.side==='p'?'axe':'hammer'}};
+    const proxy={x:w.x,f:w.dir,side:w.side,air:false,mt:0,hitstop:0,hitConfirm:false,airHits:9,weapon:{id:w.side==='p'?'axe':'hammer'}};
     const mvw={dmg:w.dmg,kb:[2.5,-3.5],knock:true,stop:5,hs:20};
     for(const t of F){if(t.side===w.side||t.air||w.hitIds.has(t))continue;const hu=hurtBox(t);if(hu&&overlap(hb,hu)){if(applyHit(proxy,t,mvw,w.x,GROUND-8))w.hitIds.add(t);}}
     if(w.side==='p')for(const c of crates)if(!c.broken&&overlap(hb,crateBox(c)))breakCrate(c);
@@ -1080,17 +1117,22 @@ function updateShocks(){
   shocks=shocks.filter(w=>w.t<24);
 }
 function spawnWave(e,m){projs.push({x:e.x+e.f*18,y:e.y-22,dir:e.f,side:e.side,t:0,dmg:m.wave,hitIds:new Set(),c:WEAPONS[e.weapon.id].trail});}
+function tossKnife(e){projs.push({kind:'knife',x:e.x+e.f*10,y:e.y-24*e.S,dir:e.f,side:e.side,t:0,dmg:6,spd:3.1,hitIds:new Set(),c:'#dfe6ef'});sfx('swing');}
+const knifeBox=w=>({x:w.x-5,y:w.y-4,w:10,h:8});
 function updateProjs(){
   for(const w of projs){
-    w.x+=w.dir*4.6;w.t++;
-    if(w.t%2===0)parts.push({k:'spark',x:w.x-w.dir*6,y:w.y+rnd(-12,12),vx:-w.dir*rnd(.5,1.5),vy:0,l:10,m:14,c:w.c});
-    const hb={x:w.x-8,y:w.y-18,w:16,h:36};
-    const proxy={f:w.dir,side:w.side,air:false,mt:0,hitstop:0,hitConfirm:false,airHits:9,weapon:{id:'sword'}};
-    const mvw={dmg:w.dmg,kb:[3,-3.6],knock:true,stop:6,hs:20};
-    for(const t of F){if(t.side===w.side||w.hitIds.has(t))continue;const hu=hurtBox(t);if(hu&&overlap(hb,hu)&&applyHit(proxy,t,mvw,w.x,w.y))w.hitIds.add(t);}
+    const knife=w.kind==='knife';
+    w.x+=w.dir*(w.spd||4.6);w.t++;
+    if(!knife&&w.t%2===0)parts.push({k:'spark',x:w.x-w.dir*6,y:w.y+rnd(-12,12),vx:-w.dir*rnd(.5,1.5),vy:0,l:10,m:14,c:w.c});
+    if(knife&&w.t%3===0)parts.push({k:'streak',x:w.x-w.dir*4,y:w.y,vx:-w.dir*0.6,vy:0,l:8,m:8,len:4});
+    const hb=knife?knifeBox(w):{x:w.x-8,y:w.y-18,w:16,h:36};
+    const proxy={x:w.x,f:w.dir,side:w.side,air:false,mt:0,hitstop:0,hitConfirm:false,airHits:9,weapon:{id:w.side==='p'?'sword':'knife'}};
+    const mvw=knife?{dmg:w.dmg,kb:[1.6,0],stop:4,hs:16}:{dmg:w.dmg,kb:[3,-3.6],knock:true,stop:6,hs:20};
+    if(knife&&w.side==='e')hint('sling','jump or dash over thrown knives, or hit them back','JUMP or DASH over thrown knives, or hit them back');
+    for(const t of F){if(t.side===w.side||w.hitIds.has(t))continue;const hu=hurtBox(t);if(hu&&overlap(hb,hu)&&applyHit(proxy,t,mvw,w.x,w.y)){w.hitIds.add(t);if(knife)w.dead=true;}}
     if(w.side==='p')for(const c of crates)if(!c.broken&&overlap(hb,crateBox(c)))breakCrate(c);
   }
-  projs=projs.filter(w=>w.t<70&&w.x>camX-40&&w.x<camX+W+40);
+  projs=projs.filter(w=>!w.dead&&w.t<(w.kind==='knife'?150:70)&&w.x>camX-40&&w.x<camX+W+40);
 }
 function quake(e,m){                             // every grounded enemy on screen that the swing itself misses is launched
   spawnShock(e);shake(5,22);
@@ -1197,7 +1239,7 @@ function updateZones(){
   }else waveDelay=0;
   if(boss&&boss.state!=='ko'&&!boss.entering){
     if(++addT>420){addT=0;const n=F.filter(e=>e.side==='e'&&!e.T.boss&&e.state!=='ko').length;
-      if(n<2)spawnQ.push({type:Math.random()<.5?'grunt':'knife',side:Math.random()<.5?-1:1,d:1});}
+      if(n<2)spawnQ.push({type:['grunt','knife','sling'][Math.random()*3|0],side:Math.random()<.5?-1:1,d:1});}
   }
 }
 function stageClear(){
@@ -1431,6 +1473,9 @@ function drawWeapon(w,e,ghost){
     case 'axe':{limb(w.a,w.b,2,wood,ol);const c={x:w.b.x-w.dx*2*S,y:w.b.y-w.dy*2*S};const e1={x:c.x+qx*5*S,y:c.y+qy*5*S},e0={x:c.x-qx*1.5*S,y:c.y-qy*1.5*S};
       limb(e0,e1,Math.round(4*S),steel,ol);if(!ghost){pline(e1.x-w.dx*1.5,e1.y-w.dy*1.5,e1.x+w.dx*1.5,e1.y+w.dy*1.5,1,'#7fe3ff');px(e1.x,e1.y,1,1,'#ffffff');}break;}
     case 'knife':limb(h,w.b,1,steel,ol);break;
+    case 'shield':{const c={x:h.x+f*2*S,y:h.y-3*S},hw=Math.round(3*S),hh=Math.round(11*S),x0=Math.round(c.x-hw),y0=Math.round(c.y-hh);   // tall tower shield in the front hand
+      px(x0-1,y0-1,hw*2+2,hh*2+2,ol);px(x0,y0,hw*2,hh*2,ghost?steel:e.blockT>0?'#ffffff':'#8c98a8');px(x0+1,y0+1,hw*2-2,hh*2-2,ghost?steel:'#6b4e36');
+      px(x0+1,y0+hh-1,hw*2-2,2,ghost?steel:'#8c98a8');px(c.x-1,c.y-1,2,2,ghost?steel:'#d9a441');break;}
     case 'hammer':{limb(w.a,w.b,Math.round(2*S),wood,ol);const c={x:w.b.x-w.dx*2*S,y:w.b.y-w.dy*2*S};
       const h0={x:c.x-qx*5*S,y:c.y-qy*5*S},h1={x:c.x+qx*5*S,y:c.y+qy*5*S};
       limb(h0,h1,Math.round(6*S),ghost?steel:'#8c98a8',ol);if(!ghost){pline(h0.x,h0.y,h1.x,h1.y,2,'#4a5060');pline(h0.x-w.dx*2,h0.y-w.dy*2,h1.x-w.dx*2,h1.y-w.dy*2,1,'#c9d2dc');}break;}
@@ -1576,8 +1621,14 @@ function drawShocks(){
       for(let r=0;r<=hh;r++){const half=Math.round((hh-r)/hh*3);px(x-half-1,GROUND-r,half*2+3,1,'#140f1a');}
       for(let r=0;r<hh;r++){const half=Math.round((hh-r)/hh*3)-1;if(half<0)continue;px(x-half,GROUND-r,half+1,1,'#f3e0a8');px(x+1,GROUND-r,half,1,'#c9a46a');}}}
 }
-function drawProjs(){                            // sword wave: a travelling crescent
+function drawProjs(){                            // sword wave: a travelling crescent; thrown knives spin
   for(const w of projs){
+    if(w.kind==='knife'){
+      const an=w.t*0.55*w.dir,c=Math.cos(an),sn=Math.sin(an);
+      pline(w.x-c*4,w.y-sn*4,w.x+c*4,w.y+sn*4,3,'#140f1a');pline(w.x-c*1,w.y-sn*1,w.x+c*4,w.y+sn*4,1,w.c);
+      px(w.x-c*3-0.5,w.y-sn*3-0.5,2,2,w.side==='p'?'#ffd36b':'#a3302a');
+      continue;
+    }
     const r=16,cx0=w.x-w.dir*10;ctx.globalAlpha=w.t>60?(70-w.t)/10:1;
     for(let i=0;i<=16;i++){const a=-1.2+i*2.4/16,x=cx0+Math.cos(a)*r*w.dir,y=w.y+Math.sin(a)*r*1.2,th=i>3&&i<13?3:2;
       px(x-1,y-1,th+1,th+1,w.c);if(i>2&&i<14)px(x-w.dir*2,y,1,1,'#ffffff');}
@@ -1720,7 +1771,7 @@ function drawOverlays(){
     text(ULT.name,W/2-slide*W,y+14,'#ffd36b',3,'center');
   }
   if(hintCur&&mode==='play'&&superT<=0){
-    const tx=(touchUsed||COARSE?hintCur.touch:hintCur.keys).toUpperCase(),tw=textW(tx,1),t=hintCur.t,a=t<10?t/10:t>220?(240-t)/20:1,y=lock&&!ZONES[zoneI].boss?20:8;
+    const tx=(touchUsed||COARSE?hintCur.touch:hintCur.keys).toUpperCase(),tw=textW(tx,1),t=hintCur.t,a=t<10?t/10:t>220?(240-t)/20:1,y=54;   // just under the health panel, clear of the action
     ctx.globalAlpha=0.75*a;px(W/2-tw/2-6,y-4,tw+12,13,'#0c0910');ctx.globalAlpha=a;prect(W/2-tw/2-6,y-4,tw+12,13,'#f2a33a');text(tx,W/2,y,'#ffe08a',1,'center');ctx.globalAlpha=1;
   }
   if(fadeT>0){ctx.globalAlpha=fadeT/24;px(0,0,W,H,'#0c0910');ctx.globalAlpha=1;fadeT--;}
@@ -2083,6 +2134,8 @@ function tipsHTML(){
     '<b>Launch</b> raiders with up or down + heavy, follow them into the air and keep hitting.',
     'The thin bar under the combo counter shows how long you have to land the next hit.',
     'Landing hits and taking damage fill the <b>ULT</b> bar. When it is full, Shade Requiem hits every raider on screen.',
+    '<b>Slingers</b> throw knives from a distance: jump or dash over them, or hit a knife back at them.',
+    '<b>Bulwarks</b> block light hits from the front. Break the guard with a heavy, charged or launching attack, or get behind them.',
     'The boss marks the ground in <b>red</b> before a slam or a charge. Get out of the red.',
     'Too hard or too easy? Change the <b>difficulty</b> in Settings at any time.',
   ].map(t=>'<li>'+t+'</li>').join('')+'</ul>';
