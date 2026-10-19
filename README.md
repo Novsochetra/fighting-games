@@ -11,19 +11,23 @@ Play it online at **https://novsochetra.github.io/fighting-games/**, or open `in
 | Action | Keys |
 | --- | --- |
 | Move | ← → or A D |
-| Jump | Space or C |
+| Jump | ↑ / W (hold ← or → to jump that way) |
+| Dash (invincible) | tap ← or → twice; once more in the air |
 | Light attack | J or Z |
-| Heavy attack | K or X |
-| Launcher | hold ↑ / W + K |
-| Air dive | in the air, hold ↓ / S + K |
-| Dash (invincible) | L or Shift |
-| Jump after a launcher hits | Space |
+| Heavy attack | tap K or X |
+| Charge attack | hold K, let go (level 1 after 0.4 s, max after 1.1 s) |
+| Launcher | ↓ + K, or ↑ + K to launch and jump after the enemy |
+| Air dive | in the air, ↓ + K |
+| Dash attack | J during a dash (K for a sliding launcher) |
+| Ultimate | L or U when the ULT bar is full |
 | Pause | P or Esc |
 | Hitbox and frame data view | H |
-| Practice weapon swap | 1 2 3 4 |
+| Practice | 1 2 3 4 swap weapons, 0 fills the ULT bar |
 | Sound | M |
 
-Touch controls appear on phones and tablets.
+Space and Shift still work as keyboard shortcuts for jump and dash.
+
+On phones and tablets a touch pad appears: an analog stick on the left (push up to jump, flick the same way twice to dash) and J, K and ULT buttons on the right.
 
 ## What's in it
 
@@ -34,6 +38,9 @@ Touch controls appear on phones and tablets.
   - `↑+K` launcher
   - `Air J J K`, ending in a spike that bounces the enemy off the ground
   - `Air ↓+K` dive
+  - `↓+K` launcher, and `↑+K` to launch and follow the enemy up
+- **Charge attacks:** hold K for level 1 or max. Every weapon has its own pair: Burst Straight and Tiger Rush (fists), Iai Rush and Crescent Moon, a slash wave (sword), Comet Lunge and Cyclone, which pulls enemies in (spear), Earthsplitter and Cataclysm, which launches every grounded enemy (axe). Holding K at the end of a string charges straight out of it.
+- **Ultimate, Shade Requiem:** hits and damage taken fill the ULT bar. When it's full, time freezes, the hero teleports through every enemy on screen for eight cuts, then launches them all with a screen-wide slash. The hero is invincible throughout.
 - **Juggles** with decay, one ground bounce and one wall bounce per juggle.
 - **3 zones** of raiders that arrive in waves, plus a boss (Warden Ox) with armor, a charge attack and a shockwave slam.
 - **Game feel:** hitstop, screen shake, hit flashes, impact sparks, weapon trails, and slow motion on the final KO.
@@ -41,7 +48,7 @@ Touch controls appear on phones and tablets.
 ## How it's built
 
 - **Fixed timestep.** Game logic runs at exactly 60 ticks per second, and rendering is separate. Frame data stays exact on any monitor.
-- **Data-driven moves.** Every move is defined in the `WEAPONS` and `EMOVES` tables near the top of the script:
+- **Data-driven moves.** Every move is defined in the `WEAPONS` and `EMOVES` tables near the top of the script. Charge timing is `CH0`/`CH1`/`CH2` and the ultimate's numbers are in `ULT`:
 
   ```js
   // mv(name, startup, active, recovery, damage, hitbox[x,y,w,h], knockback[x,y], extras)
