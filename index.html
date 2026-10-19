@@ -90,7 +90,7 @@ td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:righ
 
   <section class="screen" aria-label="Game">
     <div class="screen-inner" id="screenInner">
-      <canvas id="game" width="384" height="216" tabindex="0" aria-label="Steel and Dust game screen. Press Enter or tap to start."></canvas>
+      <canvas id="game" width="768" height="432" tabindex="0" aria-label="Steel and Dust game screen. Press Enter or tap to start."></canvas>
     </div>
   </section>
 
@@ -171,6 +171,7 @@ td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:righ
    Low-res 384x216, fixed 60 Hz simulation, data-driven moves.
    ================================================================ */
 const W=384,H=216,GROUND=184,WORLD_W=2000,STEP=1000/60;
+const RS=2;   // canvas pixels per game pixel: the world is drawn 2x, hero sprites at their native resolution
 const cv=document.getElementById('game');
 const ctx=cv.getContext('2d');
 ctx.imageSmoothingEnabled=false;
@@ -284,7 +285,7 @@ const WEAPONS={
       AK:mv('Axe Kick',7,4,14,9,[0,-24,18,18],[1.5,0],{spike:true,tip:'foot',W:{ff:6,fl:15,torsoA:-1.8},S:{ff:9,fl:0,torsoA:-1.25}}),
       ADK:mv('Dive Kick',5,60,10,8,[2,-12,13,12],[2.5,-2],{dive:[3.2,4.6],bounce:true,tip:'foot',W:{ff:2,fl:8},S:{ff:10,fl:-2,torsoA:-1.75}}),
     }},
-  sword:{name:'Sword',dur:40,trail:'#5fd8ff',hit:'blade',spark:'#7fe3ff',blade:true,guard:{a1:1.0,a2:-0.2,wa:-1.25},
+  sword:{name:'Sword',dur:40,trail:'#5fe8a0',hit:'blade',spark:'#7fffb0',blade:true,guard:{a1:1.0,a2:-0.2,wa:-1.25},
     desc:'Balanced speed and reach. The all-rounder.',
     tryCombo:'J J J J for a four-hit string, or J J K, Space, Air J J K',
     moves:{
@@ -422,7 +423,7 @@ function useBuf(){buf.b=null;buf.t=0;}
 /* ================================================================
    FIGHTERS
    ================================================================ */
-const PLAYER_T={name:'Kai',hp:100,scale:1,pal:'kai'};
+const PLAYER_T={name:'Moss Shade',hp:100,scale:1,pal:'kai'};
 function makeFighter(side,type,x){
   const T=side==='p'?PLAYER_T:ETYPES[type];
   return {side,type,T,x,y:GROUND,vx:0,vy:0,f:1,hp:T.hp,maxHp:T.hp,hpLag:T.hp,S:T.scale||1,pal:PAL[T.pal],
@@ -622,7 +623,7 @@ function updateFighter(e){
   if(e.state==='attack'&&e.move&&e.mt>=e.move.su-1&&e.mt<=e.move.su+e.move.ac+1){
     const tp=tipPoints(e);e.trail.push({tx:tp.t.x,ty:tp.t.y,ix:tp.i.x,iy:tp.i.y});if(e.trail.length>6)e.trail.shift();
   }else if(e.trail.length)e.trail.shift();
-  if(e.state==='dash'){e.ghosts.push({x:e.x,J:e.J,f:e.f,pose:e.pose,l:10});}
+  if(e.state==='dash'){e.ghosts.push({x:e.x,y:e.y,J:e.J,f:e.f,pose:e.pose,l:10});}
   for(const g of e.ghosts)g.l--;e.ghosts=e.ghosts.filter(g=>g.l>0);
   if(e.scarf)updScarf(e);
   if(e.hpLag>e.hp)e.hpLag=Math.max(e.hp,e.hpLag-0.5);else e.hpLag=e.hp;
@@ -670,7 +671,7 @@ function wallHit(e,dir){
 }
 function land(e){
   switch(e.state){
-    case 'air':e.state='idle';e.airHits=0;dust(e.x,GROUND,3);sfx('land');break;
+    case 'air':e.state='idle';e.airHits=0;e.landT=e.anim;dust(e.x,GROUND,3);sfx('land');break;
     case 'attack':{const m=e.move;e.airHits=0;
       if(m&&m.dive){e.mt=m.su+m.ac;e.vx=0;shake(m.shock?3:1,6);dust(e.x,GROUND,8);if(m.shock)spawnShock(e);sfx(m.shock?'heavy':'land');}
       else if(m&&m.air){endMove(e);dust(e.x,GROUND,3);}
@@ -1115,6 +1116,55 @@ function drawBody(e,J,P,pal,ghost,headType){
   if(pal.pauldron){const w=Math.round(6*S),h=Math.round(4*S),x=Math.round(J.sh.x-w/2),y=Math.round(J.sh.y-h/2-1);
     px(x-1,y-1,w+2,h+2,ol);px(x,y,w,h,pal.pauldron);px(x,y,w,1,pal.glow||'#e05a4a');px(x,y+h-1,w,1,ol);}
 }
+/* ---------------- hero sprites (Moss Shade, generated with PixelLab) ----------------
+   Strips live in assets/sprites/hero (see hero.json): one row of 128x80 frames, facing right,
+   feet at (64,76). They are drawn at half size, so one sprite pixel is one canvas pixel. */
+const HERO_SPR={dir:'assets/sprites/hero/',fw:128,fh:80,fx:64,fy:76,scale:1/RS,img:{},tint:{},ready:false,
+  anims:{idle:6,walk:8,jump:8,land:4,dash:4,hurt:4,juggle:4,down:4,getup:5,ko:4,win:4,slash1:5,slash2:5,spin_slash:6,
+    thrust:6,rising_dragon:6,cleave:8,air_slash:4,air_rising_cut:4,meteor_slash:4,plunge:4}};
+// move id -> [strip, strike frame]; the strike frame is held while the hitbox is active. Every weapon shares the sword set.
+const HERO_MOVES={L1:['slash1',2],L2:['slash2',3],L3:['spin_slash',3],L4:['thrust',3],LLK:['rising_dragon',2],UK:['rising_dragon',2],
+  K1:['cleave',3],AL:['air_slash',2],AL2:['air_rising_cut',2],AK:['meteor_slash',3],ADK:['plunge',2]};
+(function(){const names=Object.keys(HERO_SPR.anims);let left=names.length;
+  for(const k of names){const im=new Image();im.onload=()=>{if(--left===0)HERO_SPR.ready=true;};im.src=HERO_SPR.dir+'hero_'+k+'.png';HERO_SPR.img[k]=im;}})();
+function heroSprite(e){return e.side==='p'&&HERO_SPR.ready;}
+function heroTint(name,col){
+  const key=name+col;if(HERO_SPR.tint[key])return HERO_SPR.tint[key];
+  const im=HERO_SPR.img[name],c=mk(im.width,im.height),g=c.getContext('2d');
+  g.drawImage(im,0,0);g.globalCompositeOperation='source-in';g.fillStyle=col;g.fillRect(0,0,c.width,c.height);
+  return HERO_SPR.tint[key]=c;
+}
+function heroAnim(e){
+  const A=HERO_SPR.anims;
+  const play=(nm,ticks,loop)=>{if(e.sprName!==nm){e.sprName=nm;e.sprT=e.anim;}const k=Math.floor((e.anim-e.sprT)/ticks);return [nm,loop?k%A[nm]:Math.min(A[nm]-1,k)];};
+  switch(e.state){
+    case 'idle':case 'walk':{
+      const lt=e.anim-(e.landT===undefined?-99:e.landT);
+      if(lt<9){e.sprName='land';return ['land',[3,2,1][Math.floor(lt/3)]];}
+      if(e.state==='idle')return play('idle',8,true);
+      const r=play('walk',6,true);if(e.walkDir<0)r[1]=A.walk-1-r[1];return r;}
+    case 'air':e.sprName='jump';return ['jump',e.vy<-3?2:e.vy<-1.5?3:e.vy<0?4:e.vy<1?5:e.vy<2.5?6:7];
+    case 'attack':{
+      const m=e.move,[nm,k]=HERO_MOVES[m.id]||['slash1',2],N=A[nm],t=e.mt;e.sprName=nm;
+      if(t<m.su)return [nm,Math.floor(t/m.su*k)];
+      if(t<m.su+m.ac)return [nm,k];
+      return [nm,Math.min(N-1,k+1+Math.floor((t-m.su-m.ac)/m.re*(N-1-k)))];}
+    case 'dash':return play('dash',4,false);
+    case 'hurt':return play('hurt',4,false);
+    case 'juggle':return play('juggle',6,true);
+    case 'ko':if(e.air)return play('juggle',6,true);e.sprName='ko';return ['ko',3];
+    case 'down':{const r=play('down',4,false);r[1]=Math.min(3,2+r[1]);return r;}
+    case 'getup':e.sprName='getup';return ['getup',Math.min(4,Math.floor(e.st/16*5))];
+    case 'win':{const r=play('win',8,false);if(r[1]>=1)r[1]=1+Math.floor((e.anim-e.sprT-8)/8)%3;return r;}
+  }
+  return play('idle',8,true);
+}
+function drawHero(name,i,x,y,f,tint){
+  const S=HERO_SPR,im=tint?heroTint(name,tint):S.img[name],s=S.scale;
+  ctx.save();ctx.translate(Math.round(x*RS)/RS,Math.round(y*RS)/RS);if(f<0)ctx.scale(-1,1);
+  ctx.drawImage(im,i*S.fw,0,S.fw,S.fh,-S.fx*s,-S.fy*s,S.fw*s,S.fh*s);
+  ctx.restore();
+}
 function drawFighter(e){
   if(!e.J)return;
   if(e.state==='ko'&&!e.air&&e.st>30&&(e.st>>2)%2)return;           // blink out
@@ -1122,10 +1172,16 @@ function drawFighter(e){
   // ground shadow
   const hgt=GROUND-e.y,sw=Math.max(6,Math.round(14*e.S-hgt*0.12));
   ctx.globalAlpha=0.35;px(e.x-sw/2,GROUND,sw,2,'#3a1a2a');ctx.globalAlpha=1;
+  const ox=(e.shakeHit>0&&e.hitstop>0)?((e.hitstop&1)?1:-1):0;
+  if(heroSprite(e)){
+    for(const g of e.ghosts){ctx.globalAlpha=g.l/22;drawHero('dash',2,g.x,g.y,g.f,'#3cff9a');}
+    ctx.globalAlpha=1;
+    const [nm,i]=heroAnim(e);drawHero(nm,i,e.x+ox,e.y,e.f,e.flash>0?'#ffffff':e.armorT>0?'#ffd36b':null);
+    return;
+  }
   for(const g of e.ghosts){ctx.globalAlpha=g.l/22;drawBody({...e,f:g.f,J:g.J,scarf:null},g.J,g.pose,GHOST,true,e.pal.head);}
   ctx.globalAlpha=1;
   const pal=e.flash>0?FLASHP:e.armorT>0?ARMORP:e.pal;
-  const ox=(e.shakeHit>0&&e.hitstop>0)?((e.hitstop&1)?1:-1):0;
   if(ox)ctx.translate(ox,0);
   drawBody(e,e.J,e.pose,pal,false,e.pal.head);
   if(ox)ctx.translate(-ox,0);
@@ -1134,7 +1190,7 @@ function drawFighter(e){
   if(e.side==='e'&&!e.T.boss&&e.hpShow>0&&e.state!=='ko'){const x=Math.round(e.x-9),y=Math.round(e.y-44);px(x-1,y-1,20,4,'#140f1a');px(x,y,18,2,'#3a2f48');px(x,y,Math.ceil(18*e.hp/e.maxHp),2,'#e0533d');}
 }
 function drawTrail(e){
-  const tr=e.trail;if(tr.length<2)return;
+  const tr=e.trail;if(tr.length<2||heroSprite(e))return;   // hero sprites draw their own smear arcs
   const col=e.side==='p'?WEAPONS[e.weapon.id].trail:'#ffe6c8';
   ctx.globalAlpha=0.5;ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(tr[0].tx,tr[0].ty);
   for(const p of tr)ctx.lineTo(p.tx,p.ty);for(let i=tr.length-1;i>=0;i--)ctx.lineTo(tr[i].ix,tr[i].iy);ctx.closePath();ctx.fill();
@@ -1239,14 +1295,14 @@ function drawOverlays(){
   if(muted)text('MUTED',W/2,H-8,'#a397ae',1,'center');
 }
 function render(){
-  ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;
+  ctx.setTransform(RS,0,0,RS,0,0);ctx.globalAlpha=1;
   const cx=Math.round(camX);
   let sx=0,sy=0;if(shakeT>0&&mode!=='pause'){sx=Math.round((Math.random()*2-1)*shakeM);sy=Math.round((Math.random()*2-1)*shakeM);}
   ctx.drawImage(SKY,0,0);
-  ctx.setTransform(1,0,0,1,sx,sy);
+  ctx.setTransform(RS,0,0,RS,RS*(sx),RS*(sy));
   drawTiled(FAR,cx*0.12,0);
   drawTiled(MID,cx*0.35,0);
-  ctx.setTransform(1,0,0,1,-cx+sx,sy);
+  ctx.setTransform(RS,0,0,RS,RS*(-cx+sx),RS*(sy));
   drawGround(cx);
   for(const p of PROPS)if(p.x>cx-90&&p.x<cx+W+90)drawProp(p);
   for(const c of crates)if(!c.broken&&c.x>cx-20&&c.x<cx+W+20)drawCrate(c);
@@ -1256,11 +1312,11 @@ function render(){
   drawShocks();drawParts();
   if(debug)drawDebug();
   // foreground rubble, faster parallax for depth
-  ctx.setTransform(1,0,0,1,sx,sy);
+  ctx.setTransform(RS,0,0,RS,RS*(sx),RS*(sy));
   const fo=cx*1.25;
   for(let i=Math.floor(fo/170)-1;i<Math.floor(fo/170)+4;i++){const h=hash(i+500);if(h%3===0)continue;const x=i*170-fo+(h%60),hh=4+(h%5);
     px(x,H-hh,22+(h%14),hh,'#2b1a24');px(x+3,H-hh-2,10,3,'#3a2430');px(x+4,H-hh-2,4,1,'#4e3240');}
-  ctx.setTransform(1,0,0,1,0,0);
+  ctx.setTransform(RS,0,0,RS,0,0);
   if(mode!=='title')drawHUD();
   drawOverlays();
 }

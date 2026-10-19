@@ -36,7 +36,7 @@ Touch controls appear on phones and tablets.
   - `Air ↓+K` dive
 - **Juggles** with decay, one ground bounce and one wall bounce per juggle.
 - **3 zones** of raiders that arrive in waves, plus a boss (Warden Ox) with armor, a charge attack and a shockwave slam.
-- **Game feel:** hitstop, screen shake, hit flashes, impact sparks, weapon trails, a scarf with secondary motion, and slow motion on the final KO.
+- **Game feel:** hitstop, screen shake, hit flashes, impact sparks, weapon trails, and slow motion on the final KO.
 
 ## How it's built
 
@@ -51,7 +51,8 @@ Touch controls appear on phones and tablets.
   To balance the game, edit these numbers. `next` defines which move a buffered press cancels into during recovery.
 - **Input buffer.** A press is remembered for 8 frames.
 - **Attack tokens.** Only two enemies attack at once; the rest circle at a distance.
-- **Procedural pixel art.** Characters are drawn from a small skeleton (torso, arms, legs, weapon angle) at 384×216 and scaled up with nearest-neighbor. Each move has a wind-up pose `W` and a strike pose `S`. Real Aseprite sprites can replace the drawing later without changing the frame data.
+- **Hero sprites.** The player is the Moss Shade, drawn from the PixelLab sprite strips in `assets/sprites/hero/` (see `hero.json`). The game logic runs at 384×216 and the canvas is 768×432, so the world is drawn at 2× and the hero at its native sprite resolution. Each attack's strike frame is shown while its hitbox is active (`HERO_MOVES`). For now every weapon uses the sword animations.
+- **Procedural pixel art.** Enemies are still drawn from a small skeleton (torso, arms, legs, weapon angle). Each move has a wind-up pose `W` and a strike pose `S`, and the same skeleton still drives hitboxes for the player.
 
 ## Porting to Godot later
 
