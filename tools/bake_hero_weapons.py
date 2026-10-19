@@ -401,6 +401,7 @@ def bake_all(ann,outdir=None):
             fr=im[:,k*FW:(k+1)*FW]
             for wi,w in enumerate(WEAPS):
                 strip[wi*FH:(wi+1)*FH,k*FW:(k+1)*FW]=render_frame(fr,ann[n][k],w)
+        if n=='dash':strip[:,0:FW]=strip[:,FW:2*FW]   # the first dash frame is a full-body smear; the game shows the clean lean frames only
         res[n]=strip
         if outdir: save_indexed(strip,outdir+'hero_'+n+'.png')
     return res

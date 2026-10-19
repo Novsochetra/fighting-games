@@ -28,7 +28,13 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box;}
-html,body{margin:0;height:100%;background:#000;color:var(--fg);overflow:hidden;overscroll-behavior:none;}
+html,body{margin:0;height:100%;background:#000;color:var(--fg);overflow:hidden;overscroll-behavior:none;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+/* phones: no text selection, no long-press callout, no double-tap zoom. Set on every element, because iPhone Safari
+   ignores user-scalable=no and does not reliably pass these down from body */
+#app,#app *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
+#stage,#stage *,.touch,.touch *{touch-action:none;}
+#menus .menu,#menus .menu *{touch-action:manipulation;}
+#menus .box .scroll,#menus .box .scroll *{touch-action:pan-y;}
 body{font-family:var(--body);font-size:16px;line-height:1.45;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;}
 button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent;}
 #app{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 40%,#1f1628 0,#08060b 70%);}
@@ -107,6 +113,7 @@ body.touch-on .touch.live{display:block;}
 .stick-base{position:absolute;width:calc(128px*var(--btn));height:calc(128px*var(--btn));margin:calc(-64px*var(--btn)) 0 0 calc(-64px*var(--btn));border-radius:50%;
   background:radial-gradient(circle,rgba(241,231,214,.05) 0 55%,rgba(241,231,214,.1) 56%);border:2px solid rgba(241,231,214,.22);pointer-events:none;transition:opacity .15s;opacity:.55;}
 .stick-base.on{opacity:1;transition:none;}
+body.stick-fixed .stick-base{opacity:.85;}
 .stick-knob{position:absolute;left:50%;top:50%;width:calc(56px*var(--btn));height:calc(56px*var(--btn));margin:calc(-28px*var(--btn)) 0 0 calc(-28px*var(--btn));border-radius:50%;
   background:rgba(242,163,58,.35);border:2px solid var(--amber);box-shadow:0 0 0 3px rgba(0,0,0,.25);}
 .stick-base.on .stick-knob{background:rgba(242,163,58,.75);}
@@ -237,7 +244,7 @@ function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15
 
 /* ---------------- settings (saved in localStorage) ---------------- */
 const COARSE=!!(window.matchMedia&&matchMedia('(pointer:coarse)').matches);
-const SET_DEF={music:60,sfx:80,shake:2,numbers:true,haptics:true,flash:true,touch:'auto',btn:1,aim:COARSE,autoAtk:true,difficulty:1,training:false,hitboxes:false};
+const SET_DEF={music:60,sfx:80,shake:2,numbers:true,haptics:true,flash:true,touch:'auto',btn:1,stick:'fixed',aim:COARSE,autoAtk:true,difficulty:1,training:false,hitboxes:false};
 const S=Object.assign({},SET_DEF);
 try{Object.assign(S,JSON.parse(localStorage.getItem('sd_settings')||'{}'));}catch(e){}
 function saveSettings(){try{localStorage.setItem('sd_settings',JSON.stringify(S));}catch(e){}}
@@ -1920,6 +1927,7 @@ function fit(){
 }
 function applyTouch(){
   document.body.classList.toggle('touch-on',touchOn());
+  document.body.classList.toggle('stick-fixed',S.stick==='fixed');
   document.documentElement.style.setProperty('--btn',String([0.82,1,1.2][S.btn]||1));
   fit();
 }
@@ -1932,6 +1940,20 @@ addEventListener('pointerdown',e=>{
   audioInit();
 },true);
 app.addEventListener('contextmenu',e=>e.preventDefault());
+// keep the browser's own gestures out of the game: pinch zoom (iPhone ignores user-scalable=no), double-tap zoom, text selection
+const stopIt=e=>e.preventDefault();
+for(const ev of ['gesturestart','gesturechange','gestureend','dblclick'])document.addEventListener(ev,stopIt,{passive:false});
+document.addEventListener('selectstart',stopIt);
+// the game screen and the touch controls take raw touches only; pointer events still reach the stick and buttons
+for(const el of [stage,document.getElementById('touch')])el.addEventListener('touchstart',e=>{e.preventDefault();const s=window.getSelection();if(s&&s.rangeCount)s.removeAllRanges();},{passive:false});
+// menus: a quick second tap would zoom on iPhone, so swallow it and click the button ourselves
+{let lastEnd=-1e9,sx=0,sy=0;const menusEl=document.getElementById('menus');
+  menusEl.addEventListener('touchstart',e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;},{passive:true});
+  menusEl.addEventListener('touchend',e=>{
+    const t=e.changedTouches[0],now=e.timeStamp,tap=Math.hypot(t.clientX-sx,t.clientY-sy)<12;
+    if(tap&&now-lastEnd<350){e.preventDefault();const b=e.target.closest('button');if(b)b.click();}
+    if(tap)lastEnd=now;
+  },{passive:false});}
 hooks.input=k=>{lastInput=k;};
 
 /* ---------- touch: a floating stick on the left half, action buttons on the right ----------
@@ -1949,7 +1971,7 @@ function setDir(k,on){if(sdir[k]===on)return;sdir[k]=on;held[k]=on;}
 function stickAt(e){
   const R=base.offsetWidth/2-knob.offsetWidth/4;
   let dx=e.clientX-scx,dy=e.clientY-scy,d=Math.hypot(dx,dy);
-  if(d>R*1.35){const k=(d-R*1.35)/d;scx+=dx*k;scy+=dy*k;dx=e.clientX-scx;dy=e.clientY-scy;d=Math.hypot(dx,dy);   // the base follows a finger that slides past it
+  if(S.stick==='float'&&d>R*1.35){const k=(d-R*1.35)/d;scx+=dx*k;scy+=dy*k;dx=e.clientX-scx;dy=e.clientY-scy;d=Math.hypot(dx,dy);   // a floating base follows a finger that slides past it
     const z=zone.getBoundingClientRect();base.style.left=(scx-z.left)+'px';base.style.top=(scy-z.top)+'px';}
   const c=d>R?R/d:1;knob.style.transform='translate('+(dx*c)+'px,'+(dy*c)+'px)';
   const nx=dx/R,ny=dy/R;
@@ -1959,8 +1981,15 @@ function stickAt(e){
 zone.addEventListener('pointerdown',e=>{
   e.preventDefault();if(stickId!==null)return;
   const z=zone.getBoundingClientRect(),R=base.offsetWidth/2;
-  stickId=e.pointerId;scx=clamp(e.clientX,z.left+R*0.6,z.right-R*0.6);scy=clamp(e.clientY,z.top+R*0.6,z.bottom-R*0.6);
-  base.style.left=(scx-z.left)+'px';base.style.top=(scy-z.top)+'px';base.classList.add('on');
+  if(S.stick==='fixed'){                         // fixed: the stick stays in its corner; a thumb must land on or near it
+    const b=base.getBoundingClientRect(),cx=b.left+b.width/2,cy=b.top+b.height/2;
+    if(Math.hypot(e.clientX-cx,e.clientY-cy)>R*1.9)return;
+    stickId=e.pointerId;scx=cx;scy=cy;
+  }else{                                         // floating: the stick appears under the thumb
+    stickId=e.pointerId;scx=clamp(e.clientX,z.left+R*0.6,z.right-R*0.6);scy=clamp(e.clientY,z.top+R*0.6,z.bottom-R*0.6);
+    base.style.left=(scx-z.left)+'px';base.style.top=(scy-z.top)+'px';
+  }
+  base.classList.add('on');
   try{zone.setPointerCapture(e.pointerId);}catch(_){}
   stickAt(e);
 });
@@ -2128,6 +2157,7 @@ const SETTINGS=[
   {k:'numbers',l:'Damage numbers',opts:[false,true],fmt:onOff},
   {g:'Touch controls'},
   {k:'touch',l:'Touch controls',opts:['auto','on','off'],fmt:v=>({auto:'Auto',on:'On',off:'Off'})[v]},
+  {k:'stick',l:'Joystick',opts:['fixed','float'],fmt:v=>v==='fixed'?'Fixed':'Floating',sub:'Fixed stays in the corner; floating appears where you touch'},
   {k:'btn',l:'Button size',opts:[0,1,2],fmt:v=>['Small','Medium','Large'][v]},
   {k:'haptics',l:'Vibration',opts:[false,true],fmt:onOff,show:()=>!!navigator.vibrate},
   {g:'Training'},
@@ -2156,7 +2186,7 @@ function changeSetting(k,d,wrap){
   else{const o=def.opts,i=o.indexOf(S[k]);let j=i+d;if(wrap)j=(j+o.length)%o.length;else j=clamp(j,0,o.length-1);S[k]=o[j];}
   saveSettings();sfx('ui');
   if(k==='music'||k==='sfx')applyVolumes();
-  if(k==='touch'||k==='btn')applyTouch();
+  if(k==='touch'||k==='btn'||k==='stick')applyTouch();
   if(k==='difficulty')tokens=Math.max(0,diff().tokens-F.filter(e=>e.token).length);
   const keep=M.sel;buildSettings();M.sel=keep;highlight(lastInput==='key'||lastInput==='pad');
   if(lastInput!=='key'&&lastInput!=='pad'){const it=navItems();if(it[keep])it[keep].classList.add('sel');}
@@ -2173,7 +2203,7 @@ function inputLabel(s){
 const HELP={tab:'controls',weapon:'fists'};
 function controlsHTML(){
   const rows=(title,r)=>'<div class="group">'+title+'</div><table class="keys">'+r.map(x=>'<tr><td>'+x[0]+'</td><td>'+x[1]+'</td></tr>').join('')+'</table>';
-  const touch=rows('Touch',[['Move','drag anywhere on the left half of the screen'],['ATTACK','light attack; hold it to keep the combo going'],['HEAVY','heavy attack; hold to charge, let go to release'],
+  const touch=rows('Touch',[['Move',S.stick==='fixed'?'drag the stick in the bottom-left corner':'drag anywhere on the left half of the screen'],['ATTACK','light attack; hold it to keep the combo going'],['HEAVY','heavy attack; hold to charge, let go to release'],
     ['JUMP','jump; push the stick sideways to jump that way'],['DASH','quick invincible dash, works once in the air'],['Launcher','push the stick up or down, then HEAVY'],['Air dive','in the air, stick down + HEAVY'],['ULT','glows when the bar is full'],['Pause','II in the top corner']]);
   const keys=rows('Keyboard',[['Move',kb('←')+' '+kb('→')+' or '+kb('A')+' '+kb('D')],['Jump',kb('↑')+' / '+kb('W')+' / '+kb('Space')+', hold a direction to jump that way'],
     ['Dash',kb('Shift')+' or tap '+kb('←')+' / '+kb('→')+' twice (invincible)'],['Light attack',kb('J')+' or '+kb('Z')],['Heavy attack',kb('K')+' or '+kb('X')+', hold to charge'],
