@@ -1,0 +1,138 @@
+{
+  "character": "Moss Shade",
+  "facing": "right",
+  "frameWidth": 128,
+  "frameHeight": 80,
+  "feet": {
+    "x": 64,
+    "y": 76
+  },
+  "animations": {
+    "idle": {
+      "spec": "S01",
+      "file": "hero_idle.png",
+      "frames": 6,
+      "loop": true
+    },
+    "walk": {
+      "spec": "S02",
+      "file": "hero_walk.png",
+      "frames": 8,
+      "loop": true
+    },
+    "jump": {
+      "spec": "S03",
+      "file": "hero_jump.png",
+      "frames": 8,
+      "loop": false
+    },
+    "land": {
+      "spec": "S04",
+      "file": "hero_land.png",
+      "frames": 4,
+      "loop": false
+    },
+    "dash": {
+      "spec": "S05",
+      "file": "hero_dash.png",
+      "frames": 4,
+      "loop": false
+    },
+    "hurt": {
+      "spec": "S06",
+      "file": "hero_hurt.png",
+      "frames": 4,
+      "loop": false
+    },
+    "juggle": {
+      "spec": "S07",
+      "file": "hero_juggle.png",
+      "frames": 4,
+      "loop": true
+    },
+    "down": {
+      "spec": "S08",
+      "file": "hero_down.png",
+      "frames": 4,
+      "loop": false
+    },
+    "getup": {
+      "spec": "S09",
+      "file": "hero_getup.png",
+      "frames": 5,
+      "loop": false
+    },
+    "ko": {
+      "spec": "S10",
+      "file": "hero_ko.png",
+      "frames": 4,
+      "loop": false
+    },
+    "win": {
+      "spec": "S11",
+      "file": "hero_win.png",
+      "frames": 4,
+      "loop": true
+    },
+    "slash1": {
+      "spec": "S12",
+      "file": "hero_slash1.png",
+      "frames": 5,
+      "loop": false
+    },
+    "slash2": {
+      "spec": "S13",
+      "file": "hero_slash2.png",
+      "frames": 5,
+      "loop": false
+    },
+    "spin_slash": {
+      "spec": "S14",
+      "file": "hero_spin_slash.png",
+      "frames": 6,
+      "loop": false
+    },
+    "thrust": {
+      "spec": "S15",
+      "file": "hero_thrust.png",
+      "frames": 6,
+      "loop": false
+    },
+    "rising_dragon": {
+      "spec": "S16",
+      "file": "hero_rising_dragon.png",
+      "frames": 6,
+      "loop": false
+    },
+    "cleave": {
+      "spec": "S17",
+      "file": "hero_cleave.png",
+      "frames": 8,
+      "loop": false
+    },
+    "air_slash": {
+      "spec": "S18",
+      "file": "hero_air_slash.png",
+      "frames": 4,
+      "loop": false
+    },
+    "air_rising_cut": {
+      "spec": "S19",
+      "file": "hero_air_rising_cut.png",
+      "frames": 4,
+      "loop": false
+    },
+    "meteor_slash": {
+      "spec": "S20",
+      "file": "hero_meteor_slash.png",
+      "frames": 4,
+      "loop": false
+    },
+    "plunge": {
+      "spec": "S21",
+      "file": "hero_plunge.png",
+      "frames": 4,
+      "loop": false
+    }
+  }
+}
