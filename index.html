@@ -309,9 +309,20 @@ function buildAudio(ctx){
   CRUNCH=new Float32Array(1024);for(let i=0;i<1024;i++){const x=i/511.5-1;CRUNCH[i]=Math.tanh(x*3.2);}
 }
 function audioInit(){
-  if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});buildAudio(AC);applyVolumes();}catch(e){AC=null;}}
-  if(AC&&AC.state==='suspended')AC.resume().catch(()=>{});
+  if(!AC){try{
+    // iPhone: play like a music app, so the sound is not cut by the silent switch (Safari 17+)
+    try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}
+    AC=new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});buildAudio(AC);applyVolumes();
+  }catch(e){AC=null;}}
+  if(AC&&AC.state!=='running'&&!offline){         // 'suspended' before the first tap, 'interrupted' after a call or app switch on iPhone
+    AC.resume().catch(()=>{});
+    try{const b=AC.createBuffer(1,1,22050),src=AC.createBufferSource();src.buffer=b;src.connect(AC.destination);src.start(0);}catch(e){}   // a silent sample inside the tap wakes iOS audio
+  }
 }
+// phones only let a page start sound from certain gestures: a finger lifting (touchend / pointerup), a click or a key press.
+// pointerdown alone is not enough there, so try again on every one of these until the audio is running.
+for(const ev of ['touchend','pointerup','click','keydown'])addEventListener(ev,()=>{if(!AC||AC.state!=='running')audioInit();},{capture:true,passive:true});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&AC&&AC.state!=='running')AC.resume().catch(()=>{});});
 function applyVolumes(){
   if(!AC||!master)return;
   master.gain.value=muted?0:0.9;
@@ -1902,7 +1913,7 @@ function frame(now){
 }
 newGame();player.x=90;camX=0;refreshPose(player);
 requestAnimationFrame(frame);
-window.__sd={tick,render,held,pressed,spawn:(t,s)=>spawnEnemy(t,s||1),audio:{render:renderAudio,sfxAt:(k,big,t0)=>{SFX_T0=t0||0;sfx(k,big);SFX_T0=0;},musicStep,SONGS},get player(){return player;},get F(){return F;},get mode(){return mode;},set mode(v){mode=v;},get state(){return {zoneI,waveI,lock,score,combo,camX,clearT};}};
+window.__sd={tick,render,held,pressed,spawn:(t,s)=>spawnEnemy(t,s||1),audio:{get state(){return AC?AC.state:'none';},render:renderAudio,sfxAt:(k,big,t0)=>{SFX_T0=t0||0;sfx(k,big);SFX_T0=0;},musicStep,SONGS},get player(){return player;},get F(){return F;},get mode(){return mode;},set mode(v){mode=v;},get state(){return {zoneI,waveI,lock,score,combo,camX,clearT};}};
 
 /* ================================================================
    PAGE: fit the screen, touch controls, menus, settings, how to play
