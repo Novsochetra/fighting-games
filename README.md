@@ -4,7 +4,7 @@ A 2D pixel-art melee brawler prototype, inspired by Metal Slug's stages but with
 
 ## Run it
 
-Open `index.html` in a browser. Press **Enter** or click the screen to start.
+Play it online at **https://novsochetra.github.io/fighting-games/**, or open `index.html` in a browser. Press **Enter** or click the screen to start.
 
 ## Controls
 
@@ -62,3 +62,7 @@ Touch controls appear on phones and tablets.
 | `state` strings | an enum plus a `match` block |
 | `tick()` | `_physics_process` at 60 Hz |
 | `box()` hitboxes on active frames | Area2D shapes switched on during active frames |
+
+## Deploy
+
+Every push to `main` publishes `index.html` and `assets/` to GitHub Pages via `.github/workflows/pages.yml`.
