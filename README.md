@@ -12,7 +12,7 @@ The page is just the game: a 16:9 screen that fills the window, with a title men
 
 | Action | Keyboard | Touch | Gamepad |
 | --- | --- | --- | --- |
-| Move | ← → or A D | drag on the left half | stick or d-pad |
+| Move | ← → or A D | the stick in the bottom-left corner (or a floating stick, in Settings) | stick or d-pad |
 | Jump | ↑ / W / Space (hold ← or → to jump that way) | JUMP | A |
 | Dash (invincible) | Shift, or tap ← → twice; once more in the air | DASH | B |
 | Light attack | J or Z | ATTACK (hold to keep the combo going) | X |
@@ -29,7 +29,7 @@ Menus work with the arrow keys and Enter (Esc goes back), with a gamepad (A / B)
 
 ## Settings
 
-Saved in the browser: music and sound volume, difficulty (Easy, Normal, Hard), auto-aim (attacks turn toward the nearest raider, on by default on touch screens), hold ATTACK to combo, screen shake (off / low / full), flashes, damage numbers, touch controls (auto / on / off), button size, vibration, and **Training tools**. With Training tools on, 1–4 swap weapons, 0 fills the ULT bar, H shows hitboxes and frame data, and the pause menu has a weapon switch.
+Saved in the browser: music and sound volume, difficulty (Easy, Normal, Hard), auto-aim (attacks turn toward the nearest raider, on by default on touch screens), hold ATTACK to combo, screen shake (off / low / full), flashes, damage numbers, touch controls (auto / on / off), joystick (fixed in the corner, or floating under your thumb), button size, vibration, and **Training tools**. With Training tools on, 1–4 swap weapons, 0 fills the ULT bar, H shows hitboxes and frame data, and the pause menu has a weapon switch.
 
 ## What's in it
 
