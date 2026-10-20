@@ -56,8 +56,8 @@ tiles side by side, and every road got a cliff face. All of it is reproducible w
 - **Near strips.** Raider Camp's strip is `sink` 6 rows, so its tents and crates stand on the road's
   far edge instead of on the plate's yard (its fire emitters moved down with it); a warm dust `mist`
   now hangs over the yard. Old Grove (`#b8ccaa`, 0.38) and Firefly Hollow (`#6e6fa6`, 0.34) got
-  `groundhaze` from row 70 to 176, a ground mist that keeps their dark trunk bases from swallowing
-  the fighters. Bamboo Pass, Ember Woods and Firefly Hollow passed their trunks at one even rhythm;
+  `groundhaze` from row 70 to 176, and Pine Ridge (`#c9d5da`, 0.3) from row 90 to 178, a ground
+  mist that keeps their dark trunks and lower boughs from swallowing the fighters. Bamboo Pass, Ember Woods and Firefly Hollow passed their trunks at one even rhythm;
   `vary` joins each strip with a copy that leaves one trunk or clump out (768 wide).
 - **Cliffs.** `cliff.png` (12x64) in every folder is the face of a step whose high ground is on the
   left, drawn down each sheer step (`src/render/scene/cliff-faces.js`). One PixelLab Create Image
