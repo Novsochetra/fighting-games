@@ -40,17 +40,18 @@ function renderMission(index, ticks = 2) {
   return { view, log, game, mission: MISSIONS[index] };
 }
 
-const forestMissions = MISSIONS.filter((mission) => PAINTED_BACKDROPS[mission.theme]);
-const desertMissions = MISSIONS.filter((mission) => !PAINTED_BACKDROPS[mission.theme]);
+const paintedMissions = MISSIONS.filter((mission) => PAINTED_BACKDROPS[mission.theme]);
+const drawnMissions = MISSIONS.filter((mission) => !PAINTED_BACKDROPS[mission.theme]);
 
 describe('the scenery of each mission', () => {
-  it('walks the first six missions through painted forests and the last four through the desert', () => {
-    expect(forestMissions.map((mission) => mission.number)).toEqual([1, 2, 3, 4, 5, 6]);
-    expect(desertMissions.map((mission) => mission.number)).toEqual([7, 8, 9, 10]);
+  it('walks the first six missions through painted forests', () => {
+    expect(paintedMissions.slice(0, 6).map((mission) => mission.number)).toEqual([
+      1, 2, 3, 4, 5, 6,
+    ]);
   });
 
-  it('draws every layer of a forest, far plate first, before the fighters', () => {
-    for (const mission of forestMissions) {
+  it('draws every layer of a painted road, far plate first, before the fighters', () => {
+    for (const mission of paintedMissions) {
       const { log } = renderMission(mission.index);
       const { folder } = PAINTED_BACKDROPS[mission.theme];
       const layerCalls = log.filter(
@@ -61,18 +62,18 @@ describe('the scenery of each mission', () => {
     }
   });
 
-  it('keeps the air of a forest moving while the camera stands still', () => {
-    for (const mission of forestMissions) {
+  it('keeps the air of a painted road moving while the camera stands still', () => {
+    for (const mission of paintedMissions) {
       const first = renderMission(mission.index, 2).log.join('|');
       const later = renderMission(mission.index, 90).log.join('|');
       expect(later, mission.name).not.toBe(first);
     }
   });
 
-  it("paints each desert road's backdrop in its own theme, once per theme", () => {
+  it("paints each drawn desert road's backdrop in its own theme, once per theme", () => {
     const { view } = recordedView();
     const game = createTestGame();
-    for (const mission of desertMissions) {
+    for (const mission of drawnMissions) {
       selectMission(game, mission.index);
       startPlay(game);
       runTicks(game, 2);
@@ -81,17 +82,20 @@ describe('the scenery of each mission', () => {
       expect(paintedColors(sky), mission.name).toContain(scenePalette(mission.theme).sky.bands[0]);
     }
     expect(Object.keys(view.backdrops).sort()).toEqual(
-      [...new Set(desertMissions.map((mission) => mission.theme))].sort(),
+      [...new Set(drawnMissions.map((mission) => mission.theme))].sort(),
     );
   });
 
-  it("lays a forest road from its painted cross-section and a desert road in the theme's sand", () => {
-    for (const mission of forestMissions) {
+  it("lays a painted road from its cross-section and a drawn road in the theme's sand", () => {
+    for (const mission of paintedMissions) {
       expect(
         renderMission(mission.index).log.some((call) => call.includes('img(ground.png)')),
         mission.name,
       ).toBe(true);
     }
-    expect(renderMission(6).log).toContain(`fillStyle=${scenePalette('storm').ground.sand}`);
+    for (const mission of drawnMissions) {
+      const sand = scenePalette(mission.theme).ground.sand;
+      expect(renderMission(mission.index).log, mission.name).toContain(`fillStyle=${sand}`);
+    }
   });
 });

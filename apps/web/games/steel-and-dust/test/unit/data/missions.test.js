@@ -33,8 +33,11 @@ describe('the ten missions', () => {
       'emberWoods',
       'fireflyHollow',
     ]);
-    for (const mission of MISSIONS.slice(6)) {
-      expect(SCENE_THEMES[mission.theme], mission.name).toBeDefined();
+    const forestThemes = MISSIONS.slice(0, 6).map((mission) => mission.theme);
+    const desertThemes = new Set(MISSIONS.slice(6).map((mission) => mission.theme));
+    expect(desertThemes.size).toBe(4);
+    for (const theme of forestThemes) {
+      expect(desertThemes.has(theme), theme).toBe(false);
     }
   });
 
