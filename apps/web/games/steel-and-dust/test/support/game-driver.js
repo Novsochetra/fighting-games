@@ -16,9 +16,9 @@ const ACTION_FOR_KEY = {
 };
 const MENU_ACTIONS = { play: startPlay, resume: resumePlay, continue: continueRun };
 
-export function createScenarioGame() {
+export function createScenarioGame(hero) {
   const game = createGame({
-    settings: { ...defaultSettings(false), training: true, aim: true },
+    settings: { ...defaultSettings(false), training: true, aim: true, ...(hero && { hero }) },
     device: { coarsePointer: false, touchUsed: false },
     records: { bestCombo: 0, bestScore: 0 },
     hintsSeen: {},

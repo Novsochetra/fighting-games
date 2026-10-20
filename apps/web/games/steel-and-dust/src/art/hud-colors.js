@@ -7,9 +7,6 @@ export const HUD_COLORS = {
   frameStartup: '#e8c06a',
   frameRecovery: '#6a8fe0',
   debugText: '#a8f0e0',
-  cutInBand: '#120c18',
-  cutInStreak: '#5a3a10',
-  flash: '#fff8e0',
   vignetteClear: 'rgba(224,40,30,0)',
   vignetteRed: 'rgba(224,40,30,0.75)',
 };

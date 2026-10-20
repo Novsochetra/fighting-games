@@ -21,6 +21,7 @@ function resetWorld(game, player) {
     floaters: [],
     shockwaves: [],
     projectiles: [],
+    summons: [],
     pickups: [],
     crates: createCrates(),
     arena: null,

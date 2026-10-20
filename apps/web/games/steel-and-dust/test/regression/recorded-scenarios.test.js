@@ -12,7 +12,7 @@ const originalRandom = Math.random;
 
 function play(scenario) {
   Math.random = seededRandom(scenario.seed);
-  const game = createScenarioGame();
+  const game = createScenarioGame(scenario.hero);
   const result = runScenario(createGameDriver(game, createRecordedRenderer()), scenario);
   return `${JSON.stringify(result, null, 1)}\n`;
 }

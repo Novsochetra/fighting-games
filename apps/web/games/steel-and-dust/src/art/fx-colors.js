@@ -19,4 +19,12 @@ export const FX_COLORS = {
   stoneDark: '#5e3b26',
   shell: '#2a1a22',
   shellGlint: '#e8c06a',
+  leaf: '#22b94d',
+  leafLight: '#9df07a',
+  iceBody: '#a8dcff',
+  iceShard: '#d8ecff',
+  iceDeep: '#5aa8ff',
+  spiritFlame: '#9dffe6',
+  spiritDeep: '#2f9f8a',
+  emberGold: '#ffe066',
 };

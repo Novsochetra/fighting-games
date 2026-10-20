@@ -11,7 +11,7 @@ function clearMove(fighter) {
 }
 
 export function startMove(game, fighter, id) {
-  const move = movesetOf(fighter)[id];
+  const move = movesetOf(game, fighter)[id];
   if (!move) {
     return false;
   }

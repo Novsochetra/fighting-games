@@ -4,7 +4,7 @@ import { randomBetween } from '../../lib/math.js';
 import { commitScore } from '../combat/combo.js';
 import { shake } from '../fx/camera-fx.js';
 import { addSparks } from '../fx/particles.js';
-import { updateUlt } from '../ultimate.js';
+import { updateUlt } from '../ultimates/index.js';
 import { jump } from './actions.js';
 import { themeOf } from './hero-colors.js';
 import { updateAttack } from './attack-state.js';

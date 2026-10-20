@@ -17,7 +17,7 @@ const scheduledNodes = (context) => [
 ];
 
 describe('live sounds', () => {
-  it('covers the menu and event sounds', () => {
+  it('covers the menu, event and Shade signature sounds', () => {
     expect(Object.keys(LIVE_SOUNDS).sort()).toEqual(
       [
         'pickup',
@@ -34,6 +34,10 @@ describe('live sounds', () => {
         'uiBack',
         'combo',
         'lowDurability',
+        'thorns',
+        'swarm',
+        'stampede',
+        'freeze',
       ].sort(),
     );
   });

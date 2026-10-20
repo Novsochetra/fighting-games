@@ -26,4 +26,29 @@ export const SCENARIOS = {
     spawnBossAt: 30,
     scheduled: { 400: ['w4'], 1400: ['w3'], 2400: ['w2'], 3200: ['fill'] },
   },
+  // the other Shades: their own fighting style on every weapon and their own ultimate
+  firefly: {
+    hero: 'firefly',
+    seed: 314,
+    ticks: 2400,
+    sampleEvery: 30,
+    renderEvery: 240,
+    scheduled: { 500: ['fill'], 900: ['w2'], 1500: ['w3'], 1700: ['fill'] },
+  },
+  antler: {
+    hero: 'antler',
+    seed: 2718,
+    ticks: 2400,
+    sampleEvery: 30,
+    renderEvery: 240,
+    scheduled: { 500: ['fill'], 900: ['w4'], 1500: ['w2'], 1700: ['fill'] },
+  },
+  blue: {
+    hero: 'blue',
+    seed: 1618,
+    ticks: 2400,
+    sampleEvery: 30,
+    renderEvery: 240,
+    scheduled: { 500: ['fill'], 900: ['w2'], 1500: ['w1'], 1700: ['fill'] },
+  },
 };

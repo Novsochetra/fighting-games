@@ -4,11 +4,7 @@ import { loadHeroSprites } from './hero-sprites.js';
 
 function loadHero(view, id) {
   const hero = heroById(id);
-  return loadHeroSprites({
-    ...view.loaders,
-    directory: hero.directory,
-    theme: HERO_THEMES[hero.id],
-  });
+  return loadHeroSprites({ ...view.loaders, hero, theme: HERO_THEMES[hero.id] });
 }
 
 // each Shade's strips load the first time that Shade is picked

@@ -28,8 +28,12 @@ export const HERO_SPRITES = {
     air_rising_cut: 4,
     meteor_slash: 4,
     plunge: 4,
+    ult: 9,
   },
 };
+
+// the ultimate strip has a single row: every Shade calls up its own blade for it, whatever it holds
+export const ONE_ROW_STRIPS = new Set(['ult']);
 
 // move id -> [strip, strike frame]; a move's own `sprite` wins over this table
 export const HERO_MOVE_SPRITES = {

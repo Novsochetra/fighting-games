@@ -7,6 +7,7 @@ import { pullIn, quake } from '../hazards/area-moves.js';
 import { fireEnemyShot } from '../hazards/enemy-shots.js';
 import { spawnSlashWave, tossKnife } from '../hazards/projectiles.js';
 import { spawnShockwave } from '../hazards/shockwaves.js';
+import { SIGNATURE_STRIKES } from '../summons/signatures.js';
 import { endMove } from './actions.js';
 import { arenaBounds } from './arena-bounds.js';
 
@@ -43,6 +44,7 @@ const STRIKE_EFFECTS = [
   ],
   [(_fighter, move) => move.quakeDamage, quake],
   [(fighter, move) => move.stomp && fighter.airborne, stompDown],
+  ...SIGNATURE_STRIKES,
 ];
 
 function releaseStrike(game, fighter, move) {

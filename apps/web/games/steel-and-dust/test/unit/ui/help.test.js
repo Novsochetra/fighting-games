@@ -20,11 +20,22 @@ describe('help text', () => {
   });
 
   it('shows every move with its damage and notes', () => {
-    const html = movesHtml({ weaponId: 'spear', touch: false });
+    const html = movesHtml({ weaponId: 'spear', heroId: 'moss', touch: false });
     expect(html).toContain('Cyclone');
     expect(html).toContain('Pulls in');
     expect(html).toContain('Breaks after <b>40 hits</b>');
-    expect(html).toContain('Shade Requiem');
+    expect(html).toContain('Thornwood Requiem');
+  });
+
+  it("shows the chosen Shade's style, signatures and ultimate", () => {
+    const blue = movesHtml({ weaponId: 'sword', heroId: 'blue', touch: false });
+    expect(blue).toContain('Blue Shade: Frost Iai.');
+    expect(blue).toContain('Freezes');
+    expect(blue).toContain('Absolute Zero');
+    const firefly = movesHtml({ weaponId: 'fists', heroId: 'firefly', touch: false });
+    expect(firefly).toContain('Fireflies');
+    expect(firefly).toContain('Swarm Nova');
+    expect(firefly).not.toContain('Thornwood Requiem');
   });
 
   it('offers every take of the voices in the sound test', () => {

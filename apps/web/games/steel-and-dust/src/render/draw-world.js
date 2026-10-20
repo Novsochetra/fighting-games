@@ -1,5 +1,6 @@
-import { COLORS } from '../art/colors.js';
+import { HERO_THEMES } from '../art/hero-themes.js';
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../config.js';
+import { heroById } from '../data/heroes.js';
 import { drawFighter } from './fighters/draw-fighter.js';
 import { heroSheetFor } from './fighters/hero-sheets.js';
 import { drawTrail } from './fighters/trail.js';
@@ -8,6 +9,7 @@ import { drawEffects } from './fx/effects.js';
 import { drawFloaters } from './fx/floaters.js';
 import { drawProjectiles, drawShockwaves } from './fx/hazards.js';
 import { drawParticles } from './fx/particles.js';
+import { drawSummons } from './fx/summons.js';
 import { drawCrates } from './scene/crate.js';
 import { drawGround } from './scene/ground.js';
 import { drawPickups } from './scene/pickups.js';
@@ -24,11 +26,12 @@ function drawOrder(fighters) {
     );
 }
 
-// the world dims around the hero during the ultimate
+// the world dims around the hero during the ultimate, in the Shade's own night color
 function dimForUltimate(painter, game, cameraX) {
+  const { dim } = HERO_THEMES[heroById(game.settings.hero).id].ult;
   painter
-    .alpha(game.ultFreeze > 0 ? 0.6 : 0.35)
-    .use(COLORS.night)
+    .alpha(game.ultFreeze > 0 ? 0.6 : 0.4)
+    .use(dim)
     .rect(cameraX - 8, -8, VIEW_WIDTH + 16, VIEW_HEIGHT + 16);
   painter.alpha(1);
 }
@@ -55,6 +58,7 @@ export function drawWorld(painter, { game, view, cameraX }) {
   drawCrates(painter, game.crates, cameraX);
   drawPickups(painter, game.pickups);
   drawFighters(painter, { game, view, cameraX });
+  drawSummons(painter, game.summons, view.fxSheets);
   drawShockwaves(painter, game.shockwaves);
   drawProjectiles(painter, game.projectiles);
   drawParticles(painter, game.particles);

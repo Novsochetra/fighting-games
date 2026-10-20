@@ -1,34 +1,9 @@
 import { COLORS } from '../../art/colors.js';
-import { HUD_COLORS } from '../../art/hud-colors.js';
+import { HERO_THEMES } from '../../art/hero-themes.js';
 import { GROUND_Y, VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
-import { ULTIMATE } from '../../data/ultimate.js';
+import { heroById } from '../../data/heroes.js';
 import { drawText, textWidth } from '../text/draw-text.js';
-
-function drawUltCutIn(painter, game) {
-  const elapsed = ULTIMATE.intro - game.ultFreeze;
-  const slide = Math.max(0, 1 - elapsed / 8);
-  const y = 60;
-  painter.alpha(0.85).use(HUD_COLORS.cutInBand).rect(0, y, VIEW_WIDTH, 34);
-  painter.alpha(1).use(COLORS.gold).rect(0, y, VIEW_WIDTH, 1);
-  painter.use(COLORS.gold).rect(0, y + 33, VIEW_WIDTH, 1);
-  for (let i = 0; i < 6; i++) {
-    const streak = ((game.tickCount * 9 + i * 71) % (VIEW_WIDTH + 60)) - 30;
-    painter.use(HUD_COLORS.cutInStreak).rect(VIEW_WIDTH - streak, y + 5 + i * 4, 22, 1);
-  }
-  drawText(painter, 'ultimate', {
-    x: VIEW_WIDTH / 2 + slide * VIEW_WIDTH,
-    y: y + 5,
-    color: COLORS.sand,
-    align: 'center',
-  });
-  drawText(painter, ULTIMATE.name, {
-    x: VIEW_WIDTH / 2 - slide * VIEW_WIDTH,
-    y: y + 14,
-    color: COLORS.gold,
-    scale: 3,
-    align: 'center',
-  });
-}
+import { drawUltCutIn } from './ult-cut-in.js';
 
 function hintOpacity(time) {
   if (time < 10) {
@@ -56,26 +31,28 @@ function drawHint(painter, game) {
   painter.alpha(1);
 }
 
+// only the ultimates flash the screen, so the flash takes the Shade's ultimate colors
 export function drawScreenFlashes(painter, game) {
+  const colors = HERO_THEMES[heroById(game.settings.hero).id].ult;
   if (game.slashBandTime > 0) {
     const height = game.slashBandTime;
     const y = GROUND_Y - 22 - height / 2;
-    painter.use(COLORS.gold).rect(0, y - 1, VIEW_WIDTH, height + 2);
+    painter.use(colors.edge).rect(0, y - 1, VIEW_WIDTH, height + 2);
     painter.use(COLORS.white).rect(0, y + 1, VIEW_WIDTH, Math.max(1, height - 2));
   }
   if (game.flashTime > 0 && game.settings.flash) {
     painter
       .alpha(game.flashTime / 18)
-      .use(HUD_COLORS.flash)
+      .use(colors.flash)
       .rect(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
     painter.alpha(1);
   }
 }
 
 // the fade-in counts down here, once per drawn frame, as it always has
-export function drawOverlays(painter, game) {
+export function drawOverlays(painter, { game, view }) {
   if (game.ultFreeze > 0) {
-    drawUltCutIn(painter, game);
+    drawUltCutIn(painter, { game, view });
   }
   if (game.hint && game.mode === 'play' && game.ultFreeze <= 0) {
     drawHint(painter, game);

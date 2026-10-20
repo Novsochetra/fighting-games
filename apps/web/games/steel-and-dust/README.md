@@ -47,9 +47,18 @@ Saved in the browser: music and sound volume, difficulty (Easy, Normal, Hard), a
   - `Air ↓+K` dive
   - `↓+K` launcher, and `↑+K` to launch and follow the enemy up
 - **Charge attacks:** hold K for level 1 or max. Every weapon has its own pair: Burst Straight and Tiger Rush (fists), Iai Rush and Crescent Moon, a slash wave (sword), Comet Lunge and Cyclone, which pulls enemies in (spear), Earthsplitter and Cataclysm, which launches every grounded enemy (axe). Holding K at the end of a string charges straight out of it.
-- **Ultimate, Shade Requiem:** hits and damage taken fill the ULT bar. When it's full, time freezes, the hero teleports through every enemy on screen for eight cuts, then launches them all with a screen-wide slash. The hero is invincible throughout.
+- **A fighting style per Shade:** each Shade reworks every weapon's moves (`src/data/styles/`):
+  - **Moss, Grove Guard:** the even weapon timing; string and heavy finishers raise brambles out of the ground ahead that launch raiders.
+  - **Firefly, Swarm Dance:** about a quarter faster and a little lighter; the third light hit becomes a three-hit flurry, and finishers loose homing fireflies that sting twice each.
+  - **Antler Spirit, Stampede:** slower and a quarter heavier; the third light hit is an armored ram that sends a spirit stag charging ahead, the heavy opener stomps a shockwave, and a max charge sends three stags.
+  - **Blue, Frost Iai:** longer reach and slower recovery; heavy cuts freeze raiders solid in ice for extra hits, then the ice shatters and launches them.
+- **An ultimate per Shade:** hits and damage taken fill the ULT bar. When it's full, time freezes for a cut-in with the Shade's portrait while it plays its own PixelLab ultimate animation, and the hero is invincible throughout:
+  - **Thornwood Requiem (Moss):** the blade is planted and waves of brambles burst out to both edges of the screen, then bloom under every raider at once.
+  - **Swarm Nova (Firefly):** the Shade rises and looses a swarm of fireflies that hunts every raider, then calls it home and bursts as a golden nova.
+  - **Spirit Stampede (Antler Spirit):** herds of spirit stags thunder across the screen from both edges, then the great stag tramples everything.
+  - **Absolute Zero (Blue):** time stops; the Shade cuts every raider in passing and freezes it, then sheathes the blade and all the ice shatters at once.
 - **Juggles** with decay, one ground bounce and one wall bounce per juggle.
-- **4 playable Shades:** Moss, Firefly, Antler Spirit and Blue. Play opens a hero select screen with animated previews; the pick is saved. Each Shade has its own PixelLab sprite set and its own glow: sword smear, slash wave, hit sparks, charge glow and a trail of motes around it (a whole swarm for the Firefly Shade).
+- **4 playable Shades:** Moss, Firefly, Antler Spirit and Blue. Play opens a hero select screen with animated previews, each card naming the Shade's style and ultimate; the pick is saved. Each Shade has its own PixelLab sprite set and its own glow: sword smear, slash wave, hit sparks, charge glow and a trail of motes around it (a whole swarm for the Firefly Shade).
 - **One long road:** six zones of raiders in waves, two mid-bosses (the **Rust Colossus** in the scrapyard and the **Scorpion Queen** in the nest) and the **Warden Ox** at the end. Every boss has armor, a swipe, a charge and a shockwave slam, and marks the ground in red before it hits. Only the Ox ends the stage.
 - **16 enemies, all drawn from PixelLab sprite sheets:**
   - up close: **Raider** (punches), **Scrap Scavenger** (pipe smash, metal sparks), **Red Cutter** (stab and lunge), **Jackal Runner** (fast, claws and a pouncing rush), **Dune Assassin** (double cut, vanishes and reappears behind you), **Vulture Spearman** (long spear thrust);
@@ -77,8 +86,10 @@ hitbox, knockback, ... })` entry in `src/data/weapons/<weapon>/` or `src/data/en
   ```
 
   To balance the game, edit these numbers. `next` defines which move a buffered press cancels into
-  during recovery. Charge timing is `CHARGE_TAP` / `CHARGE_LEVEL1` / `CHARGE_MAX` in `src/config.js`,
-  and the ultimate's numbers are in `src/data/ultimate.js`.
+  during recovery. Charge timing is `CHARGE_TAP` / `CHARGE_LEVEL1` / `CHARGE_MAX` in `src/config.js`.
+  Each Shade's style (`src/data/styles/<shade>.js`) is a tempo that scales every move plus patches that add
+  signatures (`thorns`, `fireflies`, `stags`, `freeze`) to chosen moves, and each Shade's ultimate has its
+  timeline and hits in `src/data/ultimates/`.
 
 - **Input buffer.** A press is remembered for 8 ticks (`src/sim/input/read-input.js`).
 - **Attack tokens.** Only two raiders attack at once; the rest circle at a distance.

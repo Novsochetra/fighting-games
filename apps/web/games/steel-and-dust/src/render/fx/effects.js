@@ -94,7 +94,20 @@ function impact(painter, effect, progress) {
   painter.alpha(1);
 }
 
-const DRAW_EFFECT = { ring, lines, impact };
+// an iai cut: a long white line through the target, edged in the blade's glow, thinning out
+function cut(painter, effect, progress) {
+  const length = 26 + progress * 30;
+  const dx = Math.cos(effect.angle) * length;
+  const dy = Math.sin(effect.angle) * length * 0.6;
+  const from = point(effect.x - dx, effect.y - dy);
+  const to = point(effect.x + dx, effect.y + dy);
+  painter.alpha(Math.max(0, 1 - progress));
+  painter.use(effect.color).line(from, to, progress < 0.4 ? 3 : 2);
+  painter.use(COLORS.white).line(from, to, 1);
+  painter.alpha(1);
+}
+
+const DRAW_EFFECT = { ring, lines, impact, cut };
 
 export function drawEffects(painter, effects) {
   for (const effect of effects) {

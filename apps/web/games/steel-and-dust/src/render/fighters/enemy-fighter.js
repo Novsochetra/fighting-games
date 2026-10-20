@@ -11,6 +11,9 @@ function hitTint(fighter) {
   if (fighter.flashTime > 0) {
     return COLORS.white;
   }
+  if (fighter.frozen) {
+    return FX_COLORS.iceBody;
+  }
   return fighter.armorFlash > 0 ? COLORS.gold : null;
 }
 

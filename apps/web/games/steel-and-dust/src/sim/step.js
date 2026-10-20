@@ -15,6 +15,7 @@ import { updateHints } from './hints.js';
 import { expireBuffer } from './input/read-input.js';
 import { updatePickups } from './items/pickups.js';
 import { updateCamera } from './stage/camera.js';
+import { updateSummons } from './summons/update-summons.js';
 import { BANNER_FOREVER } from './stage/stage-clear.js';
 import { updateZones } from './stage/zones.js';
 
@@ -26,6 +27,7 @@ function updateWorld(game) {
   separateFighters(game.fighters);
   updateShockwaves(game);
   updateProjectiles(game);
+  updateSummons(game);
   updatePickups(game);
   updateEffects(game);
   for (const fighter of game.fighters) {

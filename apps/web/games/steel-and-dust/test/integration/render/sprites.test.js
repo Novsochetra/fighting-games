@@ -4,7 +4,7 @@ import { renderFrame } from '../../../src/render/render-frame.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
 import { FakeImage } from '../../support/fake-image.js';
 import { RecordingCanvas } from '../../support/recording-canvas.js';
-import { createPlayingGame, runTicks } from '../../support/test-game.js';
+import { createPlayingGame, runTicks, tap } from '../../support/test-game.js';
 
 function createCanvas(width, height) {
   return Object.assign(new RecordingCanvas(), { width, height });
@@ -42,5 +42,30 @@ describe('drawing from the sprite sheets', () => {
   it('loads only the Moss Shade until another Shade is picked', () => {
     const { view } = recordedView();
     expect(Object.keys(view.heroSheets)).toEqual(['moss']);
+  });
+
+  it("draws the Shade's own ultimate strip and portrait during its cut-in", () => {
+    const game = createPlayingGame({ settings: { hero: 'antler' } });
+    runTicks(game, 2);
+    game.ultMeter = 100;
+    tap(game, 'ult');
+    runTicks(game, 10);
+    const { view, log } = recordedView();
+    renderFrame(game, view);
+    const drawn = imagesDrawn(log);
+    expect(drawn).toContain('drawImage(img(hero_ult.png)');
+    expect(log).toContain('clip()');
+  });
+
+  it('draws the summons from the PixelLab effect strips', () => {
+    const game = createPlayingGame({ settings: { hero: 'blue' } });
+    spawnEnemy(game, 'grunt', 1);
+    runTicks(game, 2);
+    game.ultMeter = 100;
+    tap(game, 'ult');
+    runTicks(game, 100);
+    const { view, log } = recordedView();
+    renderFrame(game, view);
+    expect(imagesDrawn(log)).toContain('drawImage(img(ice.png)');
   });
 });

@@ -14,7 +14,7 @@ function bodyHtml(state, game, ui) {
   const touch = ui.isTouchOn();
   const bodies = {
     controls: () => controlsHtml({ touch, stick: game.settings.stick }),
-    moves: () => movesHtml({ weaponId: state.weapon, touch }),
+    moves: () => movesHtml({ weaponId: state.weapon, heroId: game.settings.hero, touch }),
     tips: tipsHtml,
     sounds: soundTestHtml,
   };

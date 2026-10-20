@@ -1,8 +1,8 @@
 import { COLORS } from '../../../art/colors.js';
 import { ULT_FULL } from '../../../config.js';
-import { ULT_START_STATES } from '../../../data/ultimate.js';
+import { ULT_START_STATES } from '../../../data/ultimates/index.js';
 import { addFloatText } from '../../fx/effects.js';
-import { startUlt } from '../../ultimate.js';
+import { startUlt } from '../../ultimates/index.js';
 import { thinkAir } from './air.js';
 import { thinkAttack } from './attack.js';
 import { thinkCharge } from './charge.js';

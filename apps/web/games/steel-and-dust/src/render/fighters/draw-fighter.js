@@ -1,4 +1,9 @@
-import { ARMOR_PALETTE, FLASH_PALETTE, TELEGRAPH_PALETTE } from '../../art/tinted-palettes.js';
+import {
+  ARMOR_PALETTE,
+  FLASH_PALETTE,
+  ICE_PALETTE,
+  TELEGRAPH_PALETTE,
+} from '../../art/tinted-palettes.js';
 import { BODY_ART } from '../../art/weapon-art.js';
 import { GROUND_Y } from '../../config.js';
 import { isPlayer } from '../../sim/fighters/loadout.js';
@@ -48,6 +53,9 @@ function bodyPalette(fighter, tickCount) {
   }
   if (fighter.armorFlash > 0) {
     return ARMOR_PALETTE;
+  }
+  if (fighter.frozen) {
+    return ICE_PALETTE;
   }
   return isTelegraphing(fighter, tickCount) ? TELEGRAPH_PALETTE : fighter.palette;
 }

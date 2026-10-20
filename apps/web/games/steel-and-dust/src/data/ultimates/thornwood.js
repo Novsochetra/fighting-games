@@ -1,0 +1,30 @@
+// Moss: the blade is planted and brambles burst out in waves to both edges, then the grove blooms
+export const THORNWOOD = {
+  name: 'Thornwood Requiem',
+  summary: 'Plants the blade; brambles burst out to both edges, then bloom under every raider.',
+  damageText: '8 per thorn + 24',
+  intro: 46,
+  poseTicks: 5,
+  waves: 7,
+  waveGap: 5,
+  waveSpacing: 30,
+  bloomAt: 118,
+  end: 160,
+  thorn: {
+    damage: 8,
+    knockback: [0.5, -5.2],
+    launch: true,
+    hitstop: 4,
+    hitstun: 30,
+    ultimate: true,
+  },
+  bloom: {
+    damage: 24,
+    knockback: [1.2, -7],
+    launch: true,
+    knockAway: true,
+    hitstop: 14,
+    hitstun: 30,
+    ultimate: true,
+  },
+};

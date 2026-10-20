@@ -19,10 +19,10 @@ const INNER_GLOW = [
   [0, 0.5],
 ];
 
-// dim glow while charging, full glow at level 1, flickering gold at max and during the ultimate
+// dim glow while charging, full glow at level 1, flickering gold at max; the ultimate's own color
 function glowColor(fighter, { tickCount, theme }) {
   if (fighter.state === 'ult') {
-    return COLORS.gold;
+    return theme.ult.edge;
   }
   if (fighter.state !== 'charge' || fighter.stateTime < CHARGE_TAP) {
     return null;

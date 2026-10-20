@@ -5,6 +5,7 @@ import { addFloatText } from '../fx/effects.js';
 import { burstMaterial } from '../fx/material-bursts.js';
 import { blockHit } from './block-hit.js';
 import { addUltMeter, endCombo } from './combo.js';
+import { freezeTarget } from './freeze.js';
 import { blocksHit, canBeHit, isFacing, isGuarding } from './guard.js';
 import { feelHit, showBigHit, showDamageNumber, showImpact } from './hit-feedback.js';
 import { absorbsHit, reactToHit } from './hit-reaction.js';
@@ -136,5 +137,8 @@ export function applyHit(game, hit) {
     return true;
   }
   reactToHit(game, target, { move, direction, knockback, knockdown });
+  if (move.freeze) {
+    freezeTarget(game, target, { duration: move.freeze });
+  }
   return true;
 }

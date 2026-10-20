@@ -15,5 +15,9 @@ with the same animation names and frame counts as `../hero/hero.json`.
   the first takes of those moves did not read well.
 - Attack strips are ordered so the frame with the biggest slash sits at the strike frame the game
   holds while the hitbox is out (`src/data/hero-sprites.js`).
+- `<shade>/hero_ult.png` is the Shade's ultimate, nine frames on one row with no `arsenal/` copy (the
+  Shade always draws its own blade for it): PixelLab v3 animations "ult_swarm_nova" (Firefly),
+  "ult_spirit_stampede" (Antler Spirit) and "ult_absolute_zero_v2" (Blue), east view, placed in the
+  128×80 frames the same way as the other strips.
 - `<shade>/arsenal/` is built from these sword strips by `tools/bake_hero_weapons.py <shade>`, with
   rows for the sword, fists, spear and axe, exactly like `../hero/arsenal/`.

@@ -62,4 +62,8 @@ export const MOVE_TAGS = [
   ['low', 'Low, under shields'],
   ['hop', 'Rises with them'],
   ['pogo', 'Bounces you up'],
+  ['thorns', 'Raises thorns'],
+  ['fireflies', 'Fireflies'],
+  ['stags', 'Spirit stag'],
+  ['freeze', 'Freezes'],
 ];

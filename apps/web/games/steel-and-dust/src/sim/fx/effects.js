@@ -27,6 +27,11 @@ export function addImpact(game, { x, y, big, color, bladed, direction }) {
   });
 }
 
+// the line an iai cut leaves through its target, drawn long and thin across the body
+export function addCutLine(game, { x, y, angle, color }) {
+  game.effects.push({ kind: 'cut', x, y, angle, color, time: 0, duration: 12 });
+}
+
 export function addFloatText(game, { x, y, text, color }) {
   game.floaters.push({ x, y, text, color, time: 0, big: true });
 }

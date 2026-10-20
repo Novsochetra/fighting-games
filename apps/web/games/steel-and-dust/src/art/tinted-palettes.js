@@ -19,3 +19,4 @@ export const FLASH_PALETTE = tintPalette('#ffffff', '#140f1a');
 export const ARMOR_PALETTE = tintPalette('#ffd36b', '#5a3a10');
 export const GHOST_PALETTE = tintPalette('#3cc8ff', '#1a5f8a');
 export const TELEGRAPH_PALETTE = tintPalette('#ff6a4a', '#3a0a05');
+export const ICE_PALETTE = tintPalette('#a8dcff', '#1a3a78');

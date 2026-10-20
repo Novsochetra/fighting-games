@@ -1,8 +1,12 @@
 import { RENDER_SCALE } from '../../config.js';
-import { HERO_SPRITES } from '../../data/hero-sprites.js';
+import { HERO_SPRITES, ONE_ROW_STRIPS } from '../../data/hero-sprites.js';
 import { tintedImage } from './tint.js';
 
-export function loadHeroSprites({ createImage, createCanvas, baseUrl, directory, theme }) {
+function stripPath(hero, name) {
+  return ONE_ROW_STRIPS.has(name) ? hero.ultStrip : `${hero.directory}hero_${name}.png`;
+}
+
+export function loadHeroSprites({ createImage, createCanvas, baseUrl, hero, theme }) {
   const sheet = { images: {}, tints: {}, ready: false, createCanvas, theme };
   const names = Object.keys(HERO_SPRITES.frames);
   let waiting = names.length;
@@ -12,7 +16,7 @@ export function loadHeroSprites({ createImage, createCanvas, baseUrl, directory,
       waiting -= 1;
       sheet.ready = waiting === 0;
     };
-    image.src = `${baseUrl}${directory}hero_${name}.png`;
+    image.src = `${baseUrl}${stripPath(hero, name)}`;
     sheet.images[name] = image;
   }
   return sheet;
@@ -27,6 +31,7 @@ export function drawHeroFrame(painter, sheet, { frame: [name, index], x, y, faci
   const { frameWidth, frameHeight, feetX, feetY, scale } = HERO_SPRITES;
   const context = painter.context;
   const image = tint ? tinted(sheet, name, tint) : sheet.images[name];
+  const sourceRow = ONE_ROW_STRIPS.has(name) ? 0 : row || 0;
   context.save();
   context.translate(
     Math.round(x * RENDER_SCALE) / RENDER_SCALE,
@@ -38,7 +43,7 @@ export function drawHeroFrame(painter, sheet, { frame: [name, index], x, y, faci
   context.drawImage(
     image,
     index * frameWidth,
-    (row || 0) * frameHeight,
+    sourceRow * frameHeight,
     frameWidth,
     frameHeight,
     -feetX * scale,

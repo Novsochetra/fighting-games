@@ -54,6 +54,9 @@ function worldSnapshot(game) {
         LEGACY_SIDE[shot.side],
       ]),
     ),
+    summons: digest(
+      game.summons.flatMap((summon) => [summon.kind, summon.x, summon.y, summon.time]),
+    ),
     pickups: digest(
       game.pickups.flatMap((pickup) => [pickup.item, pickup.x, pickup.y, pickup.time]),
     ),

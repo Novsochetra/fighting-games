@@ -33,5 +33,5 @@ export function renderFrame(game, view) {
   if (game.mode !== 'title') {
     drawHud(painter, game, view);
   }
-  drawOverlays(painter, game);
+  drawOverlays(painter, { game, view });
 }

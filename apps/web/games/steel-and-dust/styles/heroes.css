@@ -104,6 +104,20 @@
   letter-spacing: normal;
 }
 
+.hero-kit {
+  font-family: var(--font-body);
+  font-size: var(--font-size-2xs);
+  color: var(--color-text);
+  text-align: center;
+  letter-spacing: normal;
+}
+
+.hero-kit b {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-regular);
+  color: var(--accent);
+}
+
 @media (max-height: 420px), (max-width: 620px) {
   .hero-art {
     width: 64px;

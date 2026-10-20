@@ -59,13 +59,24 @@ Shade (`src/data/heroes.js`, loaded the first time it is picked) and one sheet p
 (`src/data/enemies/enemy-sprites.js`). `src/sim/hero-animation.js` and `src/sim/enemy-animation.js`
 pick the frame for a fighter's state; colors that belong to a Shade live in `src/art/hero-themes.js`.
 
+Each Shade fights in its own style and has its own ultimate:
+
+- `src/data/styles/` turns every weapon's moves into a Shade's moves once, at load
+  (`heroMoves(heroId, weaponId)`); `movesetOf(game, fighter)` hands the hero the chosen Shade's set.
+- `src/sim/summons/` runs what a Shade calls up: thorns, fireflies, spirit stags, ice and one-shot
+  bursts, kept in `game.summons`. A move's signature (`thorns`, `fireflies`, `stags`) fires on its
+  first active frame; `freeze` encases the raider it lands on (`src/sim/combat/freeze.js`).
+- `src/sim/ultimates/` holds one timeline per Shade, picked by `game.settings.hero`; the numbers are in
+  `src/data/ultimates/`. The effect strips are in `assets/sprites/fx/` (`src/data/fx-sprites.js`).
+
 The loop runs the simulation at exactly 60 ticks a second and renders once per animation frame.
 A frame that runs several ticks offsets each tick's sounds (`audio.setTickOffset`) so they keep their spacing.
 
 ### Behavior lock
 
-`test/regression/` replays two long bot-played scenarios and compares every 30th tick and every
-rendered frame against fixtures captured from the original single-file game. Any change to
+`test/regression/` replays bot-played scenarios and compares every 30th tick and every rendered frame
+against recorded fixtures: two long runs captured from the original single-file game (as the Moss
+Shade), and one shorter run for each of the other Shades. Any change to
 arithmetic, to the order of `Math.random()` calls or to the order of canvas calls shows up there.
 When a change is meant to alter behavior, regenerate the fixtures with `npm run test:regression -- -u`
 and review the diff.
