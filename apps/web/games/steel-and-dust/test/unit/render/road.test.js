@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GROUND_Y, VIEW_HEIGHT } from '../../../src/config.js';
+import { FLAT_TERRAIN } from '../../../src/data/missions/terrain.js';
 import { createPainter } from '../../../src/render/painter.js';
 import { drawForeground } from '../../../src/render/scene/foreground.js';
 import { drawGround } from '../../../src/render/scene/ground.js';
@@ -19,7 +20,9 @@ const colorsIn = (log) => new Set(drawnRects(log).map((rect) => rect.color));
 
 describe('the forest road', () => {
   it('lays soil that darkens with depth under grass, stones and roots', () => {
-    const log = record((painter) => drawGround(painter, 400, forest.ground, 0));
+    const log = record((painter) =>
+      drawGround(painter, { cameraX: 400, colors: forest.ground, tick: 0, terrain: FLAT_TERRAIN }),
+    );
     const colors = colorsIn(log);
     for (const key of ['sand', 'soil', 'soilDeep', 'grass', 'grassLight', 'grassDark', 'pebble']) {
       expect(colors.has(forest.ground[key]), key).toBe(true);
@@ -28,17 +31,30 @@ describe('the forest road', () => {
 
   it('keeps the soil still and only lets the grass tips move in the wind', () => {
     const still = (tick) =>
-      drawnRects(record((painter) => drawGround(painter, 400, forest.ground, tick))).filter(
-        (rect) => rect.y >= GROUND_Y,
-      );
+      drawnRects(
+        record((painter) =>
+          drawGround(painter, { cameraX: 400, colors: forest.ground, tick, terrain: FLAT_TERRAIN }),
+        ),
+      ).filter((rect) => rect.y >= GROUND_Y);
     expect(still(0)).toEqual(still(200));
     const tips = (tick) =>
-      record((painter) => drawGround(painter, 400, forest.ground, tick)).join('|');
+      record((painter) =>
+        drawGround(painter, { cameraX: 400, colors: forest.ground, tick, terrain: FLAT_TERRAIN }),
+      ).join('|');
     expect(tips(0)).not.toBe(tips(70));
   });
 
   it('stays between the tallest grass blade and the bottom of the view', () => {
-    const rects = drawnRects(record((painter) => drawGround(painter, 1234, forest.ground, 33)));
+    const rects = drawnRects(
+      record((painter) =>
+        drawGround(painter, {
+          cameraX: 1234,
+          colors: forest.ground,
+          tick: 33,
+          terrain: FLAT_TERRAIN,
+        }),
+      ),
+    );
     for (const rect of rects) {
       expect(rect.y).toBeGreaterThanOrEqual(GROUND_Y - 6);
       expect(rect.y + rect.height).toBeLessThanOrEqual(VIEW_HEIGHT);
@@ -46,7 +62,16 @@ describe('the forest road', () => {
   });
 
   it('leaves the desert road with sand and ruts and no grass', () => {
-    const colors = colorsIn(record((painter) => drawGround(painter, 400, desert.ground, 0)));
+    const colors = colorsIn(
+      record((painter) =>
+        drawGround(painter, {
+          cameraX: 400,
+          colors: desert.ground,
+          tick: 0,
+          terrain: FLAT_TERRAIN,
+        }),
+      ),
+    );
     expect(colors.has(desert.ground.sand)).toBe(true);
     expect(desert.ground.grass).toBeUndefined();
   });

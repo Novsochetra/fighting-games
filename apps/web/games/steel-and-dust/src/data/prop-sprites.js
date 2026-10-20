@@ -1,8 +1,6 @@
-// the forest props are PixelLab sprites in assets/sprites/props/, drawn at the fighters' density;
-// the feet point sinks a little into the road so they look planted, not pasted on
+// the palisade that closes a forest road is a PixelLab sprite in assets/sprites/props/, drawn at
+// the fighters' density; it hangs from its left end like the brick wall of the desert roads, its
+// feet sunk a little into the road so it looks planted
 export const PROP_SPRITES = {
-  stump: { file: 'stump.png', feetX: 53, feetY: 70 },
-  logs: { file: 'logs.png', feetX: 49, feetY: 69 },
-  boulder: { file: 'boulder.png', feetX: 56, feetY: 80 },
-  signpost: { file: 'signpost.png', feetX: 29, feetY: 93 },
+  palisade: { file: 'palisade.png', feetX: 16, feetY: 110 },
 };

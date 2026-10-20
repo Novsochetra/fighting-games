@@ -12,9 +12,14 @@ function loadLayer({ createImage, baseUrl }, folder, { name, parallax }) {
 }
 
 export function loadPaintedBackdrop(loaders, spec) {
+  // the image marks this same object ready when it loads, so the surface row goes onto it too
+  const ground = Object.assign(loadLayer(loaders, spec.folder, { name: 'ground', parallax: 1 }), {
+    top: spec.groundTop,
+  });
   return {
     painted: true,
     layers: spec.layers.map((layer) => loadLayer(loaders, spec.folder, layer)),
+    ground,
     ambient: spec.ambient,
   };
 }

@@ -74,7 +74,9 @@ describe('raiders, hazards and pickups on uneven ground', () => {
   });
 
   it('lands a fire pot on the platform the hero stands on', () => {
-    const game = createTerrainGame({ platforms: [{ at: 180, width: 100, rise: 40, kind: 'log' }] });
+    const game = createTerrainGame({
+      platforms: [{ at: 180, width: 100, rise: 40, kind: 'planks' }],
+    });
     const top = GROUND_Y - 40;
     placeFighter(game, game.player, { x: 230, y: top });
     const bomber = calmRaider(game, 'bomber', { x: 320 });

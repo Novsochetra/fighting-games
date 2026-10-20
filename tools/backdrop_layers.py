@@ -9,6 +9,14 @@
         stays one of the plate's own colours
     python3 tools/backdrop_layers.py fogfloor <in> <out> <from_y>
         flattens the rows just above the road into plain bands, hiding any step left there
+    python3 tools/backdrop_layers.py ground <in> <out>
+        keys out the flat colour above a ground cross-section (the grass tips stay), dithers its
+        ends together so it tiles, and prints the row the road's surface sits on
+    python3 tools/backdrop_layers.py sink <in> <out> <rows>
+        moves a near strip down so a ground band painted at its base hides under the road,
+        repeating its top row so trunks still reach the top of the view
+    python3 tools/backdrop_layers.py haze <in> <out> <#rrggbb> <amount>
+        pulls a near strip further toward the forest's mist, so dark trunks sit back from the fight
     python3 tools/backdrop_layers.py near <out> <base_y> <haze #rrggbb> <amount> <in>...
         rolls each transparent near painting so its widest see-through gap sits on its edges,
         drops its lowest solid row to base_y, joins them side by side and hazes them toward the
@@ -78,6 +86,34 @@ def fogfloor(src, dst, from_y):
     im.save(dst)
 
 
+def ground(src, dst):
+    im = Image.open(src).convert('RGBA')
+    key = im.getpixel((0, 0))
+    for y in range(16):
+        for x in range(im.width):
+            if im.getpixel((x, y)) == key:
+                im.putpixel((x, y), (0, 0, 0, 0))
+    alpha = im.getchannel('A')
+    top = next(y for y in range(im.height) if sum(alpha.getpixel((x, y)) == 0 for x in range(im.width)) < im.width // 4)
+    im.save(dst)
+    overlap(dst, dst, '32')
+    print(src, 'surface row', top)
+
+
+def sink(src, dst, rows):
+    im = Image.open(src).convert('RGBA')
+    dy = int(rows)
+    out = Image.new('RGBA', im.size)
+    out.paste(im.crop((0, 0, im.width, im.height - dy)), (0, dy))
+    for y in range(dy):
+        out.paste(im.crop((0, 0, im.width, 1)), (0, y))
+    out.save(dst)
+
+
+def haze_file(src, dst, colour, amount):
+    haze(Image.open(src).convert('RGBA'), colour, float(amount)).save(dst)
+
+
 def widest_gap_centre(im):
     alpha = im.getchannel('A')
     clear = [all(alpha.getpixel((x, y)) < 16 for y in range(im.height)) for x in range(im.width)]
@@ -127,6 +163,15 @@ def near(dst, base_y, colour, amount, *paths):
 
 if __name__ == '__main__':
     command, *args = sys.argv[1:]
-    {'unframe': unframe, 'shift': shift, 'overlap': overlap, 'fogfloor': fogfloor, 'near': near}[
+    {
+        'unframe': unframe,
+        'shift': shift,
+        'overlap': overlap,
+        'fogfloor': fogfloor,
+        'ground': ground,
+        'sink': sink,
+        'haze': haze_file,
+        'near': near,
+    }[
         command
     ](*args)

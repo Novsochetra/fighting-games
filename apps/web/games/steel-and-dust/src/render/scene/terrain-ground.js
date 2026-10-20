@@ -1,6 +1,6 @@
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
 import { STEP_UP } from '../../sim/stage/terrain.js';
-import { drawRoadDetails } from './road-details.js';
+import { drawRoadDetails, drawSwayingGrass } from './road-details.js';
 
 const TOP_SOIL = 11;
 const DEEP_SOIL = 22;
@@ -53,11 +53,46 @@ function drawStepFaces(painter, runs, colors) {
   }
 }
 
-export function drawTerrainGround(painter, { cameraX, colors, tick, surfaceAt }) {
+// the painted cross-section is anchored to the road, so it scrolls with it and wraps every tile;
+// its last row runs on down to the bottom of the view under a high hill
+function drawTextureRun(context, { image, top }, { x, width, y }) {
+  const tileWidth = image.width;
+  const bottom = y - top + image.height;
+  for (let drawn = 0; drawn < width;) {
+    const sourceX = (((x + drawn) % tileWidth) + tileWidth) % tileWidth;
+    const span = Math.min(width - drawn, tileWidth - sourceX);
+    context.drawImage(
+      image,
+      sourceX,
+      0,
+      span,
+      image.height,
+      x + drawn,
+      y - top,
+      span,
+      image.height,
+    );
+    if (bottom < VIEW_HEIGHT) {
+      const rest = VIEW_HEIGHT - bottom;
+      context.drawImage(image, sourceX, image.height - 1, span, 1, x + drawn, bottom, span, rest);
+    }
+    drawn += span;
+  }
+}
+
+export function drawTerrainGround(painter, { cameraX, colors, tick, surfaceAt, texture }) {
   const runs = surfaceRuns(surfaceAt, cameraX, cameraX + VIEW_WIDTH);
+  const painted = texture?.ready;
   for (const run of runs) {
-    drawSoilRun(painter, run, colors);
+    if (painted) {
+      drawTextureRun(painter.context, texture, run);
+    } else {
+      drawSoilRun(painter, run, colors);
+    }
   }
   drawStepFaces(painter, runs, colors);
-  drawRoadDetails(painter, { cameraX, colors, tick, surfaceAt });
+  if (!painted) {
+    drawRoadDetails(painter, { cameraX, colors, tick, surfaceAt });
+  }
+  drawSwayingGrass(painter, { cameraX, colors, tick, surfaceAt });
 }

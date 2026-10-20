@@ -25,5 +25,8 @@ Every layer is 216 rows tall, the height of the view, and tiles sideways.
 - The campfire's embers and smoke are drawn in code at the fire in `raider-camp/near.png`
   (`src/data/backdrops.js`).
 
-The props in `../sprites/props/` (stump, logs, boulder, signpost) are one Pro batch at 128×128,
-trimmed to their content and drawn at half scale like the fighters.
+The forests keep their road clear of loose props: the near strips already dress it, and props drawn
+on their own never sat in the painted light. The palisade that closes each forest road
+(`../sprites/props/palisade.png`) and the plank deck of the platforms (`../sprites/platforms/`) are
+Pro sprites drawn at half scale like the fighters. `ground.png` in each folder is the road's
+cross-section (turf, earth, roots), keyed and tiled with `ground` and laid along the hills.

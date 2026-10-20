@@ -94,7 +94,9 @@ describe('the hero on uneven ground', () => {
   });
 
   it('jumps up through a platform onto it, then drops through it and walks off its end', () => {
-    const game = createTerrainGame({ platforms: [{ at: 160, width: 80, rise: 40, kind: 'log' }] });
+    const game = createTerrainGame({
+      platforms: [{ at: 160, width: 80, rise: 40, kind: 'planks' }],
+    });
     const top = GROUND_Y - 40;
     placeFighter(game, game.player, { x: 200 });
     tap(game, 'jump');

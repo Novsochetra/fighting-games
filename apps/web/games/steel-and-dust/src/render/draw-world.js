@@ -12,6 +12,7 @@ import { drawParticles } from './fx/particles.js';
 import { drawSummons } from './fx/summons.js';
 import { drawCrates } from './scene/crate.js';
 import { drawGround } from './scene/ground.js';
+import { drawPlatforms } from './scene/platforms.js';
 import { drawPickups } from './scene/pickups.js';
 import { drawProps } from './scene/props/index.js';
 import { scenePalette } from './scene/scene-palette.js';
@@ -58,8 +59,11 @@ function drawFighters(painter, { game, view, cameraX }) {
 
 export function drawWorld(painter, { game, view, cameraX }) {
   const mission = missionOf(game);
-  drawGround(painter, cameraX, scenePalette(mission.theme).ground, game.tickCount);
+  const colors = scenePalette(mission.theme).ground;
+  const texture = view.backdrops[mission.theme]?.ground;
+  drawGround(painter, { cameraX, colors, tick: game.tickCount, terrain: game.terrain, texture });
   drawProps(painter, { cameraX, props: mission.props, sheets: view.propSheets });
+  drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });
   drawCrates(painter, game.crates, cameraX);
   drawPickups(painter, game.pickups);
   drawFighters(painter, { game, view, cameraX });

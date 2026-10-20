@@ -18,7 +18,7 @@ const ROAD = buildTerrain({
     [260, 20],
     [260, 0],
   ],
-  platforms: [{ at: 300, width: 60, rise: 40, kind: 'log' }],
+  platforms: [{ at: 300, width: 60, rise: 40, kind: 'planks' }],
 });
 const LOG_TOP = GROUND_Y - 40;
 

@@ -46,8 +46,8 @@ function drawLitter(painter, { cameraX, colors, surfaceAt }) {
 }
 
 // grass along the road's edge, its tips leaning with a slow wind that runs down the road
-function drawGrass(painter, { cameraX, colors, tick, surfaceAt }) {
-  everyStep(cameraX, 5, (x) => {
+export function drawSwayingGrass(painter, { cameraX, colors, tick, surfaceAt }) {
+  everyStep(cameraX, 9, (x) => {
     const hash = hashInt(x + 7);
     const top = surfaceAt(x + 1);
     const height = 2 + (hash % 4);
@@ -61,9 +61,9 @@ function drawGrass(painter, { cameraX, colors, tick, surfaceAt }) {
   });
 }
 
+// what the soil shows when there is no painted cross-section to lay down
 export function drawRoadDetails(painter, road) {
   drawRoots(painter, road);
   drawStones(painter, road);
   drawLitter(painter, road);
-  drawGrass(painter, road);
 }

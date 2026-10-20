@@ -17,7 +17,7 @@ function drawCalls(sheets, prop) {
   return log.filter((call) => call.startsWith('drawImage('));
 }
 
-describe('forest prop sprites', () => {
+describe('prop sprites', () => {
   it('load one sprite per prop, with its feet inside the sprite', () => {
     const sheets = loadPropSprites(loaders);
     for (const [kind, sprite] of Object.entries(PROP_SPRITES)) {
@@ -31,21 +31,21 @@ describe('forest prop sprites', () => {
   });
 
   it('tell sprite props from the drawn ones', () => {
-    expect(isSpriteProp('stump')).toBe(true);
+    expect(isSpriteProp('palisade')).toBe(true);
     expect(isSpriteProp('barrel')).toBe(false);
   });
 
   it("draw at the fighters' density with the feet on the road", () => {
     const sheets = loadPropSprites(loaders);
-    const { width, height } = sheets.images.stump;
-    const { feetX, feetY } = PROP_SPRITES.stump;
-    expect(drawCalls(sheets, { kind: 'stump', x: 500, y: 184 })).toEqual([
-      `drawImage(img(stump.png),${Math.round(500 - feetX / 2)},${Math.round(184 - feetY / 2)},${width / 2},${height / 2})`,
+    const { width, height } = sheets.images.palisade;
+    const { feetX, feetY } = PROP_SPRITES.palisade;
+    expect(drawCalls(sheets, { kind: 'palisade', x: 500, y: 184 })).toEqual([
+      `drawImage(img(palisade.png),${Math.round(500 - feetX / 2)},${Math.round(184 - feetY / 2)},${width / 2},${height / 2})`,
     ]);
   });
 
   it('draw nothing until the sprite has loaded', () => {
-    const sheets = { images: { stump: new FakeImage() }, ready: {} };
-    expect(drawCalls(sheets, { kind: 'stump', x: 500, y: 184 })).toEqual([]);
+    const sheets = { images: { palisade: new FakeImage() }, ready: {} };
+    expect(drawCalls(sheets, { kind: 'palisade', x: 500, y: 184 })).toEqual([]);
   });
 });

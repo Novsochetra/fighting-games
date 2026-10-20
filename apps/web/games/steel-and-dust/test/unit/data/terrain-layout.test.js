@@ -80,7 +80,7 @@ describe('laying out terrain', () => {
             [200, 16],
             [220, 0],
           ],
-          platforms: [{ at: 40, width: 64, rise: 40, kind: 'log' }],
+          platforms: [{ at: 40, width: 64, rise: 40, kind: 'planks' }],
         },
         { platforms: [{ at: 100, width: 48, rise: 30, kind: 'rock' }] },
       ],
@@ -88,7 +88,7 @@ describe('laying out terrain', () => {
       1752,
     );
     expect(terrain.platforms).toEqual([
-      { x: 340, y: GROUND_Y - 56, width: 64, kind: 'log' },
+      { x: 340, y: GROUND_Y - 56, width: 64, kind: 'planks' },
       { x: 1084, y: GROUND_Y - 30, width: 48, kind: 'rock' },
     ]);
   });

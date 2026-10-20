@@ -85,10 +85,13 @@ describe('the scenery of each mission', () => {
     );
   });
 
-  it("draws the road in the mission's own soil or sand", () => {
-    expect(renderMission(5).log).toContain(
-      `fillStyle=${scenePalette('fireflyHollow').ground.sand}`,
-    );
+  it("lays a forest road from its painted cross-section and a desert road in the theme's sand", () => {
+    for (const mission of forestMissions) {
+      expect(
+        renderMission(mission.index).log.some((call) => call.includes('img(ground.png)')),
+        mission.name,
+      ).toBe(true);
+    }
     expect(renderMission(6).log).toContain(`fillStyle=${scenePalette('storm').ground.sand}`);
   });
 });

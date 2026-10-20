@@ -68,3 +68,54 @@ describe('the road over hills', () => {
     expect(record(hilly, { tick: 0 })).not.toEqual(record(hilly, { tick: 70 }));
   });
 });
+
+describe('the painted road', () => {
+  const texture = {
+    image: { width: 128, height: 64, recordingId: () => 'img(ground.png)' },
+    ready: true,
+    top: 7,
+  };
+
+  function textureDraws(surfaceAt, cameraX = 0) {
+    const { context, log } = createRecordingContext(null);
+    drawTerrainGround(createPainter(context), { cameraX, colors, tick: 0, surfaceAt, texture });
+    return log
+      .filter((call) => call.startsWith('drawImage('))
+      .map((call) => call.slice(10, -1).split(',').slice(1).map(Number));
+  }
+
+  it('lays the cross-section with its surface row on the road, tile after tile', () => {
+    const draws = textureDraws(flat, 100);
+    expect(draws[0]).toEqual([100, 0, 28, 64, 100, GROUND_Y - 7, 28, 64]);
+    expect(draws[1]).toEqual([0, 0, 128, 64, 128, GROUND_Y - 7, 128, 64]);
+  });
+
+  it('runs the last row on down to the bottom of the view under a high bank', () => {
+    const bank = () => GROUND_Y - 30;
+    const [cross, deep] = textureDraws(bank, 0);
+    const bottom = GROUND_Y - 30 - 7 + 64;
+    expect(cross).toEqual([0, 0, 128, 64, 0, GROUND_Y - 37, 128, 64]);
+    expect(deep).toEqual([0, 63, 128, 1, 0, bottom, 128, 216 - bottom]);
+  });
+
+  it('rides up a hill column by column', () => {
+    const tops = textureDraws(hilly)
+      .filter((draw) => draw[3] === 64)
+      .map((draw) => draw[5] + 7);
+    expect(Math.min(...tops)).toBe(GROUND_Y - 20);
+  });
+
+  it('falls back to drawn soil until the picture has loaded', () => {
+    const { context, log } = createRecordingContext(null);
+    const loading = { ...texture, ready: false };
+    drawTerrainGround(createPainter(context), {
+      cameraX: 0,
+      colors,
+      tick: 0,
+      surfaceAt: flat,
+      texture: loading,
+    });
+    expect(log.some((call) => call.startsWith('drawImage('))).toBe(false);
+    expect(log).toContain(`fillStyle=${colors.sand}`);
+  });
+});

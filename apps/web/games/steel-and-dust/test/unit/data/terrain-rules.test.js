@@ -98,13 +98,8 @@ describe('the terrain of every mission', () => {
         }
         const rise = groundAt(mission.terrain, platform.x) - platform.y;
         expect(platform.y, label).toBeGreaterThanOrEqual(GROUND_Y - 80);
-        if (sprite.rise) {
-          expect(rise, label).toBe(sprite.rise);
-          expect(isLevel(mission, platform.x, platform.x + platform.width), label).toBe(true);
-        } else {
-          expect(rise, label).toBeGreaterThanOrEqual(24);
-          expect(rise, label).toBeLessThanOrEqual(44);
-        }
+        expect(rise, label).toBeGreaterThanOrEqual(24);
+        expect(rise, label).toBeLessThanOrEqual(44);
         expect(rise, label).toBeGreaterThan(STEP_UP);
       }
     }

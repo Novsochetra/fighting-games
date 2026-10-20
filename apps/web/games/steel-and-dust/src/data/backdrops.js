@@ -1,8 +1,11 @@
 // the painted forests: the layers in assets/backdrops/<folder>/, how fast each one scrolls with
-// the camera, and what moves in the air around them; an emitter's x is a spot in its near layer
+// the camera, and what moves in the air around them; an emitter's x is a spot in its near layer.
+// `ground.png` is the road's cross-section, laid along the terrain with row `groundTop` on its
+// surface
 export const PAINTED_BACKDROPS = {
   pineRidge: {
     folder: 'pine-ridge',
+    groundTop: 7,
     layers: [
       { name: 'back', parallax: 0.08 },
       { name: 'near', parallax: 0.45 },
@@ -15,6 +18,7 @@ export const PAINTED_BACKDROPS = {
   },
   oldGrove: {
     folder: 'old-grove',
+    groundTop: 8,
     layers: [
       { name: 'back', parallax: 0.08 },
       { name: 'near', parallax: 0.45 },
@@ -36,6 +40,7 @@ export const PAINTED_BACKDROPS = {
   },
   bambooPass: {
     folder: 'bamboo-pass',
+    groundTop: 1,
     layers: [
       { name: 'back', parallax: 0.08 },
       { name: 'near', parallax: 0.45 },
@@ -57,6 +62,7 @@ export const PAINTED_BACKDROPS = {
   },
   raiderCamp: {
     folder: 'raider-camp',
+    groundTop: 13,
     layers: [
       { name: 'back', parallax: 0.08 },
       { name: 'near', parallax: 0.45 },
@@ -69,6 +75,7 @@ export const PAINTED_BACKDROPS = {
   },
   emberWoods: {
     folder: 'ember-woods',
+    groundTop: 5,
     layers: [
       { name: 'back', parallax: 0.08 },
       { name: 'near', parallax: 0.45 },
@@ -81,12 +88,13 @@ export const PAINTED_BACKDROPS = {
   },
   fireflyHollow: {
     folder: 'firefly-hollow',
+    groundTop: 8,
     layers: [
       { name: 'back', parallax: 0.08 },
       { name: 'near', parallax: 0.45 },
     ],
     ambient: [
-      { kind: 'mist', plane: 'back', y: 140, height: 44, drift: 0.3 },
+      { kind: 'mist', plane: 'back', y: 160, height: 24, drift: 0.3 },
       { kind: 'fireflies', plane: 'back', count: 14, drift: 0.45, top: 70, bottom: 178 },
       { kind: 'fireflies', plane: 'front', count: 6, drift: 1.15, top: 110, bottom: 200 },
     ],

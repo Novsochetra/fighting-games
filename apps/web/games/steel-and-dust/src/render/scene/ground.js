@@ -1,6 +1,7 @@
 import { GROUND_Y, VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
 import { hashInt } from '../../lib/math.js';
-import { drawForestGround } from './forest-ground.js';
+import { groundAt } from '../../sim/stage/terrain.js';
+import { drawTerrainGround } from './terrain-ground.js';
 
 export function drawTiled(painter, image, offset) {
   const width = image.width;
@@ -36,25 +37,11 @@ function drawRuts(painter, cameraX, colors) {
   }
 }
 
-// grass along the road's edge, its tips leaning with a slow wind that runs down the road
-function drawGrass(painter, { cameraX, colors, tick }) {
-  for (let x = Math.floor(cameraX / 5) * 5; x < cameraX + VIEW_WIDTH + 5; x += 5) {
-    const hash = hashInt(x + 7);
-    const height = 2 + (hash % 4);
-    const lean = Math.round(Math.sin(tick / 45 + x * 0.05) * (height > 3 ? 1 : 0.6));
-    painter.use(colors.grassDark).rect(x, GROUND_Y - 1, 3, 2);
-    painter.use(colors.grass).rect(x + 1, GROUND_Y - height + 1, 1, height - 1);
-    painter.use(colors.grassLight).rect(x + 1 + lean, GROUND_Y - height, 1, 1);
-    if (hash % 3 === 0) {
-      painter.use(colors.grass).rect(x + 3 + lean, GROUND_Y - 2, 1, 2);
-    }
-  }
-}
-
-export function drawGround(painter, cameraX, colors, tick) {
+// a forest road follows the terrain's hills and steps; the desert roads stay flat as they were
+export function drawGround(painter, { cameraX, colors, tick, terrain, texture }) {
   if (colors.grass) {
-    drawForestGround(painter, cameraX, colors);
-    drawGrass(painter, { cameraX, colors, tick });
+    const surfaceAt = (x) => groundAt(terrain, x);
+    drawTerrainGround(painter, { cameraX, colors, tick, surfaceAt, texture });
     return;
   }
   painter.use(colors.sand).rect(cameraX, GROUND_Y, VIEW_WIDTH, VIEW_HEIGHT - GROUND_Y);

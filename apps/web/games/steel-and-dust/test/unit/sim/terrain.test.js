@@ -16,7 +16,7 @@ function hill() {
   }
   return {
     heights,
-    platforms: [{ x: 250, y: GROUND_Y - 40, width: 60, kind: 'log' }],
+    platforms: [{ x: 250, y: GROUND_Y - 40, width: 60, kind: 'planks' }],
   };
 }
 

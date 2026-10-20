@@ -29,12 +29,6 @@ describe('platforms', () => {
     }
   });
 
-  it('lay a log on the road with its top where fighters stand', () => {
-    const top = GROUND_Y - PLATFORM_SPRITES.log.rise;
-    const [log] = draws(terrainWith([{ x: 300, y: top, width: 80, kind: 'log' }]));
-    expect(log).toEqual(['img(log.png)', '300', String(top - 3), '80', '20']);
-  });
-
   it('grow a deck its legs down to the ground under each leg, slope or not', () => {
     const slope = (x) => (x < 400 ? GROUND_Y : GROUND_Y - 10);
     const terrain = terrainWith([{ x: 350, y: 130, width: 80, kind: 'planks' }], slope);

@@ -41,9 +41,7 @@ function drawLegs(context, { image, platform, sprite, terrain }) {
 }
 
 function drawPlatform(context, { image, platform, sprite, terrain }) {
-  if (sprite.legs) {
-    drawLegs(context, { image, platform, sprite, terrain });
-  }
+  drawLegs(context, { image, platform, sprite, terrain });
   const top = platform.y - sprite.topY / RENDER_SCALE;
   context.drawImage(
     image,

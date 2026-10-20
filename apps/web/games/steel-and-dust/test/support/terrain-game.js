@@ -21,7 +21,7 @@ export function hillyTerrain(mission) {
       [290, 24],
       [350, 0],
     ],
-    platforms: [{ at: 220, width: 60, rise: 36, kind: 'log' }],
+    platforms: [{ at: 220, width: 60, rise: 36, kind: 'planks' }],
   };
   return layoutTerrain(
     mission.zones.map(() => zoneSpec),
