@@ -1,7 +1,6 @@
 import { RENDER_SCALE } from '../config.js';
 
 export const HERO_SPRITES = {
-  directory: 'assets/sprites/hero/arsenal/',
   frameWidth: 128,
   frameHeight: 80,
   feetX: 64,

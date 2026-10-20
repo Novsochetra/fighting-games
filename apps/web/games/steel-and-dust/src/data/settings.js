@@ -14,6 +14,7 @@ export function defaultSettings(coarsePointer) {
     difficulty: 1,
     training: false,
     hitboxes: false,
+    hero: 'moss',
   };
 }
 

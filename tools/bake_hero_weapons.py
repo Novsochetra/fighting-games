@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
-"""Bake the hero's weapon variants from the Moss Shade sword strips.
+"""Bake a Shade's weapon variants from its sword strips.
 
 The PixelLab hero sprites all hold the glowing sword. For every frame this finds the blade
 (a straight run of glowing pixels sticking out of the body), erases it, recolours the slash
 smear for the weapon, and draws a spear or an axe along the same grip line. Fists get the
 blade removed and a gold smear.
 
-Output: assets/sprites/hero/arsenal/hero_<anim>.png, one strip per animation with four rows
+Output: <hero folder>/arsenal/hero_<anim>.png, one strip per animation with four rows
 of 128x80 frames: sword (the original), fists, spear, axe.
 
     pip install numpy scipy pillow
-    python3 tools/bake_hero_weapons.py
+    python3 tools/bake_hero_weapons.py            # Moss Shade, assets/sprites/hero/
+    python3 tools/bake_hero_weapons.py firefly    # assets/sprites/heroes/firefly/ (also antler, blue)
+
+The Moss Shade's blade glows green; the other Shades' blades glow blue or teal, so for them the
+glow tests read the stronger of the green and blue channels. Grip overrides are Moss-only.
 
 OVERRIDES fixes frames where detection misses: g = grip, t = blade tip, in frame pixels;
 hide = recolour the smear only and draw no weapon (strike frames where the blade is lost in the smear).
@@ -20,8 +24,13 @@ from PIL import Image
 from scipy import ndimage as nd
 
 ROOT=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..')
-HERO=os.path.join(ROOT,'apps/web/games/steel-and-dust/assets/sprites/hero/')
-OUT=os.path.join(HERO,'arsenal/')
+import sys
+SPRITES=os.path.join(ROOT,'apps/web/games/steel-and-dust/assets/sprites/')
+HERO=SPRITES+'hero/'
+VARIANT=sys.argv[1] if len(sys.argv)>1 and sys.argv[1]!='moss' else None
+SRC=SPRITES+'heroes/'+VARIANT+'/' if VARIANT else HERO
+OUT=SRC+'arsenal/'
+COOL=VARIANT is not None
 meta=json.load(open(HERO+'hero.json'))
 FW,FH=128,80
 ANIMS=list(meta['animations'].keys())
@@ -172,6 +181,7 @@ OVERRIDES={
 
 def masks(fr):
     r,g,b,a=[fr[...,i].astype(int) for i in range(4)]
+    if COOL: g=np.maximum(g,b)
     A=a>0
     Gp=A&(g>=140)&(g-r>=80)
     tr=nd.uniform_filter((~A).astype(float),size=7,mode='constant',cval=1.0)
@@ -221,6 +231,7 @@ def detect_line(fr):
 
 def smear_mask(fr):
     r,g,b,a=[fr[...,i].astype(int) for i in range(4)]
+    if COOL: g=np.maximum(g,b)
     A=a>0
     B=A&(g>=190)&(g-r>=120)
     cnt=nd.uniform_filter(B.astype(float),size=3)*9
@@ -257,12 +268,20 @@ def detect(fr):
     if endpoint_density(A,Gp,t)>endpoint_density(A,Gp,g): g,t=t,g
     return dict(g=g,t=t)
 
+# in an attack frame with a big smear the blade line is lost in the glow; only the smear is recoloured
+ATTACKS={'slash1','slash2','spin_slash','thrust','rising_dragon','cleave','air_slash','air_rising_cut','meteor_slash','plunge'}
+def frame_annotation(n,fr,ov,k):
+    if str(k) in ov: return ov[str(k)]
+    if COOL and n in ATTACKS and smear_mask(fr).sum()>=100: return {'hide':True}
+    return detect(fr)
+
 def annotations():
     out={}
     for n in ANIMS:
-        a=meta['animations'][n]; im=np.array(Image.open(HERO+a['file']).convert('RGBA'))
+        a=meta['animations'][n]; im=np.array(Image.open(SRC+a['file']).convert('RGBA'))
         ov=OVERRIDES.get(n,{})
-        out[n]=[ov[str(k)] if str(k) in ov else detect(im[:,k*FW:(k+1)*FW]) for k in range(a['frames'])]
+        if COOL: ov={k:v for k,v in ov.items() if v.get('hide')}
+        out[n]=[frame_annotation(n,im[:,k*FW:(k+1)*FW],ov,k) for k in range(a['frames'])]
     return out
 
 
@@ -297,6 +316,7 @@ def fill_poly(L,pts,c):
 def erase_blade(fr,g,t):
     out=fr.copy(); A,Gp,F=masks(fr)
     r,gg,b=[fr[...,i].astype(int) for i in range(3)]
+    if COOL: gg=np.maximum(gg,b)
     greenish=(gg-r>=30)&(gg>=60)
     tr=nd.uniform_filter((~A).astype(float),size=5,mode='constant',cval=1.0)
     g=np.array(g,float);t=np.array(t,float);u=(t-g)/max(1e-6,np.linalg.norm(t-g));L=np.linalg.norm(t-g)
@@ -395,7 +415,7 @@ def save_indexed(a,path):
 def bake_all(ann,outdir=None):
     res={}
     for n in ANIMS:
-        a=meta['animations'][n]; im=np.array(Image.open(HERO+a['file']).convert('RGBA'))
+        a=meta['animations'][n]; im=np.array(Image.open(SRC+a['file']).convert('RGBA'))
         N=a['frames']; strip=np.zeros((FH*4,FW*N,4),np.uint8)
         for k in range(N):
             fr=im[:,k*FW:(k+1)*FW]

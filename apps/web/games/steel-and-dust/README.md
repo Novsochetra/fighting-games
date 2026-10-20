@@ -49,11 +49,16 @@ Saved in the browser: music and sound volume, difficulty (Easy, Normal, Hard), a
 - **Charge attacks:** hold K for level 1 or max. Every weapon has its own pair: Burst Straight and Tiger Rush (fists), Iai Rush and Crescent Moon, a slash wave (sword), Comet Lunge and Cyclone, which pulls enemies in (spear), Earthsplitter and Cataclysm, which launches every grounded enemy (axe). Holding K at the end of a string charges straight out of it.
 - **Ultimate, Shade Requiem:** hits and damage taken fill the ULT bar. When it's full, time freezes, the hero teleports through every enemy on screen for eight cuts, then launches them all with a screen-wide slash. The hero is invincible throughout.
 - **Juggles** with decay, one ground bounce and one wall bounce per juggle.
-- **3 zones** of raiders that arrive in waves, plus a boss (Warden Ox) with armor, a charge attack and a shockwave slam.
-- **5 enemy types:** Raiders and Cutters up close, **Slingers** (from zone 2) that keep their distance and throw knives you can jump, dash through or hit back, and **Bulwarks** (zone 3) whose shield blocks light hits from the front until a heavy, charged, launching or diving hit, or a hit from behind, breaks the guard.
+- **4 playable Shades:** Moss, Firefly, Antler Spirit and Blue. Play opens a hero select screen with animated previews; the pick is saved. Each Shade has its own PixelLab sprite set and its own glow: sword smear, slash wave, hit sparks, charge glow and a trail of motes around it (a whole swarm for the Firefly Shade).
+- **One long road:** six zones of raiders in waves, two mid-bosses (the **Rust Colossus** in the scrapyard and the **Scorpion Queen** in the nest) and the **Warden Ox** at the end. Every boss has armor, a swipe, a charge and a shockwave slam, and marks the ground in red before it hits. Only the Ox ends the stage.
+- **16 enemies, all drawn from PixelLab sprite sheets:**
+  - up close: **Raider** (punches), **Scrap Scavenger** (pipe smash, metal sparks), **Red Cutter** (stab and lunge), **Jackal Runner** (fast, claws and a pouncing rush), **Dune Assassin** (double cut, vanishes and reappears behind you), **Vulture Spearman** (long spear thrust);
+  - at range: **Knife Slinger** (knives), **Crossbow Sentry** (slow aim, fast bolt that knocks you down), **Fire-Pot Bomber** (pots lobbed to land where you stand, then a patch of fire), **Mirage Witch** (sand blasts, slips away in a puff of sand when you close in). Knives and bolts can be hit back;
+  - tough: **Bulwark** (shield blocks light hits from the front until a heavy, charged, launching or diving hit, or a hit from behind), **Brass Juggernaut** (armor shrugs off small hits, a haymaker that knocks down), **Sand Scorpion** (so low that high slashes pass over it: sweep it or pogo on it).
+  - Struck enemies throw off what they are made of: sparks from metal, chips from stone, shards from shell, glowing sand from the witch.
 - **Game feel:** hitstop, screen shake, a zoom punch and camera kick on big hits, impact rings and speed lines, damage numbers sized by damage, a combo timer and combo results, a red vignette when hurt or low on health, red wind-up flashes on raiders, red danger zones under the boss's slams and charges, off-screen enemy arrows, pickup beams, KO bursts, footstep dust, and slow motion on the final KO.
 - **Sound:** every effect and the soundtrack (title, battle and boss tracks) are synthesized, no audio files. Combat sounds (swings, hits, shouts) are built sample by sample once, a few takes each, when the sound starts, and then play as one buffer each, so a fast combo costs almost nothing. Each weapon has its own swing and hit. A hit is a sharp crack, a two-band slap near 1.2 kHz and 400 Hz, and a body of struck resonant modes pitched where phone speakers can play it, plus the weapon's own voice: knuckles, a slicing blade that rings, a spear's wooden shaft knocking, an axe crunching through bone. A swing is air plus a thin whistle and starts early, so its peak lands on the strike. The dash is a scuff and thump from the feet, a whoomp of air and the cloak snapping (the air dash has no feet in it). Combat sounds are panned to where they happen on screen, swings and dashes sweep the way they travel, and the hero's hits rise a little in pitch as a combo grows. Effects have their own gentle compressor, so hits keep their punch and do not pump the music. Shouts come from a small voice synth: a glottal pulse through vowel formants, with breath, a rasp and a crackle at the end. Raiders grunt when hit and give a Metal Slug style scream when they go down; the boss roars. How to play → Sounds plays every sound and every take. Sounds fired at the same moment are merged, and each kind has a cap on how many play at once. Everything runs through a small room reverb, a soft top-end roll-off and a compressor.
-- **First-time tips** for new players (moving, crates, weapons, launchers, dashing, knives, shields, the ultimate), shown once each.
+- **First-time tips** for new players (moving, crates, weapons, launchers, dashing, knives, shields, the ultimate), shown once each, and a tips page in How to play that covers every enemy.
 
 ## How it's built
 
@@ -63,7 +68,8 @@ Saved in the browser: music and sound volume, difficulty (Easy, Normal, Hard), a
 - **Fixed timestep.** Game logic runs at exactly 60 ticks per second (`src/boot/fixed-step.js`), and
   rendering is separate. Frame data stays exact on any monitor.
 - **Data-driven moves.** Every move is a `defineMove({ name, frames: [startup, active, recovery], damage,
-hitbox, knockback, ... })` entry in `src/data/weapons/<weapon>/` or `src/data/enemies/enemy-moves.js`:
+hitbox, knockback, ... })` entry in `src/data/weapons/<weapon>/` or `src/data/enemies/moves/`, and every
+  enemy type is an entry in `src/data/enemies/types/`:
 
   ```js
   L1: defineMove({ name: 'Jab', frames: [4, 2, 9], damage: 4, hitbox: [4, -28, 14, 7], knockback: [1, 0],
@@ -76,15 +82,22 @@ hitbox, knockback, ... })` entry in `src/data/weapons/<weapon>/` or `src/data/en
 
 - **Input buffer.** A press is remembered for 8 ticks (`src/sim/input/read-input.js`).
 - **Attack tokens.** Only two raiders attack at once; the rest circle at a distance.
-- **Hero sprites.** The player is the Moss Shade, drawn from the PixelLab sprite strips in
-  `assets/sprites/hero/` (see `hero.json`). The world is simulated at 384×216 and drawn at 2×, the hero
+- **Hero sprites.** The four Shades are drawn from PixelLab sprite strips: the Moss Shade in
+  `assets/sprites/hero/` (see `hero.json`), the others in `assets/sprites/heroes/<id>/` with the same
+  animations and frame counts. `src/data/heroes.js` lists them and `src/art/hero-themes.js` holds each
+  one's glow colors. A Shade's strips load the first time it is picked. The world is simulated at 384×216 and drawn at 2×, the hero
   at its native sprite resolution. Each attack's strike frame is shown while its hitbox is active
   (`src/data/hero-sprites.js`).
 - **Weapon variants.** PixelLab drew every animation with the sword, so `tools/bake_hero_weapons.py`
   builds the other weapons from those frames into `assets/sprites/hero/arsenal/`, one strip per animation
-  with four rows: sword, fists, spear, axe. Rebuild with `pip install numpy scipy pillow && python3 tools/bake_hero_weapons.py`.
-- **Procedural pixel art.** Enemies are drawn from a small skeleton (`src/sim/pose/`, `src/render/fighters/`).
-  Each move has a wind-up pose and a strike pose.
+  with four rows: sword, fists, spear, axe. Rebuild with `pip install numpy scipy pillow && python3 tools/bake_hero_weapons.py`
+  (add `firefly`, `antler` or `blue` for the other Shades).
+- **Enemy sprites.** Each enemy is one PNG in `assets/sprites/enemies/` with a row per strip (idle, walk,
+  attack, hurt, knock-out, and a lunge, slam or charge where it has one), described in
+  `src/data/enemies/enemy-sprites.js`. `src/sim/enemy-animation.js` picks the frame for each state: the
+  wind-up leads to the strike frame, which holds while the hitbox is out, and the knock-out strip doubles
+  for juggles, falls and getting up. The enemies' small skeleton (`src/sim/pose/`) still runs, as a
+  fallback drawing and for the "!" warning.
 - **Behavior lock.** `test/regression/` replays two long bot-played runs and checks every 30th tick and
   every rendered frame against recorded fixtures, so a refactor cannot change the game by accident.
 

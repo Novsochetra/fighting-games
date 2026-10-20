@@ -6,6 +6,7 @@ import { shake } from '../fx/camera-fx.js';
 import { addSparks } from '../fx/particles.js';
 import { updateUlt } from '../ultimate.js';
 import { jump } from './actions.js';
+import { themeOf } from './hero-colors.js';
 import { updateAttack } from './attack-state.js';
 
 function updateHurt(_game, fighter) {
@@ -73,11 +74,12 @@ function updateSquat(game, fighter) {
   }
 }
 
-function chargeColor(time) {
+function chargeColor(game, time) {
   if (time >= CHARGE_MAX) {
     return COLORS.gold;
   }
-  return time >= CHARGE_LEVEL1 ? COLORS.cyan : COLORS.ocean;
+  const theme = themeOf(game);
+  return time >= CHARGE_LEVEL1 ? theme.glow : theme.glowDim;
 }
 
 function updateCharge(game, fighter) {
@@ -100,7 +102,7 @@ function updateCharge(game, fighter) {
       vy: -randomBetween(0.6, 1.4),
       life: 22,
       maxLife: 22,
-      color: chargeColor(time),
+      color: chargeColor(game, time),
     });
   }
 }

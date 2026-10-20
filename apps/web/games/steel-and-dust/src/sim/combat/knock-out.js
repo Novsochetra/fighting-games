@@ -1,6 +1,6 @@
 import { COLORS } from '../../art/colors.js';
 import { punch } from '../fx/camera-fx.js';
-import { addFloatText, addRing } from '../fx/effects.js';
+import { addFloatText, addRing, showBanner } from '../fx/effects.js';
 import { buzz } from '../fx/haptics.js';
 import { addSparks } from '../fx/particles.js';
 import { releaseToken } from '../fighters/tokens.js';
@@ -37,8 +37,17 @@ function knockOutEnemy(game, enemy, direction) {
   if (standing.length === 0 && !game.stage.spawnQueue.length) {
     game.slowMotion = Math.max(game.slowMotion, 42);
   }
-  if (enemy === game.boss && !game.clearTime) {
+  if (boss) {
+    bossDown(game, enemy);
+  }
+}
+
+// only the last boss ends the stage; a mid-boss going down just opens the road
+function bossDown(game, boss) {
+  if (boss === game.boss && boss.def.final && !game.clearTime) {
     stageClear(game);
+  } else if (!boss.def.final) {
+    showBanner(game, { text: `${boss.def.name} down`, color: COLORS.gold, time: 90 });
   }
 }
 

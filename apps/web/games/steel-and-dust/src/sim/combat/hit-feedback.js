@@ -1,6 +1,7 @@
 import { COLORS } from '../../art/colors.js';
 import { WEAPONS } from '../../data/weapons/index.js';
 import { randomBetween } from '../../lib/math.js';
+import { sparkColorOf } from '../fighters/hero-colors.js';
 import { isPlayer } from '../fighters/loadout.js';
 import { punch, shake } from '../fx/camera-fx.js';
 import { addImpact, addRing, addSpeedLines } from '../fx/effects.js';
@@ -30,7 +31,7 @@ export function attackerWeapon(attacker) {
 
 export function showImpact(game, hit, { direction, hitstop }) {
   const weapon = attackerWeapon(hit.attacker);
-  const color = weapon ? weapon.sparkColor : COLORS.gold;
+  const color = weapon ? sparkColorOf(game, hit.attacker.weapon.id) : COLORS.gold;
   const heavy = hitstop >= 9;
   shake(game, shakeAmount(hitstop), hitstop + 2);
   addImpact(game, {

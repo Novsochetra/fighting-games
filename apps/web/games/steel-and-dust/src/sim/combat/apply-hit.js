@@ -2,6 +2,7 @@ import { COLORS } from '../../art/colors.js';
 import { difficultyOf } from '../../data/difficulty.js';
 import { isPlayer } from '../fighters/loadout.js';
 import { addFloatText } from '../fx/effects.js';
+import { burstMaterial } from '../fx/material-bursts.js';
 import { blockHit } from './block-hit.js';
 import { addUltMeter, endCombo } from './combo.js';
 import { blocksHit, canBeHit, isFacing, isGuarding } from './guard.js';
@@ -91,6 +92,7 @@ function landHit(game, hit, damage, direction) {
   chargeMeters(game, hit, damage);
   freezeOnHit(hit, damage);
   const color = showImpact(game, hit, { direction, hitstop: move.hitstop });
+  burstMaterial(game, hit, direction);
   const big = isBigHit(move, knockdown);
   if (big) {
     showBigHit(game, hit, { direction, hitstop: move.hitstop, color });

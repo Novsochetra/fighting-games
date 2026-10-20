@@ -1,0 +1,37 @@
+const REGULAR = { frameWidth: 128, frameHeight: 80, feetX: 64, feetY: 76 };
+const BOSS = { frameWidth: 192, frameHeight: 112, feetX: 96, feetY: 108 };
+
+// one PNG per enemy in assets/sprites/enemies/ with a row per strip, in the order listed;
+// "attack 9/4" is a strip of 9 frames whose frame 4 holds while the hitbox is out
+function sheet(file, spec, size = REGULAR) {
+  const strips = {};
+  spec.split(', ').forEach((entry, row) => {
+    const [name, counts] = entry.split(' ');
+    const [frames, strike] = counts.split('/').map(Number);
+    strips[name] = strike === undefined ? { row, frames } : { row, frames, strike };
+  });
+  return { file, ...size, strips };
+}
+
+export const ENEMY_SPRITES = {
+  raider: sheet('raider.png', 'idle 4, walk 8, attack 9/4, hurt 4, ko 9'),
+  scavenger: sheet('scavenger.png', 'idle 4, walk 8, attack 9/4, hurt 4, ko 9'),
+  cutter: sheet('cutter.png', 'idle 4, walk 8, attack 9/4, hurt 4, ko 9, lunge 9/3'),
+  jackal: sheet('jackal.png', 'idle 4, walk 8, attack 9/2, hurt 4, ko 9'),
+  slinger: sheet('slinger.png', 'idle 4, walk 8, attack 9/4, hurt 4, ko 9'),
+  bomber: sheet('bomber.png', 'idle 4, walk 8, attack 9/4, hurt 4, ko 9'),
+  sentry: sheet('sentry.png', 'idle 4, walk 8, attack 9/2, hurt 4, ko 9'),
+  bulwark: sheet('bulwark.png', 'idle 4, walk 8, attack 9/5, hurt 4, ko 9'),
+  juggernaut: sheet('juggernaut.png', 'idle 4, walk 8, attack 9/6, hurt 4, ko 9'),
+  witch: sheet('witch.png', 'idle 4, walk 8, attack 9/7, hurt 4, ko 9'),
+  scorpion: sheet('scorpion.png', 'idle 4, walk 8, attack 9/5, hurt 4, ko 9'),
+  assassin: sheet('assassin.png', 'idle 4, walk 8, attack 9/5, hurt 4, ko 9'),
+  vulture: sheet('vulture.png', 'idle 4, walk 8, attack 9/4, hurt 4, ko 9'),
+  ox: sheet('ox.png', 'idle 4, walk 8, attack 9/5, hurt 4, ko 9, slam 9/5, charge 8', BOSS),
+  queen: sheet('queen.png', 'idle 4, walk 8, attack 9/3, hurt 4, ko 9, slam 9/4, charge 8', BOSS),
+  colossus: sheet(
+    'colossus.png',
+    'idle 4, walk 8, attack 9/3, hurt 4, ko 9, slam 9/4, charge 8',
+    BOSS,
+  ),
+};

@@ -1,16 +1,14 @@
 import { COLORS } from '../../art/colors.js';
 import { VIEW_WIDTH } from '../../config.js';
-import { WEAPONS } from '../../data/weapons/index.js';
-import { randomBetween } from '../../lib/math.js';
-import { applyHit } from '../combat/apply-hit.js';
-import { hurtBox, knifeBox, overlaps } from '../combat/boxes.js';
+import { trailColorOf } from '../fighters/hero-colors.js';
 import { showHint } from '../hints.js';
 import { breakCratesIn } from '../items/crates.js';
-import { hazardAttacker } from './hazard-attacker.js';
+import { flyBomb } from './enemy-shots.js';
+import { hitArea } from './shot-hits.js';
+import { leaveTrail } from './shot-trails.js';
+import { SHOT_RULES } from './shot-rules.js';
 
 const DEFAULT_SPEED = 4.6;
-const KNIFE_HIT = { knockback: [1.6, 0], hitstop: 4, hitstun: 16 };
-const WAVE_HIT = { knockback: [3, -3.6], knockdown: true, hitstop: 6, hitstun: 20 };
 
 export function spawnSlashWave(game, fighter, move) {
   game.projectiles.push({
@@ -23,7 +21,7 @@ export function spawnSlashWave(game, fighter, move) {
     damage: move.waveDamage,
     speed: move.waveSpeed,
     hitTargets: new Set(),
-    color: WEAPONS[fighter.weapon.id].trailColor,
+    color: trailColorOf(game, fighter.weapon.id),
   });
 }
 
@@ -43,78 +41,40 @@ export function tossKnife(game, fighter) {
   game.io.sfx('swingSpear', false, { vol: 0.6, x: fighter.x, dir: fighter.facing });
 }
 
-function leaveTrail(game, shot) {
-  if (shot.kind !== 'knife' && shot.time % 2 === 0) {
-    game.particles.push({
-      kind: 'spark',
-      x: shot.x - shot.direction * 6,
-      y: shot.y + randomBetween(-12, 12),
-      vx: -shot.direction * randomBetween(0.5, 1.5),
-      vy: 0,
-      life: 10,
-      maxLife: 14,
-      color: shot.color,
-    });
+function moveShot(game, shot) {
+  shot.x += shot.direction * (shot.speed ?? DEFAULT_SPEED);
+  shot.time++;
+  if (shot.kind === 'bomb') {
+    flyBomb(game, shot);
   }
-  if (shot.kind === 'knife' && shot.time % 3 === 0) {
-    game.particles.push({
-      kind: 'streak',
-      x: shot.x - shot.direction * 4,
-      y: shot.y,
-      vx: -shot.direction * 0.6,
-      vy: 0,
-      life: 8,
-      maxLife: 8,
-      length: 4,
-    });
-  }
-}
-
-function shotArea(shot) {
-  if (shot.kind === 'knife') {
-    return knifeBox(shot);
-  }
-  return { x: shot.x - 8, y: shot.y - 18, width: 16, height: 36 };
-}
-
-function strike(game, shot, area) {
-  const knife = shot.kind === 'knife';
-  const attacker = hazardAttacker(shot, shot.side === 'player' ? 'sword' : 'knife');
-  const move = { damage: shot.damage, ...(knife ? KNIFE_HIT : WAVE_HIT) };
-  for (const target of game.fighters) {
-    if (target.side === shot.side || shot.hitTargets.has(target)) {
-      continue;
-    }
-    const body = hurtBox(target);
-    if (
-      body &&
-      overlaps(area, body) &&
-      applyHit(game, { attacker, target, move, x: shot.x, y: shot.y })
-    ) {
-      shot.hitTargets.add(target);
-      shot.dead = shot.dead || knife;
-    }
+  const rules = SHOT_RULES[shot.kind];
+  if (rules.rehitEvery && shot.time % rules.rehitEvery === 0) {
+    shot.hitTargets.clear();
   }
 }
 
 function stillFlying(game, shot) {
-  const range = shot.kind === 'knife' ? 150 : 70;
   const cameraX = game.camera.x;
   return (
-    !shot.dead && shot.time < range && shot.x > cameraX - 40 && shot.x < cameraX + VIEW_WIDTH + 40
+    !shot.dead &&
+    shot.time < SHOT_RULES[shot.kind].range &&
+    shot.x > cameraX - 40 &&
+    shot.x < cameraX + VIEW_WIDTH + 40
   );
 }
 
 export function updateProjectiles(game) {
-  for (const shot of game.projectiles) {
-    shot.x += shot.direction * (shot.speed || DEFAULT_SPEED);
-    shot.time++;
+  for (const shot of game.projectiles.slice()) {
+    moveShot(game, shot);
     leaveTrail(game, shot);
-    const area = shotArea(shot);
-    if (shot.kind === 'knife' && shot.side === 'enemy') {
+    const rules = SHOT_RULES[shot.kind];
+    const area = rules.area(shot);
+    if ((shot.kind === 'knife' || shot.kind === 'bolt') && shot.side === 'enemy') {
       showHint(game, 'sling');
     }
-    strike(game, shot, area);
+    if (rules.hit) {
+      hitArea(game, { shot, area, hit: rules.hit });
+    }
     if (shot.side === 'player') {
       breakCratesIn(game, area);
     }

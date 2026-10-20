@@ -26,7 +26,8 @@ export function hurtBox(fighter) {
   if (fighter.removed || fighter.state === 'ko') {
     return null;
   }
-  const [left, top, width, height] = HURT_SHAPES[fighter.state] || STANDING_SHAPE;
+  const [left, top, width, height] =
+    HURT_SHAPES[fighter.state] || fighter.def?.hurtShape || STANDING_SHAPE;
   const scale = fighter.scale;
   return {
     x: fighter.x - left * scale,

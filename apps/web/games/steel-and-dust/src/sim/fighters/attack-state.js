@@ -4,6 +4,7 @@ import { playSwing, swingLeadTicks } from '../combat/sounds.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust } from '../fx/particles.js';
 import { pullIn, quake } from '../hazards/area-moves.js';
+import { fireEnemyShot } from '../hazards/enemy-shots.js';
 import { spawnSlashWave, tossKnife } from '../hazards/projectiles.js';
 import { spawnShockwave } from '../hazards/shockwaves.js';
 import { endMove } from './actions.js';
@@ -36,6 +37,10 @@ const STRIKE_EFFECTS = [
   [(_fighter, move) => move.chargeLevel, chargeRelease],
   [(_fighter, move) => move.waveDamage, spawnSlashWave],
   [(_fighter, move) => move.toss, (game, fighter) => tossKnife(game, fighter)],
+  [
+    (_fighter, move) => move.projectile,
+    (game, fighter, move) => fireEnemyShot(game, fighter, move.projectile),
+  ],
   [(_fighter, move) => move.quakeDamage, quake],
   [(fighter, move) => move.stomp && fighter.airborne, stompDown],
 ];

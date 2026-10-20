@@ -3,6 +3,7 @@ import { activeEnd } from '../../data/moves/define-move.js';
 import { isPlayer } from '../fighters/loadout.js';
 import { addFloatText, addRing } from '../fx/effects.js';
 import { addSparks } from '../fx/particles.js';
+import { isDeflectable } from '../hazards/shot-rules.js';
 import { breakCrate } from '../items/crates.js';
 import { applyHit } from './apply-hit.js';
 import { attackBox, crateBox, hurtBox, knifeBox, overlapCenter, overlaps } from './boxes.js';
@@ -52,7 +53,7 @@ function deflectKnife(game, attacker, knife) {
 
 function deflectKnives(game, attacker, area) {
   for (const shot of game.projectiles) {
-    if (shot.kind === 'knife' && shot.side === 'enemy' && overlaps(area, knifeBox(shot))) {
+    if (isDeflectable(shot) && overlaps(area, knifeBox(shot))) {
       deflectKnife(game, attacker, shot);
     }
   }

@@ -40,6 +40,10 @@
   --color-touch-heavy: color-mix(in srgb, var(--color-red) 28%, transparent);
   --color-coral: #ff8a6a;
   --color-mint-light: #7fe3cf;
+  --color-hero-moss: #5fe8a0;
+  --color-hero-firefly: #ffe066;
+  --color-hero-antler: #3fe0c0;
+  --color-hero-blue: #5aa8ff;
   --color-touch-heavy-border: color-mix(in srgb, var(--color-coral) 90%, transparent);
   --color-touch-jump: color-mix(in srgb, var(--color-teal) 28%, transparent);
   --color-touch-jump-border: color-mix(in srgb, var(--color-mint-light) 90%, transparent);
@@ -169,12 +173,16 @@
   --duration-pulse: 800ms;
   --duration-blink: 1.2s;
   --duration-sweep: 7s;
+  --duration-sprite-idle: 900ms;
+  --duration-sprite-win: 600ms;
 
   --easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --easing-overshoot: cubic-bezier(0.2, 1.6, 0.4, 1);
   --easing-linear: linear;
   --easing-step: steps(1, end);
   --easing-step-2: steps(2);
+  --easing-step-4: steps(4);
+  --easing-step-6: steps(6);
   --easing-out: ease-out;
 
   --layer-overlay: 100;

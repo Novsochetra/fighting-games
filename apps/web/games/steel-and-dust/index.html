@@ -9,7 +9,7 @@
     <title>Steel &amp; Dust</title>
     <meta
       name="description"
-      content="A side-scrolling pixel-art brawler. Pick up weapons, chain combos and fight through three zones to the boss."
+      content="A side-scrolling pixel-art brawler. Pick one of four Shades, pick up weapons, chain combos and fight sixteen kinds of raiders and three bosses."
     />
     <meta name="theme-color" content="#0c0910" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="styles/panels.css" />
     <link rel="stylesheet" href="styles/settings.css" />
     <link rel="stylesheet" href="styles/help.css" />
+    <link rel="stylesheet" href="styles/heroes.css" />
     <link rel="stylesheet" href="styles/touch.css" />
     <link rel="stylesheet" href="styles/touch-buttons.css" />
     <script type="module" src="src/main.js"></script>
@@ -115,6 +116,16 @@
               <button class="xbtn" data-act="back">Back</button>
             </header>
             <div class="scroll" id="settingsList"></div>
+          </div>
+        </section>
+
+        <section class="menu sub heroes" id="m-heroes" aria-label="Choose your Shade">
+          <div class="box">
+            <header>
+              <h2>Choose your Shade</h2>
+              <button class="xbtn" data-act="back">Back</button>
+            </header>
+            <div class="hero-grid" id="heroList"></div>
           </div>
         </section>
 

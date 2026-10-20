@@ -2,6 +2,7 @@ import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { GROUND_Y } from '../../config.js';
 import { point } from '../painter.js';
+import { drawBolt, drawBomb, drawFire, drawSand } from './enemy-shots.js';
 
 function drawShockPeak(painter, x, height) {
   for (let row = 0; row <= height; row++) {
@@ -58,12 +59,17 @@ function drawSlashWave(painter, wave) {
   painter.alpha(1);
 }
 
+const DRAW_SHOT = {
+  knife: drawKnife,
+  wave: drawSlashWave,
+  bolt: drawBolt,
+  sand: drawSand,
+  bomb: drawBomb,
+  fire: drawFire,
+};
+
 export function drawProjectiles(painter, projectiles) {
   for (const shot of projectiles) {
-    if (shot.kind === 'knife') {
-      drawKnife(painter, shot);
-    } else {
-      drawSlashWave(painter, shot);
-    }
+    DRAW_SHOT[shot.kind](painter, shot);
   }
 }

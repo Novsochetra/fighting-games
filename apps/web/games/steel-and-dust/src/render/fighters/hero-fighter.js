@@ -19,8 +19,8 @@ const INNER_GLOW = [
   [0, 0.5],
 ];
 
-// dim blue while charging, blue at level 1, flickering gold at max and during the ultimate
-function glowColor(fighter, tickCount) {
+// dim glow while charging, full glow at level 1, flickering gold at max and during the ultimate
+function glowColor(fighter, { tickCount, theme }) {
   if (fighter.state === 'ult') {
     return COLORS.gold;
   }
@@ -30,7 +30,7 @@ function glowColor(fighter, tickCount) {
   if (fighter.stateTime >= CHARGE_MAX) {
     return (tickCount >> 2) & 1 ? COLORS.gold : COLORS.cream;
   }
-  return fighter.stateTime >= CHARGE_LEVEL1 ? COLORS.cyan : COLORS.ocean;
+  return fighter.stateTime >= CHARGE_LEVEL1 ? theme.glow : theme.glowDim;
 }
 
 function hitTint(fighter) {
@@ -64,7 +64,7 @@ export function drawHeroFighter(painter, { sheet, fighter, shakeX, tickCount }) 
   const row = WEAPONS[fighter.weapon.id].spriteRow;
   drawHeroAfterimages(painter, sheet, fighter);
   const frame = heroAnimation(fighter);
-  const color = glowColor(fighter, tickCount);
+  const color = glowColor(fighter, { tickCount, theme: sheet.theme });
   if (color) {
     drawGlow(painter, sheet, { fighter, frame, row, shakeX, color });
   }

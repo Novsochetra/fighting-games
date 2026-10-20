@@ -1,5 +1,6 @@
 import { VIEW_WIDTH } from '../../../config.js';
 import { takeToken } from '../../fighters/tokens.js';
+import { tryBlink } from './blink.js';
 import { thinkBoss } from './boss.js';
 import { thinkMelee } from './melee.js';
 import { standStill, walk } from './movement.js';
@@ -59,6 +60,9 @@ export function thinkEnemy(game, fighter) {
   }
   const playerDown = isPlayerDown(game.player);
   maybeTakeToken(game, fighter, playerDown);
+  if (fighter.def.blink && tryBlink(game, fighter, distance)) {
+    return;
+  }
   const think = fighter.def.ranged ? thinkSlinger : thinkMelee;
   think(game, fighter, { distance, playerDown });
 }

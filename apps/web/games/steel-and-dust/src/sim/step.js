@@ -7,6 +7,7 @@ import { resolveHits } from './combat/resolve-hits.js';
 import { arenaBounds } from './fighters/arena-bounds.js';
 import { separateFighters } from './fighters/separate.js';
 import { updateFighter } from './fighters/update-fighter.js';
+import { shedHeroAura } from './fx/hero-aura.js';
 import { updateEffects } from './fx/update-effects.js';
 import { updateProjectiles } from './hazards/projectiles.js';
 import { updateShockwaves } from './hazards/shockwaves.js';
@@ -105,4 +106,5 @@ export function simulateStep(game) {
   updateHints(game);
   countDown(game);
   tankSmoke(game);
+  shedHeroAura(game);
 }

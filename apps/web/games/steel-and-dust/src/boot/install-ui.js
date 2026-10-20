@@ -1,4 +1,5 @@
 import { createHelpPanel } from '../ui/help/help-panel.js';
+import { createHeroPanel } from '../ui/heroes/hero-panel.js';
 import { createMenuActions } from '../ui/menus/menu-actions.js';
 import { MenuController } from '../ui/menus/menu-controller.js';
 import { installMenuEvents } from '../ui/menus/menu-events.js';
@@ -26,6 +27,7 @@ function createPanels({ elements, game, audio, layout, ui, window }) {
       canVibrate: !!window.navigator.vibrate,
     }),
     help: createHelpPanel({ tabs: elements.helpTabs, body: elements.helpBody, game, ui }),
+    heroes: createHeroPanel({ list: elements.heroList, game }),
   };
 }
 

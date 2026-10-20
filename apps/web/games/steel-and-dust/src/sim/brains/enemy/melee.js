@@ -12,7 +12,7 @@ function tryAttack(game, fighter, distance) {
     return true;
   }
   if (def.lunge && distance > 40 && distance < 72 && Math.random() < 0.04) {
-    startMove(game, fighter, 'lunge');
+    startMove(game, fighter, def.lungeMove || 'lunge');
     return true;
   }
   return false;

@@ -6,7 +6,10 @@ import { drawSkeletonAfterimages } from './afterimages.js';
 import { drawBody } from './body.js';
 import { drawDangerZone } from './danger-zone.js';
 import { drawEnemyHealth, drawWindupWarning } from './enemy-markers.js';
+import { drawSpriteEnemy } from './enemy-fighter.js';
+import { hasEnemySprite } from './enemy-sprites.js';
 import { drawHeroFighter } from './hero-fighter.js';
+import { isBossWindingUp, isTelegraphing } from './windup.js';
 
 // knocked-out raiders blink out; the hero blinks while invincible after a hit
 function isBlinkedOut(fighter, tickCount) {
@@ -39,28 +42,14 @@ function hitShakeOffset(fighter) {
   return 0;
 }
 
-// the last frames of a raider's wind-up blink red
 function bodyPalette(fighter, tickCount) {
-  const move = fighter.move;
-  const windingUp =
-    fighter.side === 'enemy' && fighter.state === 'attack' && fighter.moveTime < move.startup;
-  const telegraph = windingUp && move.startup - fighter.moveTime <= 10 && (tickCount >> 1) & 1;
   if (fighter.flashTime > 0) {
     return FLASH_PALETTE;
   }
   if (fighter.armorFlash > 0) {
     return ARMOR_PALETTE;
   }
-  return telegraph ? TELEGRAPH_PALETTE : fighter.palette;
-}
-
-function isBossWindingUp(fighter) {
-  return (
-    fighter.side === 'enemy' &&
-    fighter.def.boss &&
-    fighter.state === 'attack' &&
-    fighter.moveTime < fighter.move.startup
-  );
+  return isTelegraphing(fighter, tickCount) ? TELEGRAPH_PALETTE : fighter.palette;
 }
 
 function drawSkeletonFighter(painter, { fighter, shakeX, tickCount }) {
@@ -90,7 +79,7 @@ function drawSkeletonFighter(painter, { fighter, shakeX, tickCount }) {
   }
 }
 
-export function drawFighter(painter, { fighter, sheet, tickCount }) {
+export function drawFighter(painter, { fighter, sheet, enemySheets, tickCount }) {
   if (!fighter.joints || isBlinkedOut(fighter, tickCount)) {
     return;
   }
@@ -98,7 +87,9 @@ export function drawFighter(painter, { fighter, sheet, tickCount }) {
   const shakeX = hitShakeOffset(fighter);
   if (isPlayer(fighter) && sheet.ready) {
     drawHeroFighter(painter, { sheet, fighter, shakeX, tickCount });
-    return;
+  } else if (!isPlayer(fighter) && hasEnemySprite(enemySheets, fighter.def.sprite)) {
+    drawSpriteEnemy(painter, { sheets: enemySheets, fighter, shakeX, tickCount });
+  } else {
+    drawSkeletonFighter(painter, { fighter, shakeX, tickCount });
   }
-  drawSkeletonFighter(painter, { fighter, shakeX, tickCount });
 }

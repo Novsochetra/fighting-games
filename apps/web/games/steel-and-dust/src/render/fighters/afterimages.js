@@ -5,7 +5,8 @@ import { drawHeroFrame } from './hero-sprites.js';
 
 export function drawHeroAfterimages(painter, sheet, fighter) {
   const row = WEAPONS[fighter.weapon.id].spriteRow;
-  const trail = WEAPONS[fighter.weapon.id].trailColor;
+  const trail =
+    fighter.weapon.id === 'sword' ? sheet.theme.blade : WEAPONS[fighter.weapon.id].trailColor;
   for (const image of fighter.afterimages) {
     painter.alpha(((image.color ? 0.5 : 0.28) * image.life) / 12);
     drawHeroFrame(painter, sheet, {

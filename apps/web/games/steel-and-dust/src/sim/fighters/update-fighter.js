@@ -3,6 +3,7 @@ import { WEAPONS } from '../../data/weapons/index.js';
 import { randomBetween } from '../../lib/math.js';
 import { thinkEnemy } from '../brains/enemy/think-enemy.js';
 import { thinkPlayer } from '../brains/player/think-player.js';
+import { enemySpriteFrame } from '../enemy-animation.js';
 import { addDust } from '../fx/particles.js';
 import { heroAnimation } from '../hero-animation.js';
 import { refreshPose } from '../pose/refresh-pose.js';
@@ -68,7 +69,7 @@ function addAfterimage(fighter) {
     joints: fighter.joints,
     facing: fighter.facing,
     pose: fighter.pose,
-    sprite: isPlayer(fighter) ? heroAnimation(fighter) : null,
+    sprite: isPlayer(fighter) ? heroAnimation(fighter) : enemySpriteFrame(fighter),
     row: isPlayer(fighter) ? WEAPONS[fighter.weapon.id].spriteRow : 0,
     life: 12,
   });

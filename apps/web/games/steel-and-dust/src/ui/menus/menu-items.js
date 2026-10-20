@@ -11,6 +11,9 @@ export function navigableItems(document, top) {
   if (top === 'settings') {
     return [...menu.querySelectorAll('.setrow'), menu.querySelector('.xbtn')];
   }
+  if (top === 'heroes') {
+    return [...menu.querySelectorAll('.hero-card'), menu.querySelector('.xbtn')];
+  }
   if (top === 'help') {
     return [...menu.querySelectorAll('.tabs button'), menu.querySelector('.xbtn')];
   }

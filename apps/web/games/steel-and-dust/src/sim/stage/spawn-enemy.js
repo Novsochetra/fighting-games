@@ -15,7 +15,12 @@ export function spawnEnemy(game, kind, side) {
   game.fighters.push(enemy);
   if (enemy.def.boss) {
     game.boss = enemy;
-    showBanner(game, { text: enemy.def.name, color: COLORS.red, time: 140, sub: 'Boss' });
+    showBanner(game, {
+      text: enemy.def.name,
+      color: COLORS.red,
+      time: 140,
+      sub: enemy.def.final ? 'Final boss' : 'Boss',
+    });
     game.io.sfx('boom');
     shake(game, 3, 20);
   }

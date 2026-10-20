@@ -1,3 +1,4 @@
+import { HEROES } from '../../data/heroes.js';
 import {
   continueRun,
   cycleWeapon,
@@ -8,16 +9,30 @@ import {
 } from '../../sim/stage/flow.js';
 
 // the buttons that open a panel make their own sound
-const QUIET_ACTIONS = new Set(['back', 'help', 'settings']);
+const QUIET_ACTIONS = new Set(['back', 'help', 'settings', 'play']);
+
+function heroActions(game, begin) {
+  const actions = {};
+  for (const hero of HEROES) {
+    actions[`hero-${hero.id}`] = () => {
+      game.settings.hero = hero.id;
+      game.io.saveSettings(game.settings);
+      begin();
+    };
+  }
+  return actions;
+}
 
 export function createMenuActions({ game, audio, ui, fullscreen, menus, location }) {
+  const begin = () => {
+    if (ui.isTouchOn() && fullscreen.supported && !fullscreen.isActive()) {
+      fullscreen.enter();
+    }
+    startPlay(game);
+  };
   const actions = {
-    play() {
-      if (ui.isTouchOn() && fullscreen.supported && !fullscreen.isActive()) {
-        fullscreen.enter();
-      }
-      startPlay(game);
-    },
+    ...heroActions(game, begin),
+    play: () => menus.open('heroes'),
     resume: () => resumePlay(game),
     help: () => menus.open('help'),
     settings: () => menus.open('settings'),

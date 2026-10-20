@@ -15,5 +15,6 @@ export function findElements(document) {
     settingsList: byId('settingsList'),
     helpTabs: byId('helpTabs'),
     helpBody: byId('helpBody'),
+    heroList: byId('heroList'),
   };
 }

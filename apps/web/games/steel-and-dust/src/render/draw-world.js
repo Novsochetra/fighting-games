@@ -1,6 +1,7 @@
 import { COLORS } from '../art/colors.js';
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../config.js';
 import { drawFighter } from './fighters/draw-fighter.js';
+import { heroSheetFor } from './fighters/hero-sheets.js';
 import { drawTrail } from './fighters/trail.js';
 import { drawDebugBoxes } from './fx/debug-boxes.js';
 import { drawEffects } from './fx/effects.js';
@@ -33,12 +34,18 @@ function dimForUltimate(painter, game, cameraX) {
 }
 
 function drawFighters(painter, { game, view, cameraX }) {
+  const sheet = heroSheetFor(view, game.settings.hero);
   for (const fighter of drawOrder(game.fighters)) {
     if (fighter === game.player && (game.ultFreeze > 0 || game.player.state === 'ult')) {
       dimForUltimate(painter, game, cameraX);
     }
-    drawFighter(painter, { fighter, sheet: view.sheet, tickCount: game.tickCount });
-    drawTrail(painter, { fighter, sheet: view.sheet });
+    drawFighter(painter, {
+      fighter,
+      sheet,
+      enemySheets: view.enemySheets,
+      tickCount: game.tickCount,
+    });
+    drawTrail(painter, { fighter, sheet });
   }
 }
 

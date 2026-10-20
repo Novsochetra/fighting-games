@@ -5,6 +5,7 @@ import { ULTIMATE } from '../data/ultimate.js';
 import { clamp } from '../lib/math.js';
 import { applyHit } from './combat/apply-hit.js';
 import { arenaBounds } from './fighters/arena-bounds.js';
+import { themeOf } from './fighters/hero-colors.js';
 import { shake } from './fx/camera-fx.js';
 import { addSparks } from './fx/particles.js';
 
@@ -35,13 +36,14 @@ export function startUlt(game, player) {
   addSparks(game, { x: player.x, y: player.y - 24, count: 16, color: COLORS.gold, speed: 3.4 });
 }
 
-function leaveAfterimage(player) {
+// the warp leaves ghosts in the Shade's own blade color
+function leaveAfterimage(game, player) {
   player.afterimages.push({
     x: player.x,
     y: player.y,
     facing: player.facing,
     sprite: player.ultFrame,
-    color: COLORS.gold,
+    color: themeOf(game).blade,
     life: 14,
   });
 }
@@ -61,7 +63,7 @@ function warpStrike(game, player, strike, bounds) {
   }
   const target = targets[strike % targets.length];
   const side = strike % 2 ? 1 : -1;
-  leaveAfterimage(player);
+  leaveAfterimage(game, player);
   player.x = clamp(target.x + side * 16 * target.scale, bounds.min, bounds.max);
   player.y = target.y;
   Object.assign(player, { airborne: player.y < GROUND_Y, vx: 0, vy: 0 });
@@ -78,7 +80,7 @@ function warpStrike(game, player, strike, bounds) {
 }
 
 function returnToCenter(game, player, bounds) {
-  leaveAfterimage(player);
+  leaveAfterimage(game, player);
   player.x = clamp(game.camera.x + VIEW_WIDTH / 2, bounds.min, bounds.max);
   Object.assign(player, { y: GROUND_Y, airborne: false, vx: 0, vy: 0 });
   game.io.sfx('warp');

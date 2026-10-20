@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { ENEMY_TYPES } from '../../../src/data/enemies/enemy-types.js';
 import { ENEMY_MOVES } from '../../../src/data/enemies/enemy-moves.js';
 import { MOVE_ORDER } from '../../../src/data/move-list.js';
 import { defineMove, normalizeMoves } from '../../../src/data/moves/define-move.js';
@@ -52,6 +53,24 @@ describe('move tables', () => {
       'toss',
       'bash',
       'charge',
+      'pipe',
+      'claw',
+      'pounce',
+      'crosscut',
+      'spear',
+      'haymaker',
+      'sting',
+      'lob',
+      'bolt',
+      'sandblast',
     ]);
+  });
+
+  it('give every enemy type a basic, lunge and ranged move that exists', () => {
+    for (const def of Object.values(ENEMY_TYPES)) {
+      for (const id of [def.attackMove, def.lungeMove, def.rangedMove].filter(Boolean)) {
+        expect(ENEMY_MOVES[id], `${def.name}: ${id}`).toBeDefined();
+      }
+    }
   });
 });

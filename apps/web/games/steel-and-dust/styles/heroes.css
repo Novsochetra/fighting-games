@@ -1,0 +1,131 @@
+.heroes .box {
+  width: min(720px, 100%);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  padding: 12px;
+  overflow-y: auto;
+}
+
+.hero-card {
+  --accent: var(--color-hero-moss);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 6px 12px;
+  text-transform: none;
+  background:
+    radial-gradient(
+      ellipse 60% 22% at 50% 62%,
+      color-mix(in srgb, var(--accent) 34%, transparent),
+      transparent
+    ),
+    var(--color-panel);
+}
+
+.hero-card[data-hero='firefly'] {
+  --accent: var(--color-hero-firefly);
+}
+
+.hero-card[data-hero='antler'] {
+  --accent: var(--color-hero-antler);
+}
+
+.hero-card[data-hero='blue'] {
+  --accent: var(--color-hero-blue);
+}
+
+.hero-card.picked {
+  border-color: var(--accent);
+}
+
+.hero-card:hover,
+.hero-card.sel {
+  color: var(--color-text);
+  border-color: var(--accent);
+  background:
+    radial-gradient(
+      ellipse 70% 30% at 50% 62%,
+      color-mix(in srgb, var(--accent) 60%, transparent),
+      transparent
+    ),
+    var(--color-panel-raised);
+}
+
+/* one 64x80 window onto the 128x80 frames of the sword row, drawn at 2x */
+.hero-art {
+  width: 128px;
+  height: 160px;
+  background-image: var(--idle);
+  background-size: 1536px 640px;
+  background-position: -64px 0;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  animation: hero-idle var(--duration-sprite-idle) var(--easing-step-6) infinite;
+}
+
+.hero-card:hover .hero-art,
+.hero-card.sel .hero-art {
+  background-image: var(--win);
+  background-size: 1024px 640px;
+  animation: hero-win var(--duration-sprite-win) var(--easing-step-4) infinite;
+  filter: drop-shadow(0 0 6px var(--accent));
+}
+
+@keyframes hero-idle {
+  to {
+    background-position-x: -1600px;
+  }
+}
+
+@keyframes hero-win {
+  to {
+    background-position-x: -1088px;
+  }
+}
+
+.hero-name {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xs);
+  color: var(--accent);
+  text-align: center;
+}
+
+.hero-line {
+  font-family: var(--font-body);
+  font-size: var(--font-size-2xs);
+  color: var(--color-text-muted);
+  text-align: center;
+  letter-spacing: normal;
+}
+
+@media (max-height: 420px), (max-width: 620px) {
+  .hero-art {
+    width: 64px;
+    height: 80px;
+    background-size: 768px 320px;
+    background-position: -32px 0;
+  }
+
+  .hero-card:hover .hero-art,
+  .hero-card.sel .hero-art {
+    background-size: 512px 320px;
+  }
+
+  @keyframes hero-idle {
+    to {
+      background-position-x: -800px;
+    }
+  }
+
+  @keyframes hero-win {
+    to {
+      background-position-x: -544px;
+    }
+  }
+}

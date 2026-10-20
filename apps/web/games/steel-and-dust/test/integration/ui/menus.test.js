@@ -72,8 +72,30 @@ describe('game menus on the real page', () => {
     expect(document.querySelector('[data-k="difficulty"] .val').textContent).toBe('Hard');
   });
 
-  it('hides the menus in play, pauses with Escape and resumes with Enter', () => {
+  it('asks which Shade to play, then starts the run with the one picked', () => {
+    key('Enter');
+    expect(openMenu().id).toBe('m-heroes');
+    const cards = [...document.querySelectorAll('.hero-card')];
+    expect(cards.map((card) => card.dataset.hero)).toEqual(['moss', 'firefly', 'antler', 'blue']);
+    expect(document.querySelector('.hero-card.picked').dataset.hero).toBe('moss');
+    expect(cards[1].getAttribute('style')).toContain('heroes/firefly/arsenal/hero_idle.png');
+    key('ArrowRight');
+    expect(selected().dataset.hero).toBe('firefly');
+    key('Enter');
+    expect(page.game.settings.hero).toBe('firefly');
+    expect(page.saveSettings).toHaveBeenCalledWith(page.game.settings);
+    expect(page.game.mode).toBe('play');
+  });
+
+  it('goes back from the hero list to the title', () => {
     page.act('play');
+    key('Escape');
+    expect(openMenu().id).toBe('m-title');
+    expect(page.game.mode).toBe('title');
+  });
+
+  it('hides the menus in play, pauses with Escape and resumes with Enter', () => {
+    page.act('hero-moss');
     page.menus.sync();
     expect(openMenu()).toBeNull();
     expect(document.getElementById('touch').classList.contains('live')).toBe(true);
@@ -87,7 +109,7 @@ describe('game menus on the real page', () => {
   });
 
   it('shows the score and continues after a defeat', () => {
-    page.act('play');
+    page.act('hero-moss');
     page.game.score = 4200;
     page.game.mode = 'over';
     page.menus.sync();

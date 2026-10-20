@@ -54,6 +54,11 @@ The game keeps a strict split:
 `sim/` reaches the outside world only through `game.io` ports
 (`sfx`, `vibrate`, `saveRecords`, `saveHints`, `saveSettings`, `setMuted`), so it runs in Node tests unchanged.
 
+Fighters are drawn from PixelLab sprite sheets in `assets/sprites/`: one folder of strips per playable
+Shade (`src/data/heroes.js`, loaded the first time it is picked) and one sheet per enemy
+(`src/data/enemies/enemy-sprites.js`). `src/sim/hero-animation.js` and `src/sim/enemy-animation.js`
+pick the frame for a fighter's state; colors that belong to a Shade live in `src/art/hero-themes.js`.
+
 The loop runs the simulation at exactly 60 ticks a second and renders once per animation frame.
 A frame that runs several ticks offsets each tick's sounds (`audio.setTickOffset`) so they keep their spacing.
 
