@@ -1,8 +1,9 @@
 import { COLORS } from '../../art/colors.js';
-import { GROUND_Y, VIEW_WIDTH } from '../../config.js';
+import { VIEW_WIDTH } from '../../config.js';
 import { randomBetween } from '../../lib/math.js';
 import { applyHit } from '../combat/apply-hit.js';
 import { attackBox, hurtBox, overlaps } from '../combat/boxes.js';
+import { floorUnder, nudge } from '../fighters/terrain-motion.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust } from '../fx/particles.js';
 import { spawnShockwave } from './shockwaves.js';
@@ -37,8 +38,9 @@ export function quake(game, attacker, move) {
     if (!body || overlaps(swing, body)) {
       continue;
     }
-    addDust(game, { x: target.x, y: GROUND_Y, count: 6 });
-    if (applyHit(game, { attacker, target, move: launch, x: target.x, y: GROUND_Y - 8 })) {
+    const floor = floorUnder(game.terrain, target);
+    addDust(game, { x: target.x, y: floor, count: 6 });
+    if (applyHit(game, { attacker, target, move: launch, x: target.x, y: floor - 8 })) {
       attacker.hitTargets.add(target);
     }
   }
@@ -60,7 +62,7 @@ export function pullIn(game, attacker) {
     }
     const dx = attacker.x - target.x;
     if (Math.abs(dx) < 80 && Math.abs(dx) > 10) {
-      target.x += Math.sign(dx) * 1.3;
+      nudge(game.terrain, target, Math.sign(dx) * 1.3);
     }
   }
   if (game.tickCount % 2 === 0) {

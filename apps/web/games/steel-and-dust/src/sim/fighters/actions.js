@@ -1,8 +1,8 @@
-import { GROUND_Y } from '../../config.js';
 import { difficultyOf } from '../../data/difficulty.js';
 import { randomBetween } from '../../lib/math.js';
 import { addDust } from '../fx/particles.js';
 import { movesetOf } from './loadout.js';
+import { floorUnder } from './terrain-motion.js';
 import { releaseToken } from './tokens.js';
 
 function clearMove(fighter) {
@@ -49,7 +49,7 @@ export function jump(game, fighter, { vy, vx }) {
   fighter.state = 'air';
   clearMove(fighter);
   game.io.sfx('jump');
-  addDust(game, { x: fighter.x, y: GROUND_Y, count: 3 });
+  addDust(game, { x: fighter.x, y: floorUnder(game.terrain, fighter), count: 3 });
 }
 
 // three frames on the ground before take-off
@@ -84,6 +84,6 @@ export function dash(game, fighter, direction) {
     fighter.airDashUsed = true;
     fighter.vy = 0;
   } else {
-    addDust(game, { x: fighter.x, y: GROUND_Y, count: 4 });
+    addDust(game, { x: fighter.x, y: floorUnder(game.terrain, fighter), count: 4 });
   }
 }

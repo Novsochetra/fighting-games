@@ -1,7 +1,9 @@
 import { defaultSettings } from '../../src/data/settings.js';
 import { createGame } from '../../src/sim/create-game.js';
+import { isFlat } from '../../src/sim/fighters/terrain-motion.js';
 import { continueRun, resumePlay, selectMission, startPlay } from '../../src/sim/stage/flow.js';
 import { spawnEnemy } from '../../src/sim/stage/spawn-enemy.js';
+import { isWall } from '../../src/sim/stage/terrain.js';
 import { tick } from '../../src/sim/tick.js';
 import { snapshotGame } from './snapshot.js';
 
@@ -15,6 +17,16 @@ const ACTION_FOR_KEY = {
   fill: 'fillUlt',
 };
 const MENU_ACTIONS = { play: startPlay, resume: resumePlay, continue: continueRun };
+const LOOK_AHEAD = 6;
+
+// the hero is on his feet at the face of a rise too tall to walk up; never on a flat road
+function wallAhead(game) {
+  const { player, terrain } = game;
+  if (isFlat(terrain) || player.airborne) {
+    return false;
+  }
+  return isWall(terrain, player.x + player.facing * LOOK_AHEAD, player.y);
+}
 
 export function createScenarioGame(hero, mission = 0) {
   const game = createGame({
@@ -59,6 +71,7 @@ export function createGameDriver(game, renderFrame) {
       enemies: game.fighters
         .filter((fighter) => fighter.side === 'enemy')
         .map((fighter) => ({ x: fighter.x, state: fighter.state })),
+      wallAhead: wallAhead(game),
     }),
     snapshot: () => snapshotGame(game),
     render: () => (renderFrame ? renderFrame(game) : null),

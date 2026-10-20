@@ -1,6 +1,7 @@
 import { startMove } from '../../fighters/actions.js';
 import { arenaBounds } from '../../fighters/arena-bounds.js';
 import { standStill, walk } from './movement.js';
+import { thinkPerch } from './perch.js';
 
 const DEFAULT_KEEP_AWAY = [64, 125];
 
@@ -15,20 +16,31 @@ function canThrow(game, slinger, { distance, playerDown }) {
   );
 }
 
-// holds the middle distance and throws knives, fire pots, bolts or sand
-export function thinkSlinger(game, slinger, situation) {
-  if (canThrow(game, slinger, situation)) {
-    startMove(game, slinger, slinger.def.rangedMove || 'toss');
-    return;
-  }
-  const [near, far] = slinger.def.keepAway || DEFAULT_KEEP_AWAY;
+function keepDistance(game, slinger, distance, [near, far]) {
   const bounds = arenaBounds(game, slinger);
   const cornered = slinger.x <= bounds.min + 2 || slinger.x >= bounds.max - 2;
-  if (situation.distance < near && !cornered) {
+  if (distance < near && !cornered) {
     walk(slinger, -1, 1);
-  } else if (situation.distance > far) {
+  } else if (distance > far) {
     walk(slinger, 1, 1);
   } else {
     standStill(slinger);
+  }
+}
+
+// holds the middle distance and throws knives, fire pots, bolts or sand, from a platform when
+// there is one near
+export function thinkSlinger(game, slinger, situation) {
+  const keepAway = slinger.def.keepAway || DEFAULT_KEEP_AWAY;
+  const perch = thinkPerch(game, slinger, situation.distance, keepAway);
+  if (perch === 'moving') {
+    return;
+  }
+  if (canThrow(game, slinger, situation)) {
+    startMove(game, slinger, slinger.def.rangedMove || 'toss');
+  } else if (perch === 'perched') {
+    standStill(slinger);
+  } else {
+    keepDistance(game, slinger, situation.distance, keepAway);
   }
 }

@@ -1,30 +1,36 @@
 import { COLORS } from '../../art/colors.js';
-import { GROUND_Y } from '../../config.js';
 import { difficultyOf } from '../../data/difficulty.js';
 import { WEAPONS } from '../../data/weapons/index.js';
 import { setWeapon } from '../fighters/loadout.js';
 import { addFloatText, addRing } from '../fx/effects.js';
 import { buzz } from '../fx/haptics.js';
 import { addSparks } from '../fx/particles.js';
+import { floorBelow } from '../stage/terrain.js';
 
-function fall(pickup) {
+// a pickup's middle floats this far above the floor it rests on
+const REST_HEIGHT = 6;
+const REACH_HEIGHT = 24;
+
+function fall(pickup, terrain) {
   if (pickup.landed) {
     return;
   }
+  const floor = floorBelow(terrain, pickup.x, pickup.y + REST_HEIGHT);
   pickup.vy += 0.25;
   pickup.y += pickup.vy;
-  if (pickup.y >= GROUND_Y - 6) {
-    pickup.y = GROUND_Y - 6;
+  if (pickup.y >= floor - REST_HEIGHT) {
+    pickup.y = floor - REST_HEIGHT;
     pickup.landed = true;
   }
 }
 
+// the hero has to stand on the same floor, not on a platform above it or the ground below
 function canCollect(player, pickup) {
   return (
     pickup.landed &&
     player.state !== 'ko' &&
     Math.abs(player.x - pickup.x) < 12 &&
-    player.y > GROUND_Y - 24
+    Math.abs(player.y - (pickup.y + REST_HEIGHT)) < REACH_HEIGHT
   );
 }
 
@@ -64,7 +70,7 @@ function collect(game, pickup) {
 export function updatePickups(game) {
   for (const pickup of game.pickups) {
     pickup.time++;
-    fall(pickup);
+    fall(pickup, game.terrain);
     if (canCollect(game.player, pickup)) {
       collect(game, pickup);
     }

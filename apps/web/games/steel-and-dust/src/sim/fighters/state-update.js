@@ -9,9 +9,10 @@ import { jump } from './actions.js';
 import { themeOf } from './hero-colors.js';
 import { updateAttack } from './attack-state.js';
 
+// a hurt slide can carry a fighter off a ledge, and it must not stand idle in the air
 function updateHurt(_game, fighter) {
   if (--fighter.stateTime <= 0) {
-    fighter.state = 'idle';
+    fighter.state = fighter.airborne ? 'air' : 'idle';
   }
 }
 

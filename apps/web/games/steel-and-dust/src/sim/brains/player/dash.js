@@ -1,5 +1,5 @@
-import { GROUND_Y } from '../../../config.js';
 import { dash, jump, startMove } from '../../fighters/actions.js';
+import { floorUnder } from '../../fighters/terrain-motion.js';
 import { addDust } from '../../fx/particles.js';
 import { consumeBuffer, dashDirection } from './controls.js';
 import { pickAirMove } from './pick-move.js';
@@ -34,7 +34,7 @@ function brakeAndTurn(game, player, { buffer, direction }) {
     return false;
   }
   player.facing = direction;
-  addDust(game, { x: player.x, y: GROUND_Y, count: 3 });
+  addDust(game, { x: player.x, y: floorUnder(game.terrain, player), count: 3 });
   if (player.airborne) {
     player.state = 'air';
     player.vx = direction * 0.6;

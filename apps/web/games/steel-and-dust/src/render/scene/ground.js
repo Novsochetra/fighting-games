@@ -1,5 +1,7 @@
 import { GROUND_Y, VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
 import { hashInt } from '../../lib/math.js';
+import { groundAt } from '../../sim/stage/terrain.js';
+import { drawTerrainGround } from './terrain-ground.js';
 
 export function drawTiled(painter, image, offset) {
   const width = image.width;
@@ -35,7 +37,13 @@ function drawRuts(painter, cameraX, colors) {
   }
 }
 
-export function drawGround(painter, cameraX, colors) {
+// a forest road follows the terrain's hills and steps; the desert roads stay flat as they were
+export function drawGround(painter, { cameraX, colors, tick, terrain, texture }) {
+  if (colors.grass) {
+    const surfaceAt = (x) => groundAt(terrain, x);
+    drawTerrainGround(painter, { cameraX, colors, tick, surfaceAt, texture });
+    return;
+  }
   painter.use(colors.sand).rect(cameraX, GROUND_Y, VIEW_WIDTH, VIEW_HEIGHT - GROUND_Y);
   painter.use(colors.edge).rect(cameraX, GROUND_Y, VIEW_WIDTH, 1);
   painter.use(colors.lip).rect(cameraX, GROUND_Y + 1, VIEW_WIDTH, 2);

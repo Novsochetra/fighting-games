@@ -12,10 +12,12 @@ import { drawParticles } from './fx/particles.js';
 import { drawSummons } from './fx/summons.js';
 import { drawCrates } from './scene/crate.js';
 import { drawGround } from './scene/ground.js';
+import { drawPlatforms } from './scene/platforms.js';
 import { drawPickups } from './scene/pickups.js';
 import { drawProps } from './scene/props/index.js';
 import { scenePalette } from './scene/scene-palette.js';
 import { missionOf } from '../sim/stage/mission.js';
+import { floorBelow } from '../sim/stage/terrain.js';
 
 // knocked-out fighters go behind the living, and the hero goes in front of the raiders
 function drawOrder(fighters) {
@@ -49,6 +51,7 @@ function drawFighters(painter, { game, view, cameraX }) {
       sheet,
       enemySheets: view.enemySheets,
       tickCount: game.tickCount,
+      floor: floorBelow(game.terrain, fighter.x, fighter.y),
     });
     drawTrail(painter, { fighter, sheet });
   }
@@ -56,8 +59,11 @@ function drawFighters(painter, { game, view, cameraX }) {
 
 export function drawWorld(painter, { game, view, cameraX }) {
   const mission = missionOf(game);
-  drawGround(painter, cameraX, scenePalette(mission.theme).ground);
-  drawProps(painter, cameraX, mission.props);
+  const colors = scenePalette(mission.theme).ground;
+  const texture = view.backdrops[mission.theme]?.ground;
+  drawGround(painter, { cameraX, colors, tick: game.tickCount, terrain: game.terrain, texture });
+  drawProps(painter, { cameraX, props: mission.props, sheets: view.propSheets });
+  drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });
   drawCrates(painter, game.crates, cameraX);
   drawPickups(painter, game.pickups);
   drawFighters(painter, { game, view, cameraX });

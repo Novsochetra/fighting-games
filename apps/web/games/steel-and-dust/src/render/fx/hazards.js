@@ -1,19 +1,18 @@
 import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
-import { GROUND_Y } from '../../config.js';
 import { point } from '../painter.js';
 import { drawBolt, drawBomb, drawFire, drawSand, drawVenom } from './enemy-shots.js';
 
-function drawShockPeak(painter, x, height) {
+function drawShockPeak(painter, { x, y, height }) {
   for (let row = 0; row <= height; row++) {
     const half = Math.round(((height - row) / height) * 3);
-    painter.use(COLORS.outline).rect(x - half - 1, GROUND_Y - row, half * 2 + 3, 1);
+    painter.use(COLORS.outline).rect(x - half - 1, y - row, half * 2 + 3, 1);
   }
   for (let row = 0; row < height; row++) {
     const half = Math.round(((height - row) / height) * 3) - 1;
     if (half >= 0) {
-      painter.use(FX_COLORS.shockLight).rect(x - half, GROUND_Y - row, half + 1, 1);
-      painter.use(FX_COLORS.shockDark).rect(x + 1, GROUND_Y - row, half, 1);
+      painter.use(FX_COLORS.shockLight).rect(x - half, y - row, half + 1, 1);
+      painter.use(FX_COLORS.shockDark).rect(x + 1, y - row, half, 1);
     }
   }
 }
@@ -24,7 +23,8 @@ export function drawShockwaves(painter, shockwaves) {
     for (let peak = 0; peak < 3; peak++) {
       const height = Math.round(size - peak * 3.5);
       if (height >= 3) {
-        drawShockPeak(painter, Math.round(wave.x - wave.direction * peak * 6), height);
+        const x = Math.round(wave.x - wave.direction * peak * 6);
+        drawShockPeak(painter, { x, y: wave.y, height });
       }
     }
   }

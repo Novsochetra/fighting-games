@@ -3,6 +3,7 @@ import { activeEnd } from '../../data/moves/define-move.js';
 import { isPlayer } from '../fighters/loadout.js';
 import { addFloatText, addRing } from '../fx/effects.js';
 import { addSparks } from '../fx/particles.js';
+import { reverseDive } from '../hazards/shot-aim.js';
 import { isDeflectable } from '../hazards/shot-rules.js';
 import { breakCrate } from '../items/crates.js';
 import { shatterIceOn } from '../summons/ice.js';
@@ -10,6 +11,8 @@ import { applyHit } from './apply-hit.js';
 import { attackBox, crateBox, hurtBox, knifeBox, overlapCenter, overlaps } from './boxes.js';
 import { addUltMeter } from './combo.js';
 import { useDurability } from './durability.js';
+
+const DEFLECT_SPEED = 4.6;
 
 function breakIce(game, attacker, target) {
   if (attacker.move.shatters) {
@@ -47,7 +50,13 @@ function hitCrates(game, attacker, area) {
 }
 
 function deflectKnife(game, attacker, knife) {
-  Object.assign(knife, { side: 'player', direction: attacker.facing, speed: 4.6, damage: 10 });
+  reverseDive(knife, DEFLECT_SPEED);
+  Object.assign(knife, {
+    side: 'player',
+    direction: attacker.facing,
+    speed: DEFLECT_SPEED,
+    damage: 10,
+  });
   knife.color = COLORS.gold;
   knife.time = 0;
   knife.hitTargets.clear();

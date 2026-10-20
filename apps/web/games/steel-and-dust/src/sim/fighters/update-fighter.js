@@ -1,4 +1,3 @@
-import { GROUND_Y } from '../../config.js';
 import { WEAPONS } from '../../data/weapons/index.js';
 import { randomBetween } from '../../lib/math.js';
 import { thinkEnemy } from '../brains/enemy/think-enemy.js';
@@ -12,6 +11,7 @@ import { strikePoints } from '../pose/weapon-line.js';
 import { isPlayer } from './loadout.js';
 import { applyPhysics } from './physics.js';
 import { updateState } from './state-update.js';
+import { floorUnder } from './terrain-motion.js';
 
 const COUNTDOWNS = ['flashTime', 'armorFlash', 'blockFlash', 'invincible', 'hpBarTime'];
 
@@ -96,7 +96,8 @@ function addMotionEffects(game, fighter) {
     addWindLine(game, fighter);
   }
   if (fighter.state === 'walk' && !fighter.entering && fighter.animTime % 14 === 0) {
-    addDust(game, { x: fighter.x - fighter.facing * 5, y: GROUND_Y, count: 1 });
+    const y = floorUnder(game.terrain, fighter);
+    addDust(game, { x: fighter.x - fighter.facing * 5, y, count: 1 });
   }
   for (const image of fighter.afterimages) {
     image.life--;

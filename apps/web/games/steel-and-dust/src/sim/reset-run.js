@@ -4,15 +4,19 @@ import { createFighter } from './fighters/create-fighter.js';
 import { createCrates } from './items/crates.js';
 import { refreshPose } from './pose/refresh-pose.js';
 import { attachScarf } from './pose/scarf.js';
+import { groundAt } from './stage/terrain.js';
 
-function freshPlayer() {
-  const player = createFighter('player', 'player', 70);
+const START_X = 70;
+
+function freshPlayer(terrain) {
+  const player = createFighter('player', 'player', START_X, groundAt(terrain, START_X));
   player.facing = 1;
   attachScarf(player);
   return player;
 }
 
 function resetWorld(game, player, missionIndex) {
+  const mission = missionAt(missionIndex);
   Object.assign(game, {
     fighters: [player],
     player,
@@ -24,7 +28,8 @@ function resetWorld(game, player, missionIndex) {
     projectiles: [],
     summons: [],
     pickups: [],
-    crates: createCrates(missionAt(missionIndex).crates),
+    crates: createCrates(mission.crates),
+    terrain: mission.terrain,
     arena: null,
     missionIndex,
   });
@@ -64,7 +69,7 @@ function resetScore(game) {
 }
 
 export function resetRun(game, missionIndex = 0) {
-  const player = freshPlayer();
+  const player = freshPlayer(missionAt(missionIndex).terrain);
   resetWorld(game, player, missionIndex);
   resetCamera(game.camera);
   resetScore(game);

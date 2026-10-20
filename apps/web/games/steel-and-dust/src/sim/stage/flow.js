@@ -1,7 +1,7 @@
 import { COLORS } from '../../art/colors.js';
-import { GROUND_Y } from '../../config.js';
 import { WEAPON_IDS, WEAPONS } from '../../data/weapons/index.js';
 import { setWeapon } from '../fighters/loadout.js';
+import { floorUnder, placeOnGround } from '../fighters/terrain-motion.js';
 import { releaseToken } from '../fighters/tokens.js';
 import { shake } from '../fx/camera-fx.js';
 import { addFloatText, showBanner } from '../fx/effects.js';
@@ -58,6 +58,7 @@ export function playFromStart(game) {
 
 export function placeOnTitle(game) {
   game.player.x = 90;
+  placeOnGround(game.terrain, game.player);
   game.camera.x = 0;
   refreshPose(game.player);
 }
@@ -87,7 +88,8 @@ function knockBackNearby(game, player) {
 export function continueRun(game) {
   const player = game.player;
   Object.assign(player, { hp: player.maxHp, hpLag: player.maxHp, state: 'getup', stateTime: 0 });
-  Object.assign(player, { airborne: false, y: GROUND_Y, vy: 0, invincible: 150 });
+  const y = floorUnder(game.terrain, player);
+  Object.assign(player, { airborne: false, y, vy: 0, invincible: 150 });
   game.continues++;
   game.mode = 'play';
   game.io.sfx('go');

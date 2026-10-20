@@ -71,7 +71,32 @@ places on the road: zone walls, where each wave starts, crates and props, and th
   earlier on its road is a mid-boss and only opens the road. The score, clock, continues and ULT bar
   carry into the next mission (`enterNextMission`); the hero starts it fresh. Beating mission N
   unlocks mission N + 1 on the title's mission select (`records.bestMission`).
-- Each theme in `src/art/scene-themes.js` gives a few base colors and a skyline kind (`city`,
+- Missions 1 to 6 walk through six painted forests, sunrise to night; missions 7 to 10 are desert
+  roads. A forest (`src/data/backdrops.js`) is PixelLab layers in `assets/backdrops/<forest>/`: a
+  far plate and a near strip that each tile sideways and scroll at their own share of the camera
+  (`src/render/scene/painted-backdrop.js`), with colors for its road, ferns and air in
+  `src/art/forest-themes.js`. Its air moves on its own (`src/render/scene/ambient/`): mist, birds,
+  leaves, motes, light shafts, fireflies, embers and smoke, each worked out from the tick count and
+  the camera alone, never `Math.random()`, so a replay draws the same frames. Its road carries no
+  loose props, since the painted strips dress it; a palisade (`assets/sprites/props/`) closes it.
+- The forest roads rise and fall: a zone's spec lists its `ground` as shapes from
+  `src/data/missions/ground-shapes.js` (`mound`, `bank`, `ramp`, `stairs`) and its `platforms`
+  (plank decks). `layoutTerrain` (`src/data/missions/terrain.js`) turns them into a height for every
+  pixel of the road and the platforms' tops, kept on `mission.terrain` and `game.terrain`; a flat
+  road has no height table at all, so the desert roads keep their arithmetic exactly.
+  `src/sim/stage/terrain.js` reads it (`groundAt`, `floorBelow`, `isWall`, `STEP_UP`): fighters walk
+  slopes and steps up to 8px, taller rises are walls, platforms only catch what comes down onto them
+  and down + jump drops through (`src/sim/fighters/terrain-motion.js`), and crates, pickups, bombs,
+  fire, shockwaves and summons all use the floor where they are. Raiders use it too
+  (`src/sim/brains/enemy/climb.js`, `hop.js`, `perch.js`): melee raiders hop up to the hero, drop
+  off decks and hop walls in their way, and only swing at a hero on their own level; ranged raiders
+  climb onto a nearby deck and throw down, their shots aimed by `src/sim/hazards/shot-aim.js`.
+  `test/unit/data/terrain-rules.test.js`
+  keeps every road fair: level starts, zone walls and boss arenas, gentle lock screens, no wall over
+  24px, platforms within jumping reach and every crate on level ground. The road is drawn from the
+  forest's painted cross-section laid along the surface (`src/render/scene/terrain-ground.js`), and
+  the decks from `assets/sprites/platforms/` with legs grown to the ground.
+- Each desert theme in `src/art/scene-themes.js` gives a few base colors and a skyline kind (`city`,
   `dunes`, `factory`, `ruins`); `scenePalette` works out every other shade, and each mission's far
   scenery is painted once, the first time it is drawn (`src/render/scene/backdrop.js`).
 
@@ -111,8 +136,9 @@ Long sessions must not grow:
 
 `test/regression/` replays bot-played scenarios and compares every 30th tick and every rendered frame
 against recorded fixtures: two long runs as the Moss Shade (first captured from the original
-single-file game), one shorter run for each of the other Shades, and one run through the wide zones
-of a later mission. Any change to
+single-file game), one shorter run for each of the other Shades, one run through the wide zones
+of the fourth mission, one over the hills of the third and one through the seventh, a desert road.
+Any change to
 arithmetic, to the order of `Math.random()` calls or to the order of canvas calls shows up there.
 When a change is meant to alter behavior, regenerate the fixtures with `npm run test:regression -- -u`
 and review the diff.

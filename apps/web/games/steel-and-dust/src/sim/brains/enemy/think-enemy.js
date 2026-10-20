@@ -2,6 +2,7 @@ import { screenEdges } from '../../fighters/arena-bounds.js';
 import { takeToken } from '../../fighters/tokens.js';
 import { tryBlink } from './blink.js';
 import { thinkBoss } from './boss.js';
+import { tryClimb } from './climb.js';
 import { thinkMelee } from './melee.js';
 import { standStill, walk } from './movement.js';
 import { thinkSlinger } from './slinger.js';
@@ -59,6 +60,9 @@ export function thinkEnemy(game, fighter) {
   const playerDown = isPlayerDown(game.player);
   maybeTakeToken(game, fighter, playerDown);
   if (fighter.def.blink && tryBlink(game, fighter, distance)) {
+    return;
+  }
+  if (tryClimb(game, fighter)) {
     return;
   }
   const think = fighter.def.ranged ? thinkSlinger : thinkMelee;

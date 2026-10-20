@@ -72,6 +72,11 @@ describe('enemyAnimation', () => {
     expect(enemyAnimation(enemy, SPRITE)).toEqual(['attack', 4]);
   });
 
+  it('hops on the walk strip, knee up on the way up and striding on the way down', () => {
+    expect(enemyAnimation(fighter({ state: 'air', vy: -4 }), SPRITE)).toEqual(['walk', 1]);
+    expect(enemyAnimation(fighter({ state: 'air', vy: 2 }), SPRITE)).toEqual(['walk', 0]);
+  });
+
   it('flies through the air frames of the knock-out strip by vertical speed', () => {
     expect(enemyAnimation(fighter({ state: 'juggle', vy: -3 }), SPRITE)).toEqual(['ko', 1]);
     expect(enemyAnimation(fighter({ state: 'juggle', vy: 2 }), SPRITE)).toEqual(['ko', 4]);

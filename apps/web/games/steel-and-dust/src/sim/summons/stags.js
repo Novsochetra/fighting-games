@@ -1,8 +1,8 @@
 import { FX_COLORS } from '../../art/fx-colors.js';
-import { GROUND_Y } from '../../config.js';
 import { randomBetween } from '../../lib/math.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust, addSparks } from '../fx/particles.js';
+import { groundAt } from '../stage/terrain.js';
 import { strikeArea } from './strike.js';
 
 const COMBO_STAG = { damage: 7, knockback: [3.4, -2.8], knockdown: true, hitstop: 6, hitstun: 24 };
@@ -12,7 +12,8 @@ export function sendStag(game, { x, lane, direction, speed, scale, hit, range, d
   game.summons.push({
     kind: 'stag',
     x,
-    y: GROUND_Y + lane,
+    y: groundAt(game.terrain, x) + lane,
+    lane,
     direction,
     side: 'player',
     time: -delay,
@@ -25,21 +26,21 @@ export function sendStag(game, { x, lane, direction, speed, scale, hit, range, d
   });
 }
 
-function stagArea(stag) {
+function stagArea(stag, ground) {
   const half = 20 * stag.scale;
   const height = 36 * stag.scale;
-  return { x: stag.x - half, y: GROUND_Y - height, width: half * 2, height };
+  return { x: stag.x - half, y: ground - height, width: half * 2, height };
 }
 
-function spiritWisps(game, stag) {
+function spiritWisps(game, stag, ground) {
   if (stag.time % 3) {
     return;
   }
-  addDust(game, { x: stag.x - stag.direction * 12 * stag.scale, y: GROUND_Y, count: 1 });
+  addDust(game, { x: stag.x - stag.direction * 12 * stag.scale, y: ground, count: 1 });
   game.particles.push({
     kind: 'mote',
     x: stag.x - stag.direction * randomBetween(8, 22) * stag.scale,
-    y: GROUND_Y - randomBetween(10, 34) * stag.scale,
+    y: ground - randomBetween(10, 34) * stag.scale,
     vx: -stag.direction * randomBetween(0.6, 1.4),
     vy: -randomBetween(0.2, 0.6),
     life: 18,
@@ -54,8 +55,10 @@ export function updateStag(game, stag) {
   }
   stag.x += stag.direction * stag.speed;
   stag.range -= stag.speed;
-  spiritWisps(game, stag);
-  const struck = strikeArea(game, stag, stagArea(stag));
+  const ground = groundAt(game.terrain, stag.x);
+  stag.y = ground + stag.lane;
+  spiritWisps(game, stag, ground);
+  const struck = strikeArea(game, stag, stagArea(stag, ground));
   for (const target of struck) {
     shake(game, 2, 6);
     addSparks(game, {

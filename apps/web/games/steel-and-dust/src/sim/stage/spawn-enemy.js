@@ -5,6 +5,7 @@ import { shake } from '../fx/camera-fx.js';
 import { showBanner } from '../fx/effects.js';
 import { refreshPose } from '../pose/refresh-pose.js';
 import { isFinalBoss, isMissionBoss } from './mission.js';
+import { groundAt } from './terrain.js';
 
 function bossTitle(game, boss) {
   if (isFinalBoss(game, boss)) {
@@ -15,7 +16,8 @@ function bossTitle(game, boss) {
 
 export function spawnEnemy(game, kind, side) {
   const { left, right } = screenEdges(game);
-  const enemy = createFighter('enemy', kind, side < 0 ? left - 18 : right + 18);
+  const x = side < 0 ? left - 18 : right + 18;
+  const enemy = createFighter('enemy', kind, x, groundAt(game.terrain, x));
   enemy.facing = side < 0 ? 1 : -1;
   enemy.entering = true;
   enemy.state = 'walk';

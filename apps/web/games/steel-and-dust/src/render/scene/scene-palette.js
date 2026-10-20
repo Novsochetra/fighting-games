@@ -1,3 +1,4 @@
+import { FOREST_THEMES } from '../../art/forest-themes.js';
 import { SCENE_THEMES } from '../../art/scene-themes.js';
 import { gradientSteps, shadeColor as shade, withAlpha } from '../../lib/color.js';
 
@@ -33,7 +34,18 @@ function skylineColors({ skyline, lights }) {
   };
 }
 
-function groundColors({ sand }) {
+function forestSoil(sand, grass) {
+  return {
+    grass,
+    grassLight: shade(grass, 0.25),
+    grassDark: shade(grass, -0.3),
+    soil: shade(sand, -0.18),
+    soilDeep: shade(sand, -0.34),
+  };
+}
+
+function groundColors({ sand, grass }) {
+  const forest = grass ? forestSoil(sand, grass) : {};
   return {
     sand,
     edge: shade(sand, 0.35),
@@ -41,6 +53,7 @@ function groundColors({ sand }) {
     pebble: shade(sand, -0.25),
     glint: shade(sand, 0.3),
     rut: shade(sand, -0.17),
+    ...forest,
   };
 }
 
@@ -61,10 +74,27 @@ function buildPalette(theme) {
   };
 }
 
+function fernColors({ rock, grass }) {
+  return { ...rubbleColors({ rock }), fern: shade(grass, -0.55), fernLight: shade(grass, -0.35) };
+}
+
+function buildForestPalette(forest) {
+  return {
+    painted: true,
+    ground: groundColors(forest.ground),
+    rubble: fernColors(forest.ground),
+    ambient: forest.ambient,
+  };
+}
+
 // every color the scenery of one mission is painted with, worked out once per theme
 export function scenePalette(themeId) {
   if (!palettes.has(themeId)) {
-    palettes.set(themeId, buildPalette(SCENE_THEMES[themeId]));
+    const forest = FOREST_THEMES[themeId];
+    palettes.set(
+      themeId,
+      forest ? buildForestPalette(forest) : buildPalette(SCENE_THEMES[themeId]),
+    );
   }
   return palettes.get(themeId);
 }

@@ -1,4 +1,4 @@
-import { GROUND_Y, VIEW_WIDTH } from '../../config.js';
+import { VIEW_WIDTH } from '../../config.js';
 import { ULT_SPRITES } from '../../data/hero-sprites.js';
 import { ABSOLUTE_ZERO } from '../../data/ultimates/absolute-zero.js';
 import { clamp } from '../../lib/math.js';
@@ -6,8 +6,10 @@ import { applyHit } from '../combat/apply-hit.js';
 import { freezeTarget } from '../combat/freeze.js';
 import { arenaBounds } from '../fighters/arena-bounds.js';
 import { themeOf } from '../fighters/hero-colors.js';
+import { floorUnder } from '../fighters/terrain-motion.js';
 import { addCutLine } from '../fx/effects.js';
 import { addSparks } from '../fx/particles.js';
+import { groundAt } from '../stage/terrain.js';
 import { shatterIce } from '../summons/ice.js';
 import { finaleFlash, finishUlt, ultTargets } from './common.js';
 
@@ -31,8 +33,9 @@ function blinkTo(game, player, target, side) {
   leaveAfterimage(game, player);
   const bounds = arenaBounds(game, player);
   player.x = clamp(target.x + side * 16 * target.scale, bounds.min, bounds.max);
-  player.y = target.y;
-  Object.assign(player, { airborne: player.y < GROUND_Y, vx: 0, vy: 0 });
+  // level with the raider, but never inside a rise beside it
+  player.y = Math.min(target.y, groundAt(game.terrain, player.x));
+  Object.assign(player, { airborne: player.y < floorUnder(game.terrain, player), vx: 0, vy: 0 });
   player.facing = target.x >= player.x ? 1 : -1;
   game.io.sfx('warp');
 }
@@ -58,7 +61,7 @@ function returnToCenter(game, player) {
   leaveAfterimage(game, player);
   const bounds = arenaBounds(game, player);
   player.x = clamp(game.camera.x + VIEW_WIDTH / 2, bounds.min, bounds.max);
-  Object.assign(player, { y: GROUND_Y, airborne: false, vx: 0, vy: 0 });
+  Object.assign(player, { y: groundAt(game.terrain, player.x), airborne: false, vx: 0, vy: 0 });
   game.io.sfx('warp');
 }
 

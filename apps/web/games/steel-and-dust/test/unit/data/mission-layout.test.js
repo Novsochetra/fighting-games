@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { VIEW_WIDTH } from '../../../src/config.js';
+import { GROUND_Y, VIEW_WIDTH } from '../../../src/config.js';
 import { layoutMission } from '../../../src/data/missions/layout.js';
+import { groundAt } from '../../../src/sim/stage/terrain.js';
 
 const SPEC = {
   name: 'Test Road',
@@ -70,9 +71,32 @@ describe('laying out a mission', () => {
       'ration',
       'sword',
     ]);
-    expect(mission.props.at(-1)).toEqual({ kind: 'wall', x: mission.length - 12 });
+    expect(mission.props.at(-1)).toEqual({ kind: 'wall', x: mission.length - 12, y: GROUND_Y });
     for (const prop of mission.props.slice(0, -1)) {
       expect(SPEC.props).toContain(prop.kind);
     }
+  });
+
+  it('stands every crate and prop on the ground of a hilly road', () => {
+    const hilly = layoutMission(
+      {
+        ...SPEC,
+        zones: SPEC.zones.map((zone) => ({
+          ...zone,
+          ground: [
+            [-200, 0],
+            [-150, 30],
+            [150, 30],
+            [200, 0],
+          ],
+        })),
+      },
+      0,
+    );
+    const things = [...hilly.crates, ...hilly.props];
+    for (const thing of things) {
+      expect(thing.y).toBe(groundAt(hilly.terrain, thing.x));
+    }
+    expect(things.some((thing) => thing.y < GROUND_Y)).toBe(true);
   });
 });

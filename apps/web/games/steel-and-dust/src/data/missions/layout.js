@@ -1,5 +1,6 @@
 import { VIEW_WIDTH } from '../../config.js';
-import { hashInt } from '../../lib/math.js';
+import { layoutProps } from './props-layout.js';
+import { groundAt, layoutTerrain } from './terrain.js';
 
 const FIRST_ZONE = 300;
 const ROAD = 300;
@@ -8,7 +9,6 @@ const LEAD_IN = 110;
 // the camera keeps the hero this far from the right edge, so the last wave of a zone waits
 // until the zone's final screen is in view
 const FOLLOW_LEAD = Math.round(VIEW_WIDTH * 0.58);
-const PROP_SPACING = 150;
 
 function spreadWaves(waves, from, to) {
   return waves.map((kinds, i) => ({
@@ -47,34 +47,26 @@ function layoutZones(spec, number) {
 }
 
 // a crate on the road before every zone and one more inside the wide ones
-function layoutCrates(zones, items) {
+function layoutCrates(zones, items, terrain) {
   const spots = zones.flatMap((zone) =>
     zone.screens > 1 ? [zone.left - 120, zone.left + VIEW_WIDTH + 60] : [zone.left - 120],
   );
-  return spots.map((x, i) => ({ x, item: items[i % items.length] }));
-}
-
-function layoutProps(kinds, length) {
-  const props = [];
-  for (let x = 110; x < length - 140; x += PROP_SPACING) {
-    const hash = hashInt(x + kinds.length * 31);
-    props.push({ kind: kinds[hash % kinds.length], x: x + (hash % 60) });
-  }
-  props.push({ kind: 'wall', x: length - 12 });
-  return props;
+  return spots.map((x, i) => ({ x, y: groundAt(terrain, x), item: items[i % items.length] }));
 }
 
 // turns a mission's list of zones into places on the road
 export function layoutMission(spec, index) {
   const zones = layoutZones(spec, index + 1);
   const length = zones.at(-1).right;
+  const terrain = layoutTerrain(spec.zones, zones, length);
   return {
     ...spec,
     index,
     number: index + 1,
     length,
     zones,
-    crates: layoutCrates(zones, spec.crates),
-    props: layoutProps(spec.props, length),
+    terrain,
+    crates: layoutCrates(zones, spec.crates, terrain),
+    props: layoutProps(spec, { length, terrain }),
   };
 }

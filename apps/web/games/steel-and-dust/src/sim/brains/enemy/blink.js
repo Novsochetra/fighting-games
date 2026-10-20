@@ -1,7 +1,7 @@
 import { FX_COLORS } from '../../../art/fx-colors.js';
-import { GROUND_Y } from '../../../config.js';
 import { clamp } from '../../../lib/math.js';
 import { arenaBounds } from '../../fighters/arena-bounds.js';
+import { floorUnder, placeOnGround } from '../../fighters/terrain-motion.js';
 import { addDust, addSparks } from '../../fx/particles.js';
 
 const BLINK_COOLDOWN = 150;
@@ -11,7 +11,8 @@ const ESCAPE_GAP = 110;
 function sandPuff(game, fighter) {
   const color = FX_COLORS.mirage;
   addSparks(game, { x: fighter.x, y: fighter.y - 16, count: 10, color, speed: 2.2 });
-  addDust(game, { x: fighter.x, y: GROUND_Y, count: 5, color: FX_COLORS.mirageDust });
+  const y = floorUnder(game.terrain, fighter);
+  addDust(game, { x: fighter.x, y, count: 5, color: FX_COLORS.mirageDust });
 }
 
 // casters slip away from a hero who closes in; assassins reappear behind the hero instead
@@ -38,6 +39,7 @@ export function tryBlink(game, fighter, distance) {
   const bounds = arenaBounds(game, fighter);
   sandPuff(game, fighter);
   fighter.x = clamp(landingX(game, fighter), bounds.min, bounds.max);
+  placeOnGround(game.terrain, fighter);
   fighter.facing = game.player.x >= fighter.x ? 1 : -1;
   fighter.vx = 0;
   sandPuff(game, fighter);

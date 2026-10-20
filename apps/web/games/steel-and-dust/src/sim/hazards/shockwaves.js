@@ -1,19 +1,22 @@
 import { COLORS } from '../../art/colors.js';
-import { GROUND_Y } from '../../config.js';
 import { randomBetween } from '../../lib/math.js';
 import { applyHit } from '../combat/apply-hit.js';
 import { hurtBox, overlaps } from '../combat/boxes.js';
+import { floorUnder, isFlat } from '../fighters/terrain-motion.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust } from '../fx/particles.js';
 import { breakCratesIn } from '../items/crates.js';
+import { floorBelow, isWall } from '../stage/terrain.js';
 import { hazardAttacker } from './hazard-attacker.js';
 
 const SHOCK_HIT = { knockback: [2.5, -3.5], knockdown: true, hitstop: 5, hitstun: 20 };
 
 export function spawnShockwave(game, fighter) {
   for (const direction of [-1, 1]) {
+    const x = fighter.x + direction * 12 * fighter.scale;
     game.shockwaves.push({
-      x: fighter.x + direction * 12 * fighter.scale,
+      x,
+      y: floorBelow(game.terrain, x, fighter.y),
       direction,
       side: fighter.side,
       time: 0,
@@ -22,7 +25,7 @@ export function spawnShockwave(game, fighter) {
     });
   }
   shake(game, 3, 10);
-  addDust(game, { x: fighter.x, y: GROUND_Y, count: 10 });
+  addDust(game, { x: fighter.x, y: floorUnder(game.terrain, fighter), count: 10 });
   game.io.sfx('boom');
 }
 
@@ -30,7 +33,7 @@ function trailDust(game, wave) {
   game.particles.push({
     kind: 'dust',
     x: wave.x,
-    y: GROUND_Y - 2,
+    y: wave.y - 2,
     vx: -wave.direction * 0.3,
     vy: -randomBetween(0.3, 0.9),
     life: 18,
@@ -51,10 +54,34 @@ function strike(game, wave, area) {
     if (
       body &&
       overlaps(area, body) &&
-      applyHit(game, { attacker, target, move, x: wave.x, y: GROUND_Y - 8 })
+      applyHit(game, { attacker, target, move, x: wave.x, y: wave.y - 8 })
     ) {
       wave.hitTargets.add(target);
     }
+  }
+}
+
+// a shockwave runs along the floor it started on, up and down slopes and small steps, and
+// breaks on the face of anything taller
+export function rideFloor(terrain, wave) {
+  if (isFlat(terrain)) {
+    return;
+  }
+  if (isWall(terrain, wave.x, wave.y)) {
+    wave.broken = true;
+    return;
+  }
+  wave.y = floorBelow(terrain, wave.x, wave.y);
+}
+
+function sweep(game, wave) {
+  if (wave.time % 2 === 0) {
+    trailDust(game, wave);
+  }
+  const area = { x: wave.x - 6, y: wave.y - 12, width: 12, height: 12 };
+  strike(game, wave, area);
+  if (wave.side === 'player') {
+    breakCratesIn(game, area);
   }
 }
 
@@ -62,14 +89,10 @@ export function updateShockwaves(game) {
   for (const wave of game.shockwaves) {
     wave.x += wave.direction * 3.6;
     wave.time++;
-    if (wave.time % 2 === 0) {
-      trailDust(game, wave);
-    }
-    const area = { x: wave.x - 6, y: GROUND_Y - 12, width: 12, height: 12 };
-    strike(game, wave, area);
-    if (wave.side === 'player') {
-      breakCratesIn(game, area);
+    rideFloor(game.terrain, wave);
+    if (!wave.broken) {
+      sweep(game, wave);
     }
   }
-  game.shockwaves = game.shockwaves.filter((wave) => wave.time < 24);
+  game.shockwaves = game.shockwaves.filter((wave) => wave.time < 24 && !wave.broken);
 }

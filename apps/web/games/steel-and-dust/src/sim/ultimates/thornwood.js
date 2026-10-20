@@ -1,8 +1,8 @@
 import { FX_COLORS } from '../../art/fx-colors.js';
-import { GROUND_Y } from '../../config.js';
 import { THORNWOOD } from '../../data/ultimates/thornwood.js';
 import { randomBetween } from '../../lib/math.js';
 import { shake } from '../fx/camera-fx.js';
+import { floorUnder } from '../fighters/terrain-motion.js';
 import { addDust } from '../fx/particles.js';
 import { raiseThorn } from '../summons/thorns.js';
 import { finaleFlash, finishUlt, poseFrame, ultTargets } from './common.js';
@@ -12,7 +12,11 @@ const BLOOM_STRIKE = 6;
 
 function plantBlade(game, player) {
   shake(game, 3, 10);
-  addDust(game, { x: player.x + player.facing * 10, y: GROUND_Y, count: 10 });
+  addDust(game, {
+    x: player.x + player.facing * 10,
+    y: floorUnder(game.terrain, player),
+    count: 10,
+  });
   game.io.sfx('boom');
 }
 
@@ -26,11 +30,12 @@ function raiseWave(game, player, wave) {
 }
 
 function leafStorm(game, player) {
+  const floor = floorUnder(game.terrain, player);
   for (let i = 0; i < 40; i++) {
     game.particles.push({
       kind: 'mote',
       x: player.x + randomBetween(-200, 200),
-      y: GROUND_Y - randomBetween(0, 120),
+      y: floor - randomBetween(0, 120),
       vx: randomBetween(-0.6, 0.6),
       vy: -randomBetween(0.3, 1.2),
       life: 50,

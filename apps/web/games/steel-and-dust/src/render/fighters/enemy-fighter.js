@@ -42,9 +42,9 @@ function drawTelegraph(painter, sheets, at) {
   painter.alpha(1);
 }
 
-export function drawSpriteEnemy(painter, { sheets, fighter, shakeX, tickCount }) {
+export function drawSpriteEnemy(painter, { sheets, fighter, shakeX, tickCount, floor }) {
   if (isBossWindingUp(fighter)) {
-    drawDangerZone(painter, fighter, tickCount);
+    drawDangerZone(painter, fighter, tickCount, floor);
   }
   drawAfterimages(painter, sheets, fighter);
   const id = fighter.def.sprite;

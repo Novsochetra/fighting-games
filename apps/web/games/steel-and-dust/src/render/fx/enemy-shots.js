@@ -1,6 +1,5 @@
 import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
-import { GROUND_Y } from '../../config.js';
 import { hashInt } from '../../lib/math.js';
 import { point } from '../painter.js';
 
@@ -53,15 +52,15 @@ export function drawFire(painter, fire) {
     const hash = hashInt(i * 31 + (fire.time >> 2));
     const height = Math.round((5 + (hash % 9)) * strength);
     const x = Math.round(fire.x - 16 + i * 4);
-    painter.use(FX_COLORS.flameDark).rect(x, GROUND_Y - height, 3, height);
-    painter.use(COLORS.tangerine).rect(x, GROUND_Y - height + 2, 3, Math.max(0, height - 2));
+    painter.use(FX_COLORS.flameDark).rect(x, fire.y - height, 3, height);
+    painter.use(COLORS.tangerine).rect(x, fire.y - height + 2, 3, Math.max(0, height - 2));
     painter
       .use(COLORS.gold)
-      .rect(x + 1, GROUND_Y - Math.round(height / 2), 1, Math.round(height / 2));
+      .rect(x + 1, fire.y - Math.round(height / 2), 1, Math.round(height / 2));
   }
   painter
     .alpha(0.35 * strength)
     .use(COLORS.orange)
-    .rect(fire.x - 18, GROUND_Y - 2, 36, 3);
+    .rect(fire.x - 18, fire.y - 2, 36, 3);
   painter.alpha(1);
 }
