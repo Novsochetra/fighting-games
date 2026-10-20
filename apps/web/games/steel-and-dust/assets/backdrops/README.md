@@ -2,7 +2,8 @@
 
 Every mission's road is painted: the six forests of missions 1 to 6 first, then the four desert
 roads of missions 7 to 10 in their own sections below (Sandstorm Pass, Iron Works, Mirage Temple,
-Warden's Fortress), and a second pass over the forests after them.
+Warden's Fortress), a second pass over the forests after them, and last the two temples of
+missions 11 and 12 (Angkor Wat, the Bayon).
 
 ## The forests
 
@@ -210,3 +211,87 @@ tiles side by side, and every road got a cliff face. All of it is reproducible w
   bamboo clump at the Raider Camp gate (`#d8ae84`, 0.3), the camp's crates and banner on the edge of
   Ember Woods (`#e7a35f`, 0.25) and the last autumn tree going dark in Firefly Hollow (`#3c3c74`,
   0.58).
+
+## The temples
+
+Angkor Wat at dawn and the Bayon at dusk walk on from Warden's Fortress, made like the roads above
+from Create Image (Pro) concept paintings in `concepts/stages/angkor-wat/` and
+`concepts/stages/bayon/`.
+
+| Folder        | Mission       | Concept              | `back.png` | `near.png` |
+| ------------- | ------------- | -------------------- | ---------- | ---------- |
+| `angkor-wat/` | 11 Angkor Wat | `angkor-wat/concept` | 640 wide   | 768 wide   |
+| `bayon/`      | 12 Bayon      | `bayon/concept`      | 384 wide   | 384 wide   |
+
+### Angkor Wat at dawn
+
+Mission 11's layers come from `concepts/stages/angkor-wat/concept.png` (Pro, laid out from the
+pixflux sketch `sketch-composition.png` beside it, Ember Woods' concept as a reference and Pine
+Ridge's as the style); each layer used the concept as its reference and style, and the raw Pro
+paintings are kept beside it (`back-painting.png`, `near-painting.png`, `ground-painting.png`). The
+fixes below are small scripts, not `backdrop_layers.py` commands, because the tool has no step for
+them.
+
+- `back.png` was painted 640 wide so a tile holds one temple and two never show at once. It needed
+  no `overlap`: both ends are jungle and already met; only a palm crown the left edge cut through
+  was covered with sky from the other end. The painted moon sat cut off at the top edge, so the
+  concept's rose moon was set lower, below the HUD panel and behind a cloud streak. Pro painted the
+  moat as a pool with angled side banks, so the water only ran the full width under the road: the
+  far bank was redrawn as one straight stone edge (rows 146-152) and the water below it (row 153
+  down) rebuilt from the scene above, mirrored and squashed 2.5 times, in Pro's own water colours,
+  with ripple lines and Pro's lotus pads set back on it. Rows 146 and below were then hazed 0.28
+  toward `#d9a99e`, the dawn mist on the water, so dark fighters stand out against the reflection.
+- `near.png` joins two paintings: `near <out> 187 '#d9a99e' 0.25 <a> <b>`. Painting a is Pro's,
+  with its paved floor cut off below row 183 and the banana plant that ran off its right edge
+  trimmed back to its stem. Painting b is built from a's own pieces: the singha and the railing's
+  end post mirrored, seven post-to-post railing modules, and the naga mirrored to close the run
+  facing outward, so half the strip is low balustrade that leaves the temple in view.
+- `ground.png` came out of Pro seamless at 128 wide, so `ground` ran on a copy wrapped by 32 columns
+  (its crossfade then leaves every column as painted); surface row 19.
+- The incense smoke rises from the sticks at x 321, y 170 of `near.png`, drawn in code like the
+  campfire's. There is no `mid` or `canopy` layer: the open dawn sky, the moon and the towers are
+  the picture, and an overhang hid them.
+- `way-in.png` (384 wide) is the `once` layer at the near strip's parallax (0.45), the last of
+  Warden's Fortress on the left of the first screen. The banner tower, the spiked barricade and the
+  bare pennant pole were cut from `warden-fortress/near.png` (columns 1430-1506, 925-1000, 590-597)
+  and set on a 192x216 canvas; one Edit (Pro Flash, job `871a6ca7`) grew the jungle over them
+  (vines, ferns, a banana plant), tore a pennant onto the pole and lit them from the right with the
+  sunrise. Its white specks were cleared, `wayin <out> 188 '#d9a99e' 0.25` hazed it like the near
+  strip, and the tower was shortened by 30 rows (69-98) so its battlements sit below the HUD panel.
+- `cliff.png` (12x64) is drawn by hand in `ground.png`'s colours, the face of a sheer step: the
+  paving slab's end with a lit lip and corner, a mossy joint, two courses of laterite with a lit
+  corner, then the dark deep courses, with a dark outer edge.
+
+### Bayon at dusk
+
+Mission 12's layers come from `concepts/stages/bayon/concept.png` (Pro, laid out from the pixflux
+sketch `sketch_composition.png` beside it, Ember Woods' concept as the style); each layer used the
+concept as its reference and style. The fixes below are small scripts, not `backdrop_layers.py`
+commands, because the tool has no step for them.
+
+- `back.png` needed no `overlap`: the painting's two ends already met. Its near-black zenith was
+  recoloured teal, its lone stars brightened, the moon moved in from the right edge (the concept's
+  cratered moon, set behind the clouds) and the cloud and tree crown the edge cut through were
+  rounded off and run on across the join.
+- `near.png`: the model lit the ruins from the right and the face from the left, where the sun is,
+  so the painting was mirrored with its face tower mirrored back. Then `near <out> 215 '#6a5288'
+  0.35` (215 keeps the painted terrace under the ruins hidden under the road) and `shift 115`, so
+  the first screen opens on the face tower at the right. The second fire bowl was given the first
+  one's coals; the fire itself is drawn in code (`flames`, `embers`, `smoke`).
+- `ground.png` was painted 160 wide. `ground` gives its surface row, 19, but its 32-column dither
+  crossfade speckled the stones, so the ends were joined along the path where they match best.
+- `canopy.png` (352 wide) is the optional front layer: a pixflux sketch on a flat ground, keyed,
+  its orange tendrils dimmed to violet, lifted 6 rows, cut off below row 40 and joined like the
+  ground.
+- `way-in.png` (384x216, `once: true`, parallax 0.45 like the near strip) is the last of Angkor
+  Wat's road on the left of the first screen. In front: the end of Angkor's naga balustrade (its
+  last rail modules and the naga closing the run, `angkor-wat/near.png` columns 520-727), dimmed
+  into dusk (x0.86/0.80/0.92, 0.15 toward `#6a5288`, top edges warmed toward `#ca7d56`). Behind it,
+  a sugar palm against the sinking sun and a frangipani in bloom over jungle undergrowth, two
+  pieces cut from one Pro painting (128x170, a crop of `near.png` as the style, Angkor's palms and
+  frangipani as references, third of four candidates) and hazed 0.18 toward `#6a5288`. Its base is
+  row 188, under the road. It keeps clear of the near strip's left fire bowl (columns 9-39), whose
+  flames are drawn over the layers, so it must drift at the near strip's 0.45 to stay in register.
+- `cliff.png` (12x64) is drawn by hand in `ground.png`'s colours, the face of a sheer step: two
+  courses of grey-green sandstone with moss on the lip and in the joint, a course of laterite set
+  back a pixel under them, then earth with fig roots going dark, with a dark outer edge.

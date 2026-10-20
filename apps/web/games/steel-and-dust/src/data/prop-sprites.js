@@ -14,4 +14,7 @@ export const PROP_SPRITES = {
   templeDoor: { file: 'temple-door.png', feetX: 84, feetY: 143 },
   templeDoorBroken: { file: 'temple-door-broken.png', feetX: 16, feetY: 139 },
   wardenGate: { file: 'warden-gate.png', feetX: 176, feetY: 202 },
+  wardenGateBroken: { file: 'warden-gate-broken.png', feetX: 20, feetY: 202 },
+  templeGate: { file: 'temple-gate.png', feetX: 70, feetY: 110 },
+  templeGateBroken: { file: 'temple-gate-broken.png', feetX: 16, feetY: 110 },
 };

@@ -15,7 +15,7 @@ const TIPS = [
   '<b>Sand Scorpions</b> are low to the ground: sweep them with down + light, or bounce on them from the air.',
   'The <b>Brass Juggernaut</b> shrugs off small hits. Launch it or use heavy and charged attacks.',
   '<b>Bulwarks</b> block light hits from the front. Break the guard with a heavy, charged or launching attack, or get behind them.',
-  'Two bosses guard the road before the Warden Ox. Every boss marks the ground in <b>red</b> before a slam or a charge. Get out of the red.',
+  'Bosses you have beaten come back to guard later roads, and the Bayon Guardian waits at the very end. Every boss marks the ground in <b>red</b> before a slam or a charge. Get out of the red.',
   'Too hard or too easy? Change the <b>difficulty</b> in Settings at any time.',
 ];
 

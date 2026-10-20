@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import { FX_COLORS } from '../../../src/art/fx-colors.js';
 import { HERO_THEMES } from '../../../src/art/hero-themes.js';
 import { WEAPON_COLORS } from '../../../src/art/weapon-colors.js';
+import { ENEMY_TYPES } from '../../../src/data/enemies/enemy-types.js';
 import { sparkColorOf, trailColorOf } from '../../../src/sim/fighters/hero-colors.js';
 import { shedHeroAura } from '../../../src/sim/fx/hero-aura.js';
 import { burstMaterial } from '../../../src/sim/fx/material-bursts.js';
@@ -50,5 +52,18 @@ describe('material bursts', () => {
     expect(game.particles.every((particle) => particle.vx > 0)).toBe(true);
     burstMaterial(game, { target: { def: {} }, x: 10, y: 20 }, 1);
     expect(game.particles).toHaveLength(5);
+  });
+
+  it('chips grey-green temple stone and a fleck of gold off the Bayon Guardian', () => {
+    const game = playingAs('moss');
+    burstMaterial(game, { target: { def: ENEMY_TYPES.guardian }, x: 10, y: 20 }, -1);
+    expect(game.particles.map((particle) => particle.color)).toEqual([
+      FX_COLORS.sandstone,
+      FX_COLORS.sandstoneDark,
+      FX_COLORS.sandstoneGold,
+      FX_COLORS.sandstone,
+      FX_COLORS.sandstoneDark,
+    ]);
+    expect(game.particles.every((particle) => particle.vx < 0)).toBe(true);
   });
 });

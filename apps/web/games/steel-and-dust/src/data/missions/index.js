@@ -9,6 +9,8 @@ import { SANDSTORM_PASS } from './specs/07-sandstorm-pass.js';
 import { IRON_WORKS } from './specs/08-iron-works.js';
 import { MIRAGE_TEMPLE } from './specs/09-mirage-temple.js';
 import { WARDEN_FORTRESS } from './specs/10-warden-fortress.js';
+import { ANGKOR_WAT } from './specs/11-angkor-wat.js';
+import { BAYON } from './specs/12-bayon.js';
 
 export const MISSIONS = [
   PINE_RIDGE,
@@ -21,6 +23,8 @@ export const MISSIONS = [
   IRON_WORKS,
   MIRAGE_TEMPLE,
   WARDEN_FORTRESS,
+  ANGKOR_WAT,
+  BAYON,
 ].map(layoutMission);
 
 export function missionAt(index) {

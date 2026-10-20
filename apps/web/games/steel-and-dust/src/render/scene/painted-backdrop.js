@@ -34,6 +34,7 @@ export function loadPaintedBackdrop(loaders, spec) {
   });
   return {
     layers: spec.layers.map((layer) => loadLayer(loaders, spec.folder, layer)),
+    fronts: (spec.fronts ?? []).map((layer) => loadLayer(loaders, spec.folder, layer)),
     ground,
     cliff: spec.cliff ? loadCliff(loaders, spec.folder) : null,
     ambient: spec.ambient,
@@ -69,4 +70,16 @@ export function drawPaintedBackdrop(painter, setLayer, { backdrop, cameraX }) {
     setLayer(0, layer.parallax > farthest);
     drawLayer(painter.context, layer, cameraX);
   });
+}
+
+// a front layer hangs between the fight and the viewer, so it shakes with the world; a backdrop
+// without one draws nothing here, which keeps the recorded frames of the other roads unchanged
+export function drawPaintedFronts(painter, setLayer, { backdrop, cameraX }) {
+  if (!backdrop.fronts?.length) {
+    return;
+  }
+  setLayer(0, true);
+  for (const layer of backdrop.fronts) {
+    drawLayer(painter.context, layer, cameraX);
+  }
 }

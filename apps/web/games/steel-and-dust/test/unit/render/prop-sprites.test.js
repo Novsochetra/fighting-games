@@ -32,16 +32,18 @@ describe('prop sprites', () => {
 
   it('tell sprite props from the drawn ones', () => {
     expect(isSpriteProp('palisade')).toBe(true);
+    expect(isSpriteProp('templeGate')).toBe(true);
     expect(isSpriteProp('barrel')).toBe(false);
   });
 
   it("draw at the fighters' density with the feet on the road", () => {
     const sheets = loadPropSprites(loaders);
-    const { width, height } = sheets.images.palisade;
-    const { feetX, feetY } = PROP_SPRITES.palisade;
-    expect(drawCalls(sheets, { kind: 'palisade', x: 500, y: 184 })).toEqual([
-      `drawImage(img(palisade.png),${Math.round(500 - feetX / 2)},${Math.round(184 - feetY / 2)},${width / 2},${height / 2})`,
-    ]);
+    for (const [kind, { file, feetX, feetY }] of Object.entries(PROP_SPRITES)) {
+      const { width, height } = sheets.images[kind];
+      expect(drawCalls(sheets, { kind, x: 500, y: 184 })).toEqual([
+        `drawImage(img(${file}),${Math.round(500 - feetX / 2)},${Math.round(184 - feetY / 2)},${width / 2},${height / 2})`,
+      ]);
+    }
   });
 
   it('draw nothing until the sprite has loaded', () => {

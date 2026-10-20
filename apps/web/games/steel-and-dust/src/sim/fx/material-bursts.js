@@ -2,10 +2,16 @@ import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { randomBetween } from '../../lib/math.js';
 
-// what flies off an enemy when it is struck: metal sparks, stone chips, shell shards, sand
+// what flies off an enemy when it is struck: metal sparks, rust and temple stone chips, shell
+// shards, sand
 const MATERIALS = {
   metal: { kind: 'spark', colors: [COLORS.white, COLORS.gold], count: 4 },
   stone: { kind: 'chunk', colors: [FX_COLORS.stone, FX_COLORS.stoneDark], count: 5 },
+  sandstone: {
+    kind: 'chunk',
+    colors: [FX_COLORS.sandstone, FX_COLORS.sandstoneDark, FX_COLORS.sandstoneGold],
+    count: 5,
+  },
   shell: { kind: 'chunk', colors: [FX_COLORS.shell, FX_COLORS.shellGlint], count: 4 },
   sand: { kind: 'mote', colors: [FX_COLORS.mirage, FX_COLORS.mirageLight], count: 5 },
 };

@@ -47,9 +47,10 @@ function drawsOf(log, name) {
 }
 
 describe("the Warden's Fortress road", () => {
-  it('is the last mission, ending on the Warden Ox', () => {
-    expect(fortress).toBe(MISSIONS.at(-1));
+  it('is the tenth mission, ending on the Warden Ox, and its road walks on into Angkor Wat', () => {
+    expect(fortress.number).toBe(10);
     expect(fortress.boss).toBe('brute');
+    expect(MISSIONS[fortress.index + 1].theme).toBe('angkorWat');
   });
 
   it('starts among the sun temple ruins, which the road leaves behind', () => {

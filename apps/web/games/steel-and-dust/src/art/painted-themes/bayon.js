@@ -1,0 +1,25 @@
+export const BAYON = {
+  ground: { sand: '#7b8a6f', rock: '#251e32', grass: '#55703f' },
+  foreground: 'ruins',
+  front: {
+    block: '#2c3431',
+    blockLight: '#4f5d4c',
+    blockShade: '#171b1f',
+    drift: '#232a2a',
+    sherd: '#2e3632',
+    sherdLight: '#5a6a50',
+    reed: '#1b2420',
+    reedLight: '#2f4030',
+  },
+  ambient: {
+    bat: '#1a1024',
+    mist: '#9a86b4',
+    mote: '#ffd0a0',
+    fireflies: ['#fff3a8', '#f0c860'],
+    leaves: ['#4a5e3a', '#6b7a44', '#8a7a3e'],
+    flame: ['#d8401c', '#ff8a2a', '#fff2b0'],
+    glow: '#a8503a',
+    embers: ['#ffe08a', '#ff8a3a', '#d8501f'],
+    smoke: '#8a7a96',
+  },
+};

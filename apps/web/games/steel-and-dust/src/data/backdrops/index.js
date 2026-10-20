@@ -1,4 +1,6 @@
+import { ANGKOR_WAT } from './angkor-wat.js';
 import { BAMBOO_PASS } from './bamboo-pass.js';
+import { BAYON } from './bayon.js';
 import { EMBER_WOODS } from './ember-woods.js';
 import { FIREFLY_HOLLOW } from './firefly-hollow.js';
 import { IRON_WORKS } from './iron-works.js';
@@ -24,4 +26,6 @@ export const PAINTED_BACKDROPS = {
   ironWorks: IRON_WORKS,
   wardenFortress: WARDEN_FORTRESS,
   mirageTemple: MIRAGE_TEMPLE,
+  angkorWat: ANGKOR_WAT,
+  bayon: BAYON,
 };

@@ -193,6 +193,8 @@ export const SAMPLE_EFFECTS = {
     top: 188,
     bottom: 212,
   },
+  glints: { kind: 'glints', plane: 'back', count: 40, top: 130, bottom: 170, drift: 0.08 },
+  butterflies: { kind: 'butterflies', plane: 'front', count: 6, top: 110, bottom: 180, drift: 1.1 },
 };
 
 export function recordAmbient(effects, options = {}) {

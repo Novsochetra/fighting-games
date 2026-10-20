@@ -2,10 +2,12 @@ import { drawAsh } from './ash.js';
 import { drawBats } from './bats.js';
 import { drawBirds } from './birds.js';
 import { drawBraziers } from './braziers.js';
+import { drawButterflies } from './butterflies.js';
 import { drawDevil } from './devil.js';
 import { drawEmbers } from './embers.js';
 import { drawFireflies } from './fireflies.js';
 import { drawFlames } from './flames.js';
+import { drawGlints } from './glints.js';
 import { drawGlow } from './glow.js';
 import { drawGusts } from './gusts.js';
 import { drawLeaves } from './leaves.js';
@@ -58,6 +60,8 @@ const AMBIENT_EFFECTS = {
   trickle: { draw: drawTrickle, color: 'trickle' },
   bats: { draw: drawBats, color: 'bat' },
   sandDrift: { draw: drawSandDrift, color: 'sandDrift' },
+  glints: { draw: drawGlints, color: 'glints' },
+  butterflies: { draw: drawButterflies, color: 'butterflies' },
 };
 
 // an unknown kind or a forest without the effect's color is skipped rather than breaking the frame
