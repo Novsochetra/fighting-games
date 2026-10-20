@@ -58,17 +58,3 @@ export function layoutTerrain(zoneSpecs, zones, length) {
   const heights = layoutHeights(zoneSpecs, zones, length);
   return { heights, platforms: layoutPlatforms(zoneSpecs, zones, heights) };
 }
-
-// props and crates only stand where the road is level under their whole footprint
-export function isLevelUnder(terrain, x, halfWidth) {
-  if (!terrain.heights) {
-    return true;
-  }
-  const height = terrain.heights[Math.max(0, Math.round(x - halfWidth))];
-  for (let column = Math.round(x - halfWidth); column <= Math.round(x + halfWidth); column++) {
-    if (terrain.heights[Math.max(0, Math.min(terrain.heights.length - 1, column))] !== height) {
-      return false;
-    }
-  }
-  return true;
-}

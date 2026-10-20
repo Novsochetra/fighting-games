@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { FOREST_THEMES } from '../../../src/art/forest-themes.js';
-import { SCENE_THEMES } from '../../../src/art/scene-themes.js';
+import { PAINTED_THEMES } from '../../../src/art/painted-themes/index.js';
 import { VIEW_WIDTH } from '../../../src/config.js';
 import { ENEMY_SPRITES } from '../../../src/data/enemies/enemy-sprites.js';
 import { ENEMY_TYPES } from '../../../src/data/enemies/enemy-types.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
+import { PROP_SPRITES } from '../../../src/data/prop-sprites.js';
 import { WEAPON_IDS } from '../../../src/data/weapons/index.js';
 
 const kindsIn = (mission) =>
@@ -17,10 +17,7 @@ describe('the ten missions', () => {
     expect(MISSIONS).toHaveLength(10);
     expect(new Set(MISSIONS.map((mission) => mission.name)).size).toBe(10);
     for (const mission of MISSIONS) {
-      expect(
-        SCENE_THEMES[mission.theme] ?? FOREST_THEMES[mission.theme],
-        mission.name,
-      ).toBeDefined();
+      expect(PAINTED_THEMES[mission.theme], mission.name).toBeDefined();
     }
   });
 
@@ -33,8 +30,26 @@ describe('the ten missions', () => {
       'emberWoods',
       'fireflyHollow',
     ]);
-    for (const mission of MISSIONS.slice(6)) {
-      expect(SCENE_THEMES[mission.theme], mission.name).toBeDefined();
+    const forestThemes = MISSIONS.slice(0, 6).map((mission) => mission.theme);
+    const desertThemes = new Set(MISSIONS.slice(6).map((mission) => mission.theme));
+    expect(desertThemes.size).toBe(4);
+    for (const theme of forestThemes) {
+      expect(desertThemes.has(theme), theme).toBe(false);
+    }
+  });
+
+  it("come in through the last road's wall broken open, where a road has a way in", () => {
+    const entered = MISSIONS.filter((mission) => mission.entry);
+    expect(entered.map((mission) => mission.name)).toEqual([
+      'Sandstorm Pass',
+      'Iron Works',
+      'Mirage Temple',
+      "Warden's Fortress",
+    ]);
+    for (const mission of entered) {
+      const before = MISSIONS[mission.index - 1];
+      expect(mission.entry, mission.name).toBe(`${before.endWall}Broken`);
+      expect(PROP_SPRITES[mission.entry], mission.name).toBeDefined();
     }
   });
 

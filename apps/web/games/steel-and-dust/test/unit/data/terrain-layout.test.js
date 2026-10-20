@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GROUND_Y } from '../../../src/config.js';
-import { FLAT_TERRAIN, isLevelUnder, layoutTerrain } from '../../../src/data/missions/terrain.js';
+import { FLAT_TERRAIN, layoutTerrain } from '../../../src/data/missions/terrain.js';
 
 const zones = [
   { left: 300, right: 684 },
@@ -91,34 +91,5 @@ describe('laying out terrain', () => {
       { x: 340, y: GROUND_Y - 56, width: 64, kind: 'planks' },
       { x: 1084, y: GROUND_Y - 30, width: 48, kind: 'rock' },
     ]);
-  });
-});
-
-describe('level ground under a footprint', () => {
-  const terrain = layoutTerrain(
-    [
-      {
-        ground: [
-          [0, 0],
-          [40, 20],
-          [100, 20],
-          [140, 0],
-        ],
-      },
-      {},
-    ],
-    zones,
-    1752,
-  );
-
-  it('is everywhere on a flat road', () => {
-    expect(isLevelUnder(FLAT_TERRAIN, 500, 30)).toBe(true);
-  });
-
-  it('is on a hilltop or the plain road, not on a slope', () => {
-    expect(isLevelUnder(terrain, 370, 20)).toBe(true);
-    expect(isLevelUnder(terrain, 200, 20)).toBe(true);
-    expect(isLevelUnder(terrain, 330, 20)).toBe(false);
-    expect(isLevelUnder(terrain, 430, 20)).toBe(false);
   });
 });

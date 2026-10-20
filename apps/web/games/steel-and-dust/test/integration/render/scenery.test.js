@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { PAINTED_BACKDROPS } from '../../../src/data/backdrops.js';
+import { PAINTED_BACKDROPS } from '../../../src/data/backdrops/index.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { createView } from '../../../src/render/create-view.js';
 import { renderFrame } from '../../../src/render/render-frame.js';
-import { scenePalette } from '../../../src/render/scene/scene-palette.js';
 import { selectMission, startPlay } from '../../../src/sim/stage/flow.js';
 import { FakeImage } from '../../support/fake-image.js';
 import { RecordingCanvas } from '../../support/recording-canvas.js';
@@ -24,11 +23,6 @@ function recordedView() {
   return { view, log: screen.recording.log };
 }
 
-const paintedColors = (canvas) =>
-  canvas.recording.log
-    .filter((call) => call.startsWith('fillStyle='))
-    .map((call) => call.slice(10));
-
 function renderMission(index, ticks = 2) {
   const { view, log } = recordedView();
   const game = createTestGame();
@@ -40,17 +34,24 @@ function renderMission(index, ticks = 2) {
   return { view, log, game, mission: MISSIONS[index] };
 }
 
-const forestMissions = MISSIONS.filter((mission) => PAINTED_BACKDROPS[mission.theme]);
-const desertMissions = MISSIONS.filter((mission) => !PAINTED_BACKDROPS[mission.theme]);
-
 describe('the scenery of each mission', () => {
-  it('walks the first six missions through painted forests and the last four through the desert', () => {
-    expect(forestMissions.map((mission) => mission.number)).toEqual([1, 2, 3, 4, 5, 6]);
-    expect(desertMissions.map((mission) => mission.number)).toEqual([7, 8, 9, 10]);
+  it('paints every road with layers of its own, loaded once', () => {
+    const { view } = recordedView();
+    const game = createTestGame();
+    for (const mission of MISSIONS) {
+      expect(PAINTED_BACKDROPS[mission.theme], mission.name).toBeDefined();
+      selectMission(game, mission.index);
+      startPlay(game);
+      runTicks(game, 2);
+      renderFrame(game, view);
+    }
+    expect(Object.keys(view.backdrops).sort()).toEqual(
+      [...new Set(MISSIONS.map((mission) => mission.theme))].sort(),
+    );
   });
 
-  it('draws every layer of a forest, far plate first, before the fighters', () => {
-    for (const mission of forestMissions) {
+  it('draws every layer of a painted road, far plate first, before the fighters', () => {
+    for (const mission of MISSIONS) {
       const { log } = renderMission(mission.index);
       const { folder } = PAINTED_BACKDROPS[mission.theme];
       const layerCalls = log.filter(
@@ -61,37 +62,42 @@ describe('the scenery of each mission', () => {
     }
   });
 
-  it('keeps the air of a forest moving while the camera stands still', () => {
-    for (const mission of forestMissions) {
+  it('keeps the air of a painted road moving while the camera stands still', () => {
+    for (const mission of MISSIONS) {
       const first = renderMission(mission.index, 2).log.join('|');
       const later = renderMission(mission.index, 90).log.join('|');
       expect(later, mission.name).not.toBe(first);
     }
   });
 
-  it("paints each desert road's backdrop in its own theme, once per theme", () => {
-    const { view } = recordedView();
-    const game = createTestGame();
-    for (const mission of desertMissions) {
-      selectMission(game, mission.index);
-      startPlay(game);
-      runTicks(game, 2);
-      renderFrame(game, view);
-      const sky = view.backdrops[mission.theme].sky;
-      expect(paintedColors(sky), mission.name).toContain(scenePalette(mission.theme).sky.bands[0]);
+  it('leaves the forest through its broken palisade and the last of its trunks', () => {
+    const canyon = MISSIONS.find((mission) => mission.theme === 'sandstormPass');
+    const { log } = renderMission(canyon.index);
+    for (const image of ['palisadeBroken.png', 'edge.png', 'back.png', 'near.png']) {
+      expect(
+        log.some((call) => call.includes(`img(${image})`)),
+        image,
+      ).toBe(true);
     }
-    expect(Object.keys(view.backdrops).sort()).toEqual(
-      [...new Set(desertMissions.map((mission) => mission.theme))].sort(),
-    );
+    expect(log.some((call) => call.includes('img(canyonBarricade.png)'))).toBe(false);
   });
 
-  it("lays a forest road from its painted cross-section and a desert road in the theme's sand", () => {
-    for (const mission of forestMissions) {
+  it('closes the canyon with the raider barricade and lets the forest fall behind', () => {
+    const canyon = MISSIONS.find((mission) => mission.theme === 'sandstormPass');
+    const { view, log, game } = renderMission(canyon.index);
+    game.camera.x = canyon.length - 384;
+    log.length = 0;
+    renderFrame(game, view);
+    expect(log.some((call) => call.includes('img(canyonBarricade.png)'))).toBe(true);
+    expect(log.some((call) => call.includes('img(edge.png)'))).toBe(false);
+  });
+
+  it('lays every road from its painted cross-section', () => {
+    for (const mission of MISSIONS) {
       expect(
         renderMission(mission.index).log.some((call) => call.includes('img(ground.png)')),
         mission.name,
       ).toBe(true);
     }
-    expect(renderMission(6).log).toContain(`fillStyle=${scenePalette('storm').ground.sand}`);
   });
 });

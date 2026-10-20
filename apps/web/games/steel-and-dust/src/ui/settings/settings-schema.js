@@ -51,9 +51,16 @@ export const SETTINGS_SCHEMA = [
   {
     key: 'stick',
     label: 'Joystick',
-    options: ['fixed', 'float'],
-    format: pick({ fixed: 'Fixed', float: 'Floating' }),
-    note: 'Fixed stays in the corner; floating appears where you touch',
+    options: ['fixed', 'float', 'hidden'],
+    format: pick({ fixed: 'Fixed', float: 'Floating', hidden: 'Hidden' }),
+    note: 'Fixed stays in the corner; floating appears where you touch; hidden clears the left side',
+  },
+  {
+    key: 'padHidesTouch',
+    label: 'Hide with a gamepad',
+    options: [false, true],
+    format: onOff,
+    note: 'Touch controls step aside while you play with a gamepad; a touch brings them back',
   },
   {
     key: 'buttonSize',

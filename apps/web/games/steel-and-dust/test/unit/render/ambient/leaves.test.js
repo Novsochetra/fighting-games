@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FOREST_THEMES } from '../../../../src/art/forest-themes.js';
+import { PAINTED_THEMES } from '../../../../src/art/painted-themes/index.js';
 import { VIEW_HEIGHT } from '../../../../src/config.js';
 import { SAMPLE_EFFECTS, rectsOf, recordEffect, ticksUpTo } from './ambient-recorder.js';
 
@@ -44,7 +44,7 @@ describe('ambient leaves', () => {
   });
 
   it('cycle through the forest leaf colors', () => {
-    const emberWoods = FOREST_THEMES.emberWoods.ambient;
+    const emberWoods = PAINTED_THEMES.emberWoods.ambient;
     const bodies = new Set();
     for (const tick of ticksUpTo(600, 30)) {
       const rects = rectsOf(leaves, { tick, colors: emberWoods });

@@ -1326,7 +1326,7 @@
     {
      "kind": "grunt",
      "x": 600,
-     "y": 184,
+     "y": 183,
      "vx": -0.75,
      "vy": 0,
      "state": "walk",
@@ -1469,7 +1469,7 @@
     {
      "kind": "grunt",
      "x": 577.5,
-     "y": 184,
+     "y": 180,
      "vx": -0.75,
      "vy": 0,
      "state": "walk",
@@ -1512,7 +1512,7 @@
     }
    ],
    "world": {
-    "particles": "95c44435f72c0d6b",
+    "particles": "a90b4519b17ddcfc",
     "effects": "6b0ac47a9c9b73c6",
     "floaters": "091191c6ea07dabd",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -1612,7 +1612,7 @@
     {
      "kind": "grunt",
      "x": 555,
-     "y": 184,
+     "y": 177,
      "vx": -0.75,
      "vy": 0,
      "state": "walk",
@@ -1655,7 +1655,7 @@
     }
    ],
    "world": {
-    "particles": "f1a900c94cbf6d8f",
+    "particles": "4981cf49fb84b63e",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "f0f24aa06d531c57",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -1755,7 +1755,7 @@
     {
      "kind": "grunt",
      "x": 532.5,
-     "y": 184,
+     "y": 176,
      "vx": -0.75,
      "vy": 0,
      "state": "walk",
@@ -1798,7 +1798,7 @@
     }
    ],
    "world": {
-    "particles": "6f7d4d558335b3aa",
+    "particles": "9853d85dfe93f035",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "331cf92a429250c4",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -1898,7 +1898,7 @@
     {
      "kind": "grunt",
      "x": 516.75,
-     "y": 184,
+     "y": 176,
      "vx": -0.75,
      "vy": 0,
      "state": "walk",
@@ -1941,7 +1941,7 @@
     }
    ],
    "world": {
-    "particles": "3857033194d20462",
+    "particles": "f01a731acf329f2d",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "c68e44c1a75c2fde",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -2041,7 +2041,7 @@
     {
      "kind": "grunt",
      "x": 516.75,
-     "y": 184,
+     "y": 176,
      "vx": -0.75,
      "vy": 0,
      "state": "walk",
@@ -2184,7 +2184,7 @@
     {
      "kind": "grunt",
      "x": 499.5,
-     "y": 184,
+     "y": 178,
      "vx": -0.75,
      "vy": 0,
      "state": "walk",
@@ -2227,12 +2227,12 @@
     }
    ],
    "world": {
-    "particles": "450db82a281103dd",
+    "particles": "d546978e6071bfa7",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "52dafa4100b75c72",
+    "summons": "055008fe21815dd4",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -2327,7 +2327,7 @@
     {
      "kind": "grunt",
      "x": 474.9884779736304,
-     "y": 158.588,
+     "y": 152.588,
      "vx": 2.67588055,
      "vy": -2.2120000000000006,
      "state": "juggle",
@@ -2370,12 +2370,12 @@
     }
    ],
    "world": {
-    "particles": "32e770d6cbf889af",
-    "effects": "67063e9ee8761886",
-    "floaters": "ac305d33894744b8",
+    "particles": "319a3a79c19a150a",
+    "effects": "8c3ad4b6f86c6e00",
+    "floaters": "14d1802d113da427",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "698342d83d093c35",
+    "summons": "0212254fb64b4463",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -2448,7 +2448,7 @@
     {
      "kind": "grunt",
      "x": 475.97213834303943,
-     "y": 141.05999999999997,
+     "y": 135.05999999999997,
      "vx": -2.371136559750716,
      "vy": 0.276,
      "state": "juggle",
@@ -2491,9 +2491,9 @@
     }
    ],
    "world": {
-    "particles": "f0d0fb1d440a39f9",
+    "particles": "872ee2048beee98f",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "6aa818db00798e32",
+    "floaters": "bb64821c7d887002",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "cf20907c07c2864c",
@@ -2568,7 +2568,7 @@
    "enemies": [
     {
      "kind": "grunt",
-     "x": 437.4187774514867,
+     "x": 435.75848755190054,
      "y": 184,
      "vx": -2.4,
      "vy": -3.6,
@@ -2612,12 +2612,12 @@
     }
    ],
    "world": {
-    "particles": "1643b2121df47a93",
-    "effects": "a4d1c0b665b49bc7",
-    "floaters": "10cdb4966983d683",
+    "particles": "acdf10ee08992b8f",
+    "effects": "c5498ccfb0268a6b",
+    "floaters": "8c736d9e5dc622db",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "2af7ebef447f913e",
+    "summons": "881499484aae58d7",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -2689,7 +2689,7 @@
    "enemies": [
     {
      "kind": "grunt",
-     "x": 437.4187774514867,
+     "x": 435.75848755190054,
      "y": 184,
      "vx": -2.4,
      "vy": -3.6,
@@ -2733,12 +2733,12 @@
     }
    ],
    "world": {
-    "particles": "1e6f9b5b781878ed",
-    "effects": "5055a35cc87a94ef",
-    "floaters": "b8a0eb50aa3da868",
+    "particles": "c60a83699709a907",
+    "effects": "fe04f612ffae6b34",
+    "floaters": "2cbb64e6cc2092ed",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "5d01f5c2af7c31d4",
+    "summons": "babffc95937983d1",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -2810,7 +2810,7 @@
    "enemies": [
     {
      "kind": "grunt",
-     "x": 387.01877745148715,
+     "x": 385.358487551901,
      "y": 168.45999999999998,
      "vx": -2.4,
      "vy": 1.8599999999999992,
@@ -2856,7 +2856,7 @@
    "world": {
     "particles": "1362fd2e14c8f09d",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "246310aa8ca92d86",
+    "floaters": "c48ca52b8eafcf4a",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -2931,7 +2931,7 @@
    "enemies": [
     {
      "kind": "grunt",
-     "x": 339.0187774514876,
+     "x": 337.3584875519015,
      "y": 184,
      "vx": 0,
      "vy": 0,
@@ -2977,7 +2977,7 @@
    "world": {
     "particles": "d4c77738360fb616",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "78bb232c8912e1c1",
+    "floaters": "80f48118dc16f28d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -3052,7 +3052,7 @@
    "enemies": [
     {
      "kind": "grunt",
-     "x": 339.0187774514876,
+     "x": 337.3584875519015,
      "y": 184,
      "vx": 0,
      "vy": 0,
@@ -3128,7 +3128,7 @@
    "player": {
     "kind": "player",
     "x": 470.3000000000012,
-    "y": 184,
+    "y": 182,
     "vx": 1.55,
     "vy": 0,
     "state": "walk",
@@ -3151,7 +3151,7 @@
    "enemies": [
     {
      "kind": "grunt",
-     "x": 339.0187774514876,
+     "x": 337.3584875519015,
      "y": 184,
      "vx": 0,
      "vy": 0,
@@ -3173,7 +3173,7 @@
     }
    ],
    "world": {
-    "particles": "0b9a48406e9ce182",
+    "particles": "51772720c9a9e88a",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -3227,7 +3227,7 @@
    "player": {
     "kind": "player",
     "x": 510.60000000000144,
-    "y": 184,
+    "y": 177,
     "vx": -1.55,
     "vy": 0,
     "state": "walk",
@@ -3272,7 +3272,7 @@
     }
    ],
    "world": {
-    "particles": "6cf11a0805f1f02e",
+    "particles": "607f9bb7a46f8ed8",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -3326,7 +3326,7 @@
    "player": {
     "kind": "player",
     "x": 464.1000000000011,
-    "y": 184,
+    "y": 182,
     "vx": -1.55,
     "vy": 0,
     "state": "walk",
@@ -3393,7 +3393,7 @@
     }
    ],
    "world": {
-    "particles": "46cc9d7cf1590ab4",
+    "particles": "cf297122f0b2b5b5",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -4065,7 +4065,7 @@
     {
      "kind": "scrapper",
      "x": 593.499999999993,
-     "y": 184,
+     "y": 182,
      "vx": -0.7,
      "vy": 0,
      "state": "walk",
@@ -4108,7 +4108,7 @@
     }
    ],
    "world": {
-    "particles": "0cbf926e6a666279",
+    "particles": "a56fa55552e2957e",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "b847aef736e5f833",
     "shockwaves": "50693909a33ac9eb",
@@ -4208,7 +4208,7 @@
     {
      "kind": "scrapper",
      "x": 572.4999999999916,
-     "y": 184,
+     "y": 179,
      "vx": -0.7,
      "vy": 0,
      "state": "walk",
@@ -4251,7 +4251,7 @@
     }
    ],
    "world": {
-    "particles": "ccb45c88be7fcd05",
+    "particles": "59b9c45481d4b139",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "207342c756751cda",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -4351,7 +4351,7 @@
     {
      "kind": "scrapper",
      "x": 551.4999999999902,
-     "y": 184,
+     "y": 177,
      "vx": -0.7,
      "vy": 0,
      "state": "walk",
@@ -4394,7 +4394,7 @@
     }
    ],
    "world": {
-    "particles": "b2ccade0fc13a608",
+    "particles": "28dd389c876914f9",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "2a872bc23a37ffee",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -4494,7 +4494,7 @@
     {
      "kind": "scrapper",
      "x": 530.4999999999889,
-     "y": 184,
+     "y": 176,
      "vx": -0.7,
      "vy": 0,
      "state": "walk",
@@ -4537,7 +4537,7 @@
     }
    ],
    "world": {
-    "particles": "7e8481fdd4594533",
+    "particles": "8f606ebf0fff9443",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -4637,7 +4637,7 @@
     {
      "kind": "scrapper",
      "x": 509.4999999999877,
-     "y": 184,
+     "y": 177,
      "vx": -0.7,
      "vy": 0,
      "state": "walk",
@@ -4680,7 +4680,7 @@
     }
    ],
    "world": {
-    "particles": "9f9c4c3a5e748dc0",
+    "particles": "048fc73839f1535d",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -4758,7 +4758,7 @@
     {
      "kind": "scrapper",
      "x": 488.49999999998806,
-     "y": 184,
+     "y": 179,
      "vx": -0.7,
      "vy": 0,
      "state": "walk",
@@ -4801,7 +4801,7 @@
     }
    ],
    "world": {
-    "particles": "c5081c3c96d3667f",
+    "particles": "1a07234347785df7",
     "effects": "2e3186edfa40b6f6",
     "floaters": "eb61a079f3c74bfc",
     "shockwaves": "b0613e510dbf81ae",
@@ -4879,7 +4879,7 @@
     {
      "kind": "scrapper",
      "x": 517.4631789672578,
-     "y": 163.35999999999999,
+     "y": 159.35999999999999,
      "vx": 1.9629972746101072,
      "vy": 0.659999999999999,
      "state": "juggle",
@@ -4901,9 +4901,9 @@
     {
      "kind": "grunt",
      "x": 505.8859205651555,
-     "y": 180.18,
+     "y": 172.4,
      "vx": 2.4,
-     "vy": -1.28,
+     "vy": -0.76,
      "state": "ko",
      "stateTime": 0,
      "hp": 0,
@@ -4922,9 +4922,9 @@
     }
    ],
    "world": {
-    "particles": "04d06db5c2913360",
+    "particles": "c4a6afe5e973ec5e",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "e69f6752192e3871",
+    "floaters": "ee2af90909bc28d4",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -4976,7 +4976,7 @@
    "player": {
     "kind": "player",
     "x": 480.6099652674204,
-    "y": 184,
+    "y": 180,
     "vx": 1.55,
     "vy": 0,
     "state": "walk",
@@ -4999,12 +4999,12 @@
    "enemies": [
     {
      "kind": "scrapper",
-     "x": 538.6877625624769,
-     "y": 184,
+     "x": 537.0479822969309,
+     "y": 176,
      "vx": 0,
      "vy": 0,
      "state": "down",
-     "stateTime": 20,
+     "stateTime": 21,
      "hp": 36,
      "facing": -1,
      "weapon": "hammer",
@@ -5021,12 +5021,12 @@
     },
     {
      "kind": "grunt",
-     "x": 534.6859205651552,
-     "y": 184,
+     "x": 527.4859205651553,
+     "y": 176,
      "vx": 0,
      "vy": 0,
      "state": "ko",
-     "stateTime": 18,
+     "stateTime": 21,
      "hp": 0,
      "facing": -1,
      "weapon": "none",
@@ -5043,7 +5043,7 @@
     }
    ],
    "world": {
-    "particles": "95b8bd074d259b08",
+    "particles": "1efd041a8302ac8d",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "23f324b6ddc64122",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -5096,9 +5096,9 @@
    "boss": null,
    "player": {
     "kind": "player",
-    "x": 540.7998586930262,
-    "y": 184,
-    "vx": 1.4627964013840833,
+    "x": 540.7126550944104,
+    "y": 176,
+    "vx": 1.1702371211072666,
     "vy": 0,
     "state": "attack",
     "stateTime": 4,
@@ -5108,9 +5108,9 @@
     "durability": 23,
     "airborne": false,
     "move": "Battering Charge",
-    "moveTime": 4,
+    "moveTime": 5,
     "juggle": 0,
-    "invincible": 7,
+    "invincible": 6,
     "hitstop": 0,
     "token": false,
     "entering": false,
@@ -5120,12 +5120,12 @@
    "enemies": [
     {
      "kind": "scrapper",
-     "x": 538.6877625624769,
-     "y": 184,
+     "x": 537.0479822969309,
+     "y": 176,
      "vx": 0,
      "vy": 0,
      "state": "getup",
-     "stateTime": 6,
+     "stateTime": 7,
      "hp": 36,
      "facing": -1,
      "weapon": "hammer",
@@ -5142,12 +5142,12 @@
     },
     {
      "kind": "grunt",
-     "x": 534.6859205651552,
-     "y": 184,
+     "x": 527.4859205651553,
+     "y": 176,
      "vx": 0,
      "vy": 0,
      "state": "ko",
-     "stateTime": 48,
+     "stateTime": 51,
      "hp": 0,
      "facing": -1,
      "weapon": "none",
@@ -5164,7 +5164,7 @@
     }
    ],
    "world": {
-    "particles": "14d5cf90ead40ebf",
+    "particles": "86afaa3a06eedb82",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -5217,12 +5217,12 @@
    "boss": null,
    "player": {
     "kind": "player",
-    "x": 556.1529091302893,
-    "y": 184,
+    "x": 554.6029091302894,
+    "y": 177,
     "vx": 0,
     "vy": 0,
     "state": "charge",
-    "stateTime": 22,
+    "stateTime": 23,
     "hp": 100,
     "facing": 1,
     "weapon": "axe",
@@ -5241,8 +5241,8 @@
    "enemies": [
     {
      "kind": "scrapper",
-     "x": 528.8877625624767,
-     "y": 184,
+     "x": 526.7579822969307,
+     "y": 176,
      "vx": -0.48999999999999994,
      "vy": 0,
      "state": "walk",
@@ -5258,12 +5258,12 @@
      "hitstop": 0,
      "token": false,
      "entering": false,
-     "cooldown": 10,
+     "cooldown": 9,
      "spacing": 79.7755822292529
     }
    ],
    "world": {
-    "particles": "58bc651ec6cf268a",
+    "particles": "b9ede242ad610313",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -5316,12 +5316,12 @@
    "boss": null,
    "player": {
     "kind": "player",
-    "x": 556.1529091302893,
-    "y": 184,
+    "x": 554.6029091302894,
+    "y": 177,
     "vx": 0,
     "vy": 0,
     "state": "charge",
-    "stateTime": 52,
+    "stateTime": 53,
     "hp": 100,
     "facing": 1,
     "weapon": "axe",
@@ -5340,8 +5340,8 @@
    "enemies": [
     {
      "kind": "scrapper",
-     "x": 514.1877625624765,
-     "y": 184,
+     "x": 512.0579822969304,
+     "y": 176,
      "vx": -0.48999999999999994,
      "vy": 0,
      "state": "walk",
@@ -5362,7 +5362,7 @@
     }
    ],
    "world": {
-    "particles": "1ed0f8b304aa2fc9",
+    "particles": "00371ce48c7541be",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -5415,8 +5415,8 @@
    "boss": null,
    "player": {
     "kind": "player",
-    "x": 556.1529091302893,
-    "y": 184,
+    "x": 554.6029091302894,
+    "y": 177,
     "vx": 0,
     "vy": 0,
     "state": "attack",
@@ -5427,7 +5427,7 @@
     "durability": 23,
     "airborne": false,
     "move": "Cataclysm",
-    "moveTime": 13,
+    "moveTime": 14,
     "juggle": 0,
     "invincible": 0,
     "hitstop": 0,
@@ -5439,8 +5439,8 @@
    "enemies": [
     {
      "kind": "scrapper",
-     "x": 499.4877625624762,
-     "y": 184,
+     "x": 497.3579822969301,
+     "y": 178,
      "vx": -0.48999999999999994,
      "vy": 0,
      "state": "walk",
@@ -5461,7 +5461,7 @@
     }
    ],
    "world": {
-    "particles": "796b68ba50b06461",
+    "particles": "b5ac6cb462c271ce",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -5490,21 +5490,21 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
-    42,
+    41,
     0,
     0,
     0,
     0,
     0,
-    1303,
-    1,
-    7,
+    1302,
+    0,
+    6,
     0,
     0,
     18
    ],
    "camera": [
-    -0.23203667136524211,
+    -0.1740275035239316,
     0,
     2
    ],
@@ -5514,12 +5514,12 @@
    "boss": null,
    "player": {
     "kind": "player",
-    "x": 556.1529091302893,
-    "y": 184,
+    "x": 554.6029091302894,
+    "y": 177,
     "vx": 0,
     "vy": 0,
     "state": "ult",
-    "stateTime": 5,
+    "stateTime": 6,
     "hp": 100,
     "facing": -1,
     "weapon": "axe",
@@ -5528,7 +5528,7 @@
     "move": null,
     "moveTime": 32,
     "juggle": 0,
-    "invincible": 995,
+    "invincible": 994,
     "hitstop": 0,
     "token": false,
     "entering": false,
@@ -5538,8 +5538,8 @@
    "enemies": [
     {
      "kind": "scrapper",
-     "x": 482.62335403747613,
-     "y": 166.57600000000002,
+     "x": 480.9835737719301,
+     "y": 160.57600000000002,
      "vx": -3.4,
      "vy": -2.296,
      "state": "juggle",
@@ -5560,12 +5560,12 @@
     }
    ],
    "world": {
-    "particles": "476723f6929bfb57",
-    "effects": "603d938963742e78",
-    "floaters": "7b522fcc7ed10936",
+    "particles": "06d757b797d4cd4d",
+    "effects": "2215d755382fdedc",
+    "floaters": "7e3dd23d3a550a32",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "8834d5e86e1b0338",
+    "summons": "716d733b7b848a02",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -5589,13 +5589,13 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
-    12,
+    11,
     0,
     0,
     0,
     0,
     0,
-    1303,
+    1302,
     0,
     0,
     0,
@@ -5613,12 +5613,12 @@
    "boss": null,
    "player": {
     "kind": "player",
-    "x": 556.1529091302893,
-    "y": 184,
+    "x": 554.6029091302894,
+    "y": 177,
     "vx": 0,
     "vy": 0,
     "state": "ult",
-    "stateTime": 35,
+    "stateTime": 36,
     "hp": 100,
     "facing": -1,
     "weapon": "axe",
@@ -5627,7 +5627,7 @@
     "move": null,
     "moveTime": 32,
     "juggle": 0,
-    "invincible": 965,
+    "invincible": 964,
     "hitstop": 0,
     "token": false,
     "entering": false,
@@ -5637,8 +5637,8 @@
    "enemies": [
     {
      "kind": "scrapper",
-     "x": 482.62335403747613,
-     "y": 166.57600000000002,
+     "x": 480.9835737719301,
+     "y": 160.57600000000002,
      "vx": -3.4,
      "vy": -2.296,
      "state": "juggle",
@@ -5661,10 +5661,10 @@
    "world": {
     "particles": "da39a3ee5e6b4b0d",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "10da818606c6971f",
+    "floaters": "7f527caa9299f197",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "8834d5e86e1b0338",
+    "summons": "716d733b7b848a02",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -5682,7 +5682,7 @@
    "combo": [
     4,
     31,
-    90
+    89
    ],
    "camX": 300,
    "meter": 0,
@@ -5696,7 +5696,7 @@
     0,
     1321,
     0,
-    4,
+    3,
     0,
     0,
     18
@@ -5712,12 +5712,12 @@
    "boss": null,
    "player": {
     "kind": "player",
-    "x": 556.1529091302893,
-    "y": 184,
+    "x": 554.6029091302894,
+    "y": 177,
     "vx": 0,
     "vy": 0,
     "state": "ult",
-    "stateTime": 65,
+    "stateTime": 66,
     "hp": 100,
     "facing": -1,
     "weapon": "axe",
@@ -5726,7 +5726,7 @@
     "move": null,
     "moveTime": 32,
     "juggle": 0,
-    "invincible": 935,
+    "invincible": 934,
     "hitstop": 0,
     "token": false,
     "entering": false,
@@ -5736,10 +5736,10 @@
    "enemies": [
     {
      "kind": "scrapper",
-     "x": 442.79704354040905,
-     "y": 160.38800000000003,
-     "vx": -2.7935079619735967,
-     "vy": 1.0840000000000005,
+     "x": 438.405657932319,
+     "y": 155.73200000000003,
+     "vx": -2.751605342543993,
+     "vy": 1.3440000000000005,
      "state": "juggle",
      "stateTime": 16,
      "hp": 5,
@@ -5758,12 +5758,12 @@
     }
    ],
    "world": {
-    "particles": "c4f3e2ad5558458b",
+    "particles": "d33a023c1a4a43be",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "489c75e272a2b361",
+    "summons": "2262c36cec89df41",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -5781,7 +5781,7 @@
    "combo": [
     5,
     38,
-    106
+    105
    ],
    "camX": 300,
    "meter": 0,
@@ -5790,18 +5790,18 @@
     0,
     0,
     0,
-    32,
+    30,
     0,
     0,
-    1344,
-    5,
+    1343,
+    4,
     21,
     0,
     0,
     17
    ],
    "camera": [
-    1.0125000000000002,
+    0.7593750000000001,
     0,
     2
    ],
@@ -5811,8 +5811,8 @@
    "boss": null,
    "player": {
     "kind": "player",
-    "x": 556.1529091302893,
-    "y": 184,
+    "x": 554.6029091302894,
+    "y": 177,
     "vx": 0,
     "vy": 0,
     "state": "ult",
@@ -5835,7 +5835,7 @@
    "enemies": [
     {
      "kind": "scrapper",
-     "x": 412.77837161896497,
+     "x": 407.0474014283395,
      "y": 184,
      "vx": 2.4,
      "vy": -3.6,
@@ -5849,7 +5849,7 @@
      "moveTime": 0,
      "juggle": 4,
      "invincible": 0,
-     "hitstop": 1,
+     "hitstop": 0,
      "token": false,
      "entering": false,
      "cooldown": 0,
@@ -5857,12 +5857,12 @@
     }
    ],
    "world": {
-    "particles": "e24505646d9baf3a",
-    "effects": "a8912aafb6edb6ae",
-    "floaters": "9d2568f74781e0a3",
+    "particles": "c4249d6d3c43c937",
+    "effects": "78b1c185c3c682f4",
+    "floaters": "22951c705c0722d1",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "9e4e97ec3b4349cb",
+    "summons": "fd6219c62d980577",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -5880,7 +5880,7 @@
    "combo": [
     5,
     38,
-    96
+    95
    ],
    "camX": 300,
    "meter": 0,
@@ -5889,18 +5889,18 @@
     0,
     0,
     0,
-    2,
     0,
     0,
-    1354,
+    0,
+    1353,
     0,
     11,
     0,
-    50,
+    49,
     17
    ],
    "camera": [
-    0.05701743364334107,
+    0,
     0,
     2
    ],
@@ -5910,8 +5910,8 @@
    "boss": null,
    "player": {
     "kind": "player",
-    "x": 556.1529091302893,
-    "y": 184,
+    "x": 554.6029091302894,
+    "y": 177,
     "vx": 0,
     "vy": 0,
     "state": "ult",
@@ -5934,10 +5934,10 @@
    "enemies": [
     {
      "kind": "scrapper",
-     "x": 434.37837161896476,
-     "y": 163.29999999999998,
+     "x": 431.0474014283393,
+     "y": 162.29999999999998,
      "vx": 2.4,
-     "vy": -1.260000000000001,
+     "vy": -1.0000000000000009,
      "state": "ko",
      "stateTime": 0,
      "hp": 0,
@@ -5956,12 +5956,12 @@
     }
    ],
    "world": {
-    "particles": "b09eddba3736b388",
-    "effects": "476162fbdf4c7eee",
-    "floaters": "53cbe5a9717540f3",
+    "particles": "ea865ef5e76bfb37",
+    "effects": "62b1d9b7628a0e63",
+    "floaters": "15f5bda4aa28b25c",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "2c0b01d0d324585b",
+    "summons": "3674faaf5353a127",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -5979,7 +5979,7 @@
    "combo": [
     5,
     38,
-    67
+    65
    ],
    "camX": 300,
    "meter": 0,
@@ -5995,7 +5995,7 @@
     0,
     0,
     0,
-    21,
+    19,
     17
    ],
    "camera": [
@@ -6009,12 +6009,12 @@
    "boss": null,
    "player": {
     "kind": "player",
-    "x": 556.1529091302893,
-    "y": 184,
+    "x": 554.6029091302894,
+    "y": 177,
     "vx": 0,
     "vy": 0,
     "state": "ult",
-    "stateTime": 127,
+    "stateTime": 128,
     "hp": 100,
     "facing": -1,
     "weapon": "sword",
@@ -6023,7 +6023,7 @@
     "move": null,
     "moveTime": 32,
     "juggle": 0,
-    "invincible": 873,
+    "invincible": 872,
     "hitstop": 0,
     "token": false,
     "entering": false,
@@ -6033,16 +6033,16 @@
    "enemies": [
     {
      "kind": "scrapper",
-     "x": 503.9783716189641,
-     "y": 180.36,
-     "vx": 2.4,
-     "vy": 1.06,
+     "x": 500.64740142833864,
+     "y": 178,
+     "vx": 0,
+     "vy": 0,
      "state": "ko",
-     "stateTime": 0,
+     "stateTime": 1,
      "hp": 0,
      "facing": 1,
      "weapon": "hammer",
-     "airborne": true,
+     "airborne": false,
      "move": null,
      "moveTime": 0,
      "juggle": 4,
@@ -6055,12 +6055,12 @@
     }
    ],
    "world": {
-    "particles": "8a5f507d064dfcca",
+    "particles": "3b4b2deb192fba2f",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "a3704b3167d4560b",
+    "floaters": "a4745f3c69b563c3",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "c5a694e84f8cda57",
+    "summons": "56450fa4c72f1fca",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -6075,9 +6075,9 @@
    "combo": [
     5,
     38,
-    37
+    35
    ],
-   "camX": 391.86562566945014,
+   "camX": 391.0321165867176,
    "meter": 0,
    "tokens": 2,
    "timers": [
@@ -6085,7 +6085,7 @@
     0,
     0,
     0,
-    173,
+    171,
     0,
     1413,
     0,
@@ -6105,12 +6105,12 @@
    "boss": null,
    "player": {
     "kind": "player",
-    "x": 556.1529091302893,
-    "y": 184,
+    "x": 554.6029091302894,
+    "y": 177,
     "vx": 0,
     "vy": 0,
     "state": "ult",
-    "stateTime": 157,
+    "stateTime": 158,
     "hp": 100,
     "facing": -1,
     "weapon": "sword",
@@ -6119,7 +6119,7 @@
     "move": null,
     "moveTime": 32,
     "juggle": 0,
-    "invincible": 843,
+    "invincible": 842,
     "hitstop": 0,
     "token": false,
     "entering": false,
@@ -6129,12 +6129,12 @@
    "enemies": [
     {
      "kind": "scrapper",
-     "x": 511.17837161896404,
-     "y": 184,
+     "x": 500.64740142833864,
+     "y": 178,
      "vx": 0,
      "vy": 0,
      "state": "ko",
-     "stateTime": 27,
+     "stateTime": 31,
      "hp": 0,
      "facing": 1,
      "weapon": "hammer",
@@ -6151,12 +6151,12 @@
     }
    ],
    "world": {
-    "particles": "f1e444d228732b9a",
+    "particles": "682489ec465598fa",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "4e33170ca0292609",
+    "floaters": "1ba3a735f2098c8c",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "4c029d8ff0a9b310",
+    "summons": "881499484aae58d7",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -6171,9 +6171,9 @@
    "combo": [
     5,
     38,
-    7
+    5
    ],
-   "camX": 403.34199489298584,
+   "camX": 403.00770460146225,
    "meter": 0,
    "tokens": 2,
    "timers": [
@@ -6181,7 +6181,7 @@
     0,
     0,
     0,
-    143,
+    141,
     0,
     1443,
     0,
@@ -6202,7 +6202,7 @@
    "player": {
     "kind": "player",
     "x": 573.2029091302888,
-    "y": 184,
+    "y": 179,
     "vx": 1.55,
     "vy": 0,
     "state": "walk",
@@ -6215,7 +6215,7 @@
     "move": null,
     "moveTime": 32,
     "juggle": 0,
-    "invincible": 29,
+    "invincible": 28,
     "hitstop": 0,
     "token": false,
     "entering": false,
@@ -6225,12 +6225,12 @@
    "enemies": [
     {
      "kind": "scrapper",
-     "x": 511.17837161896404,
-     "y": 184,
+     "x": 500.64740142833864,
+     "y": 178,
      "vx": 0,
      "vy": 0,
      "state": "ko",
-     "stateTime": 57,
+     "stateTime": 61,
      "hp": 0,
      "facing": 1,
      "weapon": "hammer",
@@ -6247,12 +6247,12 @@
     }
    ],
    "world": {
-    "particles": "5676239b134fe359",
+    "particles": "e660ae6eacd98ee9",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "2dacdfbe05bbe8d1",
+    "summons": "7910bebcaa3ea096",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -6269,7 +6269,7 @@
     0,
     0
    ],
-   "camX": 447.11641837582266,
+   "camX": 447.1091972663585,
    "meter": 0,
    "tokens": 2,
    "timers": [
@@ -6277,7 +6277,7 @@
     0,
     0,
     0,
-    113,
+    111,
     0,
     1473,
     0,
@@ -6320,7 +6320,7 @@
    },
    "enemies": [],
    "world": {
-    "particles": "5ff14cb56078decb",
+    "particles": "907f34a320e664cd",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -6342,7 +6342,7 @@
     0,
     0
    ],
-   "camX": 493.55754234237827,
+   "camX": 493.5573863569273,
    "meter": 0,
    "tokens": 2,
    "timers": [
@@ -6350,7 +6350,7 @@
     0,
     0,
     0,
-    83,
+    81,
     0,
     1503,
     0,
@@ -6415,7 +6415,7 @@
     0,
     0
    ],
-   "camX": 540.0562705427074,
+   "camX": 540.0562671732167,
    "meter": 0,
    "tokens": 2,
    "timers": [
@@ -6423,7 +6423,7 @@
     0,
     0,
     0,
-    53,
+    51,
     0,
     1533,
     0,
@@ -6488,7 +6488,7 @@
     0,
     0
    ],
-   "camX": 572.420244380163,
+   "camX": 572.4202441501775,
    "meter": 0,
    "tokens": 2,
    "timers": [
@@ -6496,7 +6496,7 @@
     0,
     0,
     0,
-    32,
+    30,
     0,
     1554,
     0,
@@ -6517,7 +6517,7 @@
    "player": {
     "kind": "player",
     "x": 743.7029091302838,
-    "y": 178,
+    "y": 184,
     "vx": 0,
     "vy": 0,
     "state": "ult",
@@ -6539,9 +6539,9 @@
    },
    "enemies": [],
    "world": {
-    "particles": "fc0dcb665e6e47e6",
+    "particles": "699546b305bab383",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "0c5601c662532577",
+    "floaters": "6e5d308c1c68e99f",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -6561,7 +6561,7 @@
     0,
     0
    ],
-   "camX": 572.420244380163,
+   "camX": 572.4202441501775,
    "meter": 0,
    "tokens": 2,
    "timers": [
@@ -6569,7 +6569,7 @@
     0,
     0,
     0,
-    32,
+    30,
     0,
     1554,
     0,
@@ -6590,7 +6590,7 @@
    "player": {
     "kind": "player",
     "x": 743.7029091302838,
-    "y": 178,
+    "y": 184,
     "vx": 0,
     "vy": 0,
     "state": "ult",
@@ -6614,7 +6614,7 @@
    "world": {
     "particles": "da39a3ee5e6b4b0d",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "076cf7e0ab550eff",
+    "floaters": "856d30862dded00f",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -6634,7 +6634,7 @@
     0,
     0
    ],
-   "camX": 581.8941995588655,
+   "camX": 581.8941995467092,
    "meter": 0,
    "tokens": 2,
    "timers": [
@@ -6642,7 +6642,7 @@
     0,
     0,
     0,
-    9,
+    7,
     0,
     1577,
     0,
@@ -6663,7 +6663,7 @@
    "player": {
     "kind": "player",
     "x": 743.7029091302838,
-    "y": 178,
+    "y": 184,
     "vx": 0,
     "vy": 0,
     "state": "ult",
@@ -6685,12 +6685,12 @@
    },
    "enemies": [],
    "world": {
-    "particles": "1ab593e70c239eed",
+    "particles": "9e1400d7da009a07",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "21018abebd50a465",
+    "summons": "5205e1a929a12799",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -6736,7 +6736,7 @@
    "player": {
     "kind": "player",
     "x": 743.7029091302838,
-    "y": 178,
+    "y": 184,
     "vx": 0,
     "vy": 0,
     "state": "ult",
@@ -6758,12 +6758,12 @@
    },
    "enemies": [],
    "world": {
-    "particles": "4c46faa515201cc0",
+    "particles": "9c1e928eb712833c",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "cdbc5fc6cf866b26",
+    "summons": "dad6ff14ebb3b18d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -6809,7 +6809,7 @@
    "player": {
     "kind": "player",
     "x": 743.7029091302838,
-    "y": 178,
+    "y": 184,
     "vx": 0,
     "vy": 0,
     "state": "ult",
@@ -6831,12 +6831,12 @@
    },
    "enemies": [],
    "world": {
-    "particles": "602ceace05ef4369",
+    "particles": "fec6697afbc937ef",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "40abdb3ebcaad830",
+    "summons": "24455bf006011cf9",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -6882,7 +6882,7 @@
    "player": {
     "kind": "player",
     "x": 743.7029091302838,
-    "y": 178,
+    "y": 184,
     "vx": 0,
     "vy": 0,
     "state": "ult",
@@ -6904,12 +6904,12 @@
    },
    "enemies": [],
    "world": {
-    "particles": "eff4d10d4ed8faa5",
+    "particles": "3c985a9793b0e617",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "5eca798d9f2cfa29",
+    "summons": "441940ac408f6d3c",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -6955,7 +6955,7 @@
    "player": {
     "kind": "player",
     "x": 765.4029091302832,
-    "y": 172,
+    "y": 184,
     "vx": 1.55,
     "vy": 0,
     "state": "walk",
@@ -6977,12 +6977,12 @@
    },
    "enemies": [],
    "world": {
-    "particles": "b57094cc7d783125",
+    "particles": "44c2102f4f79e5ca",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "988aef8db03f4958",
+    "summons": "0128e47a6b6b4229",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -7028,7 +7028,7 @@
    "player": {
     "kind": "player",
     "x": 811.9029091302818,
-    "y": 173,
+    "y": 184,
     "vx": 1.55,
     "vy": 0,
     "state": "walk",
@@ -7050,7 +7050,7 @@
    },
    "enemies": [],
    "world": {
-    "particles": "c1e662377321caca",
+    "particles": "086ea174bf3770c5",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -7123,7 +7123,7 @@
    },
    "enemies": [],
    "world": {
-    "particles": "ac5ce6f5e06e9578",
+    "particles": "e763621e0d32785a",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -7466,7 +7466,7 @@
    "player": {
     "kind": "player",
     "x": 1090.9029091302737,
-    "y": 172,
+    "y": 174,
     "vx": 1.55,
     "vy": 0,
     "state": "walk",
@@ -7488,7 +7488,7 @@
    },
    "enemies": [],
    "world": {
-    "particles": "dcd6cea9c7717dfe",
+    "particles": "e017b5aa336b9eb9",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -7542,7 +7542,7 @@
    "player": {
     "kind": "player",
     "x": 1115.702909130273,
-    "y": 164,
+    "y": 169,
     "vx": -1.55,
     "vy": 0,
     "state": "walk",
@@ -7587,7 +7587,7 @@
     }
    ],
    "world": {
-    "particles": "ccb1184c1829c7ab",
+    "particles": "71b9d45e8a1e5fc3",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -7708,7 +7708,7 @@
     }
    ],
    "world": {
-    "particles": "71c67ab4c18eda1a",
+    "particles": "5cf76e6dbc2fe635",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -7808,7 +7808,7 @@
     {
      "kind": "grunt",
      "x": 1356,
-     "y": 184,
+     "y": 180,
      "vx": -0.75,
      "vy": 0,
      "state": "walk",
@@ -7829,7 +7829,7 @@
     }
    ],
    "world": {
-    "particles": "c975e295fd7e4fc3",
+    "particles": "6bb7069555f717af",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -7929,7 +7929,7 @@
     {
      "kind": "grunt",
      "x": 1333.5,
-     "y": 184,
+     "y": 174,
      "vx": -0.75,
      "vy": 0,
      "state": "walk",
@@ -7950,7 +7950,7 @@
     }
    ],
    "world": {
-    "particles": "b52d8d1d9cbbcc7b",
+    "particles": "307f849d9c11c0e4",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -8050,7 +8050,7 @@
     {
      "kind": "grunt",
      "x": 1311,
-     "y": 183,
+     "y": 172,
      "vx": -0.75,
      "vy": 0,
      "state": "walk",
@@ -8071,7 +8071,7 @@
     }
    ],
    "world": {
-    "particles": "478ab7e3f2f91185",
+    "particles": "f9c4fd2382c5f5d6",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "a5e6c8c4517f27ff",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -8171,7 +8171,7 @@
     {
      "kind": "grunt",
      "x": 1288.5,
-     "y": 175,
+     "y": 172,
      "vx": -0.75,
      "vy": 0,
      "state": "walk",
@@ -8192,7 +8192,7 @@
     }
    ],
    "world": {
-    "particles": "63a8ebb60a64ebb3",
+    "particles": "f85178e701463a3d",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -8291,16 +8291,16 @@
     },
     {
      "kind": "grunt",
-     "x": 1266,
-     "y": 168,
-     "vx": -0.75,
-     "vy": 0,
-     "state": "walk",
+     "x": 1266.7500000000014,
+     "y": 118.89999999999998,
+     "vx": -0.7083333333333334,
+     "vy": -0.40000000000000174,
+     "state": "air",
      "stateTime": 0,
      "hp": 36,
      "facing": -1,
      "weapon": "none",
-     "airborne": false,
+     "airborne": true,
      "move": null,
      "moveTime": 0,
      "juggle": 0,
@@ -8313,7 +8313,7 @@
     }
    ],
    "world": {
-    "particles": "36b3dfea53b16831",
+    "particles": "df2a19d1e7fad77d",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -8391,7 +8391,7 @@
     {
      "kind": "knife",
      "x": 1047.6597185857063,
-     "y": 184,
+     "y": 183,
      "vx": 0.6649999999999999,
      "vy": 0,
      "state": "walk",
@@ -8412,7 +8412,7 @@
     },
     {
      "kind": "grunt",
-     "x": 1243.5,
+     "x": 1245.0000000000027,
      "y": 160,
      "vx": -0.75,
      "vy": 0,
@@ -8434,7 +8434,7 @@
     }
    ],
    "world": {
-    "particles": "6c4de6e883ef59cf",
+    "particles": "396081d4da646d40",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -8487,12 +8487,12 @@
    "boss": null,
    "player": {
     "kind": "player",
-    "x": 1074.0630449826983,
-    "y": 177,
-    "vx": 4.191349480968858,
+    "x": 1068.4370934256046,
+    "y": 179,
+    "vx": 2.242560553633218,
     "vy": 0,
     "state": "dash",
-    "stateTime": 2,
+    "stateTime": 10,
     "hp": 100,
     "facing": 1,
     "weapon": "sword",
@@ -8501,7 +8501,7 @@
     "move": null,
     "moveTime": 36,
     "juggle": 0,
-    "invincible": 8,
+    "invincible": 5,
     "hitstop": 0,
     "token": false,
     "entering": false,
@@ -8511,9 +8511,9 @@
    "enemies": [
     {
      "kind": "knife",
-     "x": 1052.1436257949829,
-     "y": 184,
-     "vx": 0,
+     "x": 1065.5824155457055,
+     "y": 179,
+     "vx": 0.139460608,
      "vy": 0,
      "state": "attack",
      "stateTime": 16,
@@ -8522,7 +8522,7 @@
      "weapon": "knife",
      "airborne": false,
      "move": "Stab",
-     "moveTime": 14,
+     "moveTime": 7,
      "juggle": 0,
      "invincible": 0,
      "hitstop": 0,
@@ -8533,7 +8533,7 @@
     },
     {
      "kind": "grunt",
-     "x": 1221,
+     "x": 1222.5000000000027,
      "y": 160,
      "vx": -0.75,
      "vy": 0,
@@ -8555,7 +8555,7 @@
     }
    ],
    "world": {
-    "particles": "ee7dd6bf7748056d",
+    "particles": "e77ea78dfad1eeb1",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -8570,71 +8570,71 @@
   {
    "tick": 0,
    "frame": {
-    "calls": 1950,
-    "digest": "b42be99806f5e645"
+    "calls": 1949,
+    "digest": "9010da77af91dd64"
    }
   },
   {
    "tick": 240,
    "frame": {
-    "calls": 2549,
-    "digest": "cd2b4b06a0a28990"
+    "calls": 2564,
+    "digest": "c0887cb7f0c25899"
    }
   },
   {
    "tick": 480,
    "frame": {
-    "calls": 2466,
-    "digest": "27236b3830d8aa2e"
+    "calls": 2481,
+    "digest": "8882ffe939ff4ba3"
    }
   },
   {
    "tick": 720,
    "frame": {
-    "calls": 2712,
-    "digest": "14bf2f67f38c91be"
+    "calls": 2727,
+    "digest": "e9bf8e88a3b9fcfd"
    }
   },
   {
    "tick": 960,
    "frame": {
-    "calls": 2919,
-    "digest": "94c96de76f755284"
+    "calls": 2934,
+    "digest": "1105d0f97c25ba08"
    }
   },
   {
    "tick": 1200,
    "frame": {
-    "calls": 3023,
-    "digest": "86102bbcb7640661"
+    "calls": 3046,
+    "digest": "80130abf404bde7d"
    }
   },
   {
    "tick": 1440,
    "frame": {
-    "calls": 2520,
-    "digest": "9c0db05938350380"
+    "calls": 2513,
+    "digest": "203e9f30f80c9148"
    }
   },
   {
    "tick": 1680,
    "frame": {
-    "calls": 2252,
-    "digest": "953fce37db546c4a"
+    "calls": 2235,
+    "digest": "0491bde4b32ea0f2"
    }
   },
   {
    "tick": 1920,
    "frame": {
-    "calls": 1866,
-    "digest": "d0bc6d9a4c3b00b5"
+    "calls": 1841,
+    "digest": "75f5924350f5676c"
    }
   },
   {
    "tick": 2160,
    "frame": {
-    "calls": 2806,
-    "digest": "8cee4147ad45a600"
+    "calls": 2803,
+    "digest": "abe10f6a2debe9bf"
    }
   }
  ]

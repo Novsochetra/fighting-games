@@ -22,6 +22,14 @@ function createSafeArea(document, window) {
   };
 }
 
+function applyTouchClasses(document, { game, ui }) {
+  const { classList } = document.body;
+  classList.toggle('touch-on', ui.showsTouchControls());
+  classList.toggle('stick-fixed', game.settings.stick === 'fixed');
+  classList.toggle('stick-hidden', game.settings.stick === 'hidden');
+  document.documentElement.style.setProperty('--btn', String(buttonScale(game.settings)));
+}
+
 export function createScreenFit({ document, window, elements, game, ui }) {
   const readSafeArea = createSafeArea(document, window);
   const layout = {
@@ -37,7 +45,7 @@ export function createScreenFit({ document, window, elements, game, ui }) {
     fit() {
       const width = elements.app.clientWidth;
       const height = elements.app.clientHeight;
-      const portrait = isPortrait(width, height) && ui.isTouchOn();
+      const portrait = isPortrait(width, height) && ui.showsTouchControls();
       const rect = stageRect({
         width,
         height,
@@ -54,9 +62,7 @@ export function createScreenFit({ document, window, elements, game, ui }) {
       layout.onFit?.();
     },
     applyTouchSettings() {
-      document.body.classList.toggle('touch-on', ui.isTouchOn());
-      document.body.classList.toggle('stick-fixed', game.settings.stick === 'fixed');
-      document.documentElement.style.setProperty('--btn', String(buttonScale(game.settings)));
+      applyTouchClasses(document, { game, ui });
       layout.fit();
     },
   };

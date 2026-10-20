@@ -51,7 +51,7 @@ export class MenuController {
       menu.classList.toggle('open', menu.id === `m-${this.top()}`);
     }
     this.refresh();
-    this.state.selected = 0;
+    this.state.selected = this.panels[this.top()]?.firstSelected?.() ?? 0;
     this.highlight(false);
   }
 
