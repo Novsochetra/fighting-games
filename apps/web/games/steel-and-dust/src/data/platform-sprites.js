@@ -6,4 +6,5 @@ export const PLATFORM_SPRITES = {
   scaffold: { file: 'scaffold.png', width: 80, topY: 6, legs: [11, 68] },
   catwalk: { file: 'catwalk.png', width: 80, topY: 4, legs: [10, 68] },
   rampart: { file: 'rampart.png', width: 80, topY: 5, legs: [9, 71] },
+  slab: { file: 'slab.png', width: 80, topY: 2, legs: [37, 43] },
 };

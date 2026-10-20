@@ -29,6 +29,7 @@ export const WARDEN_FORTRESS = {
   reinforcements: ['grunt', 'knife', 'sling'],
   crates: ['axe', 'ration', 'sword', 'ration', 'spear', 'ration', 'axe'],
   props: [],
+  entry: 'templeDoorBroken',
   endWall: 'wardenGate',
   zones: [
     {

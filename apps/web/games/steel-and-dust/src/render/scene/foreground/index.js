@@ -1,6 +1,7 @@
 import { hashInt } from '../../../lib/math.js';
 import { drawFern } from './ferns.js';
 import { drawRubble } from './rubble.js';
+import { drawRuins } from './ruins.js';
 import { drawScrap } from './scrap.js';
 import { drawScrub } from './scrub.js';
 import { drawSpikes } from './spikes.js';
@@ -12,6 +13,7 @@ const FOREGROUND_KINDS = {
   scrub: drawScrub,
   scrap: drawScrap,
   spikes: drawSpikes,
+  ruins: drawRuins,
 };
 
 // what lies in front of the fighters scrolls faster than the world, for depth

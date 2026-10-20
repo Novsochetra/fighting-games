@@ -2,6 +2,7 @@ import { BAMBOO_PASS } from './bamboo-pass.js';
 import { EMBER_WOODS } from './ember-woods.js';
 import { FIREFLY_HOLLOW } from './firefly-hollow.js';
 import { IRON_WORKS } from './iron-works.js';
+import { MIRAGE_TEMPLE } from './mirage-temple.js';
 import { OLD_GROVE } from './old-grove.js';
 import { PINE_RIDGE } from './pine-ridge.js';
 import { RAIDER_CAMP } from './raider-camp.js';
@@ -22,6 +23,7 @@ export const PAINTED_BACKDROPS = {
   sandstormPass: SANDSTORM_PASS,
   ironWorks: IRON_WORKS,
   wardenFortress: WARDEN_FORTRESS,
+  mirageTemple: MIRAGE_TEMPLE,
 };
 
 export function isPaintedTheme(themeId) {

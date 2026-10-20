@@ -1,5 +1,7 @@
 import { drawAsh } from './ash.js';
+import { drawBats } from './bats.js';
 import { drawBirds } from './birds.js';
+import { drawBraziers } from './braziers.js';
 import { drawDevil } from './devil.js';
 import { drawEmbers } from './embers.js';
 import { drawFireflies } from './fireflies.js';
@@ -8,16 +10,19 @@ import { drawGlow } from './glow.js';
 import { drawGusts } from './gusts.js';
 import { drawLeaves } from './leaves.js';
 import { drawLightning } from './lightning.js';
+import { drawMirage } from './mirage.js';
 import { drawMist } from './mist.js';
 import { drawMotes } from './motes.js';
 import { drawPennants } from './pennants.js';
 import { drawPlume } from './plume.js';
 import { drawPlumes } from './plumes.js';
+import { drawSandDrift } from './sand-drift.js';
 import { drawShafts } from './shafts.js';
 import { drawShimmer } from './shimmer.js';
 import { drawSmoke } from './smoke.js';
 import { drawSparks } from './sparks.js';
 import { drawSteam } from './steam.js';
+import { drawTrickle } from './trickle.js';
 import { drawTumbleweeds } from './tumbleweeds.js';
 import { drawVeil } from './veil.js';
 import { drawVultures } from './vultures.js';
@@ -48,6 +53,11 @@ const AMBIENT_EFFECTS = {
   flames: { draw: drawFlames, color: 'flame' },
   lightning: { draw: drawLightning, color: 'lightning' },
   pennants: { draw: drawPennants, color: 'pennant' },
+  mirage: { draw: drawMirage, color: 'mirage' },
+  braziers: { draw: drawBraziers, color: 'flame' },
+  trickle: { draw: drawTrickle, color: 'trickle' },
+  bats: { draw: drawBats, color: 'bat' },
+  sandDrift: { draw: drawSandDrift, color: 'sandDrift' },
 };
 
 // an unknown kind or a forest without the effect's color is skipped rather than breaking the frame

@@ -11,5 +11,7 @@ export const PROP_SPRITES = {
   canyonBarricadeBroken: { file: 'canyonBarricadeBroken.png', feetX: 20, feetY: 108 },
   foundryGate: { file: 'foundry-gate.png', feetX: 88, feetY: 121 },
   foundryGateBroken: { file: 'foundry-gate-broken.png', feetX: 20, feetY: 121 },
+  templeDoor: { file: 'temple-door.png', feetX: 84, feetY: 143 },
+  templeDoorBroken: { file: 'temple-door-broken.png', feetX: 16, feetY: 139 },
   wardenGate: { file: 'warden-gate.png', feetX: 176, feetY: 202 },
 };
