@@ -18,6 +18,7 @@
   padding: 7px 8px;
   border: 2px solid var(--color-clear);
   cursor: default;
+  font-family: var(--font-display);
 }
 
 .setrow:nth-child(even) {
@@ -30,14 +31,14 @@
 }
 
 .setrow .lbl {
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
 }
 
 .setrow .lbl small {
   display: block;
-  font-weight: var(--font-weight-regular);
+  margin-top: 3px;
   color: var(--color-text-muted);
-  font-size: var(--font-size-caption);
+  font-size: var(--font-size-2xs);
 }
 
 .stepper {
