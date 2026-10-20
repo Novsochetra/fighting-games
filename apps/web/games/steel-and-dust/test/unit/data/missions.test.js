@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FOREST_THEMES } from '../../../src/art/forest-themes.js';
+import { PAINTED_THEMES } from '../../../src/art/painted-themes/index.js';
 import { SCENE_THEMES } from '../../../src/art/scene-themes.js';
 import { VIEW_WIDTH } from '../../../src/config.js';
 import { ENEMY_SPRITES } from '../../../src/data/enemies/enemy-sprites.js';
@@ -18,7 +18,7 @@ describe('the ten missions', () => {
     expect(new Set(MISSIONS.map((mission) => mission.name)).size).toBe(10);
     for (const mission of MISSIONS) {
       expect(
-        SCENE_THEMES[mission.theme] ?? FOREST_THEMES[mission.theme],
+        SCENE_THEMES[mission.theme] ?? PAINTED_THEMES[mission.theme],
         mission.name,
       ).toBeDefined();
     }

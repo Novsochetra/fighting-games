@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PAINTED_BACKDROPS } from '../../../src/data/backdrops.js';
+import { PAINTED_BACKDROPS } from '../../../src/data/backdrops/index.js';
 import { createPainter } from '../../../src/render/painter.js';
 import {
   drawPaintedBackdrop,
@@ -61,6 +61,12 @@ describe('painted backdrops', () => {
       [0, false],
       [0, true],
     ]);
+  });
+
+  it('draw a one-off layer once from the start of the road, scrolling away with its share', () => {
+    const entry = { ...strip(300, 0.5), once: true };
+    expect(record([entry], 0).draws).toEqual([['img(300)', '0', '0']]);
+    expect(record([entry], 400).draws).toEqual([['img(300)', '-200', '0']]);
   });
 
   it('skip a layer until its image has loaded', () => {

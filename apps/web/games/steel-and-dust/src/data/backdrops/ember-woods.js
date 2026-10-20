@@ -1,0 +1,13 @@
+export const EMBER_WOODS = {
+  folder: 'ember-woods',
+  groundTop: 5,
+  layers: [
+    { name: 'back', parallax: 0.08 },
+    { name: 'near', parallax: 0.45 },
+  ],
+  ambient: [
+    { kind: 'leaves', plane: 'back', count: 12, drift: 0.45, wind: 0.25 },
+    { kind: 'leaves', plane: 'front', count: 8, drift: 1.2, wind: 0.3 },
+    { kind: 'motes', plane: 'back', count: 8, drift: 0.3, top: 60, bottom: 180 },
+  ],
+};

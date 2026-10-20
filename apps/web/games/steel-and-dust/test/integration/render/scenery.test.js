@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PAINTED_BACKDROPS } from '../../../src/data/backdrops.js';
+import { PAINTED_BACKDROPS } from '../../../src/data/backdrops/index.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { createView } from '../../../src/render/create-view.js';
 import { renderFrame } from '../../../src/render/render-frame.js';

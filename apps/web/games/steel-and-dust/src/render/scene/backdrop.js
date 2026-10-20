@@ -1,4 +1,4 @@
-import { PAINTED_BACKDROPS } from '../../data/backdrops.js';
+import { PAINTED_BACKDROPS } from '../../data/backdrops/index.js';
 import { buildHills } from './hills.js';
 import { loadPaintedBackdrop } from './painted-backdrop.js';
 import { scenePalette } from './scene-palette.js';

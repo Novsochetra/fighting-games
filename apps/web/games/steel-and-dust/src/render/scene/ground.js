@@ -37,9 +37,9 @@ function drawRuts(painter, cameraX, colors) {
   }
 }
 
-// a forest road follows the terrain's hills and steps; the desert roads stay flat as they were
-export function drawGround(painter, { cameraX, colors, tick, terrain, texture }) {
-  if (colors.grass) {
+// a painted road follows the terrain's hills and steps; the drawn desert roads stay flat as they were
+export function drawGround(painter, { cameraX, colors, tick, terrain, texture, painted }) {
+  if (painted) {
     const surfaceAt = (x) => groundAt(terrain, x);
     drawTerrainGround(painter, { cameraX, colors, tick, surfaceAt, texture });
     return;

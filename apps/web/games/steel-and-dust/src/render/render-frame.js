@@ -7,7 +7,7 @@ import { drawVignette } from './overlays/vignette.js';
 import { missionOf } from '../sim/stage/mission.js';
 import { drawAmbient } from './scene/ambient/index.js';
 import { backdropFor } from './scene/backdrop.js';
-import { drawForeground } from './scene/foreground.js';
+import { drawForeground } from './scene/foreground/index.js';
 import { drawTiled } from './scene/ground.js';
 import { drawPaintedBackdrop } from './scene/painted-backdrop.js';
 import { scenePalette } from './scene/scene-palette.js';

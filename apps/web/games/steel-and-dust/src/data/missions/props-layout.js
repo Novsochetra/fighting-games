@@ -5,6 +5,13 @@ const PROP_SPACING = 150;
 // half the width of the widest prop, so a prop never hangs over the edge of a hill or a step
 const PROP_FOOTPRINT = 28;
 
+// the way in from the last mission (its gate broken open) stands behind the hero's start
+const ENTRY_X = 10;
+
+function entry(spec, { terrain }) {
+  return spec.entry ? [{ kind: spec.entry, x: ENTRY_X, y: groundAt(terrain, ENTRY_X) }] : [];
+}
+
 function endWall(spec, { length, terrain }) {
   const x = length - 12;
   return { kind: spec.endWall ?? 'wall', x, y: groundAt(terrain, x) };
@@ -13,7 +20,7 @@ function endWall(spec, { length, terrain }) {
 // a prop every so often along the road where it is level, then the wall that closes the road;
 // the forests list no props and let their painted layers dress the road
 export function layoutProps(spec, road) {
-  const props = [];
+  const props = entry(spec, road);
   const kinds = spec.props;
   for (let spot = 110; kinds.length && spot < road.length - 140; spot += PROP_SPACING) {
     const hash = hashInt(spot + kinds.length * 31);

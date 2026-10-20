@@ -2,8 +2,8 @@ import { VIEW_WIDTH } from '../../config.js';
 
 const DIRECTORY = 'assets/backdrops/';
 
-function loadLayer({ createImage, baseUrl }, folder, { name, parallax }) {
-  const layer = { image: createImage(), parallax, ready: false };
+function loadLayer({ createImage, baseUrl }, folder, { name, parallax, once = false }) {
+  const layer = { image: createImage(), parallax, once, ready: false };
   layer.image.onload = () => {
     layer.ready = true;
   };
@@ -24,13 +24,18 @@ export function loadPaintedBackdrop(loaders, spec) {
   };
 }
 
-// a layer that has not loaded yet has no width to tile by, so it is skipped until it has
+// a layer that has not loaded yet has no width to tile by, so it is skipped until it has; a `once`
+// layer is a single painting at the start of the road (where the last mission's road comes in)
 function drawLayer(context, layer, cameraX) {
   const width = layer.image.width;
   if (!layer.ready || width <= 0) {
     return;
   }
   const offset = cameraX * layer.parallax;
+  if (layer.once) {
+    context.drawImage(layer.image, Math.round(-offset), 0);
+    return;
+  }
   const start = -(((offset % width) + width) % width);
   for (let x = start; x < VIEW_WIDTH; x += width) {
     context.drawImage(layer.image, Math.round(x), 0);

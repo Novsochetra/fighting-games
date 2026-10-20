@@ -94,5 +94,7 @@ export function drawTerrainGround(painter, { cameraX, colors, tick, surfaceAt, t
   if (!painted) {
     drawRoadDetails(painter, { cameraX, colors, tick, surfaceAt });
   }
-  drawSwayingGrass(painter, { cameraX, colors, tick, surfaceAt });
+  if (colors.grass) {
+    drawSwayingGrass(painter, { cameraX, colors, tick, surfaceAt });
+  }
 }

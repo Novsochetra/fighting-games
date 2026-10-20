@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FOREST_THEMES } from '../../../src/art/forest-themes.js';
+import { PAINTED_THEMES } from '../../../src/art/painted-themes/index.js';
 import { SCENE_THEMES } from '../../../src/art/scene-themes.js';
 import { scenePalette } from '../../../src/render/scene/scene-palette.js';
 
@@ -32,14 +32,14 @@ describe('scene palettes', () => {
   });
 
   it('give each painted forest its soil, grass, ferns and the colors of its air', () => {
-    for (const themeId of Object.keys(FOREST_THEMES)) {
+    for (const themeId of Object.keys(PAINTED_THEMES)) {
       const palette = scenePalette(themeId);
       expect(palette.painted, themeId).toBe(true);
       const { ground, rubble } = palette;
       for (const color of [ground.sand, ground.soil, ground.soilDeep, ground.grass, rubble.fern]) {
         expect(color, themeId).toMatch(COLOR);
       }
-      expect(palette.ambient, themeId).toBe(FOREST_THEMES[themeId].ambient);
+      expect(palette.ambient, themeId).toBe(PAINTED_THEMES[themeId].ambient);
     }
   });
 

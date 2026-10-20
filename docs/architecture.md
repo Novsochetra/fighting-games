@@ -72,10 +72,10 @@ places on the road: zone walls, where each wave starts, crates and props, and th
   carry into the next mission (`enterNextMission`); the hero starts it fresh. Beating mission N
   unlocks mission N + 1 on the title's mission select (`records.bestMission`).
 - Missions 1 to 6 walk through six painted forests, sunrise to night; missions 7 to 10 are desert
-  roads. A forest (`src/data/backdrops.js`) is PixelLab layers in `assets/backdrops/<forest>/`: a
+  roads. A forest (`src/data/backdrops/`) is PixelLab layers in `assets/backdrops/<forest>/`: a
   far plate and a near strip that each tile sideways and scroll at their own share of the camera
   (`src/render/scene/painted-backdrop.js`), with colors for its road, ferns and air in
-  `src/art/forest-themes.js`. Its air moves on its own (`src/render/scene/ambient/`): mist, birds,
+  `src/art/painted-themes/`. Its air moves on its own (`src/render/scene/ambient/`): mist, birds,
   leaves, motes, light shafts, fireflies, embers and smoke, each worked out from the tick count and
   the camera alone, never `Math.random()`, so a replay draws the same frames. Its road carries no
   loose props, since the painted strips dress it; a palisade (`assets/sprites/props/`) closes it.

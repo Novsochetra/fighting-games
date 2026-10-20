@@ -1,8 +1,8 @@
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { FOREST_THEMES } from '../../../src/art/forest-themes.js';
-import { PAINTED_BACKDROPS, isPaintedTheme } from '../../../src/data/backdrops.js';
+import { PAINTED_THEMES } from '../../../src/art/painted-themes/index.js';
+import { PAINTED_BACKDROPS, isPaintedTheme } from '../../../src/data/backdrops/index.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { createPainter } from '../../../src/render/painter.js';
 import { drawAmbient } from '../../../src/render/scene/ambient/index.js';
@@ -32,7 +32,7 @@ function drawsSomethingWithin(effect, colors, ticks) {
 
 describe('painted backdrops', () => {
   it('have a forest palette for every painted theme and nothing else', () => {
-    expect(Object.keys(PAINTED_BACKDROPS).sort()).toEqual(Object.keys(FOREST_THEMES).sort());
+    expect(Object.keys(PAINTED_BACKDROPS).sort()).toEqual(Object.keys(PAINTED_THEMES).sort());
     expect(isPaintedTheme('pineRidge')).toBe(true);
     expect(isPaintedTheme('storm')).toBe(false);
   });
@@ -71,7 +71,7 @@ describe('painted backdrops', () => {
     for (const [themeId, { ambient }] of Object.entries(PAINTED_BACKDROPS)) {
       for (const effect of ambient) {
         expect(['back', 'front'], `${themeId} ${effect.kind}`).toContain(effect.plane);
-        const colors = FOREST_THEMES[themeId].ambient;
+        const colors = PAINTED_THEMES[themeId].ambient;
         expect(drawsSomethingWithin(effect, colors, 1800), `${themeId} ${effect.kind}`).toBe(true);
       }
     }

@@ -99,4 +99,11 @@ describe('laying out a mission', () => {
     }
     expect(things.some((thing) => thing.y < GROUND_Y)).toBe(true);
   });
+
+  it("stands the way in from the last mission behind the hero's start, first of the props", () => {
+    const entered = layoutMission({ ...SPEC, entry: 'palisadeBroken' }, 6);
+    expect(entered.props[0]).toEqual({ kind: 'palisadeBroken', x: 10, y: GROUND_Y });
+    expect(entered.props.slice(1)).toEqual(mission.props);
+    expect(mission.props.some((prop) => prop.kind === 'palisadeBroken')).toBe(false);
+  });
 });

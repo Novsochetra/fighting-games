@@ -1,11 +1,11 @@
-import { FOREST_THEMES } from '../../../../src/art/forest-themes.js';
+import { PAINTED_THEMES } from '../../../../src/art/painted-themes/index.js';
 import { createPainter } from '../../../../src/render/painter.js';
 import { drawAmbient } from '../../../../src/render/scene/ambient/index.js';
 import { createRecordingContext } from '../../../support/recording-canvas.js';
 
 export const ALL_COLORS = Object.assign(
   {},
-  ...Object.values(FOREST_THEMES).map((theme) => theme.ambient),
+  ...Object.values(PAINTED_THEMES).map((theme) => theme.ambient),
 );
 
 export const SAMPLE_EFFECTS = {

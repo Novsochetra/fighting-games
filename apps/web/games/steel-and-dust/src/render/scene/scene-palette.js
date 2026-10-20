@@ -1,4 +1,4 @@
-import { FOREST_THEMES } from '../../art/forest-themes.js';
+import { PAINTED_THEMES } from '../../art/painted-themes/index.js';
 import { SCENE_THEMES } from '../../art/scene-themes.js';
 import { gradientSteps, shadeColor as shade, withAlpha } from '../../lib/color.js';
 
@@ -34,18 +34,16 @@ function skylineColors({ skyline, lights }) {
   };
 }
 
-function forestSoil(sand, grass) {
-  return {
-    grass,
-    grassLight: shade(grass, 0.25),
-    grassDark: shade(grass, -0.3),
-    soil: shade(sand, -0.18),
-    soilDeep: shade(sand, -0.34),
-  };
+// a painted road without grass (sand, slag, flagstones) keeps its own soil but no swaying blades
+function paintedSoil(sand, grass) {
+  const blades = grass
+    ? { grass, grassLight: shade(grass, 0.25), grassDark: shade(grass, -0.3) }
+    : { grassDark: shade(sand, -0.3) };
+  return { ...blades, soil: shade(sand, -0.18), soilDeep: shade(sand, -0.34) };
 }
 
-function groundColors({ sand, grass }) {
-  const forest = grass ? forestSoil(sand, grass) : {};
+function groundColors({ sand, grass }, painted = false) {
+  const soil = painted ? paintedSoil(sand, grass) : {};
   return {
     sand,
     edge: shade(sand, 0.35),
@@ -53,7 +51,7 @@ function groundColors({ sand, grass }) {
     pebble: shade(sand, -0.25),
     glint: shade(sand, 0.3),
     rut: shade(sand, -0.17),
-    ...forest,
+    ...soil,
   };
 }
 
@@ -74,26 +72,35 @@ function buildPalette(theme) {
   };
 }
 
-function fernColors({ rock, grass }) {
-  return { ...rubbleColors({ rock }), fern: shade(grass, -0.55), fernLight: shade(grass, -0.35) };
+// what grows or lies in front of the fighters: ferns by default, or the theme's own kind with
+// any colors of its own in `front`
+function foregroundColors({ ground, foreground = 'ferns', front }) {
+  const { rock, grass = ground.sand } = ground;
+  return {
+    kind: foreground,
+    ...rubbleColors({ rock }),
+    fern: shade(grass, -0.55),
+    fernLight: shade(grass, -0.35),
+    ...front,
+  };
 }
 
-function buildForestPalette(forest) {
+function buildPaintedPalette(theme) {
   return {
     painted: true,
-    ground: groundColors(forest.ground),
-    rubble: fernColors(forest.ground),
-    ambient: forest.ambient,
+    ground: groundColors(theme.ground, true),
+    rubble: foregroundColors(theme),
+    ambient: theme.ambient,
   };
 }
 
 // every color the scenery of one mission is painted with, worked out once per theme
 export function scenePalette(themeId) {
   if (!palettes.has(themeId)) {
-    const forest = FOREST_THEMES[themeId];
+    const painted = PAINTED_THEMES[themeId];
     palettes.set(
       themeId,
-      forest ? buildForestPalette(forest) : buildPalette(SCENE_THEMES[themeId]),
+      painted ? buildPaintedPalette(painted) : buildPalette(SCENE_THEMES[themeId]),
     );
   }
   return palettes.get(themeId);

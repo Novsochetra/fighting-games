@@ -23,7 +23,7 @@ Every layer is 216 rows tall, the height of the view, and tiles sideways.
   just under the road's edge and hazes it a little toward the forest's mist. Pine Ridge joins two
   paintings; the Old Grove's canopy ran over its edges, so that seam was inpainted first.
 - The campfire's embers and smoke are drawn in code at the fire in `raider-camp/near.png`
-  (`src/data/backdrops.js`).
+  (`src/data/backdrops/`).
 
 The forests keep their road clear of loose props: the near strips already dress it, and props drawn
 on their own never sat in the painted light. The palisade that closes each forest road
