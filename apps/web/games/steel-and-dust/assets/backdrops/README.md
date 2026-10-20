@@ -39,13 +39,15 @@ the cliff road to the Warden Hall. Every layer is 216 rows tall like the forests
 | File                         | Size      | How it was made                                                                                                                                                                                                                                  |
 | ---------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `warden-fortress/back.png`   | 585 wide  | Create Image (Pro) 640x216, `firefly-hollow/back.png` as the style image (outline, detail, shading; not its palette), from a Pixen concept. Cut before a second mesa, `overlap` 16, then the cliff face dithered toward the mist (`#7c203a`). |
-| `warden-fortress/near.png`   | 1280 wide | Two Pro paintings of fortress pieces on transparency (the second used the first as its style image). Their painted ground band and weeds removed, the twelve pieces laid out by hand with gaps, sunk 3px and hazed toward `#80223a`, more at the base. |
+| `warden-fortress/near.png`   | 2040 wide | Three Pro paintings of fortress pieces on transparency (each later one with the one before as its style image). Their painted ground band, weeds and stray specks removed, the sixteen pieces laid out by hand, sunk 3px and hazed toward `#80223a`, more at the base. |
 | `warden-fortress/ruins.png`  | 384 wide  | Pro Flash 192x216 (a crop of the gatehouse as the style image): the broken sun-disc obelisk, a `once` layer at the start of the road where mission 9's temple is left behind. Hazed like the near strip.                                      |
 | `warden-fortress/ground.png` | 96 wide   | Pro Flash 128x64 (`firefly-hollow/ground.png` as the layout and density reference): flagstones over basalt, keyed with `ground`. Surface row 14.                                                                                            |
 | `warden-fortress/cliff.png`  | 12x64     | Cut from `ground.png` by hand, with a dark outer edge and a moonlit rim, for sheer step faces.                                                                                                                                                 |
 
 - The near strip keeps a 212px gap at its start: on the first screen the temple ruins stand there,
-  and on every later pass the far fortress shows whole through it. Its fires (the brazier, the fire
+  and on every later pass the far fortress shows whole through it. Its width (2040) and drift
+  (0.455) are picked so each boss arena looks onto its own pieces: the tower and fire bowl at the
+  Outer Gate, the gatehouse at the Inner Keep, and the Warden's statue beside his gate at the end. Its fires (the brazier, the fire
   bowl and the torch) have flames, glow and sparks drawn in code at their painted spots, and the
   pennant on the tall pole is drawn in code so it ripples (`src/data/backdrops/warden-fortress.js`).
 - The road's rampart decks (`../sprites/platforms/rampart.png`) and the Warden Hall's gate

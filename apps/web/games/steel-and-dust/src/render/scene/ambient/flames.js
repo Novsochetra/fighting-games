@@ -46,9 +46,9 @@ function drawTongue(painter, spot, { size, flicker, tick, colors }) {
     if (!isOnScreen(slice.x, slice.y, slice.width)) {
       continue;
     }
-    painter.use(row > height * 0.6 ? outer : middle).rect(slice.x, slice.y, slice.width, 1);
-    if (slice.width > 2 && row < height * 0.5) {
-      painter.use(core).rect(slice.x + 1, slice.y, slice.width - 2, 1);
+    painter.use(row > height * 0.55 ? outer : middle).rect(slice.x, slice.y, slice.width, 1);
+    if (slice.width > 4 && row < height * 0.35) {
+      painter.use(core).rect(slice.x + 2, slice.y, slice.width - 4, 1);
     }
   }
 }
@@ -58,7 +58,7 @@ export function drawFlames(painter, { effect, tick, cameraX, colors }) {
   for (const spot of emitterSpots(effect, cameraX)) {
     const flicker = flickerAt(spot.index, tick);
     drawGlow(painter, spot, { size, flicker, color: colors.glow });
-    painter.alpha(0.9);
+    painter.alpha(0.75);
     drawTongue(painter, spot, { size, flicker, tick, colors: colors.flame });
   }
   painter.alpha(1);
