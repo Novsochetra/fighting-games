@@ -1,5 +1,6 @@
 import { VIEW_WIDTH } from '../../config.js';
 import { hashInt } from '../../lib/math.js';
+import { layoutTerrain } from './terrain.js';
 
 const FIRST_ZONE = 300;
 const ROAD = 300;
@@ -74,6 +75,7 @@ export function layoutMission(spec, index) {
     number: index + 1,
     length,
     zones,
+    terrain: layoutTerrain(spec.zones, zones, length),
     crates: layoutCrates(zones, spec.crates),
     props: layoutProps(spec.props, length),
   };
