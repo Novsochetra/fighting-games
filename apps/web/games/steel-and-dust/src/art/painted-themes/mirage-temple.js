@@ -1,0 +1,25 @@
+export const MIRAGE_TEMPLE = {
+  ground: { sand: '#e38866', rock: '#763237' },
+  foreground: 'ruins',
+  front: {
+    block: '#8a3c47',
+    blockLight: '#c4635e',
+    blockShade: '#471824',
+    drift: '#b65a5a',
+    sherd: '#8d2f28',
+    sherdLight: '#c4635e',
+    reed: '#511d28',
+    reedLight: '#763237',
+  },
+  ambient: {
+    mirage: ['#fff4ec', '#bfa8f0'],
+    flame: ['#f2fdff', '#8fe3ff', '#3f86e8'],
+    flameGlow: '#6cc4ff',
+    embers: ['#e6fbff', '#86d4ff', '#4a74d8'],
+    glow: '#6cc4ff',
+    trickle: ['#ffe2c4', '#b7646e'],
+    bat: '#2c1523',
+    mote: '#ffd9a0',
+    sandDrift: ['#fdc39a', '#f7a4d7'],
+  },
+};

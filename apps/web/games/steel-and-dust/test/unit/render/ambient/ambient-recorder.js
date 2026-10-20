@@ -44,6 +44,37 @@ export const SAMPLE_EFFECTS = {
     tileWidth: 640,
     drift: 0.8,
   },
+  mirage: { kind: 'mirage', plane: 'back', y: 112, height: 14, drift: 0.08 },
+  flames: {
+    kind: 'flames',
+    plane: 'back',
+    emitters: [
+      { x: 120, y: 150 },
+      { x: 420, y: 148 },
+    ],
+    tileWidth: 640,
+    drift: 0.8,
+  },
+  trickle: {
+    kind: 'trickle',
+    plane: 'back',
+    emitters: [
+      { x: 120, y: 60, fall: 100 },
+      { x: 420, y: 130, fall: 30 },
+    ],
+    tileWidth: 640,
+    drift: 0.8,
+  },
+  bats: { kind: 'bats', plane: 'back', period: 900, y: 40 },
+  sandDrift: {
+    kind: 'sandDrift',
+    plane: 'front',
+    count: 16,
+    drift: 1.15,
+    wind: 0.45,
+    top: 188,
+    bottom: 212,
+  },
 };
 
 export function recordAmbient(effects, options = {}) {

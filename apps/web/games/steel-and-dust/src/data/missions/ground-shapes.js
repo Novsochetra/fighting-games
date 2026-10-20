@@ -41,3 +41,16 @@ export function stairs(from, steps) {
   points.push([x, 0]);
   return points;
 }
+
+// temple steps: climbs `steps` like stairs, the last one being the top, then comes back down the
+// same steps the other way, so a dais built of rises no taller than a step can be walked over
+export function terrace(from, steps) {
+  const points = stairs(from, steps).slice(0, -1);
+  let x = points.at(-1)[0];
+  for (const [width, rise] of steps.slice(0, -1).reverse()) {
+    points.push([x, rise], [x + width, rise]);
+    x += width;
+  }
+  points.push([x, 0]);
+  return points;
+}

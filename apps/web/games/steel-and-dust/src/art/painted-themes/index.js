@@ -4,6 +4,7 @@ import { BAMBOO_PASS } from './bamboo-pass.js';
 import { RAIDER_CAMP } from './raider-camp.js';
 import { EMBER_WOODS } from './ember-woods.js';
 import { FIREFLY_HOLLOW } from './firefly-hollow.js';
+import { MIRAGE_TEMPLE } from './mirage-temple.js';
 
 // the colors drawn on top of each painted road (the paintings are in assets/backdrops/): the
 // road's soil and grass, the clumps in front of the fighters, and what moves in the air
@@ -14,4 +15,5 @@ export const PAINTED_THEMES = {
   raiderCamp: RAIDER_CAMP,
   emberWoods: EMBER_WOODS,
   fireflyHollow: FIREFLY_HOLLOW,
+  mirageTemple: MIRAGE_TEMPLE,
 };
