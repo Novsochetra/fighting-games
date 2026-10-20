@@ -3,11 +3,14 @@ import { drawBirds } from './birds.js';
 import { drawDevil } from './devil.js';
 import { drawEmbers } from './embers.js';
 import { drawFireflies } from './fireflies.js';
+import { drawFlames } from './flames.js';
 import { drawGlow } from './glow.js';
 import { drawGusts } from './gusts.js';
 import { drawLeaves } from './leaves.js';
+import { drawLightning } from './lightning.js';
 import { drawMist } from './mist.js';
 import { drawMotes } from './motes.js';
+import { drawPennants } from './pennants.js';
 import { drawPlume } from './plume.js';
 import { drawPlumes } from './plumes.js';
 import { drawShafts } from './shafts.js';
@@ -42,6 +45,9 @@ const AMBIENT_EFFECTS = {
   steam: { draw: drawSteam, color: 'steam' },
   shimmer: { draw: drawShimmer, color: 'shimmer' },
   ash: { draw: drawAsh, color: 'ash' },
+  flames: { draw: drawFlames, color: 'flame' },
+  lightning: { draw: drawLightning, color: 'lightning' },
+  pennants: { draw: drawPennants, color: 'pennant' },
 };
 
 // an unknown kind or a forest without the effect's color is skipped rather than breaking the frame

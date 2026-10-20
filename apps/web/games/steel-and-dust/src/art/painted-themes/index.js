@@ -6,6 +6,7 @@ import { OLD_GROVE } from './old-grove.js';
 import { PINE_RIDGE } from './pine-ridge.js';
 import { RAIDER_CAMP } from './raider-camp.js';
 import { SANDSTORM_PASS } from './sandstorm-pass.js';
+import { WARDEN_FORTRESS } from './warden-fortress.js';
 
 // the colors drawn on top of each painted road (the paintings are in assets/backdrops/): the
 // road's soil and grass, the clumps in front of the fighters, and what moves in the air
@@ -18,4 +19,5 @@ export const PAINTED_THEMES = {
   fireflyHollow: FIREFLY_HOLLOW,
   sandstormPass: SANDSTORM_PASS,
   ironWorks: IRON_WORKS,
+  wardenFortress: WARDEN_FORTRESS,
 };

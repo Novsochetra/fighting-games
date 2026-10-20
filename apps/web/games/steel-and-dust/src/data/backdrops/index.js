@@ -6,6 +6,7 @@ import { OLD_GROVE } from './old-grove.js';
 import { PINE_RIDGE } from './pine-ridge.js';
 import { RAIDER_CAMP } from './raider-camp.js';
 import { SANDSTORM_PASS } from './sandstorm-pass.js';
+import { WARDEN_FORTRESS } from './warden-fortress.js';
 
 // the painted forests: the layers in assets/backdrops/<folder>/, how fast each one scrolls with
 // the camera, and what moves in the air around them; an emitter's x is a spot in its near layer.
@@ -20,6 +21,7 @@ export const PAINTED_BACKDROPS = {
   fireflyHollow: FIREFLY_HOLLOW,
   sandstormPass: SANDSTORM_PASS,
   ironWorks: IRON_WORKS,
+  wardenFortress: WARDEN_FORTRESS,
 };
 
 export function isPaintedTheme(themeId) {
