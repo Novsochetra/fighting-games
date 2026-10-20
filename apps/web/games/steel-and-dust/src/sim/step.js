@@ -19,7 +19,7 @@ import { updateCamera } from './stage/camera.js';
 import { enterNextMission } from './stage/flow.js';
 import { missionOf } from './stage/mission.js';
 import { updateSummons } from './summons/update-summons.js';
-import { BANNER_FOREVER } from './stage/stage-clear.js';
+import { BANNER_FOREVER, CLEAR_TICKS } from './stage/stage-clear.js';
 import { updateZones } from './stage/zones.js';
 
 function updateWorld(game) {
@@ -51,7 +51,7 @@ function advanceClearScreen(game) {
     return;
   }
   game.clearTime++;
-  if (game.clearTime <= 170 || game.mode !== 'play') {
+  if (game.clearTime <= CLEAR_TICKS || game.mode !== 'play') {
     return;
   }
   if (isLastMission(game.missionIndex)) {

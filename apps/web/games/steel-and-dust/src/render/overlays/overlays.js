@@ -3,6 +3,7 @@ import { HERO_THEMES } from '../../art/hero-themes.js';
 import { GROUND_Y, VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
 import { heroById } from '../../data/heroes.js';
 import { drawText, textWidth } from '../text/draw-text.js';
+import { clearFadeOpacity } from './clear-fade.js';
 import { drawUltCutIn } from './ult-cut-in.js';
 
 function hintOpacity(time) {
@@ -50,6 +51,17 @@ export function drawScreenFlashes(painter, game) {
 }
 
 // the fade-in counts down here, once per drawn frame, as it always has
+function drawNightFades(painter, game) {
+  const opacity = Math.max(game.fadeIn / 24, clearFadeOpacity(game));
+  if (opacity > 0) {
+    painter.alpha(opacity).use(COLORS.night).rect(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
+    painter.alpha(1);
+  }
+  if (game.fadeIn > 0) {
+    game.fadeIn--;
+  }
+}
+
 export function drawOverlays(painter, { game, view }) {
   if (game.ultFreeze > 0) {
     drawUltCutIn(painter, { game, view });
@@ -57,14 +69,7 @@ export function drawOverlays(painter, { game, view }) {
   if (game.hint && game.mode === 'play' && game.ultFreeze <= 0) {
     drawHint(painter, game);
   }
-  if (game.fadeIn > 0) {
-    painter
-      .alpha(game.fadeIn / 24)
-      .use(COLORS.night)
-      .rect(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
-    painter.alpha(1);
-    game.fadeIn--;
-  }
+  drawNightFades(painter, game);
   if (game.mode === 'title') {
     painter.alpha(0.35).use(COLORS.night).rect(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
     painter.alpha(1);
