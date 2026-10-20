@@ -111,8 +111,8 @@ Long sessions must not grow:
 
 `test/regression/` replays bot-played scenarios and compares every 30th tick and every rendered frame
 against recorded fixtures: two long runs as the Moss Shade (first captured from the original
-single-file game), one shorter run for each of the other Shades, and one run through the wide zones
-of a later mission. Any change to
+single-file game), one shorter run for each of the other Shades, one run through the wide zones
+of the fourth mission and one through the seventh, a desert road. Any change to
 arithmetic, to the order of `Math.random()` calls or to the order of canvas calls shows up there.
 When a change is meant to alter behavior, regenerate the fixtures with `npm run test:regression -- -u`
 and review the diff.

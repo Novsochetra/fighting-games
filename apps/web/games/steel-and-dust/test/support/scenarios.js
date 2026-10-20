@@ -60,4 +60,14 @@ export const SCENARIOS = {
     renderEvery: 240,
     scheduled: { 600: ['fill'], 1200: ['w2'], 2400: ['w3'], 3000: ['fill'], 3600: ['w4'] },
   },
+  // the seventh mission, a desert road that keeps its drawn scenery: blinking witches and
+  // assassins, slings, bombers and sentries on wide zones
+  sandstorm: {
+    mission: 6,
+    seed: 777,
+    ticks: 4800,
+    sampleEvery: 30,
+    renderEvery: 240,
+    scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3000: ['fill'], 3600: ['w4'] },
+  },
 };
