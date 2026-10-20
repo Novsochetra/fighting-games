@@ -1,7 +1,9 @@
-// the painted forests: the layers in assets/backdrops/<folder>/, how fast each one scrolls with
-// the camera, and what moves in the air around them; an emitter's x is a spot in its near layer.
-// `ground.png` is the road's cross-section, laid along the terrain with row `groundTop` on its
-// surface
+import { TEMPLE_BACKDROPS } from './temple-backdrops.js';
+
+// the painted roads, six forests and two temples (temple-backdrops.js): the layers in
+// assets/backdrops/<folder>/, how fast each one scrolls with the camera, and what moves in the air
+// around them; an emitter's x is a spot in its near layer. `ground.png` is the road's
+// cross-section, laid along the terrain with row `groundTop` on its surface
 export const PAINTED_BACKDROPS = {
   pineRidge: {
     folder: 'pine-ridge',
@@ -99,6 +101,7 @@ export const PAINTED_BACKDROPS = {
       { kind: 'fireflies', plane: 'front', count: 6, drift: 1.15, top: 110, bottom: 200 },
     ],
   },
+  ...TEMPLE_BACKDROPS,
 };
 
 export function isPaintedTheme(themeId) {

@@ -1,4 +1,5 @@
-// every boss swipes, slams and charges; the Warden Ox waits at the end of the last mission
+// every boss swipes, slams and charges; the Warden Ox waits at the end of the tenth mission, the
+// desert's last, and the Bayon Guardian (temple-bosses.js) at the end of the game
 export const BOSSES = {
   colossus: {
     name: 'Rust Colossus',

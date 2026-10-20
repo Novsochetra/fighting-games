@@ -56,7 +56,7 @@ The game keeps a strict split:
 
 ### Missions
 
-The game is ten missions (`src/data/missions/specs/`), each a road of its own with a scene theme, a
+The game is twelve missions (`src/data/missions/specs/`), each a road of its own with a scene theme, a
 boss, the raiders that boss calls in, crate contents and roadside props. A spec only lists its zones
 and the raider kinds in each wave; `layoutMission` (`src/data/missions/layout.js`) turns that into
 places on the road: zone walls, where each wave starts, crates and props, and the mission's length.
@@ -72,16 +72,24 @@ places on the road: zone walls, where each wave starts, crates and props, and th
   carry into the next mission (`enterNextMission`); the hero starts it fresh. Beating mission N
   unlocks mission N + 1 on the title's mission select (`records.bestMission`).
 - Missions 1 to 6 walk through six painted forests, sunrise to night; missions 7 to 10 are desert
-  roads. A forest (`src/data/backdrops.js`) is PixelLab layers in `assets/backdrops/<forest>/`: a
-  far plate and a near strip that each tile sideways and scroll at their own share of the camera
-  (`src/render/scene/painted-backdrop.js`), with colors for its road, ferns and air in
-  `src/art/forest-themes.js`. Its air moves on its own (`src/render/scene/ambient/`): mist, birds,
-  leaves, motes, light shafts, fireflies, embers and smoke, each worked out from the tick count and
-  the camera alone, never `Math.random()`, so a replay draws the same frames. Its road carries no
-  loose props, since the painted strips dress it; a palisade (`assets/sprites/props/`) closes it.
-- The forest roads rise and fall: a zone's spec lists its `ground` as shapes from
+  roads ending at Warden's Fortress under a blood moon; missions 11 and 12 walk on into two painted
+  temples, Angkor Wat at dawn and the Bayon at dusk, where the Bayon Guardian ends the game.
+  Forests and temples are painted roads alike (`src/data/backdrops.js`, the temples' entries in
+  `src/data/temple-backdrops.js`): PixelLab layers in `assets/backdrops/<folder>/`, a far plate, a
+  near strip and sometimes a middle layer, that each tile sideways and scroll at their own share of
+  the camera (`src/render/scene/painted-backdrop.js`), with colors for its road, ferns and air in
+  `src/art/forest-themes.js`. A road may also list `fronts`, layers such as an overhanging canopy
+  that scroll faster than the camera and are drawn over the fight, after the world and its front
+  air and before the foreground ferns; a road without them draws exactly as before. Its air moves
+  on its own (`src/render/scene/ambient/`): mist, birds, bats, leaves and petals, motes,
+  butterflies, light shafts, glints on water, fireflies, and flames, embers and smoke at points of
+  the near strip, each worked out from the tick count and the camera alone, never `Math.random()`,
+  so a replay draws the same frames. Its road carries no loose props, since the painted strips
+  dress it; a palisade closes a forest road and a stone naga gate a temple road
+  (`assets/sprites/props/`).
+- The painted roads rise and fall: a zone's spec lists its `ground` as shapes from
   `src/data/missions/ground-shapes.js` (`mound`, `bank`, `ramp`, `stairs`) and its `platforms`
-  (plank decks). `layoutTerrain` (`src/data/missions/terrain.js`) turns them into a height for every
+  (plank decks in the forests, sandstone ledges in the temples). `layoutTerrain` (`src/data/missions/terrain.js`) turns them into a height for every
   pixel of the road and the platforms' tops, kept on `mission.terrain` and `game.terrain`; a flat
   road has no height table at all, so the desert roads keep their arithmetic exactly.
   `src/sim/stage/terrain.js` reads it (`groundAt`, `floorBelow`, `isWall`, `STEP_UP`): fighters walk
@@ -95,7 +103,10 @@ places on the road: zone walls, where each wave starts, crates and props, and th
   keeps every road fair: level starts, zone walls and boss arenas, gentle lock screens, no wall over
   24px, platforms within jumping reach and every crate on level ground. The road is drawn from the
   forest's painted cross-section laid along the surface (`src/render/scene/terrain-ground.js`), and
-  the decks from `assets/sprites/platforms/` with legs grown to the ground.
+  the decks from `assets/sprites/platforms/` with legs grown to the ground. The temple roads are
+  built from the same shapes as raised causeways, terraces with walkable steps, steep stairs that
+  need a jump and root-heaved mounds. A shape may run on past the end of the road, since `groundAt`
+  holds the last height, so Angkor Wat's boss arena stands level 16px above the road.
 - Each desert theme in `src/art/scene-themes.js` gives a few base colors and a skyline kind (`city`,
   `dunes`, `factory`, `ruins`); `scenePalette` works out every other shade, and each mission's far
   scenery is painted once, the first time it is drawn (`src/render/scene/backdrop.js`).

@@ -1,5 +1,6 @@
-// the six painted forests of missions 1 to 6: the paintings are in assets/backdrops/, these are
-// the colors drawn on top of them, for the road and for what moves in the air
+// the eight painted roads, the forests of missions 1 to 6 and the temples of missions 11 and 12:
+// the paintings are in assets/backdrops/, these are the colors drawn on top of them, for the road
+// and for what moves in the air
 export const FOREST_THEMES = {
   pineRidge: {
     ground: { sand: '#5a4634', rock: '#2b1e1d', grass: '#4a6a44' },
@@ -43,6 +44,29 @@ export const FOREST_THEMES = {
       fireflies: ['#f4ff9a', '#c8f060'],
       mist: '#a6abd6',
       mote: '#c5c7e4',
+    },
+  },
+  angkorWat: {
+    ground: { sand: '#b07c64', rock: '#4a2b2c', grass: '#7f8f4a' },
+    ambient: {
+      shaft: '#ffd89a',
+      bird: '#3a2438',
+      mist: '#f0d0cc',
+      leaves: ['#fff3d2', '#ffe089', '#f6c2b8'],
+    },
+  },
+  bayon: {
+    ground: { sand: '#7b8a6f', rock: '#251e32', grass: '#55703f' },
+    ambient: {
+      bat: '#1a1024',
+      mist: '#9a86b4',
+      mote: '#ffd0a0',
+      fireflies: ['#fff3a8', '#f0c860'],
+      leaves: ['#4a5e3a', '#6b7a44', '#8a7a3e'],
+      flames: ['#fff6c8', '#ffd25a', '#ff8a2a', '#d8401c'],
+      glow: '#ff9a4a',
+      embers: ['#ffe08a', '#ff8a3a', '#d8501f'],
+      smoke: '#8a7a96',
     },
   },
 };

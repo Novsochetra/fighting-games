@@ -136,14 +136,30 @@ describe('a fight, with every system running', () => {
     expect(game.records).toMatchObject({ bestScore: score, bestMission: 2 });
   });
 
-  it('clears the whole game when the Warden Ox falls in the last mission', () => {
+  it('walks on from the fallen Warden Ox into Angkor Wat instead of ending the game', () => {
     const game = createPlayingGame();
     selectMission(game, 9);
     startPlay(game);
     const boss = felledBoss(game, 'brute');
     expect(boss.state).toBe('ko');
+    expect(game.banner.text).toBe('Mission complete');
+    runTicks(game, 600);
+    expect(game.mode).toBe('play');
+    expect(MISSIONS[game.missionIndex].name).toBe('Angkor Wat');
+    expect(game.terrain).toBe(MISSIONS[10].terrain);
+    expect(game.records.bestMission).toBe(11);
+  });
+
+  it('clears the whole game when the Bayon Guardian falls in the last mission', () => {
+    const game = createPlayingGame();
+    selectMission(game, 11);
+    startPlay(game);
+    const boss = felledBoss(game, 'guardian');
+    expect(boss.state).toBe('ko');
+    expect(game.banner.text).toBe('All clear');
     runTicks(game, 600);
     expect(game.mode).toBe('clear');
-    expect(game.records.bestScore).toBe(game.score);
+    expect(game.missionIndex).toBe(11);
+    expect(game.records).toMatchObject({ bestScore: game.score, bestMission: 12 });
   });
 });

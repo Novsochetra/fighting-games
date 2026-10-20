@@ -52,4 +52,6 @@ export const ENEMY_SPRITES = {
   djinn: sheet('djinn.png', bossStrips(4, 5), BOSS),
   furnace: sheet('furnace.png', bossStrips(5, 5), BOSS),
   pharaoh: sheet('pharaoh.png', bossStrips(5, 5), BOSS),
+  naga: sheet('naga.png', bossStrips(5, 5), BOSS),
+  guardian: sheet('guardian.png', bossStrips(3, 4), BOSS),
 };

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GROUND_Y, VIEW_WIDTH } from '../../../src/config.js';
+import { isPaintedTheme } from '../../../src/data/backdrops.js';
 import { FLAT_TERRAIN } from '../../../src/data/missions/terrain.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { PLATFORM_SPRITES } from '../../../src/data/platform-sprites.js';
@@ -24,7 +25,9 @@ describe('the terrain of every mission', () => {
   });
 
   it('keeps the desert roads flat', () => {
-    for (const mission of MISSIONS.slice(6)) {
+    const desertRoads = MISSIONS.filter((mission) => !isPaintedTheme(mission.theme));
+    expect(desertRoads).toHaveLength(4);
+    for (const mission of desertRoads) {
       expect(mission.terrain, mission.name).toBe(FLAT_TERRAIN);
     }
   });

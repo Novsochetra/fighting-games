@@ -40,17 +40,17 @@ function renderMission(index, ticks = 2) {
   return { view, log, game, mission: MISSIONS[index] };
 }
 
-const forestMissions = MISSIONS.filter((mission) => PAINTED_BACKDROPS[mission.theme]);
+const paintedMissions = MISSIONS.filter((mission) => PAINTED_BACKDROPS[mission.theme]);
 const desertMissions = MISSIONS.filter((mission) => !PAINTED_BACKDROPS[mission.theme]);
 
 describe('the scenery of each mission', () => {
-  it('walks the first six missions through painted forests and the last four through the desert', () => {
-    expect(forestMissions.map((mission) => mission.number)).toEqual([1, 2, 3, 4, 5, 6]);
+  it('walks six painted forests, four desert roads and two painted temples', () => {
+    expect(paintedMissions.map((mission) => mission.number)).toEqual([1, 2, 3, 4, 5, 6, 11, 12]);
     expect(desertMissions.map((mission) => mission.number)).toEqual([7, 8, 9, 10]);
   });
 
-  it('draws every layer of a forest, far plate first, before the fighters', () => {
-    for (const mission of forestMissions) {
+  it('draws every layer of a painted road, far plate first, before the fighters', () => {
+    for (const mission of paintedMissions) {
       const { log } = renderMission(mission.index);
       const { folder } = PAINTED_BACKDROPS[mission.theme];
       const layerCalls = log.filter(
@@ -61,8 +61,8 @@ describe('the scenery of each mission', () => {
     }
   });
 
-  it('keeps the air of a forest moving while the camera stands still', () => {
-    for (const mission of forestMissions) {
+  it('keeps the air of a painted road moving while the camera stands still', () => {
+    for (const mission of paintedMissions) {
       const first = renderMission(mission.index, 2).log.join('|');
       const later = renderMission(mission.index, 90).log.join('|');
       expect(later, mission.name).not.toBe(first);
@@ -85,8 +85,8 @@ describe('the scenery of each mission', () => {
     );
   });
 
-  it("lays a forest road from its painted cross-section and a desert road in the theme's sand", () => {
-    for (const mission of forestMissions) {
+  it("lays a painted road from its cross-section and a desert road in the theme's sand", () => {
+    for (const mission of paintedMissions) {
       expect(
         renderMission(mission.index).log.some((call) => call.includes('img(ground.png)')),
         mission.name,

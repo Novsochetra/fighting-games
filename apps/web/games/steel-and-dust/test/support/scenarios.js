@@ -79,4 +79,14 @@ export const SCENARIOS = {
     renderEvery: 240,
     scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3000: ['fill'], 3600: ['w4'] },
   },
+  // the last mission, the Bayon: root mounds, stone terraces and ledges, and the temple's own air,
+  // bats, flames in the fire bowls and the canopy drawn over the fight
+  bayon: {
+    mission: 11,
+    seed: 1212,
+    ticks: 4800,
+    sampleEvery: 30,
+    renderEvery: 240,
+    scheduled: { 600: ['fill'], 1200: ['w4'], 2400: ['w2'], 3000: ['fill'], 3600: ['w3'] },
+  },
 };

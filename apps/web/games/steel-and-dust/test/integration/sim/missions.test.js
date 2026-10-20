@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { VIEW_WIDTH } from '../../../src/config.js';
+import { GROUND_Y, VIEW_WIDTH } from '../../../src/config.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { knockOut } from '../../../src/sim/combat/knock-out.js';
 import {
@@ -9,6 +9,7 @@ import {
   startPlay,
 } from '../../../src/sim/stage/flow.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
+import { groundAt } from '../../../src/sim/stage/terrain.js';
 import { seededRandom } from '../../support/seeded-random.js';
 import { createTestGame, runTicks } from '../../support/test-game.js';
 
@@ -116,7 +117,7 @@ describe('missions and their zones', () => {
     expect(game.banner).toMatchObject({ text: 'Mission 4', sub: 'Raider Camp' });
   });
 
-  it('names a returning boss a mid-boss, the mission boss a boss and the Warden Ox the final boss', () => {
+  it('names a returning boss a mid-boss, the mission boss a boss and the Bayon Guardian the final boss', () => {
     const hollow = playMission(5);
     spawnEnemy(hollow, 'khan', 1);
     expect(hollow.banner.sub).toBe('Mid-boss');
@@ -124,7 +125,32 @@ describe('missions and their zones', () => {
     expect(hollow.banner.sub).toBe('Boss');
     const fortress = playMission(9);
     spawnEnemy(fortress, 'brute', 1);
-    expect(fortress.banner.sub).toBe('Final boss');
+    expect(fortress.banner.sub).toBe('Boss');
+    const bayon = playMission(11);
+    spawnEnemy(bayon, 'brute', 1);
+    expect(bayon.banner).toMatchObject({ text: 'Warden Ox', sub: 'Mid-boss' });
+    spawnEnemy(bayon, 'guardian', 1);
+    expect(bayon.banner).toMatchObject({ text: 'Bayon Guardian', sub: 'Final boss' });
+  });
+
+  it('climbs the Bakan to a sanctuary above the road, where the Naga Raja fights', () => {
+    const game = playMission(10);
+    const zones = MISSIONS[10].zones;
+    const sanctuary = zones.at(-1);
+    const floor = groundAt(game.terrain, sanctuary.left);
+    expect(floor).toBeLessThan(GROUND_Y);
+    game.stage.zoneIndex = zones.length - 1;
+    standAt(game, sanctuary.at + 4, 200);
+    expect(game.boss.kind).toBe('naga');
+    expect(game.boss.entering).toBe(false);
+    let onFloor = 0;
+    for (let i = 0; i < 300; i++) {
+      standAt(game, sanctuary.at + 4, 1);
+      expect(game.boss.y).toBeLessThanOrEqual(floor);
+      onFloor += game.boss.y === floor ? 1 : 0;
+    }
+    expect(onFloor).toBeGreaterThan(200);
+    expect(game.player.y).toBe(floor);
   });
 
   it("calls in the mission's own raiders while its boss fights", () => {

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { FOREST_THEMES } from '../../../src/art/forest-themes.js';
 import { SCENE_THEMES } from '../../../src/art/scene-themes.js';
 import { VIEW_WIDTH } from '../../../src/config.js';
+import { isPaintedTheme } from '../../../src/data/backdrops.js';
 import { ENEMY_SPRITES } from '../../../src/data/enemies/enemy-sprites.js';
 import { ENEMY_TYPES } from '../../../src/data/enemies/enemy-types.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
@@ -12,10 +13,10 @@ const kindsIn = (mission) =>
 const allKinds = new Set(MISSIONS.flatMap(kindsIn));
 const bossTypes = Object.entries(ENEMY_TYPES).filter(([, type]) => type.boss);
 
-describe('the ten missions', () => {
-  it('are ten, each with its own name and a scene theme that exists', () => {
-    expect(MISSIONS).toHaveLength(10);
-    expect(new Set(MISSIONS.map((mission) => mission.name)).size).toBe(10);
+describe('the twelve missions', () => {
+  it('are twelve, each with its own name and a scene theme that exists', () => {
+    expect(MISSIONS).toHaveLength(12);
+    expect(new Set(MISSIONS.map((mission) => mission.name)).size).toBe(12);
     for (const mission of MISSIONS) {
       expect(
         SCENE_THEMES[mission.theme] ?? FOREST_THEMES[mission.theme],
@@ -24,7 +25,7 @@ describe('the ten missions', () => {
     }
   });
 
-  it('walk through the six forests from sunrise to night, then out into the desert', () => {
+  it('walk through the six forests from sunrise to night, out into the desert, then to the temples', () => {
     expect(MISSIONS.slice(0, 6).map((mission) => mission.theme)).toEqual([
       'pineRidge',
       'oldGrove',
@@ -33,8 +34,21 @@ describe('the ten missions', () => {
       'emberWoods',
       'fireflyHollow',
     ]);
-    for (const mission of MISSIONS.slice(6)) {
+    for (const mission of MISSIONS.slice(6, 10)) {
       expect(SCENE_THEMES[mission.theme], mission.name).toBeDefined();
+    }
+    expect(MISSIONS.slice(10).map((mission) => mission.theme)).toEqual(['angkorWat', 'bayon']);
+    const painted = MISSIONS.filter((mission) => isPaintedTheme(mission.theme));
+    expect(painted.map((mission) => mission.number)).toEqual([1, 2, 3, 4, 5, 6, 11, 12]);
+  });
+
+  it('close the temple roads with a temple gate and raise sandstone ledges along them', () => {
+    for (const mission of MISSIONS.slice(10)) {
+      expect(mission.props.at(-1).kind, mission.name).toBe('templeGate');
+      expect(mission.terrain.platforms.length, mission.name).toBeGreaterThan(0);
+      for (const platform of mission.terrain.platforms) {
+        expect(platform.kind, mission.name).toBe('ledge');
+      }
     }
   });
 
@@ -50,13 +64,18 @@ describe('the ten missions', () => {
     expect([...allKinds].sort()).toEqual(Object.keys(ENEMY_TYPES).sort());
   });
 
-  it('each end on their own boss, a different one every mission, the Warden Ox last', () => {
+  it('each end on their own boss, a different one every mission, the Bayon Guardian last', () => {
     for (const mission of MISSIONS) {
       expect(mission.zones.at(-1).boss, mission.name).toBe(mission.boss);
       expect(ENEMY_TYPES[mission.boss].boss, mission.name).toBe(true);
     }
     expect(new Set(MISSIONS.map((mission) => mission.boss)).size).toBe(bossTypes.length);
-    expect(MISSIONS.at(-1).boss).toBe('brute');
+    expect(MISSIONS.at(-1).boss).toBe('guardian');
+  });
+
+  it('bring the Warden Ox back to guard the road of the finale', () => {
+    const finale = MISSIONS.at(-1);
+    expect(finale.zones.slice(0, -1).map((zone) => zone.boss)).toContain('brute');
   });
 
   it('bring back earlier bosses only as mid-bosses, never their own boss twice', () => {
@@ -88,7 +107,7 @@ describe('the ten missions', () => {
     }
   });
 
-  it('get longer zones as they go, with wide zones in every mission', () => {
+  it('get longer zones as they go, with wide zones in every mission and the finale longest', () => {
     for (const mission of MISSIONS) {
       expect(
         mission.zones.some((zone) => zone.screens >= 2),
@@ -96,6 +115,7 @@ describe('the ten missions', () => {
       ).toBe(true);
     }
     expect(MISSIONS.at(-1).length).toBeGreaterThan(MISSIONS[0].length);
+    expect(MISSIONS.at(-1).length).toBe(Math.max(...MISSIONS.map((mission) => mission.length)));
   });
 
   it('fill their crates with weapons and food that exist', () => {
