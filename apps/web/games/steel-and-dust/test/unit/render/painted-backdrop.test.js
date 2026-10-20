@@ -67,6 +67,7 @@ describe('painted backdrops', () => {
     const entry = { ...strip(300, 0.5), once: true };
     expect(record([entry], 0).draws).toEqual([['img(300)', '0', '0']]);
     expect(record([entry], 400).draws).toEqual([['img(300)', '-200', '0']]);
+    expect(record([entry], 600).draws).toEqual([]);
   });
 
   it('skip a layer until its image has loaded', () => {

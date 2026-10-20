@@ -31,16 +31,30 @@ describe('scene palettes', () => {
     expect(scenePalette('noon')).toMatchObject({ skylineKind: 'dunes', celestial: 'sun' });
   });
 
-  it('give each painted forest its soil, grass, ferns and the colors of its air', () => {
+  it('give each painted road its soil, any grass, the clumps in front and the colors of its air', () => {
     for (const themeId of Object.keys(PAINTED_THEMES)) {
       const palette = scenePalette(themeId);
       expect(palette.painted, themeId).toBe(true);
       const { ground, rubble } = palette;
-      for (const color of [ground.sand, ground.soil, ground.soilDeep, ground.grass, rubble.fern]) {
+      for (const color of [
+        ground.sand,
+        ground.soil,
+        ground.soilDeep,
+        ground.grassDark,
+        rubble.fern,
+      ]) {
         expect(color, themeId).toMatch(COLOR);
       }
+      expect(ground.grass, themeId).toBe(PAINTED_THEMES[themeId].ground.grass);
       expect(palette.ambient, themeId).toBe(PAINTED_THEMES[themeId].ambient);
     }
+  });
+
+  it('leave the swaying blades off the sand of the canyon road and dress it in scrub', () => {
+    const { ground, rubble } = scenePalette('sandstormPass');
+    expect(ground.grass).toBeUndefined();
+    expect(rubble.kind).toBe('scrub');
+    expect(rubble.bone).toBe(PAINTED_THEMES.sandstormPass.front.bone);
   });
 
   it('are worked out once per theme', () => {

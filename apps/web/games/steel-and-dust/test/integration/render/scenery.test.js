@@ -70,6 +70,28 @@ describe('the scenery of each mission', () => {
     }
   });
 
+  it('leaves the forest through its broken palisade and the last of its trunks', () => {
+    const canyon = MISSIONS.find((mission) => mission.theme === 'sandstormPass');
+    const { log } = renderMission(canyon.index);
+    for (const image of ['palisadeBroken.png', 'edge.png', 'back.png', 'near.png']) {
+      expect(
+        log.some((call) => call.includes(`img(${image})`)),
+        image,
+      ).toBe(true);
+    }
+    expect(log.some((call) => call.includes('img(canyonBarricade.png)'))).toBe(false);
+  });
+
+  it('closes the canyon with the raider barricade and lets the forest fall behind', () => {
+    const canyon = MISSIONS.find((mission) => mission.theme === 'sandstormPass');
+    const { view, log, game } = renderMission(canyon.index);
+    game.camera.x = canyon.length - 384;
+    log.length = 0;
+    renderFrame(game, view);
+    expect(log.some((call) => call.includes('img(canyonBarricade.png)'))).toBe(true);
+    expect(log.some((call) => call.includes('img(edge.png)'))).toBe(false);
+  });
+
   it("paints each drawn desert road's backdrop in its own theme, once per theme", () => {
     const { view } = recordedView();
     const game = createTestGame();

@@ -5,6 +5,7 @@ import { VIEW_WIDTH } from '../../../src/config.js';
 import { ENEMY_SPRITES } from '../../../src/data/enemies/enemy-sprites.js';
 import { ENEMY_TYPES } from '../../../src/data/enemies/enemy-types.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
+import { PROP_SPRITES } from '../../../src/data/prop-sprites.js';
 import { WEAPON_IDS } from '../../../src/data/weapons/index.js';
 
 const kindsIn = (mission) =>
@@ -38,6 +39,16 @@ describe('the ten missions', () => {
     expect(desertThemes.size).toBe(4);
     for (const theme of forestThemes) {
       expect(desertThemes.has(theme), theme).toBe(false);
+    }
+  });
+
+  it("come in through the last road's wall broken open, where a road has a way in", () => {
+    const entered = MISSIONS.filter((mission) => mission.entry);
+    expect(entered.map((mission) => mission.name)).toContain('Sandstorm Pass');
+    for (const mission of entered) {
+      const before = MISSIONS[mission.index - 1];
+      expect(mission.entry, mission.name).toBe(`${before.endWall}Broken`);
+      expect(PROP_SPRITES[mission.entry], mission.name).toBeDefined();
     }
   });
 
