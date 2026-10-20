@@ -4,6 +4,7 @@ import { BAMBOO_PASS } from './bamboo-pass.js';
 import { RAIDER_CAMP } from './raider-camp.js';
 import { EMBER_WOODS } from './ember-woods.js';
 import { FIREFLY_HOLLOW } from './firefly-hollow.js';
+import { IRON_WORKS } from './iron-works.js';
 
 // the painted forests: the layers in assets/backdrops/<folder>/, how fast each one scrolls with
 // the camera, and what moves in the air around them; an emitter's x is a spot in its near layer.
@@ -16,6 +17,7 @@ export const PAINTED_BACKDROPS = {
   raiderCamp: RAIDER_CAMP,
   emberWoods: EMBER_WOODS,
   fireflyHollow: FIREFLY_HOLLOW,
+  ironWorks: IRON_WORKS,
 };
 
 export function isPaintedTheme(themeId) {
