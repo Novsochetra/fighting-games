@@ -1,5 +1,4 @@
 import { HEROES } from '../../data/heroes.js';
-import { MISSIONS } from '../../data/missions/index.js';
 import {
   continueAs,
   cycleWeapon,
@@ -12,8 +11,7 @@ import {
 } from '../../sim/stage/flow.js';
 
 // the buttons that open a panel make their own sound
-const QUIET_ACTIONS = new Set(['back', 'help', 'settings', 'play', 'missions', 'continue']);
-const isQuiet = (name) => QUIET_ACTIONS.has(name) || name.startsWith('mission-');
+const QUIET_ACTIONS = new Set(['back', 'help', 'settings', 'play', 'continue']);
 
 // the same Shade list starts a run from the title and brings a fallen hero back as any Shade
 function heroActions(game, begin) {
@@ -32,18 +30,12 @@ function heroActions(game, begin) {
   return actions;
 }
 
-// picking a mission sets the road up behind the menu, then the Shade is chosen; Play always
-// starts at the first mission
-function missionActions(game, menus) {
-  const pick = (index) => () => {
-    selectMission(game, index);
+// every run starts at the first mission: its road is set up behind the menu, then the Shade is chosen
+function playAction(game, menus) {
+  return () => {
+    selectMission(game, 0);
     menus.open('heroes');
   };
-  const actions = { play: pick(0), missions: () => menus.open('missions') };
-  for (const mission of MISSIONS) {
-    actions[`mission-${mission.index}`] = pick(mission.index);
-  }
-  return actions;
 }
 
 export function createMenuActions({ game, audio, ui, fullscreen, menus, location }) {
@@ -55,7 +47,7 @@ export function createMenuActions({ game, audio, ui, fullscreen, menus, location
   };
   const actions = {
     ...heroActions(game, begin),
-    ...missionActions(game, menus),
+    play: playAction(game, menus),
     again: () => playFromStart(game),
     resume: () => resumePlay(game),
     help: () => menus.open('help'),
@@ -76,7 +68,7 @@ export function createMenuActions({ game, audio, ui, fullscreen, menus, location
     if (!action) {
       return;
     }
-    if (!isQuiet(name)) {
+    if (!QUIET_ACTIONS.has(name)) {
       audio.sfx('uiOk');
     }
     action();

@@ -2,7 +2,15 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { heroMoves } from '../../../src/data/styles/index.js';
 import { movesetOf, setWeapon } from '../../../src/sim/fighters/loadout.js';
-import { continueAs, continueRun, selectMission, startPlay } from '../../../src/sim/stage/flow.js';
+import {
+  continueAs,
+  continueRun,
+  enterNextMission,
+  playFromStart,
+  restartRun,
+  selectMission,
+  startPlay,
+} from '../../../src/sim/stage/flow.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
 import { seededRandom } from '../../support/seeded-random.js';
 import { createPlayingGame, press, release, runTicks, tap } from '../../support/test-game.js';
@@ -16,6 +24,12 @@ function walkInto(game, x) {
     runTicks(game, 1);
   }
   release(game, 'right');
+}
+
+// the hero goes down and stays down until the defeat menu comes up
+function fall(game) {
+  Object.assign(game.player, { hp: 0, state: 'ko', stateTime: 80, airborne: false });
+  runTicks(game, 1);
 }
 
 function standNextTo(game, enemy) {
@@ -131,6 +145,37 @@ describe('a fight, with every system running', () => {
     expect(game.player.state).not.toBe('ko');
   });
 
+  it('takes a life for every fall and ends the run for good after the fifth', () => {
+    const game = createPlayingGame();
+    expect(game.lives).toBe(5);
+    for (let lives = 4; lives > 0; lives--) {
+      fall(game);
+      expect(game).toMatchObject({ mode: 'over', lives });
+      continueRun(game);
+      expect(game.mode).toBe('play');
+    }
+    fall(game);
+    expect(game).toMatchObject({ mode: 'over', lives: 0, continues: 4 });
+    continueRun(game);
+    continueAs(game, 'blue');
+    expect(game).toMatchObject({ mode: 'over', lives: 0, continues: 4 });
+    expect(game.settings.hero).toBe('moss');
+  });
+
+  it('carries the lives into the next mission, gives none back on a restart and five on a new run', () => {
+    const game = createPlayingGame();
+    fall(game);
+    continueRun(game);
+    fall(game);
+    continueRun(game);
+    enterNextMission(game);
+    expect(game).toMatchObject({ missionIndex: 1, lives: 3 });
+    restartRun(game);
+    expect(game).toMatchObject({ missionIndex: 1, lives: 3, mode: 'play' });
+    playFromStart(game);
+    expect(game).toMatchObject({ missionIndex: 0, lives: 5, continues: 0, mode: 'play' });
+  });
+
   function felledBoss(game, kind) {
     spawnEnemy(game, kind, 1);
     const boss = game.boss;
@@ -152,7 +197,7 @@ describe('a fight, with every system running', () => {
     expect(game.mode).toBe('play');
     expect(game.missionIndex).toBe(1);
     expect(game.score).toBe(score);
-    expect(game.records).toMatchObject({ bestScore: score, bestMission: 2 });
+    expect(game.records).toMatchObject({ bestScore: score });
   });
 
   it('walks on from the fallen Warden Ox into Angkor Wat instead of ending the game', () => {
@@ -166,7 +211,6 @@ describe('a fight, with every system running', () => {
     expect(game.mode).toBe('play');
     expect(MISSIONS[game.missionIndex].name).toBe('Angkor Wat');
     expect(game.terrain).toBe(MISSIONS[10].terrain);
-    expect(game.records.bestMission).toBe(11);
   });
 
   it('clears the whole game when the Bayon Guardian falls in the last mission', () => {
@@ -179,6 +223,6 @@ describe('a fight, with every system running', () => {
     runTicks(game, 600);
     expect(game.mode).toBe('clear');
     expect(game.missionIndex).toBe(11);
-    expect(game.records).toMatchObject({ bestScore: game.score, bestMission: 12 });
+    expect(game.records).toMatchObject({ bestScore: game.score });
   });
 });

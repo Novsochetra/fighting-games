@@ -28,9 +28,16 @@ export function titleNoteHtml(game, context) {
   return parts.join(' &nbsp;·&nbsp; ') + separator + tip;
 }
 
+function livesLeftHtml(lives) {
+  if (lives === 1) {
+    return '<b>last life</b>';
+  }
+  return lives > 0 ? `lives left <b>${lives}</b>` : '<b>no lives left</b>';
+}
+
 export function overNoteHtml(game) {
   const mission = `Mission <b>${game.missionIndex + 1}</b>`;
-  return `${mission} &nbsp;·&nbsp; score <b>${game.score}</b> &nbsp;·&nbsp; continues used <b>${game.continues}</b>`;
+  return `${mission} &nbsp;·&nbsp; score <b>${game.score}</b> &nbsp;·&nbsp; ${livesLeftHtml(game.lives)}`;
 }
 
 export function clearStatsHtml(game) {
@@ -41,6 +48,7 @@ export function clearStatsHtml(game) {
     ['Score', game.score + best],
     ['Best combo', `${game.records.bestCombo} hits`],
     ['Continues', game.continues],
+    ['Lives left', game.lives],
     ['Difficulty', difficultyOf(game.settings).name],
   ];
   return rows.map(([name, value]) => `<dt>${name}</dt><dd>${value}</dd>`).join('');

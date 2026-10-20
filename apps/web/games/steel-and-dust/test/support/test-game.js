@@ -7,7 +7,7 @@ export function createTestGame({ settings = {}, io = {}, records = {} } = {}) {
   const game = createGame({
     settings: { ...defaultSettings(false), ...settings },
     device: { coarsePointer: false, touchUsed: false },
-    records: { bestCombo: 0, bestScore: 0, bestMission: 1, ...records },
+    records: { bestCombo: 0, bestScore: 0, ...records },
     hintsSeen: {},
     io,
   });

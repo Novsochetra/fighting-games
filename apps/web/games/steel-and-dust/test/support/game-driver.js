@@ -32,7 +32,7 @@ export function createScenarioGame(hero, mission = 0) {
   const game = createGame({
     settings: { ...defaultSettings(false), training: true, aim: true, ...(hero && { hero }) },
     device: { coarsePointer: false, touchUsed: false },
-    records: { bestCombo: 0, bestScore: 0, bestMission: 1 },
+    records: { bestCombo: 0, bestScore: 0 },
     hintsSeen: {},
     io: {},
   });

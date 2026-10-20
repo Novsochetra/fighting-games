@@ -1,4 +1,5 @@
 import { difficultyOf } from '../data/difficulty.js';
+import { START_LIVES } from '../data/player.js';
 import { missionAt } from '../data/missions/index.js';
 import { createFighter } from './fighters/create-fighter.js';
 import { createCrates } from './items/crates.js';
@@ -56,6 +57,7 @@ function resetScore(game) {
     goArrowTime: 0,
     clearTime: 0,
     continues: 0,
+    lives: START_LIVES,
     combo: { count: 0, timer: 0, damage: 0, bump: 0 },
     score: 0,
     playTime: 0,

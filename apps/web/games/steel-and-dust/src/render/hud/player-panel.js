@@ -4,6 +4,7 @@ import { WEAPONS } from '../../data/weapons/index.js';
 import { drawItemIcon } from '../scene/item-icons.js';
 import { drawText } from '../text/draw-text.js';
 import { drawBar } from './bar.js';
+import { drawLives } from './lives.js';
 
 function healthColor(fraction, tickCount) {
   if (fraction > 0.5) {
@@ -106,9 +107,10 @@ function drawUltGauge(painter, game) {
 }
 
 export function drawPlayerPanel(painter, game) {
-  painter.alpha(0.55).use(COLORS.night).rect(2, 2, 124, 45);
-  painter.alpha(1).use(HUD_COLORS.panelLine).outline(2, 2, 124, 45);
+  painter.alpha(0.55).use(COLORS.night).rect(2, 2, 124, 54);
+  painter.alpha(1).use(HUD_COLORS.panelLine).outline(2, 2, 124, 54);
   drawHealth(painter, game.player, game.tickCount);
   drawWeaponSlot(painter, game);
   drawUltGauge(painter, game);
+  drawLives(painter, { lives: game.lives, x: 6, y: 47 });
 }

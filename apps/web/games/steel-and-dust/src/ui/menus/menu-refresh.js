@@ -1,4 +1,4 @@
-import { unlockedMissions } from '../missions/mission-panel.js';
+import { hasLivesLeft } from '../../sim/stage/lives.js';
 import { clearStatsHtml, overNoteHtml, titleNoteHtml, weaponButtonLabel } from './menu-text.js';
 
 // fills in the live text of a base menu when it opens
@@ -7,7 +7,6 @@ export function createMenuRefreshers({ document, game, context }) {
   return {
     title() {
       byId('titleNote').innerHTML = titleNoteHtml(game, context());
-      byId('missionsBtn').hidden = unlockedMissions(game.records) < 2;
       context().fullscreen.refreshLabels();
     },
     pause() {
@@ -16,8 +15,14 @@ export function createMenuRefreshers({ document, game, context }) {
       button.textContent = weaponButtonLabel(game);
       context().fullscreen.refreshLabels();
     },
+    // with no lives left the run can only start over from the first mission
     over() {
+      const out = !hasLivesLeft(game);
+      byId('overTitle').textContent = out ? 'Game over' : 'You fell';
       byId('overNote').innerHTML = overNoteHtml(game);
+      byId('startOverBtn').hidden = !out;
+      byId('continueBtn').hidden = out;
+      byId('restartMissionBtn').hidden = out;
     },
     clear() {
       byId('clearStats').innerHTML = clearStatsHtml(game);

@@ -32,7 +32,6 @@
     <link rel="stylesheet" href="styles/settings.css" />
     <link rel="stylesheet" href="styles/help.css" />
     <link rel="stylesheet" href="styles/heroes.css" />
-    <link rel="stylesheet" href="styles/missions.css" />
     <link rel="stylesheet" href="styles/touch.css" />
     <link rel="stylesheet" href="styles/touch-buttons.css" />
     <script type="module" src="src/main.js"></script>
@@ -68,7 +67,6 @@
           <h1 class="logo">Steel &amp; Dust<span>pixel brawler</span></h1>
           <div class="mlist">
             <button class="mbtn primary" data-act="play">Play</button>
-            <button class="mbtn" data-act="missions" id="missionsBtn" hidden>Missions</button>
             <button class="mbtn" data-act="help">How to play</button>
             <button class="mbtn" data-act="settings">Settings</button>
             <button class="mbtn" data-act="fullscreen" data-fs>Full screen</button>
@@ -92,11 +90,14 @@
         </section>
 
         <section class="menu" id="m-over" aria-label="Defeated">
-          <h2 class="mtitle bad">You fell</h2>
+          <h2 class="mtitle bad" id="overTitle">You fell</h2>
           <p class="mnote" id="overNote"></p>
           <div class="mlist">
-            <button class="mbtn primary" data-act="continue">Continue</button>
-            <button class="mbtn" data-act="restart">Restart mission</button>
+            <button class="mbtn primary" data-act="again" id="startOverBtn" hidden>
+              Start from mission 1
+            </button>
+            <button class="mbtn primary" data-act="continue" id="continueBtn">Continue</button>
+            <button class="mbtn" data-act="restart" id="restartMissionBtn">Restart mission</button>
             <button class="mbtn" data-act="quit">Quit to title</button>
           </div>
         </section>
@@ -128,16 +129,6 @@
               <button class="xbtn" data-act="back">Back</button>
             </header>
             <div class="hero-grid" id="heroList"></div>
-          </div>
-        </section>
-
-        <section class="menu sub missions" id="m-missions" aria-label="Choose a mission">
-          <div class="box">
-            <header>
-              <h2>Choose a mission</h2>
-              <button class="xbtn" data-act="back">Back</button>
-            </header>
-            <div class="mission-grid" id="missionList"></div>
           </div>
         </section>
 

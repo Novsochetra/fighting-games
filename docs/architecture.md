@@ -69,11 +69,16 @@ length.
 - `screenEdges` (`src/sim/fighters/arena-bounds.js`) is the part of the road a fight happens in: the
   locked screen, or what the camera shows of a wide zone. Raiders walk in from just past it.
 - A mission ends when its own boss falls (`isMissionBoss` in `src/sim/stage/mission.js`); a boss met
-  earlier on its road is a mid-boss and only opens the road. The score, clock, continues and ULT bar
-  carry into the next mission (`enterNextMission`); the hero starts it fresh. Beating mission N
-  unlocks mission N + 1 on the title's mission select (`records.bestMission`).
-  A fallen hero continues where they fell, as any Shade: Continue opens the Shade list, and
-  `continueAs` (`src/sim/stage/flow.js`) brings the hero back as the one picked, keeping the run.
+  earlier on its road is a mid-boss and only opens the road. The score, clock, continues, lives and
+  ULT bar carry into the next mission (`enterNextMission`); the hero starts it fresh. Every run
+  starts at mission 1; there is no mission select.
+- A run has five lives (`START_LIVES` in `src/data/player.js`), shown as hearts under the hero's
+  panel (`src/render/hud/lives.js`). Every fall costs one (`loseLife` in `src/sim/stage/lives.js`)
+  and nothing gives one back: not a continue, a restart of the mission or a new mission. While lives
+  are left, a fallen hero continues where they fell, as any Shade: Continue opens the Shade list,
+  and `continueAs` (`src/sim/stage/flow.js`) brings the hero back as the one picked, keeping the
+  run. The last fall is Game over: the defeat menu offers only Start from mission 1, a new run with
+  five lives, and Quit.
 - The walk on to the next mission is never seen: over the end of the clear screen the cleared road
   fades to night (`src/render/overlays/clear-fade.js`), and the next mission fades in from it. A
   mission is drawn and its clock runs only once its painted road has loaded (`missionRoadLoaded`

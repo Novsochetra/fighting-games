@@ -35,17 +35,17 @@ describe('storage', () => {
     });
     const saved = loadSaved(storage, false);
     expect(saved.settings).toMatchObject({ buttonSize: 2, music: 20, sfx: 80 });
-    expect(saved.records).toEqual({ bestCombo: 17, bestScore: 0, bestMission: 1 });
+    expect(saved.records).toEqual({ bestCombo: 17, bestScore: 0 });
     expect(saved.hintsSeen).toEqual({});
   });
 
   it('saves through the ports', () => {
     const storage = memoryStorage();
     const ports = persistencePorts(storage);
-    ports.saveRecords({ bestCombo: 3, bestScore: 900, bestMission: 4 });
+    ports.saveRecords({ bestCombo: 3, bestScore: 900 });
     ports.saveHints({ move: 1 });
     expect(storage.data.get('sd_best_score')).toBe('900');
-    expect(loadSaved(storage, false).records.bestMission).toBe(4);
+    expect(loadSaved(storage, false).records).toEqual({ bestCombo: 3, bestScore: 900 });
     expect(storage.data.get('sd_hints')).toBe('{"move":1}');
   });
 });

@@ -1,7 +1,6 @@
 import { createHelpPanel } from '../ui/help/help-panel.js';
 import { createHeroPanel } from '../ui/heroes/hero-panel.js';
 import { createMenuActions } from '../ui/menus/menu-actions.js';
-import { createMissionPanel } from '../ui/missions/mission-panel.js';
 import { MenuController } from '../ui/menus/menu-controller.js';
 import { installMenuEvents } from '../ui/menus/menu-events.js';
 import { createNavigator, handleMenuKey } from '../ui/menus/menu-navigation.js';
@@ -29,7 +28,6 @@ function createPanels({ elements, game, audio, layout, ui, window }) {
     }),
     help: createHelpPanel({ tabs: elements.helpTabs, body: elements.helpBody, game, ui }),
     heroes: createHeroPanel({ list: elements.heroList, game }),
-    missions: createMissionPanel({ list: elements.missionList, game }),
   };
 }
 

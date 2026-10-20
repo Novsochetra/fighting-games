@@ -10,6 +10,7 @@ import { addFloatText, showBanner } from '../fx/effects.js';
 import { addSparks } from '../fx/particles.js';
 import { refreshPose } from '../pose/refresh-pose.js';
 import { resetRun } from '../reset-run.js';
+import { hasLivesLeft } from './lives.js';
 import { missionOf } from './mission.js';
 
 function announceMission(game) {
@@ -30,11 +31,11 @@ export function startPlay(game) {
   announceMission(game);
 }
 
-// the score, the clock, the continues and the ULT bar carry over; the hero starts fresh
+// the score, the clock, the continues, the lives and the ULT bar carry over; the hero starts fresh
 export function enterNextMission(game) {
-  const { score, playTime, continues, ultMeter } = game;
+  const { score, playTime, continues, lives, ultMeter } = game;
   resetRun(game, game.missionIndex + 1);
-  Object.assign(game, { score, playTime, continues, ultMeter });
+  Object.assign(game, { score, playTime, continues, lives, ultMeter });
   announceMission(game);
 }
 
@@ -49,7 +50,9 @@ export function pause(game) {
 }
 
 export function restartRun(game) {
+  const { lives } = game;
   resetRun(game, game.missionIndex);
+  game.lives = lives;
   startPlay(game);
 }
 
@@ -88,6 +91,9 @@ function knockBackNearby(game, player) {
 }
 
 export function continueRun(game) {
+  if (!hasLivesLeft(game)) {
+    return;
+  }
   const player = game.player;
   Object.assign(player, { hp: player.maxHp, hpLag: player.maxHp, state: 'getup', stateTime: 0 });
   const y = floorUnder(game.terrain, player);
@@ -102,6 +108,9 @@ export function continueRun(game) {
 
 // a fallen hero may come back as another Shade: the run, the weapon in hand and the ULT bar stay
 export function continueAs(game, heroId) {
+  if (!hasLivesLeft(game)) {
+    return;
+  }
   const hero = heroById(heroId);
   game.settings.hero = hero.id;
   game.io.saveSettings(game.settings);

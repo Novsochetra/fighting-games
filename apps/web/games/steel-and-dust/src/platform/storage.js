@@ -30,7 +30,6 @@ export function loadRecords(storage) {
   return {
     bestCombo: readCount(storage, 'sd_best'),
     bestScore: readCount(storage, 'sd_best_score'),
-    bestMission: readCount(storage, 'sd_missions') || 1,
   };
 }
 
@@ -38,7 +37,6 @@ export function saveRecords(storage, records) {
   try {
     storage.setItem('sd_best', String(records.bestCombo));
     storage.setItem('sd_best_score', String(records.bestScore));
-    storage.setItem('sd_missions', String(records.bestMission ?? 1));
   } catch {
     return false;
   }
