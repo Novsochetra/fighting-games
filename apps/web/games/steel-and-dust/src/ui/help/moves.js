@@ -1,5 +1,5 @@
 import { heroById } from '../../data/heroes.js';
-import { MOVE_INPUTS, MOVE_ORDER, MOVE_TAGS } from '../../data/move-list.js';
+import { MOVE_INPUTS, MOVE_ORDER, MOVE_TAGS, TECHNIQUE_ORDER } from '../../data/move-list.js';
 import { heroMoves, styleOf } from '../../data/styles/index.js';
 import { ultimateOf } from '../../data/ultimates/index.js';
 import { WEAPONS } from '../../data/weapons/index.js';
@@ -23,7 +23,8 @@ function weaponSummary(weapon) {
 
 function styleSummary(heroId) {
   const style = styleOf(heroId);
-  return `<p class="wmeta"><b>${heroById(heroId).name}: ${style.name}.</b> ${style.summary}</p>`;
+  const techniques = TECHNIQUE_ORDER.map((id) => style.techniques[id].name).join(', ');
+  return `<p class="wmeta"><b>${heroById(heroId).name}: ${style.name}.</b> ${style.summary} Own techniques on every weapon: ${techniques}.</p>`;
 }
 
 function moveRow(id, move, touch) {
@@ -45,7 +46,9 @@ function ultimateRow(heroId, touch) {
 export function movesHtml({ weaponId, heroId, touch }) {
   const weapon = WEAPONS[weaponId];
   const moves = heroMoves(heroId, weaponId);
-  const rows = MOVE_ORDER.map((id) => moveRow(id, moves[id], touch)).join('');
+  const rows = [...MOVE_ORDER, ...TECHNIQUE_ORDER]
+    .map((id) => moveRow(id, moves[id], touch))
+    .join('');
   const header =
     '<thead><tr><th>Input</th><th>Move</th><th style="text-align:right">Dmg</th><th>Notes</th></tr></thead>';
   const tries = weapon.tryCombos

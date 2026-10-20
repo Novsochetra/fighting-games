@@ -1,4 +1,5 @@
 import { normalizeMoves } from '../moves/define-move.js';
+import { TECHNIQUE_LINKS } from './technique-links.js';
 
 const NO_TEMPO = { startup: 1, recovery: 1, damage: 1, hitstop: 0, reach: 0 };
 const FLURRY_DAMAGE = 0.6;
@@ -39,6 +40,19 @@ function withTempo(move, tempo) {
   };
 }
 
+// the Shade's own techniques join the moveset as they are, branching off heavies with no light
+function addTechniques(styled, techniques = {}) {
+  for (const [id, technique] of Object.entries(techniques)) {
+    styled[id] = { ...technique, technique: true };
+  }
+  for (const [from, button, to] of TECHNIQUE_LINKS) {
+    const move = styled[from];
+    if (styled[to] && move && !move.next[button]) {
+      move.next = { ...move.next, [button]: to };
+    }
+  }
+}
+
 // a Shade's style reworks a weapon's moves: its tempo scales every move, its patches add signatures
 export function applyStyle(moves, style) {
   const tempo = { ...NO_TEMPO, ...style.tempo };
@@ -46,5 +60,6 @@ export function applyStyle(moves, style) {
   for (const [id, move] of Object.entries(moves)) {
     styled[id] = withTempo(patched(move, style.moves[id]), tempo);
   }
+  addTechniques(styled, style.techniques);
   return normalizeMoves(styled);
 }

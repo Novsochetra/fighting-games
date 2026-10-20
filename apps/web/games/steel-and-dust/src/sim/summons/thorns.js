@@ -58,14 +58,17 @@ export function updateThorn(game, thorn) {
   thorn.done = thorn.time >= fxLength('thorns');
 }
 
-// a finisher's brambles erupt one after another along the ground ahead
-export function raiseComboThorns(game, fighter, count) {
-  for (let i = 0; i < count; i++) {
-    raiseThorn(game, {
-      x: fighter.x + fighter.facing * (30 + i * 22),
-      scale: 0.6,
-      hit: COMBO_THORN,
-      delay: i * 4,
-    });
+// a finisher's brambles erupt one after another along the ground ahead, or on both sides in a ring
+export function raiseComboThorns(game, fighter, { count, ring = false, ahead = 30 }) {
+  const sides = ring ? [fighter.facing, -fighter.facing] : [fighter.facing];
+  for (const side of sides) {
+    for (let i = 0; i < count; i++) {
+      raiseThorn(game, {
+        x: fighter.x + side * (ahead + i * 22),
+        scale: 0.6,
+        hit: COMBO_THORN,
+        delay: i * 4,
+      });
+    }
   }
 }

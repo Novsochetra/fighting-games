@@ -1,3 +1,5 @@
+import { BLUE_TECHNIQUES } from './techniques/blue.js';
+
 // long reach and exact timing: heavy cuts freeze raiders solid until the ice shatters
 export const BLUE_STYLE = {
   name: 'Frost Iai',
@@ -10,4 +12,5 @@ export const BLUE_STYLE = {
     C1: { freeze: 52 },
     AK: { freeze: 34 },
   },
+  techniques: BLUE_TECHNIQUES,
 };

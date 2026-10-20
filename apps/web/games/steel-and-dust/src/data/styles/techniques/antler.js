@@ -1,0 +1,63 @@
+import { defineMove } from '../../moves/define-move.js';
+import { CHOP, DIVE, HOOK, THRUST } from '../technique-poses.js';
+
+// all weight and no hurry: toss them over the antlers, run the herd through them, split the ground
+export const ANTLER_TECHNIQUES = {
+  S1: defineMove({
+    name: 'Antler Toss',
+    frames: [6, 10, 20],
+    damage: 12,
+    hitbox: [2, -40, 26, 36],
+    // thrown back over the Shade's shoulder, into the raiders behind
+    knockback: [-3.4, -5.6],
+    launch: true,
+    armor: true,
+    sustain: true,
+    haltOnHit: true,
+    forward: 5.2,
+    sprite: ['slash2', 3],
+    ...HOOK,
+  }),
+  S2: defineMove({
+    name: 'Herd Charge',
+    frames: [8, 16, 22],
+    damage: 9,
+    hitbox: [0, -38, 28, 34],
+    knockback: [4.4, 0],
+    sustain: true,
+    forward: 4.2,
+    multiHit: 8,
+    finalKnockback: [4.4, -3.4],
+    knockdown: true,
+    armor: true,
+    stags: 2,
+    afterimages: true,
+    sprite: ['thrust', 3],
+    ...THRUST,
+  }),
+  S3: defineMove({
+    name: 'Earthshaker',
+    frames: [14, 4, 28],
+    damage: 18,
+    hitbox: [-8, -44, 40, 44],
+    knockback: [2.6, -5.8],
+    knockdown: true,
+    quakeDamage: 10,
+    armor: true,
+    sprite: ['cleave', 3],
+    ...CHOP,
+  }),
+  AS: defineMove({
+    name: 'Skyfall Antler',
+    frames: [8, 40, 14],
+    damage: 13,
+    hitbox: [-2, -8, 16, 16],
+    knockback: [2.4, -3],
+    dive: [0.6, 7],
+    bounce: true,
+    shockwave: true,
+    stags: 1,
+    sprite: ['plunge', 2],
+    ...DIVE,
+  }),
+};

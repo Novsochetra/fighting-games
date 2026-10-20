@@ -5,10 +5,17 @@ import { addFloatText, addRing } from '../fx/effects.js';
 import { addSparks } from '../fx/particles.js';
 import { isDeflectable } from '../hazards/shot-rules.js';
 import { breakCrate } from '../items/crates.js';
+import { shatterIceOn } from '../summons/ice.js';
 import { applyHit } from './apply-hit.js';
 import { attackBox, crateBox, hurtBox, knifeBox, overlapCenter, overlaps } from './boxes.js';
 import { addUltMeter } from './combo.js';
 import { useDurability } from './durability.js';
+
+function breakIce(game, attacker, target) {
+  if (attacker.move.shatters) {
+    shatterIceOn(game, target, attacker.facing);
+  }
+}
 
 function hitFighters(game, attacker, area) {
   let connected = false;
@@ -24,6 +31,7 @@ function hitFighters(game, attacker, area) {
     if (applyHit(game, { attacker, target, move: attacker.move, ...center })) {
       attacker.hitTargets.add(target);
       connected = true;
+      breakIce(game, attacker, target);
     }
   }
   return connected;

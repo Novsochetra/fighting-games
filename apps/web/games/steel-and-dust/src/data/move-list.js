@@ -22,6 +22,9 @@ export const MOVE_ORDER = [
   'ADL',
 ];
 
+// each Shade's own techniques, the same four inputs on every weapon
+export const TECHNIQUE_ORDER = ['S1', 'S2', 'S3', 'AS'];
+
 export const MOVE_INPUTS = {
   L1: 'J',
   L2: 'J J',
@@ -44,9 +47,14 @@ export const MOVE_INPUTS = {
   AK: 'Air K',
   ADK: 'Air ↓ + K',
   ADL: 'Air ↓ + J',
+  S1: 'K J',
+  S2: 'K K J',
+  S3: 'K K K J',
+  AS: 'Air K J',
 };
 
 export const MOVE_TAGS = [
+  ['technique', 'Shade technique'],
   ['chargeLevel', 'Charged'],
   ['launch', 'Launcher'],
   ['jumpCancel', 'Jump cancel'],
@@ -66,4 +74,5 @@ export const MOVE_TAGS = [
   ['fireflies', 'Fireflies'],
   ['stags', 'Spirit stag'],
   ['freeze', 'Freezes'],
+  ['shatters', 'Shatters ice'],
 ];

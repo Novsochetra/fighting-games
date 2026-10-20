@@ -1,3 +1,5 @@
+import { MOSS_TECHNIQUES } from './techniques/moss.js';
+
 export const MOSS_STYLE = {
   name: 'Grove Guard',
   summary: 'Even tempo. String and heavy finishers raise brambles out of the ground ahead.',
@@ -8,4 +10,5 @@ export const MOSS_STYLE = {
     C2: { thorns: 4 },
     ADK: { thorns: 2 },
   },
+  techniques: MOSS_TECHNIQUES,
 };

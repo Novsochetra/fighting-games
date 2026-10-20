@@ -40,4 +40,11 @@ function freeze(live, start) {
   hiss(live, { start, ...frost, attack: 0.005, duration: 0.3, volume: 0.06 });
 }
 
-export const SIGNATURE_SOUNDS = { thorns, swarm, stampede, freeze };
+// the Shade's blade ringing out as it calls a technique by name
+function technique(live, start) {
+  metal(live, { start, frequencies: [1320, 1980, 2640], duration: 0.35, volume: 0.045 });
+  const swell = { type: 'bandpass', from: 1200, to: 4200, resonance: 2.4 };
+  hiss(live, { start, ...swell, attack: 0.02, duration: 0.2, volume: 0.06 });
+}
+
+export const SIGNATURE_SOUNDS = { thorns, swarm, stampede, freeze, technique };

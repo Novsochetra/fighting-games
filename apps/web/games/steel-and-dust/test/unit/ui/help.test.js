@@ -38,6 +38,20 @@ describe('help text', () => {
     expect(firefly).not.toContain('Thornwood Requiem');
   });
 
+  it("lists the chosen Shade's four techniques with their inputs", () => {
+    const blue = movesHtml({ weaponId: 'axe', heroId: 'blue', touch: false });
+    expect(blue).toContain('Own techniques on every weapon: Hoarfrost Draw, Winter Edge');
+    expect(blue).toContain(
+      '<td><kbd class="k">K</kbd> <kbd class="k">K</kbd> <kbd class="k">K</kbd> <kbd class="k">J</kbd></td><td>Shatterpoint</td>',
+    );
+    expect(blue).toContain('Shatters ice');
+    const moss = movesHtml({ weaponId: 'axe', heroId: 'moss', touch: true });
+    expect(moss).toContain(
+      'Air <kbd class="k">HEAVY</kbd> <kbd class="k">ATTACK</kbd></td><td>Seedfall',
+    );
+    expect(moss.match(/Shade technique/g)).toHaveLength(4);
+  });
+
   it('offers every take of the voices in the sound test', () => {
     const html = soundTestHtml();
     expect(html).toContain('Scream 5');

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { HEROES } from '../../../src/data/heroes.js';
-import { MOVE_ORDER } from '../../../src/data/move-list.js';
+import { MOVE_ORDER, TECHNIQUE_ORDER } from '../../../src/data/move-list.js';
 import { defineMove, normalizeMoves } from '../../../src/data/moves/define-move.js';
 import { applyStyle } from '../../../src/data/styles/apply-style.js';
 import { heroMoves, STYLES, styleOf } from '../../../src/data/styles/index.js';
@@ -45,6 +45,32 @@ describe('applyStyle', () => {
     expect(Math.ceil(styled.L1.active / styled.L1.multiHit)).toBe(3);
     expect(styled.L2).toMatchObject({ active: 12, multiHit: 4, damage: 4 });
   });
+
+  it('adds techniques as they are, linked off a heavy only where its light was free', () => {
+    const chop = { frames: [8, 2, 10], damage: 10, hitbox: [4, -28, 14, 7] };
+    const base = normalizeMoves({
+      K1: defineMove({ ...chop, name: 'Chop', next: { heavy: 'K2' } }),
+      K2: defineMove({ ...chop, name: 'Chop again', next: { light: 'K1' } }),
+    });
+    const snare = defineMove({
+      name: 'Snare',
+      frames: [6, 2, 12],
+      damage: 8,
+      hitbox: [0, -8, 20, 8],
+    });
+    const style = { tempo: { damage: 2 }, moves: {}, techniques: { S1: snare, S2: snare } };
+    const styled = applyStyle(base, style);
+    expect(styled.K1.next).toEqual({ heavy: 'K2', light: 'S1' });
+    expect(styled.K2.next).toEqual({ light: 'K1' });
+    expect(styled.S1).toMatchObject({
+      id: 'S1',
+      technique: true,
+      damage: 8,
+      cancelWindow: [8, 20],
+    });
+    expect(base.K1.next).toEqual({ heavy: 'K2' });
+    expect(snare.id).toBeUndefined();
+  });
 });
 
 describe('the Shades fight in their own styles', () => {
@@ -62,7 +88,7 @@ describe('the Shades fight in their own styles', () => {
       ]),
     );
     for (const [label, moves] of movesets) {
-      expect(Object.keys(moves).sort(), label).toEqual([...MOVE_ORDER].sort());
+      expect(Object.keys(moves).sort(), label).toEqual([...MOVE_ORDER, ...TECHNIQUE_ORDER].sort());
       const chained = Object.values(moves).flatMap((move) => Object.values(move.next));
       expect(
         chained.filter((next) => !moves[next]),
@@ -95,5 +121,21 @@ describe('the Shades fight in their own styles', () => {
     expect(heroMoves('antler', 'sword').K1).toMatchObject({ armor: true, shockwave: true });
     expect(heroMoves('blue', 'spear').K1.freeze).toBe(36);
     expect(heroMoves('blue', 'sword').L1.hitbox[2]).toBe(WEAPONS.sword.moves.L1.hitbox[2] + 8);
+  });
+
+  it('gives each Shade four techniques of its own, branching off the heavies of every weapon', () => {
+    const names = HEROES.flatMap((hero) =>
+      TECHNIQUE_ORDER.map((id) => heroMoves(hero.id, 'sword')[id].name),
+    );
+    expect(new Set(names).size).toBe(16);
+    for (const weaponId of Object.keys(WEAPONS)) {
+      const moves = heroMoves('blue', weaponId);
+      expect(['K1', 'K2', 'K3', 'AK'].map((id) => moves[id].next.light)).toEqual(TECHNIQUE_ORDER);
+      expect(moves.S3).toMatchObject({ name: 'Shatterpoint', shatters: true });
+      expect(moves.AS.aerial).toBe(true);
+    }
+    expect(heroMoves('moss', 'axe').S3).toMatchObject({ thorns: 2, thornRing: true });
+    expect(heroMoves('antler', 'spear').S3.quakeDamage).toBe(10);
+    expect(heroMoves('firefly', 'fists').S3.fireflies).toBe(6);
   });
 });

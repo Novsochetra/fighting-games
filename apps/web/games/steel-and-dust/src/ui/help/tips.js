@@ -6,6 +6,7 @@ const TIPS = [
   'Dashing the wrong way? Hold the other direction to turn, or dash again to dash back.',
   'Up + light lifts you into the air with the raider. In the air, down + light bounces off their head, up to three times a jump.',
   'The thin bar under the combo counter shows how long you have to land the next hit.',
+  'Each Shade has four <b>techniques</b> of its own, on every weapon: heavy then light (K J), K K J, K K K J, and Air K J. The help lists them for your Shade.',
   "Landing hits and taking damage fill the <b>ULT</b> bar. When it is full, your Shade's own ultimate hits every raider on screen.",
   'Pick your <b>Shade</b> after pressing Play. Each one fights in its own style: Moss raises thorns, Firefly looses fireflies, Antler sends spirit stags and Blue freezes raiders solid.',
   '<b>Knife Slingers</b> and <b>Crossbow Sentries</b> shoot from a distance: jump or dash over the shot, or hit it back at them.',

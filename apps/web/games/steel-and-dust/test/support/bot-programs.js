@@ -16,6 +16,10 @@ export const PROGRAMS = [
   'L 9 L 9 L 9 L 4 K:70',
   'dash 8 dash',
   'K 14 K:40',
+  'K 18 L 6 L',
+  'K 16 K 18 L 6 L',
+  'K 16 K 16 K 22 L 6 L',
+  'jump 10 L 8 K 14 L 6 L',
 ];
 
 const DEFAULT_HOLD = { K: 2 };

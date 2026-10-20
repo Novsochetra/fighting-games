@@ -1,3 +1,5 @@
+import { FIREFLY_TECHNIQUES } from './techniques/firefly.js';
+
 // fast and light: the third hit becomes a three-hit flurry and finishers loose homing fireflies
 export const FIREFLY_STYLE = {
   name: 'Swarm Dance',
@@ -11,4 +13,5 @@ export const FIREFLY_STYLE = {
     C2: { fireflies: 6 },
     AL3: { fireflies: 2 },
   },
+  techniques: FIREFLY_TECHNIQUES,
 };

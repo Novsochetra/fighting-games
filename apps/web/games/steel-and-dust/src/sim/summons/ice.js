@@ -36,6 +36,17 @@ export function shatterIce(game, ice) {
   strikeTarget(game, ice, { target, move: ice.shatter });
 }
 
+// a hit that breaks ice shatters it at once, sending the shards and the raider the hit's way
+export function shatterIceOn(game, target, direction) {
+  const ice = game.summons.find(
+    (summon) => summon.kind === 'ice' && summon.target === target && !summon.done,
+  );
+  if (ice) {
+    ice.direction = direction;
+    shatterIce(game, ice);
+  }
+}
+
 // a frozen raider stays in hitstop: no thinking, no physics, only the shake of a fresh hit
 export function updateIce(game, ice) {
   const { target } = ice;

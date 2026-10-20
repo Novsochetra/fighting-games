@@ -52,6 +52,11 @@ Saved in the browser: music and sound volume, difficulty (Easy, Normal, Hard), a
   - **Firefly, Swarm Dance:** about a quarter faster and a little lighter; the third light hit becomes a three-hit flurry, and finishers loose homing fireflies that sting twice each.
   - **Antler Spirit, Stampede:** slower and a quarter heavier; the third light hit is an armored ram that sends a spirit stag charging ahead, the heavy opener stomps a shockwave, and a max charge sends three stags.
   - **Blue, Frost Iai:** longer reach and slower recovery; heavy cuts freeze raiders solid in ice for extra hits, then the ice shatters and launches them.
+- **Four techniques per Shade, on every weapon:** press light after a heavy: `K J`, `K K J`, `K K K J` and `Air K J`. A technique calls out its name in the Shade's colors with a ring of sparks and a blade ring:
+  - **Moss:** Root Snare (a low root lash that snares a thrown raider, a bramble bursting under them), Bramble Wall (an armored chop that raises four thorns ahead), Grove Wrath (a launcher that rings the Shade with thorns), Seedfall (a diving plunge that plants two thorns).
+  - **Firefly:** Lantern Dash (a four-hit rush in afterimages), Glowstorm (a spinning drive that pulls raiders in and looses fireflies), Swarm Crescendo (darts after the raider and launches it into six fireflies), Firefly Rain (an air whirl that looses four).
+  - **Antler Spirit:** Antler Toss (an armored rush that throws the raider back over the Shade's shoulder), Herd Charge (an armored rush with two spirit stags), Earthshaker (a stomp that quakes every grounded raider on screen), Skyfall Antler (a dive that lands in a shockwave and a stag).
+  - **Blue:** Hoarfrost Draw (a long-reach draw that freezes), Winter Edge (a spinning flurry that freezes), Shatterpoint (a thrust that shatters ice at once for the shatter hit on top: try `K K K J`, the third heavy freezes them first), Frostfall (an air spike that freezes).
 - **An ultimate per Shade:** hits and damage taken fill the ULT bar. When it's full, time freezes for a cut-in with the Shade's portrait while it plays its own PixelLab ultimate animation, and the hero is invincible throughout:
   - **Thornwood Requiem (Moss):** the blade is planted and waves of brambles burst out to both edges of the screen, then bloom under every raider at once.
   - **Swarm Nova (Firefly):** the Shade rises and looses a swarm of fireflies that hunts every raider, then calls it home and bursts as a golden nova.
@@ -88,8 +93,9 @@ hitbox, knockback, ... })` entry in `src/data/weapons/<weapon>/` or `src/data/en
   To balance the game, edit these numbers. `next` defines which move a buffered press cancels into
   during recovery. Charge timing is `CHARGE_TAP` / `CHARGE_LEVEL1` / `CHARGE_MAX` in `src/config.js`.
   Each Shade's style (`src/data/styles/<shade>.js`) is a tempo that scales every move plus patches that add
-  signatures (`thorns`, `fireflies`, `stags`, `freeze`) to chosen moves, and each Shade's ultimate has its
-  timeline and hits in `src/data/ultimates/`.
+  signatures (`thorns`, `fireflies`, `stags`, `freeze`) to chosen moves, plus the Shade's four techniques
+  (`src/data/styles/techniques/<shade>.js`, unscaled), and each Shade's ultimate has its timeline and hits
+  in `src/data/ultimates/`.
 
 - **Input buffer.** A press is remembered for 8 ticks (`src/sim/input/read-input.js`).
 - **Attack tokens.** Only two raiders attack at once; the rest circle at a distance.

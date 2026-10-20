@@ -38,6 +38,7 @@ describe('live sounds', () => {
         'swarm',
         'stampede',
         'freeze',
+        'technique',
       ].sort(),
     );
   });

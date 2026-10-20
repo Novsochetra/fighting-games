@@ -1,3 +1,5 @@
+import { ANTLER_TECHNIQUES } from './techniques/antler.js';
+
 // slow and heavy: armored rams and stomps, and the third hit sends a spirit stag charging
 export const ANTLER_STYLE = {
   name: 'Stampede',
@@ -10,4 +12,5 @@ export const ANTLER_STYLE = {
     DA: { armor: true, stags: 1 },
     C2: { stags: 3 },
   },
+  techniques: ANTLER_TECHNIQUES,
 };
