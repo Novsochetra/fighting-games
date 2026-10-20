@@ -3,8 +3,18 @@ import { createPainter } from '../../../../src/render/painter.js';
 import { drawAmbient } from '../../../../src/render/scene/ambient/index.js';
 import { createRecordingContext } from '../../../support/recording-canvas.js';
 
+// stand-ins for the air no forest paints yet; a theme's own colors take their place once it has them
+const SAMPLE_COLORS = {
+  glints: ['#fffbe8', '#ffe39a', '#f4b46a'],
+  bat: '#1a0f22',
+  butterflies: ['#f6d24a', '#f08a5a', '#fff4dc'],
+  flames: ['#fff6c8', '#ffd24a', '#ff8a2a', '#d4401c'],
+  glow: '#ffb05a',
+};
+
 export const ALL_COLORS = Object.assign(
   {},
+  SAMPLE_COLORS,
   ...Object.values(FOREST_THEMES).map((theme) => theme.ambient),
 );
 
@@ -40,6 +50,19 @@ export const SAMPLE_EFFECTS = {
     emitters: [
       { x: 120, y: 170 },
       { x: 420, y: 168 },
+    ],
+    tileWidth: 640,
+    drift: 0.8,
+  },
+  glints: { kind: 'glints', plane: 'back', count: 40, top: 130, bottom: 170, drift: 0.08 },
+  bats: { kind: 'bats', plane: 'back', period: 900, y: 50, drift: 0.1 },
+  butterflies: { kind: 'butterflies', plane: 'front', count: 6, top: 110, bottom: 180, drift: 1.1 },
+  flames: {
+    kind: 'flames',
+    plane: 'back',
+    emitters: [
+      { x: 120, y: 160 },
+      { x: 420, y: 150 },
     ],
     tileWidth: 640,
     drift: 0.8,

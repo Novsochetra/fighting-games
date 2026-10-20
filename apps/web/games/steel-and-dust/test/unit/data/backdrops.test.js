@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -10,8 +11,8 @@ import { pngSize } from '../../support/png-size.js';
 import { createRecordingContext } from '../../support/recording-canvas.js';
 
 const GAME_ROOT = fileURLToPath(new URL('../../../', import.meta.url));
-const layerSize = (folder, name) =>
-  pngSize(join(GAME_ROOT, `assets/backdrops/${folder}/${name}.png`));
+const layerPath = (folder, name) => join(GAME_ROOT, `assets/backdrops/${folder}/${name}.png`);
+const layerSize = (folder, name) => pngSize(layerPath(folder, name));
 
 function drawsSomethingWithin(effect, colors, ticks) {
   for (let tick = 0; tick <= ticks; tick += 30) {
@@ -52,6 +53,19 @@ describe('painted backdrops', () => {
         expect(width, `${themeId} ${name}`).toBeGreaterThanOrEqual(256);
         expect(parallax, `${themeId} ${name}`).toBeGreaterThan(0);
         expect(parallax, `${themeId} ${name}`).toBeLessThan(1);
+      }
+    }
+  });
+
+  it('find every front layer on disk, as tall as the view, wide enough to tile and nearer than the road', () => {
+    for (const [themeId, { folder, fronts = [] }] of Object.entries(PAINTED_BACKDROPS)) {
+      for (const { name, parallax } of fronts) {
+        const label = `${themeId} front ${name}`;
+        expect(existsSync(layerPath(folder, name)), label).toBe(true);
+        const { width, height } = layerSize(folder, name);
+        expect(height, label).toBe(216);
+        expect(width, label).toBeGreaterThanOrEqual(256);
+        expect(parallax, label).toBeGreaterThan(1);
       }
     }
   });

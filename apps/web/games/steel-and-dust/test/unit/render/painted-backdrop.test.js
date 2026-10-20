@@ -3,6 +3,7 @@ import { PAINTED_BACKDROPS } from '../../../src/data/backdrops.js';
 import { createPainter } from '../../../src/render/painter.js';
 import {
   drawPaintedBackdrop,
+  drawPaintedFronts,
   loadPaintedBackdrop,
 } from '../../../src/render/scene/painted-backdrop.js';
 import { FakeImage } from '../../support/fake-image.js';
@@ -14,16 +15,18 @@ function strip(width, parallax, ready = true) {
   return { image: { width, recordingId: () => `img(${width})` }, parallax, ready };
 }
 
-function record(layers, cameraX) {
+function record(layers, cameraX, draw = drawPaintedBackdrop) {
   const { context, log } = createRecordingContext(null);
   const shaken = [];
   const setLayer = (offsetX, shake) => shaken.push([offsetX, shake]);
-  drawPaintedBackdrop(createPainter(context), setLayer, { backdrop: { layers }, cameraX });
+  draw(createPainter(context), setLayer, { backdrop: { layers, fronts: layers }, cameraX });
   const draws = log
     .filter((call) => call.startsWith('drawImage('))
     .map((call) => call.slice('drawImage('.length, -1).split(','));
-  return { draws, shaken };
+  return { draws, shaken, log };
 }
+
+const recordFronts = (fronts, cameraX) => record(fronts, cameraX, drawPaintedFronts);
 
 describe('painted backdrops', () => {
   it('load one image per layer from the forest folder, each the height of the view', () => {
@@ -66,5 +69,49 @@ describe('painted backdrops', () => {
   it('skip a layer until its image has loaded', () => {
     const { draws } = record([strip(320, 0.08, false), strip(0, 0.45)], 500);
     expect(draws).toEqual([]);
+  });
+});
+
+describe('painted front layers', () => {
+  const canopied = { ...PAINTED_BACKDROPS.pineRidge, fronts: [{ name: 'back', parallax: 1.2 }] };
+
+  it('load from the forest folder like the other layers, and are optional', () => {
+    const backdrop = loadPaintedBackdrop(loaders, canopied);
+    expect(backdrop.fronts.map((layer) => [layer.image.name, layer.parallax])).toEqual([
+      ['back.png', 1.2],
+    ]);
+    expect(backdrop.fronts[0].ready).toBe(true);
+    expect(loadPaintedBackdrop(loaders, PAINTED_BACKDROPS.pineRidge).fronts).toEqual([]);
+  });
+
+  it('tile across the view, scrolling faster than the camera', () => {
+    const { draws } = recordFronts([strip(320, 1.2)], 1000);
+    expect(draws).toEqual([
+      ['img(320)', '-240', '0'],
+      ['img(320)', '80', '0'],
+    ]);
+    expect(recordFronts([strip(320, 1.2)], -100).draws.map(([, x]) => Number(x))).toEqual([
+      -200, 120,
+    ]);
+  });
+
+  it('draw on the shaking layer, set once for all of them', () => {
+    const { shaken } = recordFronts([strip(320, 1.2), strip(400, 1.5)], 0);
+    expect(shaken).toEqual([[0, true]]);
+  });
+
+  it('draw nothing at all for a backdrop without them', () => {
+    for (const backdrop of [{ layers: [] }, { layers: [], fronts: [] }, {}]) {
+      const { context, log } = createRecordingContext(null);
+      const shaken = [];
+      const setLayer = (...args) => shaken.push(args);
+      drawPaintedFronts(createPainter(context), setLayer, { backdrop, cameraX: 300 });
+      expect(log).toEqual([]);
+      expect(shaken).toEqual([]);
+    }
+  });
+
+  it('skip a front layer until its image has loaded', () => {
+    expect(recordFronts([strip(320, 1.2, false), strip(0, 1.2)], 500).draws).toEqual([]);
   });
 });

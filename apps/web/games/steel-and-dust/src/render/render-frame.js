@@ -9,7 +9,7 @@ import { drawAmbient } from './scene/ambient/index.js';
 import { backdropFor } from './scene/backdrop.js';
 import { drawForeground } from './scene/foreground.js';
 import { drawTiled } from './scene/ground.js';
-import { drawPaintedBackdrop } from './scene/painted-backdrop.js';
+import { drawPaintedBackdrop, drawPaintedFronts } from './scene/painted-backdrop.js';
 import { scenePalette } from './scene/scene-palette.js';
 
 function drawBackdrop(painter, setLayer, { backdrop, cameraX }) {
@@ -48,6 +48,7 @@ export function renderFrame(game, view) {
   setLayer(-cameraX, true);
   drawWorld(painter, { game, view, cameraX });
   drawAir(painter, setLayer, scene, 'front');
+  drawPaintedFronts(painter, setLayer, scene);
   setLayer(0, true);
   drawForeground(painter, cameraX, scenePalette(theme).rubble, game.tickCount);
   context.setTransform(RENDER_SCALE, 0, 0, RENDER_SCALE, 0, 0);
