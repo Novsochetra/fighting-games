@@ -77,7 +77,8 @@ length.
 - The walk on to the next mission is never seen: over the end of the clear screen the cleared road
   fades to night (`src/render/overlays/clear-fade.js`), and the next mission fades in from it. A
   mission is drawn and its clock runs only once its painted road has loaded (`missionRoadLoaded`
-  in `src/render/scene/backdrop.js`); until then `main.js` holds the ticks and the screen shows
+  in `src/render/scene/backdrop.js`) and so have the picked Shade's strips (`sceneLoaded` in
+  `src/render/scene-loaded.js`), so the hero is never drawn as the bare body; until then `main.js` holds the ticks and the screen shows
   `src/render/overlays/loading-screen.js`. Once a road is in, the next mission's road loads behind
   it, so the wait is usually over before the mission is. A file that fails to load still settles,
   and the plain road is drawn in its place.
@@ -146,7 +147,7 @@ length.
   on the sheer step.
 
 Fighters are drawn from PixelLab sprite sheets in `assets/sprites/`: one folder of strips per playable
-Shade (`src/data/heroes.js`, loaded the first time it is picked) and one sheet per enemy
+Shade (`src/data/heroes.js`, all four loaded at the start) and one sheet per enemy
 (`src/data/enemies/enemy-sprites.js`). `src/sim/hero-animation.js` and `src/sim/enemy-animation.js`
 pick the frame for a fighter's state; colors that belong to a Shade live in `src/art/hero-themes.js`.
 

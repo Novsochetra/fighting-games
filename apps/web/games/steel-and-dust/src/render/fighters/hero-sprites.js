@@ -6,18 +6,35 @@ function stripPath(hero, name) {
   return ONE_ROW_STRIPS.has(name) ? hero.ultStrip : `${hero.directory}hero_${name}.png`;
 }
 
-export function loadHeroSprites({ createImage, createCanvas, baseUrl, hero, theme }) {
-  const sheet = { images: {}, tints: createTintCache(createCanvas), ready: false, theme };
-  const names = Object.keys(HERO_SPRITES.frames);
-  let waiting = names.length;
-  for (const name of names) {
-    const image = createImage();
-    image.onload = () => {
-      waiting -= 1;
-      sheet.ready = waiting === 0;
+// a strip that fails to load settles the sheet too, so a missing file cannot hold the loading
+// screen up forever; the sheet is only drawn from once every strip is in
+function watchStrips(sheet, images) {
+  let waiting = images.length;
+  let failed = false;
+  const settle = () => {
+    waiting -= 1;
+    sheet.settled = waiting === 0;
+    sheet.ready = sheet.settled && !failed;
+  };
+  for (const image of images) {
+    image.onload = settle;
+    image.onerror = () => {
+      failed = true;
+      settle();
     };
-    image.src = `${baseUrl}${stripPath(hero, name)}`;
-    sheet.images[name] = image;
+  }
+}
+
+export function loadHeroSprites({ createImage, createCanvas, baseUrl, hero, theme }) {
+  const tints = createTintCache(createCanvas);
+  const sheet = { images: {}, tints, ready: false, settled: false, theme };
+  const names = Object.keys(HERO_SPRITES.frames);
+  for (const name of names) {
+    sheet.images[name] = createImage();
+  }
+  watchStrips(sheet, Object.values(sheet.images));
+  for (const name of names) {
+    sheet.images[name].src = `${baseUrl}${stripPath(hero, name)}`;
   }
   return sheet;
 }

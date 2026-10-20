@@ -6,7 +6,7 @@ import { installUi } from './boot/install-ui.js';
 import { TICK_MS } from './config.js';
 import { createView } from './render/create-view.js';
 import { renderFrame } from './render/render-frame.js';
-import { missionRoadLoaded } from './render/scene/backdrop.js';
+import { sceneLoaded } from './render/scene-loaded.js';
 import { beginTick, runTick } from './sim/tick.js';
 import { createUiState } from './ui/ui-state.js';
 
@@ -56,10 +56,10 @@ function runTicks(count) {
 
 const clock = createClock(performance.now());
 // nothing moves behind the loading screen; the clock still keeps time there, so play does not
-// rush to catch up once the road is in
+// rush to catch up once the road and the Shade are in
 function frame(now) {
   const due = ticksDue(clock, now, TICK_MS);
-  if (missionRoadLoaded(view, game.missionIndex)) {
+  if (sceneLoaded(view, game)) {
     runTicks(due);
   }
   renderFrame(game, view);

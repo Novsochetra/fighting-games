@@ -1,20 +1,17 @@
 import { HERO_THEMES } from '../../art/hero-themes.js';
-import { DEFAULT_HERO, heroById } from '../../data/heroes.js';
+import { HEROES, heroById } from '../../data/heroes.js';
 import { loadHeroSprites } from './hero-sprites.js';
 
-function loadHero(view, id) {
-  const hero = heroById(id);
-  return loadHeroSprites({ ...view.loaders, hero, theme: HERO_THEMES[hero.id] });
-}
-
-// each Shade's strips load the first time that Shade is picked
 export function heroSheetFor(view, id) {
-  const key = heroById(id).id;
-  view.heroSheets[key] ||= loadHero(view, key);
-  return view.heroSheets[key];
+  return view.heroSheets[heroById(id).id];
 }
 
+// every Shade's strips load at the start, so the Shade picked on the title or after a fall is
+// already in when it is first drawn
 export function createHeroSheets(view) {
   view.heroSheets = {};
-  heroSheetFor(view, DEFAULT_HERO);
+  for (const hero of HEROES) {
+    const theme = HERO_THEMES[hero.id];
+    view.heroSheets[hero.id] = loadHeroSprites({ ...view.loaders, hero, theme });
+  }
 }

@@ -36,12 +36,12 @@ describe('drawing from the sprite sheets', () => {
     const drawn = imagesDrawn(log);
     expect(drawn).toContain('drawImage(img(raider.png)');
     expect(drawn).toContain('drawImage(img(hero_idle.png)');
-    expect(Object.keys(view.heroSheets)).toEqual(['moss', 'firefly']);
   });
 
-  it('loads only the Moss Shade until another Shade is picked', () => {
+  it("loads every Shade's strips at the start, so any Shade picked later is ready to draw", () => {
     const { view } = recordedView();
-    expect(Object.keys(view.heroSheets)).toEqual(['moss']);
+    expect(Object.keys(view.heroSheets)).toEqual(['moss', 'firefly', 'antler', 'blue']);
+    expect(Object.values(view.heroSheets).every((sheet) => sheet.ready)).toBe(true);
   });
 
   it("draws the Shade's own ultimate strip and portrait during its cut-in", () => {

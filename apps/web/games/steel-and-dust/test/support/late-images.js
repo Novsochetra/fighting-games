@@ -21,6 +21,11 @@ export function createLateImages() {
     loadAll() {
       waiting.splice(0).forEach(({ load }) => load());
     },
+    loadWhere(match) {
+      const arriving = waiting.filter(({ src }) => match(src));
+      arriving.forEach((entry) => waiting.splice(waiting.indexOf(entry), 1));
+      arriving.forEach(({ load }) => load());
+    },
     failAll() {
       waiting.splice(0).forEach(({ image }) => image.onerror?.());
     },
