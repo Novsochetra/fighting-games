@@ -16,6 +16,7 @@ import { drawPickups } from './scene/pickups.js';
 import { drawProps } from './scene/props/index.js';
 import { scenePalette } from './scene/scene-palette.js';
 import { missionOf } from '../sim/stage/mission.js';
+import { floorBelow } from '../sim/stage/terrain.js';
 
 // knocked-out fighters go behind the living, and the hero goes in front of the raiders
 function drawOrder(fighters) {
@@ -49,6 +50,7 @@ function drawFighters(painter, { game, view, cameraX }) {
       sheet,
       enemySheets: view.enemySheets,
       tickCount: game.tickCount,
+      floor: floorBelow(game.terrain, fighter.x, fighter.y),
     });
     drawTrail(painter, { fighter, sheet });
   }

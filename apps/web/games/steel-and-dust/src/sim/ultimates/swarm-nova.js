@@ -1,7 +1,7 @@
 import { FX_COLORS } from '../../art/fx-colors.js';
-import { GROUND_Y } from '../../config.js';
 import { SWARM_NOVA } from '../../data/ultimates/swarm-nova.js';
 import { easeOutCubic } from '../../lib/math.js';
+import { floorUnder } from '../fighters/terrain-motion.js';
 import { addSparks } from '../fx/particles.js';
 import { addBurst } from '../summons/bursts.js';
 import { releaseFirefly } from '../summons/fireflies.js';
@@ -57,11 +57,15 @@ function nova(game, player) {
   finaleFlash(game);
 }
 
-// Firefly: rise on the glow, loose the swarm on every raider, call it home and burst as a nova
+// Firefly: rise on the glow, loose the swarm on every raider, call it home and burst as a nova.
+// The floor is taken once, as the rise lifts the hero past whatever platforms are overhead
 export function runSwarmNova(game, player, time) {
   const { intro, recallAt, novaAt, end, poseTicks } = SWARM_NOVA;
-  player.y = GROUND_Y - heightAt(time);
-  player.airborne = player.y < GROUND_Y;
+  if (time === 1) {
+    player.ultFloor = floorUnder(game.terrain, player);
+  }
+  player.y = player.ultFloor - heightAt(time);
+  player.airborne = player.y < player.ultFloor;
   player.ultFrame = poseFrame(time, poseTicks);
   if (time === intro) {
     releaseSwarm(game, player);
@@ -73,7 +77,7 @@ export function runSwarmNova(game, player, time) {
     nova(game, player);
   }
   if (time >= end) {
-    player.y = GROUND_Y;
+    player.y = player.ultFloor;
     player.airborne = false;
     finishUlt(player);
   }

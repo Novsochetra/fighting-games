@@ -1,19 +1,9 @@
-import { GROUND_Y } from '../../config.js';
+import { groundAt } from '../../data/missions/terrain.js';
+
+export { groundAt };
 
 // the tallest step a fighter walks up or down without jumping or falling
 export const STEP_UP = 8;
-
-export function groundAt(terrain, x) {
-  const heights = terrain.heights;
-  if (!heights) {
-    return GROUND_Y;
-  }
-  const column = Math.floor(x);
-  if (column < 0) {
-    return heights[0];
-  }
-  return column < heights.length ? heights[column] : heights[heights.length - 1];
-}
 
 function spans(platform, x) {
   return x >= platform.x && x <= platform.x + platform.width;

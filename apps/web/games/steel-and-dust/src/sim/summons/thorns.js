@@ -1,9 +1,9 @@
 import { FX_COLORS } from '../../art/fx-colors.js';
-import { GROUND_Y } from '../../config.js';
 import { FX_SPRITES, fxLength } from '../../data/fx-sprites.js';
 import { randomBetween } from '../../lib/math.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust } from '../fx/particles.js';
+import { groundAt } from '../stage/terrain.js';
 import { strikeArea } from './strike.js';
 
 const STRIKE_TICK = FX_SPRITES.thorns.ticks * 2;
@@ -14,7 +14,7 @@ export function raiseThorn(game, { x, scale, hit, delay = 0 }) {
   game.summons.push({
     kind: 'thorn',
     x,
-    y: GROUND_Y,
+    y: groundAt(game.terrain, x),
     direction: 1,
     side: 'player',
     time: -delay,
@@ -29,7 +29,7 @@ function scatterLeaves(game, thorn) {
     game.particles.push({
       kind: 'chunk',
       x: thorn.x + randomBetween(-12, 12) * thorn.scale,
-      y: GROUND_Y - randomBetween(12, 40) * thorn.scale,
+      y: thorn.y - randomBetween(12, 40) * thorn.scale,
       vx: randomBetween(-1.6, 1.6),
       vy: -randomBetween(1, 3),
       life: randomBetween(20, 32) | 0,
@@ -42,12 +42,12 @@ function scatterLeaves(game, thorn) {
 function thornArea(thorn) {
   const half = 16 * thorn.scale;
   const height = 46 * thorn.scale;
-  return { x: thorn.x - half, y: GROUND_Y - height, width: half * 2, height };
+  return { x: thorn.x - half, y: thorn.y - height, width: half * 2, height };
 }
 
 export function updateThorn(game, thorn) {
   if (thorn.time === 1) {
-    addDust(game, { x: thorn.x, y: GROUND_Y, count: 3 });
+    addDust(game, { x: thorn.x, y: thorn.y, count: 3 });
     game.io.sfx('thorns', false, { x: thorn.x });
   }
   if (thorn.time === STRIKE_TICK) {

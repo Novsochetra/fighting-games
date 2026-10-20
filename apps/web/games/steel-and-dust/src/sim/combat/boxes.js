@@ -1,5 +1,3 @@
-import { GROUND_Y } from '../../config.js';
-
 const HURT_SHAPES = {
   down: [12, 8, 24, 8],
   getup: [12, 8, 24, 8],
@@ -56,7 +54,7 @@ export function overlapCenter(first, second) {
 }
 
 export function crateBox(crate) {
-  return { x: crate.x - 8, y: GROUND_Y - 15, width: 16, height: 15 };
+  return { x: crate.x - 8, y: crate.y - 15, width: 16, height: 15 };
 }
 
 export function knifeBox(knife) {

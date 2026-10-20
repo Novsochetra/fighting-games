@@ -1,6 +1,6 @@
 import { VIEW_WIDTH } from '../../config.js';
 import { hashInt } from '../../lib/math.js';
-import { layoutTerrain } from './terrain.js';
+import { groundAt, layoutTerrain } from './terrain.js';
 
 const FIRST_ZONE = 300;
 const ROAD = 300;
@@ -48,20 +48,21 @@ function layoutZones(spec, number) {
 }
 
 // a crate on the road before every zone and one more inside the wide ones
-function layoutCrates(zones, items) {
+function layoutCrates(zones, items, terrain) {
   const spots = zones.flatMap((zone) =>
     zone.screens > 1 ? [zone.left - 120, zone.left + VIEW_WIDTH + 60] : [zone.left - 120],
   );
-  return spots.map((x, i) => ({ x, item: items[i % items.length] }));
+  return spots.map((x, i) => ({ x, y: groundAt(terrain, x), item: items[i % items.length] }));
 }
 
-function layoutProps(kinds, length) {
+function layoutProps(kinds, length, terrain) {
   const props = [];
-  for (let x = 110; x < length - 140; x += PROP_SPACING) {
-    const hash = hashInt(x + kinds.length * 31);
-    props.push({ kind: kinds[hash % kinds.length], x: x + (hash % 60) });
+  for (let spot = 110; spot < length - 140; spot += PROP_SPACING) {
+    const hash = hashInt(spot + kinds.length * 31);
+    const x = spot + (hash % 60);
+    props.push({ kind: kinds[hash % kinds.length], x, y: groundAt(terrain, x) });
   }
-  props.push({ kind: 'wall', x: length - 12 });
+  props.push({ kind: 'wall', x: length - 12, y: groundAt(terrain, length - 12) });
   return props;
 }
 
@@ -69,14 +70,15 @@ function layoutProps(kinds, length) {
 export function layoutMission(spec, index) {
   const zones = layoutZones(spec, index + 1);
   const length = zones.at(-1).right;
+  const terrain = layoutTerrain(spec.zones, zones, length);
   return {
     ...spec,
     index,
     number: index + 1,
     length,
     zones,
-    terrain: layoutTerrain(spec.zones, zones, length),
-    crates: layoutCrates(zones, spec.crates),
-    props: layoutProps(spec.props, length),
+    terrain,
+    crates: layoutCrates(zones, spec.crates, terrain),
+    props: layoutProps(spec.props, length, terrain),
   };
 }

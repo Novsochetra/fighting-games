@@ -33,6 +33,14 @@ export function createBot(driver, scheduled) {
     bot.heldDirection = direction;
   }
 
+  // a step too tall to walk up is jumped
+  function walkToward(direction, view) {
+    holdDirection(direction);
+    if (view.wallAhead) {
+      driver.tap('jump');
+    }
+  }
+
   function startProgram(tick) {
     holdDirection(0);
     bot.events = compileProgram(PROGRAMS[bot.programIndex % PROGRAMS.length], tick + 1);
@@ -62,12 +70,12 @@ export function createBot(driver, scheduled) {
     }
     const target = nearestEnemy(view);
     if (!target) {
-      holdDirection(1);
+      walkToward(1, view);
       return;
     }
     const dx = target.x - view.player.x;
     if (Math.abs(dx) > REACH) {
-      holdDirection(Math.sign(dx));
+      walkToward(Math.sign(dx), view);
       return;
     }
     startProgram(tick);

@@ -3,6 +3,7 @@ import { VIEW_WIDTH } from '../../config.js';
 import { trailColorOf } from '../fighters/hero-colors.js';
 import { showHint } from '../hints.js';
 import { breakCratesIn } from '../items/crates.js';
+import { groundAt } from '../stage/terrain.js';
 import { flyBomb } from './enemy-shots.js';
 import { hitArea } from './shot-hits.js';
 import { leaveTrail } from './shot-trails.js';
@@ -41,11 +42,19 @@ export function tossKnife(game, fighter) {
   game.io.sfx('swingSpear', false, { vol: 0.6, x: fighter.x, dir: fighter.facing });
 }
 
+// a thrown or fired shot breaks on a rise in the road; fire pots and fire find their own floor
+export function hitsGround(terrain, shot) {
+  return shot.kind !== 'bomb' && shot.kind !== 'fire' && shot.y >= groundAt(terrain, shot.x);
+}
+
 function moveShot(game, shot) {
   shot.x += shot.direction * (shot.speed ?? DEFAULT_SPEED);
   shot.time++;
   if (shot.kind === 'bomb') {
     flyBomb(game, shot);
+  }
+  if (hitsGround(game.terrain, shot)) {
+    shot.dead = true;
   }
   const rules = SHOT_RULES[shot.kind];
   if (rules.rehitEvery && shot.time % rules.rehitEvery === 0) {

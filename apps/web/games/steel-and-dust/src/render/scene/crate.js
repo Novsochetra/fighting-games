@@ -1,11 +1,11 @@
 import { COLORS } from '../../art/colors.js';
 import { CRATE_COLORS as CRATE } from '../../art/scene-colors.js';
-import { GROUND_Y, VIEW_WIDTH } from '../../config.js';
+import { VIEW_WIDTH } from '../../config.js';
 import { point } from '../painter.js';
 
 function drawCrate(painter, crate) {
   const x = Math.round(crate.x - 8);
-  const y = GROUND_Y - 15;
+  const y = crate.y - 15;
   painter.use(COLORS.outline).rect(x - 1, y - 1, 18, 16);
   painter.use(CRATE.wood).rect(x, y, 16, 15);
   painter.use(CRATE.inner).rect(x + 1, y + 1, 14, 13);

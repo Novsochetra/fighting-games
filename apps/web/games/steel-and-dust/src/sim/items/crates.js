@@ -1,11 +1,16 @@
 import { COLORS } from '../../art/colors.js';
-import { GROUND_Y } from '../../config.js';
 import { randomBetween } from '../../lib/math.js';
 import { crateBox, overlaps } from '../combat/boxes.js';
 import { shake } from '../fx/camera-fx.js';
 
 export function createCrates(crates) {
-  return crates.map((crate) => ({ x: crate.x, item: crate.item, broken: false, hit: 0 }));
+  return crates.map((crate) => ({
+    x: crate.x,
+    y: crate.y,
+    item: crate.item,
+    broken: false,
+    hit: 0,
+  }));
 }
 
 export function breakCrate(game, crate) {
@@ -17,7 +22,7 @@ export function breakCrate(game, crate) {
     game.particles.push({
       kind: 'chunk',
       x: crate.x + randomBetween(-6, 6),
-      y: GROUND_Y - 8 + randomBetween(-5, 5),
+      y: crate.y - 8 + randomBetween(-5, 5),
       vx: randomBetween(-2.2, 2.2),
       vy: randomBetween(-3.6, -1),
       life: 60,
@@ -27,7 +32,7 @@ export function breakCrate(game, crate) {
   }
   game.pickups.push({
     x: crate.x,
-    y: GROUND_Y - 12,
+    y: crate.y - 12,
     vy: -2.6,
     item: crate.item,
     time: 0,

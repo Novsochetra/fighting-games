@@ -1,6 +1,5 @@
 import { COLORS } from '../../art/colors.js';
 import { HUD_COLORS } from '../../art/hud-colors.js';
-import { GROUND_Y } from '../../config.js';
 import { attackBox, crateBox, hurtBox } from '../../sim/combat/boxes.js';
 import { drawText } from '../text/draw-text.js';
 
@@ -33,7 +32,7 @@ export function drawDebugBoxes(painter, game) {
     painter
       .alpha(0.45)
       .use(COLORS.red)
-      .rect(wave.x - 6, GROUND_Y - 12, 12, 12);
+      .rect(wave.x - 6, wave.y - 12, 12, 12);
     painter.alpha(1);
   }
   for (const crate of game.crates) {

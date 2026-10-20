@@ -1,10 +1,11 @@
 import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
-import { GROUND_Y } from '../../config.js';
 import { clamp } from '../../lib/math.js';
+import { floorUnder } from '../fighters/terrain-motion.js';
 import { shake } from '../fx/camera-fx.js';
 import { addRing } from '../fx/effects.js';
 import { addDust, addSparks } from '../fx/particles.js';
+import { floorBelow } from '../stage/terrain.js';
 import { hitArea } from './shot-hits.js';
 
 const BOMB_GRAVITY = 0.16;
@@ -20,7 +21,7 @@ const SHOTS = {
 
 // a fire pot is aimed to come down where the hero stands now
 function bombSpeed(game, fighter, startY) {
-  const drop = GROUND_Y - startY;
+  const drop = floorUnder(game.terrain, game.player) - startY;
   const flight =
     (-BOMB_LIFT + Math.sqrt(BOMB_LIFT * BOMB_LIFT + 2 * BOMB_GRAVITY * drop)) / BOMB_GRAVITY;
   return clamp(Math.abs(game.player.x - fighter.x) / flight, 0.8, 3.2);
@@ -45,20 +46,20 @@ export function fireEnemyShot(game, fighter, kind) {
   game.io.sfx(spec.sound, false, { vol: 0.6, x: fighter.x, dir: fighter.facing });
 }
 
-function explode(game, bomb) {
+function explode(game, bomb, floor) {
   bomb.dead = true;
-  bomb.y = GROUND_Y;
-  const area = { x: bomb.x - 22, y: GROUND_Y - 30, width: 44, height: 30 };
+  bomb.y = floor;
+  const area = { x: bomb.x - 22, y: floor - 30, width: 44, height: 30 };
   hitArea(game, { shot: bomb, area, hit: BOMB_BLAST });
-  addSparks(game, { x: bomb.x, y: GROUND_Y - 8, count: 18, color: COLORS.tangerine, speed: 3.4 });
-  addDust(game, { x: bomb.x, y: GROUND_Y, count: 8, color: COLORS.smoke });
-  addRing(game, { x: bomb.x, y: GROUND_Y - 10, color: COLORS.orange, big: true });
+  addSparks(game, { x: bomb.x, y: floor - 8, count: 18, color: COLORS.tangerine, speed: 3.4 });
+  addDust(game, { x: bomb.x, y: floor, count: 8, color: COLORS.smoke });
+  addRing(game, { x: bomb.x, y: floor - 10, color: COLORS.orange, big: true });
   shake(game, 2, 8);
   game.io.sfx('boom', false, { vol: 0.7, x: bomb.x });
   game.projectiles.push({
     kind: 'fire',
     x: bomb.x,
-    y: GROUND_Y,
+    y: floor,
     direction: 1,
     side: bomb.side,
     time: 0,
@@ -69,10 +70,13 @@ function explode(game, bomb) {
   });
 }
 
+// measured from where the pot was, so it breaks on a platform it falls onto but not one it rises
+// through
 export function flyBomb(game, bomb) {
+  const floor = floorBelow(game.terrain, bomb.x, bomb.y);
   bomb.y += bomb.vy;
   bomb.vy += BOMB_GRAVITY;
-  if (bomb.y >= GROUND_Y - 2) {
-    explode(game, bomb);
+  if (bomb.y >= floor - 2) {
+    explode(game, bomb, floor);
   }
 }

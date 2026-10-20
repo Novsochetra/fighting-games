@@ -1,4 +1,4 @@
-import { GROUND_Y } from '../../config.js';
+import { floorBelow } from '../stage/terrain.js';
 
 const MAX_PARTICLES = 500;
 
@@ -18,12 +18,14 @@ const MOVE_PARTICLE = {
       particle.size++;
     }
   },
-  chunk(particle) {
+  chunk(particle, terrain) {
+    const lastY = particle.y;
     particle.vy += 0.25;
     particle.x += particle.vx;
     particle.y += particle.vy;
-    if (particle.y > GROUND_Y) {
-      particle.y = GROUND_Y;
+    const floor = floorBelow(terrain, particle.x, lastY);
+    if (particle.y > floor) {
+      particle.y = floor;
       particle.vy *= -0.4;
       particle.vx *= 0.7;
     }
@@ -38,7 +40,7 @@ MOVE_PARTICLE.streak = MOVE_PARTICLE.mote;
 function updateParticles(game) {
   for (const particle of game.particles) {
     particle.life--;
-    MOVE_PARTICLE[particle.kind](particle);
+    MOVE_PARTICLE[particle.kind](particle, game.terrain);
   }
   game.particles = game.particles.filter((particle) => particle.life > 0);
   if (game.particles.length > MAX_PARTICLES) {

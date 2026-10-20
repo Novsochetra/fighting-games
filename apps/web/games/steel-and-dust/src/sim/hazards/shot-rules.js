@@ -1,4 +1,3 @@
-import { GROUND_Y } from '../../config.js';
 import { knifeBox } from '../combat/boxes.js';
 
 const KNIFE_HIT = { knockback: [1.6, 0], hitstop: 4, hitstun: 16 };
@@ -45,7 +44,7 @@ export const SHOT_RULES = {
   },
   fire: {
     range: 110,
-    area: (shot) => ({ x: shot.x - 16, y: GROUND_Y - 10, width: 32, height: 10 }),
+    area: (shot) => ({ x: shot.x - 16, y: shot.y - 10, width: 32, height: 10 }),
     hit: FIRE_HIT,
     enemyWeapon: 'none',
     rehitEvery: 30,

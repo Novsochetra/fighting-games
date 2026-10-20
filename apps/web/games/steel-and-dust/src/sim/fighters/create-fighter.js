@@ -50,7 +50,7 @@ function animationFields(animTime) {
   };
 }
 
-export function createFighter(side, kind, x) {
+export function createFighter(side, kind, x, y = GROUND_Y) {
   const def = side === 'player' ? PLAYER_TYPE : ENEMY_TYPES[kind];
   const animTime = (Math.random() * 60) | 0;
   const cooldown = 30 + ((Math.random() * 40) | 0);
@@ -60,7 +60,7 @@ export function createFighter(side, kind, x) {
     kind,
     def,
     x,
-    y: GROUND_Y,
+    y,
     vx: 0,
     vy: 0,
     facing: 1,

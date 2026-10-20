@@ -1,4 +1,3 @@
-import { GROUND_Y } from '../../config.js';
 import { activeEnd, moveLength } from '../../data/moves/define-move.js';
 import { playSwing, swingLeadTicks } from '../combat/sounds.js';
 import { shake } from '../fx/camera-fx.js';
@@ -10,6 +9,7 @@ import { spawnShockwave } from '../hazards/shockwaves.js';
 import { SIGNATURE_STRIKES } from '../summons/signatures.js';
 import { endMove } from './actions.js';
 import { arenaBounds } from './arena-bounds.js';
+import { floorUnder } from './terrain-motion.js';
 
 function lunge(_game, fighter, move) {
   fighter.vx = fighter.facing * move.forward * (fighter.airborne ? 0.4 : 1);
@@ -65,7 +65,8 @@ function sustainRush(game, fighter, move) {
   if (atWall) {
     fighter.moveTime = activeEnd(move) - 1;
     shake(game, 2, 8);
-    addDust(game, { x: fighter.x + fighter.facing * 10, y: GROUND_Y, count: 6 });
+    const y = floorUnder(game.terrain, fighter);
+    addDust(game, { x: fighter.x + fighter.facing * 10, y, count: 6 });
     game.io.sfx('heavy');
   }
 }

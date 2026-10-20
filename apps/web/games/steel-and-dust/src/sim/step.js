@@ -1,11 +1,12 @@
 import { COLORS } from '../art/colors.js';
-import { GROUND_Y, VIEW_WIDTH } from '../config.js';
+import { VIEW_WIDTH } from '../config.js';
 import { isLastMission } from '../data/missions/index.js';
 import { clamp, randomBetween } from '../lib/math.js';
 import { endCombo } from './combat/combo.js';
 import { resolveHits } from './combat/resolve-hits.js';
 import { arenaBounds } from './fighters/arena-bounds.js';
 import { separateFighters } from './fighters/separate.js';
+import { followFloor } from './fighters/terrain-motion.js';
 import { updateFighter } from './fighters/update-fighter.js';
 import { shedHeroAura } from './fx/hero-aura.js';
 import { updateEffects } from './fx/update-effects.js';
@@ -26,7 +27,7 @@ function updateWorld(game) {
     updateFighter(game, fighter);
   }
   resolveHits(game);
-  separateFighters(game.fighters);
+  separateFighters(game.fighters, game.terrain);
   updateShockwaves(game);
   updateProjectiles(game);
   updateSummons(game);
@@ -37,6 +38,7 @@ function updateWorld(game) {
     if (!fighter.entering) {
       fighter.x = clamp(fighter.x, bounds.min, bounds.max);
     }
+    followFloor(game.terrain, fighter);
   }
   game.fighters = game.fighters.filter((fighter) => !fighter.removed);
   if (game.boss && game.boss.removed) {
@@ -85,16 +87,16 @@ function tankSmoke(game) {
   const middle = game.camera.x + VIEW_WIDTH / 2;
   for (const prop of missionOf(game).props) {
     if (prop.kind === 'tank' && Math.abs(prop.x + 30 - middle) < VIEW_WIDTH) {
-      puffSmoke(game, prop.x + 30);
+      puffSmoke(game, { x: prop.x + 30, y: prop.y - 38 });
     }
   }
 }
 
-function puffSmoke(game, x) {
+function puffSmoke(game, { x, y }) {
   game.particles.push({
     kind: 'dust',
     x: x + randomBetween(-2, 2),
-    y: GROUND_Y - 38,
+    y,
     vx: randomBetween(-0.5, -0.1),
     vy: -randomBetween(0.3, 0.6),
     life: 60,

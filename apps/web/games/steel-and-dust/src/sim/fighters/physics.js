@@ -1,8 +1,9 @@
-import { GROUND_Y } from '../../config.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust } from '../fx/particles.js';
+import { floorBelow } from '../stage/terrain.js';
 import { arenaBounds } from './arena-bounds.js';
 import { land } from './landing.js';
+import { blockWall, followFloor } from './terrain-motion.js';
 
 function wallHit(game, fighter, side) {
   if (fighter.state === 'juggle' && Math.abs(fighter.vx) > 2.4 && !fighter.wallBounced) {
@@ -17,8 +18,8 @@ function wallHit(game, fighter, side) {
   }
 }
 
-function applyGravity(fighter) {
-  if (!fighter.airborne && fighter.y < GROUND_Y - 0.5) {
+function applyGravity(fighter, floor) {
+  if (!fighter.airborne && fighter.y < floor - 0.5) {
     fighter.airborne = true;
     if (fighter.state === 'idle' || fighter.state === 'walk') {
       fighter.state = 'air';
@@ -49,15 +50,15 @@ function applyFriction(fighter) {
   }
 }
 
-function touchGround(game, fighter) {
-  if (fighter.y < GROUND_Y) {
+function touchGround(game, fighter, floor) {
+  if (fighter.y < floor) {
     return;
   }
-  fighter.y = GROUND_Y;
+  fighter.y = floor;
   fighter.vy = 0;
   if (fighter.airborne) {
     Object.assign(fighter, { airborne: false, airDashUsed: false, pogoCount: 0 });
-    land(game, fighter);
+    land(game, fighter, floor);
   }
 }
 
@@ -72,15 +73,27 @@ function stayInBounds(game, fighter) {
   }
 }
 
-// the ultimate places the hero itself
+function hitTerrainWall(game, fighter, from) {
+  const side = blockWall(game.terrain, fighter, from);
+  if (side) {
+    wallHit(game, fighter, side);
+  }
+}
+
+// the ultimate places the hero itself; the floor is measured from where the fighter was, so a
+// platform only catches what comes down onto it from above
 export function applyPhysics(game, fighter) {
   if (fighter.state === 'ult') {
     return;
   }
-  applyGravity(fighter);
+  const { terrain } = game;
+  const from = { x: fighter.x, y: fighter.y };
+  applyGravity(fighter, floorBelow(terrain, fighter.x, fighter.y));
   fighter.x += fighter.vx;
   fighter.y += fighter.vy;
   applyFriction(fighter);
-  touchGround(game, fighter);
+  hitTerrainWall(game, fighter, from);
+  touchGround(game, fighter, floorBelow(terrain, fighter.x, from.y));
   stayInBounds(game, fighter);
+  followFloor(terrain, fighter);
 }

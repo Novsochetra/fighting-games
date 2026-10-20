@@ -1,4 +1,4 @@
-import { GROUND_Y, VIEW_WIDTH } from '../../../config.js';
+import { VIEW_WIDTH } from '../../../config.js';
 import { drawBarrel } from './barrel.js';
 import { drawPalm } from './palm.js';
 import { drawPropSprite, isSpriteProp } from './prop-sprites.js';
@@ -16,11 +16,11 @@ const DRAW_PROP = {
   wall: drawWall,
 };
 
-function drawProp(painter, sheets, { kind, x }) {
+function drawProp(painter, sheets, { kind, x, y }) {
   if (isSpriteProp(kind)) {
-    drawPropSprite(painter, sheets, { kind, x, y: GROUND_Y });
+    drawPropSprite(painter, sheets, { kind, x, y });
   } else {
-    DRAW_PROP[kind](painter, x, GROUND_Y);
+    DRAW_PROP[kind](painter, x, y);
   }
 }
 
