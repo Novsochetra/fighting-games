@@ -6,7 +6,6 @@ export const BAMBOO_PASS = {
   boss: 'ironhorn',
   reinforcements: ['hound', 'grunt', 'bomber'],
   crates: ['axe', 'ration', 'sword', 'spear', 'ration'],
-  props: [],
   endWall: 'palisade',
   zones: [
     {

@@ -15,7 +15,6 @@ function record(draw) {
 }
 
 const forest = scenePalette('pineRidge');
-const desert = scenePalette('storm');
 const canyon = scenePalette('sandstormPass');
 const colorsIn = (log) => new Set(drawnRects(log).map((rect) => rect.color));
 
@@ -27,7 +26,6 @@ describe('the forest road', () => {
         colors: forest.ground,
         tick: 0,
         terrain: FLAT_TERRAIN,
-        painted: true,
       }),
     );
     const colors = colorsIn(log);
@@ -45,7 +43,6 @@ describe('the forest road', () => {
             colors: forest.ground,
             tick,
             terrain: FLAT_TERRAIN,
-            painted: true,
           }),
         ),
       ).filter((rect) => rect.y >= GROUND_Y);
@@ -57,7 +54,6 @@ describe('the forest road', () => {
           colors: forest.ground,
           tick,
           terrain: FLAT_TERRAIN,
-          painted: true,
         }),
       ).join('|');
     expect(tips(0)).not.toBe(tips(70));
@@ -71,7 +67,6 @@ describe('the forest road', () => {
           colors: forest.ground,
           tick: 33,
           terrain: FLAT_TERRAIN,
-          painted: true,
         }),
       ),
     );
@@ -79,21 +74,6 @@ describe('the forest road', () => {
       expect(rect.y).toBeGreaterThanOrEqual(GROUND_Y - 6);
       expect(rect.y + rect.height).toBeLessThanOrEqual(VIEW_HEIGHT);
     }
-  });
-
-  it('leaves the desert road with sand and ruts and no grass', () => {
-    const colors = colorsIn(
-      record((painter) =>
-        drawGround(painter, {
-          cameraX: 400,
-          colors: desert.ground,
-          tick: 0,
-          terrain: FLAT_TERRAIN,
-        }),
-      ),
-    );
-    expect(colors.has(desert.ground.sand)).toBe(true);
-    expect(desert.ground.grass).toBeUndefined();
   });
 
   it('grows no grass on a painted road whose theme has none', () => {
@@ -105,7 +85,6 @@ describe('the forest road', () => {
           colors: bare,
           tick: 0,
           terrain: FLAT_TERRAIN,
-          painted: true,
         }),
       ),
     );
@@ -153,10 +132,5 @@ describe('what lies in front of the fighters', () => {
       (cameraX) => at(cameraX, 0).join('|') !== at(cameraX, 90).join('|'),
     );
     expect(moving.length).toBeGreaterThan(0);
-  });
-
-  it('is still rubble on the desert roads', () => {
-    const colors = colorsIn(record((painter) => drawForeground(painter, 900, desert.rubble, 0)));
-    expect(colors.has(desert.rubble.rock)).toBe(true);
   });
 });

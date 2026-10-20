@@ -33,7 +33,6 @@ export function loadPaintedBackdrop(loaders, spec) {
     top: spec.groundTop,
   });
   return {
-    painted: true,
     layers: spec.layers.map((layer) => loadLayer(loaders, spec.folder, layer)),
     ground,
     cliff: spec.cliff ? loadCliff(loaders, spec.folder) : null,

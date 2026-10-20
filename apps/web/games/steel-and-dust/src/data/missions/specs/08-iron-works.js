@@ -8,7 +8,6 @@ export const IRON_WORKS = {
   boss: 'furnace',
   reinforcements: ['stoker', 'scrapper', 'sentry'],
   crates: ['spear', 'ration', 'axe', 'sword', 'ration', 'axe'],
-  props: [],
   entry: 'canyonBarricadeBroken',
   endWall: 'foundryGate',
   zones: [

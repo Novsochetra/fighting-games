@@ -6,7 +6,6 @@ export const MIRAGE_TEMPLE = {
   boss: 'pharaoh',
   reinforcements: ['ghoul', 'tombguard', 'witch'],
   crates: ['sword', 'ration', 'axe', 'spear', 'ration', 'sword'],
-  props: [],
   entry: 'foundryGateBroken',
   endWall: 'templeDoor',
   zones: [

@@ -11,7 +11,6 @@ export const SANDSTORM_PASS = {
   boss: 'djinn',
   reinforcements: ['witch', 'assassin', 'monk'],
   crates: ['axe', 'ration', 'sword', 'ration', 'spear', 'ration'],
-  props: [],
   entry: 'palisadeBroken',
   endWall: 'canyonBarricade',
   zones: [

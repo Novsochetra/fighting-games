@@ -6,7 +6,6 @@ export const RAIDER_CAMP = {
   boss: 'cobra',
   reinforcements: ['spitter', 'knife', 'shield'],
   crates: ['sword', 'ration', 'spear', 'axe', 'ration'],
-  props: [],
   endWall: 'palisade',
   zones: [
     {

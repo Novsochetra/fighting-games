@@ -2,7 +2,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { PAINTED_THEMES } from '../../../src/art/painted-themes/index.js';
-import { PAINTED_BACKDROPS, isPaintedTheme } from '../../../src/data/backdrops/index.js';
+import { PAINTED_BACKDROPS } from '../../../src/data/backdrops/index.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { createPainter } from '../../../src/render/painter.js';
 import { drawAmbient } from '../../../src/render/scene/ambient/index.js';
@@ -31,10 +31,8 @@ function drawsSomethingWithin(effect, colors, ticks) {
 }
 
 describe('painted backdrops', () => {
-  it('have a forest palette for every painted theme and nothing else', () => {
+  it('have a palette for every painted theme and nothing else', () => {
     expect(Object.keys(PAINTED_BACKDROPS).sort()).toEqual(Object.keys(PAINTED_THEMES).sort());
-    expect(isPaintedTheme('pineRidge')).toBe(true);
-    expect(isPaintedTheme('storm')).toBe(false);
   });
 
   it('are used by a mission each', () => {

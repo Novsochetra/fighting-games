@@ -6,7 +6,6 @@ export const OLD_GROVE = {
   boss: 'colossus',
   reinforcements: ['scrapper', 'jackal', 'sling'],
   crates: ['ration', 'spear', 'sword', 'ration', 'axe'],
-  props: [],
   endWall: 'palisade',
   zones: [
     {

@@ -6,7 +6,6 @@ export const PINE_RIDGE = {
   boss: 'khan',
   reinforcements: ['grunt', 'knife', 'scrapper'],
   crates: ['sword', 'ration', 'spear', 'ration', 'axe'],
-  props: [],
   endWall: 'palisade',
   zones: [
     {

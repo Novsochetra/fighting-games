@@ -25,7 +25,3 @@ export const PAINTED_BACKDROPS = {
   wardenFortress: WARDEN_FORTRESS,
   mirageTemple: MIRAGE_TEMPLE,
 };
-
-export function isPaintedTheme(themeId) {
-  return Object.hasOwn(PAINTED_BACKDROPS, themeId);
-}

@@ -29,7 +29,6 @@ function record(layers, cameraX) {
 describe('painted backdrops', () => {
   it('load one image per layer from the forest folder, each the height of the view', () => {
     const backdrop = loadPaintedBackdrop(loaders, PAINTED_BACKDROPS.pineRidge);
-    expect(backdrop.painted).toBe(true);
     expect(backdrop.layers.map((layer) => [layer.image.name, layer.parallax])).toEqual([
       ['back.png', 0.08],
       ['near.png', 0.45],

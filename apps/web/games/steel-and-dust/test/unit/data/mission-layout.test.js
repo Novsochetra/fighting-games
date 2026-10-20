@@ -5,11 +5,11 @@ import { groundAt } from '../../../src/sim/stage/terrain.js';
 
 const SPEC = {
   name: 'Test Road',
-  theme: 'dusk',
+  theme: 'pineRidge',
   boss: 'khan',
   reinforcements: ['grunt'],
   crates: ['sword', 'ration'],
-  props: ['barrel', 'palm'],
+  endWall: 'palisade',
   zones: [
     { screens: 1, waves: [['grunt'], ['grunt', 'knife']] },
     { screens: 3, waves: [['grunt'], ['knife'], ['grunt', 'grunt']] },
@@ -62,7 +62,7 @@ describe('laying out a mission', () => {
     ]);
   });
 
-  it('puts crates before every zone and inside the wide ones, and props along the road', () => {
+  it('puts crates before every zone and inside the wide ones, and the wall at the end', () => {
     expect(mission.crates).toHaveLength(5);
     expect(mission.crates.map((crate) => crate.item)).toEqual([
       'sword',
@@ -71,10 +71,7 @@ describe('laying out a mission', () => {
       'ration',
       'sword',
     ]);
-    expect(mission.props.at(-1)).toEqual({ kind: 'wall', x: mission.length - 12, y: GROUND_Y });
-    for (const prop of mission.props.slice(0, -1)) {
-      expect(SPEC.props).toContain(prop.kind);
-    }
+    expect(mission.props).toEqual([{ kind: 'palisade', x: mission.length - 12, y: GROUND_Y }]);
   });
 
   it('stands every crate and prop on the ground of a hilly road', () => {

@@ -6,7 +6,6 @@ export const FIREFLY_HOLLOW = {
   boss: 'gnoll',
   reinforcements: ['hound', 'monk', 'vulture'],
   crates: ['ration', 'sword', 'spear', 'ration', 'axe', 'ration'],
-  props: [],
   endWall: 'palisade',
   zones: [
     {
