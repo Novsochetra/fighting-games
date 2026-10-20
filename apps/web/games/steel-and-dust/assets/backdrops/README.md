@@ -1,8 +1,9 @@
-# Painted forests
+# Painted roads
 
-The six forests of missions 1 to 6, two layers each, made with PixelLab Create Image (Pro) from the
-concept paintings in `concepts/stages/mission-01/` at the repo root (each used as the reference).
-Every layer is 216 rows tall, the height of the view, and tiles sideways.
+The six forests of missions 1 to 6 and the two temples of missions 11 and 12, two layers each (the
+Bayon also has a canopy drawn over the fight), made with PixelLab Create Image (Pro) from the
+concept paintings in `concepts/stages/` at the repo root (each used as the reference). Every layer
+is 216 rows tall, the height of the view, and tiles sideways.
 
 | Folder            | Mission          | Concept             | `back.png` | `near.png` |
 | ----------------- | ---------------- | ------------------- | ---------- | ---------- |

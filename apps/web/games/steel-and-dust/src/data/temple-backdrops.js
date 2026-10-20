@@ -20,9 +20,10 @@ const FIRE_BOWLS = {
 export const TEMPLE_BACKDROPS = {
   angkorWat: {
     folder: 'angkor-wat',
-    groundTop: 8,
+    groundTop: 19,
+    // the plate is wide and slow so the temple and its sun stay in view the whole road
     layers: [
-      { name: 'back', parallax: 0.08 },
+      { name: 'back', parallax: 0.05 },
       { name: 'near', parallax: 0.45 },
     ],
     ambient: [
@@ -30,14 +31,18 @@ export const TEMPLE_BACKDROPS = {
         kind: 'shafts',
         plane: 'back',
         shafts: [
-          { x: 180, width: 18 },
-          { x: 214, width: 10 },
+          { x: 330, width: 12 },
+          { x: 352, width: 8 },
         ],
-        slope: 0.3,
-        drift: 0.1,
+        slope: -0.3,
+        drift: 0.05,
       },
-      { kind: 'birds', plane: 'back', period: 1500, y: 40 },
-      { kind: 'mist', plane: 'back', y: 150, height: 30, drift: 0.3 },
+      { kind: 'birds', plane: 'back', period: 1500, y: 44 },
+      { kind: 'mist', plane: 'back', y: 150, height: 16, drift: 0.1 },
+      { kind: 'glints', plane: 'back', count: 14, top: 155, bottom: 170, drift: 0.05 },
+      { kind: 'motes', plane: 'back', count: 10, drift: 0.3, top: 40, bottom: 150 },
+      { kind: 'smoke', plane: 'back', emitters: [{ x: 321, y: 170 }], tileWidth: 768, drift: 0.45 },
+      { kind: 'butterflies', plane: 'back', count: 4, top: 120, bottom: 176, drift: 0.45 },
       { kind: 'leaves', plane: 'front', count: 6, drift: 1.1, wind: 0.15 },
     ],
   },

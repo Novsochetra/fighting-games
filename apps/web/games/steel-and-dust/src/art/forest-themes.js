@@ -47,12 +47,16 @@ export const FOREST_THEMES = {
     },
   },
   angkorWat: {
-    ground: { sand: '#b07c64', rock: '#4a2b2c', grass: '#7f8f4a' },
+    ground: { sand: '#c6826c', rock: '#4f2c3c', grass: '#708438' },
     ambient: {
-      shaft: '#ffd89a',
-      bird: '#3a2438',
-      mist: '#f0d0cc',
-      leaves: ['#fff3d2', '#ffe089', '#f6c2b8'],
+      shaft: '#fce0a4',
+      bird: '#30233c',
+      mist: '#e9c3b8',
+      glints: ['#f9efca', '#fce0a4', '#f6b570'],
+      mote: '#ffe2a8',
+      smoke: '#d8c6cc',
+      butterflies: ['#ffd78a', '#f3997e', '#beaad2'],
+      leaves: ['#fae6a3', '#ffd78a', '#f5fbf7'],
     },
   },
   bayon: {
