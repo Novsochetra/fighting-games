@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { continueRun } from '../../../src/sim/stage/flow.js';
+import { MISSIONS } from '../../../src/data/missions/index.js';
+import { continueRun, selectMission, startPlay } from '../../../src/sim/stage/flow.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
 import { seededRandom } from '../../support/seeded-random.js';
 import { createPlayingGame, press, release, runTicks, tap } from '../../support/test-game.js';
@@ -30,8 +31,9 @@ describe('a fight, with every system running', () => {
 
   it('locks the arena and sends in the first wave when the hero enters zone 1', () => {
     const game = createPlayingGame();
-    walkInto(game, 260);
-    expect(game.arena).toEqual({ left: 150, right: 534 });
+    const zone = MISSIONS[0].zones[0];
+    walkInto(game, zone.at + 10);
+    expect(game.arena).toEqual({ left: zone.left, right: zone.right });
     runTicks(game, 120);
     expect(enemies(game).map((enemy) => enemy.kind)).toEqual(['grunt', 'grunt', 'grunt']);
   });
@@ -69,7 +71,7 @@ describe('a fight, with every system running', () => {
 
   it('sweeps a crate open and picks up the weapon inside', () => {
     const game = createPlayingGame();
-    game.player.x = 190;
+    game.player.x = game.crates[0].x - 15;
     press(game, 'down');
     tap(game, 'light');
     release(game, 'down');
@@ -110,17 +112,36 @@ describe('a fight, with every system running', () => {
     expect(game.continues).toBe(1);
   });
 
-  it('clears the stage when the boss goes down', () => {
-    const game = createPlayingGame();
-    spawnEnemy(game, 'brute', 1);
+  function felledBoss(game, kind) {
+    spawnEnemy(game, kind, 1);
     const boss = game.boss;
     Object.assign(boss, { entering: false, x: 200, hp: 1 });
-    standNextTo(game, boss);
     game.player.x = boss.x - 20;
+    game.player.facing = 1;
     tap(game, 'heavy');
     runTicks(game, 60);
+    return boss;
+  }
+
+  it("moves on to the next mission when the mission's boss goes down", () => {
+    const game = createPlayingGame();
+    const boss = felledBoss(game, 'khan');
     expect(boss.state).toBe('ko');
     expect(game.clearTime).toBeGreaterThan(0);
+    const score = game.score;
+    runTicks(game, 600);
+    expect(game.mode).toBe('play');
+    expect(game.missionIndex).toBe(1);
+    expect(game.score).toBe(score);
+    expect(game.records).toMatchObject({ bestScore: score, bestMission: 2 });
+  });
+
+  it('clears the whole game when the Warden Ox falls in the last mission', () => {
+    const game = createPlayingGame();
+    selectMission(game, 9);
+    startPlay(game);
+    const boss = felledBoss(game, 'brute');
+    expect(boss.state).toBe('ko');
     runTicks(game, 600);
     expect(game.mode).toBe('clear');
     expect(game.records.bestScore).toBe(game.score);

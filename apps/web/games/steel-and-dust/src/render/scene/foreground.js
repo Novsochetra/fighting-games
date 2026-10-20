@@ -1,9 +1,8 @@
-import { RUBBLE_COLORS as RUBBLE } from '../../art/scene-colors.js';
 import { VIEW_HEIGHT } from '../../config.js';
 import { hashInt } from '../../lib/math.js';
 
 // rubble in front of the fighters scrolls faster than the world, for depth
-export function drawForeground(painter, cameraX) {
+export function drawForeground(painter, cameraX, colors) {
   const offset = cameraX * 1.25;
   const first = Math.floor(offset / 170) - 1;
   for (let i = first; i < Math.floor(offset / 170) + 4; i++) {
@@ -13,8 +12,8 @@ export function drawForeground(painter, cameraX) {
     }
     const x = i * 170 - offset + (hash % 60);
     const height = 4 + (hash % 5);
-    painter.use(RUBBLE.rock).rect(x, VIEW_HEIGHT - height, 22 + (hash % 14), height);
-    painter.use(RUBBLE.top).rect(x + 3, VIEW_HEIGHT - height - 2, 10, 3);
-    painter.use(RUBBLE.glint).rect(x + 4, VIEW_HEIGHT - height - 2, 4, 1);
+    painter.use(colors.rock).rect(x, VIEW_HEIGHT - height, 22 + (hash % 14), height);
+    painter.use(colors.top).rect(x + 3, VIEW_HEIGHT - height - 2, 10, 3);
+    painter.use(colors.glint).rect(x + 4, VIEW_HEIGHT - height - 2, 4, 1);
   }
 }

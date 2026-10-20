@@ -1,4 +1,3 @@
-import { HILL_COLORS } from '../../art/scene-colors.js';
 import { GROUND_Y } from '../../config.js';
 import { hashInt } from '../../lib/math.js';
 
@@ -14,13 +13,13 @@ function ridgeHeight(x) {
   return Math.round(height / 7) * 7;
 }
 
-function paintColumn(context, x) {
+function paintColumn(context, x, colors) {
   const height = ridgeHeight(x);
-  context.fillStyle = HILL_COLORS.body;
+  context.fillStyle = colors.body;
   context.fillRect(x, GROUND_Y - height, 1, height);
-  context.fillStyle = HILL_COLORS.ridge;
+  context.fillStyle = colors.ridge;
   context.fillRect(x, GROUND_Y - height, 1, 1);
-  context.fillStyle = HILL_COLORS.speck;
+  context.fillStyle = colors.speck;
   for (let y = GROUND_Y - height + 6; y < GROUND_Y; y += 9) {
     if (hashInt(x * 7 + y) % 5) {
       context.fillRect(x, y, 1, 1);
@@ -28,13 +27,13 @@ function paintColumn(context, x) {
   }
 }
 
-export function buildHills(createCanvas) {
+export function buildHills(createCanvas, colors) {
   const canvas = createCanvas(WIDTH, GROUND_Y);
   const context = canvas.getContext('2d');
   for (let x = 0; x < WIDTH; x++) {
-    paintColumn(context, x);
+    paintColumn(context, x, colors);
   }
-  context.fillStyle = HILL_COLORS.haze;
+  context.fillStyle = colors.haze;
   context.fillRect(0, GROUND_Y - 24, WIDTH, 24);
   return canvas;
 }

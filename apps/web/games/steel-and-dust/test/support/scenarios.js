@@ -51,4 +51,13 @@ export const SCENARIOS = {
     renderEvery: 240,
     scheduled: { 500: ['fill'], 900: ['w2'], 1500: ['w1'], 1700: ['fill'] },
   },
+  // the wide, scrolling zones of the fourth mission: spitters, hounds and shield bearers
+  bazaar: {
+    mission: 3,
+    seed: 4242,
+    ticks: 4800,
+    sampleEvery: 30,
+    renderEvery: 240,
+    scheduled: { 600: ['fill'], 1200: ['w2'], 2400: ['w3'], 3000: ['fill'], 3600: ['w4'] },
+  },
 };

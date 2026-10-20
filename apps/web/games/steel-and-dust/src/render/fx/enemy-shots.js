@@ -27,6 +27,15 @@ export function drawSand(painter, sand) {
   painter.alpha(1);
 }
 
+export function drawVenom(painter, venom) {
+  const x = Math.round(venom.x);
+  const y = Math.round(venom.y);
+  painter.use(FX_COLORS.venomDark).rect(x - 3, y - 2, 6, 5);
+  painter.use(FX_COLORS.venom).rect(x - 2, y - 2, 4, 4);
+  painter.use(FX_COLORS.venomLight).rect(x - 1 + venom.direction, y - 2, 1, 1);
+  painter.use(FX_COLORS.venom).rect(x - venom.direction * 4, y, 2, 1);
+}
+
 export function drawBomb(painter, bomb) {
   const x = Math.round(bomb.x);
   const y = Math.round(bomb.y);

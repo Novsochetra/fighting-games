@@ -22,6 +22,14 @@ export const RANGED_MOVES = {
     windup: { frontArm: 1.4, frontForearm: 0.2, weaponAngle: 0, torso: -1.55 },
     strike: { frontArm: 1.4, frontForearm: 0.2, weaponAngle: 0, torso: -1.75 },
   }),
+  spit: defineMove({
+    name: 'Venom Spit',
+    frames: [22, 1, 26],
+    ...NO_HIT,
+    projectile: 'venom',
+    windup: THROW_BACK,
+    strike: THROW_OUT,
+  }),
   sandblast: defineMove({
     name: 'Sand Blast',
     frames: [30, 1, 30],

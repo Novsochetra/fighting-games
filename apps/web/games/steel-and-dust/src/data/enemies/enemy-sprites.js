@@ -13,6 +13,11 @@ function sheet(file, spec, size = REGULAR) {
   return { file, ...size, strips };
 }
 
+// the boss sheets drawn for the missions share one layout and differ in their strike frames
+function bossStrips(attackStrike, slamStrike) {
+  return `idle 4, walk 8, attack 9/${attackStrike}, hurt 4, ko 9, slam 9/${slamStrike}, charge 8`;
+}
+
 export const ENEMY_SPRITES = {
   raider: sheet('raider.png', 'idle 4, walk 8, attack 9/4, hurt 4, ko 9'),
   scavenger: sheet('scavenger.png', 'idle 4, walk 8, attack 9/4, hurt 4, ko 9'),
@@ -34,4 +39,17 @@ export const ENEMY_SPRITES = {
     'idle 4, walk 8, attack 9/3, hurt 4, ko 9, slam 9/4, charge 8',
     BOSS,
   ),
+  ghoul: sheet('ghoul.png', 'idle 4, walk 8, attack 9/5, hurt 4, ko 9'),
+  hound: sheet('hound.png', 'idle 4, walk 8, attack 9/6, hurt 4, ko 9'),
+  monk: sheet('monk.png', 'idle 4, walk 8, attack 9/4, hurt 4, ko 9'),
+  spitter: sheet('spitter.png', 'idle 4, walk 8, attack 9/5, hurt 4, ko 9'),
+  stoker: sheet('stoker.png', 'idle 4, walk 8, attack 9/2, hurt 4, ko 9'),
+  tombguard: sheet('tombguard.png', 'idle 4, walk 8, attack 9/2, hurt 4, ko 9'),
+  khan: sheet('khan.png', bossStrips(5, 4), BOSS),
+  ironhorn: sheet('ironhorn.png', bossStrips(6, 5), BOSS),
+  cobra: sheet('cobra.png', bossStrips(5, 5), BOSS),
+  gnoll: sheet('gnoll.png', bossStrips(6, 4), BOSS),
+  djinn: sheet('djinn.png', bossStrips(4, 5), BOSS),
+  furnace: sheet('furnace.png', bossStrips(5, 5), BOSS),
+  pharaoh: sheet('pharaoh.png', bossStrips(5, 5), BOSS),
 };

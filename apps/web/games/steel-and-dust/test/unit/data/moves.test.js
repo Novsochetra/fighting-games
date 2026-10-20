@@ -62,6 +62,7 @@ describe('move tables', () => {
       'sting',
       'lob',
       'bolt',
+      'spit',
       'sandblast',
     ]);
   });

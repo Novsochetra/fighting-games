@@ -1,15 +1,19 @@
 import { HEROES } from '../../data/heroes.js';
+import { MISSIONS } from '../../data/missions/index.js';
 import {
   continueRun,
   cycleWeapon,
+  playFromStart,
   quitToTitle,
   restartRun,
   resumePlay,
+  selectMission,
   startPlay,
 } from '../../sim/stage/flow.js';
 
 // the buttons that open a panel make their own sound
-const QUIET_ACTIONS = new Set(['back', 'help', 'settings', 'play']);
+const QUIET_ACTIONS = new Set(['back', 'help', 'settings', 'play', 'missions']);
+const isQuiet = (name) => QUIET_ACTIONS.has(name) || name.startsWith('mission-');
 
 function heroActions(game, begin) {
   const actions = {};
@@ -23,6 +27,20 @@ function heroActions(game, begin) {
   return actions;
 }
 
+// picking a mission sets the road up behind the menu, then the Shade is chosen; Play always
+// starts at the first mission
+function missionActions(game, menus) {
+  const pick = (index) => () => {
+    selectMission(game, index);
+    menus.open('heroes');
+  };
+  const actions = { play: pick(0), missions: () => menus.open('missions') };
+  for (const mission of MISSIONS) {
+    actions[`mission-${mission.index}`] = pick(mission.index);
+  }
+  return actions;
+}
+
 export function createMenuActions({ game, audio, ui, fullscreen, menus, location }) {
   const begin = () => {
     if (ui.isTouchOn() && fullscreen.supported && !fullscreen.isActive()) {
@@ -32,7 +50,8 @@ export function createMenuActions({ game, audio, ui, fullscreen, menus, location
   };
   const actions = {
     ...heroActions(game, begin),
-    play: () => menus.open('heroes'),
+    ...missionActions(game, menus),
+    again: () => playFromStart(game),
     resume: () => resumePlay(game),
     help: () => menus.open('help'),
     settings: () => menus.open('settings'),
@@ -52,7 +71,7 @@ export function createMenuActions({ game, audio, ui, fullscreen, menus, location
     if (!action) {
       return;
     }
-    if (!QUIET_ACTIONS.has(name)) {
+    if (!isQuiet(name)) {
       audio.sfx('uiOk');
     }
     action();

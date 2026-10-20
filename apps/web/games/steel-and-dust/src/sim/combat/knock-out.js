@@ -4,6 +4,7 @@ import { addFloatText, addRing, showBanner } from '../fx/effects.js';
 import { buzz } from '../fx/haptics.js';
 import { addSparks } from '../fx/particles.js';
 import { releaseToken } from '../fighters/tokens.js';
+import { isMissionBoss } from '../stage/mission.js';
 import { stageClear } from '../stage/stage-clear.js';
 import { endCombo } from './combo.js';
 import { shout } from './sounds.js';
@@ -42,11 +43,12 @@ function knockOutEnemy(game, enemy, direction) {
   }
 }
 
-// only the last boss ends the stage; a mid-boss going down just opens the road
+// only the mission's own boss ends it; a mid-boss going down just opens the road
 function bossDown(game, boss) {
-  if (boss === game.boss && boss.def.final && !game.clearTime) {
+  const endsMission = isMissionBoss(game, boss);
+  if (boss === game.boss && endsMission && !game.clearTime) {
     stageClear(game);
-  } else if (!boss.def.final) {
+  } else if (!endsMission) {
     showBanner(game, { text: `${boss.def.name} down`, color: COLORS.gold, time: 90 });
   }
 }

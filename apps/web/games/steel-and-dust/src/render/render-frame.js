@@ -4,15 +4,18 @@ import { drawWorld } from './draw-world.js';
 import { drawHud } from './hud/draw-hud.js';
 import { drawOverlays, drawScreenFlashes } from './overlays/overlays.js';
 import { drawVignette } from './overlays/vignette.js';
+import { missionOf } from '../sim/stage/mission.js';
+import { backdropFor } from './scene/backdrop.js';
 import { drawForeground } from './scene/foreground.js';
 import { drawTiled } from './scene/ground.js';
+import { scenePalette } from './scene/scene-palette.js';
 
-function drawBackdrop(painter, setLayer, { view, cameraX }) {
+function drawBackdrop(painter, setLayer, { backdrop, cameraX }) {
   setLayer(0, false);
-  painter.context.drawImage(view.backdrop.sky, 0, 0);
+  painter.context.drawImage(backdrop.sky, 0, 0);
   setLayer(0, true);
-  drawTiled(painter, view.backdrop.hills, cameraX * 0.12);
-  drawTiled(painter, view.backdrop.skyline, cameraX * 0.35);
+  drawTiled(painter, backdrop.hills, cameraX * 0.12);
+  drawTiled(painter, backdrop.skyline, cameraX * 0.35);
 }
 
 export function renderFrame(game, view) {
@@ -22,11 +25,12 @@ export function renderFrame(game, view) {
   context.globalAlpha = 1;
   const cameraX = Math.round(game.camera.x);
   const setLayer = createCameraTransform(context, game);
-  drawBackdrop(painter, setLayer, { view, cameraX });
+  const { theme } = missionOf(game);
+  drawBackdrop(painter, setLayer, { backdrop: backdropFor(view, theme), cameraX });
   setLayer(-cameraX, true);
   drawWorld(painter, { game, view, cameraX });
   setLayer(0, true);
-  drawForeground(painter, cameraX);
+  drawForeground(painter, cameraX, scenePalette(theme).rubble);
   context.setTransform(RENDER_SCALE, 0, 0, RENDER_SCALE, 0, 0);
   drawScreenFlashes(painter, game);
   drawVignette(painter, game, view);

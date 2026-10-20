@@ -4,6 +4,14 @@ import { screenEdges } from '../fighters/arena-bounds.js';
 import { shake } from '../fx/camera-fx.js';
 import { showBanner } from '../fx/effects.js';
 import { refreshPose } from '../pose/refresh-pose.js';
+import { isFinalBoss, isMissionBoss } from './mission.js';
+
+function bossTitle(game, boss) {
+  if (isFinalBoss(game, boss)) {
+    return 'Final boss';
+  }
+  return isMissionBoss(game, boss) ? 'Boss' : 'Mid-boss';
+}
 
 export function spawnEnemy(game, kind, side) {
   const { left, right } = screenEdges(game);
@@ -19,7 +27,7 @@ export function spawnEnemy(game, kind, side) {
       text: enemy.def.name,
       color: COLORS.red,
       time: 140,
-      sub: enemy.def.final ? 'Final boss' : 'Boss',
+      sub: bossTitle(game, enemy),
     });
     game.io.sfx('boom');
     shake(game, 3, 20);

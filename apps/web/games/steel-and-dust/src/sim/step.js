@@ -1,6 +1,6 @@
 import { COLORS } from '../art/colors.js';
 import { GROUND_Y, VIEW_WIDTH } from '../config.js';
-import { TANK_SMOKE_X } from '../data/stage.js';
+import { isLastMission } from '../data/missions/index.js';
 import { clamp, randomBetween } from '../lib/math.js';
 import { endCombo } from './combat/combo.js';
 import { resolveHits } from './combat/resolve-hits.js';
@@ -15,6 +15,8 @@ import { updateHints } from './hints.js';
 import { expireBuffer } from './input/read-input.js';
 import { updatePickups } from './items/pickups.js';
 import { updateCamera } from './stage/camera.js';
+import { enterNextMission } from './stage/flow.js';
+import { missionOf } from './stage/mission.js';
 import { updateSummons } from './summons/update-summons.js';
 import { BANNER_FOREVER } from './stage/stage-clear.js';
 import { updateZones } from './stage/zones.js';
@@ -47,9 +49,14 @@ function advanceClearScreen(game) {
     return;
   }
   game.clearTime++;
-  if (game.clearTime > 170 && game.mode === 'play') {
+  if (game.clearTime <= 170 || game.mode !== 'play') {
+    return;
+  }
+  if (isLastMission(game.missionIndex)) {
     game.mode = 'clear';
     game.io.sfx('clear');
+  } else {
+    enterNextMission(game);
   }
 }
 
@@ -70,16 +77,23 @@ function countDown(game) {
   advanceClearScreen(game);
 }
 
+// the wrecked tanks by the road still smoke from their engine deck
 function tankSmoke(game) {
-  if (
-    game.tickCount % 7 !== 0 ||
-    Math.abs(TANK_SMOKE_X - (game.camera.x + VIEW_WIDTH / 2)) >= VIEW_WIDTH
-  ) {
+  if (game.tickCount % 7 !== 0) {
     return;
   }
+  const middle = game.camera.x + VIEW_WIDTH / 2;
+  for (const prop of missionOf(game).props) {
+    if (prop.kind === 'tank' && Math.abs(prop.x + 30 - middle) < VIEW_WIDTH) {
+      puffSmoke(game, prop.x + 30);
+    }
+  }
+}
+
+function puffSmoke(game, x) {
   game.particles.push({
     kind: 'dust',
-    x: TANK_SMOKE_X + randomBetween(-2, 2),
+    x: x + randomBetween(-2, 2),
     y: GROUND_Y - 38,
     vx: randomBetween(-0.5, -0.1),
     vy: -randomBetween(0.3, 0.6),

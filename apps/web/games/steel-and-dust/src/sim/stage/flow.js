@@ -8,13 +8,32 @@ import { addFloatText, showBanner } from '../fx/effects.js';
 import { addSparks } from '../fx/particles.js';
 import { refreshPose } from '../pose/refresh-pose.js';
 import { resetRun } from '../reset-run.js';
+import { missionOf } from './mission.js';
+
+function announceMission(game) {
+  const mission = missionOf(game);
+  game.fadeIn = 24;
+  showBanner(game, {
+    text: `Mission ${mission.number}`,
+    sub: mission.name,
+    color: COLORS.amber,
+    time: 100,
+  });
+  game.io.sfx('go');
+}
 
 export function startPlay(game) {
   game.mode = 'play';
-  game.fadeIn = 24;
   game.hint = null;
-  showBanner(game, { text: 'Fight!', color: COLORS.amber, time: 60 });
-  game.io.sfx('go');
+  announceMission(game);
+}
+
+// the score, the clock, the continues and the ULT bar carry over; the hero starts fresh
+export function enterNextMission(game) {
+  const { score, playTime, continues, ultMeter } = game;
+  resetRun(game, game.missionIndex + 1);
+  Object.assign(game, { score, playTime, continues, ultMeter });
+  announceMission(game);
 }
 
 export function resumePlay(game) {
@@ -28,7 +47,12 @@ export function pause(game) {
 }
 
 export function restartRun(game) {
-  resetRun(game);
+  resetRun(game, game.missionIndex);
+  startPlay(game);
+}
+
+export function playFromStart(game) {
+  resetRun(game, 0);
   startPlay(game);
 }
 
@@ -38,9 +62,13 @@ export function placeOnTitle(game) {
   refreshPose(game.player);
 }
 
-export function quitToTitle(game) {
-  resetRun(game);
+export function selectMission(game, index) {
+  resetRun(game, index);
   placeOnTitle(game);
+}
+
+export function quitToTitle(game) {
+  selectMission(game, 0);
   game.mode = 'title';
 }
 

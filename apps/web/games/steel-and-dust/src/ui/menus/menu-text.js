@@ -1,4 +1,5 @@
 import { difficultyOf } from '../../data/difficulty.js';
+import { MISSIONS } from '../../data/missions/index.js';
 import { WEAPONS } from '../../data/weapons/index.js';
 import { formatClock } from '../../render/hud/score.js';
 
@@ -28,12 +29,14 @@ export function titleNoteHtml(game, context) {
 }
 
 export function overNoteHtml(game) {
-  return `Score <b>${game.score}</b> &nbsp;·&nbsp; continues used <b>${game.continues}</b>`;
+  const mission = `Mission <b>${game.missionIndex + 1}</b>`;
+  return `${mission} &nbsp;·&nbsp; score <b>${game.score}</b> &nbsp;·&nbsp; continues used <b>${game.continues}</b>`;
 }
 
 export function clearStatsHtml(game) {
   const best = game.newBestScore ? ' <span class="new">new best!</span>' : '';
   const rows = [
+    ['Missions', `${game.missionIndex + 1} / ${MISSIONS.length}`],
     ['Time', formatClock(game.playTime)],
     ['Score', game.score + best],
     ['Best combo', `${game.records.bestCombo} hits`],

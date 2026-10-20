@@ -1,4 +1,4 @@
-// every boss swipes, slams and charges; `final` ends the stage when it falls
+// every boss swipes, slams and charges; the Warden Ox waits at the end of the last mission
 export const BOSSES = {
   colossus: {
     name: 'Rust Colossus',
@@ -33,7 +33,7 @@ export const BOSSES = {
   brute: {
     name: 'Warden Ox',
     sprite: 'ox',
-    hp: 300,
+    hp: 340,
     speed: 0.55,
     range: 36,
     palette: 'brute',
@@ -41,7 +41,6 @@ export const BOSSES = {
     scale: 1.35,
     armor: true,
     boss: true,
-    final: true,
     guardPose: { frontArm: 1.35, frontForearm: -0.95, weaponAngle: -2.4 },
   },
 };

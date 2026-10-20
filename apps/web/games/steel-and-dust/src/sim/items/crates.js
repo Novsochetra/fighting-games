@@ -1,12 +1,11 @@
 import { COLORS } from '../../art/colors.js';
 import { GROUND_Y } from '../../config.js';
-import { CRATES } from '../../data/stage.js';
 import { randomBetween } from '../../lib/math.js';
 import { crateBox, overlaps } from '../combat/boxes.js';
 import { shake } from '../fx/camera-fx.js';
 
-export function createCrates() {
-  return CRATES.map((crate) => ({ x: crate.x, item: crate.item, broken: false, hit: 0 }));
+export function createCrates(crates) {
+  return crates.map((crate) => ({ x: crate.x, item: crate.item, broken: false, hit: 0 }));
 }
 
 export function breakCrate(game, crate) {

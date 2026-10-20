@@ -1,6 +1,6 @@
 import { defaultSettings } from '../../src/data/settings.js';
 import { createGame } from '../../src/sim/create-game.js';
-import { continueRun, placeOnTitle, resumePlay, startPlay } from '../../src/sim/stage/flow.js';
+import { continueRun, resumePlay, selectMission, startPlay } from '../../src/sim/stage/flow.js';
 import { spawnEnemy } from '../../src/sim/stage/spawn-enemy.js';
 import { tick } from '../../src/sim/tick.js';
 import { snapshotGame } from './snapshot.js';
@@ -16,15 +16,15 @@ const ACTION_FOR_KEY = {
 };
 const MENU_ACTIONS = { play: startPlay, resume: resumePlay, continue: continueRun };
 
-export function createScenarioGame(hero) {
+export function createScenarioGame(hero, mission = 0) {
   const game = createGame({
     settings: { ...defaultSettings(false), training: true, aim: true, ...(hero && { hero }) },
     device: { coarsePointer: false, touchUsed: false },
-    records: { bestCombo: 0, bestScore: 0 },
+    records: { bestCombo: 0, bestScore: 0, bestMission: 1 },
     hintsSeen: {},
     io: {},
   });
-  placeOnTitle(game);
+  selectMission(game, mission);
   return game;
 }
 

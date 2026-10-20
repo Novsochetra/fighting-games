@@ -6,6 +6,7 @@ const WAVE_HIT = { knockback: [3, -3.6], knockdown: true, hitstop: 6, hitstun: 2
 const BOLT_HIT = { knockback: [3, -2.4], knockdown: true, hitstop: 6, hitstun: 22 };
 const SAND_HIT = { knockback: [2.6, -1.2], hitstop: 5, hitstun: 20 };
 const FIRE_HIT = { knockback: [1.2, -1.8], hitstop: 3, hitstun: 14 };
+const VENOM_HIT = { knockback: [1.8, -0.8], hitstop: 4, hitstun: 18 };
 
 // how each kind of thrown or fired thing flies, what it covers and what a hit does
 export const SHOT_RULES = {
@@ -28,6 +29,13 @@ export const SHOT_RULES = {
     area: (shot) => ({ x: shot.x - 10, y: shot.y - 16, width: 20, height: 30 }),
     hit: SAND_HIT,
     enemyWeapon: 'none',
+  },
+  venom: {
+    range: 120,
+    area: (shot) => ({ x: shot.x - 4, y: shot.y - 4, width: 8, height: 8 }),
+    hit: VENOM_HIT,
+    enemyWeapon: 'none',
+    breaksOnHit: true,
   },
   bomb: {
     range: 200,

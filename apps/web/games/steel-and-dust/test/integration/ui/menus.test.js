@@ -12,10 +12,10 @@ import { createTestGame } from '../../support/test-game.js';
 // happy-dom swaps the global URL for one that ignores file: bases, so the path is joined by hand
 const PAGE = readFileSync(join(import.meta.dirname, '../../../index.html'), 'utf8');
 
-function openPage() {
+function openPage(records) {
   document.body.innerHTML = PAGE.match(/<body>([\s\S]*)<\/body>/)[1];
   const saveSettings = vi.fn();
-  const game = createTestGame({ io: { saveSettings } });
+  const game = createTestGame({ io: { saveSettings }, records });
   const audio = { sfx: vi.fn(), unlock: vi.fn(), syncVolumes: vi.fn() };
   const ui = createUiState(game);
   const elements = findElements(document);
@@ -115,12 +115,53 @@ describe('game menus on the real page', () => {
     expect(page.game.mode).toBe('play');
   });
 
+  it('keeps Missions off the title until a mission has been beaten', () => {
+    expect(document.getElementById('missionsBtn').hidden).toBe(true);
+    key('ArrowDown');
+    expect(selected().textContent).toBe('How to play');
+  });
+
+  it('lists the missions reached so far and starts the one picked', () => {
+    page = openPage({ bestMission: 3 });
+    expect(document.getElementById('missionsBtn').hidden).toBe(false);
+    page.key('ArrowDown');
+    page.key('Enter');
+    expect(openMenu().id).toBe('m-missions');
+    const cards = [...document.querySelectorAll('.mission-card')];
+    expect(cards.map((card) => card.querySelector('.mission-name').textContent)).toEqual([
+      'Dust Road',
+      'Scrapyard',
+      'Red Canyon',
+    ]);
+    page.key('ArrowDown');
+    page.key('ArrowDown');
+    expect(selected().dataset.act).toBe('mission-2');
+    page.key('Enter');
+    expect(openMenu().id).toBe('m-heroes');
+    expect(page.game.missionIndex).toBe(2);
+    page.act('hero-moss');
+    expect(page.game.mode).toBe('play');
+    expect(page.game.banner).toMatchObject({ text: 'Mission 3', sub: 'Red Canyon' });
+  });
+
+  it('always starts Play from the first mission', () => {
+    page = openPage({ bestMission: 5 });
+    page.act('missions');
+    page.act('mission-4');
+    page.key('Escape');
+    page.key('Escape');
+    expect(openMenu().id).toBe('m-title');
+    page.act('play');
+    expect(page.game.missionIndex).toBe(0);
+  });
+
   it('shows the score and continues after a defeat', () => {
     page.act('hero-moss');
     page.game.score = 4200;
     page.game.mode = 'over';
     page.menus.sync();
     expect(document.getElementById('overNote').textContent).toContain('4200');
+    expect(document.getElementById('overNote').textContent).toContain('Mission 1');
     key('Enter');
     expect(page.game.mode).toBe('play');
     expect(page.game.continues).toBe(1);

@@ -42,7 +42,7 @@ The game keeps a strict split:
 
 | Folder        | Job                                                                 | May touch the DOM, canvas or audio? |
 | ------------- | ------------------------------------------------------------------- | ----------------------------------- |
-| `src/data/`   | tuning tables: moves, weapons, enemies, stage                       | no                                  |
+| `src/data/`   | tuning tables: moves, weapons, enemies, missions                    | no                                  |
 | `src/art/`    | sprite and scene colors (the only JS allowed to hold hex values)    | no                                  |
 | `src/sim/`    | the 60 Hz simulation: one `game` object in, the same object changed | no                                  |
 | `src/render/` | draws a `game` onto a 2D canvas context it is given                 | canvas only                         |
@@ -53,6 +53,27 @@ The game keeps a strict split:
 
 `sim/` reaches the outside world only through `game.io` ports
 (`sfx`, `vibrate`, `saveRecords`, `saveHints`, `saveSettings`, `setMuted`), so it runs in Node tests unchanged.
+
+### Missions
+
+The game is ten missions (`src/data/missions/specs/`), each a road of its own with a scene theme, a
+boss, the raiders that boss calls in, crate contents and roadside props. A spec only lists its zones
+and the raider kinds in each wave; `layoutMission` (`src/data/missions/layout.js`) turns that into
+places on the road: zone walls, where each wave starts, crates and props, and the mission's length.
+
+- A zone is one screen or several. On a single screen every wave comes as soon as the field is
+  clear. In a wide zone the camera keeps scrolling with the hero, and each wave waits until the
+  hero walks up to it with at most one raider left; the last wave of every zone is a lock wave that
+  pins the camera to the screen it starts on (`src/sim/stage/zones.js`).
+- `screenEdges` (`src/sim/fighters/arena-bounds.js`) is the part of the road a fight happens in: the
+  locked screen, or what the camera shows of a wide zone. Raiders walk in from just past it.
+- A mission ends when its own boss falls (`isMissionBoss` in `src/sim/stage/mission.js`); a boss met
+  earlier on its road is a mid-boss and only opens the road. The score, clock, continues and ULT bar
+  carry into the next mission (`enterNextMission`); the hero starts it fresh. Beating mission N
+  unlocks mission N + 1 on the title's mission select (`records.bestMission`).
+- Each theme in `src/art/scene-themes.js` gives a few base colors and a skyline kind (`city`,
+  `dunes`, `factory`, `ruins`); `scenePalette` works out every other shade, and each mission's far
+  scenery is painted once, the first time it is drawn (`src/render/scene/backdrop.js`).
 
 Fighters are drawn from PixelLab sprite sheets in `assets/sprites/`: one folder of strips per playable
 Shade (`src/data/heroes.js`, loaded the first time it is picked) and one sheet per enemy
@@ -89,8 +110,9 @@ Long sessions must not grow:
 ### Behavior lock
 
 `test/regression/` replays bot-played scenarios and compares every 30th tick and every rendered frame
-against recorded fixtures: two long runs captured from the original single-file game (as the Moss
-Shade), and one shorter run for each of the other Shades. Any change to
+against recorded fixtures: two long runs as the Moss Shade (first captured from the original
+single-file game), one shorter run for each of the other Shades, and one run through the wide zones
+of a later mission. Any change to
 arithmetic, to the order of `Math.random()` calls or to the order of canvas calls shows up there.
 When a change is meant to alter behavior, regenerate the fixtures with `npm run test:regression -- -u`
 and review the diff.

@@ -28,7 +28,7 @@ function recordingView() {
     createImage: () => new FakeImage(),
     baseUrl: '',
   });
-  return { view, created, before: created.length };
+  return { view, created };
 }
 
 const pixels = (canvases) =>
@@ -42,15 +42,20 @@ describe('tinted sprites', () => {
       spawnEnemy(game, kind, 1);
     }
     const raiders = game.fighters.filter((fighter) => fighter.side === 'enemy');
-    raiders.forEach((raider, i) => Object.assign(raider, { x: 60 + i * 18, entering: false }));
-    const { view, created, before } = recordingView();
+    raiders.forEach((raider, i) => Object.assign(raider, { x: 20 + i * 12, entering: false }));
+    const { view, created } = recordingView();
+    // the first frame paints the mission's backdrop, which is not a tinted copy
+    raiders.forEach((raider) => Object.assign(raider, UNTINTED));
+    renderFrame(game, view);
+    const before = created.length;
     for (const tint of TINTS) {
       raiders.forEach((raider) => Object.assign(raider, UNTINTED, tint));
       Object.assign(game.player, { flashTime: TINTS[0] === tint ? 4 : 0 });
       renderFrame(game, view);
     }
     const tinted = created.slice(before);
-    expect(tinted.length).toBeGreaterThanOrEqual(raiders.length * TINTS.length);
+    // past 64 copies the cache lends the canvas it evicts instead of making a new one
+    expect(tinted.length).toBeGreaterThanOrEqual(Math.min(raiders.length * TINTS.length, 64));
     expect(pixels(tinted)).toBeLessThan(1_500_000);
   });
 });

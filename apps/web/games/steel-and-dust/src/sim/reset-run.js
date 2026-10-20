@@ -1,4 +1,5 @@
 import { difficultyOf } from '../data/difficulty.js';
+import { missionAt } from '../data/missions/index.js';
 import { createFighter } from './fighters/create-fighter.js';
 import { createCrates } from './items/crates.js';
 import { refreshPose } from './pose/refresh-pose.js';
@@ -11,7 +12,7 @@ function freshPlayer() {
   return player;
 }
 
-function resetWorld(game, player) {
+function resetWorld(game, player, missionIndex) {
   Object.assign(game, {
     fighters: [player],
     player,
@@ -23,8 +24,9 @@ function resetWorld(game, player) {
     projectiles: [],
     summons: [],
     pickups: [],
-    crates: createCrates(),
+    crates: createCrates(missionAt(missionIndex).crates),
     arena: null,
+    missionIndex,
   });
   game.stage = { zoneIndex: 0, waveIndex: -1, spawnQueue: [], waveDelay: 0, reinforcementTimer: 0 };
 }
@@ -61,9 +63,9 @@ function resetScore(game) {
   });
 }
 
-export function resetRun(game) {
+export function resetRun(game, missionIndex = 0) {
   const player = freshPlayer();
-  resetWorld(game, player);
+  resetWorld(game, player, missionIndex);
   resetCamera(game.camera);
   resetScore(game);
   refreshPose(player);

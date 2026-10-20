@@ -80,11 +80,29 @@ function emberTrail(game, shot) {
   }
 }
 
+// the glob sheds drops that fall away behind it
+function venomTrail(game, shot) {
+  if (shot.time % 3 === 0) {
+    game.particles.push({
+      kind: 'dust',
+      x: shot.x - shot.direction * randomBetween(2, 5),
+      y: shot.y + randomBetween(-1, 2),
+      vx: -shot.direction * 0.2,
+      vy: randomBetween(0.3, 0.8),
+      life: 14,
+      maxLife: 14,
+      size: 1,
+      color: shot.time % 2 ? FX_COLORS.venom : FX_COLORS.venomDark,
+    });
+  }
+}
+
 const TRAILS = {
   knife: streakTrail(3, 4),
   wave: sparkTrail,
   bolt: streakTrail(1, 7),
   sand: sandTrail,
+  venom: venomTrail,
   bomb: fuseTrail,
   fire: emberTrail,
 };

@@ -14,6 +14,8 @@ import { drawCrates } from './scene/crate.js';
 import { drawGround } from './scene/ground.js';
 import { drawPickups } from './scene/pickups.js';
 import { drawProps } from './scene/props/index.js';
+import { scenePalette } from './scene/scene-palette.js';
+import { missionOf } from '../sim/stage/mission.js';
 
 // knocked-out fighters go behind the living, and the hero goes in front of the raiders
 function drawOrder(fighters) {
@@ -53,8 +55,9 @@ function drawFighters(painter, { game, view, cameraX }) {
 }
 
 export function drawWorld(painter, { game, view, cameraX }) {
-  drawGround(painter, cameraX);
-  drawProps(painter, cameraX);
+  const mission = missionOf(game);
+  drawGround(painter, cameraX, scenePalette(mission.theme).ground);
+  drawProps(painter, cameraX, mission.props);
   drawCrates(painter, game.crates, cameraX);
   drawPickups(painter, game.pickups);
   drawFighters(painter, { game, view, cameraX });

@@ -1,7 +1,7 @@
 import { COLORS } from '../../art/colors.js';
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
-import { ZONES } from '../../data/stage.js';
 import { clamp } from '../../lib/math.js';
+import { currentZone } from '../../sim/stage/mission.js';
 import { BANNER_FOREVER } from '../../sim/stage/stage-clear.js';
 import { drawText } from '../text/draw-text.js';
 import { drawBar } from './bar.js';
@@ -28,7 +28,7 @@ export function drawBossBar(painter, boss) {
 }
 
 export function drawGoArrow(painter, game) {
-  if (game.goArrowTime <= 0 || game.arena || game.stage.zoneIndex >= ZONES.length) {
+  if (game.goArrowTime <= 0 || game.arena || !currentZone(game)) {
     return;
   }
   const step = (game.tickCount >> 2) % 6;

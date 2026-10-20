@@ -2,7 +2,7 @@ import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { GROUND_Y } from '../../config.js';
 import { point } from '../painter.js';
-import { drawBolt, drawBomb, drawFire, drawSand } from './enemy-shots.js';
+import { drawBolt, drawBomb, drawFire, drawSand, drawVenom } from './enemy-shots.js';
 
 function drawShockPeak(painter, x, height) {
   for (let row = 0; row <= height; row++) {
@@ -64,6 +64,7 @@ const DRAW_SHOT = {
   wave: drawSlashWave,
   bolt: drawBolt,
   sand: drawSand,
+  venom: drawVenom,
   bomb: drawBomb,
   fire: drawFire,
 };

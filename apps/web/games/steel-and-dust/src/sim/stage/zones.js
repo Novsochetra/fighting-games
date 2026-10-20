@@ -1,34 +1,44 @@
 import { COLORS } from '../../art/colors.js';
-import { REINFORCEMENT_KINDS, ZONES } from '../../data/stage.js';
+import { VIEW_WIDTH } from '../../config.js';
 import { showBanner } from '../fx/effects.js';
+import { cameraTarget } from './camera.js';
+import { currentZone } from './mission.js';
+import { callReinforcements } from './reinforcements.js';
 import { spawnEnemy } from './spawn-enemy.js';
 
 const WAVE_PAUSE = 45;
-const REINFORCEMENT_EVERY = 420;
 
-function queueNextWave(game) {
-  const { stage } = game;
-  const zone = ZONES[stage.zoneIndex];
-  stage.waveIndex++;
-  if (stage.waveIndex >= zone.waves.length) {
-    return false;
+function standingEnemies(game) {
+  return game.fighters.filter((fighter) => fighter.side === 'enemy' && fighter.state !== 'ko')
+    .length;
+}
+
+// a lock wave pins the camera to the screen the hero is on until the wave is beaten
+function lockScreen(game) {
+  if (game.arena.right - game.arena.left <= VIEW_WIDTH) {
+    return;
   }
-  zone.waves[stage.waveIndex].forEach((kind, i) => {
-    stage.spawnQueue.push({ kind, side: i % 2 ? 1 : -1, delay: i === 0 ? 20 : 28 });
+  const left = Math.round(cameraTarget(game));
+  game.arena = { left, right: left + VIEW_WIDTH };
+}
+
+function releaseWave(game, wave) {
+  wave.kinds.forEach((kind, i) => {
+    game.stage.spawnQueue.push({ kind, side: i % 2 ? 1 : -1, delay: i === 0 ? 20 : 28 });
   });
-  return true;
+  if (wave.lock) {
+    lockScreen(game);
+  }
 }
 
 function enterZone(game) {
-  const { stage } = game;
-  const zone = ZONES[stage.zoneIndex];
+  const zone = currentZone(game);
   if (!zone || game.player.x < zone.at) {
     return;
   }
   game.arena = { left: zone.left, right: zone.right };
-  stage.waveIndex = -1;
-  stage.waveDelay = 0;
-  queueNextWave(game);
+  Object.assign(game.stage, { waveIndex: 0, waveDelay: 0 });
+  releaseWave(game, zone.waves[0]);
   game.goArrowTime = 0;
   if (!zone.boss) {
     showBanner(game, { text: zone.label, color: COLORS.sand, time: 80 });
@@ -56,39 +66,31 @@ function leaveZone(game) {
   game.io.sfx('go');
 }
 
-function advanceWaves(game) {
-  const { stage } = game;
-  const anyStanding = game.fighters.some(
-    (fighter) => fighter.side === 'enemy' && fighter.state !== 'ko',
-  );
-  if (anyStanding || stage.spawnQueue.length) {
-    stage.waveDelay = 0;
-    return;
-  }
-  if (++stage.waveDelay > WAVE_PAUSE) {
-    stage.waveDelay = 0;
-    if (!queueNextWave(game)) {
-      leaveZone(game);
-    }
-  }
+// in a wide zone the next wave comes once the hero walks up to it and at most one raider is
+// left; on a single screen the field has to be clear
+function nextWaveReady(game, zone, standing) {
+  const wave = zone.waves[game.stage.waveIndex + 1];
+  return wave && game.player.x >= wave.at && standing <= (zone.screens > 1 ? 1 : 0);
 }
 
-// the boss calls a raider every few seconds while fewer than two are left
-function callReinforcements(game) {
-  const boss = game.boss;
-  if (!boss || boss.state === 'ko' || boss.entering) {
+function advanceWaves(game, zone) {
+  const { stage } = game;
+  const standing = standingEnemies(game);
+  const waiting = stage.spawnQueue.length > 0;
+  const cleared = !waiting && standing === 0 && stage.waveIndex >= zone.waves.length - 1;
+  const ready = !waiting && nextWaveReady(game, zone, standing);
+  if (!cleared && !ready) {
+    stage.waveDelay = 0;
     return;
   }
-  if (++game.stage.reinforcementTimer <= REINFORCEMENT_EVERY) {
+  if (++stage.waveDelay <= WAVE_PAUSE) {
     return;
   }
-  game.stage.reinforcementTimer = 0;
-  const helpers = game.fighters.filter(
-    (fighter) => fighter.side === 'enemy' && !fighter.def.boss && fighter.state !== 'ko',
-  );
-  if (helpers.length < 2) {
-    const kind = REINFORCEMENT_KINDS[(Math.random() * 3) | 0];
-    game.stage.spawnQueue.push({ kind, side: Math.random() < 0.5 ? -1 : 1, delay: 1 });
+  stage.waveDelay = 0;
+  if (cleared) {
+    leaveZone(game);
+  } else {
+    releaseWave(game, zone.waves[++stage.waveIndex]);
   }
 }
 
@@ -101,6 +103,6 @@ export function updateZones(game) {
   if (game.clearTime) {
     return;
   }
-  advanceWaves(game);
+  advanceWaves(game, currentZone(game));
   callReinforcements(game);
 }

@@ -1,0 +1,78 @@
+import { describe, expect, it } from 'vitest';
+import { VIEW_WIDTH } from '../../../src/config.js';
+import { layoutMission } from '../../../src/data/missions/layout.js';
+
+const SPEC = {
+  name: 'Test Road',
+  theme: 'dusk',
+  boss: 'khan',
+  reinforcements: ['grunt'],
+  crates: ['sword', 'ration'],
+  props: ['barrel', 'palm'],
+  zones: [
+    { screens: 1, waves: [['grunt'], ['grunt', 'knife']] },
+    { screens: 3, waves: [['grunt'], ['knife'], ['grunt', 'grunt']] },
+    { boss: 'colossus', label: 'Gate' },
+    { boss: 'khan', label: 'Camp' },
+  ],
+};
+
+describe('laying out a mission', () => {
+  const mission = layoutMission(SPEC, 4);
+
+  it('numbers the mission and its fighting zones', () => {
+    expect(mission).toMatchObject({ index: 4, number: 5, name: 'Test Road' });
+    expect(mission.zones.map((zone) => zone.label)).toEqual([
+      'Zone 5-1',
+      'Zone 5-2',
+      'Gate',
+      'Camp',
+    ]);
+  });
+
+  it('places zones one after another with road between them', () => {
+    const [first, wide, gate, camp] = mission.zones;
+    expect(first).toMatchObject({ left: 300, right: 300 + VIEW_WIDTH, at: 410, screens: 1 });
+    expect(wide.left).toBe(first.right + 300);
+    expect(wide.right - wide.left).toBe(VIEW_WIDTH * 3);
+    expect(gate.right - gate.left).toBe(VIEW_WIDTH);
+    expect(mission.length).toBe(camp.right);
+  });
+
+  it('sends every wave of a single screen in at the start, the last one locking', () => {
+    const [first] = mission.zones;
+    expect(first.waves.map((wave) => wave.at)).toEqual([first.at, first.at]);
+    expect(first.waves.map((wave) => wave.lock)).toEqual([false, true]);
+  });
+
+  it('spreads the waves of a wide zone across it, the last on its final screen', () => {
+    const wide = mission.zones[1];
+    const spots = wide.waves.map((wave) => wave.at);
+    expect(spots[0]).toBe(wide.at);
+    expect(spots[1]).toBeGreaterThan(spots[0]);
+    expect(spots[2] - VIEW_WIDTH * 0.42).toBeGreaterThanOrEqual(wide.right - VIEW_WIDTH - 1);
+    expect(wide.waves.map((wave) => wave.lock)).toEqual([false, false, true]);
+  });
+
+  it('turns a boss zone into one locked wave of that boss', () => {
+    expect(mission.zones[2]).toMatchObject({ boss: 'colossus', screens: 1 });
+    expect(mission.zones[2].waves).toEqual([
+      { kinds: ['colossus'], at: mission.zones[2].at, lock: true },
+    ]);
+  });
+
+  it('puts crates before every zone and inside the wide ones, and props along the road', () => {
+    expect(mission.crates).toHaveLength(5);
+    expect(mission.crates.map((crate) => crate.item)).toEqual([
+      'sword',
+      'ration',
+      'sword',
+      'ration',
+      'sword',
+    ]);
+    expect(mission.props.at(-1)).toEqual({ kind: 'wall', x: mission.length - 12 });
+    for (const prop of mission.props.slice(0, -1)) {
+      expect(SPEC.props).toContain(prop.kind);
+    }
+  });
+});

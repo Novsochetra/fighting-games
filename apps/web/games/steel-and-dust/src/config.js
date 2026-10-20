@@ -1,7 +1,6 @@
 export const VIEW_WIDTH = 384;
 export const VIEW_HEIGHT = 216;
 export const GROUND_Y = 184;
-export const WORLD_WIDTH = 4600;
 export const TICK_MS = 1000 / 60;
 // the world is drawn at 2x so hero sprites can keep their native resolution
 export const RENDER_SCALE = 2;

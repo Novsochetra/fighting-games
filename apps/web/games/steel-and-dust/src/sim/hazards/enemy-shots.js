@@ -14,6 +14,7 @@ const BOMB_BLAST = { knockback: [3, -3.6], knockdown: true, hitstop: 7, hitstun:
 const SHOTS = {
   bolt: { speed: 5.4, damage: 10, height: 26, color: COLORS.steel, sound: 'swingSpear' },
   sand: { speed: 2.3, damage: 8, height: 20, color: FX_COLORS.mirage, sound: 'warp' },
+  venom: { speed: 3.4, damage: 7, height: 30, color: FX_COLORS.venom, sound: 'warp' },
   bomb: { speed: 0, damage: 12, height: 34, color: COLORS.orange, sound: 'swingSpear' },
 };
 

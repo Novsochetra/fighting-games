@@ -18,13 +18,14 @@ export function showHint(game, id) {
 
 function dueHints(game) {
   const { stage, arena, playTime } = game;
+  const zone = game.missionIndex === 0 ? stage.zoneIndex : -1;
   return [
     ['move', playTime > 30],
-    ['crate', playTime > 300 && !arena && stage.zoneIndex === 0],
+    ['crate', playTime > 300 && !arena && zone === 0],
     ['weapon', game.player.weapon.id !== 'fists'],
     ['ult', game.ultMeter >= 100],
-    ['launch', arena && stage.waveIndex >= 1 && stage.zoneIndex === 0],
-    ['dash', arena && stage.zoneIndex === 1],
+    ['launch', arena && stage.waveIndex >= 1 && zone === 0],
+    ['dash', arena && zone === 1],
   ];
 }
 

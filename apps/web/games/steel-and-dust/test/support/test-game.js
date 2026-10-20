@@ -3,11 +3,11 @@ import { createGame } from '../../src/sim/create-game.js';
 import { placeOnTitle, startPlay } from '../../src/sim/stage/flow.js';
 import { tick } from '../../src/sim/tick.js';
 
-export function createTestGame({ settings = {}, io = {} } = {}) {
+export function createTestGame({ settings = {}, io = {}, records = {} } = {}) {
   const game = createGame({
     settings: { ...defaultSettings(false), ...settings },
     device: { coarsePointer: false, touchUsed: false },
-    records: { bestCombo: 0, bestScore: 0 },
+    records: { bestCombo: 0, bestScore: 0, bestMission: 1, ...records },
     hintsSeen: {},
     io,
   });

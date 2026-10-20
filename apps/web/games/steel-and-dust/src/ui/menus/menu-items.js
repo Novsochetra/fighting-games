@@ -14,6 +14,9 @@ export function navigableItems(document, top) {
   if (top === 'heroes') {
     return [...menu.querySelectorAll('.hero-card'), menu.querySelector('.xbtn')];
   }
+  if (top === 'missions') {
+    return [...menu.querySelectorAll('.mission-card'), menu.querySelector('.xbtn')];
+  }
   if (top === 'help') {
     return [...menu.querySelectorAll('.tabs button'), menu.querySelector('.xbtn')];
   }

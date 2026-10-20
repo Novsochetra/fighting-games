@@ -1,3 +1,4 @@
+import { unlockedMissions } from '../missions/mission-panel.js';
 import { clearStatsHtml, overNoteHtml, titleNoteHtml, weaponButtonLabel } from './menu-text.js';
 
 // fills in the live text of a base menu when it opens
@@ -6,6 +7,7 @@ export function createMenuRefreshers({ document, game, context }) {
   return {
     title() {
       byId('titleNote').innerHTML = titleNoteHtml(game, context());
+      byId('missionsBtn').hidden = unlockedMissions(game.records) < 2;
       context().fullscreen.refreshLabels();
     },
     pause() {

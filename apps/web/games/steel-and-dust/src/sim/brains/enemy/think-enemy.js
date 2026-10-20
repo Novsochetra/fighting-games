@@ -1,4 +1,4 @@
-import { VIEW_WIDTH } from '../../../config.js';
+import { screenEdges } from '../../fighters/arena-bounds.js';
 import { takeToken } from '../../fighters/tokens.js';
 import { tryBlink } from './blink.js';
 import { thinkBoss } from './boss.js';
@@ -7,10 +7,8 @@ import { standStill, walk } from './movement.js';
 import { thinkSlinger } from './slinger.js';
 
 function arenaMiddle(game) {
-  if (game.arena) {
-    return (game.arena.left + game.arena.right) / 2;
-  }
-  return game.camera.x + VIEW_WIDTH / 2;
+  const { left, right } = screenEdges(game);
+  return (left + right) / 2;
 }
 
 function walkIntoArena(game, fighter) {

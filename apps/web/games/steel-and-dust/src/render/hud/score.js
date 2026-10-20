@@ -1,6 +1,6 @@
 import { COLORS } from '../../art/colors.js';
 import { VIEW_WIDTH } from '../../config.js';
-import { ZONES } from '../../data/stage.js';
+import { currentZone } from '../../sim/stage/mission.js';
 import { drawText, textWidth } from '../text/draw-text.js';
 
 const RIGHT = VIEW_WIDTH - 6;
@@ -45,9 +45,9 @@ export function drawScore(painter, game, view) {
 }
 
 export function drawWaveLabel(painter, game) {
-  const { zoneIndex, waveIndex } = game.stage;
-  const zone = ZONES[zoneIndex];
-  if (!game.arena || zone.boss || waveIndex < 0) {
+  const { waveIndex } = game.stage;
+  const zone = currentZone(game);
+  if (!game.arena || !zone || zone.boss || waveIndex < 0) {
     return;
   }
   const label = `${zone.label}  wave ${Math.min(waveIndex + 1, zone.waves.length)}/${zone.waves.length}`;
