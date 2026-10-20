@@ -5,5 +5,7 @@ export const RAIDER_CAMP = {
     glow: '#ffb05a',
     smoke: '#c4b6a8',
     bird: '#3a2a2e',
+    mist: '#d8ae84',
+    mote: '#ffe2b0',
   },
 };

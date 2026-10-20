@@ -6,9 +6,10 @@ import {
   loadPaintedBackdrop,
 } from '../../../src/render/scene/painted-backdrop.js';
 import { FakeImage } from '../../support/fake-image.js';
-import { createRecordingContext } from '../../support/recording-canvas.js';
+import { RecordingCanvas, createRecordingContext } from '../../support/recording-canvas.js';
 
-const loaders = { createImage: () => new FakeImage(), baseUrl: '' };
+const createCanvas = (width, height) => Object.assign(new RecordingCanvas(), { width, height });
+const loaders = { createImage: () => new FakeImage(), createCanvas, baseUrl: '' };
 
 function strip(width, parallax, ready = true) {
   return { image: { width, recordingId: () => `img(${width})` }, parallax, ready };
@@ -38,6 +39,23 @@ describe('painted backdrops', () => {
       expect(layer.image.height).toBe(216);
     }
     expect(backdrop.ambient).toBe(PAINTED_BACKDROPS.pineRidge.ambient);
+  });
+
+  it('load a cliff face and its mirror image for a road that has one', () => {
+    const backdrop = loadPaintedBackdrop(loaders, PAINTED_BACKDROPS.pineRidge);
+    const { image, mirrored, ready } = backdrop.cliff;
+    expect(ready).toBe(true);
+    expect(image.name).toBe('cliff.png');
+    expect([mirrored.width, mirrored.height]).toEqual([image.width, image.height]);
+    expect(mirrored.recording.log).toEqual([
+      `setTransform(-1,0,0,1,${image.width},0)`,
+      'drawImage(img(cliff.png),0,0)',
+    ]);
+  });
+
+  it('load no cliff for a road that keeps the earth line on its steps', () => {
+    const plain = { ...PAINTED_BACKDROPS.pineRidge, cliff: false };
+    expect(loadPaintedBackdrop(loaders, plain).cliff).toBeNull();
   });
 
   it('tile each layer across the view from its own share of the camera', () => {

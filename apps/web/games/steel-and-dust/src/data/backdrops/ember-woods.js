@@ -1,6 +1,7 @@
 export const EMBER_WOODS = {
   folder: 'ember-woods',
   groundTop: 5,
+  cliff: true,
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },

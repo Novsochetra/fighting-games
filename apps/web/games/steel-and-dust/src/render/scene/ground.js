@@ -38,10 +38,11 @@ function drawRuts(painter, cameraX, colors) {
 }
 
 // a painted road follows the terrain's hills and steps; the drawn desert roads stay flat as they were
-export function drawGround(painter, { cameraX, colors, tick, terrain, texture, painted }) {
+export function drawGround(painter, { cameraX, colors, tick, terrain, backdrop, painted }) {
   if (painted) {
     const surfaceAt = (x) => groundAt(terrain, x);
-    drawTerrainGround(painter, { cameraX, colors, tick, surfaceAt, texture });
+    const { ground: texture, cliff } = backdrop ?? {};
+    drawTerrainGround(painter, { cameraX, colors, tick, surfaceAt, texture, cliff });
     return;
   }
   painter.use(colors.sand).rect(cameraX, GROUND_Y, VIEW_WIDTH, VIEW_HEIGHT - GROUND_Y);

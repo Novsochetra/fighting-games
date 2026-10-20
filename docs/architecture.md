@@ -73,15 +73,18 @@ places on the road: zone walls, where each wave starts, crates and props, and th
   unlocks mission N + 1 on the title's mission select (`records.bestMission`).
 - Missions 1 to 6 walk through six painted forests, sunrise to night; missions 7 to 10 are desert
   roads. A forest (`src/data/backdrops/`) is PixelLab layers in `assets/backdrops/<forest>/`: a
-  far plate and a near strip that each tile sideways and scroll at their own share of the camera
+  far plate (wider than the view where it holds a sun or moon, so that shows once per screen) and
+  a near strip that each tile sideways and scroll at their own share of the camera
   (`src/render/scene/painted-backdrop.js`), with colors for its road, ferns and air in
   `src/art/painted-themes/`. Its air moves on its own (`src/render/scene/ambient/`): mist, birds,
   leaves, motes, light shafts, fireflies, embers and smoke, each worked out from the tick count and
   the camera alone, never `Math.random()`, so a replay draws the same frames. Its road carries no
   loose props, since the painted strips dress it; a palisade (`assets/sprites/props/`) closes it.
 - The forest roads rise and fall: a zone's spec lists its `ground` as shapes from
-  `src/data/missions/ground-shapes.js` (`mound`, `bank`, `ramp`, `stairs`) and its `platforms`
-  (plank decks). `layoutTerrain` (`src/data/missions/terrain.js`) turns them into a height for every
+  `src/data/missions/ground-shapes.js` (`mound`, `bank`, `ramp`, `terrace`, `ledge`, `stairs`, and
+  `contour` for any outline walked leg by leg) and its `platforms` (braced plank decks). Each zone's
+  shape has a job: a high ground to fight from, a deck for the throwers, a hollow, gentle lock
+  screens and level boss arenas. `layoutTerrain` (`src/data/missions/terrain.js`) turns them into a height for every
   pixel of the road and the platforms' tops, kept on `mission.terrain` and `game.terrain`; a flat
   road has no height table at all, so the desert roads keep their arithmetic exactly.
   `src/sim/stage/terrain.js` reads it (`groundAt`, `floorBelow`, `isWall`, `STEP_UP`): fighters walk
@@ -95,7 +98,13 @@ places on the road: zone walls, where each wave starts, crates and props, and th
   keeps every road fair: level starts, zone walls and boss arenas, gentle lock screens, no wall over
   24px, platforms within jumping reach and every crate on level ground. The road is drawn from the
   forest's painted cross-section laid along the surface (`src/render/scene/terrain-ground.js`), and
-  the decks from `assets/sprites/platforms/` with legs grown to the ground.
+  the decks from `assets/sprites/platforms/` with legs grown to the ground. A backdrop with
+  `cliff: true` also loads `cliff.png` (about 12x64, the face of a step whose high ground is on the
+  left, mirrored once on load for the other way): every sheer step is drawn with that face hung
+  from its lip and cut off at the low ground, the high side's turf rounded over the shoulder and
+  hanging a pixel past it, and a soft contact shadow at its foot (`src/render/scene/cliff-faces.js`).
+  Only the drawing rounds the shoulder; fighters still stand on the sheer step. A road without a
+  cliff picture keeps the plain earth line on its steps.
 - Each desert theme in `src/art/scene-themes.js` gives a few base colors and a skyline kind (`city`,
   `dunes`, `factory`, `ruins`); `scenePalette` works out every other shade, and each mission's far
   scenery is painted once, the first time it is drawn (`src/render/scene/backdrop.js`).

@@ -11,6 +11,22 @@ function loadLayer({ createImage, baseUrl }, folder, { name, parallax, once = fa
   return layer;
 }
 
+// the face of a step whose high ground is on the left; its mirror image is made once, on load,
+// for the faces that look the other way
+function loadCliff({ createImage, createCanvas, baseUrl }, folder) {
+  const cliff = { image: createImage(), mirrored: null, ready: false };
+  cliff.image.onload = () => {
+    const { width, height } = cliff.image;
+    cliff.mirrored = createCanvas(width, height);
+    const context = cliff.mirrored.getContext('2d');
+    context.setTransform(-1, 0, 0, 1, width, 0);
+    context.drawImage(cliff.image, 0, 0);
+    cliff.ready = true;
+  };
+  cliff.image.src = `${baseUrl}${DIRECTORY}${folder}/cliff.png`;
+  return cliff;
+}
+
 export function loadPaintedBackdrop(loaders, spec) {
   // the image marks this same object ready when it loads, so the surface row goes onto it too
   const ground = Object.assign(loadLayer(loaders, spec.folder, { name: 'ground', parallax: 1 }), {
@@ -20,6 +36,7 @@ export function loadPaintedBackdrop(loaders, spec) {
     painted: true,
     layers: spec.layers.map((layer) => loadLayer(loaders, spec.folder, layer)),
     ground,
+    cliff: spec.cliff ? loadCliff(loaders, spec.folder) : null,
     ambient: spec.ambient,
   };
 }

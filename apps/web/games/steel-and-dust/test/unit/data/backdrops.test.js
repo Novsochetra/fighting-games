@@ -56,6 +56,17 @@ describe('painted backdrops', () => {
     }
   });
 
+  it('find a cliff face on disk for every road that has one, about 12 by 64', () => {
+    const withCliffs = Object.entries(PAINTED_BACKDROPS).filter(([, spec]) => spec.cliff);
+    expect(withCliffs.length).toBeGreaterThanOrEqual(6);
+    for (const [themeId, { folder }] of withCliffs) {
+      const { width, height } = layerSize(folder, 'cliff');
+      expect(width, themeId).toBeGreaterThanOrEqual(8);
+      expect(width, themeId).toBeLessThanOrEqual(16);
+      expect(height, themeId).toBe(64);
+    }
+  });
+
   it('put every emitter inside its near layer, which repeats at the width the emitter expects', () => {
     for (const [themeId, { folder, ambient }] of Object.entries(PAINTED_BACKDROPS)) {
       for (const effect of ambient.filter((item) => item.emitters)) {

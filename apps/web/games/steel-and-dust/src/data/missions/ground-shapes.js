@@ -41,3 +41,35 @@ export function stairs(from, steps) {
   points.push([x, 0]);
   return points;
 }
+
+// a high ground walked up a slope `slopeWidth` pixels wide and left by a sheer drop at `to`
+export function terrace(from, to, rise, slopeWidth = rise * 4) {
+  return [
+    [from, 0],
+    [from + slopeWidth, rise],
+    [to, rise],
+    [to, 0],
+  ];
+}
+
+// a high ground jumped onto at `from` and walked down a slope `slopeWidth` pixels wide to `to`
+export function ledge(from, to, rise, slopeWidth = rise * 4) {
+  return [
+    [from, 0],
+    [from, rise],
+    [to - slopeWidth, rise],
+    [to, 0],
+  ];
+}
+
+// any outline, walked as legs of [run, rise]: each leg goes `run` pixels on to reach `rise`, a
+// run of 0 being a sheer step; the last leg comes back down to the road
+export function contour(from, legs) {
+  const points = [[from, 0]];
+  let x = from;
+  for (const [run, rise] of legs) {
+    x += run;
+    points.push([x, rise]);
+  }
+  return points;
+}
