@@ -1,6 +1,7 @@
 export const PINE_RIDGE = {
   folder: 'pine-ridge',
   groundTop: 7,
+  cliff: true,
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },

@@ -1,9 +1,11 @@
 export const OLD_GROVE = {
   folder: 'old-grove',
   groundTop: 8,
+  cliff: true,
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },
+    { name: 'way-in', parallax: 0.5, once: true },
   ],
   ambient: [
     {

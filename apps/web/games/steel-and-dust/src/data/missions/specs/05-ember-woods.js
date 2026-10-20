@@ -1,4 +1,4 @@
-import { bank, mound, ramp, stairs } from '../ground-shapes.js';
+import { bank, contour, ledge, mound } from '../ground-shapes.js';
 
 export const EMBER_WOODS = {
   name: 'Ember Woods',
@@ -11,8 +11,18 @@ export const EMBER_WOODS = {
   zones: [
     {
       screens: 2,
-      ground: [...ramp(70, 280, 24), ...mound(460, 700, 12, 48)],
-      platforms: [{ at: 300, width: 80, rise: 26, kind: 'planks' }],
+      // a leaf-deep hill, climbed on a long slope and left by a step down to its shoulder
+      ground: [
+        ...contour(60, [
+          [120, 24],
+          [80, 24],
+          [0, 12],
+          [50, 12],
+          [40, 0],
+        ]),
+        ...mound(560, 720, 8, 50),
+      ],
+      platforms: [{ at: 476, width: 80, rise: 30, kind: 'planks' }],
       waves: [
         ['scorpion', 'scorpion', 'jackal'],
         ['sentry', 'grunt', 'scorpion'],
@@ -21,19 +31,30 @@ export const EMBER_WOODS = {
     },
     {
       screens: 3,
+      // the ember ridge: up to its crest and down a broken step; then two rises of rock and a
+      // deck over the lock for the sentries
       ground: [
-        ...bank(-260, -150, 18),
-        ...mound(60, 360, 34, 102),
-        ...stairs(470, [
-          [60, 14],
-          [60, 24],
+        ...mound(-250, -140, 10, 40),
+        ...contour(70, [
+          [90, 20],
+          [50, 34],
+          [90, 34],
+          [0, 18],
+          [60, 18],
+          [50, 0],
         ]),
-        ...mound(820, 1080, 14, 56),
+        ...contour(480, [
+          [0, 10],
+          [60, 10],
+          [0, 20],
+          [70, 20],
+          [80, 0],
+        ]),
       ],
       platforms: [
-        { at: 170, width: 80, rise: 34, kind: 'planks' },
-        { at: 600, width: 80, rise: 40, kind: 'planks' },
-        { at: 900, width: 80, rise: 26, kind: 'planks' },
+        { at: 215, width: 80, rise: 28, kind: 'planks' },
+        { at: 700, width: 80, rise: 30, kind: 'planks' },
+        { at: 900, width: 80, rise: 28, kind: 'planks' },
       ],
       waves: [
         ['sentry', 'shield', 'scorpion'],
@@ -44,8 +65,9 @@ export const EMBER_WOODS = {
     },
     {
       screens: 2,
-      ground: [...mound(70, 330, 28, 84), ...mound(470, 700, 12, 48)],
-      platforms: [{ at: 360, width: 80, rise: 36, kind: 'planks' }],
+      // a leaf hollow between two low knolls, a deck over it
+      ground: [...mound(60, 200, 18, 50), ...mound(270, 400, 12, 40)],
+      platforms: [{ at: 190, width: 80, rise: 36, kind: 'planks' }],
       waves: [
         ['scorpion', 'knife', 'sentry'],
         ['bomber', 'scorpion', 'spitter'],
@@ -54,15 +76,14 @@ export const EMBER_WOODS = {
     },
     {
       screens: 2,
+      // a fallen trunk to jump, then a long bank of leaves to fight down from
       ground: [
-        ...stairs(-250, [
-          [50, 12],
-          [50, 22],
-        ]),
-        ...ramp(80, 290, 24),
-        ...mound(470, 700, 14, 56),
+        ...ledge(-250, -150, 12, 50),
+        ...bank(80, 150, 16),
+        ...mound(200, 400, 14, 60),
+        ...mound(520, 728, 6, 70),
       ],
-      platforms: [{ at: 320, width: 80, rise: 26, kind: 'planks' }],
+      platforms: [{ at: 230, width: 80, rise: 30, kind: 'planks' }],
       waves: [
         ['scorpion', 'scorpion', 'scorpion', 'jackal'],
         ['sentry', 'shield', 'scorpion', 'bomber'],

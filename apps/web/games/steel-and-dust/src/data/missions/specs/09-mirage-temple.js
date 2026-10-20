@@ -1,4 +1,4 @@
-import { mound, ramp, terrace } from '../ground-shapes.js';
+import { dais, mound, ramp } from '../ground-shapes.js';
 
 export const MIRAGE_TEMPLE = {
   name: 'Mirage Temple',
@@ -23,7 +23,7 @@ export const MIRAGE_TEMPLE = {
     {
       screens: 3,
       ground: [
-        ...terrace(70, [
+        ...dais(70, [
           [18, 8],
           [18, 16],
           [18, 24],
@@ -57,7 +57,7 @@ export const MIRAGE_TEMPLE = {
     {
       screens: 3,
       ground: [
-        ...terrace(60, [
+        ...dais(60, [
           [16, 8],
           [16, 16],
           [16, 24],
@@ -78,7 +78,7 @@ export const MIRAGE_TEMPLE = {
     {
       boss: 'pharaoh',
       label: 'Sun Throne',
-      ground: terrace(-290, [
+      ground: dais(-290, [
         [14, 8],
         [60, 16],
       ]),

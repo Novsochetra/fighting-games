@@ -31,13 +31,15 @@ describe('platforms', () => {
 
   it('grow a deck its legs down to the ground under each leg, slope or not', () => {
     const slope = (x) => (x < 400 ? GROUND_Y : GROUND_Y - 10);
-    const terrain = terrainWith([{ x: 350, y: 130, width: 80, kind: 'planks' }], slope);
+    const terrain = terrainWith([{ x: 350, y: 120, width: 80, kind: 'planks' }], slope);
     const [left, right, deck] = draws(terrain);
-    const legTop = 130 + (40 - 7) / 2;
+    const { height } = sheets.images.planks;
+    const { topY } = PLATFORM_SPRITES.planks;
+    const legTop = 120 + (height - topY) / 2;
     expect(left).toEqual([
       'img(planks.png)',
       '0',
-      '39',
+      String(height - 1),
       '80',
       '1',
       '350',
@@ -48,7 +50,7 @@ describe('platforms', () => {
     expect(right).toEqual([
       'img(planks.png)',
       '80',
-      '39',
+      String(height - 1),
       '80',
       '1',
       '390',
@@ -56,7 +58,13 @@ describe('platforms', () => {
       '40',
       String(GROUND_Y - 10 - legTop),
     ]);
-    expect(deck).toEqual(['img(planks.png)', '350', String(Math.round(130 - 7 / 2)), '80', '20']);
+    expect(deck).toEqual([
+      'img(planks.png)',
+      '350',
+      String(Math.round(120 - topY / 2)),
+      '80',
+      String(height / 2),
+    ]);
   });
 
   it('skip platforms off screen and sprites not loaded yet', () => {

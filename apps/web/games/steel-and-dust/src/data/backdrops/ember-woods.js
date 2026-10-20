@@ -1,9 +1,11 @@
 export const EMBER_WOODS = {
   folder: 'ember-woods',
   groundTop: 5,
+  cliff: true,
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },
+    { name: 'way-in', parallax: 0.5, once: true },
   ],
   ambient: [
     { kind: 'leaves', plane: 'back', count: 12, drift: 0.45, wind: 0.25 },

@@ -34,16 +34,17 @@ function skylineColors({ skyline, lights }) {
   };
 }
 
-// a painted road without grass (sand, slag, flagstones) keeps its own soil but no swaying blades
-function paintedSoil(sand, grass) {
+// a painted road without grass (sand, slag, flagstones) keeps its own soil but no swaying blades;
+// its darkest rock shades the foot of a cliff
+function paintedSoil({ sand, grass, rock }) {
   const blades = grass
     ? { grass, grassLight: shade(grass, 0.25), grassDark: shade(grass, -0.3) }
     : { grassDark: shade(sand, -0.3) };
-  return { ...blades, soil: shade(sand, -0.18), soilDeep: shade(sand, -0.34) };
+  return { ...blades, soil: shade(sand, -0.18), soilDeep: shade(sand, -0.34), shadow: rock };
 }
 
-function groundColors({ sand, grass }, painted = false) {
-  const soil = painted ? paintedSoil(sand, grass) : {};
+function groundColors({ sand, grass, rock }, painted = false) {
+  const soil = painted ? paintedSoil({ sand, grass, rock }) : {};
   return {
     sand,
     edge: shade(sand, 0.35),

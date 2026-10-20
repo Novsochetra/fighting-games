@@ -1,5 +1,6 @@
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
 import { STEP_UP } from '../../sim/stage/terrain.js';
+import { drawCliffFaces, roundedShoulders } from './cliff-faces.js';
 import { drawRoadDetails, drawSwayingGrass } from './road-details.js';
 
 const TOP_SOIL = 11;
@@ -80,9 +81,19 @@ function drawTextureRun(context, { image, top }, { x, width, y }) {
   }
 }
 
-export function drawTerrainGround(painter, { cameraX, colors, tick, surfaceAt, texture }) {
-  const runs = surfaceRuns(surfaceAt, cameraX, cameraX + VIEW_WIDTH);
+// a road with a painted cliff gives its sheer steps a rock face; the others keep the earth line
+function drawSheerFaces(painter, runs, { colors, texture, cliff }) {
+  if (texture?.ready && cliff?.ready) {
+    drawCliffFaces(painter, runs, { texture, cliff, colors });
+  } else {
+    drawStepFaces(painter, runs, colors);
+  }
+}
+
+export function drawTerrainGround(painter, { cameraX, colors, tick, texture, cliff, ...road }) {
   const painted = texture?.ready;
+  const surfaceAt = painted && cliff?.ready ? roundedShoulders(road.surfaceAt) : road.surfaceAt;
+  const runs = surfaceRuns(surfaceAt, cameraX, cameraX + VIEW_WIDTH);
   for (const run of runs) {
     if (painted) {
       drawTextureRun(painter.context, texture, run);
@@ -90,7 +101,7 @@ export function drawTerrainGround(painter, { cameraX, colors, tick, surfaceAt, t
       drawSoilRun(painter, run, colors);
     }
   }
-  drawStepFaces(painter, runs, colors);
+  drawSheerFaces(painter, runs, { colors, texture, cliff });
   if (!painted) {
     drawRoadDetails(painter, { cameraX, colors, tick, surfaceAt });
   }

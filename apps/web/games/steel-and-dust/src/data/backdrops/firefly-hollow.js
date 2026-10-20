@@ -1,9 +1,11 @@
 export const FIREFLY_HOLLOW = {
   folder: 'firefly-hollow',
   groundTop: 8,
+  cliff: true,
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },
+    { name: 'way-in', parallax: 0.5, once: true },
   ],
   ambient: [
     { kind: 'mist', plane: 'back', y: 160, height: 24, drift: 0.3 },

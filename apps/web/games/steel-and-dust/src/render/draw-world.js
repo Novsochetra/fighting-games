@@ -60,9 +60,9 @@ function drawFighters(painter, { game, view, cameraX }) {
 export function drawWorld(painter, { game, view, cameraX }) {
   const mission = missionOf(game);
   const { ground: colors, painted } = scenePalette(mission.theme);
-  const texture = view.backdrops[mission.theme]?.ground;
+  const backdrop = view.backdrops[mission.theme];
   const { terrain, tickCount: tick } = game;
-  drawGround(painter, { cameraX, colors, tick, terrain, texture, painted });
+  drawGround(painter, { cameraX, colors, tick, terrain, backdrop, painted });
   drawProps(painter, { cameraX, props: mission.props, sheets: view.propSheets });
   drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });
   drawCrates(painter, game.crates, cameraX);

@@ -4,14 +4,14 @@ The six forests of missions 1 to 6, two layers each, made with PixelLab Create I
 concept paintings in `concepts/stages/mission-01/` at the repo root (each used as the reference).
 Every layer is 216 rows tall, the height of the view, and tiles sideways.
 
-| Folder            | Mission          | Concept             | `back.png` | `near.png` |
-| ----------------- | ---------------- | ------------------- | ---------- | ---------- |
-| `pine-ridge/`     | 1 Pine Ridge     | `b_pine_dawn`       | 310 wide   | 768 wide   |
-| `old-grove/`      | 2 Old Grove      | `a_old_grove`       | 320 wide   | 384 wide   |
-| `bamboo-pass/`    | 3 Bamboo Pass    | `f_bamboo_grove`    | 320 wide   | 384 wide   |
-| `raider-camp/`    | 4 Raider Camp    | `e_raider_camp`     | 320 wide   | 384 wide   |
-| `ember-woods/`    | 5 Ember Woods    | `c_autumn_dusk`     | 320 wide   | 384 wide   |
-| `firefly-hollow/` | 6 Firefly Hollow | `d_firefly_night`   | 320 wide   | 384 wide   |
+| Folder            | Mission          | Concept           | `back.png` | `near.png` |
+| ----------------- | ---------------- | ----------------- | ---------- | ---------- |
+| `pine-ridge/`     | 1 Pine Ridge     | `b_pine_dawn`     | 620 wide   | 768 wide   |
+| `old-grove/`      | 2 Old Grove      | `a_old_grove`     | 320 wide   | 384 wide   |
+| `bamboo-pass/`    | 3 Bamboo Pass    | `f_bamboo_grove`  | 320 wide   | 768 wide   |
+| `raider-camp/`    | 4 Raider Camp    | `e_raider_camp`   | 576 wide   | 384 wide   |
+| `ember-woods/`    | 5 Ember Woods    | `c_autumn_dusk`   | 640 wide   | 768 wide   |
+| `firefly-hollow/` | 6 Firefly Hollow | `d_firefly_night` | 576 wide   | 768 wide   |
 
 - `back.png` is the far plate: the sky, the sun or moon and the distant forest, with no trunks or
   road. Made with `tools/backdrop_layers.py`: `unframe` (Pro sometimes paints a white frame), `shift`
@@ -19,6 +19,7 @@ Every layer is 216 rows tall, the height of the view, and tiles sideways.
   Pine Ridge also had a painted step in its mist inpainted away and its lowest rows flattened with
   `fogfloor`.
 - `near.png` is the strip of trunks, bamboo or camp pieces just behind the road, on transparency.
+  (`way-in.png`, where there is one, and `cliff.png` are described in the second pass below.)
   Made with `near`, which rolls each painting so a see-through gap sits on its edges, sets its base
   just under the road's edge and hazes it a little toward the forest's mist. Pine Ridge joins two
   paintings; the Old Grove's canopy ran over its edges, so that seam was inpainted first.
@@ -145,3 +146,61 @@ The flames, sparks and sand trickles are drawn in code at the braziers and ledge
 (`src/data/backdrops/mirage-temple.js`). The sealed door that closes the road and its broken-open
 twin (`../sprites/props/temple-door*.png`, the twin a Pro edit of the door) and the slab on a fluted
 column (`../sprites/platforms/slab.png`, its shaft the last row) are Pro sprites.
+
+## Second pass: seams, one sun per screen, cliffs
+
+The far plates and near strips were reworked after looking at every forest in the browser with two
+tiles side by side, and every road got a cliff face. All of it is reproducible with
+`tools/backdrop_layers.py`; the PixelLab originals were kept with the work notes.
+
+- **Far plate seams.** `overlap` had left a 64-column ordered-dither crossfade at the start of every
+  plate, which read as a ghosted, blocky patch (the Ember Woods sun halo was cut by it). `unblend`
+  sorts each pixel of that band back to the end it came from (the Bayer pattern says which), fills
+  the gaps from its neighbours and joins the two ends along the least visible seam: all six plates.
+  Firefly Hollow (column 191) and Raider Camp (column 192, its camp floor) also had a hard cut where
+  `shift` had joined the painting's own ends; `join` lays the two sides 32 columns over each other
+  and switches along the least visible seam (both plates 288 wide). Inpainting the dither with
+  PixelLab was tried first and only copied the dither, so it was not used.
+- **One sun or moon per screen.** A plate narrower than the view showed its sun twice. Each plate
+  with a sun or moon is now the plate followed by a copy without it (`back.png` twice as wide): Pine
+  Ridge, Ember Woods and Firefly Hollow had the sun or moon and its rings inpainted away with
+  PixelLab Inpaint on a 256-wide crop centred on it ("dawn sky in flat bands, no sun", "dusk sky,
+  no sun", "night sky, no moon"); Raider Camp's flat disc was painted out with its own sky bands.
+  Ember Woods is rolled by 112 so its halo sits inside its own half. The Pine Ridge halo stub at the
+  top edge was rounded off.
+- **Near strips.** Raider Camp's strip is `sink` 6 rows, so its tents and crates stand on the road's
+  far edge instead of on the plate's yard (its fire emitters moved down with it); a warm dust `mist`
+  now hangs over the yard. Old Grove (`#b8ccaa`, 0.38) and Firefly Hollow (`#6e6fa6`, 0.34) got
+  `groundhaze` from row 70 to 176, and Pine Ridge (`#c9d5da`, 0.3) from row 90 to 178, a ground
+  mist that keeps their dark trunks and lower boughs from swallowing the fighters. Bamboo Pass, Ember Woods and Firefly Hollow passed their trunks at one even rhythm;
+  `vary` joins each strip with a copy that leaves one trunk or clump out (768 wide).
+- **Cliffs.** `cliff.png` (12x64) in every folder is the face of a step whose high ground is on the
+  left, drawn down each sheer step (`src/render/scene/cliff-faces.js`). One PixelLab Create Image
+  (Pro) call at 16x64 with a crop of the Pine Ridge cross-section as the style image gave 16
+  candidate faces (earth, stones, roots, strata, stacked stones); `cliff` picks one per forest,
+  repaints it in that forest's earth by brightness rank, darkens it as a face turned from the light,
+  crumbles its outer edge and leaves its top clear so the road's own turf rolls over it:
+
+  | Folder            | Candidate         | Arguments after `<ground.png>` (left width skip depth turf lip shade) |
+  | ----------------- | ----------------- | --------------------------------------------------------------------- |
+  | `pine-ridge/`     | 0 stones, roots   | `2 12 14 64 11 4 0.8`                                                 |
+  | `old-grove/`      | 4 dense roots     | `2 12 14 64 10 4 0.8`                                                 |
+  | `bamboo-pass/`    | 5 layered strata  | `2 12 14 64 7 3 0.8`                                                  |
+  | `raider-camp/`    | 6 pebble pack     | `2 12 14 64 5 3 0.8`                                                  |
+  | `ember-woods/`    | 12 roots          | `2 12 16 64 12 5 0.8`                                                 |
+  | `firefly-hollow/` | 13 stacked stones | `1 12 1 18 14 11 0.8` (the colours of its paving, a retaining wall)   |
+
+- **Decks.** `../sprites/platforms/planks.png` is a PixelLab Create Image (Pro) trestle (160x48,
+  the old deck as the style image): a thick plank walkway on two posts with a nailed cross brace,
+  so it no longer reads as a little gate from a distance. Its brace was run 12 rows further down
+  into the posts, so the last row, which the legs repeat down to the ground, is the two posts alone.
+  `planks-night.png` is the same trestle pulled 42% toward indigo (`#3a3c6e`) and darkened to 88%,
+  the deck of Firefly Hollow, where the warm wood stood out of the moonlight.
+- **The way in.** Each road from the second on starts with a piece of the forest before it, a
+  `way-in.png` layer drawn once from the start of the road (`once: true`, parallax 0.5), made with
+  `wayin` from the last road's near strip as it was before this pass and hazed toward this forest's
+  air: two pines from Pine Ridge in the Old Grove (`#b8ccaa`, 0.3), an Old Grove tree (its canopy
+  trimmed to a ragged edge and its floor band left behind) in Bamboo Pass (`#e1f1df`, 0.35), a
+  bamboo clump at the Raider Camp gate (`#d8ae84`, 0.3), the camp's crates and banner on the edge of
+  Ember Woods (`#e7a35f`, 0.25) and the last autumn tree going dark in Firefly Hollow (`#3c3c74`,
+  0.58).
