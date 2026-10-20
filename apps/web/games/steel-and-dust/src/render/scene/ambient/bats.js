@@ -1,74 +1,70 @@
 import { VIEW_WIDTH } from '../../../config.js';
 import { hashInt } from '../../../lib/math.js';
-import { NEAR_WIDTH, batPose } from './bat-frames.js';
-import { TAU, isOnScreen, trait } from './motion.js';
+import { isOnScreen, trait, twoFrame } from './motion.js';
 
 const SALT = 19000;
-const SPEED = 1.1;
-const SPAN = 100;
-const EDGE = 12;
-const SHORTEST_LOOP = VIEW_WIDTH + SPAN + EDGE * 2;
+const CROSS_TICKS = 640;
+const BAT_WIDTH = 7;
+const SPREAD = 40;
+const TRAVEL = VIEW_WIDTH + SPREAD + BAT_WIDTH * 2;
+const WING_FRAMES = [
+  [
+    [0, 0, 1, 1],
+    [6, 0, 1, 1],
+    [1, 1, 2, 1],
+    [4, 1, 2, 1],
+    [3, 1, 1, 2],
+  ],
+  [
+    [3, 0, 1, 1],
+    [1, 1, 5, 1],
+    [0, 2, 1, 1],
+    [6, 2, 1, 1],
+  ],
+];
 
-// the stream flies round a loop wider than the view, so it crosses once per period and the camera
-// can slide it sideways without a bat ever popping in or out on screen
-function streamAt({ effect, tick, cameraX }) {
-  const loop = Math.max(effect.period * SPEED, SHORTEST_LOOP);
-  const shift = cameraX * (effect.drift ?? 0);
-  const travelled = tick * SPEED - shift;
-  const crossing = Math.floor(travelled / loop);
-  const seed = crossing + SALT;
-  return {
-    seed,
-    shift,
-    head: travelled - crossing * loop - EDGE,
-    size: 5 + (hashInt(seed) % 5),
-    y: effect.y + Math.round(trait(seed, 1) * 16) - 8,
-    phase: trait(seed, 2) * TAU,
-  };
-}
-
-// a bat darts: smooth swoops plus a sudden small hop every few ticks
-function flutterOf(seed, tick) {
-  const hop = trait(seed * 7 + Math.floor((tick + seed) / 9), 5) - 0.5;
-  return Math.sin(tick * 0.29 + seed) * 1.2 + Math.sin(tick * 0.13 + seed * 2.9) * 1.6 + hop * 2;
-}
-
-function batAt(stream, i, tick) {
-  const seed = stream.seed * 31 + i;
-  const far = trait(seed, 3) < 0.35;
-  const x = stream.head - ((i + trait(seed, 1) * 0.9) / stream.size) * SPAN;
-  // bats follow the same wavy lane in the sky, so the stream reads as one ribbon
-  const ribbon = Math.sin((x + stream.shift) * 0.028 + stream.phase) * 7;
-  const lane = (trait(seed, 2) - 0.5) * (far ? 8 : 14);
-  return {
-    x: x + Math.sin(tick * 0.05 + i * 2.3) * 2,
-    y: stream.y + lane + ribbon + flutterOf(seed, tick) - (far ? 4 : 0),
-    far,
-    beat: Math.floor((tick + Math.floor(trait(seed, 4) * 12)) / (far ? 4 : 3)),
-  };
-}
-
-function drawBat(painter, bat) {
-  const left = Math.round(bat.x);
-  const top = Math.round(bat.y);
-  painter.alpha(bat.far ? 0.75 : 1);
-  for (const [offsetX, offsetY, width, height] of batPose(bat.far, bat.beat)) {
+function drawBat(painter, { x, y, frame }) {
+  if (!isOnScreen(x, y, BAT_WIDTH)) {
+    return;
+  }
+  const left = Math.round(x);
+  const top = Math.round(y);
+  for (const [offsetX, offsetY, width, height] of WING_FRAMES[frame]) {
     painter.rect(left + offsetX, top + offsetY, width, height);
   }
 }
 
-export function drawBats(painter, { effect, tick, cameraX, colors }) {
-  const stream = streamAt({ effect, tick, cameraX });
-  painter.use(colors.bat);
-  let drawn = false;
-  for (let i = 0; i < stream.size; i++) {
-    const bat = batAt(stream, i, tick);
-    if (isOnScreen(bat.x, bat.y, NEAR_WIDTH)) {
-      drawBat(painter, bat);
-      drawn = true;
-    }
+function colonyOf(crossing) {
+  const seed = crossing + SALT;
+  return {
+    seed,
+    size: 2 + (hashInt(seed) % 3),
+    heading: hashInt(seed + 1) % 2 ? 1 : -1,
+    lift: Math.round(trait(seed, 1) * 24) - 12,
+  };
+}
+
+// bats never fly straight: each one darts back and forth and bobs on its own beat
+function batAt(colony, { i, progress, tick }) {
+  const seed = colony.seed * 7 + i;
+  const along = progress * TRAVEL - BAT_WIDTH - trait(seed, 2) * SPREAD;
+  const dart = Math.sin(tick * (0.05 + trait(seed, 3) * 0.04) + i * 2.1) * 10;
+  const x = colony.heading > 0 ? along + dart : VIEW_WIDTH - along + dart;
+  const bob = Math.sin(tick * 0.13 + i * 1.3) * 3 + Math.sin(tick * 0.031 + i) * 7;
+  return { x, y: colony.lift + i * 5 + bob, frame: twoFrame(tick + i * 2, 4) };
+}
+
+export function drawBats(painter, { effect, tick, colors }) {
+  const crossTicks = Math.min(effect.period, CROSS_TICKS);
+  const crossing = Math.floor(tick / effect.period);
+  const elapsed = tick - crossing * effect.period;
+  if (elapsed >= crossTicks) {
+    return;
   }
-  if (drawn) {
-    painter.alpha(1);
+  const colony = colonyOf(crossing);
+  painter.use(colors.bat);
+  for (let i = 0; i < colony.size; i++) {
+    const bat = batAt(colony, { i, progress: elapsed / crossTicks, tick });
+    drawBat(painter, { ...bat, y: effect.y + bat.y });
   }
 }

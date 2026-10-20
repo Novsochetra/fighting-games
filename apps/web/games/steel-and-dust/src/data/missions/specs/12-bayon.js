@@ -7,6 +7,7 @@ export const BAYON = {
   reinforcements: ['ghoul', 'assassin', 'witch'],
   crates: ['sword', 'ration', 'axe', 'ration', 'spear', 'ration', 'sword', 'axe'],
   props: [],
+  entry: 'templeGateBroken',
   endWall: 'templeGate',
   zones: [
     {
@@ -14,9 +15,9 @@ export const BAYON = {
       screens: 2,
       ground: [...mound(56, 150, 10, 30), ...ramp(190, 250, 18)],
       platforms: [
-        { at: 270, width: 80, rise: 30, kind: 'ledge' },
-        { at: 488, width: 80, rise: 34, kind: 'ledge' },
-        { at: 646, width: 80, rise: 26, kind: 'ledge' },
+        { at: 270, width: 80, rise: 30, kind: 'lintel' },
+        { at: 488, width: 80, rise: 34, kind: 'lintel' },
+        { at: 646, width: 80, rise: 26, kind: 'lintel' },
       ],
       waves: [
         ['ghoul', 'sentry', 'ghoul', 'tombguard'],
@@ -44,10 +45,10 @@ export const BAYON = {
         ...mound(560, 690, 16, 40),
       ],
       platforms: [
-        { at: 180, width: 80, rise: 26, kind: 'ledge' },
-        { at: 520, width: 80, rise: 36, kind: 'ledge' },
-        { at: 830, width: 80, rise: 30, kind: 'ledge' },
-        { at: 1000, width: 80, rise: 24, kind: 'ledge' },
+        { at: 180, width: 80, rise: 26, kind: 'lintel' },
+        { at: 520, width: 80, rise: 36, kind: 'lintel' },
+        { at: 830, width: 80, rise: 30, kind: 'lintel' },
+        { at: 1000, width: 80, rise: 24, kind: 'lintel' },
       ],
       waves: [
         ['vulture', 'sentry', 'tombguard', 'monk'],
@@ -78,10 +79,10 @@ export const BAYON = {
         ...ramp(640, 720, 20),
       ],
       platforms: [
-        { at: 120, width: 80, rise: 26, kind: 'ledge' },
-        { at: 230, width: 80, rise: 30, kind: 'ledge' },
-        { at: 850, width: 80, rise: 28, kind: 'ledge' },
-        { at: 1030, width: 80, rise: 32, kind: 'ledge' },
+        { at: 120, width: 80, rise: 26, kind: 'lintel' },
+        { at: 230, width: 80, rise: 30, kind: 'lintel' },
+        { at: 850, width: 80, rise: 28, kind: 'lintel' },
+        { at: 1030, width: 80, rise: 32, kind: 'lintel' },
       ],
       waves: [
         ['monk', 'sentry', 'monk', 'vulture'],
@@ -115,10 +116,10 @@ export const BAYON = {
         ]),
       ],
       platforms: [
-        { at: 160, width: 80, rise: 32, kind: 'ledge' },
-        { at: 520, width: 80, rise: 30, kind: 'ledge' },
-        { at: 820, width: 80, rise: 34, kind: 'ledge' },
-        { at: 990, width: 80, rise: 26, kind: 'ledge' },
+        { at: 160, width: 80, rise: 32, kind: 'lintel' },
+        { at: 520, width: 80, rise: 30, kind: 'lintel' },
+        { at: 820, width: 80, rise: 34, kind: 'lintel' },
+        { at: 990, width: 80, rise: 26, kind: 'lintel' },
       ],
       waves: [
         ['ghoul', 'sentry', 'assassin', 'witch'],

@@ -2,8 +2,8 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { FOREST_THEMES } from '../../../src/art/forest-themes.js';
-import { PAINTED_BACKDROPS, isPaintedTheme } from '../../../src/data/backdrops.js';
+import { PAINTED_THEMES } from '../../../src/art/painted-themes/index.js';
+import { PAINTED_BACKDROPS } from '../../../src/data/backdrops/index.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { createPainter } from '../../../src/render/painter.js';
 import { drawAmbient } from '../../../src/render/scene/ambient/index.js';
@@ -32,10 +32,8 @@ function drawsSomethingWithin(effect, colors, ticks) {
 }
 
 describe('painted backdrops', () => {
-  it('have a forest palette for every painted theme and nothing else', () => {
-    expect(Object.keys(PAINTED_BACKDROPS).sort()).toEqual(Object.keys(FOREST_THEMES).sort());
-    expect(isPaintedTheme('pineRidge')).toBe(true);
-    expect(isPaintedTheme('storm')).toBe(false);
+  it('have a palette for every painted theme and nothing else', () => {
+    expect(Object.keys(PAINTED_BACKDROPS).sort()).toEqual(Object.keys(PAINTED_THEMES).sort());
   });
 
   it('are used by a mission each', () => {
@@ -70,6 +68,17 @@ describe('painted backdrops', () => {
     }
   });
 
+  it('find a cliff face on disk for every road that has one, about 12 by 64', () => {
+    const withCliffs = Object.entries(PAINTED_BACKDROPS).filter(([, spec]) => spec.cliff);
+    expect(withCliffs.length).toBeGreaterThanOrEqual(6);
+    for (const [themeId, { folder }] of withCliffs) {
+      const { width, height } = layerSize(folder, 'cliff');
+      expect(width, themeId).toBeGreaterThanOrEqual(8);
+      expect(width, themeId).toBeLessThanOrEqual(16);
+      expect(height, themeId).toBe(64);
+    }
+  });
+
   it('put every emitter inside its near layer, which repeats at the width the emitter expects', () => {
     for (const [themeId, { folder, ambient }] of Object.entries(PAINTED_BACKDROPS)) {
       for (const effect of ambient.filter((item) => item.emitters)) {
@@ -85,7 +94,7 @@ describe('painted backdrops', () => {
     for (const [themeId, { ambient }] of Object.entries(PAINTED_BACKDROPS)) {
       for (const effect of ambient) {
         expect(['back', 'front'], `${themeId} ${effect.kind}`).toContain(effect.plane);
-        const colors = FOREST_THEMES[themeId].ambient;
+        const colors = PAINTED_THEMES[themeId].ambient;
         expect(drawsSomethingWithin(effect, colors, 1800), `${themeId} ${effect.kind}`).toBe(true);
       }
     }

@@ -56,10 +56,11 @@ The game keeps a strict split:
 
 ### Missions
 
-The game is twelve missions (`src/data/missions/specs/`), each a road of its own with a scene theme, a
-boss, the raiders that boss calls in, crate contents and roadside props. A spec only lists its zones
+The game is twelve missions (`src/data/missions/specs/`), each a road of its own with a painted theme,
+a boss, the raiders that boss calls in, crate contents, its way in and its closing wall. A spec only lists its zones
 and the raider kinds in each wave; `layoutMission` (`src/data/missions/layout.js`) turns that into
-places on the road: zone walls, where each wave starts, crates and props, and the mission's length.
+places on the road: zone walls, where each wave starts, crates, its way in and wall, and the mission's
+length.
 
 - A zone is one screen or several. On a single screen every wave comes as soon as the field is
   clear. In a wide zone the camera keeps scrolling with the hero, and each wave waits until the
@@ -71,27 +72,53 @@ places on the road: zone walls, where each wave starts, crates and props, and th
   earlier on its road is a mid-boss and only opens the road. The score, clock, continues and ULT bar
   carry into the next mission (`enterNextMission`); the hero starts it fresh. Beating mission N
   unlocks mission N + 1 on the title's mission select (`records.bestMission`).
-- Missions 1 to 6 walk through six painted forests, sunrise to night; missions 7 to 10 are desert
-  roads ending at Warden's Fortress under a blood moon; missions 11 and 12 walk on into two painted
-  temples, Angkor Wat at dawn and the Bayon at dusk, where the Bayon Guardian ends the game.
-  Forests and temples are painted roads alike (`src/data/backdrops.js`, the temples' entries in
-  `src/data/temple-backdrops.js`): PixelLab layers in `assets/backdrops/<folder>/`, a far plate, a
-  near strip and sometimes a middle layer, that each tile sideways and scroll at their own share of
-  the camera (`src/render/scene/painted-backdrop.js`), with colors for its road, ferns and air in
-  `src/art/forest-themes.js`. A road may also list `fronts`, layers such as an overhanging canopy
-  that scroll faster than the camera and are drawn over the fight, after the world and its front
-  air and before the foreground ferns; a road without them draws exactly as before. Its air moves
-  on its own (`src/render/scene/ambient/`): mist, birds, bats, leaves and petals, motes,
-  butterflies, light shafts, glints on water, fireflies, and flames, embers and smoke at points of
-  the near strip, each worked out from the tick count and the camera alone, never `Math.random()`,
-  so a replay draws the same frames. Its road carries no loose props, since the painted strips
-  dress it; a palisade closes a forest road and a stone naga gate a temple road
-  (`assets/sprites/props/`).
-- The painted roads rise and fall: a zone's spec lists its `ground` as shapes from
-  `src/data/missions/ground-shapes.js` (`mound`, `bank`, `ramp`, `stairs`) and its `platforms`
-  (plank decks in the forests, sandstone ledges in the temples). `layoutTerrain` (`src/data/missions/terrain.js`) turns them into a height for every
-  pixel of the road and the platforms' tops, kept on `mission.terrain` and `game.terrain`; a flat
-  road has no height table at all, so the desert roads keep their arithmetic exactly.
+  A fallen hero continues where they fell, as any Shade: Continue opens the Shade list, and
+  `continueAs` (`src/sim/stage/flow.js`) brings the hero back as the one picked, keeping the run.
+- The twelve missions are one road, painted end to end with PixelLab: six forests from sunrise to
+  night (Pine Ridge, Old Grove, Bamboo Pass, Raider Camp, Ember Woods, Firefly Hollow), then out of
+  the woods into the desert from dawn to night: Sandstorm Pass (a red-rock canyon in a dawn
+  sandstorm), Iron Works (the raiders' foundry at a smoggy midday), Mirage Temple (a half-buried sun
+  temple at dusk) and Warden's Fortress (a blood-moon fortress), then out of that night into two
+  temples: Angkor Wat at dawn and the Bayon at dusk, the finale, where the Bayon Guardian ends the
+  game. A road
+  (`src/data/backdrops/<folder>.js`) is layers in `assets/backdrops/<folder>/`: a far plate (wider
+  than the view where it holds a sun or moon, so that shows once per screen) and a near strip that
+  each tile sideways and scroll at their own share of the camera, and a layer drawn `once` at the
+  start of the road, a piece of the road before it (the last trunk of the forest, the canyon mouth,
+  the foundry's scaffold, the temple's broken obelisk), so each road walks on from the last
+  (`src/render/scene/painted-backdrop.js`; a `once` layer stops drawing when it has scrolled away,
+  and a layer that drifts no faster than the far plate keeps still in a screen shake). A road may
+  also list `fronts`, layers that scroll faster than the camera and are drawn over the fight, after
+  the world and its front air and before the foreground (the Bayon's canopy of fig roots); a road
+  without them draws exactly as before. Each road's
+  colors for its soil, grass (if any), the clumps in front of the fighters and its air are in
+  `src/art/painted-themes/<folder>.js`; `scenePalette` works out the shades.
+- A road's air moves on its own (`src/render/scene/ambient/`): mist, birds, leaves, motes, light
+  shafts, fireflies, embers and smoke in the forests; a storm that swells and dies
+  (`storm.js`) driving gusts, a dust veil, rolling plumes, a dust devil, vultures and tumbleweeds in
+  the canyon; furnace glow, sparks, chimney plumes, steam, heat shimmer and ash at the iron works;
+  mirage streaks, blue brazier fire, sand trickles, bats and drifting sand at the temple; torch
+  flames, lightning and pennants at the fortress; light shafts from the rising sun, egrets, glints
+  on the moat (`glints.js`), butterflies (`butterflies.js`), petals and incense smoke at Angkor Wat;
+  bats, flames in the fire bowls, embers and fireflies at the Bayon. Each is worked out from the tick count and the
+  camera alone, never `Math.random()`, so a replay draws the same frames. In front of the fighters
+  lies the road's own foreground kind (`src/render/scene/foreground/`: ferns, scrub and bones, slag
+  and chain, ruins, spikes).
+- A road carries no loose props, since the painted strips dress it: the only pieces set on it
+  (`src/data/missions/props-layout.js`, sprites in `assets/sprites/props/`) are its closing wall
+  (`endWall`: the forests' palisade, the canyon barricade, the foundry gate, the temple door, the
+  Warden's gate, the temples' naga gate) and, from mission 7 on, its `entry`: the last road's wall broken open, standing
+  behind the hero's start. `test/unit/data/missions.test.js` keeps every entry the last road's
+  wall plus `Broken`.
+- The roads rise and fall: a zone's spec lists its `ground` as shapes from
+  `src/data/missions/ground-shapes.js` (`mound`, `bank`, `ramp`, `terrace`, `ledge`, `stairs`,
+  `dais` for temple steps walked up and down, and `contour` for any outline walked leg by leg) and
+  its `platforms` (each road's own deck: plank trestles, scaffolds, iron catwalks, temple slabs,
+  ramparts and the temples' sandstone lintels). Each zone's shape has a job: a high ground to fight from, a deck for the throwers, a
+  hollow, gentle lock screens and level boss arenas. `layoutTerrain`
+  (`src/data/missions/terrain.js`) turns them into a height for every pixel of the road and the
+  platforms' tops, kept on `mission.terrain` and `game.terrain`; a road with no shapes has no
+  height table at all and stays at `GROUND_Y`.
   `src/sim/stage/terrain.js` reads it (`groundAt`, `floorBelow`, `isWall`, `STEP_UP`): fighters walk
   slopes and steps up to 8px, taller rises are walls, platforms only catch what comes down onto them
   and down + jump drops through (`src/sim/fighters/terrain-motion.js`), and crates, pickups, bombs,
@@ -102,14 +129,14 @@ places on the road: zone walls, where each wave starts, crates and props, and th
   `test/unit/data/terrain-rules.test.js`
   keeps every road fair: level starts, zone walls and boss arenas, gentle lock screens, no wall over
   24px, platforms within jumping reach and every crate on level ground. The road is drawn from the
-  forest's painted cross-section laid along the surface (`src/render/scene/terrain-ground.js`), and
-  the decks from `assets/sprites/platforms/` with legs grown to the ground. The temple roads are
-  built from the same shapes as raised causeways, terraces with walkable steps, steep stairs that
-  need a jump and root-heaved mounds. A shape may run on past the end of the road, since `groundAt`
-  holds the last height, so Angkor Wat's boss arena stands level 16px above the road.
-- Each desert theme in `src/art/scene-themes.js` gives a few base colors and a skyline kind (`city`,
-  `dunes`, `factory`, `ruins`); `scenePalette` works out every other shade, and each mission's far
-  scenery is painted once, the first time it is drawn (`src/render/scene/backdrop.js`).
+  backdrop's painted cross-section (`ground.png`) laid along the surface
+  (`src/render/scene/terrain-ground.js`), and the decks from `assets/sprites/platforms/` with legs
+  grown to the ground. A backdrop with `cliff: true` also loads `cliff.png` (about 12x64, the face
+  of a step whose high ground is on the left, mirrored once on load for the other way): every sheer
+  step is drawn with that face hung from its lip and cut off at the low ground, the high side's turf
+  rounded over the shoulder and hanging a pixel past it, and a soft contact shadow at its foot
+  (`src/render/scene/cliff-faces.js`). Only the drawing rounds the shoulder; fighters still stand
+  on the sheer step.
 
 Fighters are drawn from PixelLab sprite sheets in `assets/sprites/`: one folder of strips per playable
 Shade (`src/data/heroes.js`, loaded the first time it is picked) and one sheet per enemy
@@ -148,7 +175,8 @@ Long sessions must not grow:
 `test/regression/` replays bot-played scenarios and compares every 30th tick and every rendered frame
 against recorded fixtures: two long runs as the Moss Shade (first captured from the original
 single-file game), one shorter run for each of the other Shades, one run through the wide zones
-of the fourth mission, one over the hills of the third and one through the seventh, a desert road.
+of the fourth mission, one over the hills of the third, one through the seventh, the sandstorm canyon,
+and one through the twelfth, the Bayon.
 Any change to
 arithmetic, to the order of `Math.random()` calls or to the order of canvas calls shows up there.
 When a change is meant to alter behavior, regenerate the fixtures with `npm run test:regression -- -u`

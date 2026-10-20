@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { PAINTED_BACKDROPS } from '../../../src/data/backdrops.js';
+import { PAINTED_BACKDROPS } from '../../../src/data/backdrops/index.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { createView } from '../../../src/render/create-view.js';
 import { renderFrame } from '../../../src/render/render-frame.js';
@@ -11,7 +11,7 @@ import { RecordingCanvas } from '../../support/recording-canvas.js';
 import { seededRandom } from '../../support/seeded-random.js';
 import { createTestGame, runTicks } from '../../support/test-game.js';
 
-const THEME = 'pineRidge';
+const THEME = 'oldGrove';
 // the far plate stands in for a canopy, so its second showing in a frame is the front layer
 const FRONT = 'img(back.png)';
 

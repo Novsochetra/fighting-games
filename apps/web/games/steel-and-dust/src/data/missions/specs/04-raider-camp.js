@@ -1,4 +1,4 @@
-import { bank, mound, ramp } from '../ground-shapes.js';
+import { contour, ledge, mound, terrace } from '../ground-shapes.js';
 
 export const RAIDER_CAMP = {
   name: 'Raider Camp',
@@ -6,15 +6,16 @@ export const RAIDER_CAMP = {
   boss: 'cobra',
   reinforcements: ['spitter', 'knife', 'shield'],
   crates: ['sword', 'ration', 'spear', 'axe', 'ration'],
-  props: [],
   endWall: 'palisade',
   zones: [
     {
       screens: 2,
-      ground: [...mound(60, 300, 20, 60)],
+      // the camp's earth rampart, jumped at its front and walked off behind; spitters man the
+      // lookout past it
+      ground: [...ledge(80, 270, 16, 60)],
       platforms: [
-        { at: 340, width: 80, rise: 36, kind: 'planks' },
-        { at: 520, width: 80, rise: 26, kind: 'planks' },
+        { at: 300, width: 80, rise: 40, kind: 'planks' },
+        { at: 560, width: 80, rise: 30, kind: 'planks' },
       ],
       waves: [
         ['knife', 'spitter', 'grunt'],
@@ -24,8 +25,9 @@ export const RAIDER_CAMP = {
     },
     {
       screens: 2,
-      ground: [...bank(-260, -150, 16), ...ramp(60, 260, 24), ...mound(470, 700, 12, 48)],
-      platforms: [{ at: 290, width: 80, rise: 40, kind: 'planks' }],
+      // a ditch between two earthworks, with a deck across it for the spitters
+      ground: [...terrace(60, 180, 18, 60), ...ledge(270, 380, 14, 50)],
+      platforms: [{ at: 186, width: 80, rise: 36, kind: 'planks' }],
       waves: [
         ['spitter', 'spitter', 'hound'],
         ['shield', 'sling', 'scrapper'],
@@ -34,11 +36,24 @@ export const RAIDER_CAMP = {
     },
     {
       screens: 3,
-      ground: [...mound(60, 330, 30, 90), ...bank(470, 590, 20), ...mound(830, 1080, 14, 56)],
+      // the stockpile mound with a step down its back, a deck, a rampart and a low rise to the
+      // lock
+      ground: [
+        ...mound(-240, -150, 8, 30),
+        ...contour(70, [
+          [80, 24],
+          [120, 24],
+          [0, 12],
+          [60, 12],
+          [40, 0],
+        ]),
+        ...ledge(610, 740, 16, 50),
+        ...mound(840, 1010, 10, 50),
+      ],
       platforms: [
-        { at: 150, width: 80, rise: 32, kind: 'planks' },
-        { at: 620, width: 80, rise: 26, kind: 'planks' },
-        { at: 900, width: 80, rise: 34, kind: 'planks' },
+        { at: 500, width: 80, rise: 30, kind: 'planks' },
+        { at: 160, width: 80, rise: 30, kind: 'planks' },
+        { at: 1030, width: 80, rise: 34, kind: 'planks' },
       ],
       waves: [
         ['hound', 'knife', 'spitter'],
@@ -49,8 +64,18 @@ export const RAIDER_CAMP = {
     },
     {
       screens: 2,
-      ground: [...ramp(-260, -150, 18), ...mound(80, 320, 24, 72), ...mound(470, 690, 10, 40)],
-      platforms: [{ at: 160, width: 80, rise: 30, kind: 'planks' }],
+      // earth steps up to the gate road and a slope back down
+      ground: [
+        ...contour(60, [
+          [0, 12],
+          [70, 12],
+          [0, 22],
+          [80, 22],
+          [60, 10],
+          [40, 0],
+        ]),
+      ],
+      platforms: [{ at: 330, width: 80, rise: 30, kind: 'planks' }],
       waves: [
         ['spitter', 'sling', 'scrapper', 'knife'],
         ['shield', 'hound', 'spitter', 'jackal'],

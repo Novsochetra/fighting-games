@@ -1,4 +1,6 @@
 import { COLORS } from '../../art/colors.js';
+import { HERO_THEMES } from '../../art/hero-themes.js';
+import { heroById } from '../../data/heroes.js';
 import { WEAPON_IDS, WEAPONS } from '../../data/weapons/index.js';
 import { setWeapon } from '../fighters/loadout.js';
 import { floorUnder, placeOnGround } from '../fighters/terrain-motion.js';
@@ -96,6 +98,21 @@ export function continueRun(game) {
   shake(game, 3, 10);
   knockBackNearby(game, player);
   addSparks(game, { x: player.x, y: player.y - 20, count: 20, color: COLORS.butter, speed: 3.5 });
+}
+
+// a fallen hero may come back as another Shade: the run, the weapon in hand and the ULT bar stay
+export function continueAs(game, heroId) {
+  const hero = heroById(heroId);
+  game.settings.hero = hero.id;
+  game.io.saveSettings(game.settings);
+  continueRun(game);
+  const { player } = game;
+  addFloatText(game, {
+    x: player.x,
+    y: player.y - 52,
+    text: hero.name,
+    color: HERO_THEMES[hero.id].spark,
+  });
 }
 
 export function equipWeapon(game, id) {

@@ -7,6 +7,7 @@ export const ANGKOR_WAT = {
   reinforcements: ['spitter', 'monk', 'tombguard'],
   crates: ['spear', 'ration', 'sword', 'ration', 'axe', 'ration', 'sword'],
   props: [],
+  entry: 'wardenGateBroken',
   endWall: 'templeGate',
   zones: [
     {
@@ -22,9 +23,9 @@ export const ANGKOR_WAT = {
         ]),
       ],
       platforms: [
-        { at: 118, width: 80, rise: 28, kind: 'ledge' },
-        { at: 476, width: 80, rise: 24, kind: 'ledge' },
-        { at: 640, width: 80, rise: 32, kind: 'ledge' },
+        { at: 118, width: 80, rise: 28, kind: 'lintel' },
+        { at: 476, width: 80, rise: 24, kind: 'lintel' },
+        { at: 640, width: 80, rise: 32, kind: 'lintel' },
       ],
       waves: [
         ['monk', 'witch', 'tombguard'],
@@ -54,10 +55,10 @@ export const ANGKOR_WAT = {
         ]),
       ],
       platforms: [
-        { at: 128, width: 80, rise: 28, kind: 'ledge' },
-        { at: 470, width: 80, rise: 30, kind: 'ledge' },
-        { at: 800, width: 80, rise: 30, kind: 'ledge' },
-        { at: 1010, width: 80, rise: 26, kind: 'ledge' },
+        { at: 128, width: 80, rise: 28, kind: 'lintel' },
+        { at: 470, width: 80, rise: 30, kind: 'lintel' },
+        { at: 800, width: 80, rise: 30, kind: 'lintel' },
+        { at: 1010, width: 80, rise: 26, kind: 'lintel' },
       ],
       waves: [
         ['tombguard', 'witch', 'monk', 'vulture'],
@@ -95,9 +96,9 @@ export const ANGKOR_WAT = {
         ]),
       ],
       platforms: [
-        { at: 130, width: 80, rise: 24, kind: 'ledge' },
-        { at: 470, width: 80, rise: 26, kind: 'ledge' },
-        { at: 646, width: 80, rise: 30, kind: 'ledge' },
+        { at: 130, width: 80, rise: 24, kind: 'lintel' },
+        { at: 470, width: 80, rise: 26, kind: 'lintel' },
+        { at: 646, width: 80, rise: 30, kind: 'lintel' },
       ],
       waves: [
         ['monk', 'spitter', 'vulture', 'sentry'],

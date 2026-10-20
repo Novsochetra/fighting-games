@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { FOREST_THEMES } from '../../../../src/art/forest-themes.js';
+import { PAINTED_THEMES } from '../../../../src/art/painted-themes/index.js';
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../../../../src/config.js';
 import { MARGIN } from '../../../../src/render/scene/ambient/motion.js';
 import {
@@ -89,7 +89,7 @@ describe('drawAmbient', () => {
   });
 
   it('draws nothing without effects, for an unknown kind or for a forest without the color', () => {
-    const pineRidge = FOREST_THEMES.pineRidge.ambient;
+    const pineRidge = PAINTED_THEMES.pineRidge.ambient;
     expect(recordAmbient(undefined, BUSY).log).toEqual([]);
     expect(recordAmbient([{ kind: 'rain', plane: 'back' }], BUSY).log).toEqual([]);
     expect(recordEffect(leaves, { ...BUSY, colors: pineRidge }).log).toEqual([]);

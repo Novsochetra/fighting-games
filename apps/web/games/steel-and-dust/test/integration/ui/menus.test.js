@@ -14,6 +14,7 @@ const PAGE = readFileSync(join(import.meta.dirname, '../../../index.html'), 'utf
 
 function openPage(records) {
   document.body.innerHTML = PAGE.match(/<body>([\s\S]*)<\/body>/)[1];
+  document.body.className = '';
   const saveSettings = vi.fn();
   const game = createTestGame({ io: { saveSettings }, records });
   const audio = { sfx: vi.fn(), unlock: vi.fn(), syncVolumes: vi.fn() };
@@ -32,7 +33,7 @@ function openPage(records) {
   installKeyboard(keys, { game, audio, menus, ui });
   menus.sync();
   const key = (code) => keys.dispatchEvent(new KeyboardEvent('keydown', { code }));
-  return { game, menus, act, saveSettings, key };
+  return { game, menus, act, saveSettings, key, ui };
 }
 
 const openMenu = () => document.querySelector('#menus .menu.open');
@@ -115,6 +116,25 @@ describe('game menus on the real page', () => {
     expect(page.game.mode).toBe('play');
   });
 
+  it('lets a phone hide its joystick, and its touch controls step aside for a gamepad', () => {
+    const classes = document.body.classList;
+    page.game.device.coarsePointer = true;
+    page.act('settings');
+    page.menus.changeSetting('stick', 1, false);
+    page.menus.changeSetting('stick', 1, false);
+    expect(page.game.settings.stick).toBe('hidden');
+    expect(page.saveSettings).toHaveBeenLastCalledWith(page.game.settings);
+    expect(classes.contains('stick-hidden')).toBe(true);
+    expect(classes.contains('touch-on')).toBe(true);
+    page.ui.noteInput('pad');
+    expect(classes.contains('touch-on')).toBe(false);
+    page.ui.noteInput('touch');
+    expect(classes.contains('touch-on')).toBe(true);
+    page.menus.changeSetting('padHidesTouch', -1, false);
+    page.ui.noteInput('pad');
+    expect(classes.contains('touch-on')).toBe(true);
+  });
+
   it('keeps Missions off the title until a mission has been beaten', () => {
     expect(document.getElementById('missionsBtn').hidden).toBe(true);
     key('ArrowDown');
@@ -163,7 +183,38 @@ describe('game menus on the real page', () => {
     expect(document.getElementById('overNote').textContent).toContain('4200');
     expect(document.getElementById('overNote').textContent).toContain('Mission 1');
     key('Enter');
+    expect(openMenu().id).toBe('m-heroes');
+    expect(openMenu().querySelector('h2').textContent).toBe('Continue as');
+    expect(selected().dataset.hero).toBe('moss');
+    key('Enter');
     expect(page.game.mode).toBe('play');
     expect(page.game.continues).toBe(1);
+    expect(page.game.settings.hero).toBe('moss');
+  });
+
+  it('lets a fallen hero pick another Shade to continue as, or go back to the defeat menu', () => {
+    page.act('hero-moss');
+    page.game.mode = 'over';
+    page.menus.sync();
+    page.act('continue');
+    key('Escape');
+    expect(openMenu().id).toBe('m-over');
+    expect(page.game.mode).toBe('over');
+    page.act('continue');
+    key('ArrowRight');
+    key('ArrowRight');
+    expect(selected().dataset.hero).toBe('antler');
+    key('Enter');
+    expect(page.game.mode).toBe('play');
+    expect(page.game.settings.hero).toBe('antler');
+    expect(page.saveSettings).toHaveBeenLastCalledWith(page.game.settings);
+    expect(page.game.missionIndex).toBe(0);
+  });
+
+  it('highlights the Shade played last when the list opens from the title', () => {
+    page.game.settings.hero = 'blue';
+    key('Enter');
+    expect(openMenu().querySelector('h2').textContent).toBe('Choose your Shade');
+    expect(selected().dataset.hero).toBe('blue');
   });
 });

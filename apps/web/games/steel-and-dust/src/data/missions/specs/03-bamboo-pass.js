@@ -1,4 +1,4 @@
-import { bank, mound, ramp, stairs } from '../ground-shapes.js';
+import { contour, ledge, mound } from '../ground-shapes.js';
 
 export const BAMBOO_PASS = {
   name: 'Bamboo Pass',
@@ -6,20 +6,27 @@ export const BAMBOO_PASS = {
   boss: 'ironhorn',
   reinforcements: ['hound', 'grunt', 'bomber'],
   crates: ['axe', 'ration', 'sword', 'spear', 'ration'],
-  props: [],
   endWall: 'palisade',
   zones: [
     {
       screens: 2,
+      // shrine steps low enough to walk, up to a terrace and down the far side; bombers get a deck
       ground: [
-        ...stairs(70, [
-          [70, 10],
-          [80, 20],
-          [70, 10],
+        ...contour(60, [
+          [0, 8],
+          [50, 8],
+          [0, 16],
+          [50, 16],
+          [0, 24],
+          [80, 24],
+          [0, 16],
+          [40, 16],
+          [0, 8],
+          [40, 8],
+          [0, 0],
         ]),
-        ...mound(470, 700, 12, 48),
       ],
-      platforms: [{ at: 330, width: 80, rise: 30, kind: 'planks' }],
+      platforms: [{ at: 340, width: 80, rise: 30, kind: 'planks' }],
       waves: [
         ['hound', 'grunt', 'hound'],
         ['bomber', 'grunt', 'knife'],
@@ -28,15 +35,22 @@ export const BAMBOO_PASS = {
     },
     {
       screens: 2,
+      // the pass: a slope and a step up to a cut, a drop into the gully, a soft rise in the lock
       ground: [
-        ...ramp(-260, -150, 20),
-        ...stairs(80, [
-          [60, 14],
-          [60, 24],
-          [60, 14],
+        ...contour(-250, [
+          [0, 8],
+          [70, 8],
+          [0, 0],
         ]),
-        ...mound(460, 700, 14, 56),
+        ...contour(70, [
+          [90, 14],
+          [0, 22],
+          [110, 22],
+          [0, 0],
+        ]),
+        ...mound(540, 728, 12, 60),
       ],
+      platforms: [{ at: 285, width: 80, rise: 34, kind: 'planks' }],
       waves: [
         ['jackal', 'hound', 'sling'],
         ['bomber', 'bomber', 'grunt'],
@@ -45,17 +59,25 @@ export const BAMBOO_PASS = {
     },
     {
       screens: 3,
+      // the great stair to the upper terrace and its long slope down, then a ledge to jump
       ground: [
-        ...bank(60, 150, 18),
-        ...mound(170, 430, 30, 90),
-        ...stairs(470, [
+        ...contour(60, [
+          [0, 8],
+          [36, 8],
+          [0, 16],
+          [36, 16],
+          [0, 24],
+          [36, 24],
+          [0, 32],
+          [80, 32],
           [60, 12],
-          [60, 22],
+          [50, 12],
+          [50, 0],
         ]),
-        ...mound(820, 1080, 12, 48),
+        ...ledge(560, 720, 14, 60),
       ],
       platforms: [
-        { at: 260, width: 80, rise: 36, kind: 'planks' },
+        { at: 470, width: 80, rise: 36, kind: 'planks' },
         { at: 900, width: 80, rise: 32, kind: 'planks' },
       ],
       waves: [

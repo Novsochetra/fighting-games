@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { GROUND_Y, VIEW_WIDTH } from '../../../src/config.js';
-import { isPaintedTheme } from '../../../src/data/backdrops.js';
-import { FLAT_TERRAIN } from '../../../src/data/missions/terrain.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { PLATFORM_SPRITES } from '../../../src/data/platform-sprites.js';
 import { STEP_UP, groundAt } from '../../../src/sim/stage/terrain.js';
@@ -21,14 +19,6 @@ describe('the terrain of every mission', () => {
     for (const mission of MISSIONS) {
       expect(isLevel(mission, 0, 300), mission.name).toBe(true);
       expect(groundAt(mission.terrain, 0), mission.name).toBe(GROUND_Y);
-    }
-  });
-
-  it('keeps the desert roads flat', () => {
-    const desertRoads = MISSIONS.filter((mission) => !isPaintedTheme(mission.theme));
-    expect(desertRoads).toHaveLength(4);
-    for (const mission of desertRoads) {
-      expect(mission.terrain, mission.name).toBe(FLAT_TERRAIN);
     }
   });
 

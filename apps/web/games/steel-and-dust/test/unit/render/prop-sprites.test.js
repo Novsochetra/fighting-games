@@ -27,7 +27,6 @@ describe('prop sprites', () => {
       expect(sprite.feetX, kind).toBeLessThan(image.width);
       expect(sprite.feetY, kind).toBeLessThanOrEqual(image.height);
       expect(image.width % 2, kind).toBe(0);
-      expect(sprite.feetX, `${kind} hangs from its left end`).toBeLessThan(image.width / 4);
     }
   });
 

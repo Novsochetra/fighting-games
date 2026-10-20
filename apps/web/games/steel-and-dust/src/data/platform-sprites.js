@@ -1,8 +1,15 @@
-// the decks are PixelLab sprites in assets/sprites/platforms/ (plank decks in the forests,
-// sandstone ledges on the temple roads), drawn at the fighters' density. `topY` is the sprite row
-// a fighter stands on; each half of the sprite's last row is stretched down to the ground under
-// the leg at `legs` (world px from the left end), so one sprite fits any height
+// the decks are PixelLab sprites in assets/sprites/platforms/, drawn at the fighters' density.
+// `topY` is the sprite row a fighter stands on; a deck's legs grow down to the ground by repeating
+// the sprite's last row, so one sprite fits any height. The forests' braced trestle runs into its
+// posts before that last row, which is the two posts alone; the night deck is the same trestle in
+// Firefly Hollow's moonlight. The temples' lintel is a carved sandstone slab on two square pillars,
+// whose last row is the pillars' cross-section
 export const PLATFORM_SPRITES = {
-  planks: { file: 'planks.png', width: 80, topY: 7, legs: [11, 68] },
-  ledge: { file: 'ledge.png', width: 80, topY: 3, legs: [12, 67] },
+  planks: { file: 'planks.png', width: 80, topY: 6, legs: [11, 68] },
+  'planks-night': { file: 'planks-night.png', width: 80, topY: 6, legs: [11, 68] },
+  scaffold: { file: 'scaffold.png', width: 80, topY: 6, legs: [11, 68] },
+  catwalk: { file: 'catwalk.png', width: 80, topY: 4, legs: [10, 68] },
+  rampart: { file: 'rampart.png', width: 80, topY: 5, legs: [9, 71] },
+  slab: { file: 'slab.png', width: 80, topY: 2, legs: [37, 43] },
+  lintel: { file: 'lintel.png', width: 80, topY: 3, legs: [12, 67] },
 };

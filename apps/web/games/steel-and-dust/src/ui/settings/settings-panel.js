@@ -37,6 +37,7 @@ const AFTER_CHANGE = {
   touch: ({ layout }) => layout.applyTouchSettings(),
   buttonSize: ({ layout }) => layout.applyTouchSettings(),
   stick: ({ layout }) => layout.applyTouchSettings(),
+  padHidesTouch: ({ layout }) => layout.applyTouchSettings(),
   difficulty: ({ game }) => refreshAttackTokens(game),
 };
 

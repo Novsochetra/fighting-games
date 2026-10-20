@@ -41,6 +41,10 @@ body.stick-fixed .stick-base {
   opacity: 0.85;
 }
 
+body.stick-hidden .stick-zone {
+  display: none;
+}
+
 .stick-knob {
   position: absolute;
   left: 50%;

@@ -1,6 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { MISSIONS } from '../../../src/data/missions/index.js';
-import { continueRun, selectMission, startPlay } from '../../../src/sim/stage/flow.js';
+import { heroMoves } from '../../../src/data/styles/index.js';
+import { movesetOf, setWeapon } from '../../../src/sim/fighters/loadout.js';
+import { continueAs, continueRun, selectMission, startPlay } from '../../../src/sim/stage/flow.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
 import { seededRandom } from '../../support/seeded-random.js';
 import { createPlayingGame, press, release, runTicks, tap } from '../../support/test-game.js';
@@ -110,6 +112,23 @@ describe('a fight, with every system running', () => {
     expect(game.mode).toBe('play');
     expect(game.player.hp).toBe(game.player.maxHp);
     expect(game.continues).toBe(1);
+  });
+
+  it('lets a fallen hero fight on as another Shade, keeping the run and the weapon in hand', () => {
+    const game = createPlayingGame();
+    Object.assign(game, { score: 900, ultMeter: 70 });
+    setWeapon(game, game.player, 'spear');
+    game.player.hp = 0;
+    game.mode = 'over';
+    continueAs(game, 'antler');
+    expect(game.settings.hero).toBe('antler');
+    expect(game.mode).toBe('play');
+    expect(game.player.hp).toBe(game.player.maxHp);
+    expect(game).toMatchObject({ score: 900, ultMeter: 70, continues: 1 });
+    expect(movesetOf(game, game.player)).toBe(heroMoves('antler', 'spear'));
+    expect(game.floaters.at(-1).text).toBe('Antler Spirit Shade');
+    runTicks(game, 120);
+    expect(game.player.state).not.toBe('ko');
   });
 
   function felledBoss(game, kind) {

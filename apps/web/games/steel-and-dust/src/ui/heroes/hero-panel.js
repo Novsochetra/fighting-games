@@ -19,14 +19,22 @@ function heroCardHtml(hero, { picked, folder }) {
   </button>`;
 }
 
-// the four Shades, the last one played marked
+// the four Shades, the last one played marked and highlighted first; after a fall the same list
+// asks which Shade fights on
 export function createHeroPanel({ list, game }) {
   return {
     build() {
       const folder = pageFolder(list.ownerDocument.baseURI);
+      list.closest('.box').querySelector('h2').textContent =
+        game.mode === 'over' ? 'Continue as' : 'Choose your Shade';
       list.innerHTML = HEROES.map((hero) =>
         heroCardHtml(hero, { picked: hero.id === game.settings.hero, folder }),
       ).join('');
     },
+    firstSelected: () =>
+      Math.max(
+        0,
+        HEROES.findIndex((hero) => hero.id === game.settings.hero),
+      ),
   };
 }

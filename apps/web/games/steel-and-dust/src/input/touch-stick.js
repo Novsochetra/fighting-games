@@ -46,8 +46,12 @@ export class TouchStick {
     this.setDirections(stickDirections(dx / radius, dy / radius, this.directions));
   }
 
-  // fixed: a thumb must land on or near the stick; floating: the stick appears under the thumb
+  // fixed: a thumb must land on or near the stick; floating: the stick appears under the thumb;
+  // hidden: the left side is left to a gamepad player
   grab(event) {
+    if (this.game.settings.stick === 'hidden') {
+      return false;
+    }
     const { base, zone } = this.elements;
     const radius = base.offsetWidth / 2;
     const thumb = { x: event.clientX, y: event.clientY };

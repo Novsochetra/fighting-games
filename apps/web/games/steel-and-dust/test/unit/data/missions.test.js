@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { FOREST_THEMES } from '../../../src/art/forest-themes.js';
-import { SCENE_THEMES } from '../../../src/art/scene-themes.js';
+import { PAINTED_THEMES } from '../../../src/art/painted-themes/index.js';
 import { VIEW_WIDTH } from '../../../src/config.js';
-import { isPaintedTheme } from '../../../src/data/backdrops.js';
 import { ENEMY_SPRITES } from '../../../src/data/enemies/enemy-sprites.js';
 import { ENEMY_TYPES } from '../../../src/data/enemies/enemy-types.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
+import { PROP_SPRITES } from '../../../src/data/prop-sprites.js';
 import { WEAPON_IDS } from '../../../src/data/weapons/index.js';
 
 const kindsIn = (mission) =>
@@ -18,10 +17,7 @@ describe('the twelve missions', () => {
     expect(MISSIONS).toHaveLength(12);
     expect(new Set(MISSIONS.map((mission) => mission.name)).size).toBe(12);
     for (const mission of MISSIONS) {
-      expect(
-        SCENE_THEMES[mission.theme] ?? FOREST_THEMES[mission.theme],
-        mission.name,
-      ).toBeDefined();
+      expect(PAINTED_THEMES[mission.theme], mission.name).toBeDefined();
     }
   });
 
@@ -34,21 +30,39 @@ describe('the twelve missions', () => {
       'emberWoods',
       'fireflyHollow',
     ]);
-    for (const mission of MISSIONS.slice(6, 10)) {
-      expect(SCENE_THEMES[mission.theme], mission.name).toBeDefined();
+    const forestThemes = MISSIONS.slice(0, 6).map((mission) => mission.theme);
+    const desertThemes = new Set(MISSIONS.slice(6, 10).map((mission) => mission.theme));
+    expect(desertThemes.size).toBe(4);
+    for (const theme of forestThemes) {
+      expect(desertThemes.has(theme), theme).toBe(false);
     }
     expect(MISSIONS.slice(10).map((mission) => mission.theme)).toEqual(['angkorWat', 'bayon']);
-    const painted = MISSIONS.filter((mission) => isPaintedTheme(mission.theme));
-    expect(painted.map((mission) => mission.number)).toEqual([1, 2, 3, 4, 5, 6, 11, 12]);
   });
 
-  it('close the temple roads with a temple gate and raise sandstone ledges along them', () => {
+  it('close the temple roads with a temple gate and raise sandstone lintels along them', () => {
     for (const mission of MISSIONS.slice(10)) {
-      expect(mission.props.at(-1).kind, mission.name).toBe('templeGate');
+      expect(mission.endWall, mission.name).toBe('templeGate');
       expect(mission.terrain.platforms.length, mission.name).toBeGreaterThan(0);
       for (const platform of mission.terrain.platforms) {
-        expect(platform.kind, mission.name).toBe('ledge');
+        expect(platform.kind, mission.name).toBe('lintel');
       }
+    }
+  });
+
+  it("come in through the last road's wall broken open, where a road has a way in", () => {
+    const entered = MISSIONS.filter((mission) => mission.entry);
+    expect(entered.map((mission) => mission.name)).toEqual([
+      'Sandstorm Pass',
+      'Iron Works',
+      'Mirage Temple',
+      "Warden's Fortress",
+      'Angkor Wat',
+      'Bayon',
+    ]);
+    for (const mission of entered) {
+      const before = MISSIONS[mission.index - 1];
+      expect(mission.entry, mission.name).toBe(`${before.endWall}Broken`);
+      expect(PROP_SPRITES[mission.entry], mission.name).toBeDefined();
     }
   });
 

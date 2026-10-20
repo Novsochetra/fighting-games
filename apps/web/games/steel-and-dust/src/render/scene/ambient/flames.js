@@ -1,59 +1,65 @@
 import { emitterSpots } from './emitters.js';
-import { drawFlameGlow } from './flame-glow.js';
-import { flameLayers, flameTongues } from './flame-shape.js';
-import { fillClipped, isOnScreen, trait } from './motion.js';
+import { fillClipped, isOnScreen } from './motion.js';
 
-const SALT = 25000;
-const HEIGHT = 11;
+// [width, height, alpha] of each glow layer, in flame sizes: stacked, they make a warm pool of
+// light that is brightest at the fire
+const GLOW_LAYERS = [
+  [5, 3, 0.05],
+  [3.2, 2.4, 0.06],
+  [1.8, 1.8, 0.08],
+];
 
-function drawLayer(painter, spot, rows) {
-  rows.forEach((spans, row) => {
-    for (const [left, right] of spans) {
-      fillClipped(painter, {
-        x: spot.x + left,
-        y: spot.y - 1 - row,
-        width: right - left,
-        height: 1,
-      });
+// two sines at unrelated rates, phased per fire, read as an irregular flicker between 0 and 1
+export function flickerAt(index, tick) {
+  return (
+    0.5 + 0.3 * Math.sin(tick * 0.31 + index * 1.7) + 0.2 * Math.sin(tick * 0.83 + index * 4.1)
+  );
+}
+
+function drawGlow(painter, spot, { size, flicker, color }) {
+  painter.use(color);
+  const centerY = spot.y - size / 2;
+  for (const [width, height, alpha] of GLOW_LAYERS) {
+    const box = { width: Math.round(width * size), height: Math.round(height * size) };
+    painter.alpha(alpha * (0.7 + flicker * 0.6));
+    fillClipped(painter, {
+      ...box,
+      x: Math.round(spot.x - box.width / 2),
+      y: Math.round(centerY - box.height / 2),
+    });
+  }
+}
+
+// each row narrows toward the tip and leans on a wave that climbs the flame, so it licks upward
+function tongueRow(spot, { row, height, size, tick }) {
+  const progress = row / height;
+  const width = Math.max(1, Math.round(size * 0.7 * (1 - progress * progress)));
+  const lean = Math.round(Math.sin(tick * 0.27 - row * 0.7 + spot.index * 2.3) * progress * 1.6);
+  return { x: Math.round(spot.x - width / 2) + lean, y: spot.y - row - 1, width };
+}
+
+function drawTongue(painter, spot, { size, flicker, tick, colors }) {
+  const [outer, middle, core] = colors;
+  const height = Math.max(2, Math.round(size * (0.75 + flicker * 0.5)));
+  for (let row = 0; row < height; row++) {
+    const slice = tongueRow(spot, { row, height, size, tick });
+    if (!isOnScreen(slice.x, slice.y, slice.width)) {
+      continue;
     }
-  });
-}
-
-// now and then a lick of flame tears off the tip and rises a few pixels before it dies
-function drawLick(painter, spot, { tick, height, color }) {
-  const cycle = 20 + (spot.index % 3) * 5;
-  const clock = tick + spot.index * 7;
-  const lick = Math.floor(clock / cycle);
-  const age = clock - lick * cycle;
-  const seed = (spot.index + SALT) * 613 + lick;
-  if (age > 10 || trait(seed, 1) < 0.35) {
-    return;
+    painter.use(row > height * 0.55 ? outer : middle).rect(slice.x, slice.y, slice.width, 1);
+    if (slice.width > 4 && row < height * 0.35) {
+      painter.use(core).rect(slice.x + 2, slice.y, slice.width - 4, 1);
+    }
   }
-  const x = spot.x + Math.round((trait(seed, 2) - 0.5) * 3);
-  const y = spot.y - Math.round(height * 0.85 + age * 0.5);
-  if (isOnScreen(x, y, 2)) {
-    painter.use(color).rect(x, y, 1, age < 5 ? 2 : 1);
-  }
-}
-
-function drawFlame(painter, spot, { tick, colors }) {
-  const height = HEIGHT + Math.floor(trait(spot.index + SALT, 2) * 3);
-  const layers = flameLayers(flameTongues(spot, { tick, height }), colors.length);
-  painter.alpha(1);
-  layers.forEach((rows, depth) => {
-    painter.use(colors[colors.length - 1 - depth]);
-    drawLayer(painter, spot, rows);
-  });
-  drawLick(painter, spot, { tick, height, color: colors[Math.max(0, colors.length - 2)] });
 }
 
 export function drawFlames(painter, { effect, tick, cameraX, colors }) {
+  const size = effect.size ?? 6;
   for (const spot of emitterSpots(effect, cameraX)) {
-    if (colors.glow) {
-      const center = { x: spot.x, y: spot.y - 6 };
-      drawFlameGlow(painter, center, { tick, index: spot.index, color: colors.glow });
-    }
-    drawFlame(painter, spot, { tick, colors: colors.flames });
+    const flicker = flickerAt(spot.index, tick);
+    drawGlow(painter, spot, { size, flicker, color: colors.glow });
+    painter.alpha(0.75);
+    drawTongue(painter, spot, { size, flicker, tick, colors: colors.flame });
   }
   painter.alpha(1);
 }
