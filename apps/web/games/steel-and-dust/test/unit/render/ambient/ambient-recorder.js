@@ -44,6 +44,33 @@ export const SAMPLE_EFFECTS = {
     tileWidth: 640,
     drift: 0.8,
   },
+  flames: {
+    kind: 'flames',
+    plane: 'back',
+    size: 10,
+    emitters: [
+      { x: 120, y: 150 },
+      { x: 420, y: 140 },
+    ],
+    tileWidth: 640,
+    drift: 0.8,
+  },
+  // a period whose strike is lit at the busy tick the shared checks draw
+  lightning: { kind: 'lightning', plane: 'back', period: 770, top: 0, bottom: 150, strength: 0.3 },
+  pennants: {
+    kind: 'pennants',
+    plane: 'back',
+    length: 48,
+    height: 12,
+    flutter: 3,
+    droop: 4,
+    emitters: [
+      { x: 150, y: 60 },
+      { x: 500, y: 50 },
+    ],
+    tileWidth: 640,
+    drift: 0.6,
+  },
 };
 
 export function recordAmbient(effects, options = {}) {

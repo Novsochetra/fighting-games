@@ -31,12 +31,13 @@ describe('scene palettes', () => {
     expect(scenePalette('noon')).toMatchObject({ skylineKind: 'dunes', celestial: 'sun' });
   });
 
-  it('give each painted forest its soil, grass, ferns and the colors of its air', () => {
+  it('give each painted road its soil, any grass, ferns and the colors of its air', () => {
     for (const themeId of Object.keys(PAINTED_THEMES)) {
       const palette = scenePalette(themeId);
       expect(palette.painted, themeId).toBe(true);
       const { ground, rubble } = palette;
-      for (const color of [ground.sand, ground.soil, ground.soilDeep, ground.grass, rubble.fern]) {
+      const blades = PAINTED_THEMES[themeId].ground.grass ? [ground.grass] : [];
+      for (const color of [ground.sand, ground.soil, ground.soilDeep, ...blades, rubble.fern]) {
         expect(color, themeId).toMatch(COLOR);
       }
       expect(palette.ambient, themeId).toBe(PAINTED_THEMES[themeId].ambient);
