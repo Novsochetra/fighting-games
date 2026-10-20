@@ -74,7 +74,9 @@ places on the road: zone walls, where each wave starts, crates and props, and th
 - Missions 1 to 6 walk through six painted forests, sunrise to night; missions 7 to 10 are desert
   roads. A forest (`src/data/backdrops/`) is PixelLab layers in `assets/backdrops/<forest>/`: a
   far plate (wider than the view where it holds a sun or moon, so that shows once per screen) and
-  a near strip that each tile sideways and scroll at their own share of the camera
+  a near strip that each tile sideways and scroll at their own share of the camera, and from the
+  second forest on a way-in layer drawn once at the start of the road, a piece of the forest
+  before it, so each road walks on from the last
   (`src/render/scene/painted-backdrop.js`), with colors for its road, ferns and air in
   `src/art/painted-themes/`. Its air moves on its own (`src/render/scene/ambient/`): mist, birds,
   leaves, motes, light shafts, fireflies, embers and smoke, each worked out from the tick count and

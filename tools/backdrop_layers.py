@@ -23,6 +23,10 @@
     python3 tools/backdrop_layers.py vary <in> <out> <from_x> <to_x> <above_y>
         joins a near strip with a copy of itself that leaves out what stands between from_x and
         to_x above row above_y (a trunk, a clump), so the trunks do not pass at one even rhythm
+    python3 tools/backdrop_layers.py wayin <out> <base_y> <haze #rrggbb> <amount> <in>:<x0>:<x1>:<y0>:<at>...
+        builds a one-off layer for the start of a road from pieces of the last mission's near strip:
+        each piece (columns x0 to x1 from row y0 down) is set at column `at` with its lowest solid
+        row on base_y, and all of it is hazed toward this forest's air
     python3 tools/backdrop_layers.py near <out> <base_y> <haze #rrggbb> <amount> <in>...
         rolls each transparent near painting so its widest see-through gap sits on its edges,
         drops its lowest solid row to base_y, joins them side by side and hazes them toward the
@@ -159,6 +163,15 @@ def vary(src, dst, from_x, to_x, above_y):
     out.paste(im, (0, 0))
     out.paste(copy, (im.width, 0))
     out.save(dst)
+
+
+def wayin(dst, base_y, colour, amount, *pieces):
+    out = Image.new('RGBA', (384, HEIGHT))
+    for piece in pieces:
+        path, x0, x1, y0, at = piece.rsplit(':', 4)
+        part = Image.open(path).convert('RGBA').crop((int(x0), int(y0), int(x1), HEIGHT))
+        out.alpha_composite(part, (int(at), int(base_y) - lowest_solid_row(part)))
+    haze(out, colour, float(amount)).save(dst)
 
 
 def widest_gap_centre(im):
@@ -381,6 +394,7 @@ if __name__ == '__main__':
         'near': near,
         'groundhaze': groundhaze,
         'vary': vary,
+        'wayin': wayin,
         'cliff': cliff,
         'unblend': unblend,
         'join': join,

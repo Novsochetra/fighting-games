@@ -21,7 +21,7 @@ export const FIREFLY_HOLLOW = {
           [80, 0],
         ]),
       ],
-      platforms: [{ at: 476, width: 80, rise: 30, kind: 'planks' }],
+      platforms: [{ at: 476, width: 80, rise: 30, kind: 'planks-night' }],
       waves: [
         ['monk', 'grunt', 'monk'],
         ['vulture', 'hound', 'knife'],
@@ -33,8 +33,8 @@ export const FIREFLY_HOLLOW = {
       // the hollow itself: a deck over its floor between two shoulders, then the great mound
       ground: [...terrace(60, 220, 24, 90), ...ledge(330, 420, 16, 40), ...mound(500, 740, 28, 90)],
       platforms: [
-        { at: 236, width: 80, rise: 36, kind: 'planks' },
-        { at: 860, width: 80, rise: 32, kind: 'planks' },
+        { at: 236, width: 80, rise: 36, kind: 'planks-night' },
+        { at: 860, width: 80, rise: 32, kind: 'planks-night' },
       ],
       waves: [
         ['assassin', 'monk', 'sling'],
@@ -48,7 +48,7 @@ export const FIREFLY_HOLLOW = {
       screens: 2,
       // a crossing: a slope to a drop, a deck over the gap and a ledge on the far side
       ground: [...ramp(70, 200, 20), ...ledge(300, 380, 14, 40), ...mound(480, 680, 10, 60)],
-      platforms: [{ at: 210, width: 80, rise: 36, kind: 'planks' }],
+      platforms: [{ at: 210, width: 80, rise: 36, kind: 'planks-night' }],
       waves: [
         ['monk', 'sentry', 'assassin'],
         ['hound', 'hound', 'vulture'],
@@ -69,7 +69,7 @@ export const FIREFLY_HOLLOW = {
           [50, 0],
         ]),
       ],
-      platforms: [{ at: 476, width: 80, rise: 28, kind: 'planks' }],
+      platforms: [{ at: 476, width: 80, rise: 28, kind: 'planks-night' }],
       waves: [
         ['vulture', 'monk', 'assassin', 'spitter'],
         ['hound', 'assassin', 'monk', 'vulture'],

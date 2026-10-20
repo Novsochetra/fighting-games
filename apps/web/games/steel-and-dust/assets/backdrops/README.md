@@ -19,6 +19,7 @@ Every layer is 216 rows tall, the height of the view, and tiles sideways.
   Pine Ridge also had a painted step in its mist inpainted away and its lowest rows flattened with
   `fogfloor`.
 - `near.png` is the strip of trunks, bamboo or camp pieces just behind the road, on transparency.
+  (`way-in.png`, where there is one, and `cliff.png` are described in the second pass below.)
   Made with `near`, which rolls each painting so a see-through gap sits on its edges, sets its base
   just under the road's edge and hazes it a little toward the forest's mist. Pine Ridge joins two
   paintings; the Old Grove's canopy ran over its edges, so that seam was inpainted first.
@@ -78,3 +79,13 @@ tiles side by side, and every road got a cliff face. All of it is reproducible w
   the old deck as the style image): a thick plank walkway on two posts with a nailed cross brace,
   so it no longer reads as a little gate from a distance. Its brace was run 12 rows further down
   into the posts, so the last row, which the legs repeat down to the ground, is the two posts alone.
+  `planks-night.png` is the same trestle pulled 42% toward indigo (`#3a3c6e`) and darkened to 88%,
+  the deck of Firefly Hollow, where the warm wood stood out of the moonlight.
+- **The way in.** Each road from the second on starts with a piece of the forest before it, a
+  `way-in.png` layer drawn once from the start of the road (`once: true`, parallax 0.5), made with
+  `wayin` from the last road's near strip as it was before this pass and hazed toward this forest's
+  air: two pines from Pine Ridge in the Old Grove (`#b8ccaa`, 0.3), an Old Grove tree (its canopy
+  trimmed to a ragged edge and its floor band left behind) in Bamboo Pass (`#e1f1df`, 0.35), a
+  bamboo clump at the Raider Camp gate (`#d8ae84`, 0.3), the camp's crates and banner on the edge of
+  Ember Woods (`#e7a35f`, 0.25) and the last autumn tree going dark in Firefly Hollow (`#3c3c74`,
+  0.58).
