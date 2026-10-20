@@ -17,6 +17,7 @@ export function createView({ context, createCanvas, createImage, baseUrl }) {
     propSheets: loadPropSprites({ createImage, baseUrl }),
     platformSheets: loadPlatformSprites({ createImage, baseUrl }),
     shownScore: 0,
+    loadingFrames: 0,
     vignette: null,
   };
   createHeroSheets(view);

@@ -6,6 +6,7 @@ import { showBanner } from '../fx/effects.js';
 import { buzz } from '../fx/haptics.js';
 
 export const BANNER_FOREVER = 9999;
+export const CLEAR_TICKS = 170;
 
 // beating a mission opens the next one on the mission select from then on
 function unlockNextMission(game) {

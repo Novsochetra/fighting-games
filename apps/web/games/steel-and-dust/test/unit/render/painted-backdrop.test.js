@@ -7,6 +7,7 @@ import {
   loadPaintedBackdrop,
 } from '../../../src/render/scene/painted-backdrop.js';
 import { FakeImage } from '../../support/fake-image.js';
+import { createLateImages } from '../../support/late-images.js';
 import { RecordingCanvas, createRecordingContext } from '../../support/recording-canvas.js';
 
 const createCanvas = (width, height) => Object.assign(new RecordingCanvas(), { width, height });
@@ -53,6 +54,20 @@ describe('painted backdrops', () => {
       `setTransform(-1,0,0,1,${image.width},0)`,
       'drawImage(img(cliff.png),0,0)',
     ]);
+  });
+
+  it('settle every layer once its image loads, or fails to, and draw only the loaded ones', () => {
+    const pieces = ({ layers, fronts, ground, cliff }) => [...layers, ...fronts, ground, cliff];
+    const loaded = createLateImages();
+    const failed = createLateImages();
+    const forest = loadPaintedBackdrop({ ...loaders, ...loaded }, PAINTED_BACKDROPS.pineRidge);
+    const missing = loadPaintedBackdrop({ ...loaders, ...failed }, PAINTED_BACKDROPS.pineRidge);
+    expect(pieces(forest).map((piece) => piece.settled)).toEqual([false, false, false, false]);
+    loaded.loadAll();
+    failed.failAll();
+    expect(pieces(forest).every((piece) => piece.ready && piece.settled)).toBe(true);
+    expect(pieces(missing).every((piece) => !piece.ready && piece.settled)).toBe(true);
+    expect(missing.cliff.mirrored).toBeNull();
   });
 
   it('load no cliff for a road that keeps the earth line on its steps', () => {

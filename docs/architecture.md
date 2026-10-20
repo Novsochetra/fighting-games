@@ -74,6 +74,13 @@ length.
   unlocks mission N + 1 on the title's mission select (`records.bestMission`).
   A fallen hero continues where they fell, as any Shade: Continue opens the Shade list, and
   `continueAs` (`src/sim/stage/flow.js`) brings the hero back as the one picked, keeping the run.
+- The walk on to the next mission is never seen: over the end of the clear screen the cleared road
+  fades to night (`src/render/overlays/clear-fade.js`), and the next mission fades in from it. A
+  mission is drawn and its clock runs only once its painted road has loaded (`missionRoadLoaded`
+  in `src/render/scene/backdrop.js`); until then `main.js` holds the ticks and the screen shows
+  `src/render/overlays/loading-screen.js`. Once a road is in, the next mission's road loads behind
+  it, so the wait is usually over before the mission is. A file that fails to load still settles,
+  and the plain road is drawn in its place.
 - The twelve missions are one road, painted end to end with PixelLab: six forests from sunrise to
   night (Pine Ridge, Old Grove, Bamboo Pass, Raider Camp, Ember Woods, Firefly Hollow), then out of
   the woods into the desert from dawn to night: Sandstorm Pass (a red-rock canyon in a dawn

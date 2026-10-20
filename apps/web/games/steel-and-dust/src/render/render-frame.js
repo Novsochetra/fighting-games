@@ -2,11 +2,12 @@ import { RENDER_SCALE } from '../config.js';
 import { createCameraTransform } from './camera-transform.js';
 import { drawWorld } from './draw-world.js';
 import { drawHud } from './hud/draw-hud.js';
+import { drawLoadingScreen } from './overlays/loading-screen.js';
 import { drawOverlays, drawScreenFlashes } from './overlays/overlays.js';
 import { drawVignette } from './overlays/vignette.js';
 import { missionOf } from '../sim/stage/mission.js';
 import { drawAmbient } from './scene/ambient/index.js';
-import { backdropFor } from './scene/backdrop.js';
+import { backdropFor, missionRoadLoaded } from './scene/backdrop.js';
 import { drawForeground } from './scene/foreground/index.js';
 import { drawPaintedBackdrop, drawPaintedFronts } from './scene/painted-backdrop.js';
 import { scenePalette } from './scene/scene-palette.js';
@@ -22,6 +23,10 @@ export function renderFrame(game, view) {
   const context = painter.context;
   context.setTransform(RENDER_SCALE, 0, 0, RENDER_SCALE, 0, 0);
   context.globalAlpha = 1;
+  if (!missionRoadLoaded(view, game.missionIndex)) {
+    drawLoadingScreen(painter, view);
+    return;
+  }
   const cameraX = Math.round(game.camera.x);
   const setLayer = createCameraTransform(context, game);
   const { theme } = missionOf(game);

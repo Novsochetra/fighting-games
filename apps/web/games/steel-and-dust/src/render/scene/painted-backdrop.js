@@ -2,11 +2,21 @@ import { VIEW_WIDTH } from '../../config.js';
 
 const DIRECTORY = 'assets/backdrops/';
 
-function loadLayer({ createImage, baseUrl }, folder, { name, parallax, once = false }) {
-  const layer = { image: createImage(), parallax, once, ready: false };
-  layer.image.onload = () => {
-    layer.ready = true;
+// a file that fails to load settles too, so a missing layer leaves the plain road in its place
+// instead of holding the loading screen up forever
+function watchLoad(piece, prepare = () => {}) {
+  piece.image.onload = () => {
+    prepare();
+    Object.assign(piece, { ready: true, settled: true });
   };
+  piece.image.onerror = () => {
+    piece.settled = true;
+  };
+}
+
+function loadLayer({ createImage, baseUrl }, folder, { name, parallax, once = false }) {
+  const layer = { image: createImage(), parallax, once, ready: false, settled: false };
+  watchLoad(layer);
   layer.image.src = `${baseUrl}${DIRECTORY}${folder}/${name}.png`;
   return layer;
 }
@@ -14,15 +24,14 @@ function loadLayer({ createImage, baseUrl }, folder, { name, parallax, once = fa
 // the face of a step whose high ground is on the left; its mirror image is made once, on load,
 // for the faces that look the other way
 function loadCliff({ createImage, createCanvas, baseUrl }, folder) {
-  const cliff = { image: createImage(), mirrored: null, ready: false };
-  cliff.image.onload = () => {
+  const cliff = { image: createImage(), mirrored: null, ready: false, settled: false };
+  watchLoad(cliff, () => {
     const { width, height } = cliff.image;
     cliff.mirrored = createCanvas(width, height);
     const context = cliff.mirrored.getContext('2d');
     context.setTransform(-1, 0, 0, 1, width, 0);
     context.drawImage(cliff.image, 0, 0);
-    cliff.ready = true;
-  };
+  });
   cliff.image.src = `${baseUrl}${DIRECTORY}${folder}/cliff.png`;
   return cliff;
 }
