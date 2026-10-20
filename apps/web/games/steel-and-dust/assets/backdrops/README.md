@@ -38,7 +38,7 @@ on their own never sat in the painted light. The palisade that closes each fores
 Pro sprites drawn at half scale like the fighters. `ground.png` in each folder is the road's
 cross-section (turf, earth, roots), keyed and tiled with `ground` and laid along the hills.
 
-# Sandstorm Pass
+## Sandstorm Pass
 
 Mission 7 leaves the forests: the morning after Firefly Hollow, a red-rock canyon pass at dawn
 with a sandstorm blowing against the hero. `sandstorm-pass/` holds a far plate, a near strip, a
@@ -68,7 +68,7 @@ smashed with Edit and its middle stakes inpainted into a gap. The scaffold decks
 (`../sprites/platforms/scaffold.png`) are a Pro sprite whose crossed braces were carried down into
 the posts, so its last row is only the two posts.
 
-# Iron Works
+## Iron Works
 
 Mission 8 leaves the canyon of Sandstorm Pass for the raiders' foundry at a smoggy midday, all
 in `iron-works/`. Every layer was made with PixelLab Create Image (Pro) or its repair tools, a
@@ -96,30 +96,7 @@ the road (`../sprites/props/foundry-gate.png`, Pro with `palisade.png` as the st
 blown-open twin (`foundry-gate-broken.png`, an Edit of the gate) are drawn at half scale like the
 fighters; the broken one is for the next road's way in.
 
-# Warden's Fortress
-
-Mission 10, the last road: night under a blood-red moon, from the last ruins of the sun temple up
-the cliff road to the Warden Hall. Every layer is 216 rows tall like the forests'.
-
-| File                         | Size      | How it was made                                                                                                                                                                                                                                  |
-| ---------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `warden-fortress/back.png`   | 585 wide  | Create Image (Pro) 640x216, `firefly-hollow/back.png` as the style image (outline, detail, shading; not its palette), from a Pixen concept. Cut before a second mesa, `overlap` 16, then the cliff face dithered toward the mist (`#7c203a`). |
-| `warden-fortress/near.png`   | 2040 wide | Three Pro paintings of fortress pieces on transparency (each later one with the one before as its style image). Their painted ground band, weeds and stray specks removed, the sixteen pieces laid out by hand, sunk 3px and hazed toward `#80223a`, more at the base. |
-| `warden-fortress/ruins.png`  | 384 wide  | Pro Flash 192x216 (a crop of the gatehouse as the style image): the broken sun-disc obelisk, a `once` layer at the start of the road where mission 9's temple is left behind. Hazed like the near strip.                                      |
-| `warden-fortress/ground.png` | 96 wide   | Pro Flash 128x64 (`firefly-hollow/ground.png` as the layout and density reference): flagstones over basalt, keyed with `ground`. Surface row 14.                                                                                            |
-| `warden-fortress/cliff.png`  | 12x64     | Cut from `ground.png` by hand, with a dark outer edge and a moonlit rim, for sheer step faces.                                                                                                                                                 |
-
-- The near strip keeps a 212px gap at its start: on the first screen the temple ruins stand there,
-  and on every later pass the far fortress shows whole through it. Its width (2040) and drift
-  (0.455) are picked so each boss arena looks onto its own pieces: the tower and fire bowl at the
-  Outer Gate, the gatehouse at the Inner Keep, and the Warden's statue beside his gate at the end. Its fires (the brazier, the fire
-  bowl and the torch) have flames, glow and sparks drawn in code at their painted spots, and the
-  pennant on the tall pole is drawn in code so it ripples (`src/data/backdrops/warden-fortress.js`).
-- The road's rampart decks (`../sprites/platforms/rampart.png`) and the Warden Hall's gate
-  (`../sprites/props/warden-gate.png`, the end wall) are Pro Flash sprites at the fighters' density,
-  with the plank deck and the palisade as their style images.
-
-# Mirage Temple
+## Mirage Temple
 
 Mission 9's road (`mirage-temple/`): the deep desert past the iron works at dusk turning to
 twilight, a sun temple half-buried in rose-gold dunes. A concept was painted first with PixelLab
@@ -152,6 +129,29 @@ The flames, sparks and sand trickles are drawn in code at the braziers and ledge
 (`src/data/backdrops/mirage-temple.js`). The sealed door that closes the road and its broken-open
 twin (`../sprites/props/temple-door*.png`, the twin a Pro edit of the door) and the slab on a fluted
 column (`../sprites/platforms/slab.png`, its shaft the last row) are Pro sprites.
+
+## Warden's Fortress
+
+Mission 10, the last road: night under a blood-red moon, from the last ruins of the sun temple up
+the cliff road to the Warden Hall. Every layer is 216 rows tall like the forests'.
+
+| File                         | Size      | How it was made                                                                                                                                                                                                                                  |
+| ---------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `warden-fortress/back.png`   | 585 wide  | Create Image (Pro) 640x216, `firefly-hollow/back.png` as the style image (outline, detail, shading; not its palette), from a Pixen concept. Cut before a second mesa, `overlap` 16, then the cliff face dithered toward the mist (`#7c203a`). |
+| `warden-fortress/near.png`   | 2040 wide | Three Pro paintings of fortress pieces on transparency (each later one with the one before as its style image). Their painted ground band, weeds and stray specks removed, the sixteen pieces laid out by hand, sunk 3px and hazed toward `#80223a`, more at the base. |
+| `warden-fortress/ruins.png`  | 384 wide  | Pro Flash 192x216 (a crop of the gatehouse as the style image): the broken sun-disc obelisk, a `once` layer at the start of the road where mission 9's temple is left behind. Hazed like the near strip.                                      |
+| `warden-fortress/ground.png` | 96 wide   | Pro Flash 128x64 (`firefly-hollow/ground.png` as the layout and density reference): flagstones over basalt, keyed with `ground`. Surface row 14.                                                                                            |
+| `warden-fortress/cliff.png`  | 12x64     | Cut from `ground.png` by hand, with a dark outer edge and a moonlit rim, for sheer step faces.                                                                                                                                                 |
+
+- The near strip keeps a 212px gap at its start: on the first screen the temple ruins stand there,
+  and on every later pass the far fortress shows whole through it. Its width (2040) and drift
+  (0.455) are picked so each boss arena looks onto its own pieces: the tower and fire bowl at the
+  Outer Gate, the gatehouse at the Inner Keep, and the Warden's statue beside his gate at the end. Its fires (the brazier, the fire
+  bowl and the torch) have flames, glow and sparks drawn in code at their painted spots, and the
+  pennant on the tall pole is drawn in code so it ripples (`src/data/backdrops/warden-fortress.js`).
+- The road's rampart decks (`../sprites/platforms/rampart.png`) and the Warden Hall's gate
+  (`../sprites/props/warden-gate.png`, the end wall) are Pro Flash sprites at the fighters' density,
+  with the plank deck and the palisade as their style images.
 
 ## Second pass: seams, one sun per screen, cliffs
 
