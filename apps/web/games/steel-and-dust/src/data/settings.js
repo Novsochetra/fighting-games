@@ -9,6 +9,7 @@ export function defaultSettings(coarsePointer) {
     touch: 'auto',
     buttonSize: 1,
     stick: 'fixed',
+    padHidesTouch: true,
     aim: coarsePointer,
     holdToCombo: true,
     difficulty: 1,

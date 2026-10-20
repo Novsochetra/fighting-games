@@ -17,6 +17,14 @@ describe('settings steppers', () => {
     expect(steppedValue(definition('shake'), 2, { step: 1, wrap: true })).toBe(0);
     expect(steppedValue(definition('touch'), 'auto', { step: 1 })).toBe('on');
   });
+
+  it('let the joystick be fixed, floating or hidden, and hide the controls with a gamepad', () => {
+    expect(steppedValue(definition('stick'), 'float', { step: 1 })).toBe('hidden');
+    expect(steppedValue(definition('stick'), 'hidden', { step: 1, wrap: true })).toBe('fixed');
+    expect(definition('stick').format('hidden')).toBe('Hidden');
+    expect(defaultSettings(true).padHidesTouch).toBe(true);
+    expect(steppedValue(definition('padHidesTouch'), true, { step: -1 })).toBe(false);
+  });
 });
 
 describe('settings list', () => {

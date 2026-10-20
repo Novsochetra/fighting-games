@@ -1,7 +1,7 @@
 import { HEROES } from '../../data/heroes.js';
 import { MISSIONS } from '../../data/missions/index.js';
 import {
-  continueRun,
+  continueAs,
   cycleWeapon,
   playFromStart,
   quitToTitle,
@@ -12,13 +12,18 @@ import {
 } from '../../sim/stage/flow.js';
 
 // the buttons that open a panel make their own sound
-const QUIET_ACTIONS = new Set(['back', 'help', 'settings', 'play', 'missions']);
+const QUIET_ACTIONS = new Set(['back', 'help', 'settings', 'play', 'missions', 'continue']);
 const isQuiet = (name) => QUIET_ACTIONS.has(name) || name.startsWith('mission-');
 
+// the same Shade list starts a run from the title and brings a fallen hero back as any Shade
 function heroActions(game, begin) {
   const actions = {};
   for (const hero of HEROES) {
     actions[`hero-${hero.id}`] = () => {
+      if (game.mode === 'over') {
+        continueAs(game, hero.id);
+        return;
+      }
       game.settings.hero = hero.id;
       game.io.saveSettings(game.settings);
       begin();
@@ -58,7 +63,7 @@ export function createMenuActions({ game, audio, ui, fullscreen, menus, location
     fullscreen: () => fullscreen.toggle(),
     restart: () => restartRun(game),
     quit: () => quitToTitle(game),
-    continue: () => continueRun(game),
+    continue: () => menus.open('heroes'),
     back: () => menus.back(),
     weapon() {
       cycleWeapon(game);

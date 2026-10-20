@@ -36,6 +36,7 @@ function createPanels({ elements, game, audio, layout, ui, window }) {
 export function installUi({ window, elements, game, audio, ui, pad }) {
   const { document } = window;
   const layout = createScreenFit({ document, window, elements, game, ui });
+  ui.onTouchShownChange = () => layout.applyTouchSettings();
   const fullscreen = createFullscreen({ document, screen: window.screen, ui });
   const panels = createPanels({ elements, game, audio, layout, ui, window });
   const context = () => ({
