@@ -63,6 +63,12 @@ describe('painted backdrops', () => {
     ]);
   });
 
+  it('hold a layer that drifts no faster than the far plate as still as the plate', () => {
+    const moon = { ...strip(384, 0.01), once: true };
+    const { shaken } = record([strip(320, 0.08), moon, strip(384, 0.45)], 0);
+    expect(shaken.map(([, shake]) => shake)).toEqual([false, false, true]);
+  });
+
   it('draw a one-off layer once from the start of the road, scrolling away with its share', () => {
     const entry = { ...strip(300, 0.5), once: true };
     expect(record([entry], 0).draws).toEqual([['img(300)', '0', '0']]);

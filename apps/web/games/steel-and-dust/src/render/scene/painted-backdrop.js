@@ -42,10 +42,12 @@ function drawLayer(context, layer, cameraX) {
   }
 }
 
-// the back plate is far away, so screen shake moves only the nearer layers
+// the back plate is far away, so screen shake moves only the nearer layers; a layer that drifts
+// no faster than the plate (a moon on a layer of its own) is just as far and holds still with it
 export function drawPaintedBackdrop(painter, setLayer, { backdrop, cameraX }) {
-  backdrop.layers.forEach((layer, index) => {
-    setLayer(0, index > 0);
+  const farthest = backdrop.layers[0]?.parallax;
+  backdrop.layers.forEach((layer) => {
+    setLayer(0, layer.parallax > farthest);
     drawLayer(painter.context, layer, cameraX);
   });
 }

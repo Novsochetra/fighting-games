@@ -1,7 +1,5 @@
 import { mound, ramp, terrace } from '../ground-shapes.js';
 
-// the deep desert at dusk: dunes, the sun temple's steps and slabs fallen across broken columns,
-// with level ground for the Cobra Matriarch's shrine and the Sand Pharaoh's throne
 export const MIRAGE_TEMPLE = {
   name: 'Mirage Temple',
   theme: 'mirageTemple',

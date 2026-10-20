@@ -20,7 +20,6 @@ function streakAt(i, { effect, tick, cameraX }) {
   };
 }
 
-// thin streaks of sand skate along the ground in front of the fighters
 export function drawSandDrift(painter, { effect, tick, cameraX, colors }) {
   const gust = gustOf(tick);
   for (let i = 0; i < effect.count; i++) {
