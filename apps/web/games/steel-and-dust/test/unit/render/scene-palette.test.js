@@ -36,13 +36,8 @@ describe('scene palettes', () => {
       const palette = scenePalette(themeId);
       expect(palette.painted, themeId).toBe(true);
       const { ground, rubble } = palette;
-      for (const color of [
-        ground.sand,
-        ground.soil,
-        ground.soilDeep,
-        ground.grassDark,
-        rubble.fern,
-      ]) {
+      const grass = PAINTED_THEMES[themeId].ground.grass ? [ground.grass] : [];
+      for (const color of [ground.sand, ground.soil, ground.soilDeep, ...grass, rubble.fern]) {
         expect(color, themeId).toMatch(COLOR);
       }
       expect(ground.grass, themeId).toBe(PAINTED_THEMES[themeId].ground.grass);

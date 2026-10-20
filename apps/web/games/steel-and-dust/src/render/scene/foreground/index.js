@@ -1,6 +1,7 @@
 import { hashInt } from '../../../lib/math.js';
 import { drawFern } from './ferns.js';
 import { drawRubble } from './rubble.js';
+import { drawScrap } from './scrap.js';
 import { drawScrub } from './scrub.js';
 
 // a painted theme names its kind; the drawn desert roads have none and lie in rubble
@@ -8,6 +9,7 @@ const FOREGROUND_KINDS = {
   ferns: drawFern,
   rubble: drawRubble,
   scrub: drawScrub,
+  scrap: drawScrap,
 };
 
 // what lies in front of the fighters scrolls faster than the world, for depth

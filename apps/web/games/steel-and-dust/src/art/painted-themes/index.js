@@ -1,9 +1,10 @@
-import { PINE_RIDGE } from './pine-ridge.js';
-import { OLD_GROVE } from './old-grove.js';
 import { BAMBOO_PASS } from './bamboo-pass.js';
-import { RAIDER_CAMP } from './raider-camp.js';
 import { EMBER_WOODS } from './ember-woods.js';
 import { FIREFLY_HOLLOW } from './firefly-hollow.js';
+import { IRON_WORKS } from './iron-works.js';
+import { OLD_GROVE } from './old-grove.js';
+import { PINE_RIDGE } from './pine-ridge.js';
+import { RAIDER_CAMP } from './raider-camp.js';
 import { SANDSTORM_PASS } from './sandstorm-pass.js';
 
 // the colors drawn on top of each painted road (the paintings are in assets/backdrops/): the
@@ -16,4 +17,5 @@ export const PAINTED_THEMES = {
   emberWoods: EMBER_WOODS,
   fireflyHollow: FIREFLY_HOLLOW,
   sandstormPass: SANDSTORM_PASS,
+  ironWorks: IRON_WORKS,
 };

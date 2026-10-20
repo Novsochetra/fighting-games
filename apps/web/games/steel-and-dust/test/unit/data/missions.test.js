@@ -44,7 +44,9 @@ describe('the ten missions', () => {
 
   it("come in through the last road's wall broken open, where a road has a way in", () => {
     const entered = MISSIONS.filter((mission) => mission.entry);
-    expect(entered.map((mission) => mission.name)).toContain('Sandstorm Pass');
+    expect(entered.map((mission) => mission.name)).toEqual(
+      expect.arrayContaining(['Sandstorm Pass', 'Iron Works']),
+    );
     for (const mission of entered) {
       const before = MISSIONS[mission.index - 1];
       expect(mission.entry, mission.name).toBe(`${before.endWall}Broken`);

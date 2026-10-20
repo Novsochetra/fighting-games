@@ -137,6 +137,24 @@ describe('what lies in front of the fighters', () => {
     expect(at(0).join('|')).not.toBe(at(12).join('|'));
   });
 
+  it('is slag, dropped pipe and hanging chain in the iron works, glowing and swinging', () => {
+    const works = scenePalette('ironWorks').rubble;
+    const at = (cameraX, tick) =>
+      record((painter) => drawForeground(painter, cameraX, works, tick));
+    const colors = new Set();
+    for (let cameraX = 0; cameraX < 6400; cameraX += 340) {
+      colorsIn(at(cameraX, 30)).forEach((color) => colors.add(color));
+    }
+    for (const key of ['slag', 'slagTop', 'pipe', 'pipeLight', 'chain', 'molten']) {
+      expect(colors.has(works[key]), key).toBe(true);
+    }
+    expect(colors.has(works.fern)).toBe(false);
+    const moving = [0, 500, 900, 1400, 2000].filter(
+      (cameraX) => at(cameraX, 0).join('|') !== at(cameraX, 90).join('|'),
+    );
+    expect(moving.length).toBeGreaterThan(0);
+  });
+
   it('is still rubble on the desert roads', () => {
     const colors = colorsIn(record((painter) => drawForeground(painter, 900, desert.rubble, 0)));
     expect(colors.has(desert.rubble.rock)).toBe(true);

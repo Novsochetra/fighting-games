@@ -1,9 +1,10 @@
-import { PINE_RIDGE } from './pine-ridge.js';
-import { OLD_GROVE } from './old-grove.js';
 import { BAMBOO_PASS } from './bamboo-pass.js';
-import { RAIDER_CAMP } from './raider-camp.js';
 import { EMBER_WOODS } from './ember-woods.js';
 import { FIREFLY_HOLLOW } from './firefly-hollow.js';
+import { IRON_WORKS } from './iron-works.js';
+import { OLD_GROVE } from './old-grove.js';
+import { PINE_RIDGE } from './pine-ridge.js';
+import { RAIDER_CAMP } from './raider-camp.js';
 import { SANDSTORM_PASS } from './sandstorm-pass.js';
 
 // the painted forests: the layers in assets/backdrops/<folder>/, how fast each one scrolls with
@@ -18,6 +19,7 @@ export const PAINTED_BACKDROPS = {
   emberWoods: EMBER_WOODS,
   fireflyHollow: FIREFLY_HOLLOW,
   sandstormPass: SANDSTORM_PASS,
+  ironWorks: IRON_WORKS,
 };
 
 export function isPaintedTheme(themeId) {
