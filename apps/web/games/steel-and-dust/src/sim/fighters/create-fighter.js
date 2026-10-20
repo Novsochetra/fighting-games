@@ -73,7 +73,7 @@ export function createFighter(side, kind, x, y = GROUND_Y) {
     stateTime: 0,
     move: null,
     moveTime: 0,
-    ai: { cooldown, spacing },
+    ai: { cooldown, spacing, hopWait: 0 },
     walkDirection: 1,
     jumpDirection: 0,
     weapon: startingWeapon(side, def),

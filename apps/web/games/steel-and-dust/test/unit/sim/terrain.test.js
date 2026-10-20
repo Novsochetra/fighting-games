@@ -3,6 +3,7 @@ import { GROUND_Y } from '../../../src/config.js';
 import { FLAT_TERRAIN } from '../../../src/data/missions/terrain.js';
 import {
   STEP_UP,
+  faceAhead,
   floorBelow,
   groundAt,
   isWall,
@@ -60,5 +61,31 @@ describe('walls', () => {
     expect(isWall(terrain, 150, GROUND_Y - 30 + STEP_UP)).toBe(false);
     expect(isWall(terrain, 50, GROUND_Y - 30)).toBe(false);
     expect(isWall(FLAT_TERRAIN, 150, GROUND_Y)).toBe(false);
+  });
+});
+
+describe('the face ahead of a walker', () => {
+  it('is where a rise too tall to step up begins, from either side', () => {
+    const terrain = hill();
+    expect(faceAhead(terrain, { x: 90.5, y: GROUND_Y }, 1, 16)).toBe(100);
+    expect(faceAhead(terrain, { x: 210.5, y: GROUND_Y }, -1, 16)).toBe(201);
+    expect(faceAhead(terrain, { x: 80, y: GROUND_Y }, 1, 16)).toBeNull();
+    expect(faceAhead(terrain, { x: 90, y: GROUND_Y }, -1, 40)).toBeNull();
+    expect(faceAhead(FLAT_TERRAIN, { x: 90, y: GROUND_Y }, 1, 40)).toBeNull();
+  });
+
+  it('is never a slope the feet can follow up', () => {
+    const heights = new Int16Array(301).fill(GROUND_Y);
+    for (let x = 100; x <= 300; x++) {
+      heights[x] = GROUND_Y - Math.round((x - 100) / 2);
+    }
+    expect(faceAhead({ heights, platforms: [] }, { x: 90, y: GROUND_Y }, 1, 200)).toBeNull();
+  });
+
+  it('is measured from the platform a walker stands on, not from the road under it', () => {
+    const terrain = hill();
+    terrain.platforms = [{ x: 180, y: GROUND_Y - 40, width: 80, kind: 'planks' }];
+    expect(faceAhead(terrain, { x: 250, y: GROUND_Y - 40 }, -1, 160)).toBeNull();
+    expect(faceAhead(terrain, { x: 250, y: GROUND_Y }, -1, 160)).toBe(201);
   });
 });

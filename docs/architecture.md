@@ -87,7 +87,11 @@ places on the road: zone walls, where each wave starts, crates and props, and th
   `src/sim/stage/terrain.js` reads it (`groundAt`, `floorBelow`, `isWall`, `STEP_UP`): fighters walk
   slopes and steps up to 8px, taller rises are walls, platforms only catch what comes down onto them
   and down + jump drops through (`src/sim/fighters/terrain-motion.js`), and crates, pickups, bombs,
-  fire, shockwaves and summons all use the floor where they are. `test/unit/data/terrain-rules.test.js`
+  fire, shockwaves and summons all use the floor where they are. Raiders use it too
+  (`src/sim/brains/enemy/climb.js`, `hop.js`, `perch.js`): melee raiders hop up to the hero, drop
+  off decks and hop walls in their way, and only swing at a hero on their own level; ranged raiders
+  climb onto a nearby deck and throw down, their shots aimed by `src/sim/hazards/shot-aim.js`.
+  `test/unit/data/terrain-rules.test.js`
   keeps every road fair: level starts, zone walls and boss arenas, gentle lock screens, no wall over
   24px, platforms within jumping reach and every crate on level ground. The road is drawn from the
   forest's painted cross-section laid along the surface (`src/render/scene/terrain-ground.js`), and

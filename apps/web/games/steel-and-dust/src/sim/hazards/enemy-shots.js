@@ -6,6 +6,7 @@ import { shake } from '../fx/camera-fx.js';
 import { addRing } from '../fx/effects.js';
 import { addDust, addSparks } from '../fx/particles.js';
 import { floorBelow } from '../stage/terrain.js';
+import { diveToward } from './shot-aim.js';
 import { hitArea } from './shot-hits.js';
 
 const BOMB_GRAVITY = 0.16;
@@ -29,17 +30,19 @@ function bombSpeed(game, fighter, startY) {
 
 export function fireEnemyShot(game, fighter, kind) {
   const spec = SHOTS[kind];
+  const x = fighter.x + fighter.facing * 12;
   const y = fighter.y - spec.height * fighter.scale;
+  const speed = kind === 'bomb' ? bombSpeed(game, fighter, y) : spec.speed;
   game.projectiles.push({
     kind,
-    x: fighter.x + fighter.facing * 12,
+    x,
     y,
-    vy: BOMB_LIFT,
+    vy: kind === 'bomb' ? BOMB_LIFT : diveToward(fighter, game.player, { x, speed }),
     direction: fighter.facing,
     side: fighter.side,
     time: 0,
     damage: spec.damage,
-    speed: kind === 'bomb' ? bombSpeed(game, fighter, y) : spec.speed,
+    speed,
     hitTargets: new Set(),
     color: spec.color,
   });

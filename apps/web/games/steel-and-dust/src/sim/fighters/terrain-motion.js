@@ -5,6 +5,11 @@ export function isFlat(terrain) {
   return !terrain.heights && !terrain.platforms.length;
 }
 
+// on a flat road everyone is on one level, whatever their feet say
+export function onOneLevel(terrain, first, second) {
+  return isFlat(terrain) || Math.abs(first.y - second.y) <= STEP_UP;
+}
+
 export function floorUnder(terrain, fighter) {
   return floorBelow(terrain, fighter.x, fighter.y);
 }

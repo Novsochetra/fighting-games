@@ -28,3 +28,18 @@ export function platformUnder(terrain, x, y) {
 export function isWall(terrain, toX, feetY) {
   return groundAt(terrain, toX) < feetY - STEP_UP;
 }
+
+// the x where the first face too tall to walk up begins, within `reach` of a fighter walking
+// toward `side`, or null; its feet follow slopes, small steps and the platform under it on the
+// way, so a hill is never mistaken for a wall
+export function faceAhead(terrain, { x, y }, side, reach) {
+  let feetY = y;
+  for (let step = 1; step <= reach; step++) {
+    const column = Math.floor(x + side * step);
+    if (isWall(terrain, column, feetY)) {
+      return side > 0 ? column : column + 1;
+    }
+    feetY = floorBelow(terrain, column, feetY);
+  }
+  return null;
+}

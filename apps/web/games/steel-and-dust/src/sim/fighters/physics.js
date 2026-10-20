@@ -5,6 +5,9 @@ import { arenaBounds } from './arena-bounds.js';
 import { land } from './landing.js';
 import { blockWall, followFloor } from './terrain-motion.js';
 
+export const GRAVITY = 0.3;
+const TUMBLE_GRAVITY = 0.26;
+
 function wallHit(game, fighter, side) {
   if (fighter.state === 'juggle' && Math.abs(fighter.vx) > 2.4 && !fighter.wallBounced) {
     fighter.wallBounced = true;
@@ -27,7 +30,7 @@ function applyGravity(fighter, floor) {
   }
   if (fighter.airborne) {
     const tumbling = fighter.state === 'juggle' || fighter.state === 'ko';
-    fighter.vy = Math.min(7, fighter.vy + (tumbling ? 0.26 : 0.3));
+    fighter.vy = Math.min(7, fighter.vy + (tumbling ? TUMBLE_GRAVITY : GRAVITY));
     if (fighter.state === 'juggle') {
       fighter.vx *= 0.985;
     }

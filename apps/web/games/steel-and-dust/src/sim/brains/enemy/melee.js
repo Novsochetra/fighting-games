@@ -1,4 +1,6 @@
 import { startMove } from '../../fighters/actions.js';
+import { onOneLevel } from '../../fighters/terrain-motion.js';
+import { ledgeBehind } from './climb.js';
 import { standStill, walk } from './movement.js';
 
 function basicAttack(fighter) {
@@ -18,17 +20,27 @@ function tryAttack(game, fighter, distance) {
   return false;
 }
 
+// a swing at a hero on a bank or a platform above, or on the road below, cannot land
+function isReady(game, fighter, playerDown) {
+  const { player } = game;
+  return (
+    fighter.hasToken &&
+    fighter.ai.cooldown <= 0 &&
+    !playerDown &&
+    !player.airborne &&
+    onOneLevel(game.terrain, fighter, player)
+  );
+}
+
 // a raider holding an attack token closes in; the rest circle at their own distance
 export function thinkMelee(game, fighter, { distance, playerDown }) {
-  const ready =
-    fighter.hasToken && fighter.ai.cooldown <= 0 && !playerDown && !game.player.airborne;
-  if (ready && tryAttack(game, fighter, distance)) {
+  if (isReady(game, fighter, playerDown) && tryAttack(game, fighter, distance)) {
     return;
   }
   const wanted = fighter.hasToken ? fighter.def.range - 4 : fighter.ai.spacing;
   if (distance > wanted + 6) {
     walk(fighter, 1, 1);
-  } else if (distance < wanted - 6) {
+  } else if (distance < wanted - 6 && !ledgeBehind(game.terrain, fighter)) {
     walk(fighter, -1, 0.7);
   } else {
     standStill(fighter);

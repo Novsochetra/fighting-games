@@ -1,5 +1,4 @@
-import { STEP_UP } from '../stage/terrain.js';
-import { isFlat, nudge } from './terrain-motion.js';
+import { nudge, onOneLevel } from './terrain-motion.js';
 
 const SOLID_STATES = new Set(['idle', 'walk', 'attack', 'hurt', 'charge', 'squat']);
 
@@ -9,11 +8,6 @@ function isSolid(fighter) {
 
 function randomSide() {
   return Math.random() < 0.5 ? -1 : 1;
-}
-
-// a raider down on the road does not shove the hero standing on the bank above it
-function onOneLevel(terrain, first, second) {
-  return isFlat(terrain) || Math.abs(first.y - second.y) <= STEP_UP;
 }
 
 function pushApart(terrain, first, second) {
@@ -33,6 +27,7 @@ export function separateFighters(fighters, terrain) {
     for (let j = i + 1; j < fighters.length; j++) {
       const first = fighters[i];
       const second = fighters[j];
+      // a raider down on the road does not shove the hero standing on the bank above it
       if (isSolid(first) && isSolid(second) && onOneLevel(terrain, first, second)) {
         pushApart(terrain, first, second);
       }

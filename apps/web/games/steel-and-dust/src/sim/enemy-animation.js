@@ -7,6 +7,9 @@ const AIR_FRAME_BY_SPEED = [
   [0, 2],
   [1.5, 3],
 ];
+// no sheet has a jump strip: a hop rises on the walk's knee-up frame and comes down on its stride
+const HOP_RISE_FRAME = 1;
+const HOP_FALL_FRAME = 0;
 
 function lastFrame(sprite, name) {
   return sprite.strips[name].frames - 1;
@@ -27,6 +30,10 @@ function play(fighter, sprite, [name, ticksPerFrame, loop]) {
 function airFrame(fighter, sprite) {
   const match = AIR_FRAME_BY_SPEED.find(([below]) => fighter.vy < below);
   return ['ko', Math.min(lastFrame(sprite, 'ko'), match ? match[1] : 4)];
+}
+
+function hopFrame(fighter) {
+  return ['walk', fighter.vy < 0 ? HOP_RISE_FRAME : HOP_FALL_FRAME];
 }
 
 function groundFrame(fighter, sprite) {
@@ -81,6 +88,7 @@ const FRAME_BY_STATE = {
   walk: walkFrame,
   attack: attackFrame,
   hurt: (fighter, sprite) => play(fighter, sprite, ['hurt', 4, false]),
+  air: hopFrame,
   juggle: airFrame,
   down: groundFrame,
   getup: getupFrame,

@@ -5,11 +5,13 @@ import { showHint } from '../hints.js';
 import { breakCratesIn } from '../items/crates.js';
 import { groundAt } from '../stage/terrain.js';
 import { flyBomb } from './enemy-shots.js';
+import { diveToward } from './shot-aim.js';
 import { hitArea } from './shot-hits.js';
 import { leaveTrail } from './shot-trails.js';
 import { SHOT_RULES } from './shot-rules.js';
 
 const DEFAULT_SPEED = 4.6;
+const KNIFE_SPEED = 3.1;
 
 export function spawnSlashWave(game, fighter, move) {
   game.projectiles.push({
@@ -27,15 +29,17 @@ export function spawnSlashWave(game, fighter, move) {
 }
 
 export function tossKnife(game, fighter) {
+  const x = fighter.x + fighter.facing * 10;
   game.projectiles.push({
     kind: 'knife',
-    x: fighter.x + fighter.facing * 10,
+    x,
     y: fighter.y - 24 * fighter.scale,
+    vy: diveToward(fighter, game.player, { x, speed: KNIFE_SPEED }),
     direction: fighter.facing,
     side: fighter.side,
     time: 0,
     damage: 6,
-    speed: 3.1,
+    speed: KNIFE_SPEED,
     hitTargets: new Set(),
     color: COLORS.steel,
   });
@@ -52,6 +56,8 @@ function moveShot(game, shot) {
   shot.time++;
   if (shot.kind === 'bomb') {
     flyBomb(game, shot);
+  } else if (shot.vy) {
+    shot.y += shot.vy;
   }
   if (hitsGround(game.terrain, shot)) {
     shot.dead = true;
