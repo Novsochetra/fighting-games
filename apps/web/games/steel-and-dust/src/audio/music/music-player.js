@@ -1,4 +1,5 @@
 import { applyVolumes, isDucked } from '../context/volumes.js';
+import { playOneShot } from '../live/one-shot.js';
 import { playStep } from './sequencer.js';
 import { songFor } from './song-for.js';
 import { SONGS } from './songs.js';
@@ -31,8 +32,9 @@ export function tickMusic(audio) {
     music.next = context.currentTime + 0.05;
   }
   while (music.next < context.currentTime + LOOKAHEAD_SECONDS) {
+    const step = { song, index: music.step, time: music.next };
     try {
-      playStep(audio, { song, index: music.step, time: music.next });
+      playOneShot(audio, (live) => playStep(live, step));
     } catch {
       // a node the browser refuses to schedule must not stop the music loop
     }

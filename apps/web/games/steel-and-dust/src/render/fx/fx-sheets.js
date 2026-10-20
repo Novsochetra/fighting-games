@@ -1,11 +1,11 @@
 import { RENDER_SCALE } from '../../config.js';
 import { FX_SCALE, FX_SPRITES } from '../../data/fx-sprites.js';
-import { tintedImage } from '../fighters/tint.js';
+import { createTintCache, frameSource } from '../fighters/tint.js';
 
 const DIRECTORY = 'assets/sprites/fx/';
 
 export function loadFxSheets({ createImage, createCanvas, baseUrl }) {
-  const sheets = { images: {}, ready: {}, tints: {}, createCanvas };
+  const sheets = { images: {}, ready: {}, tints: createTintCache(createCanvas) };
   for (const name of Object.keys(FX_SPRITES)) {
     const image = createImage();
     image.onload = () => {
@@ -17,25 +17,21 @@ export function loadFxSheets({ createImage, createCanvas, baseUrl }) {
   return sheets;
 }
 
-function sheetImage(sheets, name, tint) {
-  const image = sheets.images[name];
-  if (!tint) {
-    return image;
-  }
-  return tintedImage(sheets.tints, {
-    image,
-    key: name,
-    color: tint,
-    createCanvas: sheets.createCanvas,
-  });
-}
-
 // one frame of an effect strip with its anchor on (x, y); scale 1 is the hero sprites' density
 export function drawFxFrame(painter, sheets, { name, frame, x, y, scale = 1, facing = 1, tint }) {
   if (!sheets.ready[name]) {
     return;
   }
   const { frameWidth, frameHeight, anchorX, anchorY } = FX_SPRITES[name];
+  const source = frameSource(sheets.tints, {
+    image: sheets.images[name],
+    key: name,
+    color: tint,
+    sx: frame * frameWidth,
+    sy: 0,
+    width: frameWidth,
+    height: frameHeight,
+  });
   const size = scale * FX_SCALE;
   const context = painter.context;
   context.save();
@@ -45,9 +41,9 @@ export function drawFxFrame(painter, sheets, { name, frame, x, y, scale = 1, fac
   );
   context.scale(facing < 0 ? -size : size, size);
   context.drawImage(
-    sheetImage(sheets, name, tint),
-    frame * frameWidth,
-    0,
+    source.image,
+    source.sx,
+    source.sy,
     frameWidth,
     frameHeight,
     -anchorX,

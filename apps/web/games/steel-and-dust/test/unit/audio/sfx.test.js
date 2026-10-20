@@ -1,6 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createAudio } from '../../../src/audio/index.js';
-import { nodesOfKind, reaches, stubAudioContext } from './fake-audio-context.js';
+import {
+  advanceTo,
+  connectedNodes,
+  nodesOfKind,
+  reaches,
+  stubAudioContext,
+} from './fake-audio-context.js';
 
 const gameState = () => ({
   mode: 'play',
@@ -100,5 +106,28 @@ describe('sfx routing', () => {
     audio.sfx('voiceHurt');
     audio.sfx('voiceHurt');
     expect(sources(context)).toHaveLength(3);
+  });
+
+  it('merges a burst of the same live sound, then plays it again a moment later', () => {
+    const { audio, context } = runningAudio();
+    audio.sfx('thorns');
+    const once = context.nodes.length;
+    audio.sfx('thorns');
+    expect(context.nodes).toHaveLength(once);
+    context.currentTime = 0.05;
+    audio.sfx('thorns');
+    expect(context.nodes).toHaveLength(once * 2);
+  });
+});
+
+describe('finished sounds', () => {
+  it('leave the voice pool and the audio graph as soon as they end', () => {
+    const { audio, context } = runningAudio();
+    audio.sfx('blunt', false, { x: 160, dir: 1 });
+    audio.sfx('ui');
+    expect(audio.debugState().voices).toBe(1);
+    advanceTo(context, 5);
+    expect(audio.debugState().voices).toBe(0);
+    expect(connectedNodes(context)).toEqual([]);
   });
 });

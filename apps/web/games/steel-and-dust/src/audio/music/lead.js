@@ -1,9 +1,9 @@
-import { biquad, envelopeGain, oscillator } from '../live/nodes.js';
+import { biquad, envelopeGain, oscillator, track } from '../live/nodes.js';
 import { midiToFrequency } from './songs.js';
 
 function vibrato(live, { target, frequency, start, length }) {
-  const lfo = live.context.createOscillator();
-  const depth = live.context.createGain();
+  const lfo = track(live, live.context.createOscillator(), { source: true });
+  const depth = track(live, live.context.createGain());
   lfo.frequency.value = 5.5;
   depth.gain.value = frequency * 0.006;
   lfo.connect(depth);

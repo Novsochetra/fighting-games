@@ -1,14 +1,50 @@
-// a solid-color copy of a sheet, for flashes, glows and afterimages; cached per sheet and color
-export function tintedImage(cache, { image, key, color, createCanvas }) {
-  const cacheKey = key + color;
-  if (!cache[cacheKey]) {
-    const canvas = createCanvas(image.width, image.height);
-    const context = canvas.getContext('2d');
-    context.drawImage(image, 0, 0);
-    context.globalCompositeOperation = 'source-in';
-    context.fillStyle = color;
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    cache[cacheKey] = canvas;
+const MAX_TINTED_FRAMES = 64;
+
+export function createTintCache(createCanvas) {
+  return { createCanvas, frames: new Map() };
+}
+
+function paintTint(canvas, { image, sx, sy, width, height, color }) {
+  const context = canvas.getContext('2d');
+  context.globalCompositeOperation = 'source-over';
+  context.clearRect(0, 0, width, height);
+  context.drawImage(image, sx, sy, width, height, 0, 0, width, height);
+  context.globalCompositeOperation = 'source-in';
+  context.fillStyle = color;
+  context.fillRect(0, 0, width, height);
+  context.globalCompositeOperation = 'source-over';
+}
+
+// the least recently used copy makes room, and lends its canvas when it is the right size
+function makeRoom(cache, { width, height }) {
+  if (cache.frames.size < MAX_TINTED_FRAMES) {
+    return cache.createCanvas(width, height);
   }
-  return cache[cacheKey];
+  const [oldest, canvas] = cache.frames.entries().next().value;
+  cache.frames.delete(oldest);
+  const fits = canvas.width === width && canvas.height === height;
+  return fits ? canvas : cache.createCanvas(width, height);
+}
+
+// a solid-color copy of one frame, for flashes, glows and afterimages. Tinting whole sheets kept a
+// full-size copy of every sheet in every color for the whole session: tens of megabytes on a phone
+export function tintedFrame(cache, frame) {
+  const id = `${frame.key}|${frame.sx}|${frame.sy}|${frame.color}`;
+  let canvas = cache.frames.get(id);
+  if (canvas) {
+    cache.frames.delete(id);
+  } else {
+    canvas = makeRoom(cache, frame);
+    paintTint(canvas, frame);
+  }
+  cache.frames.set(id, canvas);
+  return canvas;
+}
+
+// where to read a frame from: the sheet itself, or its tinted copy
+export function frameSource(cache, frame) {
+  if (!frame.color) {
+    return { image: frame.image, sx: frame.sx, sy: frame.sy };
+  }
+  return { image: tintedFrame(cache, frame), sx: 0, sy: 0 };
 }

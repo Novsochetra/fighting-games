@@ -1,14 +1,20 @@
 import { isBankSound } from './bank/definitions.js';
 import { playBankSound } from './bank/play-bank-sound.js';
 import { isLiveSound, LIVE_SOUNDS } from './live/live-sounds.js';
+import { playOneShot } from './live/one-shot.js';
 import { startTime } from './timing.js';
 
+// a burst of the same live sound (two thorns erupting together, a herd of stags) plays once
+const MERGE_SECONDS = 0.035;
+
 function playLiveSound(audio, key) {
-  if (!isLiveSound(key)) {
+  const start = startTime(audio, 0.005);
+  if (!isLiveSound(key) || start - (audio.liveStarts[key] ?? -1) < MERGE_SECONDS) {
     return;
   }
+  audio.liveStarts[key] = start;
   try {
-    LIVE_SOUNDS[key](audio, startTime(audio, 0.005));
+    playOneShot(audio, (live) => LIVE_SOUNDS[key](live, start));
   } catch {
     // a node the browser refuses must not stop the game
   }

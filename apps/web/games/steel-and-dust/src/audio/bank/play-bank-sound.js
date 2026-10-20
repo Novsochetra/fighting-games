@@ -4,6 +4,13 @@ import { startTime, vary } from '../timing.js';
 import { SOUND_DEFINITIONS } from './definitions.js';
 import { chooseTake, isDuplicate, planRoom, pruneFinished } from './voice-pool.js';
 
+function forgetVoice(audio, voice) {
+  const index = audio.voices.indexOf(voice);
+  if (index >= 0) {
+    audio.voices.splice(index, 1);
+  }
+}
+
 export function stopVoice(audio, voice) {
   try {
     voice.volume.gain.setTargetAtTime(0, audio.context.currentTime, 0.006);
@@ -11,10 +18,17 @@ export function stopVoice(audio, voice) {
   } catch {
     // a source that already stopped throws; it is gone either way
   }
-  const index = audio.voices.indexOf(voice);
-  if (index >= 0) {
-    audio.voices.splice(index, 1);
-  }
+  forgetVoice(audio, voice);
+}
+
+// a finished voice leaves the pool and the audio graph at once (see live/one-shot.js for why)
+function releaseWhenEnded(audio, voice) {
+  voice.source.onended = () => {
+    for (const node of voice.nodes) {
+      node.disconnect();
+    }
+    forgetVoice(audio, voice);
+  };
 }
 
 // heard where it happens on screen; swings and dashes travel the way they go
@@ -47,7 +61,8 @@ function startVoice(audio, game, { definition, buffer, start, options }) {
   }
   out.connect(audio.chain.effectsBus);
   source.start(start);
-  return { source, volume, end: start + buffer.duration / source.playbackRate.value };
+  const nodes = out === volume ? [source, volume] : [source, volume, out];
+  return { source, volume, nodes, end: start + buffer.duration / source.playbackRate.value };
 }
 
 // options: { vol, rate, take, x (where on the map), dir (which way it travels) }
@@ -74,5 +89,7 @@ export function playBankSound(audio, game, key, options) {
   const take = chooseTake(audio.voices, { key, count, last, requested: options.take, roll });
   audio.lastTakes[key] = take;
   const playing = startVoice(audio, game, { definition, buffer: takes[take], start, options });
-  audio.voices.push({ ...playing, key, take, group, priority, start });
+  const voice = { ...playing, key, take, group, priority, start };
+  audio.voices.push(voice);
+  releaseWhenEnded(audio, voice);
 }

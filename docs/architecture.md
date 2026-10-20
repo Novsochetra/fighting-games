@@ -72,6 +72,17 @@ Each Shade fights in its own style and has its own ultimate:
 The loop runs the simulation at exactly 60 ticks a second and renders once per animation frame.
 A frame that runs several ticks offsets each tick's sounds (`audio.setTickOffset`) so they keep their spacing.
 
+Long sessions must not grow:
+
+- Every one-shot sound and every step of the music is built through `playOneShot`
+  (`src/audio/live/one-shot.js`), and bank voices release themselves the same way: when the last
+  source ends, every node it built is disconnected. Safari keeps connected nodes in the audio graph,
+  so anything left connected piles up run after run until the sound stutters and stops.
+- Flashes, glows and afterimages tint one frame at a time into a small least-recently-used cache
+  (`src/render/fighters/tint.js`), never a whole sprite sheet.
+- `test/regression/bugs/audio-node-leak.test.js`, `tint-memory.test.js` and
+  `test/integration/sim/long-run.test.js` hold these lines.
+
 ### Behavior lock
 
 `test/regression/` replays bot-played scenarios and compares every 30th tick and every rendered frame

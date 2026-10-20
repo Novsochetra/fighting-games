@@ -1,4 +1,4 @@
-import { biquad, envelopeGain, noise, oscillator } from './nodes.js';
+import { biquad, envelopeGain, noise, oscillator, track } from './nodes.js';
 
 // a pitched body that drops (kicks, thumps, punches)
 export function thump(live, { start, from, to, duration, volume, bus }) {
@@ -84,7 +84,7 @@ export function metal(live, { start, frequencies, duration, volume, bus }) {
 
 // a gritty mid layer for chops, crates and KOs
 export function crunch(live, { start, duration, volume, frequency }) {
-  const shaper = live.context.createWaveShaper();
+  const shaper = track(live, live.context.createWaveShaper());
   shaper.curve = live.chain.crunchCurve;
   const destination = live.chain.effectsBus;
   const envelope = envelopeGain(live, {

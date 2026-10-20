@@ -1,7 +1,16 @@
-// live building blocks; `live` is { context, chain } and every start is an absolute context time
+// live building blocks; `live` is { context, chain } and every start is an absolute context time.
+// Inside a one-shot (one-shot.js) `live` also collects what it builds in `nodes` and `sources`.
+
+export function track(live, node, { source = false } = {}) {
+  live.nodes?.push(node);
+  if (source) {
+    live.sources?.push(node);
+  }
+  return node;
+}
 
 export function envelopeGain(live, { destination, start, attack, peak, decay, hold }) {
-  const node = live.context.createGain();
+  const node = track(live, live.context.createGain());
   node.gain.setValueAtTime(0.0001, start);
   node.gain.linearRampToValueAtTime(peak, start + attack);
   if (hold) {
@@ -13,7 +22,7 @@ export function envelopeGain(live, { destination, start, attack, peak, decay, ho
 }
 
 export function oscillator(live, { wave, from, to = from, start, duration, destination, glide }) {
-  const node = live.context.createOscillator();
+  const node = track(live, live.context.createOscillator(), { source: true });
   node.type = wave;
   node.frequency.setValueAtTime(from, start);
   if (to !== from) {
@@ -26,7 +35,7 @@ export function oscillator(live, { wave, from, to = from, start, duration, desti
 }
 
 export function biquad(live, { type, from, to, resonance, start, duration, destination }) {
-  const node = live.context.createBiquadFilter();
+  const node = track(live, live.context.createBiquadFilter());
   node.type = type;
   node.frequency.setValueAtTime(from, start);
   if (to && to !== from) {
@@ -38,7 +47,7 @@ export function biquad(live, { type, from, to, resonance, start, duration, desti
 }
 
 export function noise(live, { start, duration, destination, rate }) {
-  const node = live.context.createBufferSource();
+  const node = track(live, live.context.createBufferSource(), { source: true });
   node.buffer = live.chain.noiseBuffer;
   node.playbackRate.value = rate || 1;
   node.connect(destination);

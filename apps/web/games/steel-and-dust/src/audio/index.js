@@ -27,6 +27,7 @@ export function createAudio(game) {
     bank: null,
     voices: [],
     lastTakes: {},
+    liveStarts: {},
     tickOffset: 0,
     music: createMusicState(),
     ducked: null,

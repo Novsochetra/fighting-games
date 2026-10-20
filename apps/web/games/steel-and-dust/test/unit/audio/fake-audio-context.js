@@ -27,9 +27,14 @@ function createNode(context, kind, { params = {}, fields = {}, scheduled = false
     node.connections.push(destination);
     return destination;
   };
+  node.disconnect = () => {
+    node.connections.length = 0;
+    node.disconnected = true;
+  };
   if (scheduled) {
     node.starts = [];
     node.stops = [];
+    node.onended = null;
     node.start = (...args) => node.starts.push(args);
     node.stop = (...args) => node.stops.push(args);
   }
@@ -96,6 +101,30 @@ export function createFakeAudioContext({ state = 'suspended', resumeTo = 'runnin
     createStereoPanner: () => createNode(context, 'stereoPanner', { params: { pan: 0 } }),
   };
   return context;
+}
+
+// when a scheduled source stops: its own stop time, or the end of its buffer
+function endTime(node) {
+  if (node.stops.length) {
+    return node.stops.at(-1)[0];
+  }
+  const duration = node.buffer ? node.buffer.duration / node.playbackRate.value : 0;
+  return (node.starts[0]?.[0] ?? 0) + duration;
+}
+
+// moves the clock on and fires `onended` on every source that has stopped by then, once
+export function advanceTo(context, time) {
+  context.currentTime = time;
+  for (const node of context.nodes) {
+    if (node.starts?.length && !node.ended && endTime(node) <= time) {
+      node.ended = true;
+      node.onended?.();
+    }
+  }
+}
+
+export function connectedNodes(context) {
+  return context.nodes.filter((node) => !node.disconnected);
 }
 
 export function nodesOfKind(context, kind) {

@@ -8641,7 +8641,7 @@
    "tick": 240,
    "frame": {
     "calls": 3108,
-    "digest": "45694aced851fb7f"
+    "digest": "bdc1244d34f9605a"
    }
   },
   {
@@ -8662,21 +8662,21 @@
    "tick": 960,
    "frame": {
     "calls": 3875,
-    "digest": "a16f2bd1e2b5a7b2"
+    "digest": "667617eb395dd339"
    }
   },
   {
    "tick": 1200,
    "frame": {
     "calls": 2249,
-    "digest": "5835de326c511ef5"
+    "digest": "93a4d70c79eaa865"
    }
   },
   {
    "tick": 1440,
    "frame": {
     "calls": 3543,
-    "digest": "d16ad5efee331644"
+    "digest": "95c7200408889449"
    }
   },
   {

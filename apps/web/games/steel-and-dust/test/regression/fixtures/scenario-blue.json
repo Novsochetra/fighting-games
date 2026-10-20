@@ -9152,7 +9152,7 @@
    "tick": 240,
    "frame": {
     "calls": 3390,
-    "digest": "73cc5107ce158b33"
+    "digest": "6a9d8c67bd1255df"
    }
   },
   {
@@ -9166,7 +9166,7 @@
    "tick": 720,
    "frame": {
     "calls": 2832,
-    "digest": "4353e08295ba74d1"
+    "digest": "94767a3ed466d39d"
    }
   },
   {
@@ -9180,14 +9180,14 @@
    "tick": 1200,
    "frame": {
     "calls": 3466,
-    "digest": "dc9d2daca5d01e8e"
+    "digest": "454862409fbcc720"
    }
   },
   {
    "tick": 1440,
    "frame": {
     "calls": 2384,
-    "digest": "7e10df9e02ffbb29"
+    "digest": "a404884b765d22fb"
    }
   },
   {
@@ -9208,7 +9208,7 @@
    "tick": 2160,
    "frame": {
     "calls": 2897,
-    "digest": "f54909f9e43e0949"
+    "digest": "e435e7c5fcb897c0"
    }
   }
  ]
