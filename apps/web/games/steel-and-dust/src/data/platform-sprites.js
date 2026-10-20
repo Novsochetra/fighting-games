@@ -3,4 +3,5 @@
 // by repeating the sprite's last row, so one sprite fits any height
 export const PLATFORM_SPRITES = {
   planks: { file: 'planks.png', width: 80, topY: 7, legs: [11, 68] },
+  scaffold: { file: 'scaffold.png', width: 80, topY: 6, legs: [11, 68] },
 };

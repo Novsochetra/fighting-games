@@ -25,7 +25,8 @@ export function loadPaintedBackdrop(loaders, spec) {
 }
 
 // a layer that has not loaded yet has no width to tile by, so it is skipped until it has; a `once`
-// layer is a single painting at the start of the road (where the last mission's road comes in)
+// layer is a single painting at the start of the road (where the last mission's road comes in),
+// left undrawn once it has scrolled out of sight
 function drawLayer(context, layer, cameraX) {
   const width = layer.image.width;
   if (!layer.ready || width <= 0) {
@@ -33,7 +34,9 @@ function drawLayer(context, layer, cameraX) {
   }
   const offset = cameraX * layer.parallax;
   if (layer.once) {
-    context.drawImage(layer.image, Math.round(-offset), 0);
+    if (offset < width) {
+      context.drawImage(layer.image, Math.round(-offset), 0);
+    }
     return;
   }
   const start = -(((offset % width) + width) % width);

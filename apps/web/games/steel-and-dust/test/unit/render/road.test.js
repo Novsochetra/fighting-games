@@ -16,6 +16,7 @@ function record(draw) {
 
 const forest = scenePalette('pineRidge');
 const desert = scenePalette('storm');
+const canyon = scenePalette('sandstormPass');
 const colorsIn = (log) => new Set(drawnRects(log).map((rect) => rect.color));
 
 describe('the forest road', () => {
@@ -120,6 +121,20 @@ describe('what lies in front of the fighters', () => {
     expect(colors.has(forest.rubble.fern)).toBe(true);
     expect(colors.has(forest.rubble.rock)).toBe(false);
     expect(at(0).join('|')).not.toBe(at(80).join('|'));
+  });
+
+  it('is dry scrub shivering in the wind and bleached bones in the canyon', () => {
+    const at = (tick) => record((painter) => drawForeground(painter, 900, canyon.rubble, tick));
+    const colors = new Set();
+    for (const cameraX of [0, 700, 1400, 2100, 2800]) {
+      const log = record((painter) => drawForeground(painter, cameraX, canyon.rubble, 0));
+      colorsIn(log).forEach((color) => colors.add(color));
+    }
+    for (const key of ['scrub', 'scrubLight', 'bone', 'rock']) {
+      expect(colors.has(canyon.rubble[key]), key).toBe(true);
+    }
+    expect(colors.has(canyon.rubble.fern)).toBe(false);
+    expect(at(0).join('|')).not.toBe(at(12).join('|'));
   });
 
   it('is still rubble on the desert roads', () => {

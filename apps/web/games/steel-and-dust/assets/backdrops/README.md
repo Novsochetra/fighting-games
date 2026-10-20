@@ -30,3 +30,33 @@ on their own never sat in the painted light. The palisade that closes each fores
 (`../sprites/props/palisade.png`) and the plank deck of the platforms (`../sprites/platforms/`) are
 Pro sprites drawn at half scale like the fighters. `ground.png` in each folder is the road's
 cross-section (turf, earth, roots), keyed and tiled with `ground` and laid along the hills.
+
+# Sandstorm Pass
+
+Mission 7 leaves the forests: the morning after Firefly Hollow, a red-rock canyon pass at dawn
+with a sandstorm blowing against the hero. `sandstorm-pass/` holds a far plate, a near strip, a
+one-off strip of forest edge, the road's cross-section and a cliff face, made with PixelLab Create
+Image (Pro), Edit and Inpaint (the originals are kept with the job's scratch files, not in the
+repo).
+
+| File       | Size     | How it was made                                                                                                                                                                                                                                          |
+| ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `back.png` | 768 wide | Two Pro paintings side by side, the first styled on `ember-woods/back.png` (sun, mesas, a dust wall), the second on the first (no sun, the storm wall swallowing the mesas). Both joins were inpainted on 256-wide crops across them, so the plate tiles with no dither and one sun. |
+| `near.png` | 1152 wide | Two Pro paintings of set pieces (dead tree, beast skeleton, wagon, banners, hoodoo; arch, lookout, crates, cairn, thorn bush). The first painted its own ground band, which was cut away; each piece was stood on row 186 and laid along the strip with uneven gaps, then hazed toward the dust, the darks more than the lights. |
+| `edge.png` | 384 wide | `once`: Firefly Hollow's own left trunk (`firefly-hollow/near.png`), barely hazed so it stays night-blue, with wind-blown sand drifts painted over its roots, where the road leaves the forest. |
+| `ground.png` | 128x53 | A Pro cross-section (packed sand over red-rock strata) styled on `raider-camp/ground.png`; its ends already met, so it was only keyed and given a sprinkle of grit along the surface (`groundTop` 2). |
+| `cliff.png` | 12x64 | Painted from the ground's strata in code: the rock face of a step, high ground on the left, for the sheer faces of the ledges. |
+
+The canyon's air is drawn in code (`src/render/scene/ambient/`): one storm strength (`storm.js`)
+that swells and dies on an irregular beat drives a dust wash and a rolling dust bank (`veil`),
+sand streaks on both planes (`gusts`), dust plumes rolling along the foot of the canyon
+(`plumes`), a far dust devil (`devil`), vultures riding a thermal (`vultures`), straw tumbleweeds
+(`tumbleweeds`) and scraps of banner cloth (`leaves`). Dry scrub and bleached bones lie in front
+of the fighters (`foreground/scrub.js`).
+
+The broken palisade that opens the road (`../sprites/props/palisadeBroken.png`) is `palisade.png`
+smashed with Edit. The raider barricade that closes it (`canyonBarricade.png`) is a Pro sprite
+styled on the palisade, and `canyonBarricadeBroken.png`, the way into mission 8, is that sprite
+smashed with Edit and its middle stakes inpainted into a gap. The scaffold decks
+(`../sprites/platforms/scaffold.png`) are a Pro sprite whose crossed braces were carried down into
+the posts, so its last row is only the two posts.

@@ -71,14 +71,17 @@ places on the road: zone walls, where each wave starts, crates and props, and th
   earlier on its road is a mid-boss and only opens the road. The score, clock, continues and ULT bar
   carry into the next mission (`enterNextMission`); the hero starts it fresh. Beating mission N
   unlocks mission N + 1 on the title's mission select (`records.bestMission`).
-- Missions 1 to 6 walk through six painted forests, sunrise to night; missions 7 to 10 are desert
-  roads. A forest (`src/data/backdrops/`) is PixelLab layers in `assets/backdrops/<forest>/`: a
+- Missions 1 to 6 walk through six painted forests, sunrise to night; mission 7 is a painted canyon
+  and missions 8 to 10 are desert roads. A forest (`src/data/backdrops/`) is PixelLab layers in `assets/backdrops/<forest>/`: a
   far plate and a near strip that each tile sideways and scroll at their own share of the camera
   (`src/render/scene/painted-backdrop.js`), with colors for its road, ferns and air in
   `src/art/painted-themes/`. Its air moves on its own (`src/render/scene/ambient/`): mist, birds,
   leaves, motes, light shafts, fireflies, embers and smoke, each worked out from the tick count and
   the camera alone, never `Math.random()`, so a replay draws the same frames. Its road carries no
   loose props, since the painted strips dress it; a palisade (`assets/sprites/props/`) closes it.
+  A road's `entry` is the last road's wall broken open, drawn behind the hero's start: mission 7
+  leaves the woods through the palisade into Sandstorm Pass, whose air follows one storm strength
+  (`ambient/storm.js`) that thickens and thins, and ends at a raider barricade.
 - The forest roads rise and fall: a zone's spec lists its `ground` as shapes from
   `src/data/missions/ground-shapes.js` (`mound`, `bank`, `ramp`, `stairs`) and its `platforms`
   (plank decks). `layoutTerrain` (`src/data/missions/terrain.js`) turns them into a height for every
@@ -137,7 +140,7 @@ Long sessions must not grow:
 `test/regression/` replays bot-played scenarios and compares every 30th tick and every rendered frame
 against recorded fixtures: two long runs as the Moss Shade (first captured from the original
 single-file game), one shorter run for each of the other Shades, one run through the wide zones
-of the fourth mission, one over the hills of the third and one through the seventh, a desert road.
+of the fourth mission, one over the hills of the third and one through the seventh, the sandstorm canyon.
 Any change to
 arithmetic, to the order of `Math.random()` calls or to the order of canvas calls shows up there.
 When a change is meant to alter behavior, regenerate the fixtures with `npm run test:regression -- -u`
