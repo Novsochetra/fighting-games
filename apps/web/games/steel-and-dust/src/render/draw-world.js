@@ -56,8 +56,8 @@ function drawFighters(painter, { game, view, cameraX }) {
 
 export function drawWorld(painter, { game, view, cameraX }) {
   const mission = missionOf(game);
-  drawGround(painter, cameraX, scenePalette(mission.theme).ground);
-  drawProps(painter, cameraX, mission.props);
+  drawGround(painter, cameraX, scenePalette(mission.theme).ground, game.tickCount);
+  drawProps(painter, { cameraX, props: mission.props, sheets: view.propSheets });
   drawCrates(painter, game.crates, cameraX);
   drawPickups(painter, game.pickups);
   drawFighters(painter, { game, view, cameraX });

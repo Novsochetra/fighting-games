@@ -1,10 +1,10 @@
-export const THE_NEST = {
-  name: 'The Nest',
-  theme: 'ember',
+export const EMBER_WOODS = {
+  name: 'Ember Woods',
+  theme: 'emberWoods',
   boss: 'queen',
   reinforcements: ['scorpion', 'sentry', 'jackal'],
   crates: ['spear', 'ration', 'axe', 'sword', 'ration'],
-  props: ['sandbags', 'barrel', 'sign', 'tank'],
+  props: ['logs', 'stump', 'boulder', 'signpost'],
   zones: [
     {
       screens: 2,

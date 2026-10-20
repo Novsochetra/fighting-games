@@ -1,10 +1,10 @@
-export const SCRAPYARD = {
-  name: 'Scrapyard',
-  theme: 'smog',
+export const OLD_GROVE = {
+  name: 'Old Grove',
+  theme: 'oldGrove',
   boss: 'colossus',
   reinforcements: ['scrapper', 'jackal', 'sling'],
   crates: ['ration', 'spear', 'sword', 'ration', 'axe'],
-  props: ['barrel', 'tank', 'sandbags', 'sign'],
+  props: ['boulder', 'stump', 'logs', 'barrel'],
   zones: [
     {
       screens: 2,
@@ -31,6 +31,6 @@ export const SCRAPYARD = {
         ['scrapper', 'jackal', 'knife', 'sling'],
       ],
     },
-    { boss: 'colossus', label: 'Crusher Pit' },
+    { boss: 'colossus', label: 'Root Hollow' },
   ],
 };

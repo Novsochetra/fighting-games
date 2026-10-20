@@ -1,10 +1,10 @@
-export const RED_CANYON = {
-  name: 'Red Canyon',
-  theme: 'noon',
+export const BAMBOO_PASS = {
+  name: 'Bamboo Pass',
+  theme: 'bambooPass',
   boss: 'ironhorn',
   reinforcements: ['hound', 'grunt', 'bomber'],
   crates: ['axe', 'ration', 'sword', 'spear', 'ration'],
-  props: ['palm', 'sandbags', 'sign', 'barrel'],
+  props: ['boulder', 'signpost', 'sandbags', 'stump'],
   zones: [
     {
       screens: 2,
@@ -31,6 +31,6 @@ export const RED_CANYON = {
         ['hound', 'jackal', 'bomber', 'scrapper'],
       ],
     },
-    { boss: 'ironhorn', label: 'Canyon Mouth' },
+    { boss: 'ironhorn', label: 'Shrine Gate' },
   ],
 };

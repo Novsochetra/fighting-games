@@ -129,9 +129,9 @@ describe('game menus on the real page', () => {
     expect(openMenu().id).toBe('m-missions');
     const cards = [...document.querySelectorAll('.mission-card')];
     expect(cards.map((card) => card.querySelector('.mission-name').textContent)).toEqual([
-      'Dust Road',
-      'Scrapyard',
-      'Red Canyon',
+      'Pine Ridge',
+      'Old Grove',
+      'Bamboo Pass',
     ]);
     page.key('ArrowDown');
     page.key('ArrowDown');
@@ -141,7 +141,7 @@ describe('game menus on the real page', () => {
     expect(page.game.missionIndex).toBe(2);
     page.act('hero-moss');
     expect(page.game.mode).toBe('play');
-    expect(page.game.banner).toMatchObject({ text: 'Mission 3', sub: 'Red Canyon' });
+    expect(page.game.banner).toMatchObject({ text: 'Mission 3', sub: 'Bamboo Pass' });
   });
 
   it('always starts Play from the first mission', () => {

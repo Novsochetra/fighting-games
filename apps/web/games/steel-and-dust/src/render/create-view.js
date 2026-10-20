@@ -2,6 +2,7 @@ import { loadEnemySprites } from './fighters/enemy-sprites.js';
 import { createHeroSheets } from './fighters/hero-sheets.js';
 import { loadFxSheets } from './fx/fx-sheets.js';
 import { createPainter } from './painter.js';
+import { loadPropSprites } from './scene/props/prop-sprites.js';
 
 // everything the renderer keeps between frames
 export function createView({ context, createCanvas, createImage, baseUrl }) {
@@ -12,6 +13,7 @@ export function createView({ context, createCanvas, createImage, baseUrl }) {
     loaders: { createImage, createCanvas, baseUrl },
     enemySheets: loadEnemySprites({ createImage, createCanvas, baseUrl }),
     fxSheets: loadFxSheets({ createImage, createCanvas, baseUrl }),
+    propSheets: loadPropSprites({ createImage, baseUrl }),
     shownScore: 0,
     vignette: null,
   };

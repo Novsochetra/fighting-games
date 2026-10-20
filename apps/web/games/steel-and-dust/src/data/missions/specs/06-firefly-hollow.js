@@ -1,10 +1,10 @@
-export const SALT_FLATS = {
-  name: 'Salt Flats',
-  theme: 'salt',
+export const FIREFLY_HOLLOW = {
+  name: 'Firefly Hollow',
+  theme: 'fireflyHollow',
   boss: 'gnoll',
   reinforcements: ['hound', 'monk', 'vulture'],
   crates: ['ration', 'sword', 'spear', 'ration', 'axe', 'ration'],
-  props: ['sandbags', 'sign', 'barrel'],
+  props: ['stump', 'boulder', 'logs'],
   zones: [
     {
       screens: 2,

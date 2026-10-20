@@ -1,10 +1,10 @@
-export const DUST_ROAD = {
-  name: 'Dust Road',
-  theme: 'dusk',
+export const PINE_RIDGE = {
+  name: 'Pine Ridge',
+  theme: 'pineRidge',
   boss: 'khan',
   reinforcements: ['grunt', 'knife', 'scrapper'],
   crates: ['sword', 'ration', 'spear', 'ration', 'axe'],
-  props: ['sandbags', 'barrel', 'sign', 'palm', 'tank'],
+  props: ['stump', 'signpost', 'logs', 'boulder', 'barrel'],
   zones: [
     {
       screens: 1,
@@ -30,6 +30,6 @@ export const DUST_ROAD = {
         ['knife', 'knife', 'scrapper', 'grunt'],
       ],
     },
-    { boss: 'khan', label: 'Raider Camp' },
+    { boss: 'khan', label: 'Ridge Lookout' },
   ],
 };

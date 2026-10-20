@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { FOREST_THEMES } from '../../../src/art/forest-themes.js';
 import { SCENE_THEMES } from '../../../src/art/scene-themes.js';
 import { VIEW_WIDTH } from '../../../src/config.js';
 import { ENEMY_SPRITES } from '../../../src/data/enemies/enemy-sprites.js';
@@ -16,6 +17,23 @@ describe('the ten missions', () => {
     expect(MISSIONS).toHaveLength(10);
     expect(new Set(MISSIONS.map((mission) => mission.name)).size).toBe(10);
     for (const mission of MISSIONS) {
+      expect(
+        SCENE_THEMES[mission.theme] ?? FOREST_THEMES[mission.theme],
+        mission.name,
+      ).toBeDefined();
+    }
+  });
+
+  it('walk through the six forests from sunrise to night, then out into the desert', () => {
+    expect(MISSIONS.slice(0, 6).map((mission) => mission.theme)).toEqual([
+      'pineRidge',
+      'oldGrove',
+      'bambooPass',
+      'raiderCamp',
+      'emberWoods',
+      'fireflyHollow',
+    ]);
+    for (const mission of MISSIONS.slice(6)) {
       expect(SCENE_THEMES[mission.theme], mission.name).toBeDefined();
     }
   });

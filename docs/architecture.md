@@ -71,7 +71,15 @@ places on the road: zone walls, where each wave starts, crates and props, and th
   earlier on its road is a mid-boss and only opens the road. The score, clock, continues and ULT bar
   carry into the next mission (`enterNextMission`); the hero starts it fresh. Beating mission N
   unlocks mission N + 1 on the title's mission select (`records.bestMission`).
-- Each theme in `src/art/scene-themes.js` gives a few base colors and a skyline kind (`city`,
+- Missions 1 to 6 walk through six painted forests, sunrise to night; missions 7 to 10 are desert
+  roads. A forest (`src/data/backdrops.js`) is PixelLab layers in `assets/backdrops/<forest>/`: a
+  far plate and a near strip that each tile sideways and scroll at their own share of the camera
+  (`src/render/scene/painted-backdrop.js`), with colors for its road, ferns and air in
+  `src/art/forest-themes.js`. Its air moves on its own (`src/render/scene/ambient/`): mist, birds,
+  leaves, motes, light shafts, fireflies, embers and smoke, each worked out from the tick count and
+  the camera alone, never `Math.random()`, so a replay draws the same frames. Its props are PixelLab
+  sprites (`assets/sprites/props/`, `src/data/prop-sprites.js`) drawn at the fighters' density.
+- Each desert theme in `src/art/scene-themes.js` gives a few base colors and a skyline kind (`city`,
   `dunes`, `factory`, `ruins`); `scenePalette` works out every other shade, and each mission's far
   scenery is painted once, the first time it is drawn (`src/render/scene/backdrop.js`).
 

@@ -104,7 +104,7 @@ describe('missions and their zones', () => {
     expect(game.player.hp).toBe(game.player.maxHp);
     expect(game.fighters).toEqual([game.player]);
     expect(game.crates.map((crate) => crate.x)).toEqual(MISSIONS[1].crates.map((crate) => crate.x));
-    expect(game.banner).toMatchObject({ text: 'Mission 2', sub: 'Scrapyard' });
+    expect(game.banner).toMatchObject({ text: 'Mission 2', sub: 'Old Grove' });
   });
 
   it('restarts the mission the hero is on, not the first one', () => {
@@ -113,15 +113,15 @@ describe('missions and their zones', () => {
     restartRun(game);
     expect(game.missionIndex).toBe(3);
     expect(game.score).toBe(0);
-    expect(game.banner).toMatchObject({ text: 'Mission 4', sub: 'Oasis Bazaar' });
+    expect(game.banner).toMatchObject({ text: 'Mission 4', sub: 'Raider Camp' });
   });
 
   it('names a returning boss a mid-boss, the mission boss a boss and the Warden Ox the final boss', () => {
-    const salt = playMission(5);
-    spawnEnemy(salt, 'khan', 1);
-    expect(salt.banner.sub).toBe('Mid-boss');
-    spawnEnemy(salt, 'gnoll', 1);
-    expect(salt.banner.sub).toBe('Boss');
+    const hollow = playMission(5);
+    spawnEnemy(hollow, 'khan', 1);
+    expect(hollow.banner.sub).toBe('Mid-boss');
+    spawnEnemy(hollow, 'gnoll', 1);
+    expect(hollow.banner.sub).toBe('Boss');
     const fortress = playMission(9);
     spawnEnemy(fortress, 'brute', 1);
     expect(fortress.banner.sub).toBe('Final boss');

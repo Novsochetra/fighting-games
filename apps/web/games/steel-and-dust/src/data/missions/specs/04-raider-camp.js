@@ -1,10 +1,10 @@
-export const OASIS_BAZAAR = {
-  name: 'Oasis Bazaar',
-  theme: 'night',
+export const RAIDER_CAMP = {
+  name: 'Raider Camp',
+  theme: 'raiderCamp',
   boss: 'cobra',
   reinforcements: ['spitter', 'knife', 'shield'],
   crates: ['sword', 'ration', 'spear', 'axe', 'ration'],
-  props: ['palm', 'barrel', 'sign', 'sandbags', 'palm'],
+  props: ['barrel', 'logs', 'sandbags', 'signpost', 'barrel'],
   zones: [
     {
       screens: 2,
@@ -38,6 +38,6 @@ export const OASIS_BAZAAR = {
         ['shield', 'hound', 'spitter', 'jackal'],
       ],
     },
-    { boss: 'cobra', label: 'Serpent Court' },
+    { boss: 'cobra', label: "Serpent's Tent" },
   ],
 };
