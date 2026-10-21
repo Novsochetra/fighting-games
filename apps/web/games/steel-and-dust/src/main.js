@@ -1,3 +1,4 @@
+import { bootLoading } from './boot/boot-loading.js';
 import { createClock, ticksDue } from './boot/fixed-step.js';
 import { createSession } from './boot/create-session.js';
 import { findElements } from './boot/dom-elements.js';
@@ -6,7 +7,7 @@ import { installUi } from './boot/install-ui.js';
 import { TICK_MS } from './config.js';
 import { createView } from './render/create-view.js';
 import { renderFrame } from './render/render-frame.js';
-import { sceneLoaded } from './render/scene-loaded.js';
+import { missionWait, sceneLoaded } from './render/scene-loaded.js';
 import { beginTick, runTick } from './sim/tick.js';
 import { createUiState } from './ui/ui-state.js';
 
@@ -24,12 +25,8 @@ const pad = { connected: false };
 const { layout, fullscreen, menus, act } = installUi({ window, elements, game, audio, ui, pad });
 const { touchStick, gamepad } = installInput({ window, elements, game, audio, ui, layout, menus });
 layout.onFit = () => touchStick.rest();
-const view = createView({
-  context: elements.canvas.getContext('2d'),
-  createCanvas,
-  createImage: () => new Image(),
-  baseUrl: '',
-});
+let view = null;
+let clock = null;
 
 function syncDom() {
   if (menus.sync()) {
@@ -54,7 +51,6 @@ function runTicks(count) {
   audio.setTickOffset(0);
 }
 
-const clock = createClock(performance.now());
 // nothing moves behind the loading screen; the clock still keeps time there, so play does not
 // rush to catch up once the road and the Shade are in
 function frame(now) {
@@ -64,13 +60,25 @@ function frame(now) {
   }
   renderFrame(game, view);
   syncDom();
+  bootLoading.loader.update(now, missionWait(view, game));
   requestAnimationFrame(frame);
 }
 
 layout.applyTouchSettings();
 fullscreen.refreshLabels();
 syncDom();
-requestAnimationFrame(frame);
+// the fighters, raiders and effects (about 8 MB) wait for the menu art, so the title comes up first
+bootLoading.spritesMayStart.then(() => {
+  view = createView({
+    context: elements.canvas.getContext('2d'),
+    createCanvas,
+    createImage: () => new Image(),
+    baseUrl: '',
+  });
+  clock = createClock(performance.now());
+  bootLoading.appReady();
+  requestAnimationFrame(frame);
+});
 
 // browser checks and automated tests drive the game through this handle
 window.__steelAndDust = {

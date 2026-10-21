@@ -79,6 +79,33 @@
   --color-overlay-vignette: color-mix(in srgb, var(--color-black) 72%, transparent);
   --color-overlay-glare: color-mix(in srgb, var(--color-sand) 5%, transparent);
 
+  --color-dusk-navy: #111c30;
+  --color-dusk-violet: #453351;
+  --color-dusk-wine: #75363e;
+  --color-dusk-ember: #d54d26;
+  --color-stone-light: #ceb252;
+  --color-stone-face: #877b42;
+  --color-stone-dark: #554f34;
+  --color-stone-deep: #241d17;
+  --color-loader-sky-top: var(--color-night-deep);
+  --color-loader-sky: var(--color-dusk-navy);
+  --color-loader-sky-low: var(--color-dusk-violet);
+  --color-loader-sky-warm: var(--color-dusk-wine);
+  --color-loader-horizon: var(--color-dusk-ember);
+  --color-loader-water: var(--color-night);
+  --color-loader-ripple: color-mix(in srgb, var(--color-dusk-ember) 30%, transparent);
+  --color-loader-ripple-faint: color-mix(in srgb, var(--color-dusk-ember) 14%, transparent);
+  --color-loader-star: color-mix(in srgb, var(--color-sand) 70%, transparent);
+  --color-loader-silhouette: var(--color-night);
+  --color-loader-sun: var(--color-amber);
+  --color-loader-sun-halo: color-mix(in srgb, var(--color-amber) 30%, transparent);
+  --color-loader-sun-glow: color-mix(in srgb, var(--color-amber) 14%, transparent);
+  --color-loader-gold-light: var(--color-cream);
+  --color-loader-gold: var(--color-gold);
+  --color-loader-gold-dark: var(--color-amber);
+  --color-loader-glint: color-mix(in srgb, var(--color-white) 55%, transparent);
+  --color-loader-shadow: color-mix(in srgb, var(--color-black) 45%, transparent);
+
   --font-display: 'Silkscreen', 'Courier New', monospace;
   --font-body: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
@@ -179,6 +206,9 @@
   --duration-sweep: 7s;
   --duration-sprite-idle: 900ms;
   --duration-sprite-win: 600ms;
+  --duration-sprite-walk: 800ms;
+  --duration-loader-follow: 700ms;
+  --duration-loader-glint: 1.6s;
 
   --easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --easing-overshoot: cubic-bezier(0.2, 1.6, 0.4, 1);
@@ -187,6 +217,7 @@
   --easing-step-2: steps(2);
   --easing-step-4: steps(4);
   --easing-step-6: steps(6);
+  --easing-step-8: steps(8);
   --easing-out: ease-out;
 
   --layer-overlay: 100;

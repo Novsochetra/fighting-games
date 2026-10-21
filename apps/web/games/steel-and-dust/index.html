@@ -7,6 +7,12 @@
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
     />
     <title>Steel &amp; Dust</title>
+    <link
+      rel="preload"
+      href="assets/sprites/heroes/bokator/arsenal/hero_walk.png"
+      as="image"
+      fetchpriority="high"
+    />
     <meta
       name="description"
       content="A side-scrolling pixel-art brawler. Pick one of seven heroes, pick up weapons, chain combos and fight along twelve painted missions, from six forests into the desert and on to the temples of Angkor, against nineteen kinds of raiders and a boss on every road."
@@ -40,9 +46,56 @@
     <link rel="stylesheet" href="styles/touch.css" />
     <link rel="stylesheet" href="styles/touch-buttons.css" />
     <link rel="stylesheet" href="styles/layout-editor.css" />
+    <link rel="stylesheet" href="styles/loading.css" />
+    <link rel="stylesheet" href="styles/loading-ledge.css" />
+    <script type="module" src="src/boot/boot-loading.js"></script>
     <script type="module" src="src/main.js"></script>
   </head>
   <body>
+    <div class="loader" id="loader">
+      <div class="loader-stage">
+        <svg class="loader-sky" viewBox="0 0 232 60" aria-hidden="true">
+          <g id="loaderSkyline">
+            <path
+              class="loader-glow"
+              d="M170 14h9v1h4v1h2v1h2v1h1v1h2v1h1v1h1v1h1v1h1v2h1v1h1v2h1v3h1v14h-1v3h-1v2h-1v1h-1v2h-1v1h-1v1h-1v1h-1v1h-2v1h-1v1h-2v1h-21v-1h-2v-1h-1v-1h-2v-1h-1v-1h-1v-1h-1v-1h-1v-2h-1v-1h-1v-2h-1v-3h-1v-14h1v-3h1v-2h1v-1h1v-2h1v-1h1v-1h1v-1h1v-1h2v-1h1v-1h2v-1h2v-1h4z"
+            />
+            <path
+              class="loader-halo"
+              d="M170 19h9v1h3v1h2v1h1v1h2v1h1v1h1v1h1v2h1v2h1v2h1v12h-1v2h-1v2h-1v2h-1v1h-1v1h-1v1h-2v1h-1v1h-2v1h-3v1h-9v-1h-3v-1h-2v-1h-1v-1h-2v-1h-1v-1h-1v-1h-1v-2h-1v-2h-1v-2h-1v-12h1v-2h1v-2h1v-2h1v-1h1v-1h1v-1h2v-1h1v-1h2v-1h3z"
+            />
+            <path
+              class="loader-sun"
+              d="M171 23h7v1h3v1h2v1h1v1h1v1h1v1h1v2h1v2h1v9h-29v-9h1v-2h1v-2h1v-1h1v-1h1v-1h1v-1h2v-1h3zM161 43h27v2h-1v1h-25v-1h-1zM163 47h23v1h-1v1h-21v-1h-1zM166 50h17v1h-17zM171 52h7v1h-7z"
+            />
+            <path
+              class="loader-temple"
+              d="M116 2h1v3h1v2h1v2h1v2h1v2h2v1h-1v2h1v1h1v1h-1v1h1v2h1v4h1v1h-1v1h1v2h1v1h-1v3h1v1h-1v7h2v2h1v-2h2v-3h-1v-1h1v-3h-1v-1h1v-1h1v-2h-1v-1h1v-1h1v-2h-1v-1h2v-2h1v-2h1v-2h1v-1h1v-3h1v3h1v1h1v2h1v2h1v2h2v1h-1v2h1v1h1v1h-1v2h1v1h1v1h-1v3h1v1h-1v3h4v-3h-1v-1h1v-2h1v-1h-1v-1h1v-1h1v-3h1v-1h1v-2h1v-1h1v-2h1v2h1v1h1v2h1v1h1v3h1v1h1v1h-1v1h1v2h1v1h-1v3h2v3h-8v3h9v-2h2v-4h1v-1h1v-1h1v-2h1v-1h1v1h1v2h1v1h1v1h1v4h2v3h-8v1h4v5h8v3h12v3h-157v-3h12v-3h8v-5h4v-1h-8v-3h2v-4h1v-1h1v-1h1v-2h1v-1h1v1h1v2h1v1h1v1h1v4h2v2h9v-3h-8v-3h2v-3h-1v-1h1v-2h1v-1h-1v-1h1v-1h1v-3h1v-1h1v-2h1v-1h1v-2h1v2h1v1h1v2h1v1h1v3h1v1h1v1h-1v1h1v2h1v1h-1v3h4v-3h-1v-1h1v-3h-1v-1h1v-1h1v-2h-1v-1h1v-1h1v-2h-1v-1h2v-2h1v-2h1v-2h1v-1h1v-3h1v3h1v1h1v2h1v2h1v2h2v1h-1v2h1v1h1v1h-1v2h1v1h1v1h-1v3h1v1h-1v3h2v2h1v-2h2v-7h-1v-1h1v-3h-1v-1h1v-2h1v-1h-1v-1h1v-4h1v-2h1v-1h-1v-1h1v-1h1v-2h-1v-1h2v-2h1v-2h1v-2h1v-2h1zM203 6h5v1h1v1h1v3h1v-3h1v-1h1v3h1v-3h-1v-1h5v1h-1v1h6v1h3v1h1v1h1v1h2v1h1v2h-1v-1h-1v-1h-1v1h-1v-3h-1v2h-1v-1h-1v-2h-1v1h-1v2h1v1h1v1h1v2h1v1h1v2h1v2h1v1h-1v-1h-1v-2h-2v-3h-1v1h-1v-2h-1v-3h-1v3h-1v-4h-1v2h-3v1h1v1h1v2h1v2h1v1h-1v1h1v1h1v1h1v1h-1v1h1v1h1v2h3v1h3v1h1v1h1v1h1v1h-1v-1h-1v1h-1v-1h-1v-2h-1v3h1v1h1v2h1v2h1v1h-1v-1h-1v-2h-1v1h-1v-2h-1v-3h-1v2h-2v2h1v2h1v1h-2v-3h-1v1h-1v-2h-1v-2h-1v6h1v8h1v12h-2v-12h-1v-8h-1v-6h-2v2h-1v2h-1v-1h-1v3h-2v-1h1v-2h1v-2h1v-2h-1v2h-2v-2h-1v3h-1v2h-1v-1h-1v2h-1v1h-1v7h-1v13h-2v-13h1v-8h1v-6h1v-5h1v-5h1v-3h1v-3h-1v1h-1v-1h-1v2h-1v3h-1v1h-1v3h-1v1h-1v1h-1v-1h1v-1h1v-1h-1v-1h1v-1h1v-1h1v-1h-1v-1h1v-2h1v-2h1v-1h1v-1h1v-1h-1v1h-3v-2h-1v4h-1v-3h-1v3h-1v2h-1v-1h-1v3h-2v2h-1v1h-1v-1h1v-2h1v-2h1v-1h1v-2h1v-1h1v-1h1v-2h-1v-1h-1v2h-1v1h-1v-2h-1v3h-1v-1h-1v1h-1v1h-1v-2h1v-1h2v-1h1v-1h1v-1h3v-1h6v-1h-1zM206 7h-1v2h1zM208 7h-1v3h1zM216 7h-1v2h1zM16 8h5v1h1v1h1v3h1v-3h1v-1h1v3h1v-3h-1v-1h5v1h-1v1h6v1h3v1h1v1h1v1h2v1h1v2h-1v-1h-1v-1h-1v1h-1v-3h-1v2h-1v-1h-1v-2h-1v1h-1v2h1v1h1v1h1v2h1v1h1v2h1v2h1v1h-1v-1h-1v-2h-2v-3h-1v1h-1v-2h-1v-3h-1v3h-1v-2h-1v-2h-1v2h-2v1h1v1h1v2h1v2h1v1h-1v1h1v1h1v1h1v1h-1v1h1v1h1v1h-1v-1h-1v-1h-1v-3h-1v-1h-1v-3h-1v-2h-1v1h-1v-1h-1v-3h-1v5h1v4h1v4h1v1h1v1h1v1h-1v-1h-1v3h1v6h1v8h1v12h-2v-12h-1v-8h-1v-5h-1v1h-1v-2h-1v-3h-1v2h-2v2h1v2h1v1h-2v-3h-1v1h-1v-2h-1v-2h-3v6h-1v9h-1v13h-2v-13h1v-9h1v-4h-1v2h-1v-1h-1v3h-2v-1h1v-2h1v-2h1v-2h-1v2h-2v-2h-1v3h-1v2h-1v-1h-1v2h-1v1h-1v-1h1v-2h1v-2h1v-1h1v-3h-1v2h-1v1h-1v-1h-1v1h-1v-1h1v-1h1v-1h1v-1h3v-1h3v-1h2v-1h1v1h2v3h1v-3h5v1h3v1h1v-3h-1v-4h-1v-3h-1v-2h-1v2h-1v-2h-1v3h-1v1h-1v-1h-1v2h-1v3h-1v1h-1v-1h1v-1h-1v-1h1v-2h1v-2h1v-1h1v-1h1v-1h-1v1h-2v-2h-1v2h-1v2h-1v-3h-1v3h-1v2h-1v-1h-1v3h-2v2h-1v1h-1v-1h1v-2h1v-2h1v-1h1v-2h1v-1h1v-1h1v-2h-1v-1h-1v2h-1v1h-1v-2h-1v3h-1v-1h-1v1h-1v1h-1v-2h1v-1h2v-1h1v-1h1v-1h3v-1h6v-1h-1zM19 9h-1v2h1zM21 9h-1v3h1zM29 9h-1v2h1zM201 9h-1v2h1zM204 9h-1v1h1zM218 9h-1v1h1zM221 9h-1v2h1zM14 11h-1v2h1zM17 11h-1v1h1zM31 11h-1v1h1zM34 11h-1v2h1zM216 13h-1v1h1zM208 14h-1v2h1zM210 14v2h-1v4h-1v3h-1v5h-1v2h3v-1h3v-1h5v3h1v-3h4v-1h-1v-1h-1v-3h-1v-1h-1v-3h-1v-2h-1v1h-1v-1h-1v-3h-1v2h-1v-2zM29 15h-1v1h1zM13 27h-1v1h1zM19 27v1h2v-1zM10 28h-1v1h1zM24 28h-1v1h1zM27 29h-1v3h1zM213 29v1h2v-1zM220 29v1h2v-1zM211 30h-1v1h1zM225 30h-1v1h1zM22 31h-1v2h1zM208 31h-1v2h-1v1h-1v3h1v-2h1v-1h1zM223 33h-1v2h1zM9 39h1v1h-1v1h-1v-1h1zM23 39h1v1h1v1h-1v-1h-1zM210 41h1v1h-1v1h-1v-1h1zM224 41h1v1h1v1h-1v-1h-1z"
+            />
+          </g>
+        </svg>
+        <svg class="loader-reflection" viewBox="0 0 232 60" aria-hidden="true">
+          <use href="#loaderSkyline" />
+        </svg>
+        <div
+          class="loader-ledge"
+          role="progressbar"
+          aria-label="Loading"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <span class="loader-groove">
+            <span class="loader-fill"></span>
+            <span class="loader-walker"><span class="loader-hero"></span></span>
+          </span>
+        </div>
+        <p class="loader-caption" aria-hidden="true">
+          <span>Loading</span><span class="loader-percent">0%</span>
+        </p>
+      </div>
+    </div>
+
     <div id="app">
       <div id="stage">
         <canvas

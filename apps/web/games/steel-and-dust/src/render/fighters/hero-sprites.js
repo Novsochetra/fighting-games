@@ -8,13 +8,14 @@ function stripPath(hero, name) {
 }
 
 // a strip that fails to load settles the sheet too, so a missing file cannot hold the loading
-// screen up forever; the sheet is only drawn from once every strip is in
+// screen up forever; the sheet is only drawn from once every strip is in, and counts the strips
+// still on their way for the loading screen's bar
 function watchStrips(sheet, images) {
-  let waiting = images.length;
+  sheet.waiting = images.length;
   let failed = false;
   const settle = () => {
-    waiting -= 1;
-    sheet.settled = waiting === 0;
+    sheet.waiting -= 1;
+    sheet.settled = sheet.waiting === 0;
     sheet.ready = sheet.settled && !failed;
   };
   for (const image of images) {

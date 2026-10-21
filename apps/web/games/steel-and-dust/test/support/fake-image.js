@@ -1,8 +1,8 @@
 import { basename, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { pngSize } from './png-size.js';
 
-const GAME_ROOT = fileURLToPath(new URL('../../', import.meta.url));
+// happy-dom swaps the global URL for one that ignores file: bases, so the path is joined by hand
+const GAME_ROOT = join(import.meta.dirname, '../../');
 
 // loads at once when its source is set, so tests can draw sprites without a browser
 export class FakeImage {

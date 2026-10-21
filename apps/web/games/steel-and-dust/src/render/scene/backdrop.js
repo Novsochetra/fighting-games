@@ -9,8 +9,12 @@ export function backdropFor(view, themeId) {
   return view.backdrops[themeId];
 }
 
-export function backdropSettled({ layers, fronts, ground, cliff }) {
-  return [...layers, ...fronts, ground, cliff].every((piece) => !piece || piece.settled);
+export function backdropPieces({ layers, fronts, ground, cliff }) {
+  return [...layers, ...fronts, ground, cliff].filter(Boolean);
+}
+
+export function backdropSettled(backdrop) {
+  return backdropPieces(backdrop).every((piece) => piece.settled);
 }
 
 // a mission is drawn and its clock runs only once its own road is in; then the next mission's road
