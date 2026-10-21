@@ -1,0 +1,125 @@
+/* every card stands in a carved stone frame drawn behind it, the middle one lit jade; the button grows
+   round the middle hero's text so its frame holds it, and the side cards' text folds away so their
+   frames are only as tall as the hero */
+.hero-stage {
+  --frame: 2;
+}
+
+.hero-card {
+  --info-width: calc(var(--px) * 84px - var(--frame) * 34px);
+
+  top: calc(var(--frame) * 14px);
+  height: auto;
+  min-height: calc(var(--px) * 80px);
+  padding-bottom: calc(var(--frame) * 10px);
+}
+
+.hero-card::before,
+.hero-card::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+.hero-card::before {
+  z-index: -1;
+  inset: calc(var(--frame) * -14px) calc(var(--px) * -10px) calc(var(--frame) * -14px);
+  border: 0 solid var(--color-clear);
+  border-image: url('../assets/ui/select/card.png') 44 26 30 fill / calc(var(--frame) * 44px)
+    calc(var(--frame) * 26px) calc(var(--frame) * 30px) / 0 round;
+}
+
+.hero-card::after {
+  top: calc(var(--frame) * -14px);
+  left: 50%;
+  width: calc(var(--frame) * 44px);
+  height: calc(var(--frame) * 36px);
+  translate: -50% 0;
+  background: url('../assets/ui/select/card-crest.png') 0 0 / 100% 100%;
+}
+
+.hero-card[data-depth='0']::before {
+  border-image-source: url('../assets/ui/select/card-selected.png');
+}
+
+.hero-card[data-depth='0']::after {
+  background-image: url('../assets/ui/select/card-crest-selected.png');
+}
+
+.hero-info {
+  width: var(--info-width);
+  max-height: 0;
+  margin-inline: calc((var(--px) * 64px - var(--info-width)) / 2);
+  overflow: hidden;
+  transition:
+    opacity var(--duration-normal) var(--easing-out),
+    max-height var(--duration-slow) var(--easing-standard);
+}
+
+.hero-card[data-depth='0'] .hero-info {
+  max-height: 20rem;
+}
+
+.hero-kit b {
+  color: var(--color-gold);
+}
+
+.hero-carousel {
+  height: calc(var(--px) * 80px + 9rem + var(--frame) * 40px);
+}
+
+.hero-step::before,
+.hero-step:hover::before {
+  width: 32px;
+  height: 56px;
+  background: url('../assets/ui/select/arrow.png') 0 0 / 100% 100%;
+  clip-path: none;
+  image-rendering: pixelated;
+}
+
+.hero-step:hover::before {
+  filter: drop-shadow(0 0 4px var(--color-green));
+}
+
+@media (max-width: 640px), (max-height: 420px) {
+  .hero-stage {
+    --frame: 1;
+  }
+
+  .hero-card {
+    --info-width: calc(var(--px) * 90px - var(--frame) * 34px);
+  }
+
+  .hero-card::before {
+    inset-inline: calc(var(--px) * -13px);
+  }
+
+  .hero-carousel {
+    height: calc(var(--px) * 80px + 10rem + var(--frame) * 40px);
+  }
+}
+
+/* a phone on its side has room across but not down: the middle card widens so its text takes fewer
+   lines, and the side cards step out of its way */
+@media (max-height: 420px) and (min-width: 641px) {
+  .hero-stage {
+    --slot-gap: 200px;
+  }
+
+  .hero-card {
+    --info-width: calc(var(--px) * 124px - var(--frame) * 34px);
+  }
+
+  .hero-card::before {
+    inset-inline: calc(var(--px) * -30px);
+  }
+
+  .hero-card .hero-name {
+    font-size: var(--font-size-sm);
+  }
+
+  .hero-carousel {
+    height: calc(var(--px) * 80px + 6rem + var(--frame) * 40px);
+  }
+}

@@ -140,6 +140,18 @@ describe('the Shades fight differently with the same weapon', () => {
     expect(summonsOf(game, 'lion')).toEqual([]);
   });
 
+  it("the Angkor Warrior's fourth light hit raises a carved soldier that strikes the raider ahead", () => {
+    const { game, raider } = fightOneRaider('angkor', 'sword');
+    lightString(game, 4);
+    let struck = false;
+    for (let tick = 0; tick < 50; tick++) {
+      runTicks(game, 1);
+      struck ||= summonsOf(game, 'soldier').some((soldier) => soldier.hitTargets.has(raider));
+    }
+    expect(struck).toBe(true);
+    expect(summonsOf(game, 'soldier')).toEqual([]);
+  });
+
   it('the same press from the Moss Shade leaves the raider unfrozen', () => {
     const { game, raider } = fightOneRaider('moss', 'sword');
     tap(game, 'heavy');

@@ -68,6 +68,16 @@ export const SCENARIOS = {
     renderEvery: 240,
     scheduled: { 500: ['fill'], 900: ['w2'], 1700: ['fill'] },
   },
+  // the Angkor Warrior: carved soldiers out of the stone on his finishers with his fists, the sword,
+  // the spear and the axe, and his ultimate twice
+  angkor: {
+    hero: 'angkor',
+    seed: 1181,
+    ticks: 2400,
+    sampleEvery: 30,
+    renderEvery: 240,
+    scheduled: { 500: ['fill'], 700: ['w2'], 1100: ['w3'], 1500: ['w4'], 1700: ['fill'] },
+  },
   // the wide, scrolling zones of the fourth mission: spitters, hounds and shield bearers
   bazaar: {
     mission: 3,

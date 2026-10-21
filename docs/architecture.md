@@ -48,7 +48,7 @@ The game keeps a strict split:
 | `src/render/` | draws a `game` onto a 2D canvas context it is given                 | canvas only                         |
 | `src/audio/`  | synthesized sound and music                                         | Web Audio only                      |
 | `src/input/`  | keyboard, gamepad and touch write into `game.input`                 | yes                                 |
-| `src/ui/`     | menus, settings, help, screen fit, full screen                      | yes                                 |
+| `src/ui/`     | menus, the hero carousel, settings, help, screen fit, full screen   | yes                                 |
 | `src/main.js` | wires the pieces together and runs the fixed-step loop              | yes                                 |
 
 The menus and the HUD share one carved-sandstone kit in `assets/ui/` (see its README): nine-slice
@@ -167,9 +167,11 @@ Each Shade fights in its own style and has its own ultimate:
   A Shade's own techniques (`src/data/styles/techniques/`) join every weapon's set unscaled, linked
   off the heavies' free light follow-ups (`technique-links.js`): `K J`, `K K J`, `K K K J`, `Air K J`.
 - `src/sim/summons/` runs what a Shade calls up: thorns, fireflies, spirit stags, ice, flame
-  pillars, the fire on a burning raider, the phoenix, the golden lion and one-shot bursts, kept in
-  `game.summons`; the phoenix and the lion fly a list of points (`flight.js`). A move's signature
-  (`thorns`, `fireflies`, `stags`, `pillars`, `lions`, and the name call-out of a
+  pillars, the fire on a burning raider, the phoenix, the golden lion, the Angkor Warrior's carved
+  soldiers and one-shot bursts, kept in `game.summons`; the phoenix and the lion fly a list of points
+  (`flight.js`). A carved soldier is drawn from the strips of the hero who raised it, in flat
+  sandstone behind the fighters (`src/render/fx/soldiers.js`). A move's signature
+  (`thorns`, `fireflies`, `stags`, `pillars`, `lions`, `soldiers`, and the name call-out of a
   `technique`) fires on its first active frame; a style's `weapons` patch marks every move of one
   weapon (the Ember Shade's spear moves all carry `feathers`, a burst where each hit lands); what a landed move leaves on the raider is in
   `src/sim/combat/afflict.js`: `freeze` encases it (`src/sim/combat/freeze.js`), `shatters` breaks

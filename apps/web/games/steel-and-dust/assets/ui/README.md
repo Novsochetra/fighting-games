@@ -7,7 +7,7 @@ sizes by keeping the most common color in each block, snapped to one palette and
 | Folder      | Files                                                                | Used by                     |
 | ----------- | -------------------------------------------------------------------- | --------------------------- |
 | `select/`   | `bg-landscape.png` (384×216), `bg-portrait.png` (216×468): Angkor Wat at dusk | `styles/hero-scene.css`     |
-| `select/`   | `card.png`, `card-selected.png`, `card-crest*.png`, `card-foot*.png` | `styles/heroes.css`         |
+| `select/`   | `card.png`, `card-selected.png`, `card-crest*.png`, `arrow.png`      | `styles/hero-frames.css`    |
 | `kit/`      | `panel.png`, `panel-crest.png`, `panel-foot.png`, `stone-button.png` | `styles/stone.css`          |
 | `kit/`      | `title-crest.png`, `title-rule.png`                                  | `styles/hero-scene.css`     |
 | `settings/` | `lotus-band.png`: the frieze after a settings group's name           | `styles/stone.css`          |
@@ -25,6 +25,6 @@ image pixels (top, right, bottom, left):
 | `hud/panel-frame.png`       | 12, 14, 12, 14 |
 | `hud/score-frame.png`       | 11, 12, 11, 12 |
 
-The crest and foot of a card or panel would repeat along the edge, so they are cut out of the frame and
-laid on top of its middle. The menus draw this art at 2× (1× on short screens), the hero sprites' own
+A card's crest and the panel's crest and foot would repeat along the edge, so they are cut out of the
+frame and laid on top of its middle. The menus draw this art at 2× (1× on short screens), the hero sprites' own
 size, and the HUD draws it at the sprites' 2× on the canvas.

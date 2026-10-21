@@ -47,6 +47,7 @@ describe('drawing from the sprite sheets', () => {
       'blue',
       'ember',
       'bokator',
+      'angkor',
     ]);
     expect(Object.values(view.heroSheets).every((sheet) => sheet.ready)).toBe(true);
   });

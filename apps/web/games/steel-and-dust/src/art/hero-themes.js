@@ -94,4 +94,20 @@ export const HERO_THEMES = {
       flash: '#fff8e0',
     },
   },
+  // his blade's pale gold, sandstone dust, and the lotus pink of dawn over Angkor for his ultimate
+  angkor: {
+    blade: '#ffe08a',
+    glow: '#ffb7c9',
+    glowDim: '#b0607a',
+    spark: '#fff1c8',
+    aura: { every: 10, color: '#e6c49a' },
+    ult: {
+      dim: '#160c12',
+      band: '#26131d',
+      edge: '#f29ab2',
+      streak: '#5c2a3c',
+      title: '#ffe0ea',
+      flash: '#fff3f6',
+    },
+  },
 };

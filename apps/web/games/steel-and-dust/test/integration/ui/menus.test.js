@@ -1,43 +1,9 @@
 // @vitest-environment happy-dom
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { findElements } from '../../../src/boot/dom-elements.js';
-import { installUi } from '../../../src/boot/install-ui.js';
-import { installKeyboard } from '../../../src/input/keyboard.js';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { tick } from '../../../src/sim/tick.js';
 import { enterNextMission, selectMission } from '../../../src/sim/stage/flow.js';
-import { createUiState } from '../../../src/ui/ui-state.js';
-import { createTestGame } from '../../support/test-game.js';
+import { openMenu, openPage, selected } from '../../support/menu-page.js';
 
-// happy-dom swaps the global URL for one that ignores file: bases, so the path is joined by hand
-const PAGE = readFileSync(join(import.meta.dirname, '../../../index.html'), 'utf8');
-
-function openPage(records) {
-  document.body.innerHTML = PAGE.match(/<body>([\s\S]*)<\/body>/)[1];
-  document.body.className = '';
-  const saveSettings = vi.fn();
-  const game = createTestGame({ io: { saveSettings }, records });
-  const audio = { sfx: vi.fn(), unlock: vi.fn(), syncVolumes: vi.fn() };
-  const ui = createUiState(game);
-  const elements = findElements(document);
-  const { menus, act } = installUi({
-    window,
-    elements,
-    game,
-    audio,
-    ui,
-    pad: { connected: false },
-  });
-  // a fresh target per test, so keys never reach the listeners of an earlier test's page
-  const keys = new EventTarget();
-  installKeyboard(keys, { game, audio, menus, ui });
-  menus.sync();
-  const key = (code) => keys.dispatchEvent(new KeyboardEvent('keydown', { code }));
-  return { game, menus, act, saveSettings, key, ui };
-}
-
-const openMenu = () => document.querySelector('#menus .menu.open');
 const visibleButtons = () =>
   [...openMenu().querySelectorAll('.mbtn')]
     .filter((button) => !button.hidden)
@@ -48,7 +14,6 @@ function fall(game) {
   Object.assign(game.player, { hp: 0, state: 'ko', stateTime: 80, airborne: false });
   tick(game);
 }
-const selected = () => document.querySelector('#menus .sel');
 
 describe('game menus on the real page', () => {
   let page;
@@ -95,6 +60,7 @@ describe('game menus on the real page', () => {
       'blue',
       'ember',
       'bokator',
+      'angkor',
     ]);
     expect(document.querySelector('.hero-card.picked').dataset.hero).toBe('moss');
     expect(cards[1].getAttribute('style')).toContain('heroes/firefly/arsenal/hero_idle.png');
@@ -105,6 +71,7 @@ describe('game menus on the real page', () => {
       'Ult Absolute Zero',
       'Ult Phoenix Pyre',
       'Ult Pounding the Lion',
+      'Ult March of the Bayon',
     ]);
     expect(cards[3].querySelector('.hero-kit').textContent).toBe('Style Frost Iai');
     key('ArrowRight');

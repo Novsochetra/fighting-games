@@ -20,6 +20,7 @@ describe('the ultimates', () => {
       'Absolute Zero',
       'Phoenix Pyre',
       'Pounding the Lion',
+      'March of the Bayon',
     ]);
     expect(ultimateOf('nobody')).toBe(ULTIMATES.moss);
   });
@@ -47,11 +48,11 @@ describe('the ultimates', () => {
       expect(width, hero.id).toBe(HERO_SPRITES.frameWidth * HERO_SPRITES.frames.ult);
       expect(height, hero.id).toBeGreaterThanOrEqual(HERO_SPRITES.frameHeight);
     }
-    // only Bokator's raised sword needs the room
+    // only the two Khmer fighters' raised swords need the room
     const taller = HEROES.filter(
       (hero) => pngSize(GAME_ROOT + hero.ultStrip).height > HERO_SPRITES.frameHeight,
     );
-    expect(taller.map((hero) => hero.id)).toEqual(['bokator']);
+    expect(taller.map((hero) => hero.id)).toEqual(['bokator', 'angkor']);
   });
 
   it('has an effect strip for every effect, as long as its frames say', () => {

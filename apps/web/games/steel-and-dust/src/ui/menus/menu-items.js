@@ -32,6 +32,14 @@ export function isTab(item) {
   return item.parentNode.classList.contains('tabs');
 }
 
+export function isHeroCard(item) {
+  return item.classList.contains('hero-card');
+}
+
+export function isCenterCard(item) {
+  return isHeroCard(item) && item.dataset.depth === '0';
+}
+
 export const MENU_KEYS = {
   ArrowUp: ['move', -1],
   KeyW: ['move', -1],

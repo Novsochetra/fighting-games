@@ -78,4 +78,5 @@ export const MOVE_TAGS = [
   ['pillars', 'Flame pillars'],
   ['burn', 'Burns'],
   ['lions', 'Lion pounce'],
+  ['soldiers', 'Relief soldiers'],
 ];

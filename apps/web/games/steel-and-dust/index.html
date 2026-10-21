@@ -9,7 +9,7 @@
     <title>Steel &amp; Dust</title>
     <meta
       name="description"
-      content="A side-scrolling pixel-art brawler. Pick one of six heroes, pick up weapons, chain combos and fight along twelve painted missions, from six forests into the desert and on to the temples of Angkor, against nineteen kinds of raiders and a boss on every road."
+      content="A side-scrolling pixel-art brawler. Pick one of seven heroes, pick up weapons, chain combos and fight along twelve painted missions, from six forests into the desert and on to the temples of Angkor, against nineteen kinds of raiders and a boss on every road."
     />
     <meta name="theme-color" content="#0c0910" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -33,6 +33,8 @@
     <link rel="stylesheet" href="styles/help.css" />
     <link rel="stylesheet" href="styles/stone.css" />
     <link rel="stylesheet" href="styles/heroes.css" />
+    <link rel="stylesheet" href="styles/hero-cards.css" />
+    <link rel="stylesheet" href="styles/hero-frames.css" />
     <link rel="stylesheet" href="styles/hero-scene.css" />
     <link rel="stylesheet" href="styles/touch.css" />
     <link rel="stylesheet" href="styles/touch-buttons.css" />
@@ -130,7 +132,11 @@
               <h2>Choose your hero</h2>
               <button class="xbtn stone-btn" data-act="back">Back</button>
             </header>
-            <div class="hero-grid" id="heroList"></div>
+            <div class="hero-stage" id="heroStage">
+              <button class="hero-step" data-step="-1" aria-label="Previous hero"></button>
+              <div class="hero-carousel" id="heroList"></div>
+              <button class="hero-step" data-step="1" aria-label="Next hero"></button>
+            </div>
           </div>
         </section>
 
