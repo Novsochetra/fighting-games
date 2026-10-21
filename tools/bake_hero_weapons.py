@@ -16,7 +16,8 @@ of 128x80 frames: sword (the original), fists, spear, axe.
 The Moss Shade's blade glows green; the Firefly, Antler Spirit and Blue Shades' blades glow blue or
 teal, so for them the glow tests read the stronger of the green and blue channels; the Ember Shade's
 blade burns red and orange, so for it they read red against blue. Grip overrides are Moss-only, but for
-EMBER_OVERRIDES; the Ember Shade's spear keeps the sword's fire smear instead of a recoloured one.
+EMBER_OVERRIDES; the Ember Shade's spear keeps the sword's fire smear instead of a recoloured one, and its
+attacks come from its own spear moves in heroes/ember/spear/ instead.
 
 OVERRIDES fixes frames where detection misses: g = grip, t = blade tip, in frame pixels;
 hide = recolour the smear only and draw no weapon (strike frames where the blade is lost in the smear).
@@ -433,6 +434,15 @@ def save_indexed(a,path):
     im=Image.fromarray(inv.reshape(a.shape[:2]).astype(np.uint8),'P')
     im.putpalette(cols[:,:3].astype(np.uint8).tobytes())
     im.save(path,optimize=True,transparency=bytes(cols[:,3].astype(np.uint8)))
+# a Shade with spear moves of its own keeps them in <shade>/spear/, one row per attack with the
+# sword strip's frame count; they take the spear row's place instead of a sword swing with a spear drawn in
+def own_spear_row(n,N):
+    path=SRC+'spear/hero_'+n+'.png'
+    if not os.path.exists(path): return None
+    row=np.array(Image.open(path).convert('RGBA'))
+    assert row.shape==(FH,FW*N,4), path
+    return row
+
 def bake_all(ann,outdir=None):
     res={}
     for n in ANIMS:
@@ -443,6 +453,8 @@ def bake_all(ann,outdir=None):
             for wi,w in enumerate(WEAPS):
                 strip[wi*FH:(wi+1)*FH,k*FW:(k+1)*FW]=render_frame(fr,ann[n][k],w)
         if n=='dash':strip[:,0:FW]=strip[:,FW:2*FW]   # the first dash frame is a full-body smear; the game shows the clean lean frames only
+        spear=own_spear_row(n,N)
+        if spear is not None: strip[WEAPS.index('spear')*FH:(WEAPS.index('spear')+1)*FH]=spear
         res[n]=strip
         if outdir: save_indexed(strip,outdir+'hero_'+n+'.png')
     return res
