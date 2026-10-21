@@ -15,6 +15,7 @@ export const FX_SPRITES = {
   phoenix: { frameWidth: 128, frameHeight: 96, frames: 6, ticks: 4, anchorX: 64, anchorY: 52 },
   lion: { frameWidth: 216, frameHeight: 155, frames: 6, ticks: 4, anchorX: 108, anchorY: 151 },
   feathers: { frameWidth: 66, frameHeight: 70, frames: 8, ticks: 2, anchorX: 18, anchorY: 23 },
+  pounce: { frameWidth: 202, frameHeight: 127, frames: 8, ticks: 3, anchorX: 101, anchorY: 99 },
 };
 
 export const FX_SCALE = 1 / RENDER_SCALE;

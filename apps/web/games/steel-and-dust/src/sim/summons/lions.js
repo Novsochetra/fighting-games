@@ -3,15 +3,17 @@ import { randomBetween } from '../../lib/math.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust, addSparks } from '../fx/particles.js';
 import { groundAt } from '../stage/terrain.js';
-import { flightOver, legAt, pointOnLeg } from './flight.js';
+import { legAt, pointOnLeg, progressOnLeg } from './flight.js';
 import { strikeArea } from './strike.js';
 
 const COMBO_LION = { damage: 7, knockback: [3, -3.2], knockdown: true, hitstop: 6, hitstun: 24 };
 const COMBO_SCALE = 0.46;
+// ticks it takes to melt back into gold dust after its last landing
+const FADE_TICKS = 10;
 
-// a golden guardian lion bounds along its flight of [tick, x, y] points, its paws at (x, y), after
+// a golden guardian lion bounds along its flight of [tick, x, y, hop] points, its paws at (x, y), after
 // taking shape where the flight starts for `appear` ticks; it strikes each raider it passes once, or
-// once on every leg when `everyLeg` is set
+// once on every leg when `everyLeg` is set, and lands on every point it reaches
 export function releaseLion(game, { flight, hit, scale, appear = 0, everyLeg = false, delay = 0 }) {
   const [, x, y] = flight[0];
   game.summons.push({
@@ -23,7 +25,9 @@ export function releaseLion(game, { flight, hit, scale, appear = 0, everyLeg = f
     time: -delay,
     appear,
     flight,
-    leg: 0,
+    reached: 0,
+    stride: 0,
+    fade: 0,
     hit,
     scale,
     everyLeg,
@@ -71,28 +75,43 @@ function landed(game, lion) {
   game.io.sfx('pounce', false, { x: lion.x });
 }
 
+function touchDown(game, lion, time) {
+  const reached = lion.flight.filter(([tick], i) => i > 0 && tick <= time).length;
+  if (reached === lion.reached) {
+    return;
+  }
+  lion.reached = reached;
+  if (lion.everyLeg) {
+    lion.hitTargets.clear();
+  }
+  landed(game, lion);
+}
+
+// where the lion is `time` ticks into its run, how far through its leap (0 to 1), and which way it bounds
+export function lionPoseAt(lion, time) {
+  const { flight } = lion;
+  const leg = legAt(flight, time);
+  const [x, y] = pointOnLeg(flight, leg, time);
+  const run = flight[leg + 1][1] - flight[leg][1];
+  const direction = Math.abs(run) > 0.5 ? Math.sign(run) : lion.direction;
+  return { x, y, direction, stride: progressOnLeg(flight, leg, time) };
+}
+
 export function updateLion(game, lion) {
   goldDust(game, lion);
   if (lion.time <= lion.appear) {
     return;
   }
-  const { flight } = lion;
   const time = lion.time - lion.appear;
-  const leg = legAt(flight, time);
-  if (leg !== lion.leg) {
-    lion.leg = leg;
-    if (lion.everyLeg) {
-      lion.hitTargets.clear();
-    }
-    landed(game, lion);
+  const end = lion.flight.at(-1)[0];
+  if (time > end) {
+    lion.fade = (time - end) / FADE_TICKS;
+    lion.done = lion.fade >= 1;
+    return;
   }
-  const [x, y] = pointOnLeg(flight, leg, time);
-  if (Math.abs(x - lion.x) > 0.5) {
-    lion.direction = x > lion.x ? 1 : -1;
-  }
-  Object.assign(lion, { x, y });
+  Object.assign(lion, lionPoseAt(lion, time));
+  touchDown(game, lion, time);
   maul(game, lion);
-  lion.done = flightOver(flight, time);
 }
 
 // a finisher calls up a lion behind the hero that leaps over its shoulder and pounces on the raiders ahead
@@ -103,8 +122,7 @@ export function pounceComboLions(game, fighter, count) {
     const reach = 110 + i * 30;
     const flight = [
       [0, ahead(-18), ground],
-      [10, ahead(reach * 0.45), ground - 34],
-      [20, ahead(reach), ground],
+      [20, ahead(reach), ground, 34],
     ];
     releaseLion(game, { flight, hit: COMBO_LION, scale: COMBO_SCALE, delay: i * 8 });
   }

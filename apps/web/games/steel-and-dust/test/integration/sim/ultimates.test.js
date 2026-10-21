@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { GROUND_Y } from '../../../src/config.js';
+import { GROUND_Y, VIEW_WIDTH } from '../../../src/config.js';
 import { ULTIMATES } from '../../../src/data/ultimates/index.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
 import { seededRandom } from '../../support/seeded-random.js';
@@ -127,15 +127,25 @@ describe("each Shade's ultimate", () => {
   it('Bokator: the slam throws every raider up, the lion bounds both ways and pounces', () => {
     const game = startUltimate('bokator');
     const directions = new Set();
+    const impacts = new Map();
     const seen = watchUltimate(game, (current) => {
       for (const summon of current.summons) {
         if (summon.kind === 'lion') {
           directions.add(summon.direction);
         }
+        if (summon.kind === 'burst' && !impacts.has(summon)) {
+          impacts.set(summon, current.camera.x + VIEW_WIDTH / 2);
+        }
       }
     });
-    expect(seen.kinds).toEqual(new Set(['lion']));
+    expect(seen.kinds).toEqual(new Set(['lion', 'burst']));
     expect(directions).toEqual(new Set([1, -1]));
+    // the gold breaks the ground where his sword slams it, then bigger where the lion lands
+    const [slamImpact, pounceImpact] = [...impacts.keys()];
+    expect([slamImpact.sprite, pounceImpact.sprite]).toEqual(['pounce', 'pounce']);
+    expect(Math.abs(slamImpact.x - game.player.x)).toBeLessThan(30);
+    expect(pounceImpact.x).toBe(impacts.get(pounceImpact));
+    expect(pounceImpact.scale).toBeGreaterThan(slamImpact.scale);
     const { slam, pounce } = ULTIMATES.bokator;
     raiders(game).forEach((raider) => {
       expect(raider.maxHp - raider.hp).toBeGreaterThanOrEqual(slam.damage + pounce.damage);

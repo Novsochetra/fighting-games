@@ -16,10 +16,14 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `burn.png`    | 8 × 48×64    | Ember: flames on a burning raider (loops)        | VFX workbench, "Ember Burn" (`4813b8ef-ffac-4f4c-8a0a-1bd7e9a2e07c`)          |
 | `phoenix.png` | 6 × 128×96   | Ember: Phoenix Pyre's firebird (loops)           | Pixen image (`95d5d481-7be4-4346-9ec0-6b4994bf0370`), PixMiniMax flap (`5a9556a1-3365-4e22-8e86-93bc4b76a7b7`, frames 0–5) |
 | `inferno.png` | 16 × 244×180 | Ember: Phoenix Pyre's closing blast             | VFX workbench, "Ember Inferno" (`19ad017d-a6db-4be5-b869-d3aa7136bfe5`)       |
-| `lion.png`    | 6 × 216×151  | Bokator: the golden lion (3 frames rising, 3 leaping) | ChatGPT image sheet on black: the body solid with its dark lines, only the glow round it see-through |
+| `lion.png`    | 6 × 216×155  | Bokator: the golden lion (3 frames rising, 3 leaping) | ChatGPT image sheet on black: the body solid with its dark lines, only the glow round it see-through |
 | `feathers.png` | 8 × 66×70   | Ember: feathers where a spear hit lands         | VFX workbench, "Phoenix Feathers" (`d2f23d08-4f1d-46c8-ae4f-270b3608ada3`)    |
+| `pounce.png`  | 8 × 202×127  | Bokator: the ground breaking under his slam and the lion's pounce | VFX workbench, "Lion Pounce Impact" (`5b6ed44c-958d-4c1c-b3a4-6b9a6d0250b4`) |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
-opened, retuned with their sliders and exported again. The stag strip had its ground-shadow line
+opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to
+reaching for the ground, so more leap frames added to the end of `lion.png` (and its `frames` count in
+`src/data/fx-sprites.js`) make every bound smoother with no code change. The pounce impact was
+exported as a 4×3 grid and cut into one row, its two blank closing frames dropped. The stag strip had its ground-shadow line
 removed. The ice holds frames 4–7 while a raider stays frozen. The feathers fly right from the hit and are
 mirrored when the strike goes left.
