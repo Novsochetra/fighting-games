@@ -52,16 +52,19 @@ Saved in the browser: music and sound volume, difficulty (Easy, Normal, Hard), a
   - **Firefly, Swarm Dance:** about a quarter faster and a little lighter; the third light hit becomes a three-hit flurry, and finishers loose homing fireflies that sting twice each.
   - **Antler Spirit, Stampede:** slower and a quarter heavier; the third light hit is an armored ram that sends a spirit stag charging ahead, the heavy opener stomps a shockwave, and a max charge sends three stags.
   - **Blue, Frost Iai:** longer reach and slower recovery; heavy cuts freeze raiders solid in ice for extra hits, then the ice shatters and launches them.
+  - **Ember, Wildfire:** a little quicker and a little heavier; finishers raise pillars of flame ahead that launch raiders and leave them burning, and the heavy cuts set raiders alight, so they keep losing health for a few seconds.
 - **Four techniques per Shade, on every weapon:** press light after a heavy: `K J`, `K K J`, `K K K J` and `Air K J`. A technique calls out its name in the Shade's colors with a ring of sparks and a blade ring:
   - **Moss:** Root Snare (a low root lash that snares a thrown raider, a bramble bursting under them), Bramble Wall (an armored chop that raises four thorns ahead), Grove Wrath (a launcher that rings the Shade with thorns), Seedfall (a diving plunge that plants two thorns).
   - **Firefly:** Lantern Dash (a four-hit rush in afterimages), Glowstorm (a spinning drive that pulls raiders in and looses fireflies), Swarm Crescendo (darts after the raider and launches it into six fireflies), Firefly Rain (an air whirl that looses four).
   - **Antler Spirit:** Antler Toss (an armored rush that throws the raider back over the Shade's shoulder), Herd Charge (an armored rush with two spirit stags), Earthshaker (a stomp that quakes every grounded raider on screen), Skyfall Antler (a dive that lands in a shockwave and a stag).
   - **Blue:** Hoarfrost Draw (a long-reach draw that freezes), Winter Edge (a spinning flurry that freezes), Shatterpoint (a thrust that shatters ice at once for the shatter hit on top: try `K K K J`, the third heavy freezes them first), Frostfall (an air spike that freezes).
+  - **Ember:** Cinder Sweep (a low sweep that sets the raider burning), Flame Wall (an armored chop that raises three flame pillars ahead), Phoenix Rise (a launcher that sets the raider alight and rings the Shade with flame), Meteor Brand (a diving plunge that lands in two flame pillars).
 - **An ultimate per Shade:** hits and damage taken fill the ULT bar. When it's full, time freezes for a cut-in with the Shade's portrait while it plays its own PixelLab ultimate animation, and the hero is invincible throughout:
   - **Thornwood Requiem (Moss):** the blade is planted and waves of brambles burst out to both edges of the screen, then bloom under every raider at once.
   - **Swarm Nova (Firefly):** the Shade rises and looses a swarm of fireflies that hunts every raider, then calls it home and bursts as a golden nova.
   - **Spirit Stampede (Antler Spirit):** herds of spirit stags thunder across the screen from both edges, then the great stag tramples everything.
   - **Absolute Zero (Blue):** time stops; the Shade cuts every raider in passing and freezes it, then sheathes the blade and all the ice shatters at once.
+  - **Phoenix Pyre (Ember):** the Shade raises its blade into a column of fire, waves of flame pillars roll out to both edges, then a phoenix bursts from the blade, sweeps low across the field and back, and dives into the middle in an inferno.
 - **Juggles** with decay, one ground bounce and one wall bounce per juggle.
 - **4 playable Shades:** Moss, Firefly, Antler Spirit and Blue. Play opens a hero select screen with animated previews, each card naming the Shade's style and ultimate; the pick is saved. After a fall, Continue opens the same list as **Continue as**, so you can fight on as any Shade, keeping the score, the weapon in hand and the ULT bar.
 - **5 lives a run:** shown as hearts on the HUD. Every fall costs one, and a restart or a new mission gives none back. Lose the last one and it is Game over: the run starts again from mission 1. Each Shade has its own PixelLab sprite set and its own glow: sword smear, slash wave, hit sparks, charge glow and a trail of motes around it (a whole swarm for the Firefly Shade).
@@ -96,13 +99,13 @@ hitbox, knockback, ... })` entry in `src/data/weapons/<weapon>/` or `src/data/en
   To balance the game, edit these numbers. `next` defines which move a buffered press cancels into
   during recovery. Charge timing is `CHARGE_TAP` / `CHARGE_LEVEL1` / `CHARGE_MAX` in `src/config.js`.
   Each Shade's style (`src/data/styles/<shade>.js`) is a tempo that scales every move plus patches that add
-  signatures (`thorns`, `fireflies`, `stags`, `freeze`) to chosen moves, plus the Shade's four techniques
+  signatures (`thorns`, `fireflies`, `stags`, `freeze`, `pillars`, `burn`) to chosen moves, plus the Shade's four techniques
   (`src/data/styles/techniques/<shade>.js`, unscaled), and each Shade's ultimate has its timeline and hits
   in `src/data/ultimates/`.
 
 - **Input buffer.** A press is remembered for 8 ticks (`src/sim/input/read-input.js`).
 - **Attack tokens.** Only two raiders attack at once; the rest circle at a distance.
-- **Hero sprites.** The four Shades are drawn from PixelLab sprite strips: the Moss Shade in
+- **Hero sprites.** The five Shades are drawn from PixelLab sprite strips: the Moss Shade in
   `assets/sprites/hero/` (see `hero.json`), the others in `assets/sprites/heroes/<id>/` with the same
   animations and frame counts. `src/data/heroes.js` lists them and `src/art/hero-themes.js` holds each
   one's glow colors. A Shade's strips load the first time it is picked. The world is simulated at 384×216 and drawn at 2×, the hero
@@ -111,7 +114,7 @@ hitbox, knockback, ... })` entry in `src/data/weapons/<weapon>/` or `src/data/en
 - **Weapon variants.** PixelLab drew every animation with the sword, so `tools/bake_hero_weapons.py`
   builds the other weapons from those frames into `assets/sprites/hero/arsenal/`, one strip per animation
   with four rows: sword, fists, spear, axe. Rebuild with `pip install numpy scipy pillow && python3 tools/bake_hero_weapons.py`
-  (add `firefly`, `antler` or `blue` for the other Shades).
+  (add `firefly`, `antler`, `blue` or `ember` for the other Shades).
 - **Enemy sprites.** Each enemy is one PNG in `assets/sprites/enemies/` with a row per strip (idle, walk,
   attack, hurt, knock-out, and a lunge, slam or charge where it has one), described in
   `src/data/enemies/enemy-sprites.js`. `src/sim/enemy-animation.js` picks the frame for each state: the

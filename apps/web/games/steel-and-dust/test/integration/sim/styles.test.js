@@ -110,6 +110,24 @@ describe('the Shades fight differently with the same weapon', () => {
     expect(raider.state).toBe('juggle');
   });
 
+  it("Ember's heavy sets the raider burning, and the fire keeps eating at it", () => {
+    const { game, raider } = fightOneRaider('ember', 'sword');
+    tap(game, 'heavy');
+    runTicks(game, 20);
+    expect(summonsOf(game, 'burn').map((burn) => burn.target)).toEqual([raider]);
+    const afterCut = raider.hp;
+    runTicks(game, 50);
+    expect(raider.hp).toBeLessThan(afterCut);
+  });
+
+  it("Ember's fourth light hit raises two flame pillars ahead", () => {
+    const { game } = fightOneRaider('ember', 'sword');
+    lightString(game, 4);
+    runTicks(game, 12);
+    expect(game.player.move?.id).toBe('L4');
+    expect(summonsOf(game, 'pillar')).toHaveLength(2);
+  });
+
   it('the same press from the Moss Shade leaves the raider unfrozen', () => {
     const { game, raider } = fightOneRaider('moss', 'sword');
     tap(game, 'heavy');

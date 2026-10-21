@@ -5,9 +5,9 @@ import { DEFAULT_HERO, HEROES, heroById } from '../../../src/data/heroes.js';
 import { defaultSettings } from '../../../src/data/settings.js';
 
 describe('the Shades', () => {
-  it('offers four heroes, each with its own sprite folder and colors', () => {
-    expect(HEROES.map((hero) => hero.id)).toEqual(['moss', 'firefly', 'antler', 'blue']);
-    expect(new Set(HEROES.map((hero) => hero.directory)).size).toBe(4);
+  it('offers five heroes, each with its own sprite folder and colors', () => {
+    expect(HEROES.map((hero) => hero.id)).toEqual(['moss', 'firefly', 'antler', 'blue', 'ember']);
+    expect(new Set(HEROES.map((hero) => hero.directory)).size).toBe(5);
     for (const hero of HEROES) {
       expect(HERO_THEMES[hero.id], hero.id).toBeDefined();
     }

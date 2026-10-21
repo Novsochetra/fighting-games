@@ -5,6 +5,7 @@ import { drawFxFrame, fxFrameAt } from './fx-sheets.js';
 // the encasing spikes grow, then hold at full height until the ice shatters
 const ICE_HOLD_FRAMES = [4, 5, 6, 7];
 const STAG_ECHOES = 2;
+const PHOENIX_ECHOES = 2;
 
 function drawThorn(painter, sheets, thorn) {
   const frame = fxFrameAt('thorns', thorn.time);
@@ -58,6 +59,44 @@ function drawFirefly(painter, sheets, fly) {
   drawFxFrame(painter, sheets, { name: 'firefly', frame, x: fly.x, y: fly.y, scale: 1.6 });
 }
 
+function drawPillar(painter, sheets, pillar) {
+  const frame = fxFrameAt('pillar', pillar.time);
+  drawFxFrame(painter, sheets, {
+    name: 'pillar',
+    frame,
+    x: pillar.x,
+    y: pillar.y,
+    scale: pillar.scale,
+  });
+}
+
+// see-through, so the raider shows through the flames licking up it
+function drawBurn(painter, sheets, burn) {
+  const { ticks, frames } = FX_SPRITES.burn;
+  const frame = Math.floor(burn.time / ticks) % frames;
+  painter.alpha(0.85);
+  drawFxFrame(painter, sheets, { name: 'burn', frame, x: burn.x, y: burn.y, scale: burn.scale });
+  painter.alpha(1);
+}
+
+// the firebird leaves fading afterimages of itself along its flight
+function drawPhoenix(painter, sheets, phoenix) {
+  const { ticks, frames } = FX_SPRITES.phoenix;
+  for (let echo = PHOENIX_ECHOES; echo >= 0; echo--) {
+    const time = Math.max(0, phoenix.time - echo * 2);
+    painter.alpha(echo ? 0.3 / echo : 1);
+    drawFxFrame(painter, sheets, {
+      name: 'phoenix',
+      frame: Math.floor(time / ticks) % frames,
+      x: phoenix.x - phoenix.direction * echo * 12,
+      y: phoenix.y,
+      scale: phoenix.scale,
+      facing: phoenix.direction,
+    });
+  }
+  painter.alpha(1);
+}
+
 function drawBurst(painter, sheets, burst) {
   const frame = fxFrameAt(burst.sprite, burst.time);
   drawFxFrame(painter, sheets, {
@@ -75,6 +114,9 @@ const DRAW_BY_KIND = {
   stag: drawStag,
   firefly: drawFirefly,
   burst: drawBurst,
+  pillar: drawPillar,
+  burn: drawBurn,
+  phoenix: drawPhoenix,
 };
 
 export function drawSummons(painter, summons, sheets) {

@@ -3,6 +3,7 @@ import { WEAPONS } from '../weapons/index.js';
 import { ANTLER_STYLE } from './antler.js';
 import { applyStyle } from './apply-style.js';
 import { BLUE_STYLE } from './blue.js';
+import { EMBER_STYLE } from './ember.js';
 import { FIREFLY_STYLE } from './firefly.js';
 import { MOSS_STYLE } from './moss.js';
 
@@ -11,6 +12,7 @@ export const STYLES = {
   firefly: FIREFLY_STYLE,
   antler: ANTLER_STYLE,
   blue: BLUE_STYLE,
+  ember: EMBER_STYLE,
 };
 
 // every Shade's take on every weapon, built once: STYLED_MOVES[heroId][weaponId][moveId]

@@ -44,7 +44,7 @@ describe('a long run through the zones', () => {
   });
 
   it('keeps every world list bounded zone after zone, for every Shade', () => {
-    for (const hero of ['moss', 'firefly', 'antler', 'blue']) {
+    for (const hero of ['moss', 'firefly', 'antler', 'blue', 'ember']) {
       Math.random = seededRandom(77);
       const game = createScenarioGame(hero);
       const { largest, zones } = playZones(game, 5000);

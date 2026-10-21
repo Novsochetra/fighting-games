@@ -1,10 +1,10 @@
 .heroes .box {
-  width: min(720px, 100%);
+  width: min(880px, 100%);
 }
 
 .hero-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 10px;
   padding: 12px;
   overflow-y: auto;
@@ -38,6 +38,10 @@
 
 .hero-card[data-hero='blue'] {
   --accent: var(--color-hero-blue);
+}
+
+.hero-card[data-hero='ember'] {
+  --accent: var(--color-hero-ember);
 }
 
 .hero-card.picked {
@@ -118,7 +122,7 @@
   color: var(--accent);
 }
 
-@media (max-height: 420px), (max-width: 620px) {
+@media (max-height: 420px), (max-width: 860px) {
   .hero-art {
     width: 64px;
     height: 80px;

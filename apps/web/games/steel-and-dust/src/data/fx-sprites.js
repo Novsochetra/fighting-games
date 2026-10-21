@@ -9,6 +9,10 @@ export const FX_SPRITES = {
   nova: { frameWidth: 144, frameHeight: 165, frames: 16, ticks: 3, anchorX: 72, anchorY: 56 },
   shatter: { frameWidth: 113, frameHeight: 136, frames: 10, ticks: 3, anchorX: 55, anchorY: 49 },
   firefly: { frameWidth: 20, frameHeight: 20, frames: 6, ticks: 4, anchorX: 10, anchorY: 10 },
+  pillar: { frameWidth: 81, frameHeight: 111, frames: 12, ticks: 3, anchorX: 42, anchorY: 95 },
+  burn: { frameWidth: 48, frameHeight: 64, frames: 8, ticks: 4, anchorX: 24, anchorY: 60 },
+  inferno: { frameWidth: 244, frameHeight: 180, frames: 16, ticks: 3, anchorX: 122, anchorY: 131 },
+  phoenix: { frameWidth: 128, frameHeight: 96, frames: 6, ticks: 4, anchorX: 64, anchorY: 52 },
 };
 
 export const FX_SCALE = 1 / RENDER_SCALE;

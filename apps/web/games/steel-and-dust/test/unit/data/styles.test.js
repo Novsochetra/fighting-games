@@ -76,7 +76,7 @@ describe('applyStyle', () => {
 describe('the Shades fight in their own styles', () => {
   it('gives every Shade a named style', () => {
     expect(Object.keys(STYLES)).toEqual(HEROES.map((hero) => hero.id));
-    expect(new Set(Object.values(STYLES).map((style) => style.name)).size).toBe(4);
+    expect(new Set(Object.values(STYLES).map((style) => style.name)).size).toBe(5);
     expect(styleOf('nobody')).toBe(STYLES.moss);
   });
 
@@ -121,13 +121,15 @@ describe('the Shades fight in their own styles', () => {
     expect(heroMoves('antler', 'sword').K1).toMatchObject({ armor: true, shockwave: true });
     expect(heroMoves('blue', 'spear').K1.freeze).toBe(36);
     expect(heroMoves('blue', 'sword').L1.hitbox[2]).toBe(WEAPONS.sword.moves.L1.hitbox[2] + 8);
+    expect(heroMoves('ember', 'sword').L4.pillars).toBe(2);
+    expect(heroMoves('ember', 'axe').K3).toMatchObject({ pillars: 3, burn: 150 });
   });
 
   it('gives each Shade four techniques of its own, branching off the heavies of every weapon', () => {
     const names = HEROES.flatMap((hero) =>
       TECHNIQUE_ORDER.map((id) => heroMoves(hero.id, 'sword')[id].name),
     );
-    expect(new Set(names).size).toBe(16);
+    expect(new Set(names).size).toBe(20);
     for (const weaponId of Object.keys(WEAPONS)) {
       const moves = heroMoves('blue', weaponId);
       expect(['K1', 'K2', 'K3', 'AK'].map((id) => moves[id].next.light)).toEqual(TECHNIQUE_ORDER);
@@ -137,5 +139,11 @@ describe('the Shades fight in their own styles', () => {
     expect(heroMoves('moss', 'axe').S3).toMatchObject({ thorns: 2, thornRing: true });
     expect(heroMoves('antler', 'spear').S3.quakeDamage).toBe(10);
     expect(heroMoves('firefly', 'fists').S3.fireflies).toBe(6);
+    expect(heroMoves('ember', 'spear').S1).toMatchObject({
+      name: 'Cinder Sweep',
+      low: true,
+      burn: 180,
+    });
+    expect(heroMoves('ember', 'fists').S3).toMatchObject({ pillars: 1, pillarRing: true });
   });
 });

@@ -1,4 +1,4 @@
-// the four Shades the player can pick; each has its own PixelLab sprite set and effect colors,
+// the five Shades the player can pick; each has its own PixelLab sprite set and effect colors,
 // a fighting style (data/styles/) and an ultimate (data/ultimates/)
 export const HEROES = [
   {
@@ -28,6 +28,13 @@ export const HEROES = [
     tagline: 'Cold steel, no shadow',
     directory: 'assets/sprites/heroes/blue/arsenal/',
     ultStrip: 'assets/sprites/heroes/blue/hero_ult.png',
+  },
+  {
+    id: 'ember',
+    name: 'Ember Shade',
+    tagline: 'Walked out of the burning woods',
+    directory: 'assets/sprites/heroes/ember/arsenal/',
+    ultStrip: 'assets/sprites/heroes/ember/hero_ult.png',
   },
 ];
 

@@ -44,6 +44,7 @@
   --color-hero-firefly: #ffe066;
   --color-hero-antler: #3fe0c0;
   --color-hero-blue: #5aa8ff;
+  --color-hero-ember: #ff7a2a;
   --color-touch-heavy-border: color-mix(in srgb, var(--color-coral) 90%, transparent);
   --color-touch-jump: color-mix(in srgb, var(--color-teal) 28%, transparent);
   --color-touch-jump-border: color-mix(in srgb, var(--color-mint-light) 90%, transparent);

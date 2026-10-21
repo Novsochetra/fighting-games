@@ -71,7 +71,7 @@ describe('Shade techniques', () => {
     Math.random = originalRandom;
   });
 
-  it.each(['moss', 'firefly', 'antler', 'blue'])(
+  it.each(['moss', 'firefly', 'antler', 'blue', 'ember'])(
     'the %s Shade branches a technique off each heavy, on every weapon',
     (hero) => {
       for (const weapon of ['fists', 'sword', 'spear', 'axe']) {

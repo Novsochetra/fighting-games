@@ -101,6 +101,29 @@ describe("each Shade's ultimate", () => {
     });
   });
 
+  it('Ember: flames roll out, the phoenix sweeps both ways and dives into an inferno', () => {
+    const game = startUltimate('ember');
+    const directions = new Set();
+    const burning = new Set();
+    const seen = watchUltimate(game, (current) => {
+      for (const summon of current.summons) {
+        if (summon.kind === 'phoenix') {
+          directions.add(summon.direction);
+        }
+        if (summon.kind === 'burn') {
+          burning.add(summon.target);
+        }
+      }
+    });
+    expect(seen.kinds).toEqual(new Set(['pillar', 'burn', 'phoenix', 'burst']));
+    expect(directions).toEqual(new Set([1, -1]));
+    expect(burning.size).toBe(3);
+    raiders(game).forEach((raider) => {
+      expect(raider.maxHp - raider.hp).toBeGreaterThanOrEqual(ULTIMATES.ember.inferno.damage);
+    });
+    expect(game.player).toMatchObject({ state: 'idle', invincible: 40 });
+  });
+
   it('lasts as long as its timeline says, for every Shade', () => {
     for (const [hero, ult] of Object.entries(ULTIMATES)) {
       const game = startUltimate(hero);

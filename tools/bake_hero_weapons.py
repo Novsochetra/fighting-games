@@ -11,10 +11,11 @@ of 128x80 frames: sword (the original), fists, spear, axe.
 
     pip install numpy scipy pillow
     python3 tools/bake_hero_weapons.py            # Moss Shade, assets/sprites/hero/
-    python3 tools/bake_hero_weapons.py firefly    # assets/sprites/heroes/firefly/ (also antler, blue)
+    python3 tools/bake_hero_weapons.py firefly    # assets/sprites/heroes/firefly/ (also antler, blue, ember)
 
-The Moss Shade's blade glows green; the other Shades' blades glow blue or teal, so for them the
-glow tests read the stronger of the green and blue channels. Grip overrides are Moss-only.
+The Moss Shade's blade glows green; the Firefly, Antler Spirit and Blue Shades' blades glow blue or
+teal, so for them the glow tests read the stronger of the green and blue channels; the Ember Shade's
+blade burns red and orange, so for it they read red against blue. Grip overrides are Moss-only.
 
 OVERRIDES fixes frames where detection misses: g = grip, t = blade tip, in frame pixels;
 hide = recolour the smear only and draw no weapon (strike frames where the blade is lost in the smear).
@@ -31,7 +32,13 @@ VARIANT=sys.argv[1] if len(sys.argv)>1 and sys.argv[1]!='moss' else None
 SRC=SPRITES+'heroes/'+VARIANT+'/' if VARIANT else HERO
 OUT=SRC+'arsenal/'
 COOL=VARIANT is not None
+WARM=VARIANT=='ember'
 meta=json.load(open(HERO+'hero.json'))
+
+def glow_and_base(fr):
+    r,g,b=[fr[...,i].astype(int) for i in range(3)]
+    if WARM: return r,b
+    return (np.maximum(g,b) if COOL else g),r
 FW,FH=128,80
 ANIMS=list(meta['animations'].keys())
 
@@ -180,16 +187,23 @@ OVERRIDES={
 }
 
 def masks(fr):
-    r,g,b,a=[fr[...,i].astype(int) for i in range(4)]
-    if COOL: g=np.maximum(g,b)
-    A=a>0
+    g,r=glow_and_base(fr); A=fr[...,3]>0
     Gp=A&(g>=140)&(g-r>=80)
     tr=nd.uniform_filter((~A).astype(float),size=7,mode='constant',cval=1.0)
     F=Gp&(tr>=0.42)
     return A,Gp,F
 
+# embers drift loose all round the Ember Shade and its armour glows through the cracks, so only
+# clumps of glow count, and the blade is found wherever it meets open air, not only at its tip
+def warm_glow(A,Gp):
+    lab,n=nd.label(Gp,structure=np.ones((3,3)))
+    clumped=Gp&(np.bincount(lab.ravel())[lab]>=5)
+    tr=nd.uniform_filter((~A).astype(float),size=5,mode='constant',cval=1.0)
+    return clumped,clumped&(tr>=0.2)
+
 def detect_line(fr):
     A,Gp,F=masks(fr)
+    if WARM: Gp,F=warm_glow(A,Gp)
     ys,xs=np.nonzero(F)
     if len(xs)<4: return None
     gy,gx=np.nonzero(Gp)
@@ -230,27 +244,26 @@ def detect_line(fr):
 
 
 def smear_mask(fr):
-    r,g,b,a=[fr[...,i].astype(int) for i in range(4)]
-    if COOL: g=np.maximum(g,b)
-    A=a>0
+    g,r=glow_and_base(fr); A=fr[...,3]>0; mx=fr[...,:3].max(-1).astype(int)
     B=A&(g>=190)&(g-r>=120)
     cnt=nd.uniform_filter(B.astype(float),size=3)*9
     seed=B&(cnt>=7.5)
     lab,n=nd.label(B|seed,structure=np.ones((3,3)))
     dens=nd.uniform_filter(A.astype(float),size=9)
     keep=np.zeros_like(A)
+    # the Ember Shade's cloak and armour burn in the smear's own colours: only a swing-sized blaze is a smear
+    smallest=120 if WARM else 14
     for i in range(1,n+1):
         m=lab==i
-        if not (seed&m).any() or m.sum()<14: continue
+        if not (seed&m).any() or m.sum()<smallest: continue
         if m.sum()<80 and (dens[m]<0.8).mean()<0.3: continue          # glow that sits inside the body (chest emblem, eyes)
         keep|=m
-    dark=A&~((g-r>=30)&(g>=60))&(np.maximum(np.maximum(r,g),b)<90)
+    dark=A&~((g-r>=30)&(g>=60))&(mx<90)
     nearDark=nd.binary_dilation(dark,structure=np.ones((3,3)))
     loose=A&(g>=150)&(g-r>=90)&(dens<0.42)&~nearDark
-    keep|=loose
+    if not WARM: keep|=loose
     if keep.any():
         ring=nd.binary_dilation(keep,structure=np.ones((3,3)))&~keep&A
-        mx=np.maximum(np.maximum(r,g),b)
         keep|=ring&((g-r>=40)&(g>=100)|(mx>=120)&(dens<0.85))
     return keep
 
@@ -315,8 +328,7 @@ def fill_poly(L,pts,c):
 
 def erase_blade(fr,g,t):
     out=fr.copy(); A,Gp,F=masks(fr)
-    r,gg,b=[fr[...,i].astype(int) for i in range(3)]
-    if COOL: gg=np.maximum(gg,b)
+    gg,r=glow_and_base(fr)
     greenish=(gg-r>=30)&(gg>=60)
     tr=nd.uniform_filter((~A).astype(float),size=5,mode='constant',cval=1.0)
     g=np.array(g,float);t=np.array(t,float);u=(t-g)/max(1e-6,np.linalg.norm(t-g));L=np.linalg.norm(t-g)

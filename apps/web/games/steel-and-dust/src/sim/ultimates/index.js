@@ -4,6 +4,7 @@ import { themeOf } from '../fighters/hero-colors.js';
 import { shake } from '../fx/camera-fx.js';
 import { addSparks } from '../fx/particles.js';
 import { runAbsoluteZero } from './absolute-zero.js';
+import { runPhoenixPyre } from './phoenix-pyre.js';
 import { runStampede } from './stampede.js';
 import { runSwarmNova } from './swarm-nova.js';
 import { runThornwood } from './thornwood.js';
@@ -13,6 +14,7 @@ const RUN_BY_HERO = {
   firefly: runSwarmNova,
   antler: runStampede,
   blue: runAbsoluteZero,
+  ember: runPhoenixPyre,
 };
 
 export function startUlt(game, player) {

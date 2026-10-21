@@ -19,7 +19,7 @@ function heroCardHtml(hero, { picked, folder }) {
   </button>`;
 }
 
-// the four Shades, the last one played marked and highlighted first; after a fall the same list
+// the five Shades, the last one played marked and highlighted first; after a fall the same list
 // asks which Shade fights on
 export function createHeroPanel({ list, game }) {
   return {

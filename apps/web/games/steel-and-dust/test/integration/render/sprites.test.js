@@ -40,7 +40,7 @@ describe('drawing from the sprite sheets', () => {
 
   it("loads every Shade's strips at the start, so any Shade picked later is ready to draw", () => {
     const { view } = recordedView();
-    expect(Object.keys(view.heroSheets)).toEqual(['moss', 'firefly', 'antler', 'blue']);
+    expect(Object.keys(view.heroSheets)).toEqual(['moss', 'firefly', 'antler', 'blue', 'ember']);
     expect(Object.values(view.heroSheets).every((sheet) => sheet.ready)).toBe(true);
   });
 
