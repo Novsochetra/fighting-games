@@ -5,7 +5,8 @@ function hoverSelects(item) {
   return item && (!isHeroCard(item) || isCenterCard(item));
 }
 
-// clicks and mouse hover on the menus, and the panels' own buttons
+// clicks and mouse hover on the menus, and the panels' own buttons; the mouse coming onto an item
+// ticks as the arrow keys do
 export function installMenuEvents({ document, menus, act, ui, panels, audio }) {
   const root = document.getElementById('menus');
   root.addEventListener('click', (event) => {
@@ -25,6 +26,7 @@ export function installMenuEvents({ document, menus, act, ui, panels, audio }) {
       ui.noteInput('mouse');
       menus.highlight(false);
       items[index].classList.add('sel');
+      audio.sfx('ui');
     }
   });
   document.getElementById('settingsList').addEventListener('click', (event) => {
