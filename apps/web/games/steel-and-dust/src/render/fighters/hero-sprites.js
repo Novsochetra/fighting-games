@@ -50,7 +50,11 @@ export function frameBox(sheet, name) {
   return { frameHeight: height, feetY: height - (frameHeight - feetY) };
 }
 
-export function drawHeroFrame(painter, sheet, { frame: [name, index], x, y, facing, tint, row }) {
+export function drawHeroFrame(
+  painter,
+  sheet,
+  { frame: [name, index], x, y, facing, tint, relief, row },
+) {
   const { frameWidth, feetX, scale } = HERO_SPRITES;
   const { frameHeight, feetY } = frameBox(sheet, name);
   const sourceRow = ONE_ROW_STRIPS.has(name) ? 0 : row || 0;
@@ -58,6 +62,7 @@ export function drawHeroFrame(painter, sheet, { frame: [name, index], x, y, faci
     image: sheet.images[name],
     key: name,
     color: tint,
+    relief,
     sx: index * frameWidth,
     sy: sourceRow * frameHeight,
     width: frameWidth,

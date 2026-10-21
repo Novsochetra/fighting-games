@@ -37,4 +37,6 @@ export const FX_COLORS = {
   lionDeep: '#b8862a',
   reliefStone: '#c9a97e',
   reliefShade: '#6e5a44',
+  reliefRim: '#ffe7a3',
+  fissureDark: '#26150c',
 };

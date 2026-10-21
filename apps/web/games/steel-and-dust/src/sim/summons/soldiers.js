@@ -17,9 +17,35 @@ const COMBO_SOLDIER = {
   hitstun: 22,
 };
 
+// when it strikes: a finisher's soldier thrusts once; an ultimate's soldier waits in the ground until
+// its rank's wave reaches it, then fights a chain of moves, striking in step with the rank on its
+// `beats`, and crumbles a while after its last
+export function soldierTiming(soldier) {
+  const { rise, strike, crumble: crumbleAt, end } = SOLDIER_TIMING;
+  const beats = soldier.beats || [strike];
+  const lastBeat = beats[beats.length - 1];
+  return {
+    wait: soldier.wait || 0,
+    rise,
+    beats,
+    strike: beats[0],
+    crumble: lastBeat + crumbleAt - strike,
+    end: lastBeat + end - strike,
+  };
+}
+
 // a soldier carved on the Bayon's walls stepping out of the ground in the hero's own shape; with no
 // hit it only plays, for an ultimate that strikes every raider itself
-export function raiseSoldier(game, { x, direction, hit = null, delay = 0 }) {
+export function raiseSoldier(game, soldier) {
+  const {
+    x,
+    direction,
+    hit = null,
+    delay = 0,
+    wait = 0,
+    moves = ['thrust'],
+    beats = null,
+  } = soldier;
   game.summons.push({
     kind: 'soldier',
     hero: game.settings.hero,
@@ -28,6 +54,9 @@ export function raiseSoldier(game, { x, direction, hit = null, delay = 0 }) {
     direction,
     side: 'player',
     time: -delay,
+    wait,
+    moves,
+    beats,
     hit,
     hitTargets: new Set(),
   });
@@ -62,8 +91,8 @@ function thrust(game, soldier) {
 }
 
 export function updateSoldier(game, soldier) {
-  const { strike, crumble: crumbleAt, end } = SOLDIER_TIMING;
-  if (soldier.time === 1) {
+  const { wait, strike, crumble: crumbleAt, end } = soldierTiming(soldier);
+  if (soldier.time === wait + 1) {
     addDust(game, { x: soldier.x, y: soldier.y, count: 3, color: FX_COLORS.reliefStone });
   }
   const striking = soldier.time >= strike && soldier.time < strike + STRIKE_TICKS;

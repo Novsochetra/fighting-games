@@ -50,6 +50,23 @@ describe('tinted frames', () => {
     expect(tintedFrame(cache, frame(128, '#ffffff'))).not.toBe(white);
   });
 
+  it("carves a copy that keeps the frame's own shading under the color, apart from the flat one", () => {
+    const { cache, created } = countingCache();
+    const flat = tintedFrame(cache, frame(0, '#c9a97e'));
+    const carved = tintedFrame(cache, { ...frame(0, '#c9a97e'), relief: true });
+    expect(carved).not.toBe(flat);
+    expect(tintedFrame(cache, { ...frame(0, '#c9a97e'), relief: true })).toBe(carved);
+    const log = created[1].recording.log;
+    expect(log.slice(log.indexOf('globalCompositeOperation=color'))).toEqual([
+      'globalCompositeOperation=color',
+      'fillStyle=#c9a97e',
+      'fillRect(0,0,128,80)',
+      'globalCompositeOperation=destination-in',
+      'drawImage(img(sheet.png),0,0,128,80,0,0,128,80)',
+      'globalCompositeOperation=source-over',
+    ]);
+  });
+
   it('holds at most 64 copies, dropping the least recently used and reusing its canvas', () => {
     const { cache, created } = countingCache();
     const kept = tintedFrame(cache, frame(0, '#000001'));

@@ -169,8 +169,12 @@ Each Shade fights in its own style and has its own ultimate:
 - `src/sim/summons/` runs what a Shade calls up: thorns, fireflies, spirit stags, ice, flame
   pillars, the fire on a burning raider, the phoenix, the golden lion, the Angkor Warrior's carved
   soldiers and one-shot bursts, kept in `game.summons`; the phoenix and the lion fly a list of points
-  (`flight.js`), and a point may carry a hop, so the lion bounds to it in an arc and lands there. A carved soldier is drawn from the strips of the hero who raised it, in flat
-  sandstone behind the fighters (`src/render/fx/soldiers.js`). A move's signature
+  (`flight.js`), and a point may carry a hop, so the lion bounds to it in an arc and lands there. A carved soldier is drawn from the strips of the hero who raised it, carved in
+  sandstone (the frame's own light and shade under the stone's color, a `relief` copy in
+  `src/render/fighters/tint.js`), rising out of the ground behind the fighters
+  (`src/render/fx/soldiers.js`). A finisher's soldier thrusts once; the ultimate's soldiers rise in a
+  wave from the hero's feet and each fights a chain of the hero's own attack strips, striking in step
+  with its rank on the rank's `beats`, and they stand in the hero's light over the dimmed world. A move's signature
   (`thorns`, `fireflies`, `stags`, `pillars`, `lions`, `soldiers`, and the name call-out of a
   `technique`) fires on its first active frame; a style's `weapons` patch marks every move of one
   weapon (the Ember Shade's spear moves all carry `feathers`, a burst where each hit lands); what a landed move leaves on the raider is in
@@ -179,6 +183,9 @@ Each Shade fights in its own style and has its own ultimate:
   flinching (`src/sim/summons/burn.js`).
 - `src/sim/ultimates/` holds one timeline per Shade, picked by `game.settings.hero`; the numbers are in
   `src/data/ultimates/`. The effect strips are in `assets/sprites/fx/` (`src/data/fx-sprites.js`).
+  The Angkor Warrior's chop opens a `fissure` effect (`src/sim/fx/fissure.js`, drawn by
+  `src/render/fx/fissure.js`): a crack fixed to the road that runs out to both screen edges with
+  light rising out of it.
 
 The loop runs the simulation at exactly 60 ticks a second and renders once per animation frame.
 A frame that runs several ticks offsets each tick's sounds (`audio.setTickOffset`) so they keep their spacing.
