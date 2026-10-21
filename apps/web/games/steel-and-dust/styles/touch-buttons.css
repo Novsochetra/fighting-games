@@ -16,15 +16,17 @@
   pointer-events: auto;
   touch-action: none;
   cursor: pointer;
+  width: calc(var(--tb-base) * var(--btn) * var(--tb-size, 1));
+  height: calc(var(--tb-base) * var(--btn) * var(--tb-size, 1));
   font-family: var(--font-display);
-  font-size: calc(var(--font-size-2xs) * var(--btn));
+  font-size: calc(var(--font-size-2xs) * var(--btn) * var(--tb-size, 1));
   letter-spacing: var(--tracking-wide);
   color: var(--color-white);
   text-shadow: var(--text-shadow-pixel-xs);
   background: var(--color-touch-button);
   border: 2px solid var(--color-touch-border);
   box-shadow: var(--shadow-touch-button);
-  transform: translate(50%, 50%);
+  translate: 50% 50%;
 }
 
 .tb.on {
@@ -32,49 +34,49 @@
   border-color: var(--color-amber-pale);
   color: var(--color-ink);
   text-shadow: none;
-  transform: translate(50%, 50%) scale(0.93);
+  scale: 0.93;
 }
 
 .tb-atk {
+  --tb-base: 96px;
+
   right: calc(52px * var(--btn));
   bottom: calc(52px * var(--btn));
-  width: calc(96px * var(--btn));
-  height: calc(96px * var(--btn));
-  font-size: calc(var(--font-size-caption) * var(--btn));
+  font-size: calc(var(--font-size-caption) * var(--btn) * var(--tb-size, 1));
   background: var(--color-touch-attack);
   border-color: var(--color-touch-attack-border);
 }
 
 .tb-heavy {
+  --tb-base: 78px;
+
   right: calc(146px * var(--btn));
   bottom: calc(40px * var(--btn));
-  width: calc(78px * var(--btn));
-  height: calc(78px * var(--btn));
   background: var(--color-touch-heavy);
   border-color: var(--color-touch-heavy-border);
 }
 
 .tb-jump {
+  --tb-base: 76px;
+
   right: calc(46px * var(--btn));
   bottom: calc(150px * var(--btn));
-  width: calc(76px * var(--btn));
-  height: calc(76px * var(--btn));
   background: var(--color-touch-jump);
   border-color: var(--color-touch-jump-border);
 }
 
 .tb-dash {
+  --tb-base: 62px;
+
   right: calc(130px * var(--btn));
   bottom: calc(128px * var(--btn));
-  width: calc(62px * var(--btn));
-  height: calc(62px * var(--btn));
 }
 
 .tb-ult {
+  --tb-base: 56px;
+
   right: calc(214px * var(--btn));
   bottom: calc(112px * var(--btn));
-  width: calc(56px * var(--btn));
-  height: calc(56px * var(--btn));
   color: var(--color-text-muted);
 }
 
@@ -104,14 +106,27 @@
   }
 }
 
+/* a custom layout (Settings, Button layout) places each button's centre anywhere on the touch layer
+   and sizes it on top of the button size; the clamp keeps it whole on a screen of any shape */
+.btns.custom {
+  inset: 0;
+  width: auto;
+  height: auto;
+}
+
+.btns.custom .tb {
+  --tb-half: calc(var(--tb-base) * var(--btn) * var(--tb-size, 1) / 2);
+
+  left: clamp(var(--tb-half), calc(var(--tb-x) * 100%), calc(100% - var(--tb-half)));
+  top: clamp(var(--tb-half), calc(var(--tb-y) * 100%), calc(100% - var(--tb-half)));
+  right: auto;
+  bottom: auto;
+  translate: -50% -50%;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tb-ult.ready {
     animation: none;
     box-shadow: var(--shadow-ult-ready-still);
-  }
-
-  .menu.open,
-  .logo {
-    animation: none;
   }
 }

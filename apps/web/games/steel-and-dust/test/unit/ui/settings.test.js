@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { defaultSettings } from '../../../src/data/settings.js';
-import { settingsHtml } from '../../../src/ui/settings/settings-panel.js';
+import { createSettingsPanel, settingsHtml } from '../../../src/ui/settings/settings-panel.js';
 import { SETTINGS_SCHEMA, steppedValue } from '../../../src/ui/settings/settings-schema.js';
 
 const definition = (key) => SETTINGS_SCHEMA.find((entry) => entry.key === key);
@@ -52,5 +52,31 @@ describe('settings list', () => {
     expect(html).toContain('Hold ATTACK');
     expect(html).toContain('Vibration');
     expect(html).toContain('Show hitboxes');
+  });
+
+  it('shows the button layout only with touch controls, with an Edit button and no stepper', () => {
+    expect(settingsHtml(visibility(), defaultSettings(false))).not.toContain('Button layout');
+    const touch = visibility({ isTouchOn: () => true });
+    const html = settingsHtml(touch, defaultSettings(true));
+    const row = html.match(/<div class="setrow" data-k="buttonLayout">.*?<\/div>/)[0];
+    expect(row).toContain('<span class="val">Default</span>');
+    expect(row).toContain('data-act="layout">Edit</button>');
+    expect(row).not.toContain('data-d=');
+    const custom = { ...defaultSettings(true), buttonLayout: { landscape: {}, portrait: null } };
+    expect(settingsHtml(touch, custom)).toContain('<span class="val">Custom</span>');
+  });
+});
+
+describe('settings panel', () => {
+  it('leaves a row that opens its own editor alone when stepped', () => {
+    const game = { settings: defaultSettings(true), io: { saveSettings: vi.fn() } };
+    const audio = { sfx: vi.fn() };
+    const ui = { isTouchOn: () => true };
+    const panel = createSettingsPanel({ list: {}, game, audio, layout: {}, ui, canVibrate: false });
+    expect(panel.change('buttonLayout', 1, true)).toBe(false);
+    expect(game.settings.buttonLayout).toBeNull();
+    expect(game.io.saveSettings).not.toHaveBeenCalled();
+    expect(panel.change('shake', -1, false)).toBe(true);
+    expect(game.settings.shake).toBe(1);
   });
 });

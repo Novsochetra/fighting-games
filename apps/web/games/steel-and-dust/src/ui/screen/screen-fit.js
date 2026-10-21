@@ -1,5 +1,8 @@
 import { buttonScale } from '../../data/settings.js';
-import { isPortrait, stageRect, stickRestPosition } from './stage-layout.js';
+import { applyButtonLayout, applyStickZone } from '../layout/apply-button-layout.js';
+import { layoutForScreen } from '../layout/layout-draft.js';
+import { customStickPlace } from '../layout/stick-place.js';
+import { isPortrait, STICK_RADIUS, stageRect, stickRestPosition } from './stage-layout.js';
 
 const SAFE_AREA_PROBE =
   'position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;' +
@@ -30,35 +33,70 @@ function applyTouchClasses(document, { game, ui }) {
   document.documentElement.style.setProperty('--btn', String(buttonScale(game.settings)));
 }
 
+function fitStage({ elements, game, ui, safe }) {
+  const width = elements.app.clientWidth;
+  const height = elements.app.clientHeight;
+  const rect = stageRect({
+    width,
+    height,
+    safe,
+    portrait: isPortrait(width, height) && ui.showsTouchControls(),
+    buttonScale: buttonScale(game.settings),
+  });
+  Object.assign(elements.stage.style, {
+    left: `${rect.x}px`,
+    top: `${rect.y}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+  });
+}
+
+function controlsLayout({ elements, game }) {
+  return layoutForScreen(
+    game.settings.buttonLayout,
+    elements.app.clientWidth,
+    elements.app.clientHeight,
+  );
+}
+
+// the stick of the custom layout for the way the phone is held, placed on the touch layer
+function customStick(context, scale) {
+  const stick = controlsLayout(context)?.stick;
+  if (!stick) {
+    return null;
+  }
+  const { app } = context.elements;
+  const layer = { width: app.clientWidth, height: app.clientHeight };
+  return customStickPlace({ stick, layer, radius: STICK_RADIUS * scale * stick.size });
+}
+
+function fitControls(context) {
+  const { elements, game } = context;
+  applyButtonLayout(elements.touch, controlsLayout(context));
+  applyStickZone(elements.stickZone, customStick(context, buttonScale(game.settings))?.zone);
+}
+
 export function createScreenFit({ document, window, elements, game, ui }) {
   const readSafeArea = createSafeArea(document, window);
+  const context = { elements, game };
   const layout = {
-    stickRest(scale) {
+    // the stick zone is as tall as the app, which still measures while the touch layer is hidden
+    // (the layout editor places its copy of the stick from the title or pause menu)
+    originalStickRest(scale) {
       return stickRestPosition({
-        zoneHeight: elements.stickZone.getBoundingClientRect().height,
+        zoneHeight: elements.app.getBoundingClientRect().height,
         safe: readSafeArea(),
         stageBottom: elements.stage.getBoundingClientRect().bottom,
         portrait: isPortrait(elements.app.clientWidth, elements.app.clientHeight),
         buttonScale: scale,
       });
     },
+    stickRest(scale) {
+      return customStick(context, scale)?.rest ?? layout.originalStickRest(scale);
+    },
     fit() {
-      const width = elements.app.clientWidth;
-      const height = elements.app.clientHeight;
-      const portrait = isPortrait(width, height) && ui.showsTouchControls();
-      const rect = stageRect({
-        width,
-        height,
-        safe: readSafeArea(),
-        portrait,
-        buttonScale: buttonScale(game.settings),
-      });
-      Object.assign(elements.stage.style, {
-        left: `${rect.x}px`,
-        top: `${rect.y}px`,
-        width: `${rect.width}px`,
-        height: `${rect.height}px`,
-      });
+      fitStage({ elements, game, ui, safe: readSafeArea() });
+      fitControls(context);
       layout.onFit?.();
     },
     applyTouchSettings() {

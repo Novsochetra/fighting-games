@@ -84,11 +84,6 @@
   image-rendering: pixelated;
 }
 
-/* the title's darkening sits over the painting, under the menu */
-#m-title > * {
-  position: relative;
-}
-
 /* short screens have no room for that much stone, so they draw it at 1x */
 @media (max-height: 560px) {
   .mlist,

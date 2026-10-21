@@ -3,7 +3,8 @@ import { DIFFICULTIES } from '../../data/difficulty.js';
 const onOff = (value) => (value ? 'On' : 'Off');
 const pick = (labels) => (value) => labels[value];
 
-// `visible` gets { isTouchOn, canVibrate, settings }
+// `visible` gets { isTouchOn, canVibrate, settings }; a row with an `action` has a button that
+// opens that menu instead of a stepper
 export const SETTINGS_SCHEMA = [
   { group: 'Sound' },
   { key: 'music', label: 'Music', range: true },
@@ -67,6 +68,14 @@ export const SETTINGS_SCHEMA = [
     label: 'Button size',
     options: [0, 1, 2],
     format: pick(['Small', 'Medium', 'Large']),
+  },
+  {
+    key: 'buttonLayout',
+    label: 'Button layout',
+    action: 'layout',
+    format: (value) => (value ? 'Custom' : 'Default'),
+    note: 'Move and resize the buttons and the stick, for each way you hold the phone',
+    visible: ({ isTouchOn }) => isTouchOn(),
   },
   {
     key: 'haptics',

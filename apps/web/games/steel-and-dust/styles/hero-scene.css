@@ -1,16 +1,22 @@
-/* the title and the hero select stand in front of Angkor Wat at dusk; a notch on one side of a phone
-   leaves the full-width row of hero cards a little past the other edge */
-#m-title,
-.menu.heroes {
-  overflow-x: hidden;
+/* the title and the hero select stand in front of Angkor Wat at dusk, on one layer shared by both
+   (`menuBackdrop`); it fills the tallest the screen gets, since iPhone Safari leaves a strip at the
+   bottom unpainted under a page that is only as tall as its smallest viewport */
+.menu-scene {
+  position: fixed;
+  height: 100lvh;
   background: url('../assets/ui/select/bg-landscape.png') center / cover no-repeat
     var(--color-night);
   image-rendering: pixelated;
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--easing-out);
+}
+
+#menus[data-scene='on'] .menu-scene {
+  opacity: 1;
 }
 
 /* the moat and the ruins in the front of the painting are bright; the menus stand on them */
-#m-title::before,
-.menu.heroes::before {
+.menu-scene::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -19,7 +25,12 @@
     var(--color-backdrop) 45%,
     var(--color-backdrop-strong)
   );
-  pointer-events: none;
+}
+
+/* a notch on one side of a phone leaves the full-width row of hero cards a little past the other edge */
+#m-title,
+.menu.heroes {
+  overflow-x: hidden;
 }
 
 .heroes .box {
@@ -66,8 +77,7 @@
 }
 
 @media (orientation: portrait) {
-  #m-title,
-  .menu.heroes {
+  .menu-scene {
     background-image: url('../assets/ui/select/bg-portrait.png');
   }
 }

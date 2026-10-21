@@ -17,6 +17,9 @@ export function navigableItems(document, top) {
   if (top === 'help') {
     return [...menu.querySelectorAll('.tabs button'), menu.querySelector('.xbtn')];
   }
+  if (top === 'layout') {
+    return [...menu.querySelectorAll('.layout-bar button')];
+  }
   return [...menu.querySelectorAll('.mbtn')].filter((button) => !button.hidden);
 }
 

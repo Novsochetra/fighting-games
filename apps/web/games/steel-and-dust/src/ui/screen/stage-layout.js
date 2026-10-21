@@ -23,9 +23,12 @@ export function stageRect({ width, height, safe, portrait, buttonScale }) {
   };
 }
 
+// half the stick base in styles/touch.css, before the button size
+export const STICK_RADIUS = 64;
+
 // the fixed stick rests in the bottom-left corner, below the stage when the phone is upright
 export function stickRestPosition({ zoneHeight, safe, stageBottom, portrait, buttonScale }) {
-  const radius = 64 * buttonScale;
+  const radius = STICK_RADIUS * buttonScale;
   const bottom = zoneHeight - safe.bottom - radius;
   const y = portrait
     ? Math.min(bottom - 28, Math.max(stageBottom + radius + 40, zoneHeight * 0.68))

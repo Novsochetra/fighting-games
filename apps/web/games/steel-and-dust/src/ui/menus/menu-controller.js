@@ -1,4 +1,5 @@
 import { clamp } from '../../lib/math.js';
+import { menuBackdrop } from './menu-backdrop.js';
 import { navigableItems } from './menu-items.js';
 import { createMenuRefreshers } from './menu-refresh.js';
 
@@ -48,10 +49,15 @@ export class MenuController {
     this.refreshers[this.top()]?.();
   }
 
-  show() {
+  // `entering` plays the menu's way in (the logo dropping in); coming back from a panel stacked on
+  // it only fades it up again, or the title would bounce every time Settings closes
+  show(entering = false) {
     for (const menu of this.document.querySelectorAll('#menus .menu')) {
-      menu.classList.toggle('open', menu.id === `m-${this.top()}`);
+      const open = menu.id === `m-${this.top()}`;
+      menu.classList.toggle('open', open);
+      menu.classList.toggle('enter', open && entering);
     }
+    Object.assign(this.document.getElementById('menus').dataset, menuBackdrop(this.state.stack));
     this.refresh();
     this.state.selected = this.panels[this.top()]?.firstSelected?.() ?? 0;
     this.highlight(false);
@@ -96,7 +102,7 @@ export class MenuController {
     this.state.mode = this.game.mode;
     const base = MENU_FOR_MODE[this.game.mode];
     this.state.stack = base ? [base] : [];
-    this.show();
+    this.show(true);
     return true;
   }
 }

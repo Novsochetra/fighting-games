@@ -9,40 +9,73 @@
   touch-action: manipulation;
 }
 
+/* every menu stays laid out and fades, so a change of menu never blinks; the one coming waits a
+   moment for the one going to thin out, so their words never sit on top of each other, and the one
+   going lets taps through at once */
 .menu {
   position: absolute;
   inset: 0;
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  pointer-events: auto;
+  pointer-events: none;
   padding: calc(16px + var(--sat)) calc(16px + var(--sar)) calc(16px + var(--sab))
     calc(16px + var(--sal));
   overflow-y: auto;
-  background: var(--color-backdrop);
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--duration-fast) var(--easing-out),
+    visibility 0s var(--easing-linear) var(--duration-fast);
 }
 
 .menu.open {
-  display: flex;
-  animation: menu-in var(--duration-normal) var(--easing-out);
+  pointer-events: auto;
+  visibility: visible;
+  opacity: 1;
+  transition: opacity var(--duration-normal) var(--easing-out) var(--duration-instant);
 }
 
-.menu.sub {
-  background: var(--color-backdrop-strong);
+/* only the panel moves as it comes; the painting and the dim behind it hold still */
+.menu.sub.open .box,
+.menu.enter .mlist,
+.menu.enter .mtitle,
+.menu.enter .mnote,
+.menu.enter .stats {
+  animation: menu-rise var(--duration-normal) var(--easing-standard) var(--duration-instant) both;
 }
 
-@keyframes menu-in {
+@keyframes menu-rise {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    translate: 0 8px;
   }
+}
 
-  to {
-    opacity: 1;
-    transform: none;
-  }
+.menu-scene,
+.menu-dim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.menu-dim {
+  background-color: var(--color-clear);
+  transition: background-color var(--duration-normal) var(--easing-out);
+}
+
+#menus[data-dim='light'] .menu-dim {
+  background-color: var(--color-backdrop-light);
+}
+
+#menus[data-dim='menu'] .menu-dim {
+  background-color: var(--color-backdrop);
+}
+
+#menus[data-dim='panel'] .menu-dim {
+  background-color: var(--color-backdrop-strong);
 }
 
 .logo {
@@ -55,6 +88,9 @@
   letter-spacing: var(--tracking-slight);
   color: var(--color-accent);
   text-shadow: var(--text-shadow-logo);
+}
+
+.menu.enter .logo {
   animation: logo-in var(--duration-logo) var(--easing-overshoot) both;
 }
 
@@ -144,4 +180,22 @@
 
 .mbtn:focus {
   outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu,
+  .menu.open,
+  .menu-scene,
+  .menu-dim {
+    transition: none;
+  }
+
+  .menu.sub.open .box,
+  .menu.enter .logo,
+  .menu.enter .mlist,
+  .menu.enter .mtitle,
+  .menu.enter .mnote,
+  .menu.enter .stats {
+    animation: none;
+  }
 }

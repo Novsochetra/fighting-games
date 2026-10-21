@@ -51,9 +51,26 @@ The game keeps a strict split:
 | `src/ui/`     | menus, the hero carousel, settings, help, screen fit, full screen   | yes                                 |
 | `src/main.js` | wires the pieces together and runs the fixed-step loop              | yes                                 |
 
+The menus stand on two layers shared by all of them, at the back of `#menus`: the Angkor painting
+(`.menu-scene`) and one dim (`.menu-dim`). `menuBackdrop` (`src/ui/menus/menu-backdrop.js`) sets
+both from the menu stack, so a change of menu fades the dim from one darkness to the next and keeps
+the painting up from the title into Settings or the hero select; the menus themselves only cross-fade.
+
 The menus and the HUD share one carved-sandstone kit in `assets/ui/` (see its README): nine-slice
 frames for the hero cards, the settings panel and the HUD panels, which the HUD draws with
 `src/render/nine-slice.js`.
+
+The touch buttons and the stick can be moved and resized (Settings, Button layout). The editor is its
+own menu, `layout`, in `src/ui/layout/` with `styles/layout-editor.css`: it drags a copy of the touch
+layer's controls and works on a draft (`layout-draft.js`), so only Done saves. The setting
+`buttonLayout` holds one layout per orientation, or `null` for the original one in
+`styles/touch-buttons.css` and `styles/touch.css`: each control's centre (the five buttons and the
+stick) as fractions of the touch layer and a size on top of Button size, checked on load by
+`sanitizeButtonLayout` (`src/data/button-layout.js`). `screen-fit.js` applies the layout for the way
+the phone is held on every fit: the `custom` class and `--tb-x`, `--tb-y`, `--tb-size` on each button,
+`--stick-size` on the stick, and the stick's zone, which becomes the half of the screen the stick
+stands on, widened to reach past its rim (`stick-place.js`); `layout.stickRest` gives `TouchStick`
+the custom centre to rest on. The buttons come after the zone in the page, so they stay on top of it.
 
 `sim/` reaches the outside world only through `game.io` ports
 (`sfx`, `vibrate`, `saveRecords`, `saveHints`, `saveSettings`, `setMuted`), so it runs in Node tests unchanged.

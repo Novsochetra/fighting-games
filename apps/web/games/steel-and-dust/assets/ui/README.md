@@ -13,6 +13,7 @@ sizes by keeping the most common color in each block, snapped to one palette and
 | `kit/`      | `button.png`, `button-primary.png`: the menu buttons                 | `styles/stone-menus.css`    |
 | `settings/` | `lotus-band.png`: the frieze after a settings group's name           | `styles/stone.css`          |
 | `hud/`      | `panel-frame.png`, `score-frame.png`                                 | `src/data/hud-frames.js`    |
+| `hud/`      | `panel-frame.png`: the button layout editor's toolbar                | `styles/layout-editor.css`  |
 
 Frames are nine-slice images: corners stay whole and the middle of every edge repeats. Their borders, in
 image pixels (top, right, bottom, left):
