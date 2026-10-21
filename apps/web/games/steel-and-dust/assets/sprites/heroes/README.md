@@ -53,7 +53,9 @@ height from its image).
   the overhead chop and the first frame of his ultimate sheet (the only one the lion is not drawn
   over), the sword raised to the sky in a gold swirl. Standing up in his win pose he is a head taller
   than the crouch he fights in, so `card_win.png` is the same win sheet cut the same way at 80% of
-  that size, for his select card only, where he stands as tall as the Shades on theirs.
+  that size, for his select card only, where he stands as tall as the Shades on theirs. In the
+  middle of the hero carousel his card holds its first frame, where he faces the player; in the
+  other three he turns his back.
 - `bokator/fists/` holds his own bare-hand Bokator moves (elbows, knees, a push kick, a flying knee, a
   downward elbow), one row per attack strip; the bake puts them in his fists row, the same way as the
   Ember Shade's spear moves. His other rows are baked from the sword strips with the `bokator` setting:

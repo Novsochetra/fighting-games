@@ -1,4 +1,5 @@
 import { createHelpPanel } from '../ui/help/help-panel.js';
+import { installCarouselEvents } from '../ui/heroes/carousel-events.js';
 import { createHeroPanel } from '../ui/heroes/hero-panel.js';
 import { createMenuActions } from '../ui/menus/menu-actions.js';
 import { MenuController } from '../ui/menus/menu-controller.js';
@@ -49,6 +50,7 @@ export function installUi({ window, elements, game, audio, ui, pad }) {
   menus.navigate = navigate;
   menus.handleKey = (event) => handleMenuKey(event, { menus, navigate, ui });
   installMenuEvents({ document, menus, act, ui, panels, audio });
+  installCarouselEvents({ stage: elements.heroStage, menus, audio });
   installScreenFit(window, layout);
   installFullscreen({ window, document, fullscreen, layout });
   installGestureGuards({ window, document, elements });

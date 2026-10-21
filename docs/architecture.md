@@ -48,7 +48,7 @@ The game keeps a strict split:
 | `src/render/` | draws a `game` onto a 2D canvas context it is given                 | canvas only                         |
 | `src/audio/`  | synthesized sound and music                                         | Web Audio only                      |
 | `src/input/`  | keyboard, gamepad and touch write into `game.input`                 | yes                                 |
-| `src/ui/`     | menus, settings, help, screen fit, full screen                      | yes                                 |
+| `src/ui/`     | menus, the hero carousel, settings, help, screen fit, full screen   | yes                                 |
 | `src/main.js` | wires the pieces together and runs the fixed-step loop              | yes                                 |
 
 `sim/` reaches the outside world only through `game.io` ports

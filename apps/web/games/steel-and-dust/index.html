@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="styles/settings.css" />
     <link rel="stylesheet" href="styles/help.css" />
     <link rel="stylesheet" href="styles/heroes.css" />
+    <link rel="stylesheet" href="styles/hero-cards.css" />
     <link rel="stylesheet" href="styles/touch.css" />
     <link rel="stylesheet" href="styles/touch-buttons.css" />
     <script type="module" src="src/main.js"></script>
@@ -128,7 +129,11 @@
               <h2>Choose your hero</h2>
               <button class="xbtn" data-act="back">Back</button>
             </header>
-            <div class="hero-grid" id="heroList"></div>
+            <div class="hero-stage" id="heroStage">
+              <button class="hero-step" data-step="-1" aria-label="Previous hero"></button>
+              <div class="hero-carousel" id="heroList"></div>
+              <button class="hero-step" data-step="1" aria-label="Next hero"></button>
+            </div>
           </div>
         </section>
 

@@ -1,5 +1,5 @@
 import { clamp } from '../../lib/math.js';
-import { isSettingRow, isTab, MENU_KEYS, tabKey } from './menu-items.js';
+import { isCenterCard, isHeroCard, isSettingRow, isTab, MENU_KEYS, tabKey } from './menu-items.js';
 
 function reselect(menus, key) {
   menus.state.selected = Math.max(
@@ -27,14 +27,36 @@ function adjust(menus, { current, step, audio }) {
     stepTab(menus, current, step, audio);
     return;
   }
-  if (menus.top() !== 'settings' && menus.top() !== 'help') {
+  if (menus.top() === 'heroes') {
+    stepHero(menus, step, audio);
+  } else if (menus.top() !== 'settings' && menus.top() !== 'help') {
     move(menus, step, audio);
   }
 }
 
+// up and down go between the carousel's middle card and Back
+function toggleBack(menus) {
+  const items = menus.items();
+  const onCard = isHeroCard(items[menus.state.selected]);
+  menus.state.selected = onCard ? items.length - 1 : items.findIndex(isCenterCard);
+}
+
 function move(menus, step, audio) {
-  const count = menus.items().length;
-  menus.state.selected = (menus.state.selected + step + count) % count;
+  if (menus.top() === 'heroes') {
+    toggleBack(menus);
+  } else {
+    const count = menus.items().length;
+    menus.state.selected = (menus.state.selected + step + count) % count;
+  }
+  menus.highlight(true);
+  audio.sfx('ui');
+}
+
+// the carousel loops round the heroes: stepping turns it and never lands on Back
+export function stepHero(menus, step, audio) {
+  const cards = menus.items().filter(isHeroCard);
+  const center = cards.findIndex(isCenterCard);
+  menus.state.selected = (((center + step) % cards.length) + cards.length) % cards.length;
   menus.highlight(true);
   audio.sfx('ui');
 }

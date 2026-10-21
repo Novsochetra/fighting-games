@@ -24,10 +24,12 @@ export class MenuController {
     return this.state.stack.length > 0;
   }
 
-  // touch and mouse players get no keyboard highlight unless the list scrolls
+  // touch and mouse players get no keyboard highlight unless the list scrolls, but the hero
+  // carousel turns to what is selected for every player
   highlight(scroll) {
     const items = this.items();
     this.state.selected = clamp(this.state.selected, 0, Math.max(0, items.length - 1));
+    this.panels[this.top()]?.focus?.(this.state.selected);
     for (const node of this.document.querySelectorAll('#menus .sel')) {
       node.classList.remove('sel');
     }
