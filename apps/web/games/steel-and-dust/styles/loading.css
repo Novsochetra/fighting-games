@@ -1,0 +1,185 @@
+/* the loading screen: Bokator walks a carved ledge before Angkor at dusk while the art comes in. It is
+   drawn from tokens and the skyline inlined in the page, never from the images it waits for, bar his
+   own walk, which the page preloads first; the ledge and Bokator are in loading-ledge.css */
+.loader {
+  --px: 2;
+  --progress: 0;
+
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-overlay);
+  overflow: hidden;
+  font-family: var(--font-display);
+  color: var(--color-text);
+  background: var(--color-loader-water);
+  transition:
+    opacity var(--duration-normal) var(--easing-out),
+    visibility 0s;
+}
+
+/* faded out it takes no taps, and once the fade is over the page drops it altogether */
+.loader.done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity var(--duration-slow) var(--easing-out),
+    visibility 0s linear var(--duration-slow);
+}
+
+.loader[hidden] {
+  display: none;
+}
+
+/* the stage's top edge is the horizon, a little under the middle of the safe area; the sky rises
+   from it and the moat falls from it, both past the edges of any screen */
+.loader-stage {
+  --horizon: 0.6;
+
+  position: absolute;
+  top: calc(var(--sat) + (100% - var(--sat) - var(--sab)) * var(--horizon));
+  left: 50%;
+  width: calc(var(--px) * 160px);
+  padding-top: calc(var(--px) * 14px);
+  translate: -50% 0;
+  isolation: isolate;
+}
+
+.loader-stage::before,
+.loader-stage::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  translate: -50% 0;
+}
+
+/* the sky reaches past the top of the screen, so the first stars sit from 40% of its height down */
+.loader-stage::before {
+  --star: linear-gradient(var(--color-loader-star), var(--color-loader-star));
+  --star-size: calc(var(--px) * 1px) calc(var(--px) * 1px) no-repeat;
+
+  bottom: 100%;
+  background:
+    var(--star) 8% 46% / var(--star-size),
+    var(--star) 21% 58% / var(--star-size),
+    var(--star) 33% 43% / var(--star-size),
+    var(--star) 46% 66% / var(--star-size),
+    var(--star) 58% 49% / var(--star-size),
+    var(--star) 69% 62% / var(--star-size),
+    var(--star) 81% 45% / var(--star-size),
+    var(--star) 93% 57% / var(--star-size),
+    linear-gradient(
+      to top,
+      var(--color-loader-horizon) 0,
+      var(--color-loader-sky-warm) 7%,
+      var(--color-loader-sky-low) 20%,
+      var(--color-loader-sky) 46%,
+      var(--color-loader-sky-top) 80%
+    );
+}
+
+/* the glow on the moat breaks into ripples, shorter and fainter the nearer they are */
+.loader-stage::after {
+  --ripple-row: 100% calc(var(--px) * 1px) repeat-x;
+
+  top: 0;
+  background:
+    repeating-linear-gradient(
+        to right,
+        var(--color-loader-ripple) 0 calc(var(--px) * 14px),
+        var(--color-clear) calc(var(--px) * 14px) calc(var(--px) * 22px)
+      )
+      calc(var(--px) * 3px) calc(var(--px) * 2px) / var(--ripple-row),
+    repeating-linear-gradient(
+        to right,
+        var(--color-loader-ripple) 0 calc(var(--px) * 9px),
+        var(--color-clear) calc(var(--px) * 9px) calc(var(--px) * 20px)
+      )
+      calc(var(--px) * 11px) calc(var(--px) * 5px) / var(--ripple-row),
+    repeating-linear-gradient(
+        to right,
+        var(--color-loader-ripple-faint) 0 calc(var(--px) * 6px),
+        var(--color-clear) calc(var(--px) * 6px) calc(var(--px) * 19px)
+      )
+      calc(var(--px) * -5px) calc(var(--px) * 9px) / var(--ripple-row),
+    repeating-linear-gradient(
+        to right,
+        var(--color-loader-ripple-faint) 0 calc(var(--px) * 4px),
+        var(--color-clear) calc(var(--px) * 4px) calc(var(--px) * 23px)
+      )
+      calc(var(--px) * 7px) calc(var(--px) * 14px) / var(--ripple-row),
+    repeating-linear-gradient(
+        to right,
+        var(--color-loader-ripple-faint) 0 calc(var(--px) * 3px),
+        var(--color-clear) calc(var(--px) * 3px) calc(var(--px) * 29px)
+      )
+      calc(var(--px) * -9px) calc(var(--px) * 21px) / var(--ripple-row),
+    linear-gradient(var(--color-loader-sky-warm), var(--color-loader-water) calc(var(--px) * 30px));
+}
+
+.loader-sky,
+.loader-reflection {
+  position: absolute;
+  left: 50%;
+  width: calc(var(--px) * 232px);
+  height: calc(var(--px) * 60px);
+  translate: -50% 0;
+  shape-rendering: crispEdges;
+}
+
+.loader-sky {
+  bottom: 100%;
+}
+
+/* the temple upside down in the moat, in broken bands that fade with depth */
+.loader-reflection {
+  top: 0;
+  scale: 1 -1;
+  opacity: 0.4;
+  mask-image:
+    linear-gradient(to top, var(--color-black), var(--color-clear) 75%),
+    repeating-linear-gradient(
+      var(--color-black) 0 calc(var(--px) * 2px),
+      var(--color-clear) calc(var(--px) * 2px) calc(var(--px) * 3px)
+    );
+  mask-composite: intersect;
+}
+
+.loader-glow {
+  fill: var(--color-loader-sun-glow);
+}
+
+.loader-halo {
+  fill: var(--color-loader-sun-halo);
+}
+
+.loader-sun {
+  fill: var(--color-loader-sun);
+}
+
+.loader-temple {
+  fill: var(--color-loader-silhouette);
+}
+
+/* a tall screen has room enough under the ledge, so the scene stands nearer its middle */
+@media (orientation: portrait) {
+  .loader-stage {
+    --horizon: 0.52;
+  }
+}
+
+/* the same pixel size as the menus' stone: 2x, 3x on a big screen, 1x on a tiny one */
+@media (min-width: 900px) and (min-height: 600px) {
+  .loader {
+    --px: 3;
+  }
+}
+
+@media (max-width: 359px), (max-height: 279px) {
+  .loader {
+    --px: 1;
+  }
+}
