@@ -48,6 +48,17 @@
   --accent: var(--color-hero-bokator);
 }
 
+/* Bokator's frames are 112 px tall with his feet in the same place, so his window starts 32 px lower */
+.hero-card[data-hero='bokator'] .hero-art {
+  background-size: 1536px 896px;
+  background-position: -64px -64px;
+}
+
+.hero-card[data-hero='bokator']:hover .hero-art,
+.hero-card[data-hero='bokator'].sel .hero-art {
+  background-size: 1024px 896px;
+}
+
 .hero-card.picked {
   border-color: var(--accent);
 }
@@ -137,6 +148,16 @@
   .hero-card:hover .hero-art,
   .hero-card.sel .hero-art {
     background-size: 512px 320px;
+  }
+
+  .hero-card[data-hero='bokator'] .hero-art {
+    background-size: 768px 448px;
+    background-position: -32px -32px;
+  }
+
+  .hero-card[data-hero='bokator']:hover .hero-art,
+  .hero-card[data-hero='bokator'].sel .hero-art {
+    background-size: 512px 448px;
   }
 
   @keyframes hero-idle {

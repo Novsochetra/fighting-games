@@ -1,5 +1,6 @@
 import { RENDER_SCALE } from '../../config.js';
 import { HERO_SPRITES, ONE_ROW_STRIPS } from '../../data/hero-sprites.js';
+import { WEAPON_IDS } from '../../data/weapons/index.js';
 import { createTintCache, frameSource } from './tint.js';
 
 function stripPath(hero, name) {
@@ -39,14 +40,13 @@ export function loadHeroSprites({ createImage, createCanvas, baseUrl, hero, them
   return sheet;
 }
 
-// a one-row strip may stand taller than the rest (a sword raised to the sky); its feet keep the same
-// gap above its bottom edge
+// a hero whose sword reaches higher than the Shades' frames has taller ones: a strip's frame height
+// comes from its image, a row per weapon or the one row of the ultimate, and the feet keep the same
+// gap above the frame's bottom edge
 export function frameBox(sheet, name) {
   const { frameHeight, feetY } = HERO_SPRITES;
-  if (!ONE_ROW_STRIPS.has(name)) {
-    return { frameHeight, feetY };
-  }
-  const height = sheet.images[name].height || frameHeight;
+  const rows = ONE_ROW_STRIPS.has(name) ? 1 : WEAPON_IDS.length;
+  const height = sheet.images[name].height / rows || frameHeight;
   return { frameHeight: height, feetY: height - (frameHeight - feetY) };
 }
 
