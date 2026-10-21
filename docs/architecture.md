@@ -163,10 +163,10 @@ Each Shade fights in its own style and has its own ultimate:
   A Shade's own techniques (`src/data/styles/techniques/`) join every weapon's set unscaled, linked
   off the heavies' free light follow-ups (`technique-links.js`): `K J`, `K K J`, `K K K J`, `Air K J`.
 - `src/sim/summons/` runs what a Shade calls up: thorns, fireflies, spirit stags, ice, flame
-  pillars, the fire on a burning raider, the phoenix, the phoenix lance and one-shot bursts, kept in
-  `game.summons`. A move's signature (`thorns`, `fireflies`, `stags`, `pillars`, `lance`, and the
-  name call-out of a `technique`) fires on its first active frame; a style's `weapons` patch marks
-  every move of one weapon (the Ember Shade's spear moves all carry `lance`); what a landed move leaves on the raider is in
+  pillars, the fire on a burning raider, the phoenix and one-shot bursts, kept in `game.summons`. A
+  move's signature (`thorns`, `fireflies`, `stags`, `pillars`, and the name call-out of a
+  `technique`) fires on its first active frame; a style's `weapons` patch marks every move of one
+  weapon (the Ember Shade's spear moves all carry `feathers`, a burst where each hit lands); what a landed move leaves on the raider is in
   `src/sim/combat/afflict.js`: `freeze` encases it (`src/sim/combat/freeze.js`), `shatters` breaks
   that ice at once, and `burn` sets it alight, losing a little health every so often without
   flinching (`src/sim/summons/burn.js`).

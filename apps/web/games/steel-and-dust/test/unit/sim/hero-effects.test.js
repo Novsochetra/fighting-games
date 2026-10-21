@@ -6,6 +6,7 @@ import { ENEMY_TYPES } from '../../../src/data/enemies/enemy-types.js';
 import { sparkColorOf, trailColorOf } from '../../../src/sim/fighters/hero-colors.js';
 import { shedHeroAura } from '../../../src/sim/fx/hero-aura.js';
 import { burstMaterial } from '../../../src/sim/fx/material-bursts.js';
+import { scatterFeathers } from '../../../src/sim/fx/phoenix-feathers.js';
 import { createPlayingGame } from '../../support/test-game.js';
 
 function playingAs(hero) {
@@ -73,5 +74,14 @@ describe('material bursts', () => {
       FX_COLORS.sandstoneDark,
     ]);
     expect(game.particles.every((particle) => particle.vx < 0)).toBe(true);
+  });
+
+  it('scatters phoenix feathers off a feathered strike only, flying the way it was struck', () => {
+    const game = playingAs('ember');
+    scatterFeathers(game, { move: { feathers: true }, x: 10, y: 20 }, -1);
+    scatterFeathers(game, { move: {}, x: 30, y: 20 }, 1);
+    expect(game.summons).toEqual([
+      expect.objectContaining({ kind: 'burst', sprite: 'feathers', x: 10, y: 20, direction: -1 }),
+    ]);
   });
 });

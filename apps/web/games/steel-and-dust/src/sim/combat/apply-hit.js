@@ -3,6 +3,7 @@ import { difficultyOf } from '../../data/difficulty.js';
 import { isPlayer } from '../fighters/loadout.js';
 import { addFloatText } from '../fx/effects.js';
 import { burstMaterial } from '../fx/material-bursts.js';
+import { scatterFeathers } from '../fx/phoenix-feathers.js';
 import { afflictTarget } from './afflict.js';
 import { blockHit } from './block-hit.js';
 import { addUltMeter, endCombo } from './combo.js';
@@ -94,6 +95,7 @@ function landHit(game, hit, damage, direction) {
   freezeOnHit(hit, damage);
   const color = showImpact(game, hit, { direction, hitstop: move.hitstop });
   burstMaterial(game, hit, direction);
+  scatterFeathers(game, hit, direction);
   const big = isBigHit(move, knockdown);
   if (big) {
     showBigHit(game, hit, { direction, hitstop: move.hitstop, color });

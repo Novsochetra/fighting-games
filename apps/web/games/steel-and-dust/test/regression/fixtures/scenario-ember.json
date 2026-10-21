@@ -3695,7 +3695,7 @@
     "floaters": "d4feea1491c3afd5",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "0885371bdccfbc66",
+    "summons": "16e5a8eb1a8ed54c",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -3981,7 +3981,7 @@
     "floaters": "d7be2942f6ad2e0c",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "a3cdf10901b8679f",
+    "summons": "3dbb88b1e5d5bbda",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -4124,7 +4124,7 @@
     "floaters": "81ca710fbd21b12d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "c3c39cdca79cc17c",
+    "summons": "188bd7fbf9d1738d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -4267,7 +4267,7 @@
     "floaters": "3d38d05534402c26",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "bed53b2177ce5f3d",
+    "summons": "16e719ee738f0073",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -4410,7 +4410,7 @@
     "floaters": "47786bf2197bc09b",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "be5d7c3555e059a6",
+    "summons": "a589c86b954cd63c",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -4553,7 +4553,7 @@
     "floaters": "1fe9ba757ddb66b1",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "a2ed1795c49be57d",
+    "summons": "da39a3ee5e6b4b0d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -4938,7 +4938,7 @@
     "floaters": "ebbbabc9942fd942",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "63efb7b5f34ede01",
+    "summons": "5c3c80646591fe58",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -5235,7 +5235,7 @@
     "floaters": "c1cd7dd332072ee3",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "f8f4281e5ba95eab",
+    "summons": "da39a3ee5e6b4b0d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -5829,7 +5829,7 @@
     "floaters": "e37164a7b698223a",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "11e5757dfe8b3cd2",
+    "summons": "5f19ffa3182783f8",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -5928,7 +5928,7 @@
     "floaters": "2bd985b2f2624f7e",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "975896c6ac84b30e",
+    "summons": "da39a3ee5e6b4b0d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -8470,8 +8470,8 @@
   {
    "tick": 960,
    "frame": {
-    "calls": 3684,
-    "digest": "654be95a2bf7ad55"
+    "calls": 3688,
+    "digest": "63e4fedbca225a9f"
    }
   },
   {
