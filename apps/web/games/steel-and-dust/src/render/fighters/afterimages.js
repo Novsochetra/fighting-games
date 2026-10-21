@@ -1,12 +1,12 @@
 import { GHOST_PALETTE } from '../../art/tinted-palettes.js';
 import { WEAPONS } from '../../data/weapons/index.js';
+import { weaponGlowOf } from '../../sim/fighters/hero-colors.js';
 import { drawBody } from './body.js';
 import { drawHeroFrame } from './hero-sprites.js';
 
 export function drawHeroAfterimages(painter, sheet, fighter) {
   const row = WEAPONS[fighter.weapon.id].spriteRow;
-  const trail =
-    fighter.weapon.id === 'sword' ? sheet.theme.blade : WEAPONS[fighter.weapon.id].trailColor;
+  const trail = weaponGlowOf(sheet.theme, fighter.weapon.id).trail;
   for (const image of fighter.afterimages) {
     painter.alpha(((image.color ? 0.5 : 0.28) * image.life) / 12);
     drawHeroFrame(painter, sheet, {

@@ -409,7 +409,8 @@ def render_frame(fr,ann,weapon):
     if ann and 'g' in ann:
         img,grip,u,L=erase_blade(fr,ann['g'],ann['t'])
         if ann.get('len'): L=ann['len']
-    img=recolor_smear(img,sm,RAMPS[weapon])
+    # the Ember Shade's spear burns with its sword's own fire, so its smear keeps the sword's colours
+    if not (WARM and weapon=='spear'): img=recolor_smear(img,sm,RAMPS[weapon])
     if ann and 'g' in ann and not ann.get('hide'):
         if weapon=='spear': img=comp(img,draw_spear(grip,u,L))
         elif weapon=='axe': img=comp(img,draw_axe(grip,u,L,WCOL['axe']))
