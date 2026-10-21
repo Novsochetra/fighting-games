@@ -129,9 +129,4 @@
     animation: none;
     box-shadow: var(--shadow-ult-ready-still);
   }
-
-  .menu.open,
-  .logo {
-    animation: none;
-  }
 }

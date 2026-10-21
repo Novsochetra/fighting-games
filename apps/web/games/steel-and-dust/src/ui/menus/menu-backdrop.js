@@ -1,7 +1,15 @@
 // the Angkor painting stays up behind the title, every panel opened over it and the hero select, so
 // moving between them never drops back to the game screen for a frame
 const SCENE_MENUS = new Set(['title', 'heroes']);
-const DIM_FOR_MENU = { title: 'none', heroes: 'none', pause: 'menu', over: 'menu', clear: 'menu' };
+// the button layout editor keeps only a light dim, so the buttons are placed against the screen
+const DIM_FOR_MENU = {
+  title: 'none',
+  heroes: 'none',
+  pause: 'menu',
+  over: 'menu',
+  clear: 'menu',
+  layout: 'light',
+};
 
 // what lies behind the open menu: one painting and one dim layer shared by every menu, so a change
 // of menu fades their darkness from one level to the next instead of stacking two backdrops

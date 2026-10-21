@@ -66,6 +66,10 @@
   transition: background-color var(--duration-normal) var(--easing-out);
 }
 
+#menus[data-dim='light'] .menu-dim {
+  background-color: var(--color-backdrop-light);
+}
+
 #menus[data-dim='menu'] .menu-dim {
   background-color: var(--color-backdrop);
 }

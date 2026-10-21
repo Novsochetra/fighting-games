@@ -19,6 +19,11 @@ describe('what lies behind the open menu', () => {
     expect(menuBackdrop(['pause', 'settings'])).toEqual({ scene: 'off', dim: 'panel' });
   });
 
+  it('keeps only a light dim over the screen while the buttons are laid out', () => {
+    expect(menuBackdrop(['title', 'settings', 'layout'])).toEqual({ scene: 'on', dim: 'light' });
+    expect(menuBackdrop(['pause', 'settings', 'layout'])).toEqual({ scene: 'off', dim: 'light' });
+  });
+
   it('brings the painting up for the hero list after a fall', () => {
     expect(menuBackdrop(['over', 'heroes'])).toEqual({ scene: 'on', dim: 'none' });
   });

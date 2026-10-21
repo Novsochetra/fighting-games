@@ -1,9 +1,8 @@
 /* the Button layout editor (src/ui/layout/) lies over the paused game or the title under only a light
-   dim, so the buttons are placed against the real screen */
+   dim (`menuBackdrop`), so the buttons are placed against the real screen */
 #m-layout {
   padding: 0;
   overflow: hidden;
-  background: var(--color-backdrop-light);
 }
 
 #menus #m-layout .layout-preview,
