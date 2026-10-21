@@ -9,6 +9,7 @@ import { drawEffects } from './fx/effects.js';
 import { drawFloaters } from './fx/floaters.js';
 import { drawProjectiles, drawShockwaves } from './fx/hazards.js';
 import { drawParticles } from './fx/particles.js';
+import { drawSoldiers } from './fx/soldiers.js';
 import { drawSummons } from './fx/summons.js';
 import { drawCrates } from './scene/crate.js';
 import { drawGround } from './scene/ground.js';
@@ -67,6 +68,7 @@ export function drawWorld(painter, { game, view, cameraX }) {
   drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });
   drawCrates(painter, game.crates, cameraX);
   drawPickups(painter, game.pickups);
+  drawSoldiers(painter, { summons: game.summons, view });
   drawFighters(painter, { game, view, cameraX });
   drawSummons(painter, game.summons, view.fxSheets);
   drawShockwaves(painter, game.shockwaves);

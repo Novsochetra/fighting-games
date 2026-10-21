@@ -122,10 +122,12 @@ const DRAW_BY_KIND = {
   lion: drawLion,
 };
 
+// relief soldiers are drawn from a hero's own sheet, behind the fighters (soldiers.js)
 export function drawSummons(painter, summons, sheets) {
   for (const summon of summons) {
-    if (summon.time > 0) {
-      DRAW_BY_KIND[summon.kind](painter, sheets, summon);
+    const draw = DRAW_BY_KIND[summon.kind];
+    if (summon.time > 0 && draw) {
+      draw(painter, sheets, summon);
     }
   }
 }

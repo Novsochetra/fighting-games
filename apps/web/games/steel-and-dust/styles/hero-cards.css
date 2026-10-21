@@ -51,6 +51,10 @@
   --accent: var(--color-hero-bokator);
 }
 
+.hero-card[data-hero='angkor'] {
+  --accent: var(--color-hero-angkor);
+}
+
 /* the middle hero stands in a pool of their own light */
 .hero-card[data-depth='0'] {
   z-index: 3;
@@ -124,8 +128,10 @@
     drop-shadow(0 0 calc(var(--px) * 4px) color-mix(in srgb, var(--accent) 70%, transparent));
 }
 
-/* Bokator's frames are 112 px tall with his feet in the same place, so his window starts 32 px lower */
-.hero-card[data-hero='bokator'] .hero-art {
+/* Bokator's and the Angkor Warrior's frames are 112 px tall with their feet in the same place, so
+   their window starts 32 px lower */
+.hero-card[data-hero='bokator'] .hero-art,
+.hero-card[data-hero='angkor'] .hero-art {
   background-size: calc(var(--px) * 768px) calc(var(--px) * 448px);
   background-position: 0 calc(var(--px) * -32px);
 }
@@ -137,6 +143,13 @@
   background-image: url('../assets/sprites/heroes/bokator/card_win.png');
   background-size: calc(var(--px) * 512px) calc(var(--px) * 112px);
   animation: none;
+}
+
+/* with his dav raised the Angkor Warrior's win pose reaches above his frame's window too, so his card
+   shows it smaller the same way; it is one pose, the blade's glow swelling and fading as it plays */
+.hero-card[data-hero='angkor'][data-depth='0'] .hero-art {
+  background-image: url('../assets/sprites/heroes/angkor/card_win.png');
+  background-size: calc(var(--px) * 512px) calc(var(--px) * 112px);
 }
 
 @keyframes hero-idle {

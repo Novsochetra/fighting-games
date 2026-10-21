@@ -163,9 +163,11 @@ Each Shade fights in its own style and has its own ultimate:
   A Shade's own techniques (`src/data/styles/techniques/`) join every weapon's set unscaled, linked
   off the heavies' free light follow-ups (`technique-links.js`): `K J`, `K K J`, `K K K J`, `Air K J`.
 - `src/sim/summons/` runs what a Shade calls up: thorns, fireflies, spirit stags, ice, flame
-  pillars, the fire on a burning raider, the phoenix, the golden lion and one-shot bursts, kept in
-  `game.summons`; the phoenix and the lion fly a list of points (`flight.js`). A move's signature
-  (`thorns`, `fireflies`, `stags`, `pillars`, `lions`, and the name call-out of a
+  pillars, the fire on a burning raider, the phoenix, the golden lion, the Angkor Warrior's carved
+  soldiers and one-shot bursts, kept in `game.summons`; the phoenix and the lion fly a list of points
+  (`flight.js`). A carved soldier is drawn from the strips of the hero who raised it, in flat
+  sandstone behind the fighters (`src/render/fx/soldiers.js`). A move's signature
+  (`thorns`, `fireflies`, `stags`, `pillars`, `lions`, `soldiers`, and the name call-out of a
   `technique`) fires on its first active frame; a style's `weapons` patch marks every move of one
   weapon (the Ember Shade's spear moves all carry `feathers`, a burst where each hit lands); what a landed move leaves on the raider is in
   `src/sim/combat/afflict.js`: `freeze` encases it (`src/sim/combat/freeze.js`), `shatters` breaks

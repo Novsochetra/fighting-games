@@ -35,4 +35,6 @@ export const FX_COLORS = {
   emberGold: '#ffe066',
   lionGold: '#ffd25a',
   lionDeep: '#b8862a',
+  reliefStone: '#c9a97e',
+  reliefShade: '#6e5a44',
 };

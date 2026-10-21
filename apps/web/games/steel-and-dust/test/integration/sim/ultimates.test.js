@@ -143,6 +143,27 @@ describe("each Shade's ultimate", () => {
     expect(game.player).toMatchObject({ state: 'idle', invincible: 40 });
   });
 
+  it('Angkor: a rank of carved soldiers thrusts each way, then the chop splits the ground', () => {
+    const game = startUltimate('angkor');
+    const directions = new Set();
+    const seen = watchUltimate(game, (current) => {
+      for (const summon of current.summons) {
+        if (summon.kind === 'soldier') {
+          directions.add(summon.direction);
+        }
+      }
+    });
+    expect(seen.kinds).toEqual(new Set(['soldier']));
+    expect(directions).toEqual(new Set([1, -1]));
+    const { rank, ranks, split } = ULTIMATES.angkor;
+    raiders(game).forEach((raider) => {
+      expect(raider.maxHp - raider.hp).toBeGreaterThanOrEqual(
+        rank.damage * ranks.length + split.damage,
+      );
+    });
+    expect(game.player).toMatchObject({ state: 'idle', invincible: 40 });
+  });
+
   it('lasts as long as its timeline says, for every Shade', () => {
     for (const [hero, ult] of Object.entries(ULTIMATES)) {
       const game = startUltimate(hero);

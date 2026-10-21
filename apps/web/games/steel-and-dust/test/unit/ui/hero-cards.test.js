@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { pngSize } from '../../support/png-size.js';
 
 const STYLES = new URL('../../../styles/', import.meta.url);
-const ARSENAL = new URL('../../../assets/sprites/heroes/bokator/arsenal/', import.meta.url);
+const HEROES_DIR = new URL('../../../assets/sprites/heroes/', import.meta.url);
 const imagesIn = (css) =>
   [...css.matchAll(/url\('([^']+)'\)/g)].map((match) => new URL(match[1], STYLES));
 
@@ -37,9 +37,20 @@ describe('the hero select cards', () => {
     expect(rule('\\.hero-card')).toContain('height: calc(var(--px) * 80px);');
   });
 
-  it("draws Bokator's smaller win pose in frames the size of his win strip's", () => {
-    const card = pngSize(new URL('../card_win.png', ARSENAL).pathname);
-    const win = pngSize(new URL('hero_win.png', ARSENAL).pathname);
-    expect(card).toEqual({ width: win.width, height: win.height / 4 });
+  it("plays the Angkor Warrior's smaller win pose in the middle of the carousel, glow and all", () => {
+    const picked = css.match(
+      /\.hero-card\[data-hero='angkor'\]\[data-depth='0'\] \.hero-art \{([^}]*)\}/,
+    );
+    expect(picked[1]).toContain('angkor/card_win.png');
+    expect(picked[1]).not.toContain('animation: none;');
   });
+
+  it.each(['bokator', 'angkor'])(
+    "draws the %s hero's smaller win pose in frames the size of his win strip's",
+    (hero) => {
+      const card = pngSize(new URL(`${hero}/card_win.png`, HEROES_DIR).pathname);
+      const win = pngSize(new URL(`${hero}/arsenal/hero_win.png`, HEROES_DIR).pathname);
+      expect(card).toEqual({ width: win.width, height: win.height / 4 });
+    },
+  );
 });

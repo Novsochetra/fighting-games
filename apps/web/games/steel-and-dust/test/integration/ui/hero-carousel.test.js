@@ -20,22 +20,24 @@ describe('the hero carousel on the real page', () => {
 
   it('opens on the hero played last, in the middle, with the others round it', () => {
     expect(middle()).toBe('moss');
-    expect(slots()).toEqual(['0', '1', '2', '3', '-2', '-1']);
-    expect(card('bokator').dataset.depth).toBe('1');
+    expect(slots()).toEqual(['0', '1', '2', '3', '-3', '-2', '-1']);
+    expect(card('angkor').dataset.depth).toBe('1');
+    expect(card('bokator').dataset.depth).toBe('2');
     expect(card('blue').dataset.depth).toBe('3');
+    expect(card('ember').dataset.depth).toBe('3');
   });
 
   it('loops round the heroes with left and right, never landing on Back', () => {
     page.key('ArrowLeft');
-    expect(middle()).toBe('bokator');
-    expect(selected().dataset.hero).toBe('bokator');
-    for (let step = 0; step < 6; step++) {
+    expect(middle()).toBe('angkor');
+    expect(selected().dataset.hero).toBe('angkor');
+    for (let step = 0; step < 7; step++) {
       page.key('ArrowRight');
     }
-    expect(middle()).toBe('bokator');
+    expect(middle()).toBe('angkor');
     page.key('ArrowRight');
     expect(middle()).toBe('moss');
-    expect(slots()).toEqual(['0', '1', '2', '-3', '-2', '-1']);
+    expect(slots()).toEqual(['0', '1', '2', '3', '-3', '-2', '-1']);
     expect(document.querySelector('.hero-card.wrap')).toBeNull();
   });
 
@@ -65,7 +67,7 @@ describe('the hero carousel on the real page', () => {
     expect(middle()).toBe('firefly');
     document.querySelector('[data-step="-1"]').click();
     document.querySelector('[data-step="-1"]').click();
-    expect(middle()).toBe('bokator');
+    expect(middle()).toBe('angkor');
     expect(page.game.mode).toBe('title');
   });
 
