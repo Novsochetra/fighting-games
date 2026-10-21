@@ -1,6 +1,6 @@
 // every image the menus' stylesheets draw: the stone kit, the title painting for either way up and the
-// two heroes whose cards show a smaller win pose; the loading screen holds the title until all of it
-// is in (test/unit/data/ui-art.test.js keeps UI_ART in step with the stylesheets)
+// two heroes whose cards play their own idle and pose frames; the loading screen holds the title until
+// all of it is in (test/unit/data/ui-art.test.js keeps UI_ART in step with the stylesheets)
 const MENU_ART = [
   'assets/ui/select/bg-landscape.png',
   'assets/ui/select/bg-portrait.png',
@@ -19,8 +19,10 @@ const MENU_ART = [
   'assets/ui/select/card-selected.png',
   'assets/ui/select/card-crest-selected.png',
   'assets/ui/select/arrow.png',
-  'assets/sprites/heroes/bokator/card_win.png',
-  'assets/sprites/heroes/angkor/card_win.png',
+  'assets/sprites/heroes/bokator/card_idle.png',
+  'assets/sprites/heroes/bokator/card_pose.png',
+  'assets/sprites/heroes/angkor/card_idle.png',
+  'assets/sprites/heroes/angkor/card_pose.png',
 ];
 
 // the loading screen's own art, which the page preloads ahead of everything else
