@@ -13,7 +13,7 @@ axe lying along the ground keeps its blade above it.
 
     pip install numpy scipy pillow
     python3 tools/bake_hero_weapons.py            # Moss Shade, assets/sprites/hero/
-    python3 tools/bake_hero_weapons.py firefly    # assets/sprites/heroes/firefly/ (also antler, blue, ember, bokator)
+    python3 tools/bake_hero_weapons.py firefly    # assets/sprites/heroes/firefly/ (also antler, blue, ember, bokator, angkor)
 
 The Moss Shade's blade glows green; the Firefly, Antler Spirit and Blue Shades' blades glow blue or
 teal, so for them the glow tests read the stronger of the green and blue channels; the Ember Shade's
@@ -24,7 +24,7 @@ white-gold against tan skin: it is found as the longest thin straight run of gol
 give the line where it is not), all of it goes wherever open air lies either side of it, where it
 crosses his body it is covered with what lies beside it and the new edge gets his dark outline, only
 smears count as hide frames for him, and his fists row takes his own bare-hand moves from
-heroes/bokator/fists/.
+heroes/bokator/fists/. The Angkor Warrior's gold blade is found and taken away the same way.
 
 OVERRIDES fixes frames where detection misses: g = grip, t = blade tip, in frame pixels;
 hide = recolour the smear only and draw no weapon (strike frames where the blade is lost in the smear).
@@ -42,7 +42,7 @@ SRC=SPRITES+'heroes/'+VARIANT+'/' if VARIANT else HERO
 OUT=SRC+'arsenal/'
 COOL=VARIANT is not None
 WARM=VARIANT=='ember'
-GILDED=VARIANT=='bokator'
+GILDED=VARIANT in ('bokator','angkor')
 meta=json.load(open(HERO+'hero.json'))
 
 # the Bokator fighter's blade glows white-gold against his tan skin: bright and pale, or bright and
@@ -427,7 +427,8 @@ ATTACKS={'slash1','slash2','spin_slash','thrust','rising_dragon','cleave','air_s
 # the Ember Shade's own grip fix: on this frame detection takes the smear's tail on the ground for the blade;
 # the Bokator fighter's: frames where his blade is merged with his glowing fist or bends, so no straight
 # thin run is found, or another run is taken for it; cut = a run off the blade's line, its glint or a
-# trail, cut away as well
+# trail, cut away as well; the Angkor Warrior's: frames where a gold arm band is taken for his blade,
+# and None where no blade is drawn at all
 OWN_OVERRIDES={
     'ember':{'slash1':{'3':{'g':[65,50],'t':[87,69]}}},
     'bokator':{
@@ -442,6 +443,13 @@ OWN_OVERRIDES={
         'plunge':{'0':{'g':[73,25],'t':[53,16]}},
         'jump':{'4':{'g':[77,78],'t':[108,93.5]}},
         'ko':{'3':{'g':[60,102.5],'t':[102,106.5]}},
+    },
+    'angkor':{
+        'down':{'0':{'g':[74,101.7],'t':[114.6,99.5]}},
+        'getup':{'1':None,'3':{'g':[70,88.7],'t':[102.9,104.3]}},
+        'ko':{'1':None},
+        'spin_slash':{'4':{'g':[83.5,74.4],'t':[109.9,83.3]}},
+        'air_rising_cut':{'1':{'g':[86.6,69.3],'t':[110.6,43.6]}},
     },
 }
 
