@@ -6,16 +6,17 @@ export const POUNDING_LION = {
     'A bow, a slam that throws every raider up, then a golden lion bounds across the field and pounces.',
   damageText: '8 + 10 per lion pass + 24',
   intro: 46,
-  poseTicks: 12,
+  // ticks for each frame of the bow, before the blow
+  poseTicks: 16,
   slamAt: 60,
   lionAt: 64,
   // ticks the lion takes to rise out of gold fire behind the hero and roar
   appear: 22,
-  // ticks after it starts its run at which it reaches each point: from behind the hero to the edge
-  // ahead in three leaps, then back up high and down on the middle
-  legs: [0, 10, 20, 30, 40, 50, 60, 76, 88],
+  // ticks after it starts its run at which it lands on each point: from behind the hero to the edge
+  // ahead in three leaps, then one high bound back down on the middle
+  legs: [0, 20, 40, 60, 88],
   leapHeight: 70,
-  pounceHeight: 110,
+  pounceHeight: 80,
   end: 216,
   slam: {
     damage: 8,

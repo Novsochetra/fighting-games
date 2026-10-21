@@ -165,7 +165,7 @@ Each Shade fights in its own style and has its own ultimate:
 - `src/sim/summons/` runs what a Shade calls up: thorns, fireflies, spirit stags, ice, flame
   pillars, the fire on a burning raider, the phoenix, the golden lion, the Angkor Warrior's carved
   soldiers and one-shot bursts, kept in `game.summons`; the phoenix and the lion fly a list of points
-  (`flight.js`). A carved soldier is drawn from the strips of the hero who raised it, in flat
+  (`flight.js`), and a point may carry a hop, so the lion bounds to it in an arc and lands there. A carved soldier is drawn from the strips of the hero who raised it, in flat
   sandstone behind the fighters (`src/render/fx/soldiers.js`). A move's signature
   (`thorns`, `fireflies`, `stags`, `pillars`, `lions`, `soldiers`, and the name call-out of a
   `technique`) fires on its first active frame; a style's `weapons` patch marks every move of one
