@@ -23,8 +23,9 @@ body {
   text-size-adjust: 100%;
 }
 
+/* every word in the game is set in the pixel font, like the sprites and the HUD's own letters */
 body {
-  font-family: var(--font-body);
+  font-family: var(--font-display);
   font-size: var(--font-size-md);
   line-height: var(--leading-normal);
   touch-action: none;

@@ -32,7 +32,7 @@
 .keys {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--font-size-body-lg);
+  font-size: var(--font-size-sm);
 }
 
 .keys td {
@@ -51,10 +51,10 @@ kbd.k {
   font-family: var(--font-display);
   font-size: var(--font-size-2xs);
   padding: 1px 6px;
-  border: 1px solid var(--color-border);
+  border: 1px solid color-mix(in srgb, var(--color-gold) 40%, transparent);
   border-bottom-width: 2px;
-  border-radius: var(--radius-md);
-  background: var(--color-panel-raised);
+  border-radius: 0;
+  background: color-mix(in srgb, var(--color-night-deep) 70%, transparent);
   color: var(--color-text);
   white-space: nowrap;
 }
@@ -83,7 +83,7 @@ kbd.k {
   color: var(--color-text-muted);
   text-align: left;
   padding: 6px 8px;
-  background: var(--color-panel-raised);
+  background: color-mix(in srgb, var(--color-night-deep) 70%, transparent);
 }
 
 .moves td {
@@ -133,4 +133,24 @@ kbd.k {
   font-size: var(--font-size-xs);
   color: var(--color-accent);
   margin-right: 6px;
+}
+
+/* a phone held upright has no room for four columns of moves: each move takes two lines, its input,
+   name and damage, then its notes */
+@media (max-width: 480px) {
+  .moves tr {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    border-top: 1px solid color-mix(in srgb, var(--color-gold) 22%, transparent);
+  }
+
+  .moves td {
+    border-top: 0;
+  }
+
+  .moves td:last-child,
+  .moves th:last-child {
+    grid-column: 1 / -1;
+    padding-top: 0;
+  }
 }

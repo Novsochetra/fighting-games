@@ -81,3 +81,14 @@
   bottom: 0;
   background: var(--color-gold);
 }
+
+/* a phone held upright has no room for a value beside its label: it moves under it */
+@media (max-width: 480px) {
+  .setrow {
+    grid-template-columns: 1fr;
+  }
+
+  .setrow .stepper {
+    justify-self: end;
+  }
+}
