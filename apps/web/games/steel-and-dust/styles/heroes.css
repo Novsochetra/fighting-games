@@ -1,10 +1,10 @@
 .heroes .box {
-  width: min(880px, 100%);
+  width: min(1040px, 100%);
 }
 
 .hero-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 10px;
   padding: 12px;
   overflow-y: auto;
@@ -42,6 +42,24 @@
 
 .hero-card[data-hero='ember'] {
   --accent: var(--color-hero-ember);
+}
+
+.hero-card[data-hero='bokator'] {
+  --accent: var(--color-hero-bokator);
+}
+
+/* Bokator's frames are 112 px tall with his feet in the same place, so his window starts 32 px lower */
+.hero-card[data-hero='bokator'] .hero-art {
+  background-size: 1536px 896px;
+  background-position: -64px -64px;
+}
+
+/* standing up in his win pose he is a head taller than the crouch he fights in, so his card plays a
+   smaller drawing of it, one row as tall as his frames, to stand as tall as the Shades on theirs */
+.hero-card[data-hero='bokator']:hover .hero-art,
+.hero-card[data-hero='bokator'].sel .hero-art {
+  background-image: url('../assets/sprites/heroes/bokator/card_win.png');
+  background-size: 1024px 224px;
 }
 
 .hero-card.picked {
@@ -122,7 +140,7 @@
   color: var(--accent);
 }
 
-@media (max-height: 420px), (max-width: 860px) {
+@media (max-height: 420px), (min-width: 641px) and (max-width: 860px) {
   .hero-art {
     width: 64px;
     height: 80px;
@@ -135,6 +153,16 @@
     background-size: 512px 320px;
   }
 
+  .hero-card[data-hero='bokator'] .hero-art {
+    background-size: 768px 448px;
+    background-position: -32px -32px;
+  }
+
+  .hero-card[data-hero='bokator']:hover .hero-art,
+  .hero-card[data-hero='bokator'].sel .hero-art {
+    background-size: 512px 112px;
+  }
+
   @keyframes hero-idle {
     to {
       background-position-x: -800px;
@@ -145,5 +173,27 @@
     to {
       background-position-x: -544px;
     }
+  }
+}
+
+/* a phone held upright has no room for six cards side by side: they keep their full size and the row
+   scrolls sideways, with a slice of the next card always showing so the row reads as one to swipe */
+@media (max-width: 640px) and (min-height: 421px) {
+  .hero-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: min(144px, calc(50% - 20px));
+    overflow: auto hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+
+  .hero-card {
+    scroll-snap-align: start;
+    padding-inline: 4px;
+    overflow: hidden;
   }
 }

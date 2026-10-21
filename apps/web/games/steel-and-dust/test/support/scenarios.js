@@ -59,6 +59,15 @@ export const SCENARIOS = {
     renderEvery: 240,
     scheduled: { 500: ['fill'], 900: ['w3'], 1500: ['w4'], 1700: ['fill'] },
   },
+  // the Bokator fighter: lion finishers with his own bare-hand moves, then the sword, then his ultimate
+  bokator: {
+    hero: 'bokator',
+    seed: 1357,
+    ticks: 2400,
+    sampleEvery: 30,
+    renderEvery: 240,
+    scheduled: { 500: ['fill'], 900: ['w2'], 1700: ['fill'] },
+  },
   // the wide, scrolling zones of the fourth mission: spitters, hounds and shield bearers
   bazaar: {
     mission: 3,

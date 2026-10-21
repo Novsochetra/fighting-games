@@ -1,5 +1,5 @@
-// the five Shades the player can pick; each has its own PixelLab sprite set and effect colors,
-// a fighting style (data/styles/) and an ultimate (data/ultimates/)
+// the heroes the player can pick, five Shades and the Bokator fighter; each has its own sprite set and
+// effect colors, a fighting style (data/styles/) and an ultimate (data/ultimates/)
 export const HEROES = [
   {
     id: 'moss',
@@ -35,6 +35,13 @@ export const HEROES = [
     tagline: 'Walked out of the burning woods',
     directory: 'assets/sprites/heroes/ember/arsenal/',
     ultStrip: 'assets/sprites/heroes/ember/hero_ult.png',
+  },
+  {
+    id: 'bokator',
+    name: 'Bokator',
+    tagline: 'Pounds the lion, as Angkor taught',
+    directory: 'assets/sprites/heroes/bokator/arsenal/',
+    ultStrip: 'assets/sprites/heroes/bokator/hero_ult.png',
   },
 ];
 

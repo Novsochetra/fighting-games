@@ -124,6 +124,25 @@ describe("each Shade's ultimate", () => {
     expect(game.player).toMatchObject({ state: 'idle', invincible: 40 });
   });
 
+  it('Bokator: the slam throws every raider up, the lion bounds both ways and pounces', () => {
+    const game = startUltimate('bokator');
+    const directions = new Set();
+    const seen = watchUltimate(game, (current) => {
+      for (const summon of current.summons) {
+        if (summon.kind === 'lion') {
+          directions.add(summon.direction);
+        }
+      }
+    });
+    expect(seen.kinds).toEqual(new Set(['lion']));
+    expect(directions).toEqual(new Set([1, -1]));
+    const { slam, pounce } = ULTIMATES.bokator;
+    raiders(game).forEach((raider) => {
+      expect(raider.maxHp - raider.hp).toBeGreaterThanOrEqual(slam.damage + pounce.damage);
+    });
+    expect(game.player).toMatchObject({ state: 'idle', invincible: 40 });
+  });
+
   it('lasts as long as its timeline says, for every Shade', () => {
     for (const [hero, ult] of Object.entries(ULTIMATES)) {
       const game = startUltimate(hero);

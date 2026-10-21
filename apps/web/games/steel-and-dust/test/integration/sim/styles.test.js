@@ -128,6 +128,18 @@ describe('the Shades fight differently with the same weapon', () => {
     expect(summonsOf(game, 'pillar')).toHaveLength(2);
   });
 
+  it("Bokator's fourth light hit sends a golden lion pouncing on the raider ahead", () => {
+    const { game, raider } = fightOneRaider('bokator', 'fists');
+    lightString(game, 4);
+    let struck = false;
+    for (let tick = 0; tick < 40; tick++) {
+      runTicks(game, 1);
+      struck ||= summonsOf(game, 'lion').some((lion) => lion.hitTargets.has(raider));
+    }
+    expect(struck).toBe(true);
+    expect(summonsOf(game, 'lion')).toEqual([]);
+  });
+
   it('the same press from the Moss Shade leaves the raider unfrozen', () => {
     const { game, raider } = fightOneRaider('moss', 'sword');
     tap(game, 'heavy');

@@ -16,6 +16,7 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `burn.png`    | 8 × 48×64    | Ember: flames on a burning raider (loops)        | VFX workbench, "Ember Burn" (`4813b8ef-ffac-4f4c-8a0a-1bd7e9a2e07c`)          |
 | `phoenix.png` | 6 × 128×96   | Ember: Phoenix Pyre's firebird (loops)           | Pixen image (`95d5d481-7be4-4346-9ec0-6b4994bf0370`), PixMiniMax flap (`5a9556a1-3365-4e22-8e86-93bc4b76a7b7`, frames 0–5) |
 | `inferno.png` | 16 × 244×180 | Ember: Phoenix Pyre's closing blast             | VFX workbench, "Ember Inferno" (`19ad017d-a6db-4be5-b869-d3aa7136bfe5`)       |
+| `lion.png`    | 6 × 216×151  | Bokator: the golden lion (3 frames rising, 3 leaping) | ChatGPT image sheet on black: the body solid with its dark lines, only the glow round it see-through |
 | `feathers.png` | 8 × 66×70   | Ember: feathers where a spear hit lands         | VFX workbench, "Phoenix Feathers" (`d2f23d08-4f1d-46c8-ae4f-270b3608ada3`)    |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be

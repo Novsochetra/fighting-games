@@ -1,4 +1,4 @@
-// each Shade's glow: the sword smear (and any other weapon in `weapons`), charge glow,
+// each hero's glow: the sword smear (and any other weapon in `weapons`), charge glow,
 // afterimages and its select-screen accent;
 // `ult` colors its ultimate: the dimmed world, the cut-in band and title, the finale flash
 export const HERO_THEMES = {
@@ -77,6 +77,21 @@ export const HERO_THEMES = {
       streak: '#6a200e',
       title: '#ffd28a',
       flash: '#fff0dc',
+    },
+  },
+  bokator: {
+    blade: '#ffd25a',
+    glow: '#ffe7a3',
+    glowDim: '#c9952e',
+    spark: '#fff2c4',
+    aura: { every: 8, color: '#ffd25a' },
+    ult: {
+      dim: '#140f04',
+      band: '#231a08',
+      edge: '#ffd25a',
+      streak: '#5a4410',
+      title: '#fff2c4',
+      flash: '#fff8e0',
     },
   },
 };
