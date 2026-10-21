@@ -12,8 +12,13 @@ sizes by keeping the most common color in each block, snapped to one palette and
 | `kit/`      | `title-crest.png`, `title-rule.png`                                  | `styles/stone-menus.css`    |
 | `kit/`      | `button.png`, `button-primary.png`: the menu buttons                 | `styles/stone-menus.css`    |
 | `settings/` | `lotus-band.png`: the frieze after a settings group's name           | `styles/stone.css`          |
+| `loading/`  | `bg.png` (384×216, Angkor Wat at dusk from the causeway), `naga-*.png` (each piece's stone look over its gold one), `bokator-run.png` (8 frames of 76×59), `dust.png` (5 frames of 32×18) | `styles/loading*.css` |
 | `hud/`      | `panel-frame.png`, `score-frame.png`                                 | `src/data/hud-frames.js`    |
 | `hud/`      | `panel-frame.png`: the button layout editor's toolbar                | `styles/layout-editor.css`  |
+
+The loading screen's art was drawn with Codex the same way and baked to these sizes; the naga's gold
+look is its stone look recoloured, each pixel taking the gold of the same rank of brightness, so the
+two line up exactly where the gold ends.
 
 Frames are nine-slice images: corners stay whole and the middle of every edge repeats. Their borders, in
 image pixels (top, right, bottom, left):

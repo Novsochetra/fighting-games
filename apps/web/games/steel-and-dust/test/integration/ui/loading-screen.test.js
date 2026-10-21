@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { BOOT_TIMING } from '../../../src/boot/start-loading.js';
+import { LOADER_ART } from '../../../src/data/ui-art.js';
 import { missionWait } from '../../../src/render/scene-loaded.js';
 import { bootArt } from '../../../src/ui/loading/boot-art.js';
 import { LOADER_TIMING } from '../../../src/ui/loading/loader-gate.js';
@@ -26,23 +27,25 @@ async function bootThrough(page) {
 }
 
 describe('the loading screen on the real page', () => {
-  it('is up from the first paint, before any script runs, with Bokator preloaded first', () => {
+  it('is up from the first paint, before any script runs, with its own art preloaded first', () => {
     const { loader } = openBootPage();
     expect(document.body.firstElementChild).toBe(loader);
     expect(isUp(loader)).toBe(true);
     expect(percent(loader)).toBe('0');
-    expect(PAGE).toMatch(
-      /<link\s+rel="preload"\s+href="assets\/sprites\/heroes\/bokator\/arsenal\/hero_walk\.png"\s+as="image"\s+fetchpriority="high"/,
-    );
+    for (const url of LOADER_ART) {
+      expect(PAGE).toContain(
+        `<link rel="preload" href="${url}" as="image" fetchpriority="high" />`,
+      );
+    }
     expect(PAGE.indexOf('src/boot/boot-loading.js')).toBeLessThan(PAGE.indexOf('src/main.js'));
   });
 
-  it('draws nothing it waits for but Bokator, so it can never show as a hole itself', () => {
-    const css = ['loading.css', 'loading-ledge.css']
+  it('draws only its own preloaded art, never the menu art it waits for', () => {
+    const css = ['loading.css', 'loading-naga.css']
       .map((file) => readFileSync(join(STYLES, file), 'utf8'))
       .join('\n');
-    const images = [...css.matchAll(/url\('([^']+)'\)/g)].map((match) => match[1]);
-    expect(images).toEqual(['../assets/sprites/heroes/bokator/arsenal/hero_walk.png']);
+    const images = [...css.matchAll(/url\('([^']+)'\)/g)].map((match) => match[1].slice(3));
+    expect([...new Set(images)].sort()).toEqual([...LOADER_ART].sort());
   });
 
   it('asks for every menu image and every hero card at once', () => {

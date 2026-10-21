@@ -1,8 +1,7 @@
-// every image the page's stylesheets draw: the stone kit, the title painting for either way up, the
-// two heroes whose cards show a smaller win pose, and Bokator walking on the loading screen itself;
-// the loading screen holds the title until all of it is in (test/unit/data/ui-art.test.js keeps this
-// list in step with the stylesheets)
-export const UI_ART = [
+// every image the menus' stylesheets draw: the stone kit, the title painting for either way up and the
+// two heroes whose cards show a smaller win pose; the loading screen holds the title until all of it
+// is in (test/unit/data/ui-art.test.js keeps UI_ART in step with the stylesheets)
+const MENU_ART = [
   'assets/ui/select/bg-landscape.png',
   'assets/ui/select/bg-portrait.png',
   'assets/ui/kit/button.png',
@@ -22,5 +21,17 @@ export const UI_ART = [
   'assets/ui/select/arrow.png',
   'assets/sprites/heroes/bokator/card_win.png',
   'assets/sprites/heroes/angkor/card_win.png',
-  'assets/sprites/heroes/bokator/arsenal/hero_walk.png',
 ];
+
+// the loading screen's own art, which the page preloads ahead of everything else
+export const LOADER_ART = [
+  'assets/ui/loading/bg.png',
+  'assets/ui/loading/bokator-run.png',
+  'assets/ui/loading/naga-tail.png',
+  'assets/ui/loading/naga-body.png',
+  'assets/ui/loading/naga-head.png',
+  'assets/ui/loading/dust.png',
+];
+
+// the loading screen's own art goes first, so it is up before the menus' art starts coming in
+export const UI_ART = [...LOADER_ART, ...MENU_ART];

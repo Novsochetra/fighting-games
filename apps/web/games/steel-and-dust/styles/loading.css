@@ -1,8 +1,9 @@
-/* the loading screen: Bokator walks a carved ledge before Angkor at dusk while the art comes in. It is
-   drawn from tokens and the skyline inlined in the page, never from the images it waits for, bar his
-   own walk, which the page preloads first; the ledge and Bokator are in loading-ledge.css */
+/* the loading screen: Bokator runs along a naga balustrade on the causeway to Angkor Wat at dusk,
+   the stone turning to gold behind him as the art comes in (the bar is in loading-naga.css). Its own
+   art is small and preloaded first by the page; until the painting lands, the dusk colors stand in */
 .loader {
   --px: 2;
+  --tiles: 3;
   --progress: 0;
 
   position: fixed;
@@ -11,7 +12,13 @@
   overflow: hidden;
   font-family: var(--font-display);
   color: var(--color-text);
-  background: var(--color-loader-water);
+  background: linear-gradient(
+    var(--color-loader-sky-top),
+    var(--color-loader-sky) 30%,
+    var(--color-loader-sky-low) 45%,
+    var(--color-loader-sky-warm) 58%,
+    var(--color-loader-water) 75%
+  );
   transition:
     opacity var(--duration-normal) var(--easing-out),
     visibility 0s;
@@ -31,154 +38,90 @@
   display: none;
 }
 
-/* the stage's top edge is the horizon, a little under the middle of the safe area; the sky rises
-   from it and the moat falls from it, both past the edges of any screen */
+/* the painting is cropped like the title's, round its middle, so the temple stays in sight on a phone
+   held upright */
+.loader-scene {
+  position: absolute;
+  inset: 0;
+  background: url('../assets/ui/loading/bg.png') 50% 50% / cover no-repeat;
+  image-rendering: pixelated;
+}
+
+/* the balustrade stands in front of the painted one, on the dark stone of the causeway */
 .loader-stage {
-  --horizon: 0.6;
-
-  position: absolute;
-  top: calc(var(--sat) + (100% - var(--sat) - var(--sab)) * var(--horizon));
-  left: 50%;
-  width: calc(var(--px) * 160px);
-  padding-top: calc(var(--px) * 14px);
-  translate: -50% 0;
-  isolation: isolate;
-}
-
-.loader-stage::before,
-.loader-stage::after {
-  content: '';
   position: absolute;
   left: 50%;
-  z-index: -1;
-  width: 100vw;
-  height: 100vh;
+  bottom: calc(var(--sab) + 7%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   translate: -50% 0;
 }
 
-/* the sky reaches past the top of the screen, so the first stars sit from 40% of its height down */
-.loader-stage::before {
-  --star: linear-gradient(var(--color-loader-star), var(--color-loader-star));
-  --star-size: calc(var(--px) * 1px) calc(var(--px) * 1px) no-repeat;
-
-  bottom: 100%;
-  background:
-    var(--star) 8% 46% / var(--star-size),
-    var(--star) 21% 58% / var(--star-size),
-    var(--star) 33% 43% / var(--star-size),
-    var(--star) 46% 66% / var(--star-size),
-    var(--star) 58% 49% / var(--star-size),
-    var(--star) 69% 62% / var(--star-size),
-    var(--star) 81% 45% / var(--star-size),
-    var(--star) 93% 57% / var(--star-size),
-    linear-gradient(
-      to top,
-      var(--color-loader-horizon) 0,
-      var(--color-loader-sky-warm) 7%,
-      var(--color-loader-sky-low) 20%,
-      var(--color-loader-sky) 46%,
-      var(--color-loader-sky-top) 80%
-    );
+/* the words wait for the pixel font, rather than showing in a fallback first */
+.loader-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 2em;
+  width: 100%;
+  margin: calc(var(--px) * 6px) 0 0;
+  padding: 0 calc(var(--px) * 8px);
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--easing-out);
+  font-size: var(--font-size-md);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-gold);
+  text-shadow: var(--text-shadow-pixel-sm);
 }
 
-/* the glow on the moat breaks into ripples, shorter and fainter the nearer they are */
-.loader-stage::after {
-  --ripple-row: 100% calc(var(--px) * 1px) repeat-x;
-
-  top: 0;
-  background:
-    repeating-linear-gradient(
-        to right,
-        var(--color-loader-ripple) 0 calc(var(--px) * 14px),
-        var(--color-clear) calc(var(--px) * 14px) calc(var(--px) * 22px)
-      )
-      calc(var(--px) * 3px) calc(var(--px) * 2px) / var(--ripple-row),
-    repeating-linear-gradient(
-        to right,
-        var(--color-loader-ripple) 0 calc(var(--px) * 9px),
-        var(--color-clear) calc(var(--px) * 9px) calc(var(--px) * 20px)
-      )
-      calc(var(--px) * 11px) calc(var(--px) * 5px) / var(--ripple-row),
-    repeating-linear-gradient(
-        to right,
-        var(--color-loader-ripple-faint) 0 calc(var(--px) * 6px),
-        var(--color-clear) calc(var(--px) * 6px) calc(var(--px) * 19px)
-      )
-      calc(var(--px) * -5px) calc(var(--px) * 9px) / var(--ripple-row),
-    repeating-linear-gradient(
-        to right,
-        var(--color-loader-ripple-faint) 0 calc(var(--px) * 4px),
-        var(--color-clear) calc(var(--px) * 4px) calc(var(--px) * 23px)
-      )
-      calc(var(--px) * 7px) calc(var(--px) * 14px) / var(--ripple-row),
-    repeating-linear-gradient(
-        to right,
-        var(--color-loader-ripple-faint) 0 calc(var(--px) * 3px),
-        var(--color-clear) calc(var(--px) * 3px) calc(var(--px) * 29px)
-      )
-      calc(var(--px) * -9px) calc(var(--px) * 21px) / var(--ripple-row),
-    linear-gradient(var(--color-loader-sky-warm), var(--color-loader-water) calc(var(--px) * 30px));
+.loader.lettered .loader-caption {
+  opacity: 1;
 }
 
-.loader-sky,
-.loader-reflection {
-  position: absolute;
-  left: 50%;
-  width: calc(var(--px) * 232px);
-  height: calc(var(--px) * 60px);
-  translate: -50% 0;
-  shape-rendering: crispEdges;
+.loader-percent {
+  color: var(--color-text);
+  letter-spacing: var(--tracking-wide);
 }
 
-.loader-sky {
-  bottom: 100%;
-}
-
-/* the temple upside down in the moat, in broken bands that fade with depth */
-.loader-reflection {
-  top: 0;
-  scale: 1 -1;
-  opacity: 0.4;
-  mask-image:
-    linear-gradient(to top, var(--color-black), var(--color-clear) 75%),
-    repeating-linear-gradient(
-      var(--color-black) 0 calc(var(--px) * 2px),
-      var(--color-clear) calc(var(--px) * 2px) calc(var(--px) * 3px)
-    );
-  mask-composite: intersect;
-}
-
-.loader-glow {
-  fill: var(--color-loader-sun-glow);
-}
-
-.loader-halo {
-  fill: var(--color-loader-sun-halo);
-}
-
-.loader-sun {
-  fill: var(--color-loader-sun);
-}
-
-.loader-temple {
-  fill: var(--color-loader-silhouette);
-}
-
-/* a tall screen has room enough under the ledge, so the scene stands nearer its middle */
-@media (orientation: portrait) {
-  .loader-stage {
-    --horizon: 0.52;
+/* the balustrade is as many stretches long as the screen has room for, in whole art pixels */
+@media (min-width: 480px) {
+  .loader {
+    --tiles: 5;
   }
 }
 
-/* the same pixel size as the menus' stone: 2x, 3x on a big screen, 1x on a tiny one */
-@media (min-width: 900px) and (min-height: 600px) {
+@media (min-width: 720px) {
+  .loader {
+    --tiles: 8;
+  }
+}
+
+@media (min-width: 1100px) and (min-height: 640px) {
   .loader {
     --px: 3;
   }
+
+  .loader-caption {
+    font-size: var(--font-size-xl);
+  }
 }
 
-@media (max-width: 359px), (max-height: 279px) {
+@media (min-width: 1800px) and (min-height: 1000px) {
+  .loader {
+    --px: 4;
+  }
+}
+
+/* a phone on its side is short: the run sits lower, under less sky */
+@media (max-height: 420px) {
+  .loader-stage {
+    bottom: calc(var(--sab) + 3%);
+  }
+}
+
+@media (max-width: 339px) {
   .loader {
     --px: 1;
   }

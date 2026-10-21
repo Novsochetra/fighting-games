@@ -1,0 +1,140 @@
+/* the bar is a naga balustrade: its tail, whole stretches of its body on their posts, and its seven
+   heads. Every piece holds its stone look over its gold one; the gold copy is cut off where Bokator
+   has run to (--progress, set by src/ui/loading/loader-view.js), and the heads light at the end. He
+   runs from the tail to the foot of the heads, his reach ahead of him stopping short of them */
+.loader-track {
+  --run: calc(var(--tiles) * 30px * var(--px));
+  --track: calc(84px * var(--px) + var(--run));
+  --reach: calc(28px * var(--px) + var(--progress) * (var(--run) - 26px * var(--px)));
+
+  position: relative;
+  width: var(--track);
+  height: calc(61px * var(--px));
+}
+
+.naga {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+}
+
+.naga i {
+  flex: none;
+  image-rendering: pixelated;
+}
+
+.naga-tail {
+  width: calc(28px * var(--px));
+  height: calc(33px * var(--px));
+  background: url('../assets/ui/loading/naga-tail.png') 0 0 / 100% 200% no-repeat;
+}
+
+.naga-body {
+  width: var(--run);
+  height: calc(21px * var(--px));
+  background: url('../assets/ui/loading/naga-body.png') 0 0 / calc(30px * var(--px)) 200% repeat-x;
+}
+
+.naga-head {
+  width: calc(56px * var(--px));
+  height: calc(61px * var(--px));
+  background: url('../assets/ui/loading/naga-head.png') 0 0 / 100% 200% no-repeat;
+}
+
+.naga-gold i {
+  background-position-y: 100%;
+}
+
+.naga-gold {
+  clip-path: inset(0 calc(100% - var(--reach)) 0 0);
+  transition: clip-path var(--duration-loader-follow) var(--easing-linear);
+}
+
+/* the heads light up and glow once everything is in */
+.loader.complete .naga-gold {
+  clip-path: inset(0);
+}
+
+.loader.complete .naga-gold .naga-head {
+  filter: drop-shadow(0 0 calc(var(--px) * 4px) var(--color-gold));
+}
+
+/* Bokator's middle is where the gold ends, his feet on the serpent's back; the clamp keeps the
+   trailing blade on screen where a narrow phone leaves little room round the bar */
+.loader-runner {
+  position: absolute;
+  left: 0;
+  bottom: calc(20px * var(--px));
+  width: calc(62px * var(--px));
+  height: calc(47px * var(--px));
+  translate: clamp(
+      calc((var(--track) - 100vw) / 2),
+      calc(var(--reach) - 31px * var(--px)),
+      calc((var(--track) + 100vw) / 2 - 62px * var(--px))
+    )
+    0;
+  transition: translate var(--duration-loader-follow) var(--easing-linear);
+}
+
+.loader-hero,
+.loader-dust {
+  position: absolute;
+  image-rendering: pixelated;
+}
+
+.loader-hero {
+  inset: 0;
+  background: url('../assets/ui/loading/bokator-run.png') 0 0 / calc(496px * var(--px)) 100%
+    no-repeat;
+  animation: loader-run var(--duration-sprite-run) var(--easing-step-8) infinite;
+}
+
+/* a puff of dust behind his heel at every stride, two to a run of eight frames */
+.loader-dust {
+  left: calc(-14px * var(--px));
+  bottom: 0;
+  width: calc(32px * var(--px));
+  height: calc(18px * var(--px));
+  background: url('../assets/ui/loading/dust.png') 0 0 / calc(160px * var(--px)) 100% no-repeat;
+  animation: loader-dust var(--duration-dust) var(--easing-step-5) infinite;
+}
+
+/* the last stretch is quick, and a hidden screen jumps straight to where its next wait starts */
+.loader.complete .naga-gold,
+.loader.complete .loader-runner {
+  transition-duration: var(--duration-normal);
+}
+
+.loader.done .naga-gold,
+.loader.done .loader-runner {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-hero,
+  .loader-dust {
+    animation: none;
+  }
+
+  .loader-dust {
+    display: none;
+  }
+
+  .naga-gold,
+  .loader-runner {
+    transition: none;
+  }
+}
+
+@keyframes loader-run {
+  to {
+    background-position-x: calc(-496px * var(--px));
+  }
+}
+
+@keyframes loader-dust {
+  to {
+    background-position-x: calc(-160px * var(--px));
+  }
+}

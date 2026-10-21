@@ -61,7 +61,8 @@ size and brings the dusk to life: the moat's reflection ripples, the sun glows a
 the roads' ambient effects drift through. It draws only while the painting is shown.
 
 A loading screen (`#loader` in `index.html`, `src/ui/loading/`, styles in `styles/loading*.css`) is
-up from the first paint, with Bokator walking along a ledge that fills as files settle. The boot
+up from the first paint: Bokator runs along a naga balustrade before Angkor Wat at dusk, the stone
+turning to gold behind him as files settle (its own art, in `assets/ui/loading/`, is preloaded first). The boot
 (`src/boot/start-loading.js`) loads every image the menus draw (`src/data/ui-art.js` and each hero's
 card strips) and the pixel font before the fighters' sprites, so no menu or popup shows art still on
 its way; a file that fails counts as settled and a stalled boot gives up after a time limit. In play
