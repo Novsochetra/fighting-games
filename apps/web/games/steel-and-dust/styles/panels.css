@@ -4,11 +4,20 @@
   text-align: center;
   margin: 4px 0 0;
   max-width: 46ch;
+  text-wrap: balance;
 }
 
 .mnote b {
   color: var(--color-text);
   font-weight: var(--font-weight-semibold);
+}
+
+.mnote .keep {
+  white-space: nowrap;
+}
+
+.mnote .dot {
+  margin-inline: 0.5em;
 }
 
 .stats {

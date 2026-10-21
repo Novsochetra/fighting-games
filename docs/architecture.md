@@ -51,6 +51,11 @@ The game keeps a strict split:
 | `src/ui/`     | menus, the hero carousel, settings, help, screen fit, full screen   | yes                                 |
 | `src/main.js` | wires the pieces together and runs the fixed-step loop              | yes                                 |
 
+The menus stand on two layers shared by all of them, at the back of `#menus`: the Angkor painting
+(`.menu-scene`) and one dim (`.menu-dim`). `menuBackdrop` (`src/ui/menus/menu-backdrop.js`) sets
+both from the menu stack, so a change of menu fades the dim from one darkness to the next and keeps
+the painting up from the title into Settings or the hero select; the menus themselves only cross-fade.
+
 The menus and the HUD share one carved-sandstone kit in `assets/ui/` (see its README): nine-slice
 frames for the hero cards, the settings panel and the HUD panels, which the HUD draws with
 `src/render/nine-slice.js`.

@@ -15,6 +15,7 @@ function titleTip({ ui, fullscreen, isIos, padConnected }) {
   return '<kbd>Enter</kbd> choose · <kbd>Esc</kbd> back · <kbd>F</kbd> full screen';
 }
 
+// each record is kept whole, so a narrow phone breaks the line between them, never inside one
 export function titleNoteHtml(game, context) {
   const parts = [];
   if (game.records.bestScore) {
@@ -25,7 +26,8 @@ export function titleNoteHtml(game, context) {
   }
   const tip = titleTip(context);
   const separator = parts.length && tip ? '<br>' : '';
-  return parts.join(' &nbsp;·&nbsp; ') + separator + tip;
+  const records = parts.map((part) => `<span class="keep">${part}</span>`);
+  return records.join('<span class="dot"> · </span>') + separator + tip;
 }
 
 function livesLeftHtml(lives) {

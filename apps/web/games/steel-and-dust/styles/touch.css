@@ -87,13 +87,13 @@ body.stick-hidden .stick-zone {
   display: none;
 }
 
+/* the hint follows the title's note in the column rather than sitting on the bottom edge, where a
+   note that wraps on a narrow phone ran into it */
 @media (orientation: portrait) {
   body.touch-on .rotate {
     display: block;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: calc(10px + var(--sab));
+    max-width: 30ch;
+    margin: 4px 0 0;
     text-align: center;
     font-family: var(--font-display);
     font-size: var(--font-size-xs);
