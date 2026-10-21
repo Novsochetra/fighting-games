@@ -4,6 +4,7 @@ import { themeOf } from '../fighters/hero-colors.js';
 import { shake } from '../fx/camera-fx.js';
 import { addSparks } from '../fx/particles.js';
 import { runAbsoluteZero } from './absolute-zero.js';
+import { runMarchOfTheBayon } from './march-of-the-bayon.js';
 import { runPhoenixPyre } from './phoenix-pyre.js';
 import { runPoundingLion } from './pounding-lion.js';
 import { runStampede } from './stampede.js';
@@ -17,6 +18,7 @@ const RUN_BY_HERO = {
   blue: runAbsoluteZero,
   ember: runPhoenixPyre,
   bokator: runPoundingLion,
+  angkor: runMarchOfTheBayon,
 };
 
 export function startUlt(game, player) {

@@ -5,7 +5,7 @@ import { DEFAULT_HERO, HEROES, heroById } from '../../../src/data/heroes.js';
 import { defaultSettings } from '../../../src/data/settings.js';
 
 describe('the heroes', () => {
-  it('offers five Shades and the Bokator fighter, each with its own sprite folder and colors', () => {
+  it('offers five Shades and two Khmer fighters, each with its own sprite folder and colors', () => {
     expect(HEROES.map((hero) => hero.id)).toEqual([
       'moss',
       'firefly',
@@ -13,8 +13,9 @@ describe('the heroes', () => {
       'blue',
       'ember',
       'bokator',
+      'angkor',
     ]);
-    expect(new Set(HEROES.map((hero) => hero.directory)).size).toBe(6);
+    expect(new Set(HEROES.map((hero) => hero.directory)).size).toBe(7);
     for (const hero of HEROES) {
       expect(HERO_THEMES[hero.id], hero.id).toBeDefined();
     }

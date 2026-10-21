@@ -95,6 +95,7 @@ describe('game menus on the real page', () => {
       'blue',
       'ember',
       'bokator',
+      'angkor',
     ]);
     expect(document.querySelector('.hero-card.picked').dataset.hero).toBe('moss');
     expect(cards[1].getAttribute('style')).toContain('heroes/firefly/arsenal/hero_idle.png');
@@ -105,6 +106,7 @@ describe('game menus on the real page', () => {
       'Ult Absolute Zero',
       'Ult Phoenix Pyre',
       'Ult Pounding the Lion',
+      'Ult March of the Bayon',
     ]);
     expect(cards[3].querySelector('.hero-kit').textContent).toBe('Style Frost Iai');
     key('ArrowRight');

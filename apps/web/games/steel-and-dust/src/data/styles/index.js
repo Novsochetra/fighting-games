@@ -1,5 +1,6 @@
 import { heroById } from '../heroes.js';
 import { WEAPONS } from '../weapons/index.js';
+import { ANGKOR_STYLE } from './angkor.js';
 import { ANTLER_STYLE } from './antler.js';
 import { applyStyle } from './apply-style.js';
 import { BLUE_STYLE } from './blue.js';
@@ -15,6 +16,7 @@ export const STYLES = {
   blue: BLUE_STYLE,
   ember: EMBER_STYLE,
   bokator: BOKATOR_STYLE,
+  angkor: ANGKOR_STYLE,
 };
 
 // every Shade's take on every weapon, built once: STYLED_MOVES[heroId][weaponId][moveId]

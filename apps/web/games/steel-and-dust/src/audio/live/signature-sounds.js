@@ -84,6 +84,14 @@ function pounce(live, start) {
   hiss(live, { start, ...dust, attack: 0.01, duration: 0.14, volume: 0.06 });
 }
 
+// carved stone grinding up out of the ground on the deep beat of a skor drum
+function relief(live, start) {
+  thump(live, { start, from: 70, to: 40, duration: 0.3, volume: 0.36 });
+  crunch(live, { start: start + 0.02, duration: 0.24, volume: 0.12, frequency: 300 });
+  const grind = { type: 'lowpass', from: 900, to: 300, resonance: 1.1 };
+  hiss(live, { start, ...grind, attack: 0.04, duration: 0.3, volume: 0.08 });
+}
+
 // the hero's blade ringing out as it calls a technique by name
 function technique(live, start) {
   metal(live, { start, frequencies: [1320, 1980, 2640], duration: 0.35, volume: 0.045 });
@@ -101,5 +109,6 @@ export const SIGNATURE_SOUNDS = {
   phoenix,
   roar,
   pounce,
+  relief,
   technique,
 };

@@ -1,5 +1,6 @@
-// the heroes the player can pick, five Shades and the Bokator fighter; each has its own sprite set and
-// effect colors, a fighting style (data/styles/) and an ultimate (data/ultimates/)
+// the heroes the player can pick, five Shades and two Khmer fighters, Bokator and the Angkor Warrior;
+// each has its own sprite set and effect colors, a fighting style (data/styles/) and an ultimate
+// (data/ultimates/)
 export const HEROES = [
   {
     id: 'moss',
@@ -42,6 +43,13 @@ export const HEROES = [
     tagline: 'Pounds the lion, as Angkor taught',
     directory: 'assets/sprites/heroes/bokator/arsenal/',
     ultStrip: 'assets/sprites/heroes/bokator/hero_ult.png',
+  },
+  {
+    id: 'angkor',
+    name: 'Angkor Warrior',
+    tagline: 'Steps out of the Bayon walls',
+    directory: 'assets/sprites/heroes/angkor/arsenal/',
+    ultStrip: 'assets/sprites/heroes/angkor/hero_ult.png',
   },
 ];
 

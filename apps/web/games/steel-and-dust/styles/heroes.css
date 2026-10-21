@@ -1,10 +1,10 @@
 .heroes .box {
-  width: min(1040px, 100%);
+  width: min(1200px, 100%);
 }
 
 .hero-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 10px;
   padding: 12px;
   overflow-y: auto;
@@ -48,17 +48,29 @@
   --accent: var(--color-hero-bokator);
 }
 
-/* Bokator's frames are 112 px tall with his feet in the same place, so his window starts 32 px lower */
-.hero-card[data-hero='bokator'] .hero-art {
+.hero-card[data-hero='angkor'] {
+  --accent: var(--color-hero-angkor);
+}
+
+/* Bokator's and the Angkor Warrior's frames are 112 px tall with their feet in the same place, so
+   their window starts 32 px lower */
+.hero-card[data-hero='bokator'] .hero-art,
+.hero-card[data-hero='angkor'] .hero-art {
   background-size: 1536px 896px;
   background-position: -64px -64px;
 }
 
-/* standing up in his win pose he is a head taller than the crouch he fights in, so his card plays a
-   smaller drawing of it, one row as tall as his frames, to stand as tall as the Shades on theirs */
+/* standing up in their win poses they reach well above the crouch they fight in, so their cards play
+   a smaller drawing of it, one row as tall as their frames, to stand as tall as the Shades on theirs */
 .hero-card[data-hero='bokator']:hover .hero-art,
 .hero-card[data-hero='bokator'].sel .hero-art {
   background-image: url('../assets/sprites/heroes/bokator/card_win.png');
+  background-size: 1024px 224px;
+}
+
+.hero-card[data-hero='angkor']:hover .hero-art,
+.hero-card[data-hero='angkor'].sel .hero-art {
+  background-image: url('../assets/sprites/heroes/angkor/card_win.png');
   background-size: 1024px 224px;
 }
 
@@ -140,7 +152,8 @@
   color: var(--accent);
 }
 
-@media (max-height: 420px), (min-width: 641px) and (max-width: 860px) {
+/* seven drawings at full size need about 1064 px side by side; below that they are drawn at half size */
+@media (max-height: 420px), (min-width: 641px) and (max-width: 1120px) {
   .hero-art {
     width: 64px;
     height: 80px;
@@ -153,13 +166,16 @@
     background-size: 512px 320px;
   }
 
-  .hero-card[data-hero='bokator'] .hero-art {
+  .hero-card[data-hero='bokator'] .hero-art,
+  .hero-card[data-hero='angkor'] .hero-art {
     background-size: 768px 448px;
     background-position: -32px -32px;
   }
 
   .hero-card[data-hero='bokator']:hover .hero-art,
-  .hero-card[data-hero='bokator'].sel .hero-art {
+  .hero-card[data-hero='bokator'].sel .hero-art,
+  .hero-card[data-hero='angkor']:hover .hero-art,
+  .hero-card[data-hero='angkor'].sel .hero-art {
     background-size: 512px 112px;
   }
 
@@ -176,7 +192,7 @@
   }
 }
 
-/* a phone held upright has no room for six cards side by side: they keep their full size and the row
+/* a phone held upright has no room for seven cards side by side: they keep their full size and the row
    scrolls sideways, with a slice of the next card always showing so the row reads as one to swipe */
 @media (max-width: 640px) and (min-height: 421px) {
   .hero-grid {
