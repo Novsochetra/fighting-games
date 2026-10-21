@@ -1,3 +1,5 @@
+import { sanitizeButtonLayout } from './button-layout.js';
+
 export function defaultSettings(coarsePointer) {
   return {
     music: 60,
@@ -8,6 +10,7 @@ export function defaultSettings(coarsePointer) {
     flash: true,
     touch: 'auto',
     buttonSize: 1,
+    buttonLayout: null,
     stick: 'fixed',
     padHidesTouch: true,
     aim: coarsePointer,
@@ -25,6 +28,9 @@ export function migrateSettings(stored) {
   const settings = {};
   for (const [key, value] of Object.entries(stored)) {
     settings[RENAMED_KEYS[key] ?? key] = value;
+  }
+  if ('buttonLayout' in settings) {
+    settings.buttonLayout = sanitizeButtonLayout(settings.buttonLayout);
   }
   return settings;
 }

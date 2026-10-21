@@ -1,6 +1,7 @@
 import { createHelpPanel } from '../ui/help/help-panel.js';
 import { installCarouselEvents } from '../ui/heroes/carousel-events.js';
 import { createHeroPanel } from '../ui/heroes/hero-panel.js';
+import { createLayoutEditor } from '../ui/layout/layout-editor.js';
 import { createMenuActions } from '../ui/menus/menu-actions.js';
 import { MenuController } from '../ui/menus/menu-controller.js';
 import { installMenuEvents } from '../ui/menus/menu-events.js';
@@ -18,7 +19,7 @@ function isIos(navigator) {
 }
 
 function createPanels({ elements, game, audio, layout, ui, window }) {
-  return {
+  const panels = {
     settings: createSettingsPanel({
       list: elements.settingsList,
       game,
@@ -30,6 +31,8 @@ function createPanels({ elements, game, audio, layout, ui, window }) {
     help: createHelpPanel({ tabs: elements.helpTabs, body: elements.helpBody, game, ui }),
     heroes: createHeroPanel({ list: elements.heroList, game }),
   };
+  panels.layout = createLayoutEditor({ window, game, audio, layout, settings: panels.settings });
+  return panels;
 }
 
 export function installUi({ window, elements, game, audio, ui, pad }) {

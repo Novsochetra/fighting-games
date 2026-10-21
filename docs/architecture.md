@@ -60,6 +60,14 @@ The menus and the HUD share one carved-sandstone kit in `assets/ui/` (see its RE
 frames for the hero cards, the settings panel and the HUD panels, which the HUD draws with
 `src/render/nine-slice.js`.
 
+The touch buttons can be moved and resized (Settings, Button layout). The editor is its own menu,
+`layout`, in `src/ui/layout/` with `styles/layout-editor.css`: it drags a copy of the touch layer's
+buttons and works on a draft (`layout-draft.js`), so only Done saves. The setting `buttonLayout` holds
+one layout per orientation, or `null` for the original one in `styles/touch-buttons.css`: each button's
+centre as fractions of the touch layer and a size on top of Button size, checked on load by
+`sanitizeButtonLayout` (`src/data/button-layout.js`). `screen-fit.js` applies the layout for the way
+the phone is held on every fit, as the `custom` class and `--tb-x`, `--tb-y`, `--tb-size` on each button.
+
 `sim/` reaches the outside world only through `game.io` ports
 (`sfx`, `vibrate`, `saveRecords`, `saveHints`, `saveSettings`, `setMuted`), so it runs in Node tests unchanged.
 
