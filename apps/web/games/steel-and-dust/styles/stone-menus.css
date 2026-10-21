@@ -1,0 +1,99 @@
+/* the title, pause, defeat and clear menus in the carved stone kit: a crest over the title, a carved
+   rule under it, and stone buttons whose carved ends stay whole while the plain middle repeats */
+/* a menu's buttons are as wide as its longest label and the carved ends either side of it */
+.mlist {
+  --stone: 2;
+
+  width: max-content;
+  min-width: calc(var(--stone) * 100px);
+  max-width: 88vw;
+  gap: calc(var(--stone) * 4px);
+}
+
+.mlist .mbtn {
+  display: grid;
+  place-items: center;
+  height: calc(var(--stone) * 23px);
+  padding: 0 calc(var(--stone) * 24px);
+  color: var(--color-text);
+  text-shadow: var(--text-shadow-pixel-xs);
+  background: none;
+  border: 0 solid var(--color-clear);
+  box-shadow: none;
+  border-image: url('../assets/ui/kit/button.png') 0 24 0 22 fill / 0 calc(var(--stone) * 24px) 0
+    calc(var(--stone) * 22px) / 0 round;
+  white-space: nowrap;
+  image-rendering: pixelated;
+}
+
+/* a grid button would show even while the menu hides it (Weapon, Start from mission 1) */
+.mlist .mbtn[hidden] {
+  display: none;
+}
+
+.mlist .mbtn.primary {
+  height: calc(var(--stone) * 29px);
+  color: var(--color-gold);
+  border-image-source: url('../assets/ui/kit/button-primary.png');
+}
+
+.mlist .mbtn:hover,
+.mlist .mbtn.sel,
+.mlist .mbtn.primary:hover,
+.mlist .mbtn.primary.sel {
+  color: var(--color-mint-light);
+  background: none;
+  filter: drop-shadow(0 0 6px var(--color-green)) brightness(1.15);
+}
+
+.mlist .mbtn:active {
+  transform: none;
+  translate: 0 1px;
+  box-shadow: none;
+}
+
+.logo,
+.mtitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo,
+.mtitle.good {
+  color: var(--color-gold);
+}
+
+.logo::before,
+.mtitle::before {
+  content: '';
+  width: calc(var(--stone, 2) * 53px);
+  height: calc(var(--stone, 2) * 29px);
+  margin-bottom: 0.15em;
+  background: url('../assets/ui/kit/title-crest.png') 0 0 / 100% 100%;
+  image-rendering: pixelated;
+}
+
+.logo::after,
+.mtitle::after {
+  content: '';
+  width: min(calc(var(--stone, 2) * 162px), 82vw);
+  height: calc(var(--stone, 2) * 11px);
+  margin-top: 0.3em;
+  background: url('../assets/ui/kit/title-rule.png') 0 0 / 100% 100%;
+  image-rendering: pixelated;
+}
+
+/* the title's darkening sits over the painting, under the menu */
+#m-title > * {
+  position: relative;
+}
+
+/* short screens have no room for that much stone, so they draw it at 1x */
+@media (max-height: 560px) {
+  .mlist,
+  .logo,
+  .mtitle {
+    --stone: 1;
+  }
+}

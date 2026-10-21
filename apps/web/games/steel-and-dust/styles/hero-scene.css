@@ -1,4 +1,6 @@
-/* a notch on one side of a phone leaves the full-width row of cards a little past the other edge */
+/* the title and the hero select stand in front of Angkor Wat at dusk; a notch on one side of a phone
+   leaves the full-width row of hero cards a little past the other edge */
+#m-title,
 .menu.heroes {
   overflow-x: hidden;
   background: url('../assets/ui/select/bg-landscape.png') center / cover no-repeat
@@ -6,7 +8,8 @@
   image-rendering: pixelated;
 }
 
-/* the moat and the ruins in the front of the painting are bright; the cards stand on them */
+/* the moat and the ruins in the front of the painting are bright; the menus stand on them */
+#m-title::before,
 .menu.heroes::before {
   content: '';
   position: absolute;
@@ -63,6 +66,7 @@
 }
 
 @media (orientation: portrait) {
+  #m-title,
   .menu.heroes {
     background-image: url('../assets/ui/select/bg-portrait.png');
   }

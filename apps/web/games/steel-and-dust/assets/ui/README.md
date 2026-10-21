@@ -1,6 +1,6 @@
 # UI art: the Khmer stone kit
 
-Carved, mossy Angkor sandstone for the hero select, the settings panel and the HUD frames. The art was
+Carved, mossy Angkor sandstone for the menus, the hero select and the HUD frames. The art was
 drawn with Codex (ChatGPT image generation) as large sheets on magenta, then cut out, shrunk to these
 sizes by keeping the most common color in each block, snapped to one palette and given a dark outline.
 
@@ -9,7 +9,8 @@ sizes by keeping the most common color in each block, snapped to one palette and
 | `select/`   | `bg-landscape.png` (384×216), `bg-portrait.png` (216×468): Angkor Wat at dusk | `styles/hero-scene.css`     |
 | `select/`   | `card.png`, `card-selected.png`, `card-crest*.png`, `arrow.png`      | `styles/hero-frames.css`    |
 | `kit/`      | `panel.png`, `panel-crest.png`, `panel-foot.png`, `stone-button.png` | `styles/stone.css`          |
-| `kit/`      | `title-crest.png`, `title-rule.png`                                  | `styles/hero-scene.css`     |
+| `kit/`      | `title-crest.png`, `title-rule.png`                                  | `styles/stone-menus.css`    |
+| `kit/`      | `button.png`, `button-primary.png`: the menu buttons                 | `styles/stone-menus.css`    |
 | `settings/` | `lotus-band.png`: the frieze after a settings group's name           | `styles/stone.css`          |
 | `hud/`      | `panel-frame.png`, `score-frame.png`                                 | `src/data/hud-frames.js`    |
 
@@ -21,6 +22,7 @@ image pixels (top, right, bottom, left):
 | `select/card*.png`          | 44, 26, 30, 26 |
 | `kit/panel.png`             | 46, 40, 50, 40 |
 | `kit/stone-button.png`      | 8, 8, 8, 8     |
+| `kit/button*.png`           | 0, 24, 0, 22   |
 | `settings/lotus-band.png`   | 0, 10, 0, 14   |
 | `hud/panel-frame.png`       | 12, 14, 12, 14 |
 | `hud/score-frame.png`       | 11, 12, 11, 12 |
