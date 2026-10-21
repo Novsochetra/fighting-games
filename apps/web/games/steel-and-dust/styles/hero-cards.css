@@ -1,0 +1,199 @@
+/* the button is only the middle half of the sprite window, as tall as the sprite, so no two cards
+   overlap where they take a tap; the rest of the window and the middle hero's text hang outside it */
+.hero-card {
+  --accent: var(--color-hero-moss);
+  --scale: 1;
+  --edge: calc(var(--px) * 1px);
+
+  position: absolute;
+  top: 0;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: calc(var(--px) * 64px);
+  height: calc(var(--px) * 80px);
+  padding: 0;
+  color: var(--color-text);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transform: translateX(calc(-50% + var(--slot) * var(--slot-gap))) scale(var(--scale));
+  transform-origin: 50% calc(var(--px) * 76px);
+  transition:
+    transform var(--duration-slow) var(--easing-standard),
+    opacity var(--duration-slow) var(--easing-standard),
+    filter var(--duration-slow) var(--easing-standard);
+}
+
+.hero-card.wrap {
+  transition: none;
+}
+
+.hero-card[data-hero='firefly'] {
+  --accent: var(--color-hero-firefly);
+}
+
+.hero-card[data-hero='antler'] {
+  --accent: var(--color-hero-antler);
+}
+
+.hero-card[data-hero='blue'] {
+  --accent: var(--color-hero-blue);
+}
+
+.hero-card[data-hero='ember'] {
+  --accent: var(--color-hero-ember);
+}
+
+.hero-card[data-hero='bokator'] {
+  --accent: var(--color-hero-bokator);
+}
+
+/* the middle hero stands in a pool of their own light */
+.hero-card[data-depth='0'] {
+  z-index: 3;
+  background:
+    radial-gradient(
+      calc(var(--px) * 30px) calc(var(--px) * 5px) at 50% calc(var(--px) * 76px),
+      color-mix(in srgb, var(--accent) 60%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      calc(var(--px) * 32px) calc(var(--px) * 40px) at 50% calc(var(--px) * 44px),
+      color-mix(in srgb, var(--accent) 16%, transparent),
+      transparent
+    );
+}
+
+/* the side heroes stand back in grey, like the ones not picked on an arcade select screen */
+.hero-card[data-depth='1'] {
+  --scale: 0.6667;
+
+  z-index: 2;
+  filter: grayscale(0.75) brightness(0.8);
+}
+
+.hero-card[data-depth='2'] {
+  --scale: 0.5;
+
+  z-index: 1;
+  filter: grayscale(1) brightness(0.55);
+}
+
+.hero-card[data-depth='1']:hover,
+.hero-card[data-depth='2']:hover {
+  filter: grayscale(0.3) brightness(1);
+}
+
+/* a card going out of sight fades out fast, as quick presses can bring it round the loop at once */
+.hero-card[data-depth='3'] {
+  --scale: 0.5;
+
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--duration-slow) var(--easing-standard),
+    opacity var(--duration-fast) var(--easing-out);
+}
+
+/* one whole 128x80 frame of the sword row, so no blade or flame is cut off at the edge */
+.hero-art {
+  flex: none;
+  pointer-events: none;
+  width: calc(var(--px) * 128px);
+  height: calc(var(--px) * 80px);
+  margin-inline: calc(var(--px) * -32px);
+  background-image: var(--idle);
+  background-size: calc(var(--px) * 768px) calc(var(--px) * 320px);
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  animation: hero-idle var(--duration-sprite-idle) var(--easing-step-6) infinite;
+}
+
+/* four hard shadows one sprite pixel out draw an outline round the hero, then a soft glow */
+.hero-card[data-depth='0'] .hero-art {
+  background-image: var(--win);
+  background-size: calc(var(--px) * 512px) calc(var(--px) * 320px);
+  animation: hero-win var(--duration-sprite-win) var(--easing-step-4) infinite;
+  filter: drop-shadow(var(--edge) 0 0 var(--accent))
+    drop-shadow(calc(-1 * var(--edge)) 0 0 var(--accent)) drop-shadow(0 var(--edge) 0 var(--accent))
+    drop-shadow(0 calc(-1 * var(--edge)) 0 var(--accent))
+    drop-shadow(0 0 calc(var(--px) * 4px) color-mix(in srgb, var(--accent) 70%, transparent));
+}
+
+/* Bokator's frames are 112 px tall with his feet in the same place, so his window starts 32 px lower */
+.hero-card[data-hero='bokator'] .hero-art {
+  background-size: calc(var(--px) * 768px) calc(var(--px) * 448px);
+  background-position: 0 calc(var(--px) * -32px);
+}
+
+/* standing up in his win pose he is a head taller than the crouch he fights in, so his card shows a
+   smaller drawing of it, one row as tall as his frames, to stand as tall as the Shades on theirs; it
+   holds the first frame, where he faces the player, since in the rest he turns his back */
+.hero-card[data-hero='bokator'][data-depth='0'] .hero-art {
+  background-image: url('../assets/sprites/heroes/bokator/card_win.png');
+  background-size: calc(var(--px) * 512px) calc(var(--px) * 112px);
+  animation: none;
+}
+
+@keyframes hero-idle {
+  to {
+    background-position-x: calc(var(--px) * -768px);
+  }
+}
+
+@keyframes hero-win {
+  to {
+    background-position-x: calc(var(--px) * -512px);
+  }
+}
+
+.hero-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: calc(var(--px) * 112px);
+  margin-inline: calc(var(--px) * -24px);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--easing-out);
+}
+
+.hero-card[data-depth='0'] .hero-info {
+  visibility: visible;
+  opacity: 1;
+}
+
+.hero-name {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  color: var(--accent);
+  text-align: center;
+  text-shadow: var(--text-shadow-pixel-sm);
+}
+
+.hero-line {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+  letter-spacing: normal;
+}
+
+.hero-kit {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  text-align: center;
+  letter-spacing: normal;
+}
+
+.hero-kit b {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-regular);
+  color: var(--accent);
+}

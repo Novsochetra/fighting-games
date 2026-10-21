@@ -1,3 +1,10 @@
+import { isCenterCard, isHeroCard } from './menu-items.js';
+
+// a side hero card turns the carousel only when clicked, or it would slide out from under the mouse
+function hoverSelects(item) {
+  return item && (!isHeroCard(item) || isCenterCard(item));
+}
+
 // clicks and mouse hover on the menus, and the panels' own buttons
 export function installMenuEvents({ document, menus, act, ui, panels, audio }) {
   const root = document.getElementById('menus');
@@ -13,7 +20,7 @@ export function installMenuEvents({ document, menus, act, ui, panels, audio }) {
     }
     const items = menus.items();
     const index = items.findIndex((item) => item.contains(event.target));
-    if (index >= 0 && index !== menus.state.selected) {
+    if (hoverSelects(items[index]) && index !== menus.state.selected) {
       menus.state.selected = index;
       ui.noteInput('mouse');
       menus.highlight(false);
