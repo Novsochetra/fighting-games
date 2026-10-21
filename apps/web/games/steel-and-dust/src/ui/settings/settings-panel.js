@@ -13,9 +13,9 @@ function rowHtml(definition, settings) {
   const note = definition.note ? `<small>${definition.note}</small>` : '';
   return (
     `<div class="setrow" data-k="${definition.key}"><span class="lbl">${definition.label}${note}</span>` +
-    '<span class="stepper"><button type="button" data-d="-1" aria-label="Less">‹</button>' +
+    '<span class="stepper"><button type="button" class="stone-btn" data-d="-1" aria-label="Less">‹</button>' +
     `<span class="val">${valueHtml(definition, settings)}</span>` +
-    '<button type="button" data-d="1" aria-label="More">›</button></span></div>'
+    '<button type="button" class="stone-btn" data-d="1" aria-label="More">›</button></span></div>'
   );
 }
 
@@ -25,7 +25,7 @@ export function settingsHtml(visibility, settings) {
   )
     .map((definition) =>
       definition.group
-        ? `<div class="group">${definition.group}</div>`
+        ? `<div class="group stone-band">${definition.group}</div>`
         : rowHtml(definition, settings),
     )
     .join('');

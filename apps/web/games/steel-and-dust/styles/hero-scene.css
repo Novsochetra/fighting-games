@@ -1,0 +1,96 @@
+.menu.heroes {
+  background: url('../assets/ui/select/bg-landscape.png') center / cover no-repeat
+    var(--color-night);
+  image-rendering: pixelated;
+}
+
+/* the moat and the ruins in the front of the painting are bright; the cards stand on them */
+.menu.heroes::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    var(--color-clear) 15%,
+    var(--color-backdrop) 45%,
+    var(--color-backdrop-strong)
+  );
+  pointer-events: none;
+}
+
+.heroes .box {
+  position: relative;
+  width: min(1240px, 100%);
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+
+.heroes .box header {
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 14px 6px;
+  border-bottom: 0;
+}
+
+.heroes .box header::before,
+.heroes .box header::after {
+  content: '';
+  background-size: 100% 100%;
+}
+
+.heroes .box header::before {
+  width: 106px;
+  height: 58px;
+  background-image: url('../assets/ui/kit/title-crest.png');
+}
+
+.heroes .box header::after {
+  width: min(324px, 100%);
+  height: 22px;
+  background-image: url('../assets/ui/kit/title-rule.png');
+}
+
+.heroes .box h2 {
+  font-size: var(--font-size-xl);
+  color: var(--color-gold);
+  text-align: center;
+  text-shadow: var(--text-shadow-pixel-md);
+}
+
+.heroes .box .xbtn {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+}
+
+@media (orientation: portrait) {
+  .menu.heroes {
+    background-image: url('../assets/ui/select/bg-portrait.png');
+  }
+
+  .heroes .box h2 {
+    font-size: var(--font-size-lg);
+  }
+}
+
+@media (max-height: 420px) {
+  .heroes .box header::before {
+    width: 53px;
+    height: 29px;
+  }
+
+  .heroes .box header::after {
+    width: 162px;
+    height: 11px;
+  }
+
+  .heroes .box h2 {
+    font-size: var(--font-size-md);
+  }
+
+  .heroes .box .xbtn {
+    top: 0;
+  }
+}

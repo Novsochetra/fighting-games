@@ -5,7 +5,7 @@ import { drawPlayerPanel } from './player-panel.js';
 import { drawScore, drawWaveLabel } from './score.js';
 
 export function drawHud(painter, game, view) {
-  drawPlayerPanel(painter, game);
+  drawPlayerPanel(painter, game, view);
   drawScore(painter, game, view);
   drawWaveLabel(painter, game);
   drawCombo(painter, game);

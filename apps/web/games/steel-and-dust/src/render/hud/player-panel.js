@@ -4,7 +4,12 @@ import { WEAPONS } from '../../data/weapons/index.js';
 import { drawItemIcon } from '../scene/item-icons.js';
 import { drawText } from '../text/draw-text.js';
 import { drawBar } from './bar.js';
+import { drawHudFrame } from './hud-frames.js';
 import { drawLives } from './lives.js';
+
+const FRAME = { x: 0, y: 0, width: 132, height: 62 };
+// the stone frame's corners would cover the panel's first letters, so everything inside moves in
+const INSET = 2;
 
 function healthColor(fraction, tickCount) {
   if (fraction > 0.5) {
@@ -106,11 +111,19 @@ function drawUltGauge(painter, game) {
   }
 }
 
-export function drawPlayerPanel(painter, game) {
-  painter.alpha(0.55).use(COLORS.night).rect(2, 2, 124, 54);
-  painter.alpha(1).use(HUD_COLORS.panelLine).outline(2, 2, 124, 54);
+export function drawPlayerPanel(painter, game, view) {
+  painter
+    .alpha(0.55)
+    .use(COLORS.night)
+    .rect(2, 2, FRAME.width - 4, FRAME.height - 4);
+  painter.alpha(1);
+  drawHudFrame(painter, view.hudFrames, 'panel', FRAME);
+  const { context } = painter;
+  context.save();
+  context.translate(INSET, INSET);
   drawHealth(painter, game.player, game.tickCount);
   drawWeaponSlot(painter, game);
   drawUltGauge(painter, game);
   drawLives(painter, { lives: game.lives, x: 6, y: 47 });
+  context.restore();
 }

@@ -1,7 +1,3 @@
-.heroes .box {
-  width: min(1040px, 100%);
-}
-
 .hero-grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -10,22 +6,49 @@
   overflow-y: auto;
 }
 
+/* a carved stone frame, a nine-slice image at the hero sprites' 2x, with its crest and foot laid on top */
 .hero-card {
   --accent: var(--color-hero-moss);
+  --frame: 2;
 
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 10px 6px 12px;
+  padding: calc(18px * var(--frame)) calc(13px * var(--frame)) calc(24px * var(--frame));
   text-transform: none;
-  background:
-    radial-gradient(
-      ellipse 60% 22% at 50% 62%,
-      color-mix(in srgb, var(--accent) 34%, transparent),
-      transparent
-    ),
-    var(--color-panel);
+  letter-spacing: normal;
+  background: none;
+  border: 0 solid var(--color-clear);
+  box-shadow: none;
+  border-image: url('../assets/ui/select/card.png') 44 26 30 fill / calc(44px * var(--frame))
+    calc(26px * var(--frame)) calc(30px * var(--frame)) / 0 round;
+  image-rendering: pixelated;
+}
+
+.hero-card::before,
+.hero-card::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  background-size: 100% 100%;
+  pointer-events: none;
+}
+
+.hero-card::before {
+  top: 0;
+  width: calc(44px * var(--frame));
+  height: calc(36px * var(--frame));
+  background-image: url('../assets/ui/select/card-crest.png');
+}
+
+.hero-card::after {
+  bottom: 0;
+  width: calc(20px * var(--frame));
+  height: calc(22px * var(--frame));
+  background-image: url('../assets/ui/select/card-foot.png');
 }
 
 .hero-card[data-hero='firefly'] {
@@ -62,21 +85,23 @@
   background-size: 1024px 224px;
 }
 
-.hero-card.picked {
-  border-color: var(--accent);
-}
-
 .hero-card:hover,
 .hero-card.sel {
   color: var(--color-text);
-  border-color: var(--accent);
-  background:
-    radial-gradient(
-      ellipse 70% 30% at 50% 62%,
-      color-mix(in srgb, var(--accent) 60%, transparent),
-      transparent
-    ),
-    var(--color-panel-raised);
+  background: none;
+  border-image-source: url('../assets/ui/select/card-selected.png');
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--color-green) 55%, transparent));
+}
+
+.hero-card.picked::before,
+.hero-card:hover::before,
+.hero-card.sel::before {
+  background-image: url('../assets/ui/select/card-crest-selected.png');
+}
+
+.hero-card:hover::after,
+.hero-card.sel::after {
+  background-image: url('../assets/ui/select/card-foot-selected.png');
 }
 
 /* one 64x80 window onto the 128x80 frames of the sword row, drawn at 2x */
@@ -89,6 +114,7 @@
   background-repeat: no-repeat;
   image-rendering: pixelated;
   animation: hero-idle var(--duration-sprite-idle) var(--easing-step-6) infinite;
+  flex: none;
 }
 
 .hero-card:hover .hero-art,
@@ -137,10 +163,14 @@
 .hero-kit b {
   font-family: var(--font-display);
   font-weight: var(--font-weight-regular);
-  color: var(--accent);
+  color: var(--color-gold);
 }
 
 @media (max-height: 420px), (min-width: 641px) and (max-width: 860px) {
+  .hero-card {
+    --frame: 1;
+  }
+
   .hero-art {
     width: 64px;
     height: 80px;
@@ -182,7 +212,7 @@
   .hero-grid {
     grid-template-columns: none;
     grid-auto-flow: column;
-    grid-auto-columns: min(144px, calc(50% - 20px));
+    grid-auto-columns: min(176px, calc(50% - 10px));
     overflow: auto hidden;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
@@ -193,7 +223,6 @@
 
   .hero-card {
     scroll-snap-align: start;
-    padding-inline: 4px;
     overflow: hidden;
   }
 }
