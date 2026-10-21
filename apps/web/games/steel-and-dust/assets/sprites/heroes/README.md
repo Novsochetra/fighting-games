@@ -72,7 +72,11 @@ height from its image).
   palette and given a 1-px dark outline round his body only, so the glow of his blade and arcs keeps a
   soft edge. Ground frames stand with his legs on x=63 and his feet on y=108, air frames have their
   lowest point on y=105, the idle loop's frames are nudged so his feet stay still, and the frames of each
-  attack were picked so the strike lands on the strip's strike frame. His win pose is one frame of the
+  attack were picked so the strike lands on the strip's strike frame. Scaled to that height, the lean of
+  his dash and the crouch of his landing came out a fifth bigger than his stance, so the dash's first
+  three frames and the landing's first two were shrunk about his feet afterwards (to 82-88%, in the
+  sword strips and in every row of `arsenal/`), each pixel taking the colour most of it covered and the
+  edge keeping its dark outline. His win pose is one frame of the
   win sheet, its blade glowing brighter and dimmer, since the sheet's other win frames wrap the blade in
   flames the weapon bake cannot lift off; `card_win.png` is that pose at 80% of the size for his select
   card, as for the Bokator fighter. `hero_ult.png` is two frames raising the dav, three of its blade
