@@ -1,18 +1,26 @@
-/* every card stands in a carved stone frame drawn behind it, the middle one lit jade; the button grows
-   round the middle hero's name so its frame holds it, and the side cards' names fold away so their
-   frames are only as tall as the hero */
+/* every card stands in the same carved stone frame, drawn behind it and lit jade in the middle: the
+   hero, and under them a line kept for their name, which only the middle card shows; every size on
+   the frames is worked out from the sprite pixel (--px) and the frame's own pixel (--frame) */
 .hero-stage {
   --frame: 2;
+  --overhang: calc(var(--px) * 16px);
+  --name-line: calc(var(--font-size-sm) * 1.15);
+  --below: calc(6px + var(--name-line) + var(--frame) * 26px);
+  --card-width: calc(var(--px) * 64px + 2 * var(--overhang));
+  --card-middle: calc((var(--px) * 80px + var(--below) - var(--frame) * 14px) / 2);
+  --card-gap: calc(var(--frame) * 10px);
+  --near-scale: 0.6667;
+  --far-scale: 0.5;
+  --reach-near: calc(var(--card-width) * (1 + var(--near-scale)) / 2 + var(--card-gap));
+  --reach-far: calc(
+    var(--reach-near) + var(--card-width) * (var(--near-scale) + var(--far-scale)) / 2 +
+      var(--card-gap)
+  );
+  --reach-out: calc(var(--reach-far) + var(--card-width) * var(--far-scale) + var(--card-gap));
 }
 
 .hero-card {
-  --overhang: calc(var(--px) * 10px);
-  --name-width: calc(var(--px) * 64px + 2 * var(--overhang) - var(--frame) * 30px);
-
   top: calc(var(--frame) * 14px);
-  height: auto;
-  min-height: calc(var(--px) * 80px);
-  padding-bottom: calc(var(--frame) * 10px);
 }
 
 .hero-card::before,
@@ -25,7 +33,7 @@
 
 .hero-card::before {
   z-index: -1;
-  inset: calc(var(--frame) * -14px) calc(-1 * var(--overhang)) calc(var(--frame) * -14px);
+  inset: calc(var(--frame) * -14px) calc(-1 * var(--overhang)) calc(-1 * var(--below));
   border: 0 solid var(--color-clear);
   border-image: url('../assets/ui/select/card.png') 44 26 30 fill / calc(var(--frame) * 44px)
     calc(var(--frame) * 26px) calc(var(--frame) * 30px) / 0 round;
@@ -48,22 +56,8 @@
   background-image: url('../assets/ui/select/card-crest-selected.png');
 }
 
-.hero-info {
-  width: var(--name-width);
-  max-height: 0;
-  margin-inline: calc((var(--px) * 64px - var(--name-width)) / 2);
-  overflow: hidden;
-  transition:
-    opacity var(--duration-normal) var(--easing-out),
-    max-height var(--duration-slow) var(--easing-standard);
-}
-
-.hero-card[data-depth='0'] .hero-info {
-  max-height: 6rem;
-}
-
 .hero-carousel {
-  height: calc(var(--px) * 80px + 4rem + var(--frame) * 40px);
+  height: calc(var(--frame) * 14px + var(--px) * 80px + var(--below));
 }
 
 .hero-step::before,
@@ -79,48 +73,27 @@
   filter: drop-shadow(0 0 4px var(--color-green));
 }
 
+/* the longest name (Antler Spirit Shade) has to fit on one line inside the frame; --name-line is the
+   height of that line at the name's size, at the leading set on .hero-name */
 @media (max-width: 640px), (max-height: 420px) {
   .hero-stage {
     --frame: 1;
-  }
-
-  .hero-card {
-    --overhang: calc(var(--px) * 13px);
-  }
-}
-
-/* a screen on its side is short: the middle hero's name stays on one line, the middle card is as wide
-   as it, and the side cards step out of its way */
-@media (orientation: landscape) and (max-height: 560px) {
-  .hero-stage {
-    --slot-gap: calc(var(--px) * 136px);
-  }
-
-  .hero-card[data-depth='0'] {
-    width: max-content;
-    min-width: calc(var(--px) * 64px);
-  }
-
-  .hero-card[data-depth='0'] .hero-info {
-    width: auto;
-    margin-inline: 0;
+    --overhang: calc(var(--px) * 16px);
+    --name-line: calc(var(--font-size-xs) * 1.15);
   }
 
   .hero-name {
-    white-space: nowrap;
-  }
-
-  .hero-carousel {
-    height: calc(var(--px) * 80px + 2rem + var(--frame) * 40px);
+    font-size: var(--font-size-xs);
   }
 }
 
 @media (orientation: landscape) and (max-height: 420px) {
-  .hero-name {
-    font-size: var(--font-size-sm);
+  .hero-stage {
+    --overhang: calc(var(--px) * 24px);
+    --name-line: calc(var(--font-size-sm) * 1.15);
   }
 
-  .hero-carousel {
-    height: calc(var(--px) * 80px + 1.5rem + var(--frame) * 40px);
+  .hero-name {
+    font-size: var(--font-size-sm);
   }
 }
