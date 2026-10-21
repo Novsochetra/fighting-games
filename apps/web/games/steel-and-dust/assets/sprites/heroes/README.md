@@ -46,7 +46,10 @@ with the same animation names and frame counts as `../hero/hero.json`.
   second's tan skin and slate trousers, every sheet scaled so his body is the same size, shrunk to the
   game's scale, cut to one 64-colour palette and given a 1-px dark outline, with the body on x=60 and
   the feet on y=76. His idle breathes on one frame of the idle sheet, and `hero_ult.png` is put
-  together from the salute, the overhead chop and the thrust.
+  together from the salute, the overhead chop and the first frame of his ultimate sheet (the only one
+  the lion is not drawn over), the sword raised to the sky in a gold swirl. That pose stands taller
+  than a 128×80 frame, so his ultimate strip is 112 px tall with the feet 4 px above its bottom; the
+  game reads a one-row strip's height from the image.
 - `bokator/fists/` holds his own bare-hand Bokator moves (elbows, knees, a push kick, a flying knee, a
   downward elbow), one row per attack strip; the bake puts them in his fists row, the same way as the
   Ember Shade's spear moves. His other rows are baked from the sword strips with the `bokator` setting:

@@ -39,8 +39,20 @@ export function loadHeroSprites({ createImage, createCanvas, baseUrl, hero, them
   return sheet;
 }
 
+// a one-row strip may stand taller than the rest (a sword raised to the sky); its feet keep the same
+// gap above its bottom edge
+export function frameBox(sheet, name) {
+  const { frameHeight, feetY } = HERO_SPRITES;
+  if (!ONE_ROW_STRIPS.has(name)) {
+    return { frameHeight, feetY };
+  }
+  const height = sheet.images[name].height || frameHeight;
+  return { frameHeight: height, feetY: height - (frameHeight - feetY) };
+}
+
 export function drawHeroFrame(painter, sheet, { frame: [name, index], x, y, facing, tint, row }) {
-  const { frameWidth, frameHeight, feetX, feetY, scale } = HERO_SPRITES;
+  const { frameWidth, feetX, scale } = HERO_SPRITES;
+  const { frameHeight, feetY } = frameBox(sheet, name);
   const sourceRow = ONE_ROW_STRIPS.has(name) ? 0 : row || 0;
   const source = frameSource(sheet.tints, {
     image: sheet.images[name],

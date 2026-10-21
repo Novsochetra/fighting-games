@@ -41,12 +41,17 @@ describe('the ultimates', () => {
     }
   });
 
-  it("has an ultimate strip for every Shade with the hero sprites' frame size", () => {
+  it("has an ultimate strip for every hero, the hero frames' width and at least their height", () => {
     for (const hero of HEROES) {
       const { width, height } = pngSize(GAME_ROOT + hero.ultStrip);
       expect(width, hero.id).toBe(HERO_SPRITES.frameWidth * HERO_SPRITES.frames.ult);
-      expect(height, hero.id).toBe(HERO_SPRITES.frameHeight);
+      expect(height, hero.id).toBeGreaterThanOrEqual(HERO_SPRITES.frameHeight);
     }
+    // only Bokator's raised sword needs the room
+    const taller = HEROES.filter(
+      (hero) => pngSize(GAME_ROOT + hero.ultStrip).height > HERO_SPRITES.frameHeight,
+    );
+    expect(taller.map((hero) => hero.id)).toEqual(['bokator']);
   });
 
   it('has an effect strip for every effect, as long as its frames say', () => {
