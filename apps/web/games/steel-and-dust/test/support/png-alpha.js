@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { inflateSync } from 'node:zlib';
 
-// enough of a PNG decoder to read the alpha of the game's own sprites: 8-bit, not interlaced,
-// RGBA or indexed with a tRNS chunk
+// enough of a PNG decoder to read the alpha and color of the game's own sprites: 8-bit, not
+// interlaced, RGBA or indexed with a tRNS chunk
 const BYTES_PER_PIXEL = { 3: 1, 6: 4 };
 
 function readChunks(buffer) {
@@ -73,5 +73,11 @@ export function readPngAlpha(path) {
     const value = pixels[(y * width + x) * bytesPerPixel + bytesPerPixel - 1];
     return colorType === 6 ? value : (chunks.tRNS?.[value] ?? 255);
   };
-  return { width, height, alpha };
+  const rgb = (x, y) => {
+    const at = (y * width + x) * bytesPerPixel;
+    const source = colorType === 6 ? pixels : chunks.PLTE;
+    const start = colorType === 6 ? at : pixels[at] * 3;
+    return [source[start], source[start + 1], source[start + 2]];
+  };
+  return { width, height, alpha, rgb };
 }
