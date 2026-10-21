@@ -1,9 +1,12 @@
 /* the title, pause, defeat and clear menus in the carved stone kit: a crest over the title, a carved
    rule under it, and stone buttons whose carved ends stay whole while the plain middle repeats */
+/* a menu's buttons are as wide as its longest label and the carved ends either side of it */
 .mlist {
   --stone: 2;
 
-  width: min(400px, 88vw);
+  width: max-content;
+  min-width: calc(var(--stone) * 100px);
+  max-width: 88vw;
   gap: calc(var(--stone) * 4px);
 }
 
