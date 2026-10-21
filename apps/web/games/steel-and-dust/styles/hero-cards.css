@@ -188,25 +188,3 @@
   text-align: center;
   text-shadow: var(--text-shadow-pixel-sm);
 }
-
-.hero-line {
-  font-family: var(--font-body);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-  text-align: center;
-  letter-spacing: normal;
-}
-
-.hero-kit {
-  font-family: var(--font-body);
-  font-size: var(--font-size-xs);
-  color: var(--color-text);
-  text-align: center;
-  letter-spacing: normal;
-}
-
-.hero-kit b {
-  font-family: var(--font-display);
-  font-weight: var(--font-weight-regular);
-  color: var(--accent);
-}

@@ -8,7 +8,7 @@ const imagesIn = (css) =>
   [...css.matchAll(/url\('([^']+)'\)/g)].map((match) => new URL(match[1], STYLES));
 
 describe('the hero select cards', () => {
-  const css = ['heroes.css', 'hero-cards.css']
+  const css = ['heroes.css', 'hero-cards.css', 'hero-frames.css', 'hero-scene.css']
     .map((file) => readFileSync(new URL(file, STYLES), 'utf8'))
     .join('\n');
 

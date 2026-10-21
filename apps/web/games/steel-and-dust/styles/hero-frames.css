@@ -1,12 +1,13 @@
 /* every card stands in a carved stone frame drawn behind it, the middle one lit jade; the button grows
-   round the middle hero's text so its frame holds it, and the side cards' text folds away so their
+   round the middle hero's name so its frame holds it, and the side cards' names fold away so their
    frames are only as tall as the hero */
 .hero-stage {
   --frame: 2;
 }
 
 .hero-card {
-  --info-width: calc(var(--px) * 84px - var(--frame) * 34px);
+  --overhang: calc(var(--px) * 10px);
+  --name-width: calc(var(--px) * 64px + 2 * var(--overhang) - var(--frame) * 30px);
 
   top: calc(var(--frame) * 14px);
   height: auto;
@@ -24,7 +25,7 @@
 
 .hero-card::before {
   z-index: -1;
-  inset: calc(var(--frame) * -14px) calc(var(--px) * -10px) calc(var(--frame) * -14px);
+  inset: calc(var(--frame) * -14px) calc(-1 * var(--overhang)) calc(var(--frame) * -14px);
   border: 0 solid var(--color-clear);
   border-image: url('../assets/ui/select/card.png') 44 26 30 fill / calc(var(--frame) * 44px)
     calc(var(--frame) * 26px) calc(var(--frame) * 30px) / 0 round;
@@ -48,9 +49,9 @@
 }
 
 .hero-info {
-  width: var(--info-width);
+  width: var(--name-width);
   max-height: 0;
-  margin-inline: calc((var(--px) * 64px - var(--info-width)) / 2);
+  margin-inline: calc((var(--px) * 64px - var(--name-width)) / 2);
   overflow: hidden;
   transition:
     opacity var(--duration-normal) var(--easing-out),
@@ -58,15 +59,11 @@
 }
 
 .hero-card[data-depth='0'] .hero-info {
-  max-height: 20rem;
-}
-
-.hero-kit b {
-  color: var(--color-gold);
+  max-height: 6rem;
 }
 
 .hero-carousel {
-  height: calc(var(--px) * 80px + 9rem + var(--frame) * 40px);
+  height: calc(var(--px) * 80px + 4rem + var(--frame) * 40px);
 }
 
 .hero-step::before,
@@ -88,43 +85,42 @@
   }
 
   .hero-card {
-    --info-width: calc(var(--px) * 90px - var(--frame) * 34px);
-  }
-
-  .hero-card::before {
-    inset-inline: calc(var(--px) * -13px);
-  }
-
-  .hero-carousel {
-    height: calc(var(--px) * 80px + 10rem + var(--frame) * 40px);
+    --overhang: calc(var(--px) * 13px);
   }
 }
 
-/* a screen on its side is short: the middle card sets the hero's text beside them instead of under
-   them, so the card is no taller than the hero, and the side cards step out of its way */
+/* a screen on its side is short: the middle hero's name stays on one line, the middle card is as wide
+   as it, and the side cards step out of its way */
 @media (orientation: landscape) and (max-height: 560px) {
   .hero-stage {
     --slot-gap: calc(var(--px) * 136px);
   }
 
-  .hero-card {
-    --info-width: calc(var(--px) * 100px);
-  }
-
   .hero-card[data-depth='0'] {
-    flex-direction: row;
-    width: calc(var(--px) * 186px);
+    width: max-content;
+    min-width: calc(var(--px) * 64px);
   }
 
-  .hero-card[data-depth='0'] .hero-art {
-    margin-inline: calc(var(--px) * -32px) calc(var(--px) * -16px);
-  }
-
-  .hero-card .hero-info {
+  .hero-card[data-depth='0'] .hero-info {
+    width: auto;
     margin-inline: 0;
   }
 
+  .hero-name {
+    white-space: nowrap;
+  }
+
   .hero-carousel {
-    height: calc(var(--px) * 80px + var(--frame) * 40px);
+    height: calc(var(--px) * 80px + 2rem + var(--frame) * 40px);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 420px) {
+  .hero-name {
+    font-size: var(--font-size-sm);
+  }
+
+  .hero-carousel {
+    height: calc(var(--px) * 80px + 1.5rem + var(--frame) * 40px);
   }
 }

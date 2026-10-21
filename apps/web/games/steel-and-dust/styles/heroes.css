@@ -116,8 +116,4 @@
   .hero-name {
     font-size: var(--font-size-md);
   }
-
-  .hero-line {
-    font-size: var(--font-size-xs);
-  }
 }
