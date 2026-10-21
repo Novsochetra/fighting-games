@@ -16,6 +16,9 @@ of 128x80 frames: sword (the original), fists, spear, axe.
 The Moss Shade's blade glows green; the Firefly, Antler Spirit and Blue Shades' blades glow blue or
 teal, so for them the glow tests read the stronger of the green and blue channels; the Ember Shade's
 blade burns red and orange, so for it they read red against blue. Grip overrides are Moss-only.
+The Ember Shade's spear row drops the smear and holds the spear in every attack frame, since the game
+plays a phoenix lance from its tip; after re-baking it, measure the tips into
+apps/web/games/steel-and-dust/src/data/ember-spear-tips.js again.
 
 OVERRIDES fixes frames where detection misses: g = grip, t = blade tip, in frame pixels;
 hide = recolour the smear only and draw no weapon (strike frames where the blade is lost in the smear).
@@ -402,15 +405,50 @@ def draw_axe(G,u,L,glow):
     return outline_layer(Ly)
 
 WCOL={'fists':hx('#ffd23f'),'spear':hx('#a8e6ff'),'axe':hx('#ffa640')}
-def render_frame(fr,ann,weapon):
+# the Ember Shade's spear has a phoenix lance of its own (fx/lance.png, played from its tip in the
+# game), so its row drops the sword's smear and holds the spear in every attack frame, aimed with
+# the move; where the blade was lost in the smear, the spear is held from the body's front edge
+SPEAR_AIM={'rising_dragon':-55,'air_rising_cut':-45,'meteor_slash':35,'plunge':70}
+def erase_smear(img,sm):
+    near=nd.binary_dilation(nd.binary_dilation(sm,structure=np.ones((3,3))),structure=np.ones((3,3)))
+    r,b=img[...,0].astype(int),img[...,2].astype(int)
+    fiery=(img[...,:3].max(-1)>=170)|((r-b>=80)&(r>=120))
+    white=img[...,:3].min(-1)>=200   # the smear's white-hot core; nothing on the Ember Shade is white
+    img[sm|(near&fiery)|white]=0
+    lab,n=nd.label(img[...,3]>0,structure=np.ones((3,3)))
+    sizes=np.bincount(lab.ravel()); sizes[0]=0
+    body=lab==sizes.argmax()
+    for i in range(1,n+1):
+        part=lab==i
+        if i!=sizes.argmax() and sizes[i]>6 and fiery[part].mean()>0.5: img[part]=0   # smear tails left floating
+    return img,body
+
+def held_by_body(body,grip):
+    x,y=int(round(grip[0])),int(round(grip[1]))
+    return body[max(0,y-3):y+4,max(0,x-3):x+4].any()
+
+def front_hand(body):
+    ys,xs=np.nonzero(body[30:62]); k=xs.argmax()
+    return np.array([xs[k],ys[k]+30],float)
+
+def phoenix_spear(img,sm,anim,held):
+    img,body=erase_smear(img,sm)
+    grip,u,L=held
+    if anim in ATTACKS and (grip is None or not held_by_body(body,grip)):
+        a=math.radians(SPEAR_AIM.get(anim,0))
+        grip,u,L=front_hand(body),np.array([math.cos(a),math.sin(a)]),14
+    return img if grip is None else comp(img,draw_spear(grip,u,L))
+
+def render_frame(fr,ann,weapon,anim=None):
     sm=smear_mask(fr)
     if weapon=='sword': return fr
-    img=fr.copy(); grip=None
+    img=fr.copy(); grip=u=L=None
     if ann and 'g' in ann:
         img,grip,u,L=erase_blade(fr,ann['g'],ann['t'])
         if ann.get('len'): L=ann['len']
-    # the Ember Shade's spear burns with its sword's own fire, so its smear keeps the sword's colours
-    if not (WARM and weapon=='spear'): img=recolor_smear(img,sm,RAMPS[weapon])
+    if WARM and weapon=='spear':
+        return phoenix_spear(img,sm,anim,(None,None,None) if (ann or {}).get('hide') else (grip,u,L))
+    img=recolor_smear(img,sm,RAMPS[weapon])
     if ann and 'g' in ann and not ann.get('hide'):
         if weapon=='spear': img=comp(img,draw_spear(grip,u,L))
         elif weapon=='axe': img=comp(img,draw_axe(grip,u,L,WCOL['axe']))
@@ -433,7 +471,7 @@ def bake_all(ann,outdir=None):
         for k in range(N):
             fr=im[:,k*FW:(k+1)*FW]
             for wi,w in enumerate(WEAPS):
-                strip[wi*FH:(wi+1)*FH,k*FW:(k+1)*FW]=render_frame(fr,ann[n][k],w)
+                strip[wi*FH:(wi+1)*FH,k*FW:(k+1)*FW]=render_frame(fr,ann[n][k],w,n)
         if n=='dash':strip[:,0:FW]=strip[:,FW:2*FW]   # the first dash frame is a full-body smear; the game shows the clean lean frames only
         res[n]=strip
         if outdir: save_indexed(strip,outdir+'hero_'+n+'.png')

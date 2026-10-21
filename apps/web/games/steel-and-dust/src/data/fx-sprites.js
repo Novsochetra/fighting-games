@@ -13,6 +13,7 @@ export const FX_SPRITES = {
   burn: { frameWidth: 48, frameHeight: 64, frames: 8, ticks: 4, anchorX: 24, anchorY: 60 },
   inferno: { frameWidth: 244, frameHeight: 180, frames: 16, ticks: 3, anchorX: 122, anchorY: 131 },
   phoenix: { frameWidth: 128, frameHeight: 96, frames: 6, ticks: 4, anchorX: 64, anchorY: 52 },
+  lance: { frameWidth: 132, frameHeight: 64, frames: 12, ticks: 2, anchorX: 10, anchorY: 32 },
 };
 
 export const FX_SCALE = 1 / RENDER_SCALE;

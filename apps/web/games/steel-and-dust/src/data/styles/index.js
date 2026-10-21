@@ -22,7 +22,7 @@ const STYLED_MOVES = Object.fromEntries(
     Object.fromEntries(
       Object.entries(WEAPONS).map(([weaponId, weapon]) => [
         weaponId,
-        applyStyle(weapon.moves, style),
+        applyStyle(weapon.moves, style, weaponId),
       ]),
     ),
   ]),

@@ -13,5 +13,7 @@ export const EMBER_STYLE = {
     C2: { pillars: 4 },
     ADK: { pillars: 1, pillarRing: true },
   },
+  // every spear strike pours a phoenix lance from the tip, so the spear is more than a longer sword
+  weapons: { spear: { lance: true } },
   techniques: EMBER_TECHNIQUES,
 };

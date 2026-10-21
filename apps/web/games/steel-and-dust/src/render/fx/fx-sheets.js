@@ -17,8 +17,10 @@ export function loadFxSheets({ createImage, createCanvas, baseUrl }) {
   return sheets;
 }
 
-// one frame of an effect strip with its anchor on (x, y); scale 1 is the hero sprites' density
-export function drawFxFrame(painter, sheets, { name, frame, x, y, scale = 1, facing = 1, tint }) {
+// one frame of an effect strip with its anchor on (x, y); scale 1 is the hero sprites' density;
+// angle (radians, clockwise) turns it about the anchor before it is mirrored to face left
+export function drawFxFrame(painter, sheets, at) {
+  const { name, frame, x, y, scale = 1, facing = 1, tint, angle = 0 } = at;
   if (!sheets.ready[name]) {
     return;
   }
@@ -40,6 +42,9 @@ export function drawFxFrame(painter, sheets, { name, frame, x, y, scale = 1, fac
     Math.round(y * RENDER_SCALE) / RENDER_SCALE,
   );
   context.scale(facing < 0 ? -size : size, size);
+  if (angle) {
+    context.rotate(angle);
+  }
   context.drawImage(
     source.image,
     source.sx,

@@ -53,13 +53,23 @@ function addTechniques(styled, techniques = {}) {
   }
 }
 
+// a style can mark every move made with one weapon, its own techniques included
+function withWeaponPatch(styled, patch) {
+  if (!patch) {
+    return styled;
+  }
+  return Object.fromEntries(
+    Object.entries(styled).map(([id, move]) => [id, { ...move, ...patch }]),
+  );
+}
+
 // a Shade's style reworks a weapon's moves: its tempo scales every move, its patches add signatures
-export function applyStyle(moves, style) {
+export function applyStyle(moves, style, weaponId) {
   const tempo = { ...NO_TEMPO, ...style.tempo };
   const styled = {};
   for (const [id, move] of Object.entries(moves)) {
     styled[id] = withTempo(patched(move, style.moves[id]), tempo);
   }
   addTechniques(styled, style.techniques);
-  return normalizeMoves(styled);
+  return normalizeMoves(withWeaponPatch(styled, style.weapons?.[weaponId]));
 }
