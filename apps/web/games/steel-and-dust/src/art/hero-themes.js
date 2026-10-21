@@ -1,4 +1,5 @@
-// each Shade's glow: the sword smear, charge glow, afterimages and its select-screen accent;
+// each Shade's glow: the sword smear (and any other weapon in `weapons`), charge glow,
+// afterimages and its select-screen accent;
 // `ult` colors its ultimate: the dimmed world, the cut-in band and title, the finale flash
 export const HERO_THEMES = {
   moss: {
@@ -66,6 +67,8 @@ export const HERO_THEMES = {
     glow: '#ffb347',
     glowDim: '#c8501f',
     spark: '#ffd28a',
+    // the spear burns with the same phoenix fire as the sword
+    weapons: { spear: { trail: '#ff7a2a', spark: '#ffd28a' } },
     aura: { every: 6, color: '#ff9a3c' },
     ult: {
       dim: '#1a0604',

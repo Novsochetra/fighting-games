@@ -20,6 +20,14 @@ describe("each Shade's glow", () => {
     expect(trailColorOf(game, 'axe')).toBe(WEAPON_COLORS.axe.trail);
   });
 
+  it("lets the Ember Shade's spear burn with its sword's fire, and only its own", () => {
+    const ember = playingAs('ember');
+    expect(trailColorOf(ember, 'spear')).toBe(HERO_THEMES.ember.blade);
+    expect(sparkColorOf(ember, 'spear')).toBe(HERO_THEMES.ember.spark);
+    expect(trailColorOf(ember, 'fists')).toBe(WEAPON_COLORS.fists.trail);
+    expect(trailColorOf(playingAs('moss'), 'spear')).toBe(WEAPON_COLORS.spear.trail);
+  });
+
   it('sheds motes of its own color, the Firefly Shade far more often than the Moss Shade', () => {
     const count = (hero) => {
       const game = playingAs(hero);
