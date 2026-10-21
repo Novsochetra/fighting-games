@@ -25,7 +25,7 @@ describe('the golden lion in a running fight', () => {
     Math.random = originalRandom;
   });
 
-  it('strikes a raider it bounds over once, turns to face its run and is gone at the end', () => {
+  it('strikes a raider it bounds over once, then melts away where it last landed', () => {
     const { game, raider } = gameWithRaider();
     const { x, y } = raider;
     const flight = [
@@ -36,7 +36,37 @@ describe('the golden lion in a running fight', () => {
     releaseLion(game, { flight, hit: HIT, scale: 1 });
     runTicks(game, 41);
     expect(raider.maxHp - raider.hp).toBe(5);
+    const [lion] = lionsOf(game);
+    expect(lion).toMatchObject({ x: x + 120, y });
+    expect(lion.fade).toBeGreaterThan(0);
+    runTicks(game, 10);
+    expect(raider.maxHp - raider.hp).toBe(5);
     expect(lionsOf(game)).toEqual([]);
+  });
+
+  it('bounds in arcs, landing with dust and a thud on every point of its run', () => {
+    const sounds = [];
+    const game = createPlayingGame({
+      settings: { hero: 'bokator' },
+      io: { sfx: (key) => sounds.push(key) },
+    });
+    const { x, y } = game.player;
+    const flight = [
+      [0, x, y],
+      [20, x + 100, y, 60],
+      [40, x + 200, y, 60],
+    ];
+    releaseLion(game, { flight, hit: HIT, scale: 1 });
+    const heights = [];
+    for (let i = 0; i < 40; i++) {
+      runTicks(game, 1);
+      heights.push(y - lionsOf(game)[0].y);
+    }
+    expect(heights[9]).toBeCloseTo(60);
+    expect(heights[19]).toBeCloseTo(0);
+    expect(heights[29]).toBeCloseTo(60);
+    expect(Math.max(...heights)).toBeLessThanOrEqual(60);
+    expect(sounds.filter((key) => key === 'pounce')).toHaveLength(2);
   });
 
   it('strikes again on every leg when its run asks for it', () => {
