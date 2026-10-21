@@ -9,13 +9,22 @@ function valueHtml(definition, settings) {
   return definition.format(value);
 }
 
+function controlHtml(definition, settings) {
+  const value = `<span class="val">${valueHtml(definition, settings)}</span>`;
+  if (definition.action) {
+    return `<span class="stepper">${value}<button type="button" class="xbtn stone-btn" data-act="${definition.action}">Edit</button></span>`;
+  }
+  return (
+    '<span class="stepper"><button type="button" class="stone-btn" data-d="-1" aria-label="Less">‹</button>' +
+    `${value}<button type="button" class="stone-btn" data-d="1" aria-label="More">›</button></span>`
+  );
+}
+
 function rowHtml(definition, settings) {
   const note = definition.note ? `<small>${definition.note}</small>` : '';
   return (
     `<div class="setrow" data-k="${definition.key}"><span class="lbl">${definition.label}${note}</span>` +
-    '<span class="stepper"><button type="button" class="stone-btn" data-d="-1" aria-label="Less">‹</button>' +
-    `<span class="val">${valueHtml(definition, settings)}</span>` +
-    '<button type="button" class="stone-btn" data-d="1" aria-label="More">›</button></span></div>'
+    `${controlHtml(definition, settings)}</div>`
   );
 }
 
@@ -49,7 +58,7 @@ export function createSettingsPanel({ list, game, audio, layout, ui, canVibrate 
     },
     change(key, step, wrap) {
       const definition = SETTINGS_SCHEMA.find((entry) => entry.key === key);
-      if (!definition) {
+      if (!definition || definition.action) {
         return false;
       }
       game.settings[key] = steppedValue(definition, game.settings[key], { step, wrap });

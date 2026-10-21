@@ -1,4 +1,6 @@
 import { buttonScale } from '../../data/settings.js';
+import { applyButtonLayout } from '../layout/apply-button-layout.js';
+import { layoutForScreen } from '../layout/layout-draft.js';
 import { isPortrait, stageRect, stickRestPosition } from './stage-layout.js';
 
 const SAFE_AREA_PROBE =
@@ -34,8 +36,10 @@ export function createScreenFit({ document, window, elements, game, ui }) {
   const readSafeArea = createSafeArea(document, window);
   const layout = {
     stickRest(scale) {
+      // the stick zone is as tall as the app, which still measures while the touch layer is hidden
+      // (the layout editor places its copy of the stick from the title or pause menu)
       return stickRestPosition({
-        zoneHeight: elements.stickZone.getBoundingClientRect().height,
+        zoneHeight: elements.app.getBoundingClientRect().height,
         safe: readSafeArea(),
         stageBottom: elements.stage.getBoundingClientRect().bottom,
         portrait: isPortrait(elements.app.clientWidth, elements.app.clientHeight),
@@ -59,6 +63,7 @@ export function createScreenFit({ document, window, elements, game, ui }) {
         width: `${rect.width}px`,
         height: `${rect.height}px`,
       });
+      applyButtonLayout(elements.touch, layoutForScreen(game.settings.buttonLayout, width, height));
       layout.onFit?.();
     },
     applyTouchSettings() {

@@ -39,6 +39,14 @@ describe('storage', () => {
     expect(saved.hintsSeen).toEqual({});
   });
 
+  it('loads a broken button layout as the original one', () => {
+    const storage = memoryStorage({
+      sd_settings: '{"buttonLayout":{"landscape":{"light":{"x":0.5}}},"music":20}',
+    });
+    expect(loadSaved(storage, true).settings).toMatchObject({ buttonLayout: null, music: 20 });
+    expect(loadSaved(memoryStorage(), true).settings.buttonLayout).toBeNull();
+  });
+
   it('saves through the ports', () => {
     const storage = memoryStorage();
     const ports = persistencePorts(storage);

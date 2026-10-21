@@ -11,7 +11,7 @@ import {
 } from '../../sim/stage/flow.js';
 
 // the buttons that open a panel make their own sound
-const QUIET_ACTIONS = new Set(['back', 'help', 'settings', 'play', 'continue']);
+const QUIET_ACTIONS = new Set(['back', 'help', 'settings', 'layout', 'play', 'continue']);
 
 // the same Shade list starts a run from the title and brings a fallen hero back as any Shade
 function heroActions(game, begin) {
@@ -52,6 +52,7 @@ export function createMenuActions({ game, audio, ui, fullscreen, menus, location
     resume: () => resumePlay(game),
     help: () => menus.open('help'),
     settings: () => menus.open('settings'),
+    layout: () => menus.open('layout'),
     fullscreen: () => fullscreen.toggle(),
     restart: () => restartRun(game),
     quit: () => quitToTitle(game),

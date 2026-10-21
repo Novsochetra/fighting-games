@@ -61,12 +61,22 @@ export function stepHero(menus, step, audio) {
   audio.sfx('ui');
 }
 
+// a row with a button of its own (Button layout: Edit) opens it, the others cycle their value
+function chooseSetting(menus, row) {
+  const button = row.querySelector('[data-act]');
+  if (button) {
+    button.click();
+  } else {
+    menus.changeSetting(row.dataset.k, 1, true);
+  }
+}
+
 function choose(menus, { current, audio }) {
   if (!current) {
     return;
   }
   if (isSettingRow(current)) {
-    menus.changeSetting(current.dataset.k, 1, true);
+    chooseSetting(menus, current);
     return;
   }
   const key = tabKey(current);

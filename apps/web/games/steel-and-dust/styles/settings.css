@@ -55,6 +55,13 @@
   cursor: pointer;
 }
 
+/* a row that opens an editor of its own (Button layout) has its Edit button where the arrows are */
+.stepper .xbtn {
+  width: 74px;
+  padding: 0;
+  font-size: var(--font-size-caption);
+}
+
 .stepper .val {
   min-width: 96px;
   text-align: center;

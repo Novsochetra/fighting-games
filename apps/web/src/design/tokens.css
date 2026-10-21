@@ -25,6 +25,7 @@
   --color-ink: var(--color-night);
   --color-backdrop: color-mix(in srgb, var(--color-night-deep) 58%, transparent);
   --color-backdrop-strong: color-mix(in srgb, var(--color-night-deep) 80%, transparent);
+  --color-backdrop-light: color-mix(in srgb, var(--color-night-deep) 35%, transparent);
   --color-row-stripe: color-mix(in srgb, var(--color-white) 2.5%, transparent);
   --color-row-selected: color-mix(in srgb, var(--color-amber) 8%, transparent);
   --color-stick-fill: color-mix(in srgb, var(--color-sand) 5%, transparent);
