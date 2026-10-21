@@ -1,22 +1,17 @@
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { VIEW_WIDTH } from '../../config.js';
 import { POUNDING_LION } from '../../data/ultimates/pounding-lion.js';
-import { clamp, randomBetween } from '../../lib/math.js';
+import { randomBetween } from '../../lib/math.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust, addSparks } from '../fx/particles.js';
 import { groundAt } from '../stage/terrain.js';
 import { addBurst } from '../summons/bursts.js';
 import { releaseLion } from '../summons/lions.js';
 import { finaleFlash, finishUlt, hitEveryTarget } from './common.js';
+import { prideFlight, pridePosts, prideSchedule, riseOrder } from './lion-pride.js';
 
-const { poseTicks, slamAt, lionAt, appear, legs, leapHeight, pounceHeight } = POUNDING_LION;
-export const POUNCE_AT = lionAt + appear + legs[legs.length - 1];
-const BEHIND = 40;
-// world px from the lion's centre to its tail and paws at the scale the ultimate draws it
-const HALF_LION = 70;
-// it turns just inside the far edge, so it never leaves the screen
-const EDGE_INSET = 40;
-const LEAPS = 3;
+const { poseTicks, slamAt, prideAt } = POUNDING_LION;
+export const POUNCE_AT = POUNDING_LION.pounceAt;
 // where the sword tip meets the ground in the slam frame, ahead of his feet
 const SWORD_REACH = 18;
 // [frame, ticks] of a blow: the sword overhead (3), the swing (4), the slam (5), rising (6-7)
@@ -45,7 +40,7 @@ function strikeFrame(since) {
 }
 
 // his ultimate strip: the bow and the sword raised (0-2) through the cut-in, the blow that slams the
-// ground, the sword held high (8) while the lion runs, then the same blow again as it pounces
+// ground, the sword held high (8) while the lions run, then the same blow again as they pounce
 export function poundingFrame(time) {
   if (time >= SECOND_STRIKE) {
     return ['ult', strikeFrame(time - SECOND_STRIKE)];
@@ -85,26 +80,25 @@ function channel(game, player) {
   });
 }
 
-// it hops from behind the hero to the edge ahead, then makes one high bound back down on the middle
-function lionRun(game, player) {
-  // it rises behind the hero, but never so near the screen's edge that it is cut off
-  const left = game.camera.x + HALF_LION;
-  const behind = clamp(player.x - player.facing * BEHIND, left, left + VIEW_WIDTH - HALF_LION * 2);
-  const ahead = game.camera.x + (player.facing > 0 ? VIEW_WIDTH - EDGE_INSET : EDGE_INSET);
-  const middle = game.camera.x + VIEW_WIDTH / 2;
-  const ground = (x) => groundAt(game.terrain, x);
-  const points = [[behind, ground(behind)]];
-  for (let leap = 1; leap <= LEAPS; leap++) {
-    const x = behind + ((ahead - behind) * leap) / LEAPS;
-    points.push([x, ground(x), leapHeight]);
-  }
-  points.push([middle, ground(middle), pounceHeight]);
-  return points.map((point, i) => [legs[i], ...point]);
-}
-
-function guardianLion(game, player) {
-  const flight = lionRun(game, player);
-  releaseLion(game, { flight, hit: POUNDING_LION.lion, scale: 1.3, appear });
+// the pride rises out of the gold in a row across the field, nearest the hero first; each crouches
+// a beat of its own before it bounds off, and they land on the middle one after another
+function releasePride(game, player) {
+  const posts = pridePosts(game.camera.x, player.x);
+  const order = riseOrder(posts, player.x);
+  const lay = {
+    middle: game.camera.x + VIEW_WIDTH / 2,
+    facing: player.facing,
+    ground: (x) => groundAt(game.terrain, x),
+  };
+  prideSchedule().forEach(({ scale, delay, appear, run }, rank) => {
+    releaseLion(game, {
+      flight: prideFlight(posts, order[rank], { ...lay, scale, run }),
+      hit: POUNDING_LION.lion,
+      scale,
+      delay,
+      appear,
+    });
+  });
   game.io.sfx('roar', false, { x: player.x });
 }
 
@@ -121,15 +115,15 @@ function pounce(game, player) {
   finaleFlash(game);
 }
 
-// Bokator: bow, slam the ground, then the guardian lion bounds across the field and pounces as he
-// pounds the ground again
+// Bokator: bow, slam the ground, then a pride of guardian lions bounds across the field and pounces
+// as he pounds the ground again
 export function runPoundingLion(game, player, time) {
   player.ultFrame = poundingFrame(time);
   if (time === slamAt) {
     slam(game, player);
   }
-  if (time === lionAt) {
-    guardianLion(game, player);
+  if (time === prideAt) {
+    releasePride(game, player);
   }
   if (time >= FIRST_STRIKE + STRIKE_TICKS && time < SECOND_STRIKE && time % 3 === 0) {
     channel(game, player);

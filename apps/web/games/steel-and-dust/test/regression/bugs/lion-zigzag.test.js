@@ -12,9 +12,10 @@ function lionPath() {
   game.ultMeter = 100;
   tap(game, 'ult');
   const path = [];
+  let lion = null;
   while (game.player.state === 'ult') {
     runTicks(game, 1);
-    const lion = game.summons.find((summon) => summon.kind === 'lion');
+    lion ??= game.summons.find((summon) => summon.kind === 'lion');
     if (lion && lion.time > lion.appear && !lion.fade) {
       path.push({ y: lion.y, airborne: groundAt(game.terrain, lion.x) - lion.y > 1 });
     }

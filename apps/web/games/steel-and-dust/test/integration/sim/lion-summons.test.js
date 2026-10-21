@@ -44,6 +44,21 @@ describe('the golden lion in a running fight', () => {
     expect(lionsOf(game)).toEqual([]);
   });
 
+  it('stands where it rises, striking nothing, until it has waited out its appear', () => {
+    const { game, raider } = gameWithRaider();
+    const { x, y } = raider;
+    const flight = [
+      [0, x, y],
+      [20, x + 120, y],
+    ];
+    releaseLion(game, { flight, hit: HIT, scale: 1, appear: 30 });
+    runTicks(game, 30);
+    expect(lionsOf(game)[0]).toMatchObject({ x, y });
+    expect(raider.hp).toBe(raider.maxHp);
+    runTicks(game, 2);
+    expect(raider.maxHp - raider.hp).toBe(5);
+  });
+
   it('bounds in arcs, landing with dust and a thud on every point of its run', () => {
     const sounds = [];
     const game = createPlayingGame({

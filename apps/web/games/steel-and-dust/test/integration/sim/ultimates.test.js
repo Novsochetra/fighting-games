@@ -124,14 +124,16 @@ describe("each Shade's ultimate", () => {
     expect(game.player).toMatchObject({ state: 'idle', invincible: 40 });
   });
 
-  it('Bokator: the slam throws every raider up, the lion bounds both ways and pounces', () => {
+  it('Bokator: the slam throws every raider up, the pride bounds both ways and pounces in turn', () => {
     const game = startUltimate('bokator');
     const directions = new Set();
+    const lions = new Set();
     const impacts = new Map();
     const seen = watchUltimate(game, (current) => {
       for (const summon of current.summons) {
         if (summon.kind === 'lion') {
           directions.add(summon.direction);
+          lions.add(summon);
         }
         if (summon.kind === 'burst' && !impacts.has(summon)) {
           impacts.set(summon, current.camera.x + VIEW_WIDTH / 2);
@@ -140,13 +142,14 @@ describe("each Shade's ultimate", () => {
     });
     expect(seen.kinds).toEqual(new Set(['lion', 'burst']));
     expect(directions).toEqual(new Set([1, -1]));
-    // the gold breaks the ground where his sword slams it, then bigger where the lion lands
+    const { slam, pounce, pride } = ULTIMATES.bokator;
+    expect(new Set([...lions].map((lion) => lion.scale)).size).toBeGreaterThan(pride.length / 2);
+    // the gold breaks the ground where his sword slams it, then bigger where the pride lands
     const [slamImpact, pounceImpact] = [...impacts.keys()];
     expect([slamImpact.sprite, pounceImpact.sprite]).toEqual(['pounce', 'pounce']);
     expect(Math.abs(slamImpact.x - game.player.x)).toBeLessThan(30);
     expect(pounceImpact.x).toBe(impacts.get(pounceImpact));
     expect(pounceImpact.scale).toBeGreaterThan(slamImpact.scale);
-    const { slam, pounce } = ULTIMATES.bokator;
     raiders(game).forEach((raider) => {
       expect(raider.maxHp - raider.hp).toBeGreaterThanOrEqual(slam.damage + pounce.damage);
     });

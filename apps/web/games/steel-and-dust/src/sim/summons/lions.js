@@ -10,9 +10,11 @@ const COMBO_LION = { damage: 7, knockback: [3, -3.2], knockdown: true, hitstop: 
 const COMBO_SCALE = 0.46;
 // ticks it takes to melt back into gold dust after its last landing
 const FADE_TICKS = 10;
+// ticks a lion that appears takes to rise out of the gold and crouch; it holds the crouch after that
+export const LION_RISE_TICKS = 18;
 
 // a golden guardian lion bounds along its flight of [tick, x, y, hop] points, its paws at (x, y), after
-// taking shape where the flight starts for `appear` ticks; it strikes each raider it passes once, or
+// taking shape and waiting where the flight starts for `appear` ticks; it strikes each raider it passes once, or
 // once on every leg when `everyLeg` is set, and lands on every point it reaches
 export function releaseLion(game, { flight, hit, scale, appear = 0, everyLeg = false, delay = 0 }) {
   const [, x, y] = flight[0];
@@ -49,6 +51,12 @@ function goldDust(game, lion) {
     maxLife: 20,
     color: lion.time % 4 ? FX_COLORS.lionGold : FX_COLORS.lionDeep,
   });
+}
+
+// a lion that takes shape first rises out of a flare of gold at its feet
+function riseFromGold(game, lion) {
+  addSparks(game, { x: lion.x, y: lion.y - 6, count: 6, color: FX_COLORS.lionGold, speed: 2.6 });
+  addDust(game, { x: lion.x, y: lion.y, count: 3 });
 }
 
 function lionArea(lion) {
@@ -98,6 +106,9 @@ export function lionPoseAt(lion, time) {
 }
 
 export function updateLion(game, lion) {
+  if (lion.time === 1 && lion.appear) {
+    riseFromGold(game, lion);
+  }
   goldDust(game, lion);
   if (lion.time <= lion.appear) {
     return;

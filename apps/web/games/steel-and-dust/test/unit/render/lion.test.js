@@ -10,6 +10,12 @@ describe("the lion's frames", () => {
     expect([1, 7, 14, 21].map((time) => lionFrame(lion, time))).toEqual([0, 1, 2, 2]);
   });
 
+  it('holds its crouch once risen, however long it waits to bound off', () => {
+    const lion = { appear: 40, stride: 0 };
+    expect([18, 30, 40].map((time) => lionFrame(lion, time))).toEqual([2, 2, 2]);
+    expect(lionFrame(lion, 41)).toBe(leapFrame(0));
+  });
+
   it('plays its leap once over every bound, from push-off to reaching for the ground', () => {
     const strides = [0, 0.99 / LEAP_FRAMES, 1 / LEAP_FRAMES, 0.5, 0.99, 1];
     const frames = strides.map(leapFrame);

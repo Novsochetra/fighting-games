@@ -1,10 +1,11 @@
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { FX_SPRITES } from '../../data/fx-sprites.js';
-import { lionPoseAt } from '../../sim/summons/lions.js';
+import { LION_RISE_TICKS, lionPoseAt } from '../../sim/summons/lions.js';
 import { drawFxFrame } from './fx-sheets.js';
 
-// the strip's first frames are the lion taking shape and roaring, played once while it appears;
-// the rest are one leap, from push-off to reaching for the ground, spread over each bound
+// the strip's first frames are the lion taking shape, roaring and crouching, played once as it
+// appears and held on the crouch while it waits; the rest are one leap, from push-off to reaching
+// for the ground, spread over each bound
 const RISE_FRAMES = 3;
 const ECHOES = 2;
 const ECHO_GAP = 3;
@@ -16,7 +17,7 @@ export function leapFrame(stride) {
 
 export function lionFrame(lion, time) {
   if (time <= lion.appear) {
-    return Math.min(RISE_FRAMES - 1, Math.floor((time / lion.appear) * RISE_FRAMES));
+    return Math.min(RISE_FRAMES - 1, Math.floor((time / LION_RISE_TICKS) * RISE_FRAMES));
   }
   return leapFrame(lion.stride);
 }
