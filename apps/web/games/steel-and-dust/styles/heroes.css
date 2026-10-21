@@ -1,10 +1,10 @@
 .heroes .box {
-  width: min(880px, 100%);
+  width: min(1040px, 100%);
 }
 
 .hero-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 10px;
   padding: 12px;
   overflow-y: auto;
@@ -42,6 +42,10 @@
 
 .hero-card[data-hero='ember'] {
   --accent: var(--color-hero-ember);
+}
+
+.hero-card[data-hero='bokator'] {
+  --accent: var(--color-hero-bokator);
 }
 
 .hero-card.picked {

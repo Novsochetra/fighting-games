@@ -43,8 +43,8 @@ function freeze(live, start) {
 // a pillar of fire roaring up out of cracked ground
 function flames(live, start) {
   thump(live, { start, from: 110, to: 50, duration: 0.2, volume: 0.3 });
-  const roar = { type: 'bandpass', from: 300, to: 1800, resonance: 1.4 };
-  hiss(live, { start, ...roar, attack: 0.03, duration: 0.42, volume: 0.12 });
+  const blaze = { type: 'bandpass', from: 300, to: 1800, resonance: 1.4 };
+  hiss(live, { start, ...blaze, attack: 0.03, duration: 0.42, volume: 0.12 });
   crunch(live, { start: start + 0.04, duration: 0.18, volume: 0.08, frequency: 900 });
 }
 
@@ -69,7 +69,22 @@ function phoenix(live, start) {
   hiss(live, { start, ...wings, attack: 0.06, duration: 0.6, volume: 0.1 });
 }
 
-// the Shade's blade ringing out as it calls a technique by name
+// a lion's roar: a deep growl rolling up under a rough breathy rasp
+function roar(live, start) {
+  thump(live, { start, from: 90, to: 140, duration: 0.45, volume: 0.32 });
+  const rasp = { type: 'bandpass', from: 260, to: 900, resonance: 2.2 };
+  hiss(live, { start, ...rasp, attack: 0.06, duration: 0.55, volume: 0.13 });
+  crunch(live, { start: start + 0.05, duration: 0.3, volume: 0.08, frequency: 380 });
+}
+
+// heavy paws landing: a soft thud and a puff of dust
+function pounce(live, start) {
+  thump(live, { start, from: 120, to: 50, duration: 0.16, volume: 0.3 });
+  const dust = { type: 'lowpass', from: 1400, to: 500, resonance: 0.8 };
+  hiss(live, { start, ...dust, attack: 0.01, duration: 0.14, volume: 0.06 });
+}
+
+// the hero's blade ringing out as it calls a technique by name
 function technique(live, start) {
   metal(live, { start, frequencies: [1320, 1980, 2640], duration: 0.35, volume: 0.045 });
   const swell = { type: 'bandpass', from: 1200, to: 4200, resonance: 2.4 };
@@ -84,5 +99,7 @@ export const SIGNATURE_SOUNDS = {
   flames,
   ignite,
   phoenix,
+  roar,
+  pounce,
   technique,
 };

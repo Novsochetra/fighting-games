@@ -84,7 +84,7 @@ describe('game menus on the real page', () => {
     expect(document.querySelector('[data-k="difficulty"] .val').textContent).toBe('Hard');
   });
 
-  it('asks which Shade to play, then starts the run with the one picked', () => {
+  it('asks which hero to play, then starts the run with the one picked', () => {
     key('Enter');
     expect(openMenu().id).toBe('m-heroes');
     const cards = [...document.querySelectorAll('.hero-card')];
@@ -94,6 +94,7 @@ describe('game menus on the real page', () => {
       'antler',
       'blue',
       'ember',
+      'bokator',
     ]);
     expect(document.querySelector('.hero-card.picked').dataset.hero).toBe('moss');
     expect(cards[1].getAttribute('style')).toContain('heroes/firefly/arsenal/hero_idle.png');
@@ -103,6 +104,7 @@ describe('game menus on the real page', () => {
       'Ult Spirit Stampede',
       'Ult Absolute Zero',
       'Ult Phoenix Pyre',
+      'Ult Pounding the Lion',
     ]);
     expect(cards[3].querySelector('.hero-kit').textContent).toBe('Style Frost Iai');
     key('ArrowRight');
@@ -222,7 +224,7 @@ describe('game menus on the real page', () => {
   it('highlights the Shade played last when the list opens from the title', () => {
     page.game.settings.hero = 'blue';
     key('Enter');
-    expect(openMenu().querySelector('h2').textContent).toBe('Choose your Shade');
+    expect(openMenu().querySelector('h2').textContent).toBe('Choose your hero');
     expect(selected().dataset.hero).toBe('blue');
   });
 });

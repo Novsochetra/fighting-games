@@ -1,6 +1,7 @@
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { FX_SPRITES } from '../../data/fx-sprites.js';
 import { drawFxFrame, fxFrameAt } from './fx-sheets.js';
+import { drawLion } from './lion.js';
 
 // the encasing spikes grow, then hold at full height until the ice shatters
 const ICE_HOLD_FRAMES = [4, 5, 6, 7];
@@ -118,6 +119,7 @@ const DRAW_BY_KIND = {
   pillar: drawPillar,
   burn: drawBurn,
   phoenix: drawPhoenix,
+  lion: drawLion,
 };
 
 export function drawSummons(painter, summons, sheets) {

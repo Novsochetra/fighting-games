@@ -84,7 +84,7 @@ describe('applyStyle', () => {
 describe('the Shades fight in their own styles', () => {
   it('gives every Shade a named style', () => {
     expect(Object.keys(STYLES)).toEqual(HEROES.map((hero) => hero.id));
-    expect(new Set(Object.values(STYLES).map((style) => style.name)).size).toBe(5);
+    expect(new Set(Object.values(STYLES).map((style) => style.name)).size).toBe(6);
     expect(styleOf('nobody')).toBe(STYLES.moss);
   });
 
@@ -131,6 +131,8 @@ describe('the Shades fight in their own styles', () => {
     expect(heroMoves('blue', 'sword').L1.hitbox[2]).toBe(WEAPONS.sword.moves.L1.hitbox[2] + 8);
     expect(heroMoves('ember', 'sword').L4.pillars).toBe(2);
     expect(heroMoves('ember', 'axe').K3).toMatchObject({ pillars: 3, burn: 150 });
+    expect(heroMoves('bokator', 'fists').C2.lions).toBe(2);
+    expect(heroMoves('bokator', 'spear').K3.lions).toBe(1);
     expect(heroMoves('ember', 'spear').L1.feathers).toBe(true);
     expect(heroMoves('ember', 'sword').L1.feathers).toBeUndefined();
     expect(heroMoves('moss', 'spear').L1.feathers).toBeUndefined();
@@ -140,7 +142,7 @@ describe('the Shades fight in their own styles', () => {
     const names = HEROES.flatMap((hero) =>
       TECHNIQUE_ORDER.map((id) => heroMoves(hero.id, 'sword')[id].name),
     );
-    expect(new Set(names).size).toBe(20);
+    expect(new Set(names).size).toBe(24);
     for (const weaponId of Object.keys(WEAPONS)) {
       const moves = heroMoves('blue', weaponId);
       expect(['K1', 'K2', 'K3', 'AK'].map((id) => moves[id].next.light)).toEqual(TECHNIQUE_ORDER);
@@ -156,5 +158,7 @@ describe('the Shades fight in their own styles', () => {
       burn: 180,
     });
     expect(heroMoves('ember', 'fists').S3).toMatchObject({ pillars: 1, pillarRing: true });
+    expect(heroMoves('bokator', 'fists').S1).toMatchObject({ name: 'Elbow Crush', armor: true });
+    expect(heroMoves('bokator', 'sword').S3).toMatchObject({ name: "Lion's Pounce", lions: 1 });
   });
 });

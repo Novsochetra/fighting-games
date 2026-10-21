@@ -11,13 +11,15 @@ of 128x80 frames: sword (the original), fists, spear, axe.
 
     pip install numpy scipy pillow
     python3 tools/bake_hero_weapons.py            # Moss Shade, assets/sprites/hero/
-    python3 tools/bake_hero_weapons.py firefly    # assets/sprites/heroes/firefly/ (also antler, blue, ember)
+    python3 tools/bake_hero_weapons.py firefly    # assets/sprites/heroes/firefly/ (also antler, blue, ember, bokator)
 
 The Moss Shade's blade glows green; the Firefly, Antler Spirit and Blue Shades' blades glow blue or
 teal, so for them the glow tests read the stronger of the green and blue channels; the Ember Shade's
 blade burns red and orange, so for it they read red against blue. Grip overrides are Moss-only, but for
 EMBER_OVERRIDES; the Ember Shade's spear keeps the sword's fire smear instead of a recoloured one, and its
-attacks come from its own spear moves in heroes/ember/spear/ instead.
+attacks come from its own spear moves in heroes/ember/spear/ instead. The Bokator fighter's blade glows
+white-gold against tan skin: it is found as the longest straight run of gold, erased with its edges and
+the sparkles round it, and his fists row takes his own bare-hand moves from heroes/bokator/fists/.
 
 OVERRIDES fixes frames where detection misses: g = grip, t = blade tip, in frame pixels;
 hide = recolour the smear only and draw no weapon (strike frames where the blade is lost in the smear).
@@ -35,10 +37,19 @@ SRC=SPRITES+'heroes/'+VARIANT+'/' if VARIANT else HERO
 OUT=SRC+'arsenal/'
 COOL=VARIANT is not None
 WARM=VARIANT=='ember'
+GILDED=VARIANT=='bokator'
 meta=json.load(open(HERO+'hero.json'))
+
+# the Bokator fighter's blade glows white-gold against his tan skin: bright and pale, or bright and
+# yellower than skin; the test is all or nothing, so it hands back full glow against no base
+def gold_glow(fr):
+    hsv=np.array(Image.fromarray(fr[...,:3].astype(np.uint8),'RGB').convert('HSV')).astype(float)
+    hue,sat,val=hsv[...,0]*360/255,hsv[...,1],hsv[...,2]
+    return (val>225)&((sat<140)|(hue>41))
 
 def glow_and_base(fr):
     r,g,b=[fr[...,i].astype(int) for i in range(3)]
+    if GILDED: return np.where(gold_glow(fr),255,0),np.zeros_like(r)
     if WARM: return r,b
     return (np.maximum(g,b) if COOL else g),r
 FW,FH=128,80
@@ -205,7 +216,7 @@ def warm_glow(A,Gp):
 
 def detect_line(fr):
     A,Gp,F=masks(fr)
-    if WARM: Gp,F=warm_glow(A,Gp)
+    if WARM or GILDED: Gp,F=warm_glow(A,Gp)
     ys,xs=np.nonzero(F)
     if len(xs)<4: return None
     gy,gx=np.nonzero(Gp)
@@ -254,7 +265,7 @@ def smear_mask(fr):
     dens=nd.uniform_filter(A.astype(float),size=9)
     keep=np.zeros_like(A)
     # the Ember Shade's cloak and armour burn in the smear's own colours: only a swing-sized blaze is a smear
-    smallest=120 if WARM else 14
+    smallest=120 if WARM or GILDED else 14
     for i in range(1,n+1):
         m=lab==i
         if not (seed&m).any() or m.sum()<smallest: continue
@@ -263,7 +274,7 @@ def smear_mask(fr):
     dark=A&~((g-r>=30)&(g>=60))&(mx<90)
     nearDark=nd.binary_dilation(dark,structure=np.ones((3,3)))
     loose=A&(g>=150)&(g-r>=90)&(dens<0.42)&~nearDark
-    if not WARM: keep|=loose
+    if not (WARM or GILDED): keep|=loose
     if keep.any():
         ring=nd.binary_dilation(keep,structure=np.ones((3,3)))&~keep&A
         keep|=ring&((g-r>=40)&(g>=100)|(mx>=120)&(dens<0.85))
@@ -275,7 +286,47 @@ def endpoint_density(A,Gp,p):
     return (A[y0:y1,x0:x1]&~Gp[y0:y1,x0:x1]).sum()
 
 
+# the Bokator fighter's blade is the longest straight run of gold in the frame; its grip is the end
+# nearer the body
+def gilded_blade(fr):
+    A=fr[...,3]>0; glow=gold_glow(fr)&A
+    lab,n=nd.label(glow,structure=np.ones((3,3)))
+    body=np.argwhere(A&~glow).mean(0)[::-1]
+    best=None
+    for i in range(1,n+1):
+        ys,xs=np.nonzero(lab==i)
+        if len(xs)<12: continue
+        pts=np.c_[xs,ys].astype(float); c=pts.mean(0)
+        u=np.linalg.eigh(np.cov((pts-c).T))[1][:,-1]
+        along=(pts-c)@u; across=(pts-c)@np.array([-u[1],u[0]])
+        length=along.max()-along.min()
+        if length<12 or length<4*max(1.0,across.std()*2): continue
+        if best is None or length>best[0]: best=(length,c+u*along.min(),c+u*along.max())
+    if best is None: return None
+    _,p0,p1=best
+    if math.dist(p1,body)<math.dist(p0,body): p0,p1=p1,p0
+    return dict(g=[round(p0[0],1),round(p0[1],1)],t=[round(p1[0],1),round(p1[1],1)])
+
+# his blade is wide, with an amber edge and a dark outline either side: along the blade those go too,
+# but where the blade crosses his body only the gold itself, so no groove is cut into a leg
+def gilded_rails(fr,A,Gp,tr,band):
+    hsv=np.array(Image.fromarray(fr[...,:3].astype(np.uint8),'RGB').convert('HSV')).astype(float)
+    hue,sat,val=hsv[...,0]*360/255,hsv[...,1],hsv[...,2]
+    amber=(hue>20)&(hue<55)&(val>140)&(sat>90)
+    black=fr[...,:3].max(-1)<45
+    return band&A&(Gp|((amber|black)&(tr>=0.2)))
+
+# the sparkles drawn round his blade are left floating once it is gone
+def without_sparkles(img,band):
+    lab,n=nd.label(img[...,3]>0,structure=np.ones((3,3)))
+    sizes=np.bincount(lab.ravel())
+    outside=np.bincount(lab[~band].ravel(),minlength=n+1)
+    loose=(sizes<=6)&(outside==0); loose[0]=False
+    img=img.copy(); img[loose[lab]]=0
+    return img
+
 def detect(fr):
+    if GILDED: return gilded_blade(fr)
     det=detect_line(fr)
     if not det: return None
     A,Gp,F=masks(fr)
@@ -345,7 +396,9 @@ def erase_blade(fr,g,t):
     px=xs-g[0];py=ys-g[1];along=px*u[0]+py*u[1];perp=np.abs(-px*u[1]+py*u[0])
     seg=(along>=-0.5)&(along<=L+2.5)
     kill=seg&A&(((perp<=1.5)&greenish)|((perp<=2.3)&(tr>=0.3)))
+    if GILDED: kill|=gilded_rails(fr,A,Gp,tr,seg&(along>=2)&(perp<=3.4))
     out[kill]=0
+    if GILDED: out=without_sparkles(out,(along>=2)&(along<=L+8)&(perp<=8))
     # walk inward from the grip while the line is still glowing green: that is the hilt end of the blade
     grip=g.copy();miss=0
     for s in range(1,10):
@@ -434,10 +487,11 @@ def save_indexed(a,path):
     im=Image.fromarray(inv.reshape(a.shape[:2]).astype(np.uint8),'P')
     im.putpalette(cols[:,:3].astype(np.uint8).tobytes())
     im.save(path,optimize=True,transparency=bytes(cols[:,3].astype(np.uint8)))
-# a Shade with spear moves of its own keeps them in <shade>/spear/, one row per attack with the
-# sword strip's frame count; they take the spear row's place instead of a sword swing with a spear drawn in
-def own_spear_row(n,N):
-    path=SRC+'spear/hero_'+n+'.png'
+# a hero with moves of its own for a weapon keeps them in <hero>/<weapon>/ (the Ember Shade's spear,
+# the Bokator fighter's bare hands), one row per attack with the sword strip's frame count; they take
+# that weapon's row instead of a sword swing with the weapon drawn in
+def own_row(n,N,weapon):
+    path=SRC+weapon+'/hero_'+n+'.png'
     if not os.path.exists(path): return None
     row=np.array(Image.open(path).convert('RGBA'))
     assert row.shape==(FH,FW*N,4), path
@@ -453,8 +507,9 @@ def bake_all(ann,outdir=None):
             for wi,w in enumerate(WEAPS):
                 strip[wi*FH:(wi+1)*FH,k*FW:(k+1)*FW]=render_frame(fr,ann[n][k],w)
         if n=='dash':strip[:,0:FW]=strip[:,FW:2*FW]   # the first dash frame is a full-body smear; the game shows the clean lean frames only
-        spear=own_spear_row(n,N)
-        if spear is not None: strip[WEAPS.index('spear')*FH:(WEAPS.index('spear')+1)*FH]=spear
+        for wi,w in enumerate(WEAPS):
+            own=own_row(n,N,w)
+            if own is not None: strip[wi*FH:(wi+1)*FH]=own
         res[n]=strip
         if outdir: save_indexed(strip,outdir+'hero_'+n+'.png')
     return res

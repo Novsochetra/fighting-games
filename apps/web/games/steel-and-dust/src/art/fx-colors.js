@@ -33,4 +33,6 @@ export const FX_COLORS = {
   spiritFlame: '#9dffe6',
   spiritDeep: '#2f9f8a',
   emberGold: '#ffe066',
+  lionGold: '#ffd25a',
+  lionDeep: '#b8862a',
 };

@@ -41,6 +41,8 @@ describe('live sounds', () => {
         'flames',
         'ignite',
         'phoenix',
+        'roar',
+        'pounce',
         'technique',
       ].sort(),
     );

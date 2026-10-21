@@ -19,14 +19,14 @@ function heroCardHtml(hero, { picked, folder }) {
   </button>`;
 }
 
-// the five Shades, the last one played marked and highlighted first; after a fall the same list
-// asks which Shade fights on
+// the heroes, the last one played marked and highlighted first; after a fall the same list asks
+// which hero fights on
 export function createHeroPanel({ list, game }) {
   return {
     build() {
       const folder = pageFolder(list.ownerDocument.baseURI);
       list.closest('.box').querySelector('h2').textContent =
-        game.mode === 'over' ? 'Continue as' : 'Choose your Shade';
+        game.mode === 'over' ? 'Continue as' : 'Choose your hero';
       list.innerHTML = HEROES.map((hero) =>
         heroCardHtml(hero, { picked: hero.id === game.settings.hero, folder }),
       ).join('');

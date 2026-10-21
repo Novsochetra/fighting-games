@@ -19,6 +19,7 @@ describe('the ultimates', () => {
       'Spirit Stampede',
       'Absolute Zero',
       'Phoenix Pyre',
+      'Pounding the Lion',
     ]);
     expect(ultimateOf('nobody')).toBe(ULTIMATES.moss);
   });

@@ -3,6 +3,7 @@ import { randomBetween } from '../../lib/math.js';
 import { shake } from '../fx/camera-fx.js';
 import { addSparks } from '../fx/particles.js';
 import { igniteTarget } from './burn.js';
+import { flightOver, legAt, pointOnLeg } from './flight.js';
 import { strikeArea } from './strike.js';
 
 // the firebird flies its flight of [tick, x, y] points leg by leg, and each leg is a new pass
@@ -22,21 +23,6 @@ export function releasePhoenix(game, { flight, hit, burn, scale }) {
     scale,
     hitTargets: new Set(),
   });
-}
-
-function legAt(flight, time) {
-  let leg = 0;
-  while (leg < flight.length - 2 && time >= flight[leg + 1][0]) {
-    leg++;
-  }
-  return leg;
-}
-
-function pointOnLeg(flight, leg, time) {
-  const [from, x0, y0] = flight[leg];
-  const [to, x1, y1] = flight[leg + 1];
-  const along = Math.min(1, Math.max(0, (time - from) / (to - from)));
-  return [x0 + (x1 - x0) * along, y0 + (y1 - y0) * along];
 }
 
 function fireTrail(game, phoenix) {
@@ -90,5 +76,5 @@ export function updatePhoenix(game, phoenix) {
   Object.assign(phoenix, { x, y });
   fireTrail(game, phoenix);
   sear(game, phoenix);
-  phoenix.done = phoenix.time >= flight[flight.length - 1][0];
+  phoenix.done = flightOver(flight, phoenix.time);
 }
