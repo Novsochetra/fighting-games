@@ -1,11 +1,11 @@
 import { BUTTON_SIZE } from '../../data/button-layout.js';
 import { buttonScale } from '../../data/settings.js';
 import { applyButtonLayout } from './apply-button-layout.js';
-import { orientationOf, sizeOf } from './layout-draft.js';
+import { orientationOf, shownControls, sizeOf } from './layout-draft.js';
 import { centreOf, coverCost, fractionOf, halfExtentOf } from './layout-geometry.js';
-import { EDITOR_HTML, fillPreview, sizeLabel } from './layout-markup.js';
+import { controlName, EDITOR_HTML, fillPreview, sizeLabel } from './layout-markup.js';
 
-// the editor's screen: a copy of the touch layer to drag the buttons on, and its toolbar
+// the editor's screen: a copy of the touch layer to drag the controls on, and its toolbar
 export class LayoutView {
   constructor({ document, layout }) {
     this.layout = layout;
@@ -15,86 +15,91 @@ export class LayoutView {
     this.preview = this.section.querySelector('.layout-preview');
     fillPreview(this.preview, document.getElementById('touch'));
     this.bar = this.section.querySelector('.layout-bar');
-    this.buttons = [...this.preview.querySelectorAll('.tb[data-action]')];
+    this.controls = [...this.preview.querySelectorAll('[data-control]')];
   }
 
   isOpen() {
     return this.section.classList.contains('open');
   }
 
-  // the menu is only drawn once it opens, so the toolbar finds its place a frame later
+  // the bar starts each visit at the top; menus stay laid out while closed, so it can be placed
+  // before the editor shows
   reset() {
     this.bar.classList.remove('low');
-    this.app.ownerDocument.defaultView.requestAnimationFrame(() => this.placeToolbar());
   }
 
   orientation() {
     return orientationOf(this.app.clientWidth, this.app.clientHeight);
   }
 
-  buttonFor(action) {
-    return this.buttons.find((button) => button.dataset.action === action);
+  controlFor(control) {
+    return this.controls.find((element) => element.dataset.control === control);
   }
 
   pointAt(point) {
     return fractionOf(point, this.preview.getBoundingClientRect());
   }
 
-  centreOnScreen(action) {
-    return centreOf(this.buttonFor(action).getBoundingClientRect());
+  centreOnScreen(control) {
+    return centreOf(this.controlFor(control).getBoundingClientRect());
   }
 
-  halfOf(action, size) {
-    const rect = this.buttonFor(action).getBoundingClientRect();
+  halfOf(control, size) {
+    const rect = this.controlFor(control).getBoundingClientRect();
     return halfExtentOf(rect, this.preview.getBoundingClientRect(), size);
   }
 
   measureCentres() {
     const layer = this.preview.getBoundingClientRect();
     return Object.fromEntries(
-      this.buttons.map((button) => [
-        button.dataset.action,
-        fractionOf(centreOf(button.getBoundingClientRect()), layer),
+      this.controls.map((element) => [
+        element.dataset.control,
+        fractionOf(centreOf(element.getBoundingClientRect()), layer),
       ]),
     );
   }
 
   render({ draft, picked }, settings) {
-    const orientation = this.orientation();
+    const entries = draft[this.orientation()];
     this.picked = picked;
-    applyButtonLayout(this.preview, draft[orientation]);
-    for (const button of this.buttons) {
-      button.classList.toggle('picked', button.dataset.action === picked);
+    this.shown = shownControls(settings.stick);
+    applyButtonLayout(this.preview, entries);
+    for (const element of this.controls) {
+      element.classList.toggle('picked', element.dataset.control === picked);
     }
-    this.showValues(picked, sizeOf(draft, orientation, picked), !!draft[orientation]);
-    this.placeStick(settings);
+    this.placeStick(entries, settings);
+    this.showValues(picked, sizeOf(draft, this.orientation(), picked), !!entries);
     this.placeToolbar();
   }
 
   showValues(picked, size, custom) {
     const field = (selector) => this.bar.querySelector(selector);
-    field('.layout-name').textContent = this.buttonFor(picked).textContent;
+    field('.layout-name').textContent = controlName(this.controlFor(picked));
     field('.layout-size').textContent = sizeLabel(size);
     field('[data-edit="smaller"]').disabled = size <= BUTTON_SIZE.min;
     field('[data-edit="bigger"]').disabled = size >= BUTTON_SIZE.max;
     field('[data-edit="reset"]').disabled = !custom;
   }
 
-  placeStick(settings) {
-    const stick = this.preview.querySelector('.stick-base');
-    const rest = this.layout.stickRest(buttonScale(settings));
+  // the buttons place themselves through CSS; the stick rests where the screen fit puts the
+  // original one, or at its custom centre
+  placeStick(entries, settings) {
+    const stick = this.controlFor('stick');
+    const rest = entries
+      ? { x: entries.stick.x * this.app.clientWidth, y: entries.stick.y * this.app.clientHeight }
+      : this.layout.originalStickRest(buttonScale(settings));
     stick.style.left = `${rest.x}px`;
     stick.style.top = `${rest.y}px`;
   }
 
   // the toolbar sits at the top and moves to the other side when that hides less, above all less of
-  // the picked button; when the other side is no better it stays, drawn over the buttons
+  // the picked control; when the other side is no better it stays, drawn over the controls
   placeToolbar() {
-    const buttons = this.buttons.map((button) => ({
-      action: button.dataset.action,
-      rect: button.getBoundingClientRect(),
+    const controls = this.shown.map((control) => ({
+      control,
+      rect: this.controlFor(control).getBoundingClientRect(),
     }));
-    const cost = () => coverCost(buttons, this.bar.getBoundingClientRect(), this.picked);
+    const cost = () => coverCost(controls, this.bar.getBoundingClientRect(), this.picked);
     const here = cost();
     if (here > 0) {
       this.bar.classList.toggle('low');

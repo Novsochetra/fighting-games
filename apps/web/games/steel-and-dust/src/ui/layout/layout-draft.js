@@ -1,8 +1,13 @@
-import { BUTTON_ACTIONS, clampCentre, steppedSize } from '../../data/button-layout.js';
+import {
+  BUTTON_ACTIONS,
+  clampCentre,
+  LAYOUT_CONTROLS,
+  steppedSize,
+} from '../../data/button-layout.js';
 import { isPortrait } from '../screen/stage-layout.js';
 
 // the editor works on a copy of the saved layouts, so Cancel only has to drop it; every step
-// returns a new draft
+// returns a new draft. A control is one of the buttons or the stick
 
 export function orientationOf(width, height) {
   return isPortrait(width, height) ? 'portrait' : 'landscape';
@@ -22,20 +27,20 @@ export function createDraft(buttonLayout) {
 // four decimals place a centre to a tenth of a pixel on any phone and keep the save short
 const roundFraction = (value) => Math.round(value * 10000) / 10000;
 
-// editing starts from where the original buttons stand: `centres` is measured on screen
+// editing starts from where the original controls stand: `centres` is measured on screen
 export function customised(draft, orientation, centres) {
   if (draft[orientation]) {
     return draft;
   }
   const entries = {};
-  for (const [action, centre] of Object.entries(centres)) {
-    entries[action] = { x: roundFraction(centre.x), y: roundFraction(centre.y), size: 1 };
+  for (const [control, centre] of Object.entries(centres)) {
+    entries[control] = { x: roundFraction(centre.x), y: roundFraction(centre.y), size: 1 };
   }
   return { ...draft, [orientation]: entries };
 }
 
-function withEntry(draft, orientation, action, entry) {
-  return { ...draft, [orientation]: { ...draft[orientation], [action]: entry } };
+function withEntry(draft, orientation, control, entry) {
+  return { ...draft, [orientation]: { ...draft[orientation], [control]: entry } };
 }
 
 function placed(entry, centre, half) {
@@ -44,29 +49,34 @@ function placed(entry, centre, half) {
   return { ...entry, x: roundFraction(inside.x), y: roundFraction(inside.y) };
 }
 
-// `half` is the button's half width and height at size 1, as fractions of the layer
-export function moveButton(draft, { orientation, action, centre, half }) {
-  const entry = draft[orientation][action];
-  return withEntry(draft, orientation, action, placed(entry, centre, half));
+// `half` is the control's half width and height at size 1, as fractions of the layer
+export function moveControl(draft, { orientation, control, centre, half }) {
+  const entry = draft[orientation][control];
+  return withEntry(draft, orientation, control, placed(entry, centre, half));
 }
 
-// a button that grows near an edge is pushed back onto the screen
-export function resizeButton(draft, { orientation, action, step, half }) {
-  const entry = draft[orientation][action];
+// a control that grows near an edge is pushed back onto the screen
+export function resizeControl(draft, { orientation, control, step, half }) {
+  const entry = draft[orientation][control];
   const resized = { ...entry, size: steppedSize(entry.size, step) };
-  return withEntry(draft, orientation, action, placed(resized, entry, half));
+  return withEntry(draft, orientation, control, placed(resized, entry, half));
 }
 
 export function resetLayout(draft, orientation) {
   return { ...draft, [orientation]: null };
 }
 
-export function nextAction(action) {
-  return BUTTON_ACTIONS[(BUTTON_ACTIONS.indexOf(action) + 1) % BUTTON_ACTIONS.length];
+// a hidden stick (Settings, Joystick) is neither shown nor edited
+export function shownControls(stickMode) {
+  return stickMode === 'hidden' ? BUTTON_ACTIONS : LAYOUT_CONTROLS;
 }
 
-export function sizeOf(draft, orientation, action) {
-  return draft[orientation]?.[action].size ?? 1;
+export function nextControl(control, shown) {
+  return shown[(shown.indexOf(control) + 1) % shown.length];
+}
+
+export function sizeOf(draft, orientation, control) {
+  return draft[orientation]?.[control].size ?? 1;
 }
 
 export function savedLayout(draft) {

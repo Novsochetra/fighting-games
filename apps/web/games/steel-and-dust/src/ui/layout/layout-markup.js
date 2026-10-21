@@ -1,4 +1,4 @@
-// the name of the picked button picks the next one, for a button hidden under the toolbar and for
+// the name of the picked control picks the next one, for a control hidden under the toolbar and for
 // keys and gamepads; Done also carries data-act="back": the editor's own click listener saves first,
 // then the menus' listener further up closes the editor the same way Cancel does
 export const EDITOR_HTML = `<div class="layout-preview" aria-hidden="true"></div>
@@ -19,7 +19,8 @@ export const EDITOR_HTML = `<div class="layout-preview" aria-hidden="true"></div
     <p class="layout-hint">Drag to move, tap to pick</p>
   </div>`;
 
-// the preview copies the real stick, buttons and pause button, so it looks and sizes exactly like them
+// the preview copies the real stick, buttons and pause button, so it looks and sizes exactly like
+// them; the stick and the buttons are marked as the controls the editor moves
 export function fillPreview(preview, touch) {
   for (const selector of ['.stick-base', '.btns', '.tb-pause']) {
     const copy = touch.querySelector(selector).cloneNode(true);
@@ -28,6 +29,14 @@ export function fillPreview(preview, touch) {
     }
     preview.append(copy);
   }
+  preview.querySelector('.stick-base').dataset.control = 'stick';
+  for (const button of preview.querySelectorAll('.tb[data-action]')) {
+    button.dataset.control = button.dataset.action;
+  }
+}
+
+export function controlName(element) {
+  return element.dataset.control === 'stick' ? 'STICK' : element.textContent;
 }
 
 export function sizeLabel(size) {

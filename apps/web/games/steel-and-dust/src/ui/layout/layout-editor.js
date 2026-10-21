@@ -1,25 +1,26 @@
 import {
   createDraft,
   customised,
-  moveButton,
-  nextAction,
+  moveControl,
+  nextControl,
   resetLayout,
-  resizeButton,
+  resizeControl,
   savedLayout,
+  shownControls,
   sizeOf,
 } from './layout-draft.js';
 import { installLayoutDrag } from './layout-drag.js';
 import { LayoutView } from './layout-view.js';
 
 const TOOLBAR_ACTIONS = {
-  next: (editor) => editor.pick(nextAction(editor.state.picked)),
+  next: (editor) => editor.pickNext(),
   smaller: (editor) => editor.resize(-1),
   bigger: (editor) => editor.resize(1),
   reset: (editor) => editor.reset(),
   done: (editor) => editor.save(),
 };
 
-// the Button layout menu: it edits a draft of the saved layouts, so the real touch buttons only
+// the Button layout menu: it edits a draft of the saved layouts, so the real touch controls only
 // change on Done, and Cancel (the menus' Back) just leaves
 export class LayoutEditor {
   constructor({ view, game, audio, layout, settingsPanel }) {
@@ -42,7 +43,7 @@ export class LayoutEditor {
     this.view.render(this.state, this.game.settings);
   }
 
-  // the first move or resize turns the original layout into a custom one, where the buttons stand
+  // the first move or resize turns the original layout into a custom one, where the controls stand
   customise() {
     const orientation = this.view.orientation();
     if (!this.state.draft[orientation]) {
@@ -51,31 +52,35 @@ export class LayoutEditor {
     return orientation;
   }
 
-  halfOf(orientation, action) {
-    return this.view.halfOf(action, sizeOf(this.state.draft, orientation, action));
+  halfOf(orientation, control) {
+    return this.view.halfOf(control, sizeOf(this.state.draft, orientation, control));
   }
 
-  pick(action) {
-    if (this.state.picked !== action) {
-      this.state.picked = action;
+  pick(control) {
+    if (this.state.picked !== control) {
+      this.state.picked = control;
       this.audio.sfx('ui');
       this.render();
     }
   }
 
-  moveTo(action, point) {
+  pickNext() {
+    this.pick(nextControl(this.state.picked, shownControls(this.game.settings.stick)));
+  }
+
+  moveTo(control, point) {
     const orientation = this.customise();
-    const half = this.halfOf(orientation, action);
+    const half = this.halfOf(orientation, control);
     const centre = this.view.pointAt(point);
-    this.state.draft = moveButton(this.state.draft, { orientation, action, centre, half });
+    this.state.draft = moveControl(this.state.draft, { orientation, control, centre, half });
     this.render();
   }
 
   resize(step) {
     const orientation = this.customise();
-    const action = this.state.picked;
-    const half = this.halfOf(orientation, action);
-    this.state.draft = resizeButton(this.state.draft, { orientation, action, step, half });
+    const control = this.state.picked;
+    const half = this.halfOf(orientation, control);
+    this.state.draft = resizeControl(this.state.draft, { orientation, control, step, half });
     this.audio.sfx('ui');
     this.render();
   }

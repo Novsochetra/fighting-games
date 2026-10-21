@@ -1,5 +1,5 @@
 /* the Button layout editor (src/ui/layout/) lies over the paused game or the title under only a light
-   dim (`menuBackdrop`), so the buttons are placed against the real screen */
+   dim (`menuBackdrop`), so the buttons and the stick are placed against the real screen */
 #m-layout {
   padding: 0;
   overflow: hidden;
@@ -16,29 +16,35 @@
   pointer-events: none;
 }
 
-.layout-preview .tb {
+.layout-preview [data-control] {
+  pointer-events: auto;
   cursor: grab;
 }
 
-.layout-preview .tb.dragging {
+.layout-preview .dragging {
   cursor: grabbing;
 }
 
-.layout-preview .tb.picked {
+/* a closing menu lets taps through at once (menus.css), and so do the controls on it */
+#m-layout:not(.open) [data-control] {
+  pointer-events: none;
+}
+
+.layout-preview .picked {
   outline: 2px dashed var(--color-gold);
   outline-offset: 4px;
   filter: drop-shadow(0 0 6px var(--color-gold));
 }
 
-/* the stick and the pause button only show what the buttons have to be placed around */
-.layout-preview .stick-base,
+/* the pause button only shows what the controls have to be placed around */
 .layout-preview .tb-pause {
   opacity: 0.35;
   pointer-events: none;
 }
 
+/* a hidden stick is neither shown nor edited, but it still stands where it would be measured */
 body.stick-hidden .layout-preview .stick-base {
-  display: none;
+  visibility: hidden;
 }
 
 /* the carved frame of the HUD panels, around a dark plate; 1x on short screens like the menus */

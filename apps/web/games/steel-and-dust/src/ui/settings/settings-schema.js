@@ -74,7 +74,7 @@ export const SETTINGS_SCHEMA = [
     label: 'Button layout',
     action: 'layout',
     format: (value) => (value ? 'Custom' : 'Default'),
-    note: 'Move and resize the buttons, for each way you hold the phone',
+    note: 'Move and resize the buttons and the stick, for each way you hold the phone',
     visible: ({ isTouchOn }) => isTouchOn(),
   },
   {

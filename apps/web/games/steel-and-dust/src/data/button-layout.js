@@ -1,8 +1,10 @@
 import { clamp } from '../lib/math.js';
 
-// a custom layout places each touch button by its centre, as fractions of the touch layer, and
-// sizes it on top of the global button size; each orientation has its own layout or none
+// a custom layout places each touch control, the buttons and the stick, by its centre as fractions
+// of the touch layer, and sizes it on top of the global button size; each orientation has its own
+// layout or none
 export const BUTTON_ACTIONS = ['light', 'heavy', 'jump', 'dash', 'ult'];
+export const LAYOUT_CONTROLS = [...BUTTON_ACTIONS, 'stick'];
 export const BUTTON_SIZE = { min: 0.6, max: 1.8, step: 0.1 };
 
 // sizes are kept to one decimal so steps never drift into 1.2000000000000002
@@ -37,16 +39,16 @@ function sanitizeOrientation(value) {
     return null;
   }
   const entries = {};
-  for (const action of BUTTON_ACTIONS) {
-    entries[action] = sanitizeEntry(value[action]);
-    if (!entries[action]) {
+  for (const control of LAYOUT_CONTROLS) {
+    entries[control] = sanitizeEntry(value[control]);
+    if (!entries[control]) {
       return null;
     }
   }
   return entries;
 }
 
-// a saved layout that is broken or missing a button falls back to the original one
+// a saved layout that is broken or missing a control falls back to the original one
 export function sanitizeButtonLayout(value) {
   const layout = {
     landscape: sanitizeOrientation(value?.landscape),

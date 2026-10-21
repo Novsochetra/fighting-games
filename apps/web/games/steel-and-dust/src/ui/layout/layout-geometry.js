@@ -29,13 +29,13 @@ export function overlaps(first, second) {
   );
 }
 
-// what a toolbar in `bar` would hide of `buttons` ({ action, rect }); the picked button counts most,
-// as it is the one being moved or resized
-export function coverCost(buttons, bar, picked) {
-  return buttons.reduce((cost, { action, rect }) => {
+// what a toolbar in `bar` would hide of `controls` ({ control, rect }); the picked control counts
+// most, as it is the one being moved or resized
+export function coverCost(controls, bar, picked) {
+  return controls.reduce((cost, { control, rect }) => {
     if (!overlaps(rect, bar)) {
       return cost;
     }
-    return cost + (action === picked ? 10 : 1);
+    return cost + (control === picked ? 10 : 1);
   }, 0);
 }

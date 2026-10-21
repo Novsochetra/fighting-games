@@ -1,7 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { STICK_RADIUS } from '../../src/ui/screen/stage-layout.js';
 
 const css = readFileSync(new URL('../../styles/touch-buttons.css', import.meta.url), 'utf8');
+const stickCss = readFileSync(new URL('../../styles/touch.css', import.meta.url), 'utf8');
 
 function ruleOf(selector, source = css) {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -48,5 +50,20 @@ describe('the original touch button layout', () => {
   it('only places a button by its custom centre inside a custom layout', () => {
     expect(css.match(/var\(--tb-x\)/g)).toHaveLength(1);
     expect(ruleOf('.btns.custom .tb')).toContain('var(--tb-x)');
+  });
+
+  it('keeps the stick in the left 48% of the screen, as big as it was', () => {
+    const zone = ruleOf('.stick-zone', stickCss);
+    expect(zone).toContain('left: 0;');
+    expect(zone).toContain('width: 48%;');
+    const base = ruleOf('.stick-base', stickCss);
+    expect(base).toContain('--stick: calc(var(--btn) * var(--stick-size, 1));');
+    expect(base).toContain('width: calc(128px * var(--stick));');
+    expect(base).toContain('margin: calc(-64px * var(--stick)) 0 0 calc(-64px * var(--stick));');
+    const knob = ruleOf('.stick-knob', stickCss);
+    expect(knob).toContain('width: calc(56px * var(--stick));');
+    expect(knob).toContain('margin: calc(-28px * var(--stick)) 0 0 calc(-28px * var(--stick));');
+    // the rest position and a custom stick's zone are worked out from the same radius
+    expect(STICK_RADIUS).toBe(64);
   });
 });

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
-  BUTTON_ACTIONS,
   clampCentre,
+  LAYOUT_CONTROLS,
   sanitizeButtonLayout,
   steppedSize,
 } from '../../../src/data/button-layout.js';
@@ -13,6 +13,7 @@ const entries = (overrides = {}) => ({
   jump: { x: 0.9, y: 0.5, size: 1.2 },
   heavy: { x: 0.75, y: 0.8, size: 1 },
   light: { x: 0.2, y: 0.8, size: 0.8 },
+  stick: { x: 0.85, y: 0.7, size: 1.3 },
   ...overrides,
 });
 
@@ -51,10 +52,11 @@ describe('a saved button layout', () => {
   it('keeps a whole layout for each orientation', () => {
     const saved = { landscape: entries(), portrait: null };
     expect(sanitizeButtonLayout(saved)).toEqual(saved);
-    expect(Object.keys(sanitizeButtonLayout(saved).landscape)).toEqual(BUTTON_ACTIONS);
+    expect(Object.keys(sanitizeButtonLayout(saved).landscape)).toEqual(LAYOUT_CONTROLS);
+    expect(LAYOUT_CONTROLS).toEqual(['light', 'heavy', 'jump', 'dash', 'ult', 'stick']);
   });
 
-  it('drops an orientation that misses a button or holds bad numbers', () => {
+  it('drops an orientation that misses a control or holds bad numbers', () => {
     const missingUlt = entries();
     delete missingUlt.ult;
     const portrait = entries();
@@ -62,6 +64,11 @@ describe('a saved button layout', () => {
       landscape: null,
       portrait,
     });
+    const missingStick = entries();
+    delete missingStick.stick;
+    expect(sanitizeButtonLayout({ landscape: missingStick, portrait: null })).toBeNull();
+    const badStick = entries({ stick: { x: 0.5, y: -0.1, size: 1 } });
+    expect(sanitizeButtonLayout({ landscape: badStick, portrait: null })).toBeNull();
     const outside = entries({ dash: { x: 1.4, y: 0.5, size: 1 } });
     expect(sanitizeButtonLayout({ landscape: outside, portrait: null })).toBeNull();
     const notANumber = entries({ jump: { x: '0.5', y: 0.5, size: 1 } });

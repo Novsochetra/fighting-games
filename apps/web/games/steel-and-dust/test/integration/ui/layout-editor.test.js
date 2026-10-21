@@ -1,9 +1,10 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { TouchStick } from '../../../src/input/touch-stick.js';
 import { openMenu, openPage, selected } from '../../support/menu-page.js';
 
-// happy-dom lays nothing out, so the editor's copy of the touch layer and its buttons get the rects
-// of an 800x400 screen, where each original button stands at [centre x, centre y, size]
+// happy-dom lays nothing out, so the editor's copy of the touch layer and its controls get the rects
+// of an 800x400 screen, where each original control stands at [centre x, centre y, size]
 const LAYER = { left: 0, top: 0, width: 800, height: 400 };
 const ORIGINAL = {
   light: [720, 320, 96],
@@ -11,13 +12,14 @@ const ORIGINAL = {
   jump: [740, 200, 76],
   dash: [640, 210, 62],
   ult: [560, 250, 56],
+  stick: [90, 300, 128],
 };
 
 function stubRect(element) {
   if (element.classList.contains('layout-preview')) {
     return LAYER;
   }
-  const spot = element.closest('#m-layout') && ORIGINAL[element.dataset.action];
+  const spot = element.closest('#m-layout') && ORIGINAL[element.dataset.control];
   if (!spot) {
     return { left: 0, top: 0, width: 0, height: 0 };
   }
@@ -25,7 +27,7 @@ function stubRect(element) {
   return { left: x - size / 2, top: y - size / 2, width: size, height: size };
 }
 
-const copy = (action) => document.querySelector(`#m-layout .tb[data-action="${action}"]`);
+const copy = (control) => document.querySelector(`#m-layout [data-control="${control}"]`);
 const real = (action) => document.querySelector(`#touch .tb[data-action="${action}"]`);
 const tool = (name) => document.querySelector(`#m-layout [data-edit="${name}"]`);
 const cancel = () => document.querySelector('#m-layout [data-act="back"]:not([data-edit])');
@@ -54,6 +56,15 @@ function holdPhone(width, height) {
     clientHeight: { value: height, configurable: true },
   });
   window.dispatchEvent(new Event('resize'));
+}
+
+// the real stick rests on every fit, as main.js has it
+function installStick(page) {
+  const byId = (id) => document.getElementById(id);
+  const elements = { zone: byId('stickZone'), base: byId('stickBase'), knob: byId('stickKnob') };
+  const stick = new TouchStick({ elements, game: page.game, layout: page.layout });
+  page.layout.onFit = () => stick.rest();
+  return elements;
 }
 
 function tap(action) {
@@ -134,6 +145,7 @@ describe('the button layout editor on the real page', () => {
       heavy: { x: 0.775, y: 0.85, size: 1 },
       dash: { x: 0.8, y: 0.525, size: 1 },
       ult: { x: 0.7, y: 0.625, size: 1 },
+      stick: { x: 0.1125, y: 0.75, size: 1 },
     });
     expect(document.querySelector('#touch .btns').classList.contains('custom')).toBe(true);
     expect(real('light').style.getPropertyValue('--tb-x')).toBe('0.125');
@@ -183,5 +195,43 @@ describe('the button layout editor on the real page', () => {
       expect.objectContaining({ buttonLayout: null }),
     );
     expect(document.querySelector('[data-k="buttonLayout"] .val').textContent).toBe('Default');
+  });
+
+  it('moves and resizes the stick, and the real one rests there inside its zone', () => {
+    const { zone, base } = installStick(page);
+    holdPhone(800, 400);
+    openEditor();
+    drag('stick', { x: 680, y: 280 });
+    expect(toolbarText()).toEqual(['STICK', '100%']);
+    expect(copy('stick').classList.contains('picked')).toBe(true);
+    tool('bigger').click();
+    tool('bigger').click();
+    expect(toolbarText()).toEqual(['STICK', '120%']);
+    expect(copy('stick').style.getPropertyValue('--stick-size')).toBe('1.2');
+    expect(base.style.getPropertyValue('--stick-size')).toBe('');
+    tool('done').click();
+    expect(page.game.settings.buttonLayout.landscape.stick).toEqual({ x: 0.85, y: 0.7, size: 1.2 });
+    expect(base.style.getPropertyValue('--stick-size')).toBe('1.2');
+    // the stick stands on the right, so its zone is the right half and the base rests inside it
+    expect([zone.style.left, zone.style.width]).toEqual(['400px', '400px']);
+    expect([base.style.left, base.style.top]).toEqual(['280px', '280px']);
+    document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
+    expect(document.querySelector('#m-layout .btns').classList.contains('custom')).toBe(true);
+    tool('reset').click();
+    tool('done').click();
+    expect(page.game.settings.buttonLayout).toBeNull();
+    expect(base.style.getPropertyValue('--stick-size')).toBe('');
+    expect([zone.style.left, zone.style.width]).toEqual(['', '']);
+  });
+
+  it('leaves a hidden stick out of the editor', () => {
+    page.game.settings.stick = 'hidden';
+    openEditor();
+    const names = [];
+    for (let i = 0; i < 6; i++) {
+      names.push(document.querySelector('.layout-name').textContent);
+      tool('next').click();
+    }
+    expect(names).toEqual(['ATTACK', 'HEAVY', 'JUMP', 'DASH', 'ULT', 'ATTACK']);
   });
 });

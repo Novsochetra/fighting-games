@@ -18,7 +18,7 @@ export function openPage(records) {
   const audio = { sfx: vi.fn(), unlock: vi.fn(), syncVolumes: vi.fn() };
   const ui = createUiState(game);
   const elements = findElements(document);
-  const { menus, act } = installUi({
+  const { menus, act, layout } = installUi({
     window,
     elements,
     game,
@@ -31,7 +31,7 @@ export function openPage(records) {
   installKeyboard(keys, { game, audio, menus, ui });
   menus.sync();
   const key = (code) => keys.dispatchEvent(new KeyboardEvent('keydown', { code }));
-  return { game, menus, act, saveSettings, key, ui, audio };
+  return { game, menus, act, layout, saveSettings, key, ui, audio };
 }
 
 export const openMenu = () => document.querySelector('#menus .menu.open');
