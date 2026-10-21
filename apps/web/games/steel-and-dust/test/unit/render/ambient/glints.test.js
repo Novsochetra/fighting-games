@@ -65,6 +65,16 @@ describe('ambient glints', () => {
     expect(longest.every((rect) => rect.color !== palette.at(-1))).toBe(true);
   });
 
+  it('gather into one stretch of water when given a left edge and a span', () => {
+    const gathered = { ...glints, drift: 0, left: 120, span: 60 };
+    const dashes = ticksUpTo(2400, 4).flatMap((tick) => rectsOf(gathered, { tick }));
+    expect(dashes.length).toBeGreaterThan(500);
+    for (const dash of dashes) {
+      expect(dash.x).toBeGreaterThanOrEqual(gathered.left - 6);
+      expect(dash.x + dash.width).toBeLessThanOrEqual(gathered.left + gathered.span + 6);
+    }
+  });
+
   it('stay glued to the water, scrolling with the camera by their drift and wrapping', () => {
     const tick = ticksUpTo(2400, 2).find((at) => {
       const [dash] = rectsOf(oneGlint, { tick: at, cameraX: IN_VIEW });

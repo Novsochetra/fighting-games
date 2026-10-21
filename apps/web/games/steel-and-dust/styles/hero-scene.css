@@ -15,6 +15,18 @@
   opacity: 1;
 }
 
+/* the canvas draws the same painting with its life over it, cropped and scaled exactly as the
+   background is, so each effect lies on its own pixel; until its first frame it is blank and the
+   background shows through */
+.menu-scene canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+
 /* the moat and the ruins in the front of the painting are bright; the menus stand on them */
 .menu-scene::after {
   content: '';

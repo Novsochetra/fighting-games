@@ -1,8 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { PAINTED_THEMES } from '../../../../src/art/painted-themes/index.js';
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../../../../src/config.js';
+import { createPainter } from '../../../../src/render/painter.js';
+import { drawAmbientEffect } from '../../../../src/render/scene/ambient/index.js';
 import { MARGIN } from '../../../../src/render/scene/ambient/motion.js';
+import { createRecordingContext } from '../../../support/recording-canvas.js';
 import {
+  ALL_COLORS,
   SAMPLE_EFFECTS,
   drawnRects,
   recordAmbient,
@@ -93,5 +97,24 @@ describe('drawAmbient', () => {
     expect(recordAmbient(undefined, BUSY).log).toEqual([]);
     expect(recordAmbient([{ kind: 'rain', plane: 'back' }], BUSY).log).toEqual([]);
     expect(recordEffect(leaves, { ...BUSY, colors: pineRidge }).log).toEqual([]);
+  });
+});
+
+describe('drawAmbientEffect', () => {
+  const { mist } = SAMPLE_EFFECTS;
+  const drawOne = (effect, colors = ALL_COLORS) => {
+    const { context, log } = createRecordingContext(null);
+    drawAmbientEffect(createPainter(context), { effect, ...BUSY, colors });
+    return log;
+  };
+
+  it('draws one effect just as the plane it lies on would, whatever its plane', () => {
+    expect(drawOne(mist)).toEqual(recordEffect(mist, BUSY).log);
+    expect(drawOne({ ...mist, plane: undefined })).toEqual(recordEffect(mist, BUSY).log);
+  });
+
+  it('skips an unknown kind and a kind without its color', () => {
+    expect(drawOne({ kind: 'rain' })).toEqual([]);
+    expect(drawOne(mist, {})).toEqual([]);
   });
 });
