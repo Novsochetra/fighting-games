@@ -5,26 +5,28 @@
   margin: 0 0 12px;
 }
 
+/* the tabs are small carved stones; the open one and the one under the gamepad glow jade */
 .tabs button {
   font-family: var(--font-display);
   font-size: var(--font-size-xs);
   letter-spacing: var(--tracking-wide);
   color: var(--color-text-muted);
-  background: var(--color-clear);
-  border: 2px solid var(--color-border);
-  padding: 6px 10px;
+  background: none;
+  border: 0 solid var(--color-clear);
+  border-image: url('../assets/ui/kit/stone-button.png') 8 fill / 8px / 0 stretch;
+  padding: 8px 12px;
   cursor: pointer;
+  image-rendering: pixelated;
 }
 
 .tabs button[aria-selected='true'] {
-  background: var(--color-accent);
-  color: var(--color-ink);
-  border-color: var(--color-accent);
+  color: var(--color-mint-light);
+  filter: drop-shadow(0 0 4px var(--color-green));
 }
 
 .tabs button.sel {
-  outline: 2px solid var(--color-accent-strong);
-  outline-offset: 1px;
+  color: var(--color-gold);
+  filter: drop-shadow(0 0 4px var(--color-gold));
 }
 
 .keys {
@@ -35,7 +37,7 @@
 
 .keys td {
   padding: 6px 4px;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-gold) 22%, transparent);
   vertical-align: top;
 }
 
@@ -86,7 +88,7 @@ kbd.k {
 
 .moves td {
   padding: 6px 8px;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid color-mix(in srgb, var(--color-gold) 22%, transparent);
   vertical-align: middle;
 }
 
