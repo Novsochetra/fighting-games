@@ -137,7 +137,7 @@
   color: var(--accent);
 }
 
-@media (max-height: 420px), (max-width: 860px) {
+@media (max-height: 420px), (min-width: 641px) and (max-width: 860px) {
   .hero-art {
     width: 64px;
     height: 80px;
@@ -170,5 +170,27 @@
     to {
       background-position-x: -544px;
     }
+  }
+}
+
+/* a phone held upright has no room for six cards side by side: they keep their full size and the row
+   scrolls sideways, with a slice of the next card always showing so the row reads as one to swipe */
+@media (max-width: 640px) and (min-height: 421px) {
+  .hero-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: min(144px, calc(50% - 20px));
+    overflow: auto hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+
+  .hero-card {
+    scroll-snap-align: start;
+    padding-inline: 4px;
+    overflow: hidden;
   }
 }
