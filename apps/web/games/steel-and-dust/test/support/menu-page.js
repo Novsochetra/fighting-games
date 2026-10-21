@@ -31,7 +31,7 @@ export function openPage(records) {
   installKeyboard(keys, { game, audio, menus, ui });
   menus.sync();
   const key = (code) => keys.dispatchEvent(new KeyboardEvent('keydown', { code }));
-  return { game, menus, act, saveSettings, key, ui };
+  return { game, menus, act, saveSettings, key, ui, audio };
 }
 
 export const openMenu = () => document.querySelector('#menus .menu.open');
