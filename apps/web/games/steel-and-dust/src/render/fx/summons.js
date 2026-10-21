@@ -105,6 +105,8 @@ function drawBurst(painter, sheets, burst) {
     x: burst.x,
     y: burst.y,
     scale: burst.scale,
+    facing: burst.direction,
+    angle: burst.angle,
   });
 }
 
@@ -117,6 +119,7 @@ const DRAW_BY_KIND = {
   pillar: drawPillar,
   burn: drawBurn,
   phoenix: drawPhoenix,
+  lance: drawBurst,
 };
 
 export function drawSummons(painter, summons, sheets) {

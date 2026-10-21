@@ -1,18 +1,21 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { fxLength } from '../../../src/data/fx-sprites.js';
+import { equipWeapon } from '../../../src/sim/stage/flow.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
 import { igniteTarget } from '../../../src/sim/summons/burn.js';
 import { releasePhoenix } from '../../../src/sim/summons/phoenix.js';
 import { raisePillar } from '../../../src/sim/summons/pillars.js';
 import { seededRandom } from '../../support/seeded-random.js';
-import { createPlayingGame, runTicks } from '../../support/test-game.js';
+import { createPlayingGame, runTicks, tap } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
 const HIT = { damage: 5, knockback: [0.5, -4], launch: true, hitstop: 3, hitstun: 20 };
+const lancesOf = (game) => game.summons.filter((summon) => summon.kind === 'lance');
 const burnsOn = (game, raider) =>
   game.summons.some((summon) => summon.kind === 'burn' && summon.target === raider);
 
-function gameWithRaider() {
-  const game = createPlayingGame({ settings: { hero: 'ember' } });
+function gameWithRaider(hero = 'ember') {
+  const game = createPlayingGame({ settings: { hero } });
   spawnEnemy(game, 'grunt', 1);
   const raider = game.fighters.find((fighter) => fighter.side === 'enemy');
   Object.assign(raider, { entering: false, x: game.player.x + 80, state: 'idle' });
@@ -79,5 +82,31 @@ describe("the Ember Shade's fire in a running fight", () => {
     runTicks(game, 41);
     expect(raider.maxHp - raider.hp).toBeGreaterThanOrEqual(10);
     expect(game.summons.filter((summon) => summon.kind === 'phoenix')).toEqual([]);
+  });
+
+  it("the Ember Shade's spear poke pours a lance that rides the strike, hurts nothing and burns out", () => {
+    const { game, raider } = gameWithRaider();
+    equipWeapon(game, 'spear');
+    tap(game, 'light');
+    runTicks(game, game.player.move.startup);
+    const [lance] = lancesOf(game);
+    expect(lance).toMatchObject({ direction: game.player.facing, angle: 0 });
+    expect((lance.x - game.player.x) * game.player.facing).toBeGreaterThan(0);
+    runTicks(game, fxLength('lance'));
+    expect(lancesOf(game)).toEqual([]);
+    expect(raider.hp).toBe(raider.maxHp);
+  });
+
+  it("pours no lance from another Shade's spear or from the Ember Shade's sword", () => {
+    for (const [hero, weapon] of [
+      ['moss', 'spear'],
+      ['ember', 'sword'],
+    ]) {
+      const { game } = gameWithRaider(hero);
+      equipWeapon(game, weapon);
+      tap(game, 'light');
+      runTicks(game, 20);
+      expect(lancesOf(game), `${hero} ${weapon}`).toEqual([]);
+    }
   });
 });
