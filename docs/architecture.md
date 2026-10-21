@@ -212,6 +212,9 @@ Any change to
 arithmetic, to the order of `Math.random()` calls or to the order of canvas calls shows up there.
 When a change is meant to alter behavior, regenerate the fixtures with `npm run test:regression -- -u`
 and review the diff.
+The replays swap `Math.sin` and `Math.cos` for a port of V8's fdlibm (`test/support/portable-trig.js`):
+on Apple Silicon the native ones round about one result in 200 differently from x64, where the
+fixtures were recorded and CI runs, so without it a Mac fails runs no change touched.
 
 ## Tests
 
