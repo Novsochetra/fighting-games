@@ -8580,15 +8580,15 @@
   {
    "tick": 1680,
    "frame": {
-    "calls": 2560,
-    "digest": "06d0e696f134ae17"
+    "calls": 2546,
+    "digest": "b8594b6e9d8d0722"
    }
   },
   {
    "tick": 1920,
    "frame": {
-    "calls": 2102,
-    "digest": "6fc927e07753118a"
+    "calls": 2088,
+    "digest": "486be0d6ed62281d"
    }
   },
   {

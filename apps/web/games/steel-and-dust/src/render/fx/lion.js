@@ -4,7 +4,6 @@ import { drawFxFrame } from './fx-sheets.js';
 // the strip's first frames are the lion taking shape and roaring, played once while it appears;
 // the rest are its leap, looped while it runs
 const RISE_FRAMES = 3;
-const ECHOES = 2;
 
 export function lionFrame(lion, time) {
   const { ticks, frames } = FX_SPRITES.lion;
@@ -15,19 +14,14 @@ export function lionFrame(lion, time) {
   return RISE_FRAMES + (leaping % (frames - RISE_FRAMES));
 }
 
-// the spirit lion glows through: see-through, with fading echoes of its leap behind it
+// drawn solid like the sheet it comes from: its leap frames carry their own speed trails
 export function drawLion(painter, sheets, lion) {
-  for (let echo = ECHOES; echo >= 0; echo--) {
-    const time = Math.max(0, lion.time - echo * 2);
-    painter.alpha(echo ? 0.25 / echo : 0.95);
-    drawFxFrame(painter, sheets, {
-      name: 'lion',
-      frame: lionFrame(lion, time),
-      x: lion.x - lion.direction * echo * 10 * lion.scale,
-      y: lion.y,
-      scale: lion.scale,
-      facing: lion.direction,
-    });
-  }
-  painter.alpha(1);
+  drawFxFrame(painter, sheets, {
+    name: 'lion',
+    frame: lionFrame(lion, lion.time),
+    x: lion.x,
+    y: lion.y,
+    scale: lion.scale,
+    facing: lion.direction,
+  });
 }
