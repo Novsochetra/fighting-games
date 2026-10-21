@@ -30,3 +30,10 @@ with the same animation names and frame counts as `../hero/hero.json`.
   rows for the sword, fists, spear and axe, exactly like `../hero/arsenal/`. The Ember Shade's spear
   keeps the sword's fire smear, and a few of its frames with no smear take their grip from detection
   (or `EMBER_OVERRIDES`) instead of the Moss Shade's "hide" overrides.
+- `ember/spear/` holds the Ember Shade's own spear moves, one row per attack strip with the sword
+  strip's frame count; the bake puts them in the spear row of `ember/arsenal/` in place of the sword
+  swings. Each is a PixMiniMax animation (8 frames) of the arsenal's spear idle frame: a jab, a low
+  stab, a twirl with a ring of fire, a thrust, a rising stab, an overhead slam, an air jab, a rising
+  air stab, a diving stab and a plunge, all with phoenix-fire trails. The frames were picked so the
+  strike lands on the strip's strike frame; air frames are lowered or raised so the hood sits where
+  it does in the sword strip, without running off the bottom edge.
