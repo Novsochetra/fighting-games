@@ -100,26 +100,31 @@
   }
 }
 
-/* a phone on its side has room across but not down: the middle card widens so its text takes fewer
-   lines, and the side cards step out of its way */
-@media (max-height: 420px) and (min-width: 641px) {
+/* a screen on its side is short: the middle card sets the hero's text beside them instead of under
+   them, so the card is no taller than the hero, and the side cards step out of its way */
+@media (orientation: landscape) and (max-height: 560px) {
   .hero-stage {
-    --slot-gap: 200px;
+    --slot-gap: calc(var(--px) * 136px);
   }
 
   .hero-card {
-    --info-width: calc(var(--px) * 124px - var(--frame) * 34px);
+    --info-width: calc(var(--px) * 100px);
   }
 
-  .hero-card::before {
-    inset-inline: calc(var(--px) * -30px);
+  .hero-card[data-depth='0'] {
+    flex-direction: row;
+    width: calc(var(--px) * 186px);
   }
 
-  .hero-card .hero-name {
-    font-size: var(--font-size-sm);
+  .hero-card[data-depth='0'] .hero-art {
+    margin-inline: calc(var(--px) * -32px) calc(var(--px) * -16px);
+  }
+
+  .hero-card .hero-info {
+    margin-inline: 0;
   }
 
   .hero-carousel {
-    height: calc(var(--px) * 80px + 6rem + var(--frame) * 40px);
+    height: calc(var(--px) * 80px + var(--frame) * 40px);
   }
 }
