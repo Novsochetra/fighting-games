@@ -16,9 +16,9 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `burn.png`    | 8 × 48×64    | Ember: flames on a burning raider (loops)        | VFX workbench, "Ember Burn" (`4813b8ef-ffac-4f4c-8a0a-1bd7e9a2e07c`)          |
 | `phoenix.png` | 6 × 128×96   | Ember: Phoenix Pyre's firebird (loops)           | Pixen image (`95d5d481-7be4-4346-9ec0-6b4994bf0370`), PixMiniMax flap (`5a9556a1-3365-4e22-8e86-93bc4b76a7b7`, frames 0–5) |
 | `inferno.png` | 16 × 244×180 | Ember: Phoenix Pyre's closing blast             | VFX workbench, "Ember Inferno" (`19ad017d-a6db-4be5-b869-d3aa7136bfe5`)       |
-| `lance.png`   | 12 × 132×64  | Ember: the phoenix lance from the spear's tip   | VFX workbench, "Phoenix Lance" (`943e46bd-7997-4301-9719-5cb1f20779f3`)       |
+| `feathers.png` | 8 × 66×70   | Ember: feathers where a spear hit lands         | VFX workbench, "Phoenix Feathers" (`d2f23d08-4f1d-46c8-ae4f-270b3608ada3`)    |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The stag strip had its ground-shadow line
-removed. The ice holds frames 4–7 while a raider stays frozen. The lance points right with its anchor
-on the spear's tip and is turned to the way the spear points (`src/data/ember-spear-tips.js`).
+removed. The ice holds frames 4–7 while a raider stays frozen. The feathers fly right from the hit and are
+mirrored when the strike goes left.

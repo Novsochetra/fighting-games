@@ -47,11 +47,11 @@ describe('applyStyle', () => {
   });
 
   it("marks every move of the style's chosen weapon, techniques included, and no other weapon's", () => {
-    const style = { tempo: {}, moves: {}, weapons: { spear: { lance: true } } };
+    const style = { tempo: {}, moves: {}, weapons: { spear: { feathers: true } } };
     const spear = applyStyle(BASE, style, 'spear');
-    expect([spear.L1.lance, spear.L2.lance]).toEqual([true, true]);
-    expect(applyStyle(BASE, style, 'sword').L1.lance).toBeUndefined();
-    expect(heroMoves('ember', 'spear').S3.lance).toBe(true);
+    expect([spear.L1.feathers, spear.L2.feathers]).toEqual([true, true]);
+    expect(applyStyle(BASE, style, 'sword').L1.feathers).toBeUndefined();
+    expect(heroMoves('ember', 'spear').S3.feathers).toBe(true);
   });
 
   it('adds techniques as they are, linked off a heavy only where its light was free', () => {
@@ -131,9 +131,9 @@ describe('the Shades fight in their own styles', () => {
     expect(heroMoves('blue', 'sword').L1.hitbox[2]).toBe(WEAPONS.sword.moves.L1.hitbox[2] + 8);
     expect(heroMoves('ember', 'sword').L4.pillars).toBe(2);
     expect(heroMoves('ember', 'axe').K3).toMatchObject({ pillars: 3, burn: 150 });
-    expect(heroMoves('ember', 'spear').L1.lance).toBe(true);
-    expect(heroMoves('ember', 'sword').L1.lance).toBeUndefined();
-    expect(heroMoves('moss', 'spear').L1.lance).toBeUndefined();
+    expect(heroMoves('ember', 'spear').L1.feathers).toBe(true);
+    expect(heroMoves('ember', 'sword').L1.feathers).toBeUndefined();
+    expect(heroMoves('moss', 'spear').L1.feathers).toBeUndefined();
   });
 
   it('gives each Shade four techniques of its own, branching off the heavies of every weapon', () => {

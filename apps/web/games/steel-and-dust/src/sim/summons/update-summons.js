@@ -2,7 +2,6 @@ import { updateBurn } from './burn.js';
 import { updateBurst } from './bursts.js';
 import { updateFirefly } from './fireflies.js';
 import { updateIce } from './ice.js';
-import { updateLance } from './lance.js';
 import { updatePhoenix } from './phoenix.js';
 import { updatePillar } from './pillars.js';
 import { updateStag } from './stags.js';
@@ -17,7 +16,6 @@ const UPDATE_BY_KIND = {
   pillar: updatePillar,
   burn: updateBurn,
   phoenix: updatePhoenix,
-  lance: updateLance,
 };
 
 // a summon with a delay starts at a negative time and waits for zero

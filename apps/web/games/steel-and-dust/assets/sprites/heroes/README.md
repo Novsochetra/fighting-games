@@ -28,6 +28,5 @@ with the same animation names and frame counts as `../hero/hero.json`.
   PixMiniMax take ("raises the sword into a column of fire"), nine frames of it kept.
 - `<shade>/arsenal/` is built from these sword strips by `tools/bake_hero_weapons.py <shade>`, with
   rows for the sword, fists, spear and axe, exactly like `../hero/arsenal/`. The Ember Shade's spear
-  row has no smear at all: its spear strikes pour a phoenix lance (`../fx/lance.png`) from the tip
-  instead, so the row holds the spear in every attack frame, aimed with the move. The tip of each
-  strike frame's spear is measured into `src/data/ember-spear-tips.js`; re-baking means measuring again.
+  keeps the sword's fire smear, and a few of its frames with no smear take their grip from detection
+  (or `EMBER_OVERRIDES`) instead of the Moss Shade's "hide" overrides.

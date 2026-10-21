@@ -1,6 +1,5 @@
 import { announceTechnique } from '../fx/technique-announce.js';
 import { releaseComboFireflies } from './fireflies.js';
-import { thrustLance } from './lance.js';
 import { raiseComboPillars } from './pillars.js';
 import { chargeComboStags } from './stags.js';
 import { raiseComboThorns } from './thorns.js';
@@ -30,5 +29,4 @@ export const SIGNATURE_STRIKES = [
     (game, fighter, move) =>
       raiseComboPillars(game, fighter, { count: move.pillars, ring: move.pillarRing }),
   ],
-  [(_fighter, move) => move.lance, thrustLance],
 ];

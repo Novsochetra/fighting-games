@@ -10,7 +10,7 @@ import { createPlayingGame, runTicks, tap } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
 const HIT = { damage: 5, knockback: [0.5, -4], launch: true, hitstop: 3, hitstun: 20 };
-const lancesOf = (game) => game.summons.filter((summon) => summon.kind === 'lance');
+const feathersOf = (game) => game.summons.filter((summon) => summon.sprite === 'feathers');
 const burnsOn = (game, raider) =>
   game.summons.some((summon) => summon.kind === 'burn' && summon.target === raider);
 
@@ -84,29 +84,31 @@ describe("the Ember Shade's fire in a running fight", () => {
     expect(game.summons.filter((summon) => summon.kind === 'phoenix')).toEqual([]);
   });
 
-  it("the Ember Shade's spear poke pours a lance that rides the strike, hurts nothing and burns out", () => {
+  it("the Ember Shade's spear scatters phoenix feathers where it lands, flying on past the raider", () => {
     const { game, raider } = gameWithRaider();
     equipWeapon(game, 'spear');
+    raider.x = game.player.x + game.player.facing * 24;
     tap(game, 'light');
-    runTicks(game, game.player.move.startup);
-    const [lance] = lancesOf(game);
-    expect(lance).toMatchObject({ direction: game.player.facing, angle: 0 });
-    expect((lance.x - game.player.x) * game.player.facing).toBeGreaterThan(0);
-    runTicks(game, fxLength('lance'));
-    expect(lancesOf(game)).toEqual([]);
-    expect(raider.hp).toBe(raider.maxHp);
+    runTicks(game, game.player.move.startup + 1);
+    expect(raider.hp).toBeLessThan(raider.maxHp);
+    const [feathers] = feathersOf(game);
+    expect(feathers).toMatchObject({ direction: game.player.facing, scale: 1.2 });
+    runTicks(game, fxLength('feathers'));
+    expect(feathersOf(game)).toEqual([]);
   });
 
-  it("pours no lance from another Shade's spear or from the Ember Shade's sword", () => {
-    for (const [hero, weapon] of [
-      ['moss', 'spear'],
-      ['ember', 'sword'],
+  it("scatters no feathers from another Shade's spear, the Ember Shade's sword or a miss", () => {
+    for (const [hero, weapon, reach] of [
+      ['moss', 'spear', 24],
+      ['ember', 'sword', 24],
+      ['ember', 'spear', 80],
     ]) {
-      const { game } = gameWithRaider(hero);
+      const { game, raider } = gameWithRaider(hero);
       equipWeapon(game, weapon);
+      raider.x = game.player.x + game.player.facing * reach;
       tap(game, 'light');
       runTicks(game, 20);
-      expect(lancesOf(game), `${hero} ${weapon}`).toEqual([]);
+      expect(feathersOf(game), `${hero} ${weapon} at ${reach}`).toEqual([]);
     }
   });
 });
