@@ -1,199 +1,123 @@
 .heroes .box {
   width: min(1040px, 100%);
+  background: none;
+  border: 0;
+  box-shadow: none;
 }
 
-.hero-grid {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 10px;
-  padding: 12px;
-  overflow-y: auto;
+.heroes .box header {
+  border-bottom: 0;
 }
 
-.hero-card {
-  --accent: var(--color-hero-moss);
+.heroes .box h2 {
+  font-size: var(--font-size-xl);
+  text-shadow: var(--text-shadow-pixel-md);
+}
+
+/* --px is how many screen pixels one sprite pixel takes in the middle; the side cards are scaled
+   down from it, and every size on the cards is worked out from it */
+.hero-stage {
+  --px: 3;
+  --slot-gap: 190px;
 
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 10px 6px 12px;
-  text-transform: none;
-  background:
-    radial-gradient(
-      ellipse 60% 22% at 50% 62%,
-      color-mix(in srgb, var(--accent) 34%, transparent),
-      transparent
-    ),
-    var(--color-panel);
+  padding: 4px 0 12px;
 }
 
-.hero-card[data-hero='firefly'] {
-  --accent: var(--color-hero-firefly);
+/* a swipe across the carousel turns it, so only an upward or downward drag may scroll the menu */
+#menus .heroes .hero-stage,
+#menus .heroes .hero-stage * {
+  touch-action: pan-y;
 }
 
-.hero-card[data-hero='antler'] {
-  --accent: var(--color-hero-antler);
+.hero-carousel {
+  position: relative;
+  flex: 1;
+  height: calc(var(--px) * 80px + 7rem);
+  overflow-x: clip;
 }
 
-.hero-card[data-hero='blue'] {
-  --accent: var(--color-hero-blue);
+/* a pixel arrow, four sprite-sized steps to its point, on a button big enough for a thumb */
+.hero-step {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 64px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
 }
 
-.hero-card[data-hero='ember'] {
-  --accent: var(--color-hero-ember);
+.hero-step[data-step='-1'] {
+  scale: -1 1;
 }
 
-.hero-card[data-hero='bokator'] {
-  --accent: var(--color-hero-bokator);
+.hero-step::before {
+  content: '';
+  width: 16px;
+  height: 28px;
+  background: var(--color-accent);
+  clip-path: polygon(
+    0 0,
+    25% 0,
+    25% 14.29%,
+    50% 14.29%,
+    50% 28.57%,
+    75% 28.57%,
+    75% 42.86%,
+    100% 42.86%,
+    100% 57.14%,
+    75% 57.14%,
+    75% 71.43%,
+    50% 71.43%,
+    50% 85.71%,
+    25% 85.71%,
+    25% 100%,
+    0 100%
+  );
+  animation: hero-step-nudge var(--duration-pulse) var(--easing-step-2) infinite;
 }
 
-/* Bokator's frames are 112 px tall with his feet in the same place, so his window starts 32 px lower */
-.hero-card[data-hero='bokator'] .hero-art {
-  background-size: 1536px 896px;
-  background-position: -64px -64px;
+.hero-step:hover::before {
+  background: var(--color-accent-strong);
 }
 
-/* standing up in his win pose he is a head taller than the crouch he fights in, so his card plays a
-   smaller drawing of it, one row as tall as his frames, to stand as tall as the Shades on theirs */
-.hero-card[data-hero='bokator']:hover .hero-art,
-.hero-card[data-hero='bokator'].sel .hero-art {
-  background-image: url('../assets/sprites/heroes/bokator/card_win.png');
-  background-size: 1024px 224px;
-}
-
-.hero-card.picked {
-  border-color: var(--accent);
-}
-
-.hero-card:hover,
-.hero-card.sel {
-  color: var(--color-text);
-  border-color: var(--accent);
-  background:
-    radial-gradient(
-      ellipse 70% 30% at 50% 62%,
-      color-mix(in srgb, var(--accent) 60%, transparent),
-      transparent
-    ),
-    var(--color-panel-raised);
-}
-
-/* one 64x80 window onto the 128x80 frames of the sword row, drawn at 2x */
-.hero-art {
-  width: 128px;
-  height: 160px;
-  background-image: var(--idle);
-  background-size: 1536px 640px;
-  background-position: -64px 0;
-  background-repeat: no-repeat;
-  image-rendering: pixelated;
-  animation: hero-idle var(--duration-sprite-idle) var(--easing-step-6) infinite;
-}
-
-.hero-card:hover .hero-art,
-.hero-card.sel .hero-art {
-  background-image: var(--win);
-  background-size: 1024px 640px;
-  animation: hero-win var(--duration-sprite-win) var(--easing-step-4) infinite;
-  filter: drop-shadow(0 0 6px var(--accent));
-}
-
-@keyframes hero-idle {
+@keyframes hero-step-nudge {
   to {
-    background-position-x: -1600px;
+    translate: 4px 0;
   }
 }
 
-@keyframes hero-win {
-  to {
-    background-position-x: -1088px;
+@media (max-width: 860px) {
+  .hero-stage {
+    --slot-gap: 160px;
   }
 }
 
-.hero-name {
-  font-family: var(--font-display);
-  font-size: var(--font-size-xs);
-  color: var(--accent);
-  text-align: center;
-}
-
-.hero-line {
-  font-family: var(--font-body);
-  font-size: var(--font-size-2xs);
-  color: var(--color-text-muted);
-  text-align: center;
-  letter-spacing: normal;
-}
-
-.hero-kit {
-  font-family: var(--font-body);
-  font-size: var(--font-size-2xs);
-  color: var(--color-text);
-  text-align: center;
-  letter-spacing: normal;
-}
-
-.hero-kit b {
-  font-family: var(--font-display);
-  font-weight: var(--font-weight-regular);
-  color: var(--accent);
-}
-
-@media (max-height: 420px), (min-width: 641px) and (max-width: 860px) {
-  .hero-art {
-    width: 64px;
-    height: 80px;
-    background-size: 768px 320px;
-    background-position: -32px 0;
-  }
-
-  .hero-card:hover .hero-art,
-  .hero-card.sel .hero-art {
-    background-size: 512px 320px;
-  }
-
-  .hero-card[data-hero='bokator'] .hero-art {
-    background-size: 768px 448px;
-    background-position: -32px -32px;
-  }
-
-  .hero-card[data-hero='bokator']:hover .hero-art,
-  .hero-card[data-hero='bokator'].sel .hero-art {
-    background-size: 512px 112px;
-  }
-
-  @keyframes hero-idle {
-    to {
-      background-position-x: -800px;
-    }
-  }
-
-  @keyframes hero-win {
-    to {
-      background-position-x: -544px;
-    }
+@media (max-width: 640px) {
+  .heroes .box h2 {
+    font-size: var(--font-size-md);
   }
 }
 
-/* a phone held upright has no room for six cards side by side: they keep their full size and the row
-   scrolls sideways, with a slice of the next card always showing so the row reads as one to swipe */
-@media (max-width: 640px) and (min-height: 421px) {
-  .hero-grid {
-    grid-template-columns: none;
-    grid-auto-flow: column;
-    grid-auto-columns: min(144px, calc(50% - 20px));
-    overflow: auto hidden;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 12px;
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-border) transparent;
+@media (max-width: 640px), (max-height: 420px) {
+  .hero-stage {
+    --px: 2;
+    --slot-gap: 120px;
   }
 
-  .hero-card {
-    scroll-snap-align: start;
-    padding-inline: 4px;
-    overflow: hidden;
+  .hero-carousel {
+    height: calc(var(--px) * 80px + 6rem);
+  }
+
+  .hero-name {
+    font-size: var(--font-size-md);
+  }
+
+  .hero-line {
+    font-size: var(--font-size-xs);
   }
 }

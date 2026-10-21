@@ -8,7 +8,9 @@ const imagesIn = (css) =>
   [...css.matchAll(/url\('([^']+)'\)/g)].map((match) => new URL(match[1], STYLES));
 
 describe('the hero select cards', () => {
-  const css = readFileSync(new URL('heroes.css', STYLES), 'utf8');
+  const css = ['heroes.css', 'hero-cards.css']
+    .map((file) => readFileSync(new URL(file, STYLES), 'utf8'))
+    .join('\n');
 
   it('draws only images that are there', () => {
     const images = imagesIn(css);
@@ -18,7 +20,24 @@ describe('the hero select cards', () => {
     }
   });
 
-  it("plays Bokator's smaller win pose in frames the size of his win strip's", () => {
+  it('holds Bokator on the first frame of his smaller win pose in the middle of the carousel', () => {
+    const picked = css.match(
+      /\.hero-card\[data-hero='bokator'\]\[data-depth='0'\] \.hero-art \{([^}]*)\}/,
+    );
+    expect(picked[1]).toContain('card_win.png');
+    expect(picked[1]).toContain('animation: none;');
+  });
+
+  // the middle hero's sprite window is twice as wide as its button and hangs over the side cards,
+  // where it took the taps meant for them and started the run
+  it('takes a tap only on a card button the height of its sprite, never on the window over it', () => {
+    const rule = (selector) => css.match(new RegExp(`\\n${selector} \\{([^}]*)\\}`))[1];
+    expect(rule('\\.hero-art')).toContain('pointer-events: none;');
+    expect(rule('\\.hero-card')).toContain('width: calc(var(--px) * 64px);');
+    expect(rule('\\.hero-card')).toContain('height: calc(var(--px) * 80px);');
+  });
+
+  it("draws Bokator's smaller win pose in frames the size of his win strip's", () => {
     const card = pngSize(new URL('../card_win.png', ARSENAL).pathname);
     const win = pngSize(new URL('hero_win.png', ARSENAL).pathname);
     expect(card).toEqual({ width: win.width, height: win.height / 4 });
