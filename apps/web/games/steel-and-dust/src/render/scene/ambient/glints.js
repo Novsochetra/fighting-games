@@ -25,7 +25,9 @@ function glintAt(i, { effect, tick, cameraX }) {
   const intensity = Math.sin(Math.PI * lit) * shimmer;
   // nearer water, lower in the band, throws longer dashes
   const reach = 1 + depth * 2 + trait(seed, 5) * 2;
-  const baseX = trait(seed, 0) * CYCLE_WIDTH + (trait(flashSeed, 6) - 0.5) * 6;
+  // a road's glints spread over the whole water; `left` and `span` gather them into one stretch
+  const across = (effect.left ?? 0) + trait(seed, 0) * (effect.span ?? CYCLE_WIDTH);
+  const baseX = across + (trait(flashSeed, 6) - 0.5) * 6;
   return {
     x: Math.round(scrollX(baseX, { cameraX, drift: effect.drift })),
     y: effect.top + Math.round(depth * (effect.bottom - effect.top)),

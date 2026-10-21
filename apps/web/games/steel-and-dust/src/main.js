@@ -9,6 +9,7 @@ import { createView } from './render/create-view.js';
 import { renderFrame } from './render/render-frame.js';
 import { missionWait, sceneLoaded } from './render/scene-loaded.js';
 import { beginTick, runTick } from './sim/tick.js';
+import { installTitleScene } from './ui/screen/title-scene.js';
 import { createUiState } from './ui/ui-state.js';
 
 function createCanvas(width, height) {
@@ -25,6 +26,7 @@ const pad = { connected: false };
 const { layout, fullscreen, menus, act } = installUi({ window, elements, game, audio, ui, pad });
 const { touchStick, gamepad } = installInput({ window, elements, game, audio, ui, layout, menus });
 layout.onFit = () => touchStick.rest();
+const titleScene = installTitleScene(window);
 let view = null;
 let clock = null;
 
@@ -61,6 +63,7 @@ function frame(now) {
   renderFrame(game, view);
   syncDom();
   bootLoading.loader.update(now, missionWait(view, game));
+  titleScene.frame(now);
   requestAnimationFrame(frame);
 }
 

@@ -65,11 +65,17 @@ const AMBIENT_EFFECTS = {
 };
 
 // an unknown kind or a forest without the effect's color is skipped rather than breaking the frame
+export function drawAmbientEffect(painter, air) {
+  const ambient = AMBIENT_EFFECTS[air.effect.kind];
+  if (ambient && air.colors?.[ambient.color]) {
+    ambient.draw(painter, air);
+  }
+}
+
 export function drawAmbient(painter, { effects, plane, tick, cameraX, colors }) {
   for (const effect of effects ?? []) {
-    const ambient = AMBIENT_EFFECTS[effect.kind];
-    if (effect.plane === plane && ambient && colors?.[ambient.color]) {
-      ambient.draw(painter, { effect, tick, cameraX, colors });
+    if (effect.plane === plane) {
+      drawAmbientEffect(painter, { effect, tick, cameraX, colors });
     }
   }
 }
