@@ -56,8 +56,30 @@
   background-image: url('../assets/ui/select/card-crest-selected.png');
 }
 
+/* the row runs the full width of the screen, so a side card is only ever cut off by the screen's edge,
+   and the arrows float over it at the menu's edges */
+.hero-stage {
+  position: relative;
+}
+
 .hero-carousel {
   height: calc(var(--frame) * 14px + var(--px) * 80px + var(--below));
+  margin-inline: calc(50% - 50vw);
+}
+
+.hero-step {
+  position: absolute;
+  inset-block: 4px 12px;
+  z-index: 4;
+  margin-block: auto;
+}
+
+.hero-step[data-step='-1'] {
+  left: 0;
+}
+
+.hero-step[data-step='1'] {
+  right: 0;
 }
 
 .hero-step::before,
@@ -67,6 +89,7 @@
   background: url('../assets/ui/select/arrow.png') 0 0 / 100% 100%;
   clip-path: none;
   image-rendering: pixelated;
+  filter: drop-shadow(0 0 4px var(--color-night-deep));
 }
 
 .hero-step:hover::before {

@@ -1,4 +1,6 @@
+/* a notch on one side of a phone leaves the full-width row of cards a little past the other edge */
 .menu.heroes {
+  overflow-x: hidden;
   background: url('../assets/ui/select/bg-landscape.png') center / cover no-repeat
     var(--color-night);
   image-rendering: pixelated;
