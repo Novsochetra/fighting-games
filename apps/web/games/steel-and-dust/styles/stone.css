@@ -1,0 +1,90 @@
+/* nine-slice art at 2x, the same pixel size as the hero sprites; short screens have no room for that much
+   stone, so they draw it at 1x */
+.stone-panel {
+  --stone: 2;
+
+  position: relative;
+  background: none;
+  border: 0 solid var(--color-clear);
+  box-shadow: none;
+  border-image: url('../assets/ui/kit/panel.png') 46 40 50 40 fill / calc(46px * var(--stone))
+    calc(40px * var(--stone)) calc(50px * var(--stone)) / 0 round;
+  padding: calc(44px * var(--stone)) calc(30px * var(--stone)) calc(46px * var(--stone));
+  image-rendering: pixelated;
+}
+
+.stone-panel::before,
+.stone-panel::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  background-size: 100% 100%;
+  pointer-events: none;
+}
+
+.stone-panel::before {
+  top: 0;
+  width: calc(52px * var(--stone));
+  height: calc(46px * var(--stone));
+  background-image: url('../assets/ui/kit/panel-crest.png');
+}
+
+.stone-panel::after {
+  bottom: 0;
+  width: calc(32px * var(--stone));
+  height: calc(41px * var(--stone));
+  background-image: url('../assets/ui/kit/panel-foot.png');
+}
+
+.stone-panel header {
+  border-bottom: 0;
+}
+
+.stone-panel h2 {
+  color: var(--color-gold);
+  text-shadow: var(--text-shadow-pixel-sm);
+}
+
+.stone-btn {
+  border: 0 solid var(--color-clear);
+  background: none;
+  box-shadow: none;
+  border-image: url('../assets/ui/kit/stone-button.png') 8 fill / 8px / 0 stretch;
+  color: var(--color-gold);
+  text-shadow: var(--text-shadow-pixel-xs);
+  image-rendering: pixelated;
+}
+
+.stone-btn:hover,
+.stone-btn.sel {
+  background: none;
+  color: var(--color-mint-light);
+  filter: drop-shadow(0 0 4px var(--color-green));
+}
+
+.stone-btn:active {
+  translate: 0 1px;
+}
+
+.stone-band {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-gold);
+}
+
+.stone-band::after {
+  content: '';
+  flex: 1;
+  height: 26px;
+  border: 0 solid var(--color-clear);
+  border-image: url('../assets/ui/settings/lotus-band.png') 0 10 0 14 fill / 0 20px 0 28px / 0 round;
+  image-rendering: pixelated;
+}
+
+@media (max-height: 600px), (max-width: 640px) {
+  .stone-panel {
+    --stone: 1;
+  }
+}

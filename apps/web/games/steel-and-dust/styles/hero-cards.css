@@ -19,8 +19,8 @@
   background: none;
   border: 0;
   cursor: pointer;
-  transform: translateX(calc(-50% + var(--slot) * var(--slot-gap))) scale(var(--scale));
-  transform-origin: 50% calc(var(--px) * 76px);
+  transform: translateX(calc(-50% + var(--offset, 0px))) scale(var(--scale));
+  transform-origin: 50% var(--card-middle);
   transition:
     transform var(--duration-slow) var(--easing-standard),
     opacity var(--duration-slow) var(--easing-standard),
@@ -71,16 +71,19 @@
     );
 }
 
-/* the side heroes stand back in grey, like the ones not picked on an arcade select screen */
+/* the side heroes stand back in grey, like the ones not picked on an arcade select screen; each card
+   is as far out as it takes to leave the same gap after the card before it, whatever their scales */
 .hero-card[data-depth='1'] {
-  --scale: 0.6667;
+  --scale: var(--near-scale);
+  --offset: calc(var(--slot) * var(--reach-near));
 
   z-index: 2;
   filter: grayscale(0.75) brightness(0.8);
 }
 
 .hero-card[data-depth='2'] {
-  --scale: 0.5;
+  --scale: var(--far-scale);
+  --offset: calc(var(--slot) / 2 * var(--reach-far));
 
   z-index: 1;
   filter: grayscale(1) brightness(0.55);
@@ -93,7 +96,8 @@
 
 /* a card going out of sight fades out fast, as quick presses can bring it round the loop at once */
 .hero-card[data-depth='3'] {
-  --scale: 0.5;
+  --scale: var(--far-scale);
+  --offset: calc(var(--slot) / 3 * var(--reach-out));
 
   opacity: 0;
   pointer-events: none;
@@ -183,30 +187,10 @@
 
 .hero-name {
   font-family: var(--font-display);
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-sm);
+  line-height: var(--leading-tight);
+  white-space: nowrap;
   color: var(--accent);
   text-align: center;
   text-shadow: var(--text-shadow-pixel-sm);
-}
-
-.hero-line {
-  font-family: var(--font-body);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-  text-align: center;
-  letter-spacing: normal;
-}
-
-.hero-kit {
-  font-family: var(--font-body);
-  font-size: var(--font-size-xs);
-  color: var(--color-text);
-  text-align: center;
-  letter-spacing: normal;
-}
-
-.hero-kit b {
-  font-family: var(--font-display);
-  font-weight: var(--font-weight-regular);
-  color: var(--accent);
 }

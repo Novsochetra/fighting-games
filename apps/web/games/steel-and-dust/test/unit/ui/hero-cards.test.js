@@ -8,7 +8,7 @@ const imagesIn = (css) =>
   [...css.matchAll(/url\('([^']+)'\)/g)].map((match) => new URL(match[1], STYLES));
 
 describe('the hero select cards', () => {
-  const css = ['heroes.css', 'hero-cards.css']
+  const css = ['heroes.css', 'hero-cards.css', 'hero-frames.css', 'hero-scene.css']
     .map((file) => readFileSync(new URL(file, STYLES), 'utf8'))
     .join('\n');
 
@@ -43,6 +43,18 @@ describe('the hero select cards', () => {
     );
     expect(picked[1]).toContain('angkor/card_win.png');
     expect(picked[1]).not.toContain('animation: none;');
+  });
+
+  // the cards were spaced by a fixed step whatever their scale, so the gaps between frames grew toward
+  // the edges, and each shrank toward the hero's feet, so the small frames sat low
+  it('spaces every card by the same gap after the one before it, all on one middle line', () => {
+    const rule = (selector) => css.match(new RegExp(`\\n${selector} \\{([^}]*)\\}`))[1];
+    const depth = (level) => rule(`\\.hero-card\\[data-depth='${level}'\\]`);
+    expect(rule('\\.hero-card')).toContain('transform-origin: 50% var(--card-middle);');
+    expect(depth(1)).toContain('--offset: calc(var(--slot) * var(--reach-near));');
+    expect(depth(2)).toContain('--offset: calc(var(--slot) / 2 * var(--reach-far));');
+    expect(depth(3)).toContain('--offset: calc(var(--slot) / 3 * var(--reach-out));');
+    expect(css).not.toContain('--slot-gap');
   });
 
   it.each(['bokator', 'angkor'])(

@@ -1,0 +1,85 @@
+/* a notch on one side of a phone leaves the full-width row of cards a little past the other edge */
+.menu.heroes {
+  overflow-x: hidden;
+  background: url('../assets/ui/select/bg-landscape.png') center / cover no-repeat
+    var(--color-night);
+  image-rendering: pixelated;
+}
+
+/* the moat and the ruins in the front of the painting are bright; the cards stand on them */
+.menu.heroes::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    var(--color-clear) 15%,
+    var(--color-backdrop) 45%,
+    var(--color-backdrop-strong)
+  );
+  pointer-events: none;
+}
+
+.heroes .box {
+  position: relative;
+  width: min(1240px, 100%);
+}
+
+.heroes .box header {
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 14px 6px;
+  border-bottom: 0;
+}
+
+.heroes .box header::before,
+.heroes .box header::after {
+  content: '';
+  background-size: 100% 100%;
+}
+
+.heroes .box header::before {
+  width: 106px;
+  height: 58px;
+  background-image: url('../assets/ui/kit/title-crest.png');
+}
+
+.heroes .box header::after {
+  width: min(324px, 100%);
+  height: 22px;
+  background-image: url('../assets/ui/kit/title-rule.png');
+}
+
+.heroes .box h2 {
+  color: var(--color-gold);
+  text-align: center;
+}
+
+.heroes .box .xbtn {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+}
+
+@media (orientation: portrait) {
+  .menu.heroes {
+    background-image: url('../assets/ui/select/bg-portrait.png');
+  }
+}
+
+/* a phone on its side is too short for the crest over the title as well as the middle card */
+@media (max-height: 420px) {
+  .heroes .box header::before {
+    display: none;
+  }
+
+  .heroes .box header::after {
+    width: 162px;
+    height: 11px;
+  }
+
+  .heroes .box .xbtn {
+    top: 0;
+  }
+}

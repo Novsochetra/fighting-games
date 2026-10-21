@@ -87,7 +87,7 @@
 .xbtn {
   font-family: var(--font-display);
   font-size: var(--font-size-caption);
-  padding: 7px 12px;
+  padding: 8px 14px;
   background: var(--color-panel-raised);
   border: 2px solid var(--color-border);
   cursor: pointer;

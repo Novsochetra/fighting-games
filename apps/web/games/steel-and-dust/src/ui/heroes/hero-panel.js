@@ -1,6 +1,4 @@
 import { HEROES } from '../../data/heroes.js';
-import { styleOf } from '../../data/styles/index.js';
-import { ultimateOf } from '../../data/ultimates/index.js';
 import { turnCarousel } from './hero-carousel.js';
 
 // a url() inside a custom property resolves against the stylesheet, so the page's folder is added here
@@ -15,9 +13,6 @@ function heroCardHtml(hero, { picked, folder }) {
     <span class="hero-art" aria-hidden="true"></span>
     <span class="hero-info">
       <span class="hero-name">${hero.name}</span>
-      <span class="hero-line">${hero.tagline}</span>
-      <span class="hero-kit"><b>Style</b> ${styleOf(hero.id).name}</span>
-      <span class="hero-kit"><b>Ult</b> ${ultimateOf(hero.id).name}</span>
     </span>
   </button>`;
 }

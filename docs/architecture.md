@@ -51,6 +51,10 @@ The game keeps a strict split:
 | `src/ui/`     | menus, the hero carousel, settings, help, screen fit, full screen   | yes                                 |
 | `src/main.js` | wires the pieces together and runs the fixed-step loop              | yes                                 |
 
+The menus and the HUD share one carved-sandstone kit in `assets/ui/` (see its README): nine-slice
+frames for the hero cards, the settings panel and the HUD panels, which the HUD draws with
+`src/render/nine-slice.js`.
+
 `sim/` reaches the outside world only through `game.io` ports
 (`sfx`, `vibrate`, `saveRecords`, `saveHints`, `saveSettings`, `setMuted`), so it runs in Node tests unchanged.
 

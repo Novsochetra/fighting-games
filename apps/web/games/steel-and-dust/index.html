@@ -31,8 +31,11 @@
     <link rel="stylesheet" href="styles/panels.css" />
     <link rel="stylesheet" href="styles/settings.css" />
     <link rel="stylesheet" href="styles/help.css" />
+    <link rel="stylesheet" href="styles/stone.css" />
     <link rel="stylesheet" href="styles/heroes.css" />
     <link rel="stylesheet" href="styles/hero-cards.css" />
+    <link rel="stylesheet" href="styles/hero-frames.css" />
+    <link rel="stylesheet" href="styles/hero-scene.css" />
     <link rel="stylesheet" href="styles/touch.css" />
     <link rel="stylesheet" href="styles/touch-buttons.css" />
     <script type="module" src="src/main.js"></script>
@@ -114,10 +117,10 @@
         </section>
 
         <section class="menu sub" id="m-settings" aria-label="Settings">
-          <div class="box">
+          <div class="box stone-panel">
             <header>
               <h2>Settings</h2>
-              <button class="xbtn" data-act="back">Back</button>
+              <button class="xbtn stone-btn" data-act="back">Back</button>
             </header>
             <div class="scroll" id="settingsList"></div>
           </div>
@@ -127,7 +130,7 @@
           <div class="box">
             <header>
               <h2>Choose your hero</h2>
-              <button class="xbtn" data-act="back">Back</button>
+              <button class="xbtn stone-btn" data-act="back">Back</button>
             </header>
             <div class="hero-stage" id="heroStage">
               <button class="hero-step" data-step="-1" aria-label="Previous hero"></button>

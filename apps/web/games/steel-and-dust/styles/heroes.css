@@ -18,7 +18,6 @@
    down from it, and every size on the cards is worked out from it */
 .hero-stage {
   --px: 3;
-  --slot-gap: 190px;
 
   display: flex;
   align-items: center;
@@ -91,12 +90,6 @@
   }
 }
 
-@media (max-width: 860px) {
-  .hero-stage {
-    --slot-gap: 160px;
-  }
-}
-
 @media (max-width: 640px) {
   .heroes .box h2 {
     font-size: var(--font-size-md);
@@ -106,18 +99,5 @@
 @media (max-width: 640px), (max-height: 420px) {
   .hero-stage {
     --px: 2;
-    --slot-gap: 120px;
-  }
-
-  .hero-carousel {
-    height: calc(var(--px) * 80px + 6rem);
-  }
-
-  .hero-name {
-    font-size: var(--font-size-md);
-  }
-
-  .hero-line {
-    font-size: var(--font-size-xs);
   }
 }

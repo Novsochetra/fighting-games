@@ -1,0 +1,122 @@
+/* every card stands in the same carved stone frame, drawn behind it and lit jade in the middle: the
+   hero, and under them a line kept for their name, which only the middle card shows; every size on
+   the frames is worked out from the sprite pixel (--px) and the frame's own pixel (--frame) */
+.hero-stage {
+  --frame: 2;
+  --overhang: calc(var(--px) * 16px);
+  --name-line: calc(var(--font-size-sm) * 1.15);
+  --below: calc(6px + var(--name-line) + var(--frame) * 26px);
+  --card-width: calc(var(--px) * 64px + 2 * var(--overhang));
+  --card-middle: calc((var(--px) * 80px + var(--below) - var(--frame) * 14px) / 2);
+  --card-gap: calc(var(--frame) * 10px);
+  --near-scale: 0.6667;
+  --far-scale: 0.5;
+  --reach-near: calc(var(--card-width) * (1 + var(--near-scale)) / 2 + var(--card-gap));
+  --reach-far: calc(
+    var(--reach-near) + var(--card-width) * (var(--near-scale) + var(--far-scale)) / 2 +
+      var(--card-gap)
+  );
+  --reach-out: calc(var(--reach-far) + var(--card-width) * var(--far-scale) + var(--card-gap));
+}
+
+.hero-card {
+  top: calc(var(--frame) * 14px);
+}
+
+.hero-card::before,
+.hero-card::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+.hero-card::before {
+  z-index: -1;
+  inset: calc(var(--frame) * -14px) calc(-1 * var(--overhang)) calc(-1 * var(--below));
+  border: 0 solid var(--color-clear);
+  border-image: url('../assets/ui/select/card.png') 44 26 30 fill / calc(var(--frame) * 44px)
+    calc(var(--frame) * 26px) calc(var(--frame) * 30px) / 0 round;
+}
+
+.hero-card::after {
+  top: calc(var(--frame) * -14px);
+  left: 50%;
+  width: calc(var(--frame) * 44px);
+  height: calc(var(--frame) * 36px);
+  translate: -50% 0;
+  background: url('../assets/ui/select/card-crest.png') 0 0 / 100% 100%;
+}
+
+.hero-card[data-depth='0']::before {
+  border-image-source: url('../assets/ui/select/card-selected.png');
+}
+
+.hero-card[data-depth='0']::after {
+  background-image: url('../assets/ui/select/card-crest-selected.png');
+}
+
+/* the row runs the full width of the screen, so a side card is only ever cut off by the screen's edge,
+   and the arrows float over it at the menu's edges */
+.hero-stage {
+  position: relative;
+}
+
+.hero-carousel {
+  height: calc(var(--frame) * 14px + var(--px) * 80px + var(--below));
+  margin-inline: calc(50% - 50vw);
+}
+
+.hero-step {
+  position: absolute;
+  inset-block: 4px 12px;
+  z-index: 4;
+  margin-block: auto;
+}
+
+.hero-step[data-step='-1'] {
+  left: 0;
+}
+
+.hero-step[data-step='1'] {
+  right: 0;
+}
+
+.hero-step::before,
+.hero-step:hover::before {
+  width: 32px;
+  height: 56px;
+  background: url('../assets/ui/select/arrow.png') 0 0 / 100% 100%;
+  clip-path: none;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 4px var(--color-night-deep));
+}
+
+.hero-step:hover::before {
+  filter: drop-shadow(0 0 4px var(--color-green));
+}
+
+/* the longest name (Antler Spirit Shade) has to fit on one line inside the frame; --name-line is the
+   height of that line at the name's size, at the leading set on .hero-name */
+@media (max-width: 640px), (max-height: 420px) {
+  .hero-stage {
+    --frame: 1;
+    --overhang: calc(var(--px) * 16px);
+    --name-line: calc(var(--font-size-xs) * 1.15);
+  }
+
+  .hero-name {
+    font-size: var(--font-size-xs);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 420px) {
+  .hero-stage {
+    --overhang: calc(var(--px) * 24px);
+    --name-line: calc(var(--font-size-sm) * 1.15);
+  }
+
+  .hero-name {
+    font-size: var(--font-size-sm);
+  }
+}
