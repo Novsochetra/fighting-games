@@ -18,7 +18,13 @@ describe('the hero select cards', () => {
     }
   });
 
-  it("plays Bokator's smaller win pose in frames the size of his win strip's", () => {
+  it("holds Bokator's picked card on the first frame of his smaller win pose", () => {
+    const picked = css.match(/\.hero-card\[data-hero='bokator'\]\.sel \.hero-art \{([^}]*)\}/);
+    expect(picked[1]).toContain('card_win.png');
+    expect(picked[1]).toContain('animation: none;');
+  });
+
+  it("draws Bokator's smaller win pose in frames the size of his win strip's", () => {
     const card = pngSize(new URL('../card_win.png', ARSENAL).pathname);
     const win = pngSize(new URL('hero_win.png', ARSENAL).pathname);
     expect(card).toEqual({ width: win.width, height: win.height / 4 });

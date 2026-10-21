@@ -54,12 +54,14 @@
   background-position: -64px -64px;
 }
 
-/* standing up in his win pose he is a head taller than the crouch he fights in, so his card plays a
-   smaller drawing of it, one row as tall as his frames, to stand as tall as the Shades on theirs */
+/* standing up in his win pose he is a head taller than the crouch he fights in, so his card shows a
+   smaller drawing of it, one row as tall as his frames, to stand as tall as the Shades on theirs; it
+   holds the first frame, where he faces the player, since in the rest he turns his back */
 .hero-card[data-hero='bokator']:hover .hero-art,
 .hero-card[data-hero='bokator'].sel .hero-art {
   background-image: url('../assets/sprites/heroes/bokator/card_win.png');
   background-size: 1024px 224px;
+  animation: none;
 }
 
 .hero-card.picked {
