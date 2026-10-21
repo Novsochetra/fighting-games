@@ -52,7 +52,9 @@ describe('the moat ripple', () => {
 
   it('redraws only rows that moved, each kept inside its stretch of water', () => {
     for (const tick of ticksUpTo(600, 37)) {
-      const drawn = drawnRows(record((painter) => drawRipple(painter, { effect: RIPPLE, tick, painting: PAINTING })).log);
+      const drawn = drawnRows(
+        record((painter) => drawRipple(painter, { effect: RIPPLE, tick, painting: PAINTING })).log,
+      );
       expect(drawn.length).toBeGreaterThan(0);
       for (const row of drawn) {
         const area = RIPPLE.areas.find((each) => row.y >= each.top && row.y < each.bottom);

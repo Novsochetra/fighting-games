@@ -55,6 +55,18 @@ The menus stand on two layers shared by all of them, at the back of `#menus`: th
 (`.menu-scene`) and one dim (`.menu-dim`). `menuBackdrop` (`src/ui/menus/menu-backdrop.js`) sets
 both from the menu stack, so a change of menu fades the dim from one darkness to the next and keeps
 the painting up from the title into Settings or the hero select; the menus themselves only cross-fade.
+On that layer a canvas (`src/ui/screen/title-scene.js`, drawn by `src/render/title/`, effects in
+`src/data/title-scene.js`, colors in `src/art/title-scene.js`) redraws the painting at its own pixel
+size and brings the dusk to life: the moat's reflection ripples, the sun glows and throws rays, and
+the roads' ambient effects drift through. It draws only while the painting is shown.
+
+A loading screen (`#loader` in `index.html`, `src/ui/loading/`, styles in `styles/loading*.css`) is
+up from the first paint, with Bokator walking along a ledge that fills as files settle. The boot
+(`src/boot/start-loading.js`) loads every image the menus draw (`src/data/ui-art.js` and each hero's
+card strips) and the pixel font before the fighters' sprites, so no menu or popup shows art still on
+its way; a file that fails counts as settled and a stalled boot gives up after a time limit. In play
+the same screen covers a mission's road and the picked Shade while they load (`missionWait` in
+`src/render/scene-loaded.js`), after a short grace so a cached road never flashes it.
 
 The menus and the HUD share one carved-sandstone kit in `assets/ui/` (see its README): nine-slice
 frames for the hero cards, the settings panel and the HUD panels, which the HUD draws with
