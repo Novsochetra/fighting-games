@@ -41,11 +41,18 @@ function dimForUltimate(painter, game, cameraX) {
   painter.alpha(1);
 }
 
+// relief soldiers stand behind the fighters, but the ultimate's ranks stand in the hero's light, over
+// the dimmed world
 function drawFighters(painter, { game, view, cameraX }) {
   const sheet = heroSheetFor(view, game.settings.hero);
+  const ultimate = game.ultFreeze > 0 || game.player.state === 'ult';
+  if (!ultimate) {
+    drawSoldiers(painter, { summons: game.summons, view });
+  }
   for (const fighter of drawOrder(game.fighters)) {
-    if (fighter === game.player && (game.ultFreeze > 0 || game.player.state === 'ult')) {
+    if (fighter === game.player && ultimate) {
       dimForUltimate(painter, game, cameraX);
+      drawSoldiers(painter, { summons: game.summons, view });
     }
     drawFighter(painter, {
       fighter,
@@ -68,7 +75,6 @@ export function drawWorld(painter, { game, view, cameraX }) {
   drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });
   drawCrates(painter, game.crates, cameraX);
   drawPickups(painter, game.pickups);
-  drawSoldiers(painter, { summons: game.summons, view });
   drawFighters(painter, { game, view, cameraX });
   drawSummons(painter, game.summons, view.fxSheets);
   drawShockwaves(painter, game.shockwaves);

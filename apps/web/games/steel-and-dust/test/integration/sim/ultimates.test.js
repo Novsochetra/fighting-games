@@ -153,9 +153,10 @@ describe("each Shade's ultimate", () => {
     expect(game.player).toMatchObject({ state: 'idle', invincible: 40 });
   });
 
-  it('Angkor: a rank of carved soldiers thrusts each way, then the chop splits the ground', () => {
+  it('Angkor: a rank of carved soldiers fights each way, then he leaps and splits the ground', () => {
     const game = startUltimate('angkor');
     const directions = new Set();
+    const standing = game.player.y;
     const seen = watchUltimate(game, (current) => {
       for (const summon of current.summons) {
         if (summon.kind === 'soldier') {
@@ -163,15 +164,42 @@ describe("each Shade's ultimate", () => {
         }
       }
     });
-    expect(seen.kinds).toEqual(new Set(['soldier']));
+    expect(seen.kinds).toEqual(new Set(['soldier', 'burst']));
     expect(directions).toEqual(new Set([1, -1]));
-    const { rank, ranks, split } = ULTIMATES.angkor;
+    const { blow, rank, ranks, beats, split, leapHeight } = ULTIMATES.angkor;
+    const perRank = blow.damage * (beats.length - 1) + rank.damage;
     raiders(game).forEach((raider) => {
       expect(raider.maxHp - raider.hp).toBeGreaterThanOrEqual(
-        rank.damage * ranks.length + split.damage,
+        perRank * ranks.length + split.damage,
       );
     });
-    expect(game.player).toMatchObject({ state: 'idle', invincible: 40 });
+    expect(seen.lowest).toBe(standing - leapHeight);
+    expect(game.player).toMatchObject({ state: 'idle', invincible: 40, y: standing });
+  });
+
+  it('Angkor: each rank rises in a wave, then all of it strikes in step on every beat', () => {
+    const game = startUltimate('angkor');
+    const { ranks, beats } = ULTIMATES.angkor;
+    runTicks(game, ranks[0].at + 1);
+    const rank = game.summons.filter((summon) => summon.kind === 'soldier');
+    const waits = new Set(rank.map((soldier) => soldier.wait));
+    expect(waits.size).toBeGreaterThan(2);
+    expect(rank.every((soldier) => soldier.beats === beats)).toBe(true);
+    expect(rank.some((soldier) => Math.abs(soldier.x - game.player.x) < 16)).toBe(false);
+  });
+
+  it('Angkor: the chop opens a fissure across the whole screen, a pillar of light under every raider', () => {
+    const game = startUltimate('angkor');
+    const { chopAt } = ULTIMATES.angkor;
+    while (game.player.stateTime < chopAt) {
+      runTicks(game, 1);
+    }
+    const fissure = game.effects.find((effect) => effect.kind === 'fissure');
+    const xs = fissure.points.map(([x]) => x);
+    expect(Math.min(...xs)).toBeLessThanOrEqual(game.camera.x);
+    expect(Math.max(...xs)).toBeGreaterThanOrEqual(game.camera.x + VIEW_WIDTH);
+    const pillars = game.summons.filter((summon) => summon.sprite === 'pounce');
+    expect(pillars).toHaveLength(raiders(game).length + 1);
   });
 
   it('lasts as long as its timeline says, for every Shade', () => {
