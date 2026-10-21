@@ -21,10 +21,11 @@ height from its image).
   the first takes of those moves did not read well.
 - Attack strips are ordered so the frame with the biggest slash sits at the strike frame the game
   holds while the hitbox is out (`src/data/hero-sprites.js`).
-- `<shade>/hero_ult.png` is the Shade's ultimate, nine frames on one row with no `arsenal/` copy (the
+- `<shade>/hero_ult.png` is the Shade's ultimate, nine frames on one row with no weapon rows (the
   Shade always draws its own blade for it): PixelLab v3 animations "ult_swarm_nova" (Firefly),
   "ult_spirit_stampede" (Antler Spirit) and "ult_absolute_zero_v2" (Blue), east view, placed in the
-  128×80 frames the same way as the other strips.
+  128×80 frames the same way as the other strips. The game draws `<shade>/arsenal/hero_ult.png`, the
+  same strip dressed in the Shade's element (below).
 - The Ember Shade is not a PixelLab character: its concept is a 64×64 Create Image (Pro Flash) sprite,
   set into a 128×80 frame on the feet line, and every strip is a PixMiniMax animation of that frame
   (getting up and the juggle start from its own knock-out lying frame). The frames were picked and
@@ -32,9 +33,58 @@ height from its image).
   re-centred; frames where the model painted a hit flash were left out. Its ultimate is a 12-frame
   PixMiniMax take ("raises the sword into a column of fire"), nine frames of it kept.
 - `<shade>/arsenal/` is built from these sword strips by `tools/bake_hero_weapons.py <shade>`, with
-  rows for the sword, fists, spear and axe, exactly like `../hero/arsenal/`. The Ember Shade's spear
-  keeps the sword's fire smear, and a few of its frames with no smear take their grip from detection
-  (or `EMBER_OVERRIDES`) instead of the Moss Shade's "hide" overrides.
+  rows for the sword, fists, spear and axe, exactly like `../hero/arsenal/`, and for the Firefly,
+  Antler Spirit and Blue Shades then dressed in their element (below). The Firefly and Blue Shades' blades
+  burn white at the core, so for them the bake counts white as the blade's glow: it finds the blade
+  wherever it lies, across the body too, takes away its white core and its glowing edge to their full
+  width, and where the blade crossed the body with body on both sides of it each pixel takes the one
+  mirrored across the blade's edge, so the body runs on under it. Their lit armour and tunic, all
+  colour and wrapped in the body, never count as a smear; out of a swing a flailing blade's white arcs
+  take the weapon's smear colours, while a swing's smear, and a strike lost in it, is recoloured as it
+  always was. A few frames have their blade line set by hand (`OWN_OVERRIDES`): the Firefly Shade's
+  walk, where a ring of sparks or a glow at the tip was taken for the blade, and its hurt, where the
+  blade is drawn twice; the Blue Shade's landing and flailing hurt frames, a getting-up frame found
+  grip-for-tip, and the pommel hanging under his raised fist in his win pose. A frame's entry may also
+  mark it `blaze` (a swing running through the glow round him, recoloured whole) and list `keep` boxes
+  shown as drawn in every row (an eye a swing's glow runs into), `smear` boxes recoloured with it and
+  `under` boxes where the weapon passes behind his body (a spear's butt behind his hood), and `burst`
+  boxes that give back the glow the blade's erase took (a thrust's burst, a smear's end the blade runs
+  into), recoloured with the smear. The Firefly and Blue Shades' entries also use the Moss Shade's
+  `paint`, `clear` and `tint`, and `aim`, the point a drawn weapon points at from his grip. The
+  Firefly Shade's small loose cyan sparks stay as drawn in every row. A pale blade's smear follows
+  its stroke: a darker rim, the lightest colour only on its core line. The Ember Shade's spear keeps
+  the sword's fire smear, and a few of its frames with no smear take their grip from detection (or
+  `EMBER_OVERRIDES`) instead of the Moss Shade's "hide" overrides.
+- The bake dresses the Firefly, Antler Spirit and Blue Shades (and the Moss Shade, `../hero/`) in
+  their element with `tools/shade_fx/` (`<shade>.py` and its `<shade>_*.py` parts), the way the
+  Ember Shade's frames burn, in every row of every `arsenal/` strip and in `arsenal/hero_ult.png`; the
+  strips in this folder stay as PixelLab drew them, so a re-bake writes the same files. Every pixel
+  it paints is one of the Shade's own dozen colours, never a blend (a few see-through glow colours
+  only on empty pixels), its particles are seeded, wrap round the looping strips so the last frame
+  runs into the first, keep off the frame's outer pixel and are the same in every weapon row.
+  `python3 tools/shade_fx/preview.py <shade> OUT_DIR` draws every strip before and after.
+  - Firefly: a swarm of nine fireflies circles him (a ring at the waist passing in front, one behind
+    the shoulders, a few hovering behind and above), each pulsing white-hot to lime with a gold trail
+    and lagging his body, so the swarm streams after him on lunges and jumps; on the looping strips
+    each ring turns one spacing a loop. The swarm lights the cloak's back edge, which breaks into
+    flickering motes, sixteen resting fireflies blink along its edge, hem and folds, sparks lift off the
+    hem, fireflies gather a few pixels outside each swing, his eyes get a white core and the blade a
+    soft cyan bloom; in the ultimate a second ring closes in on the raised blade. The win strip is timed
+as the game plays it, a loop over its last three frames with the first half a step between them, so
+the swarm turns evenly both in a fight and on the select card that plays all four.
+  - Antler Spirit: the cloak's back edge and hem burn in teal ghost fire, hottest low at his back,
+    dark teal to pale mint over a scorch that keeps the cloth's fold shading, cooling within a few
+    pixels of the blade and smear; wisps rise and curl off it, soul motes drift behind him, small
+    flames lick up from each antler tip, the runes and eyes pulse a step brighter, and a see-through
+    teal halo sits round the blade, smear and burning edge.
+  - Blue: the black cape gets an icy rim along its back and top edges, two fold lines hung a set
+    distance in from its back edge so they swing with the cloth, and frost spikes, needles and short
+    icicles along its hem; ice motes drift back off it, a third of them twinkling once as a cross, mist
+    curls at his feet, each armour seam gets a glint, the blade core and smears turn cold white in a
+    soft blue halo, and warm eyes turn to ice. His black trousers are told apart from the cape and left
+    plain. His head is kept out of the frost (`blue_head.py`), so the hood's flat black frames his face
+    as in his PixelLab design (gallery `1792398516784`): where a side view drew the face as a flat blue
+    plate, it is drawn black in the hood, lit only along its front and chin, with its eye.
 - `ember/spear/` holds the Ember Shade's own spear moves, one row per attack strip with the sword
   strip's frame count; the bake puts them in the spear row of `ember/arsenal/` in place of the sword
   swings. Each is a PixMiniMax animation (8 frames) of the arsenal's spear idle frame: a jab, a low
@@ -53,9 +103,7 @@ height from its image).
   the overhead chop and the first frame of his ultimate sheet (the only one the lion is not drawn
   over), the sword raised to the sky in a gold swirl. Standing up in his win pose he is a head taller
   than the crouch he fights in, so `card_win.png` is the same win sheet cut the same way at 80% of
-  that size, for his select card only, where he stands as tall as the Shades on theirs. In the
-  middle of the hero carousel his card holds its first frame, where he faces the player; in the
-  other three he turns his back.
+  that size, the art his select cards were drawn from (see `card_pose.png` below).
 - `bokator/fists/` holds his own bare-hand Bokator moves (elbows, knees, a push kick, a flying knee, a
   downward elbow), one row per attack strip; the bake puts them in his fists row, the same way as the
   Ember Shade's spear moves. His other rows are baked from the sword strips with the `bokator` setting:
@@ -84,8 +132,22 @@ height from its image).
   slash's arc thins out over its last rows instead of stopping at the bottom edge, and the rising
   dragon's arc tip, shrunk, now ends inside the frame. His win pose is one frame of the
   win sheet, its blade glowing brighter and dimmer, since the sheet's other win frames wrap the blade in
-  flames the weapon bake cannot lift off; `card_win.png` is that pose at 80% of the size for his select
-  card, as for the Bokator fighter. `hero_ult.png` is two frames raising the dav, three of its blade
+  flames the weapon bake cannot lift off; `card_win.png` is that pose at 80% of the size, the art his
+  select cards were drawn and sized from, as for the Bokator fighter. `hero_ult.png` is two frames raising the dav, three of its blade
   blazing, the leap, the chop and the kneel over the split ground, from his ultimate sheet. His other
   rows are baked with the `angkor` setting, his gold blade found and taken away like the Bokator
   fighter's, with the frames where a gold arm band was taken for it given their blade line by hand.
+- `bokator/card_pose.png` and `card_idle.png`, and the same two in `angkor/`, are the Khmer fighters'
+  select cards: the middle card and the side cards, six 128×112 frames on one row each. They were
+  drawn with ChatGPT image generation (Codex) from their own art: a sheet of six frames on magenta for
+  each, the middle card a flourish (Bokator flicks his sword up, spins it in a gold arc and salutes;
+  the Angkor Warrior's raised dav gathers light, blazes up in flame under a star and settles) and the
+  side cards a bouncing guard. `python3 tools/hero_cards/cut.py <hero> <pose|idle> SHEET` cut each
+  sheet into `<hero>/card/pose.png` and `card/idle.png`: every frame lifted off the magenta, shrunk by
+  the one scale that makes its body (a raised blade does not count) as tall as the art it replaces,
+  each pixel taking the colour of one shared palette that covers most of it, lone grain pixels taking
+  their neighbours' colour, the drawing's own dark line closed where a lit pixel met the background,
+  and the feet set where that art's are, each frame moved sideways so its feet cover the first's.
+  `python3 tools/hero_cards/bake.py` then draws gold sparks rising off the blade, now and then a
+  twinkle, and for the Angkor Warrior lotus petals tumbling past his shoulders, and writes the cards;
+  `python3 tools/hero_cards/preview.py <hero> OUT_DIR` draws them on a pixel grid.

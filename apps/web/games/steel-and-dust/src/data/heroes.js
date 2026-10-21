@@ -1,34 +1,35 @@
 // the heroes the player can pick, five Shades and two Khmer fighters, Bokator and the Angkor Warrior;
 // each has its own sprite set and effect colors, a fighting style (data/styles/) and an ultimate
-// (data/ultimates/)
+// (data/ultimates/); the Moss, Firefly, Antler Spirit and Blue Shades' ultimate is dressed in their
+// element by the same bake as their other strips, so it is drawn from their arsenal too
 export const HEROES = [
   {
     id: 'moss',
     name: 'Moss Shade',
     tagline: 'Patient blade of the old grove',
     directory: 'assets/sprites/hero/arsenal/',
-    ultStrip: 'assets/sprites/hero/hero_ult.png',
+    ultStrip: 'assets/sprites/hero/arsenal/hero_ult.png',
   },
   {
     id: 'firefly',
     name: 'Firefly Shade',
     tagline: 'Fights in a swarm of sparks',
     directory: 'assets/sprites/heroes/firefly/arsenal/',
-    ultStrip: 'assets/sprites/heroes/firefly/hero_ult.png',
+    ultStrip: 'assets/sprites/heroes/firefly/arsenal/hero_ult.png',
   },
   {
     id: 'antler',
     name: 'Antler Spirit Shade',
     tagline: 'Horned ghost of the dunes',
     directory: 'assets/sprites/heroes/antler/arsenal/',
-    ultStrip: 'assets/sprites/heroes/antler/hero_ult.png',
+    ultStrip: 'assets/sprites/heroes/antler/arsenal/hero_ult.png',
   },
   {
     id: 'blue',
     name: 'Blue Shade',
     tagline: 'Cold steel, no shadow',
     directory: 'assets/sprites/heroes/blue/arsenal/',
-    ultStrip: 'assets/sprites/heroes/blue/hero_ult.png',
+    ultStrip: 'assets/sprites/heroes/blue/arsenal/hero_ult.png',
   },
   {
     id: 'ember',

@@ -189,6 +189,12 @@ Fighters are drawn from PixelLab sprite sheets in `assets/sprites/`: one folder 
 Shade (`src/data/heroes.js`, all four loaded at the start) and one sheet per enemy
 (`src/data/enemies/enemy-sprites.js`). `src/sim/hero-animation.js` and `src/sim/enemy-animation.js`
 pick the frame for a fighter's state; colors that belong to a Shade live in `src/art/hero-themes.js`.
+A Shade's `arsenal/` strips are baked from its sword strips by `tools/bake_hero_weapons.py`, which
+also dresses the Moss, Firefly, Antler Spirit and Blue Shades and their ultimate in their element
+(`tools/shade_fx/`: grove moss and spores, a firefly swarm, teal ghost fire, frost), drawn into the
+pixels of every frame the way the Ember Shade's frames burn. The two Khmer fighters' select cards
+play loops drawn for them, `card_pose.png` and `card_idle.png`, cut from their sheets and lit by
+`tools/hero_cards/`.
 
 Each Shade fights in its own style and has its own ultimate:
 

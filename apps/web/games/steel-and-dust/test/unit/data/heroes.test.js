@@ -21,6 +21,15 @@ describe('the heroes', () => {
     }
   });
 
+  // the bake dresses these four Shades' ultimate in their element along with their other strips;
+  // drawn from the plain strip beside the arsenal, the ultimate lost the hero's look for its length
+  it('draws the dressed Shades their ultimate from the arsenal their other strips come from', () => {
+    for (const id of ['moss', 'firefly', 'antler', 'blue']) {
+      const hero = heroById(id);
+      expect(hero.ultStrip, id).toBe(`${hero.directory}hero_ult.png`);
+    }
+  });
+
   it('starts as the Moss Shade, whose sword keeps its original colors', () => {
     expect(defaultSettings(false).hero).toBe(DEFAULT_HERO);
     expect(HERO_THEMES.moss.blade).toBe(WEAPON_COLORS.sword.trail);

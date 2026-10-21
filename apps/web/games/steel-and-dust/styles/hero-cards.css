@@ -3,7 +3,8 @@
 .hero-card {
   --accent: var(--color-hero-moss);
   --scale: 1;
-  --edge: calc(var(--px) * 1px);
+  --glow-edge: calc(var(--px) * 0.5px);
+  --glow-spread: calc(var(--px) * 3px);
 
   position: absolute;
   top: 0;
@@ -121,39 +122,54 @@
   animation: hero-idle var(--duration-sprite-idle) var(--easing-step-6) infinite;
 }
 
-/* four hard shadows one sprite pixel out draw an outline round the hero, then a soft glow */
+/* the middle hero glows in their own light; a hard outline a sprite pixel wide turned every spark,
+   spore and wisp drawn round a hero into a blob of the accent color */
 .hero-card[data-depth='0'] .hero-art {
   background-image: var(--win);
   background-size: calc(var(--px) * 512px) calc(var(--px) * 320px);
   animation: hero-win var(--duration-sprite-win) var(--easing-step-4) infinite;
-  filter: drop-shadow(var(--edge) 0 0 var(--accent))
-    drop-shadow(calc(-1 * var(--edge)) 0 0 var(--accent)) drop-shadow(0 var(--edge) 0 var(--accent))
-    drop-shadow(0 calc(-1 * var(--edge)) 0 var(--accent))
-    drop-shadow(0 0 calc(var(--px) * 4px) color-mix(in srgb, var(--accent) 70%, transparent));
+  filter: drop-shadow(0 0 var(--glow-edge) var(--accent))
+    drop-shadow(0 0 var(--glow-spread) color-mix(in srgb, var(--accent) 55%, transparent));
 }
 
 /* Bokator's and the Angkor Warrior's frames are 112 px tall with their feet in the same place, so
-   their window starts 32 px lower */
+   their window starts 32 px lower; on the side cards they bounce in their guard, one row of six
+   drawn frames (card_idle.png, from tools/hero_cards) */
 .hero-card[data-hero='bokator'] .hero-art,
 .hero-card[data-hero='angkor'] .hero-art {
-  background-size: calc(var(--px) * 768px) calc(var(--px) * 448px);
+  background-size: calc(var(--px) * 768px) calc(var(--px) * 112px);
   background-position: 0 calc(var(--px) * -32px);
 }
 
-/* standing up in his win pose he is a head taller than the crouch he fights in, so his card shows a
-   smaller drawing of it, one row as tall as his frames, to stand as tall as the Shades on theirs; it
-   holds the first frame, where he faces the player, since in the rest he turns his back */
-.hero-card[data-hero='bokator'][data-depth='0'] .hero-art {
-  background-image: url('../assets/sprites/heroes/bokator/card_win.png');
-  background-size: calc(var(--px) * 512px) calc(var(--px) * 112px);
-  animation: none;
+.hero-card[data-hero='bokator'] .hero-art {
+  background-image: url('../assets/sprites/heroes/bokator/card_idle.png');
 }
 
-/* with his dav raised the Angkor Warrior's win pose reaches above his frame's window too, so his card
-   shows it smaller the same way; it is one pose, the blade's glow swelling and fading as it plays */
+.hero-card[data-hero='angkor'] .hero-art {
+  background-image: url('../assets/sprites/heroes/angkor/card_idle.png');
+}
+
+/* standing up each is a head taller than the crouch he fights in, so the middle card shows a flourish
+   drawn smaller (card_pose.png) to stand as tall as the Shades on theirs, at the side cards' pace;
+   it is drawn over the crest, which his raised blade reaches */
+.hero-card[data-hero='bokator'][data-depth='0'] .hero-art,
 .hero-card[data-hero='angkor'][data-depth='0'] .hero-art {
-  background-image: url('../assets/sprites/heroes/angkor/card_win.png');
-  background-size: calc(var(--px) * 512px) calc(var(--px) * 112px);
+  position: relative;
+  z-index: 1;
+  animation: hero-idle var(--duration-sprite-idle) var(--easing-step-6) infinite;
+}
+
+.hero-card[data-hero='bokator'][data-depth='0'] .hero-art {
+  background-image: url('../assets/sprites/heroes/bokator/card_pose.png');
+}
+
+/* the Angkor Warrior's dav, raised, burns up above the window, so his starts 18 px higher, over the
+   top of the frame, to show the star that flares at its point */
+.hero-card[data-hero='angkor'][data-depth='0'] .hero-art {
+  height: calc(var(--px) * 98px);
+  margin-top: calc(var(--px) * -18px);
+  background-image: url('../assets/sprites/heroes/angkor/card_pose.png');
+  background-position: 0 calc(var(--px) * -14px);
 }
 
 @keyframes hero-idle {
