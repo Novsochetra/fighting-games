@@ -1,0 +1,57 @@
+import { defineMove } from '../../moves/define-move.js';
+import { CHOP, DIVE, LIFT, SWEEP } from '../technique-poses.js';
+
+// a wildfire's temper: catch them low and let them burn, wall them off, then rise on the flames
+export const EMBER_TECHNIQUES = {
+  S1: defineMove({
+    name: 'Cinder Sweep',
+    frames: [5, 4, 16],
+    damage: 8,
+    hitbox: [2, -16, 52, 16],
+    knockback: [0.8, 0],
+    hitstun: 30,
+    low: true,
+    burn: 180,
+    sprite: ['cleave', 3],
+    ...SWEEP,
+  }),
+  S2: defineMove({
+    name: 'Flame Wall',
+    frames: [9, 4, 20],
+    damage: 10,
+    hitbox: [4, -40, 26, 40],
+    knockback: [2.6, -3],
+    knockdown: true,
+    armor: true,
+    forward: 2,
+    pillars: 3,
+    sprite: ['cleave', 3],
+    ...CHOP,
+  }),
+  S3: defineMove({
+    name: 'Phoenix Rise',
+    frames: [7, 5, 22],
+    damage: 13,
+    hitbox: [0, -50, 30, 50],
+    knockback: [0.6, -6.6],
+    launch: true,
+    jumpCancel: true,
+    burn: 120,
+    pillars: 1,
+    pillarRing: true,
+    sprite: ['rising_dragon', 2],
+    ...LIFT,
+  }),
+  AS: defineMove({
+    name: 'Meteor Brand',
+    frames: [6, 40, 12],
+    damage: 10,
+    hitbox: [-2, -8, 16, 16],
+    knockback: [2, -2.5],
+    dive: [1.4, 6],
+    bounce: true,
+    pillars: 2,
+    sprite: ['plunge', 2],
+    ...DIVE,
+  }),
+};

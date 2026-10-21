@@ -36,6 +36,12 @@ describe('help text', () => {
     expect(firefly).toContain('Fireflies');
     expect(firefly).toContain('Swarm Nova');
     expect(firefly).not.toContain('Thornwood Requiem');
+    const ember = movesHtml({ weaponId: 'spear', heroId: 'ember', touch: false });
+    expect(ember).toContain('Ember Shade: Wildfire.');
+    expect(ember).toContain('Flame pillars');
+    expect(ember).toContain('Burns');
+    expect(ember).toContain('Phoenix Pyre');
+    expect(ember).toContain('Own techniques on every weapon: Cinder Sweep, Flame Wall');
   });
 
   it("lists the chosen Shade's four techniques with their inputs", () => {

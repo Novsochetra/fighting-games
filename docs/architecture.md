@@ -162,10 +162,13 @@ Each Shade fights in its own style and has its own ultimate:
   (`heroMoves(heroId, weaponId)`); `movesetOf(game, fighter)` hands the hero the chosen Shade's set.
   A Shade's own techniques (`src/data/styles/techniques/`) join every weapon's set unscaled, linked
   off the heavies' free light follow-ups (`technique-links.js`): `K J`, `K K J`, `K K K J`, `Air K J`.
-- `src/sim/summons/` runs what a Shade calls up: thorns, fireflies, spirit stags, ice and one-shot
-  bursts, kept in `game.summons`. A move's signature (`thorns`, `fireflies`, `stags`, and the name
-  call-out of a `technique`) fires on its first active frame; `freeze` encases the raider it lands on
-  (`src/sim/combat/freeze.js`) and `shatters` breaks that ice at once.
+- `src/sim/summons/` runs what a Shade calls up: thorns, fireflies, spirit stags, ice, flame
+  pillars, the fire on a burning raider, the phoenix and one-shot bursts, kept in `game.summons`. A
+  move's signature (`thorns`, `fireflies`, `stags`, `pillars`, and the name call-out of a
+  `technique`) fires on its first active frame; what a landed move leaves on the raider is in
+  `src/sim/combat/afflict.js`: `freeze` encases it (`src/sim/combat/freeze.js`), `shatters` breaks
+  that ice at once, and `burn` sets it alight, losing a little health every so often without
+  flinching (`src/sim/summons/burn.js`).
 - `src/sim/ultimates/` holds one timeline per Shade, picked by `game.settings.hero`; the numbers are in
   `src/data/ultimates/`. The effect strips are in `assets/sprites/fx/` (`src/data/fx-sprites.js`).
 

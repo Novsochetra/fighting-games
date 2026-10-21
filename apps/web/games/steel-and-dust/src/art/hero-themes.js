@@ -61,4 +61,19 @@ export const HERO_THEMES = {
       flash: '#eef8ff',
     },
   },
+  ember: {
+    blade: '#ff7a2a',
+    glow: '#ffb347',
+    glowDim: '#c8501f',
+    spark: '#ffd28a',
+    aura: { every: 6, color: '#ff9a3c' },
+    ult: {
+      dim: '#1a0604',
+      band: '#260a06',
+      edge: '#ff7a2a',
+      streak: '#6a200e',
+      title: '#ffd28a',
+      flash: '#fff0dc',
+    },
+  },
 };

@@ -40,6 +40,35 @@ function freeze(live, start) {
   hiss(live, { start, ...frost, attack: 0.005, duration: 0.3, volume: 0.06 });
 }
 
+// a pillar of fire roaring up out of cracked ground
+function flames(live, start) {
+  thump(live, { start, from: 110, to: 50, duration: 0.2, volume: 0.3 });
+  const roar = { type: 'bandpass', from: 300, to: 1800, resonance: 1.4 };
+  hiss(live, { start, ...roar, attack: 0.03, duration: 0.42, volume: 0.12 });
+  crunch(live, { start: start + 0.04, duration: 0.18, volume: 0.08, frequency: 900 });
+}
+
+// a body catching light: a short breathy whoosh
+function ignite(live, start) {
+  const whoosh = { type: 'bandpass', from: 600, to: 2400, resonance: 1.2 };
+  hiss(live, { start, ...whoosh, attack: 0.02, duration: 0.22, volume: 0.07 });
+}
+
+// the firebird's cry over the rush of its wings
+function phoenix(live, start) {
+  [1480, 1975, 1660].forEach((frequency, i) => {
+    blip(live, {
+      start: start + i * 0.09,
+      frequency,
+      duration: 0.16,
+      volume: 0.05,
+      wave: 'sawtooth',
+    });
+  });
+  const wings = { type: 'bandpass', from: 400, to: 2200, resonance: 1.6 };
+  hiss(live, { start, ...wings, attack: 0.06, duration: 0.6, volume: 0.1 });
+}
+
 // the Shade's blade ringing out as it calls a technique by name
 function technique(live, start) {
   metal(live, { start, frequencies: [1320, 1980, 2640], duration: 0.35, volume: 0.045 });
@@ -47,4 +76,13 @@ function technique(live, start) {
   hiss(live, { start, ...swell, attack: 0.02, duration: 0.2, volume: 0.06 });
 }
 
-export const SIGNATURE_SOUNDS = { thorns, swarm, stampede, freeze, technique };
+export const SIGNATURE_SOUNDS = {
+  thorns,
+  swarm,
+  stampede,
+  freeze,
+  flames,
+  ignite,
+  phoenix,
+  technique,
+};

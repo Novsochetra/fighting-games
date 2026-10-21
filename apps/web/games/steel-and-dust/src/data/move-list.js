@@ -75,4 +75,6 @@ export const MOVE_TAGS = [
   ['stags', 'Spirit stag'],
   ['freeze', 'Freezes'],
   ['shatters', 'Shatters ice'],
+  ['pillars', 'Flame pillars'],
+  ['burn', 'Burns'],
 ];

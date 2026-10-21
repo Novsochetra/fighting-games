@@ -13,7 +13,13 @@ describe('the ultimates', () => {
   it('gives every Shade an ultimate of its own', () => {
     expect(Object.keys(ULTIMATES)).toEqual(HEROES.map((hero) => hero.id));
     const names = Object.values(ULTIMATES).map((ult) => ult.name);
-    expect(names).toEqual(['Thornwood Requiem', 'Swarm Nova', 'Spirit Stampede', 'Absolute Zero']);
+    expect(names).toEqual([
+      'Thornwood Requiem',
+      'Swarm Nova',
+      'Spirit Stampede',
+      'Absolute Zero',
+      'Phoenix Pyre',
+    ]);
     expect(ultimateOf('nobody')).toBe(ULTIMATES.moss);
   });
 
@@ -27,7 +33,7 @@ describe('the ultimates', () => {
   it('hits only with ultimate moves, which nothing can block or dodge', () => {
     for (const ult of Object.values(ULTIMATES)) {
       const moves = ultimateMoves(ult);
-      expect(moves.length, ult.name).toBe(2);
+      expect(moves.length, ult.name).toBeGreaterThanOrEqual(2);
       for (const move of moves) {
         expect(move.ultimate, ult.name).toBe(true);
       }
