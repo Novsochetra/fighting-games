@@ -1,8 +1,10 @@
+import { slipAway } from './blink.js';
 import { standStill, walk } from './movement.js';
 
 const FEINT_TICKS = 12;
 const SCUTTLE_TICKS = 30;
 const PROWL_TICKS = 22;
+const DRIFT_TICKS = 50;
 
 // a duelist keeps a sword's length and a step away: he backs off a hero who crowds him, closes on
 // one who keeps away, and in between stands his ground or feints a step in
@@ -83,4 +85,21 @@ function packHunter(boss, { distance, pace }) {
   }
 }
 
-export const BOSS_MOVEMENT = { duelist, bulldozer, bull, slither, scuttle, packHunter };
+// a floater hangs at the edge of his reach and drifts slowly to and fro; a hero who crowds him
+// finds him gone in a whirl of sand, back where there is room
+function floater(boss, { game, distance, pace }) {
+  const ai = boss.ai;
+  if (distance < 44 && slipAway(game, boss)) {
+    return;
+  }
+  if (distance > 160) {
+    walk(boss, 1, pace);
+  } else if (distance < 80) {
+    walk(boss, -1, 0.9 * pace);
+  } else {
+    ai.drift = (ai.drift ?? 0) + 1;
+    walk(boss, Math.floor(ai.drift / DRIFT_TICKS) % 2 ? -1 : 1, 0.6 * pace);
+  }
+}
+
+export const BOSS_MOVEMENT = { duelist, bulldozer, bull, slither, scuttle, packHunter, floater };

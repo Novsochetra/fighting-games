@@ -1,5 +1,6 @@
 import { COBRA_KIT } from './cobra.js';
 import { COLOSSUS_KIT } from './colossus.js';
+import { DJINN_KIT } from './djinn.js';
 import { GNOLL_KIT } from './gnoll.js';
 import { IRONHORN_KIT } from './ironhorn.js';
 import { KHAN_KIT } from './khan.js';
@@ -13,4 +14,5 @@ export const BOSS_KITS = {
   cobra: COBRA_KIT,
   queen: QUEEN_KIT,
   gnoll: GNOLL_KIT,
+  djinn: DJINN_KIT,
 };

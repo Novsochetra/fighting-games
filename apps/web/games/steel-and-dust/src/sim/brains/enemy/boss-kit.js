@@ -83,7 +83,7 @@ function attackOrMove(game, boss, context) {
     startMove(game, boss, moves[(Math.random() * moves.length) | 0]);
     return;
   }
-  BOSS_MOVEMENT[kit.movement](boss, { distance, pace: phase.pace });
+  BOSS_MOVEMENT[kit.movement](boss, { game, distance, pace: phase.pace });
 }
 
 // a boss with a kit of its own picks from its skills by range and cooldown, and moves its own way
@@ -96,7 +96,7 @@ export function thinkKitBoss(game, boss, { kit, distance }) {
     return;
   }
   if (boss.ai.cooldown > 0) {
-    BOSS_MOVEMENT[kit.movement](boss, { distance, pace: phase.pace });
+    BOSS_MOVEMENT[kit.movement](boss, { game, distance, pace: phase.pace });
     return;
   }
   if (player.state === 'down' || player.state === 'getup') {

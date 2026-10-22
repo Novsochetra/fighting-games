@@ -97,6 +97,19 @@ export const SCENARIOS = {
     spawnBossAt: 30,
     scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
   },
+  // the Storm Djinn in Sandstorm Pass: his drifting and whirling away, Thunder Fist, Dust Devil
+  // and, below 40%, the Eye of the Storm's waves of lightning (two devils at once is in
+  // djinn.test.js)
+  djinn: {
+    mission: 6,
+    boss: 'djinn',
+    seed: 7,
+    ticks: 4800,
+    sampleEvery: 30,
+    renderEvery: 120,
+    spawnBossAt: 30,
+    scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
+  },
   // the other Shades: their own fighting style on every weapon and their own ultimate
   firefly: {
     hero: 'firefly',

@@ -40,6 +40,9 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `howl.png` | 6 × 112×112 | Gnoll Packlord: the Pack Call's rings spreading from his throat | ChatGPT image (three effects on one sheet), split into rows, shrunk and cut into frames |
 | `bones.png` | 6 × 144×72 | Gnoll Packlord: bones and earth bursting where the Leaping Maul lands | the same sheet's second row |
 | `redeye.png` | 4 × 56×16 | Gnoll Packlord: the red streak his eyes leave in the Blood Frenzy | the same sheet's third row, drawn flying left and mirrored as he lunges |
+| `zap.png` | 4 × 120×56 | Storm Djinn: the Thunder Fist's bolt, a loop, its head on the anchor | ChatGPT image, drawn flying left, so mirrored before it was shrunk and cut into frames |
+| `tornado.png` | 8 × 136×160 | Storm Djinn: a dust devil rising (0-2), spinning (3-5, a loop) and blowing away (6-7); small, his whirl as he slips away | ChatGPT image, shrunk and cut into frames, folded to 255 colors |
+| `thunder.png` | 8 × 232×352 | Storm Djinn: the Eye of the Storm's lightning striking a marked spot, then the sand it throws up | ChatGPT image, shrunk and cut into frames, folded to 255 colors |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to

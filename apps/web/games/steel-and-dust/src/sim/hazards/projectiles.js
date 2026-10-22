@@ -6,12 +6,15 @@ import { breakCratesIn } from '../items/crates.js';
 import { groundAt } from '../stage/terrain.js';
 import { flyBoulder } from './boulders.js';
 import { skimGround } from './crescents.js';
+import { spinDustDevil } from './dust-devils.js';
 import { flyBomb } from './enemy-shots.js';
 import { diveToward } from './shot-aim.js';
 import { hitArea } from './shot-hits.js';
 import { leaveTrail } from './shot-trails.js';
 import { SHOT_RULES } from './shot-rules.js';
 import { riseSpike } from './spikes.js';
+import { crackStrike } from './storm-strikes.js';
+import { runThunderBolt } from './thunder-bolts.js';
 import { flyGlob, soakPuddle } from './venom-globs.js';
 import { fadeMark } from './pounce-mark.js';
 import { flyWasp } from './wasps.js';
@@ -63,6 +66,9 @@ const FLIGHT = {
   puddle: soakPuddle,
   wasp: flyWasp,
   pounceMark: fadeMark,
+  thunderBolt: runThunderBolt,
+  dustDevil: spinDustDevil,
+  stormStrike: crackStrike,
 };
 const OWN_FLOOR = new Set(['fire', 'bamboo', ...Object.keys(FLIGHT)]);
 

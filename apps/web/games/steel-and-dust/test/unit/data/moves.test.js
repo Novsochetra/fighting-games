@@ -96,6 +96,10 @@ describe('move tables', () => {
       'frenzy4',
       'frenzy5',
       'frenzyPant',
+      'thunderFist',
+      'dustDevil',
+      'dustDevils',
+      'eyeOfStorm',
     ]);
   });
 
