@@ -121,7 +121,8 @@ length.
   `src/render/overlays/loading-screen.js`. Once a road is in, the next mission's road loads behind
   it, so the wait is usually over before the mission is. A file that fails to load still settles,
   and the plain road is drawn in its place.
-- The twelve missions are one road, painted end to end with PixelLab: six forests from sunrise to
+- The twelve missions are one road, painted end to end with PixelLab (Angkor Wat repainted with
+  ChatGPT and turned into pixel art by `tools/painting_layers.py`): six forests from sunrise to
   night (Pine Ridge, Old Grove, Bamboo Pass, Raider Camp, Ember Woods, Firefly Hollow), then out of
   the woods into the desert from dawn to night: Sandstorm Pass (a red-rock canyon in a dawn
   sandstorm), Iron Works (the raiders' foundry at a smoggy midday), Mirage Temple (a half-buried sun
@@ -210,7 +211,14 @@ Each Shade fights in its own style and has its own ultimate:
   `src/render/fighters/tint.js`), rising out of the ground behind the fighters
   (`src/render/fx/soldiers.js`). A finisher's soldier thrusts once; the ultimate's soldiers rise in a
   wave from the hero's feet and each fights a chain of the hero's own attack strips, striking in step
-  with its rank on the rank's `beats`, and they stand in the hero's light over the dimmed world. A move's signature
+  with its rank on the rank's `beats`, and they stand in the hero's light over the dimmed world.
+  Bokator's ultimate leaves gold `echo`es of him where his rush lands each blow
+  (`src/sim/summons/echoes.js`), drawn the same way from his strips in gold behind the fighters
+  (`src/render/fx/echoes.js`); each strikes its raider again, holds the blow and, once woken, flares
+  as a lion rises out of it. A burst may be marked `behind` to rise behind the fighters too. An
+  ultimate frame may name its own weapon row (`[strip, frame, row]`), so he fights his whole ultimate
+  bare-handed whatever he holds, and an ultimate marked `bareHanded` shows the hero bare-handed in
+  its cut-in too. A move's signature
   (`thorns`, `fireflies`, `stags`, `pillars`, `lions`, `soldiers`, and the name call-out of a
   `technique`) fires on its first active frame; a style's `weapons` patch marks every move of one
   weapon (the Ember Shade's spear moves all carry `feathers`, a burst where each hit lands); what a landed move leaves on the raider is in

@@ -21,6 +21,9 @@ export const FX_SPRITES = {
   spike: { frameWidth: 64, frameHeight: 96, frames: 8, ticks: 4, anchorX: 32, anchorY: 95 },
   glint: { frameWidth: 32, frameHeight: 32, frames: 4, ticks: 4, anchorX: 16, anchorY: 16 },
   pounce: { frameWidth: 202, frameHeight: 127, frames: 8, ticks: 3, anchorX: 101, anchorY: 99 },
+  strike: { frameWidth: 67, frameHeight: 53, frames: 7, ticks: 2, anchorX: 33, anchorY: 27 },
+  awaken: { frameWidth: 60, frameHeight: 100, frames: 10, ticks: 3, anchorX: 30, anchorY: 86 },
+  gather: { frameWidth: 67, frameHeight: 84, frames: 8, ticks: 2, anchorX: 33, anchorY: 76 },
 };
 
 export const FX_SCALE = 1 / RENDER_SCALE;

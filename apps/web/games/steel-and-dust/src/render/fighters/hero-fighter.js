@@ -60,10 +60,11 @@ function drawGlow(painter, sheet, { fighter, frame, row, shakeX, color }) {
   painter.alpha(1);
 }
 
+// an ultimate frame may name its own weapon row: Bokator rushes bare-handed whatever he holds
 export function drawHeroFighter(painter, { sheet, fighter, shakeX, tickCount }) {
-  const row = WEAPONS[fighter.weapon.id].spriteRow;
   drawHeroAfterimages(painter, sheet, fighter);
   const frame = heroAnimation(fighter);
+  const row = frame[2] ?? WEAPONS[fighter.weapon.id].spriteRow;
   const color = glowColor(fighter, { tickCount, theme: sheet.theme });
   if (color) {
     drawGlow(painter, sheet, { fighter, frame, row, shakeX, color });

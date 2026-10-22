@@ -37,12 +37,12 @@ export const SCENARIOS = {
     spawnBossAt: 30,
     scheduled: { 600: ['fill'], 1200: ['w2'], 2400: ['w3'], 3600: ['fill'] },
   },
-  // the Rust Colossus in the Old Grove: his walk, Spike Line, Boulder Lob and, below 40%, the
-  // Landslide
+  // the Rust Colossus in the Old Grove: his walk, Spike Line and, below 40%, the Landslide (the bot
+  // never keeps far enough away for a Boulder Lob; test/integration/sim/colossus.test.js covers it)
   colossus: {
     mission: 1,
     boss: 'colossus',
-    seed: 5150,
+    seed: 11,
     ticks: 4800,
     sampleEvery: 30,
     renderEvery: 120,

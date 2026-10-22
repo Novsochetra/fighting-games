@@ -106,9 +106,8 @@ the swarm turns evenly both in a fight and on the select card that plays all fou
   second's tan skin and slate trousers, every sheet scaled so his body is the same size, shrunk to the
   game's scale, cut to one 64-colour palette and given a 1-px dark outline, with the body on x=60 and
   his feet, not his sword's tip, on y=108; his raised sword and his leaps need the taller frame. His
-  idle breathes on one frame of the idle sheet, and `hero_ult.png` is put together from the salute,
-  the overhead chop and the first frame of his ultimate sheet (the only one the lion is not drawn
-  over), the sword raised to the sky in a gold swirl. Standing up in his win pose he is a head taller
+  idle breathes on one frame of the idle sheet. He has no `hero_ult.png`: he fights his ultimate
+  bare-handed, every frame of it from his fists row. Standing up in his win pose he is a head taller
   than the crouch he fights in, so `card_win.png` is the same win sheet cut the same way at 80% of
   that size, the art his select cards were drawn from (see `card_pose.png` below).
 - `bokator/fists/` holds his own bare-hand Bokator moves (elbows, knees, a push kick, a flying knee, a

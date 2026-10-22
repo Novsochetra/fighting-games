@@ -6,12 +6,13 @@ import { drawFighter } from './fighters/draw-fighter.js';
 import { heroSheetFor } from './fighters/hero-sheets.js';
 import { drawTrail } from './fighters/trail.js';
 import { drawDebugBoxes } from './fx/debug-boxes.js';
+import { drawEchoes } from './fx/echoes.js';
 import { drawEffects } from './fx/effects.js';
 import { drawFloaters } from './fx/floaters.js';
 import { drawProjectiles, drawShockwaves } from './fx/hazards.js';
 import { drawParticles } from './fx/particles.js';
 import { drawSoldiers } from './fx/soldiers.js';
-import { drawSummons } from './fx/summons.js';
+import { drawBehindBursts, drawSummons } from './fx/summons.js';
 import { drawCrates } from './scene/crate.js';
 import { drawGround } from './scene/ground.js';
 import { drawPlatforms } from './scene/platforms.js';
@@ -42,18 +43,25 @@ function dimForUltimate(painter, game, cameraX) {
   painter.alpha(1);
 }
 
-// relief soldiers stand behind the fighters, but the ultimate's ranks stand in the hero's light, over
-// the dimmed world
+// relief soldiers, the hero's echoes and the bursts rising behind him
+function drawBehindFighters(painter, { game, view }) {
+  drawSoldiers(painter, { summons: game.summons, view });
+  drawEchoes(painter, { summons: game.summons, view });
+  drawBehindBursts(painter, game.summons, view.fxSheets);
+}
+
+// what stands behind the fighters stands there, but in the ultimate it stands in the hero's light,
+// over the dimmed world
 function drawFighters(painter, { game, view, cameraX }) {
   const sheet = heroSheetFor(view, game.settings.hero);
   const ultimate = game.ultFreeze > 0 || game.player.state === 'ult';
   if (!ultimate) {
-    drawSoldiers(painter, { summons: game.summons, view });
+    drawBehindFighters(painter, { game, view });
   }
   for (const fighter of drawOrder(game.fighters)) {
     if (fighter === game.player && ultimate) {
       dimForUltimate(painter, game, cameraX);
-      drawSoldiers(painter, { summons: game.summons, view });
+      drawBehindFighters(painter, { game, view });
     }
     if (isBossUltimate(fighter)) {
       dimForBossUltimate(painter, fighter, cameraX);

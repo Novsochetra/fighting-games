@@ -2,6 +2,7 @@ import { HERO_THEMES } from '../../art/hero-themes.js';
 import { VIEW_WIDTH } from '../../config.js';
 import { heroById } from '../../data/heroes.js';
 import { ultimateOf } from '../../data/ultimates/index.js';
+import { WEAPONS } from '../../data/weapons/index.js';
 import { heroSheetFor } from '../fighters/hero-sheets.js';
 import { drawHeroFrame } from '../fighters/hero-sprites.js';
 import { drawText } from '../text/draw-text.js';
@@ -25,6 +26,11 @@ function drawBand(painter, game, colors) {
   }
 }
 
+// the sword row, or the fists row for a hero whose ultimate is fought bare-handed
+export function portraitRow(heroId) {
+  return ultimateOf(heroId).bareHanded ? WEAPONS.fists.spriteRow : WEAPONS.sword.spriteRow;
+}
+
 // the Shade at twice its size, glowing in its ultimate's color, cropped to the band
 function drawPortrait(painter, { view, game, colors, slide }) {
   const sheet = heroSheetFor(view, game.settings.hero);
@@ -38,7 +44,8 @@ function drawPortrait(painter, { view, game, colors, slide }) {
   context.clip();
   context.translate(Math.round(70 - slide * 140), BAND_Y + BAND_HEIGHT + 22);
   context.scale(2, 2);
-  const at = (dx, dy, tint) => ({ frame: ['idle', 0], x: dx, y: dy, facing: 1, tint, row: 0 });
+  const row = portraitRow(game.settings.hero);
+  const at = (dx, dy, tint) => ({ frame: ['idle', 0], x: dx, y: dy, facing: 1, tint, row });
   painter.alpha(0.8);
   for (const [dx, dy] of GLOW) {
     drawHeroFrame(painter, sheet, at(dx * 0.5, dy * 0.5, colors.edge));
