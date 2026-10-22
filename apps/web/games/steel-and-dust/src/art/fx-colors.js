@@ -6,6 +6,7 @@ export const FX_COLORS = {
   shockDark: '#c9a46a',
   knifeHandle: '#a3302a',
   enemyGhost: '#ffcf9a',
+  frenzyGhost: '#d8282e',
   telegraph: '#ff4a2a',
   mirage: '#62e6d4',
   mirageDust: '#c9b48a',

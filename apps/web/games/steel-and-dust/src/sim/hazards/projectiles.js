@@ -13,6 +13,7 @@ import { leaveTrail } from './shot-trails.js';
 import { SHOT_RULES } from './shot-rules.js';
 import { riseSpike } from './spikes.js';
 import { flyGlob, soakPuddle } from './venom-globs.js';
+import { fadeMark } from './pounce-mark.js';
 import { flyWasp } from './wasps.js';
 
 const DEFAULT_SPEED = 4.6;
@@ -61,6 +62,7 @@ const FLIGHT = {
   glob: flyGlob,
   puddle: soakPuddle,
   wasp: flyWasp,
+  pounceMark: fadeMark,
 };
 const OWN_FLOOR = new Set(['fire', 'bamboo', ...Object.keys(FLIGHT)]);
 

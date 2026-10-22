@@ -4,7 +4,13 @@ import { FX_SPRITES } from '../../data/fx-sprites.js';
 import { point } from '../painter.js';
 import { drawBolt, drawBomb, drawFire, drawSand, drawVenom } from './enemy-shots.js';
 import { drawFxFrame } from './fx-sheets.js';
-import { drawBamboo, drawBoulder, drawShard, drawSpike } from './rock-hazards.js';
+import {
+  drawBamboo,
+  drawBoulder,
+  drawLandingShadow,
+  drawShard,
+  drawSpike,
+} from './rock-hazards.js';
 import { drawGlob, drawPuddle } from './venom-hazards.js';
 import { drawWasp } from './wasp-hazards.js';
 
@@ -77,6 +83,12 @@ function drawCrescent(painter, wave, sheets) {
   });
 }
 
+// the shadow of a pouncer grows and darkens on the spot as he comes down
+function drawPounceMark(painter, mark) {
+  const left = mark.life - mark.time;
+  drawLandingShadow(painter, { x: mark.x, floor: mark.y, y: mark.y - left * 5, time: mark.time });
+}
+
 const DRAW_SHOT = {
   knife: drawKnife,
   wave: drawSlashWave,
@@ -93,10 +105,11 @@ const DRAW_SHOT = {
   glob: drawGlob,
   puddle: drawPuddle,
   wasp: drawWasp,
+  pounceMark: drawPounceMark,
 };
 
 // what lies flat on the road is drawn under the fighters' feet
-const ON_GROUND = new Set(['puddle']);
+const ON_GROUND = new Set(['puddle', 'pounceMark']);
 
 export function drawProjectiles(painter, projectiles, fxSheets) {
   for (const shot of projectiles) {

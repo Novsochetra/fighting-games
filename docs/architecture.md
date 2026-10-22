@@ -240,17 +240,18 @@ A boss with one (`src/data/enemies/boss-kits/`) is run by `src/sim/brains/enemy/
 its own way (`boss-movement.js`: Gravel Khan's `duelist` backs off, closes and feints; the Rust
 Colossus's `bulldozer` walks in and never steps back; Ironhorn's `bull` keeps room to run; the Cobra
 Matriarch's `slither` keeps the middle distance; the Scorpion Queen's `scuttle` darts to and fro at
-the edge of her sting's reach), swings its
+the edge of her sting's reach; the Gnoll Packlord's `packHunter` darts in and out), swings its
 `close` moves in reach, picks its `skills` by range, chance and cooldown, and on its own road (never as
 a mid-boss) looses its `ultimate` below a share of its health, again every so often. Below half
 health its `phaseTwo` moves quicker, shortens the cooldowns, may chain a skill and may `swap` one for
 a stronger one. Its moves live with the other enemy moves (`src/data/enemies/moves/khan-moves.js`,
-`colossus-moves.js`, `ironhorn-moves.js`, `cobra-moves.js`, `queen-moves.js`) and each plays a strip of its name (or the one its `strip` names) in its sheet on
+`colossus-moves.js`, `ironhorn-moves.js`, `cobra-moves.js`, `queen-moves.js`, `gnoll-moves.js`) and each plays a strip of its name (or the one its `strip` names) in its sheet on
 its own timeline (`frameAt`, the tick each frame starts on; `loopFrames`, a run of frames looped
 while the move is active, for a rush or a daze). A rush that meets the arena's wall turns into the
 move its `wallNext` names (`src/sim/bosses/wall-hit.js`): Ironhorn is left dazed when his Horn Rush
 misses, and his Stampede turns and runs back twice; every wall hit bursts and knocks a bamboo stalk
-into the arena (`src/sim/hazards/bamboo.js`). What a move does at
+into the arena (`src/sim/hazards/bamboo.js`), unless the turn is `soft`, as the Gnoll's five frenzy
+lunges are. What a move does at
 set ticks is in `src/sim/bosses/move-cues.js`: the sword `glint` (a burst), the ultimate's call-out
 (`announce.js`), the war `horn` that calls the road's raiders (`war-horn.js`), the `crescents`, waves
 that skim the road (`src/sim/hazards/crescents.js`), the lobbed `boulder` and the landslide's
@@ -266,7 +267,11 @@ in `src/sim/combat/boxes.js`), her mound `tunnel`s after the hero, stops (a `rum
 sand) and turns into the move its `then` names, the `emerge` that `erupts` up under the hero; her
 Tail Sting leaves `poison` (`src/sim/summons/poison.js`), which bites a little at a time and never
 takes the last of a life; her Hive Swarm's `swarm` sends wasps across the screen, low or high, each
-waiting at the edge while its lane is marked (`src/sim/hazards/wasps.js`). They are all projectiles, drawn from
+waiting at the edge while its lane is marked (`src/sim/hazards/wasps.js`). The Gnoll Packlord's
+`howls` ring out and call hounds in from both sides; his Leaping Maul (`leapAt`) springs onto the
+spot the hero stands on, marked on the ground till he lands (`src/sim/hazards/pounce-mark.js`), and
+his Blood Frenzy lunges trail red from his eyes, leave red afterimages (a move's `ghost`) and feed
+him on each hit (`heals`; all in `src/sim/bosses/pack-hunt.js`). They are all projectiles, drawn from
 the `fx/` strips (`src/render/fx/rock-hazards.js`, `venom-hazards.js`, `wasp-hazards.js`); a puddle,
 flat on the road, is drawn under the fighters' feet. While an ultimate
 gathers and plays the world dims behind the boss in its own color (`src/render/fighters/boss-ultimate.js`,
@@ -292,7 +297,7 @@ Long sessions must not grow:
 `test/regression/` replays bot-played scenarios and compares every 30th tick and every rendered frame
 against recorded fixtures: two long runs as the Moss Shade (first captured from the original
 single-file game), one shorter run for each of the other Shades, one against each boss kit (Gravel Khan, the Rust
-Colossus, Ironhorn, the Cobra Matriarch, the Scorpion Queen), one run through the wide zones
+Colossus, Ironhorn, the Cobra Matriarch, the Scorpion Queen, the Gnoll Packlord), one run through the wide zones
 of the fourth mission, one over the hills of the third, one through the seventh, the sandstorm canyon,
 and one through the twelfth, the Bayon.
 Any change to

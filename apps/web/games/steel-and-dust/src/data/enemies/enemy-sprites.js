@@ -70,7 +70,11 @@ export const ENEMY_SPRITES = {
     `${bossStrips(5, 5)}, venomSpit 8/3, coilLash 10/6, hypnoticGaze 12/9`,
     WIDE_BOSS,
   ),
-  gnoll: sheet('gnoll.png', bossStrips(6, 4), BOSS),
+  gnoll: sheet(
+    'gnoll.png',
+    `${bossStrips(6, 4)}, packCall 8, leapingMaul 10/7, bloodFrenzy 12/5`,
+    TALL_BOSS,
+  ),
   djinn: sheet('djinn.png', bossStrips(4, 5), BOSS),
   furnace: sheet('furnace.png', bossStrips(5, 5), BOSS),
   pharaoh: sheet('pharaoh.png', bossStrips(5, 5), BOSS),

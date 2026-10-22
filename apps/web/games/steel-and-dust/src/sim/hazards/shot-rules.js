@@ -112,6 +112,13 @@ export const SHOT_RULES = {
     breaksOnHit: true,
     armed: (shot) => shot.time >= shot.warn,
   },
+  // the spot a pounce lands on (pounce-mark.js)
+  pounceMark: {
+    range: 80,
+    area: (shot) => ({ x: shot.x, y: shot.y, width: 0, height: 0 }),
+    hit: null,
+    enemyWeapon: 'none',
+  },
   fire: {
     range: 110,
     area: (shot) => ({ x: shot.x - 16, y: shot.y - 10, width: 32, height: 10 }),

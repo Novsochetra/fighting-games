@@ -87,6 +87,15 @@ describe('move tables', () => {
       'emerge',
       'tailSting',
       'hiveSwarm',
+      'packCall',
+      'packCallThree',
+      'leapingMaul',
+      'bloodFrenzy',
+      'frenzy2',
+      'frenzy3',
+      'frenzy4',
+      'frenzy5',
+      'frenzyPant',
     ]);
   });
 

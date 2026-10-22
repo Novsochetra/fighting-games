@@ -37,6 +37,9 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `hypnosis.png` | 8 × 128×80 | Cobra Matriarch: the Hypnotic Gaze's rings and flash | ChatGPT image, shrunk and cut into frames; the fading rings kept down to a quarter's opacity |
 | `wasp.png` | 4 × 56×48 | Scorpion Queen: an ember wasp of the Hive Swarm flying (loops) | ChatGPT image, shrunk and cut into frames |
 | `eruption.png` | 6 × 144×144 | Scorpion Queen: the earth bursting up behind her as she surfaces | ChatGPT image, shrunk and cut into frames |
+| `howl.png` | 6 × 112×112 | Gnoll Packlord: the Pack Call's rings spreading from his throat | ChatGPT image (three effects on one sheet), split into rows, shrunk and cut into frames |
+| `bones.png` | 6 × 144×72 | Gnoll Packlord: bones and earth bursting where the Leaping Maul lands | the same sheet's second row |
+| `redeye.png` | 4 × 56×16 | Gnoll Packlord: the red streak his eyes leave in the Blood Frenzy | the same sheet's third row, drawn flying left and mirrored as he lunges |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to

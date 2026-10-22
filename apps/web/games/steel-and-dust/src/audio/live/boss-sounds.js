@@ -76,6 +76,17 @@ function buzz(live, start) {
   }
 }
 
+// a hyena's howl: a wavering cry that climbs, breaks and falls away, over a rough throat
+function howl(live, start) {
+  const notes = [330, 440, 520, 480, 360];
+  notes.forEach((frequency, i) => {
+    const at = start + i * 0.12;
+    blip(live, { start: at, frequency, duration: 0.2, volume: 0.07, wave: 'sawtooth' });
+  });
+  const throat = { type: 'bandpass', from: 700, to: 1300, resonance: 2 };
+  hiss(live, { start, ...throat, attack: 0.05, duration: 0.6, volume: 0.04 });
+}
+
 export const BOSS_SOUNDS = {
   warHorn,
   bossUltimate,
@@ -85,4 +96,5 @@ export const BOSS_SOUNDS = {
   dig,
   eruption,
   buzz,
+  howl,
 };

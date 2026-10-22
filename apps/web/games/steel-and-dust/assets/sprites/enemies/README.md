@@ -46,7 +46,7 @@ of its own, named as the move is. Each plays on the move's own timeline (`frameA
 frame only has to lie inside the strip. A boulder or a mace held overhead does not fit a 192×112 frame, so `colossus.png` and `ironhorn.png`
 have 192×160 frames with the feet at y = 156: their first seven rows are the old ones moved 48px down. The Cobra's tail laid
 along the floor reaches past a 192px frame, so `cobra.png` has 256×112 frames with the feet at x = 128: its first seven rows
-are the old ones moved 32px right. The Queen's sting reaches far ahead and her tail stabs straight up as she
+are the old ones moved 32px right. The Gnoll's club raised high in his leap does not fit either, so `gnoll.png` has 192×160 frames too. The Queen's sting reaches far ahead and her tail stabs straight up as she
 bursts out, so `queen.png` has 256×160 frames with the feet at x = 128, y = 156: its first seven rows are the old ones
 moved 32px right and 48px down. Her old sheet was in full color, so once the rows were added the whole sheet was
 folded into one 255-color palette (no color moved more than 9 levels). They are drawn by an image model, then lifted off their
@@ -59,4 +59,5 @@ into the sheet's own palette.
 | `colossus.png` | `boulderLob` 10 (tears up a boulder, hurls it), `spikeLine` 8 (a stomp), `landslide` 12 (pounds the ground twice, roars) |
 | `ironhorn.png` | `hornRush` 10 (paws, runs, skids), `uppercut` 8, `dazed` 6 (a loop; the stars are `fx/stars.png`), `stampede` 12 (rears, stomps, runs, skids) |
 | `cobra.png` | `venomSpit` 8 (rears back, spits), `coilLash` 10 (whips the tail round and along the floor), `hypnoticGaze` 12 (rises, hood flared, eyes glowing and flashing, lunges) |
+| `gnoll.png` | `packCall` 8 (crouches, howls at the sky), `leapingMaul` 10 (crouches, leaps with the club overhead, smashes it down), `bloodFrenzy` 12 (hunches with red eyes, cackles, lunges; frame 8 is unused, see `docs/boss-kits.md`) |
 | `queen.png` | `burrow` 12 (digs in until only the stinger shows, 0-7; then her mound tunnelling, a loop, 8-11), `emerge` 8 (bursts up, stinger stabbing straight up), `tailSting` 9 (stabs over her head), `hiveSwarm` 12 (rears, shrieks, tail glowing with embers, slams the pincers down) |

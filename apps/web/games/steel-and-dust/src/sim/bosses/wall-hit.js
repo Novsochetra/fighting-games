@@ -7,9 +7,7 @@ import { addBurst } from '../summons/bursts.js';
 // a boss left dazed bounces back off the wall, so the hero sees him whole while he reels
 const WALL_BOUNCE = 10;
 
-// a rush that meets the arena's wall smashes into it, knocks a bamboo stalk down into the arena and
-// turns into the move it names: a daze if it missed the hero, or another run back the other way
-export function hitWall(game, fighter, move) {
+function smashWall(game, fighter) {
   const floor = floorUnder(game.terrain, fighter);
   const wallX = fighter.x + fighter.facing * 14;
   const burstX = fighter.x + fighter.facing * 6;
@@ -17,7 +15,16 @@ export function hitWall(game, fighter, move) {
   dropBamboo(game, { x: wallX, direction: -fighter.facing, side: fighter.side });
   shake(game, 6, 18);
   game.io.sfx('boom', false, { x: fighter.x });
-  const { move: next, turn, onlyOnMiss } = move.wallNext;
+}
+
+// a rush that meets the arena's wall smashes into it, knocks a bamboo stalk down into the arena and
+// turns into the move it names: a daze if it missed the hero, or another run back the other way; a
+// `soft` turn only skids round
+export function hitWall(game, fighter, move) {
+  const { move: next, turn, onlyOnMiss, soft } = move.wallNext;
+  if (!soft) {
+    smashWall(game, fighter);
+  }
   if (onlyOnMiss && fighter.hitConfirmed) {
     return;
   }

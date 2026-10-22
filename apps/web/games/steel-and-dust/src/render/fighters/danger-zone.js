@@ -27,7 +27,7 @@ function slamZone(painter, fighter, floor) {
 }
 
 // boss wind-ups mark the ground they are about to hit, on the floor the boss stands on; a rush or
-// a wave marks the lane it runs down
+// a wave marks the lane it runs down, and a leap only the spot it lands on (pounce-mark.js)
 export function drawDangerZone(painter, fighter, tickCount, floor) {
   const move = fighter.move;
   const progress = 1 - (move.startup - fighter.moveTime) / move.startup;
@@ -37,7 +37,7 @@ export function drawDangerZone(painter, fighter, tickCount, floor) {
     if (move.laneBothWays) {
       chargeLane(painter, fighter, { floor, direction: -fighter.facing });
     }
-  } else if (move.hitbox) {
+  } else if (move.hitbox && !move.leapAt) {
     slamZone(painter, fighter, floor);
   }
   painter.alpha(1);
