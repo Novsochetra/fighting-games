@@ -16,6 +16,9 @@ export const FX_SPRITES = {
   lion: { frameWidth: 216, frameHeight: 155, frames: 6, ticks: 4, anchorX: 108, anchorY: 151 },
   feathers: { frameWidth: 66, frameHeight: 70, frames: 8, ticks: 2, anchorX: 18, anchorY: 23 },
   crescent: { frameWidth: 96, frameHeight: 64, frames: 6, ticks: 3, anchorX: 88, anchorY: 62 },
+  boulder: { frameWidth: 56, frameHeight: 56, frames: 4, ticks: 4, anchorX: 28, anchorY: 28 },
+  shards: { frameWidth: 64, frameHeight: 64, frames: 6, ticks: 4, anchorX: 32, anchorY: 63 },
+  spike: { frameWidth: 64, frameHeight: 96, frames: 8, ticks: 4, anchorX: 32, anchorY: 95 },
   glint: { frameWidth: 32, frameHeight: 32, frames: 4, ticks: 4, anchorX: 16, anchorY: 16 },
   pounce: { frameWidth: 202, frameHeight: 127, frames: 8, ticks: 3, anchorX: 101, anchorY: 99 },
 };

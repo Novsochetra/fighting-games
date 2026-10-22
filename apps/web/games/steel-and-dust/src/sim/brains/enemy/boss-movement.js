@@ -20,4 +20,13 @@ function duelist(boss, { distance, pace }) {
   }
 }
 
-export const BOSS_MOVEMENT = { duelist };
+// a bulldozer walks at the hero and never steps back, only stopping once in reach
+function bulldozer(boss, { distance, pace }) {
+  if (distance > 40) {
+    walk(boss, 1, pace);
+  } else {
+    standStill(boss);
+  }
+}
+
+export const BOSS_MOVEMENT = { duelist, bulldozer };

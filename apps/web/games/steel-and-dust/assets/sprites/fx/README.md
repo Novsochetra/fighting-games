@@ -21,6 +21,9 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `pounce.png`  | 8 × 202×127  | Bokator: the ground breaking under his slam and the lion's pounce | VFX workbench, "Lion Pounce Impact" (`5b6ed44c-958d-4c1c-b3a4-6b9a6d0250b4`) |
 | `crescent.png` | 6 × 96×64   | Gravel Khan: Khan's Tempest's waves skimming the road (loops) | ChatGPT image, keyed out, shrunk and cut into frames |
 | `glint.png`   | 4 × 32×32    | Gravel Khan: the glint on his blade before the Crescent Dash | ChatGPT image, shrunk and cut into frames |
+| `boulder.png` | 4 × 56×56 | Rust Colossus: a boulder lobbed or falling (loops) | ChatGPT image, shrunk and cut into frames |
+| `shards.png` | 6 × 64×64 | Rust Colossus: a boulder breaking on the ground | ChatGPT image, shrunk and cut into frames |
+| `spike.png` | 8 × 64×96 | Rust Colossus: a stone spike bursting up and crumbling | ChatGPT image, shrunk and cut into frames |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to

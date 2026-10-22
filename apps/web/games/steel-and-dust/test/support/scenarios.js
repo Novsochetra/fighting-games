@@ -37,6 +37,18 @@ export const SCENARIOS = {
     spawnBossAt: 30,
     scheduled: { 600: ['fill'], 1200: ['w2'], 2400: ['w3'], 3600: ['fill'] },
   },
+  // the Rust Colossus in the Old Grove: his walk, Spike Line, Boulder Lob and, below 40%, the
+  // Landslide
+  colossus: {
+    mission: 1,
+    boss: 'colossus',
+    seed: 5150,
+    ticks: 4800,
+    sampleEvery: 30,
+    renderEvery: 120,
+    spawnBossAt: 30,
+    scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
+  },
   // the other Shades: their own fighting style on every weapon and their own ultimate
   firefly: {
     hero: 'firefly',

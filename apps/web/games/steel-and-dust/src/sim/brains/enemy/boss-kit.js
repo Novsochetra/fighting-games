@@ -3,7 +3,7 @@ import { isMissionBoss } from '../../stage/mission.js';
 import { BOSS_MOVEMENT } from './boss-movement.js';
 import { standStill } from './movement.js';
 
-const CALM = { pace: 1, cooldown: 1, chains: {} };
+const CALM = { pace: 1, cooldown: 1, chains: {}, swaps: {} };
 
 function kitState(boss) {
   boss.ai.kit ??= { readyAt: {}, ultReadyAt: 0, chain: null };
@@ -53,7 +53,7 @@ function tryUltimate(game, boss, { kit, state }) {
 function trySkill(game, boss, { kit, state, distance, phase }) {
   for (const skill of kit.skills) {
     if (canUse(game, skill, { state, distance }) && Math.random() < skill.chance) {
-      startMove(game, boss, skill.move);
+      startMove(game, boss, phase.swaps?.[skill.move] ?? skill.move);
       state.readyAt[skill.move] = game.tickCount + Math.round(skill.cooldown * phase.cooldown);
       const repeats = (phase.chains[skill.move] ?? 1) - 1;
       state.chain = repeats > 0 ? { move: skill.move, left: repeats } : null;

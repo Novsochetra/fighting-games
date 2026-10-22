@@ -4,6 +4,7 @@ import { FX_SPRITES } from '../../data/fx-sprites.js';
 import { point } from '../painter.js';
 import { drawBolt, drawBomb, drawFire, drawSand, drawVenom } from './enemy-shots.js';
 import { drawFxFrame } from './fx-sheets.js';
+import { drawBoulder, drawShard, drawSpike } from './rock-hazards.js';
 
 function drawShockPeak(painter, { x, y, height }) {
   for (let row = 0; row <= height; row++) {
@@ -83,6 +84,9 @@ const DRAW_SHOT = {
   bomb: drawBomb,
   fire: drawFire,
   crescent: drawCrescent,
+  boulder: drawBoulder,
+  shard: drawShard,
+  spike: drawSpike,
 };
 
 export function drawProjectiles(painter, projectiles, fxSheets) {

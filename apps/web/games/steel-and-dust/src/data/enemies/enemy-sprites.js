@@ -1,5 +1,7 @@
 const REGULAR = { frameWidth: 128, frameHeight: 80, feetX: 64, feetY: 76 };
 const BOSS = { frameWidth: 192, frameHeight: 112, feetX: 96, feetY: 108 };
+// a boss whose own moves reach high (a boulder held overhead) keeps its old frames 48px lower
+const TALL_BOSS = { frameWidth: 192, frameHeight: 160, feetX: 96, feetY: 156 };
 
 // one PNG per enemy in assets/sprites/enemies/ with a row per strip, in the order listed;
 // "attack 9/4" is a strip of 9 frames whose frame 4 holds while the hitbox is out
@@ -36,8 +38,8 @@ export const ENEMY_SPRITES = {
   queen: sheet('queen.png', 'idle 4, walk 8, attack 9/3, hurt 4, ko 9, slam 9/4, charge 8', BOSS),
   colossus: sheet(
     'colossus.png',
-    'idle 4, walk 8, attack 9/3, hurt 4, ko 9, slam 9/4, charge 8',
-    BOSS,
+    'idle 4, walk 8, attack 9/3, hurt 4, ko 9, slam 9/4, charge 8, boulderLob 10/6, spikeLine 8/4, landslide 12/9',
+    TALL_BOSS,
   ),
   ghoul: sheet('ghoul.png', 'idle 4, walk 8, attack 9/5, hurt 4, ko 9'),
   hound: sheet('hound.png', 'idle 4, walk 8, attack 9/6, hurt 4, ko 9'),

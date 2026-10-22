@@ -1,6 +1,11 @@
+import { shake } from '../fx/camera-fx.js';
+import { lobBoulder } from '../hazards/boulders.js';
 import { spawnCrescent } from '../hazards/crescents.js';
+import { spawnShockwave } from '../hazards/shockwaves.js';
+import { raiseSpikes } from '../hazards/spikes.js';
 import { addBurst } from '../summons/bursts.js';
 import { announceBossUltimate } from './announce.js';
+import { dropRockfall, rockfallIndex } from './rockfall.js';
 import { blowWarHorn } from './war-horn.js';
 
 // the light catches the blade drawn back behind the boss, a beat before it springs
@@ -9,18 +14,32 @@ function glint(game, fighter) {
   addBurst(game, { sprite: 'glint', x, y: fighter.y - 14, scale: 1 });
 }
 
-// a boss move's own beats, each on the tick its data names
+function quake(game, fighter) {
+  spawnShockwave(game, fighter);
+  shake(game, 4, 14);
+}
+
+const atStrike = (field) => (move, time) => Boolean(move[field]) && time === move.startup;
+
+// [is it this tick of the move, what happens]: a boss move's own beats, on the ticks its data names
+const CUES = [
+  [(move, time) => time === move.glint, glint],
+  [(move, time) => time === 0 && move.bossUltimate, announceBossUltimate],
+  [atStrike('horn'), (game, fighter, move) => blowWarHorn(game, fighter, move.horn)],
+  [(move, time) => move.crescents?.includes(time), spawnCrescent],
+  [atStrike('boulder'), lobBoulder],
+  [atStrike('spikes'), (game, fighter, move) => raiseSpikes(game, fighter, move.spikes)],
+  [(move, time) => move.quakes?.includes(time), quake],
+  [
+    (move, time) => move.rockfall && rockfallIndex(move, time) >= 0,
+    (game, fighter, move, time) => dropRockfall(game, fighter, rockfallIndex(move, time)),
+  ],
+];
+
 export function playMoveCues(game, fighter, move, time) {
-  if (time === move.glint) {
-    glint(game, fighter);
-  }
-  if (time === 0 && move.bossUltimate) {
-    announceBossUltimate(game, fighter, move);
-  }
-  if (time === move.startup && move.horn) {
-    blowWarHorn(game, fighter, move.horn);
-  }
-  if (move.crescents?.includes(time)) {
-    spawnCrescent(game, fighter);
+  for (const [isNow, play] of CUES) {
+    if (isNow(move, time)) {
+      play(game, fighter, move, time);
+    }
   }
 }

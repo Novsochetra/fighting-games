@@ -55,8 +55,10 @@ function walkFrame(fighter, sprite) {
   return frame;
 }
 
+// a move plays the strip it names, or the one named as it is, or the attack strip
 export function stripForMove(sprite, move) {
-  return sprite.strips[move.id] ? move.id : 'attack';
+  const own = move.strip ?? move.id;
+  return sprite.strips[own] ? own : 'attack';
 }
 
 // a rush with its own strip (a lunge or a charge) keeps running through it; other strikes hold
@@ -80,7 +82,7 @@ function timelineFrame({ frameAt }, moveTime) {
 function attackFrame(fighter, sprite) {
   const { move, moveTime } = fighter;
   const name = stripForMove(sprite, move);
-  if (move.frameAt && name === move.id) {
+  if (move.frameAt && name === (move.strip ?? move.id)) {
     return [name, timelineFrame(move, moveTime)];
   }
   const strike = sprite.strips[name].strike ?? 0;

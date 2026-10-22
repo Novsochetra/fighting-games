@@ -4,12 +4,14 @@ import { trailColorOf } from '../fighters/hero-colors.js';
 import { showHint } from '../hints.js';
 import { breakCratesIn } from '../items/crates.js';
 import { groundAt } from '../stage/terrain.js';
+import { flyBoulder } from './boulders.js';
 import { skimGround } from './crescents.js';
 import { flyBomb } from './enemy-shots.js';
 import { diveToward } from './shot-aim.js';
 import { hitArea } from './shot-hits.js';
 import { leaveTrail } from './shot-trails.js';
 import { SHOT_RULES } from './shot-rules.js';
+import { riseSpike } from './spikes.js';
 
 const DEFAULT_SPEED = 4.6;
 const KNIFE_SPEED = 3.1;
@@ -47,10 +49,17 @@ export function tossKnife(game, fighter) {
   game.io.sfx('swingSpear', false, { vol: 0.6, x: fighter.x, dir: fighter.facing });
 }
 
-const OWN_FLOOR = new Set(['bomb', 'fire', 'crescent']);
+// shots that fly their own way, and find their own floor, instead of running straight
+const FLIGHT = {
+  bomb: flyBomb,
+  crescent: skimGround,
+  shard: skimGround,
+  boulder: flyBoulder,
+  spike: riseSpike,
+};
+const OWN_FLOOR = new Set(['fire', ...Object.keys(FLIGHT)]);
 
-// a thrown or fired shot breaks on a rise in the road; fire pots, fire and crescent waves find
-// their own floor
+// a thrown or fired shot breaks on a rise in the road
 export function hitsGround(terrain, shot) {
   return !OWN_FLOOR.has(shot.kind) && shot.y >= groundAt(terrain, shot.x);
 }
@@ -58,10 +67,8 @@ export function hitsGround(terrain, shot) {
 function moveShot(game, shot) {
   shot.x += shot.direction * (shot.speed ?? DEFAULT_SPEED);
   shot.time++;
-  if (shot.kind === 'bomb') {
-    flyBomb(game, shot);
-  } else if (shot.kind === 'crescent') {
-    skimGround(game, shot);
+  if (FLIGHT[shot.kind]) {
+    FLIGHT[shot.kind](game, shot);
   } else if (shot.vy) {
     shot.y += shot.vy;
   }
@@ -93,7 +100,7 @@ export function updateProjectiles(game) {
     if ((shot.kind === 'knife' || shot.kind === 'bolt') && shot.side === 'enemy') {
       showHint(game, 'sling');
     }
-    if (rules.hit) {
+    if (rules.hit && (!rules.armed || rules.armed(shot))) {
       hitArea(game, { shot, area, hit: rules.hit });
     }
     if (shot.side === 'player') {

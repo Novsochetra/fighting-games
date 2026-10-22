@@ -43,10 +43,12 @@ ramps keep their order and the outlines, blades and transparency stay as they we
 
 A boss with a kit of its own (`docs/boss-kits.md`) has more rows under the seven above, one per move
 of its own, named as the move is. Each plays on the move's own timeline (`frameAt`), so its strike
-frame only has to lie inside the strip. They are drawn by an image model, then lifted off their
+frame only has to lie inside the strip. A boulder held overhead does not fit a 192×112 frame, so `colossus.png` has 192×160 frames with the
+feet at y = 156: its first seven rows are the old ones moved 48px down. They are drawn by an image model, then lifted off their
 background, cut into frames, shrunk to the boss's idle height, stood on the feet line and folded
 into the sheet's own palette.
 
 | Sheet      | Rows added                                                                                       |
 | ---------- | ------------------------------------------------------------------------------------------------ |
 | `khan.png` | `warHorn` 8 (blows a ram's horn), `crescentDash` 10 (crouch, lunge, slash), `tempest` 12 (three low swings) |
+| `colossus.png` | `boulderLob` 10 (tears up a boulder, hurls it), `spikeLine` 8 (a stomp), `landslide` 12 (pounds the ground twice, roars) |

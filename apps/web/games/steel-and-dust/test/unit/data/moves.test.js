@@ -67,6 +67,10 @@ describe('move tables', () => {
       'crescentDash',
       'warHorn',
       'tempest',
+      'boulderLob',
+      'spikeLine',
+      'spikeCross',
+      'landslide',
     ]);
   });
 
