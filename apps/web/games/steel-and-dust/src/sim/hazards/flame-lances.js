@@ -1,20 +1,22 @@
-import { groundAt, isWall } from '../stage/terrain.js';
+import { groundAt } from '../stage/terrain.js';
 
 const LANCE_SPEED = 6;
 const LANCE_DAMAGE = 14;
-// the chest furnace's mouth on the firing frame, in sheet pixels from his feet halved and scaled
-const CHEST = { ahead: 6, up: 20 };
 const LANCE_LENGTH = 70;
+// the burning core reaches this far above and below the lance's middle
+export const LANCE_CORE = 4;
+// the flame in the furnace's open mouth on the firing frame, in sheet pixels from his feet halved
+// and scaled; a lance starts a little inside that flame's tip, so it grows out of it
+export const FURNACE_MOUTH = { ahead: 4, up: 19 };
 
-// a lance of flame leaves the open furnace and runs down the arena at its height: jump it
+// a lance of flame leaves the open furnace and runs level down the arena at chest height: jump it
 export function looseLance(game, boss) {
-  const x = boss.x + boss.facing * CHEST.ahead * boss.scale;
+  const x = boss.x + boss.facing * FURNACE_MOUTH.ahead * boss.scale;
   game.projectiles.push({
     kind: 'flameLance',
     x,
     from: x,
-    y: groundAt(game.terrain, x) - CHEST.up * boss.scale,
-    height: CHEST.up * boss.scale,
+    y: boss.y - FURNACE_MOUTH.up * boss.scale,
     direction: boss.facing,
     speed: LANCE_SPEED,
     side: boss.side,
@@ -35,12 +37,7 @@ export function lanceSpan(lance) {
   return { left: lance.x, right: Math.min(tail, lance.from) };
 }
 
-// it keeps its height over the road and burns out against a rise too tall for it
+// it flies level and burns out against a rise in the road that comes up to its core
 export function runLance(game, lance) {
-  const floor = groundAt(game.terrain, lance.x);
-  if (isWall(game.terrain, lance.x, lance.y + lance.height)) {
-    lance.dead = true;
-    return;
-  }
-  lance.y = floor - lance.height;
+  lance.dead = groundAt(game.terrain, lance.x) <= lance.y + LANCE_CORE;
 }

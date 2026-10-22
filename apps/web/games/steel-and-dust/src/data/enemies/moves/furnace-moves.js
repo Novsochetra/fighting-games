@@ -14,7 +14,9 @@ const fireFlail = (life) => ({
 });
 
 // the Furnace Knight's own moves, each on the timeline of its strip (frameAt: the tick each frame
-// starts on; loopFrames: the frames he holds while the furnace fires or cools)
+// starts on; loopFrames: the frames he loops while the furnace fires or cools). The Meltdown strip
+// braces and opens the furnace (0-3), fires (4), blazes between lances (5), stops (6), glows red
+// hot (7), cools (8) and is back on guard (9)
 export const FURNACE_MOVES = {
   fireFlail: defineMove(fireFlail(240)),
   fireFlailHot: defineMove(fireFlail(420)),
@@ -38,9 +40,9 @@ export const FURNACE_MOVES = {
     bossUltimate: true,
     lane: 384,
     lances: [72, 122, 172],
-    loopFrames: [4, 4, 8],
+    loopFrames: [4, 5, 25],
     then: 'overheated',
-    frameAt: [0, 8, 18, 30, 72, 219, 220, 221, 222],
+    frameAt: [0, 8, 18, 30, 72, 97, 219, 220, 221, 222],
   }),
   // red hot and venting steam, his armor is off: every hit lands, for double damage
   overheated: defineMove({
@@ -52,7 +54,7 @@ export const FURNACE_MOVES = {
     exposed: true,
     vents: 30,
     strip: 'meltdown',
-    loopFrames: [6, 7, 20],
-    frameAt: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    loopFrames: [7, 8, 20],
+    frameAt: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   }),
 };

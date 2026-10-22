@@ -1,5 +1,5 @@
 import { isBurning } from './blazes.js';
-import { lanceSpan } from './flame-lances.js';
+import { LANCE_CORE, lanceSpan } from './flame-lances.js';
 
 const BLAZE_HIT = { knockback: [1.2, -1.2], knockAway: true, hitstop: 2, hitstun: 10 };
 const POT_HIT = { knockback: [2, -2.4], knockdown: true, hitstop: 6, hitstun: 20 };
@@ -39,7 +39,7 @@ export const FORGE_RULES = {
     range: 140,
     area: (lance) => {
       const { left, right } = lanceSpan(lance);
-      return { x: left, y: lance.y - 4, width: right - left, height: 8 };
+      return { x: left, y: lance.y - LANCE_CORE, width: right - left, height: LANCE_CORE * 2 };
     },
     hit: LANCE_HIT,
     enemyWeapon: 'none',

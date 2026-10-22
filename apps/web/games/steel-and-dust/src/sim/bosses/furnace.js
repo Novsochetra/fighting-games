@@ -2,17 +2,15 @@ import { BOSS_ULT_COLORS } from '../../art/boss-colors.js';
 import { floorUnder } from '../fighters/terrain-motion.js';
 import { shake } from '../fx/camera-fx.js';
 import { addFloatText } from '../fx/effects.js';
-import { looseLance } from '../hazards/flame-lances.js';
+import { FURNACE_MOUTH, looseLance } from '../hazards/flame-lances.js';
 import { addBurst } from '../summons/bursts.js';
 
-// the furnace's mouth on the firing frame, in sheet pixels from his feet halved and scaled
-const CHEST = { ahead: 6, up: 20 };
 // the furnace roars this many ticks before each lance, so the player can time the jump
 const ROAR_LEAD = 16;
 
 function flare(game, boss, scale) {
-  const x = boss.x + boss.facing * CHEST.ahead * boss.scale;
-  const y = boss.y - CHEST.up * boss.scale;
+  const x = boss.x + boss.facing * FURNACE_MOUTH.ahead * boss.scale;
+  const y = boss.y - FURNACE_MOUTH.up * boss.scale;
   addBurst(game, { sprite: 'flare', x, y, scale, direction: boss.facing });
 }
 

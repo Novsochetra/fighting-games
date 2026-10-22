@@ -168,7 +168,8 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    checkerboard, also shut inside the flail's fiery arcs, so the keying also clears closed pockets
    made of the two checker greys and peels the grey fringe off the arcs. The Meltdown image drew each
    beam frame's flame over the next frame's body, so only its first firing frame is used and the
-   beam is drawn as lances, grown out of his chest. In place of one sweeping beam (a beam the hero
+   beam is drawn as lances, grown out of the flame in his chest and flying level at its height; he
+   leans into each shot and stands blazing between them. In place of one sweeping beam (a beam the hero
    cannot crouch under would be unfair), it is three lances at chest height, each a beat after the
    furnace roars, to jump. He overheats as soon as the last lance has gone, so no hit can knock
    him out of it, and while overheated each hit lands for double where he stands. Burning ground and
