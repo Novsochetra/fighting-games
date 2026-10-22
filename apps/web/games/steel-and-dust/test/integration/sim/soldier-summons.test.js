@@ -49,13 +49,6 @@ describe('the relief soldiers in a running fight', () => {
     expect(raider.hp).toBe(raider.maxHp);
   });
 
-  it('only plays when it has no hit of its own, as in the ultimate', () => {
-    const { game, raider } = gameWithRaider();
-    raiseSoldier(game, { x: raider.x - 20, direction: 1 });
-    runTicks(game, SOLDIER_TIMING.end + 1);
-    expect(raider.hp).toBe(raider.maxHp);
-  });
-
   it('a finisher raises one soldier per count, each a beat behind and further ahead', () => {
     const { game } = gameWithRaider();
     raiseComboSoldiers(game, game.player, 3);

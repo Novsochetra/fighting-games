@@ -5,6 +5,7 @@ import { dimForBossUltimate, isBossUltimate } from './fighters/boss-ultimate.js'
 import { drawFighter } from './fighters/draw-fighter.js';
 import { heroSheetFor } from './fighters/hero-sheets.js';
 import { drawTrail } from './fighters/trail.js';
+import { drawCarvings } from './fx/carvings.js';
 import { drawDebugBoxes } from './fx/debug-boxes.js';
 import { drawEchoes } from './fx/echoes.js';
 import { drawEffects } from './fx/effects.js';
@@ -43,9 +44,10 @@ function dimForUltimate(painter, game, cameraX) {
   painter.alpha(1);
 }
 
-// relief soldiers, the hero's echoes and the bursts rising behind him
+// relief soldiers, carvings, the hero's echoes and the bursts rising behind him
 function drawBehindFighters(painter, { game, view }) {
   drawSoldiers(painter, { summons: game.summons, view });
+  drawCarvings(painter, { summons: game.summons, view });
   drawEchoes(painter, { summons: game.summons, view });
   drawBehindBursts(painter, game.summons, view.fxSheets);
 }

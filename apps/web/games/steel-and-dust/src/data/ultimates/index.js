@@ -1,6 +1,6 @@
 import { heroById } from '../heroes.js';
 import { ABSOLUTE_ZERO } from './absolute-zero.js';
-import { MARCH_OF_THE_BAYON } from './march-of-the-bayon.js';
+import { THOUSAND_CUTS } from './thousand-cuts.js';
 import { PHOENIX_PYRE } from './phoenix-pyre.js';
 import { POUNDING_LION } from './pounding-lion.js';
 import { STAMPEDE } from './stampede.js';
@@ -14,7 +14,7 @@ export const ULTIMATES = {
   blue: ABSOLUTE_ZERO,
   ember: PHOENIX_PYRE,
   bokator: POUNDING_LION,
-  angkor: MARCH_OF_THE_BAYON,
+  angkor: THOUSAND_CUTS,
 };
 
 export const ULT_START_STATES = new Set([

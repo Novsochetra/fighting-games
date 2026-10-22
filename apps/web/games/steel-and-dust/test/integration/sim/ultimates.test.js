@@ -177,39 +177,66 @@ describe("each Shade's ultimate", () => {
     expect(game.player).toMatchObject({ state: 'idle', invincible: 40, rush: null });
   });
 
-  it('Angkor: a rank of carved soldiers fights each way, then he leaps and splits the ground', () => {
+  it('Angkor: cuts through every raider, leaving cuts and carvings, then every cut lands at once', () => {
     const game = startUltimate('angkor');
-    const directions = new Set();
     const standing = game.player.y;
-    const seen = watchUltimate(game, (current) => {
+    const cuts = new Set();
+    const carvings = new Set();
+    let hpBeforeRelease = null;
+    const seen = watchUltimate(game, (current, watched) => {
       for (const summon of current.summons) {
-        if (summon.kind === 'soldier') {
-          directions.add(summon.direction);
+        if (summon.kind === 'hangingCut') {
+          cuts.add(summon);
+        }
+        if (summon.kind === 'carving') {
+          carvings.add(summon);
         }
       }
+      if (current.player.stateTime === ULTIMATES.angkor.releaseAt - 1 && !hpBeforeRelease) {
+        hpBeforeRelease = raiders(current).map((raider) => raider.hp);
+      }
+      watched.cutsHanging = Math.max(
+        watched.cutsHanging ?? 0,
+        current.summons.filter((summon) => summon.kind === 'hangingCut').length,
+      );
     });
-    expect(seen.kinds).toEqual(new Set(['soldier', 'burst']));
-    expect(directions).toEqual(new Set([1, -1]));
-    const { blow, rank, ranks, beats, split, leapHeight } = ULTIMATES.angkor;
-    const perRank = blow.damage * (beats.length - 1) + rank.damage;
-    raiders(game).forEach((raider) => {
+    expect(seen.kinds).toEqual(new Set(['hangingCut', 'carving', 'burst']));
+    const { passes, cut, sever, split, leapHeight } = ULTIMATES.angkor;
+    // a cut hangs on a raider for every pass, all of them at once before they land
+    expect(cuts.size).toBe(passes.length);
+    expect(seen.cutsHanging).toBe(passes.length);
+    expect(new Set([...cuts].map((hanging) => hanging.target))).toEqual(new Set(raiders(game)));
+    // his shape is left carved where he stopped after every pass but the last, facing both ways
+    expect(carvings.size).toBe(passes.length - 1);
+    expect(new Set([...carvings].map((carving) => carving.direction))).toEqual(new Set([1, -1]));
+    raiders(game).forEach((raider, i) => {
+      const made = [...cuts].filter((hanging) => hanging.target === raider).length;
+      expect(raider.maxHp - hpBeforeRelease[i]).toBe(cut.damage * made);
       expect(raider.maxHp - raider.hp).toBeGreaterThanOrEqual(
-        perRank * ranks.length + split.damage,
+        (cut.damage + sever.damage) * made + split.damage,
       );
     });
     expect(seen.lowest).toBe(standing - leapHeight);
-    expect(game.player).toMatchObject({ state: 'idle', invincible: 40, y: standing });
+    expect(game.summons.filter((summon) => summon.kind !== 'burst')).toEqual([]);
+    expect(game.player).toMatchObject({ state: 'idle', invincible: 40, y: standing, cuts: null });
   });
 
-  it('Angkor: each rank rises in a wave, then all of it strikes in step on every beat', () => {
+  it('Angkor: the cuts land together, one great slash across the field, and every carving swings', () => {
     const game = startUltimate('angkor');
-    const { ranks, beats } = ULTIMATES.angkor;
-    runTicks(game, ranks[0].at + 1);
-    const rank = game.summons.filter((summon) => summon.kind === 'soldier');
-    const waits = new Set(rank.map((soldier) => soldier.wait));
-    expect(waits.size).toBeGreaterThan(2);
-    expect(rank.every((soldier) => soldier.beats === beats)).toBe(true);
-    expect(rank.some((soldier) => Math.abs(soldier.x - game.player.x) < 16)).toBe(false);
+    const { releaseAt } = ULTIMATES.angkor;
+    while (game.player.stateTime < releaseAt) {
+      runTicks(game, 1);
+    }
+    const severed = game.summons.filter((summon) => summon.kind === 'hangingCut');
+    expect(severed.length).toBeGreaterThan(0);
+    expect(severed.every((hanging) => hanging.severedAt !== null)).toBe(true);
+    expect(game.summons.filter((summon) => summon.sprite === 'sever')).toHaveLength(severed.length);
+    const carvings = game.summons.filter((summon) => summon.kind === 'carving');
+    expect(carvings.every((carving) => carving.swungAt !== null)).toBe(true);
+    const [slash] = game.effects.filter((effect) => effect.kind === 'screenCut');
+    // across the middle of the field (the camera may have eased on a pixel since)
+    expect(Math.abs(slash.x - (game.camera.x + VIEW_WIDTH / 2))).toBeLessThan(4);
+    expect(game.slashBandTime).toBe(0);
   });
 
   it('Angkor: the chop opens a fissure across the whole screen, a pillar of light under every raider', () => {

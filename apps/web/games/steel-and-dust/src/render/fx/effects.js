@@ -2,6 +2,7 @@ import { COLORS } from '../../art/colors.js';
 import { createRng, easeOutCubic } from '../../lib/math.js';
 import { point } from '../painter.js';
 import { drawFissure } from './fissure.js';
+import { drawScreenCut } from './screen-cut.js';
 
 const STAR = [
   [1, 0],
@@ -108,7 +109,7 @@ function cut(painter, effect, progress) {
   painter.alpha(1);
 }
 
-const DRAW_EFFECT = { ring, lines, impact, cut, fissure: drawFissure };
+const DRAW_EFFECT = { ring, lines, impact, cut, fissure: drawFissure, screenCut: drawScreenCut };
 
 export function drawEffects(painter, effects) {
   for (const effect of effects) {

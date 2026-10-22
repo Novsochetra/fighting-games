@@ -17,35 +17,9 @@ const COMBO_SOLDIER = {
   hitstun: 22,
 };
 
-// when it strikes: a finisher's soldier thrusts once; an ultimate's soldier waits in the ground until
-// its rank's wave reaches it, then fights a chain of moves, striking in step with the rank on its
-// `beats`, and crumbles a while after its last
-export function soldierTiming(soldier) {
-  const { rise, strike, crumble: crumbleAt, end } = SOLDIER_TIMING;
-  const beats = soldier.beats || [strike];
-  const lastBeat = beats[beats.length - 1];
-  return {
-    wait: soldier.wait || 0,
-    rise,
-    beats,
-    strike: beats[0],
-    crumble: lastBeat + crumbleAt - strike,
-    end: lastBeat + end - strike,
-  };
-}
-
-// a soldier carved on the Bayon's walls stepping out of the ground in the hero's own shape; with no
-// hit it only plays, for an ultimate that strikes every raider itself
-export function raiseSoldier(game, soldier) {
-  const {
-    x,
-    direction,
-    hit = null,
-    delay = 0,
-    wait = 0,
-    moves = ['thrust'],
-    beats = null,
-  } = soldier;
+// a soldier carved on the Bayon's walls stepping out of the ground ahead of the hero in his own
+// shape, and thrusting once
+export function raiseSoldier(game, { x, direction, hit, delay = 0 }) {
   game.summons.push({
     kind: 'soldier',
     hero: game.settings.hero,
@@ -54,9 +28,6 @@ export function raiseSoldier(game, soldier) {
     direction,
     side: 'player',
     time: -delay,
-    wait,
-    moves,
-    beats,
     hit,
     hitTargets: new Set(),
   });
@@ -67,13 +38,14 @@ function thrustArea(soldier) {
   return { x, y: soldier.y - 36, width: REACH, height: 30 };
 }
 
-function crumble(game, soldier) {
-  addDust(game, { x: soldier.x, y: soldier.y, count: 4, color: FX_COLORS.reliefStone });
+// a carving breaking up: sandstone chunks and dust falling off where it stands
+export function crumbleStone(game, { x, y }) {
+  addDust(game, { x, y, count: 4, color: FX_COLORS.reliefStone });
   for (let i = 0; i < 6; i++) {
     game.particles.push({
       kind: 'chunk',
-      x: soldier.x + randomBetween(-8, 8),
-      y: soldier.y - randomBetween(4, 34),
+      x: x + randomBetween(-8, 8),
+      y: y - randomBetween(4, 34),
       vx: randomBetween(-1, 1),
       vy: -randomBetween(0.4, 1.8),
       life: randomBetween(18, 28) | 0,
@@ -91,16 +63,15 @@ function thrust(game, soldier) {
 }
 
 export function updateSoldier(game, soldier) {
-  const { wait, strike, crumble: crumbleAt, end } = soldierTiming(soldier);
-  if (soldier.time === wait + 1) {
+  const { strike, crumble, end } = SOLDIER_TIMING;
+  if (soldier.time === 1) {
     addDust(game, { x: soldier.x, y: soldier.y, count: 3, color: FX_COLORS.reliefStone });
   }
-  const striking = soldier.time >= strike && soldier.time < strike + STRIKE_TICKS;
-  if (soldier.hit && striking) {
+  if (soldier.time >= strike && soldier.time < strike + STRIKE_TICKS) {
     thrust(game, soldier);
   }
-  if (soldier.time === crumbleAt) {
-    crumble(game, soldier);
+  if (soldier.time === crumble) {
+    crumbleStone(game, soldier);
   }
   soldier.done = soldier.time >= end;
 }
