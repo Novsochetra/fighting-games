@@ -133,4 +133,7 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    him, and the dash's dust trail was left out: the gravel the waves throw up was enough.
 2. **Rust Colossus**: done. His sheet has taller frames (192×160) so the boulder held overhead
    fits. The landing spot of every boulder is marked with the same blinking red bar as the lanes.
-3. Then down the road, 3 to 12. Naga Raja and Bayon Guardian wait for their new sheets.
+3. **Ironhorn**: done. Taller frames too (the mace swung overhead). The stars GPT drew into the
+   Dazed strip were keyed out and are drawn from the stars effect instead, so they also circle him
+   after the Stampede. Every wall hit, not only the Stampede's, knocks a bamboo stalk down.
+4. Then down the road, 4 to 12. Naga Raja and Bayon Guardian wait for their new sheets.

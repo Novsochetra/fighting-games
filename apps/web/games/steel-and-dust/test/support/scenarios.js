@@ -49,6 +49,18 @@ export const SCENARIOS = {
     spawnBossAt: 30,
     scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
   },
+  // Ironhorn at the Bamboo Pass: his rushes, the daze when one meets the wall, the uppercut and,
+  // below 40%, the Stampede
+  ironhorn: {
+    mission: 2,
+    boss: 'ironhorn',
+    seed: 42,
+    ticks: 4800,
+    sampleEvery: 30,
+    renderEvery: 120,
+    spawnBossAt: 30,
+    scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
+  },
   // the other Shades: their own fighting style on every weapon and their own ultimate
   firefly: {
     hero: 'firefly',

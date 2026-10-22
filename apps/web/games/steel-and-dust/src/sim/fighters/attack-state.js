@@ -7,6 +7,7 @@ import { fireEnemyShot } from '../hazards/enemy-shots.js';
 import { spawnSlashWave, tossKnife } from '../hazards/projectiles.js';
 import { spawnShockwave } from '../hazards/shockwaves.js';
 import { playMoveCues } from '../bosses/move-cues.js';
+import { hitWall } from '../bosses/wall-hit.js';
 import { SIGNATURE_STRIKES } from '../summons/signatures.js';
 import { endMove } from './actions.js';
 import { arenaBounds } from './arena-bounds.js';
@@ -69,6 +70,9 @@ function sustainRush(game, fighter, move) {
     const y = floorUnder(game.terrain, fighter);
     addDust(game, { x: fighter.x + fighter.facing * 10, y, count: 6 });
     game.io.sfx('heavy');
+    if (move.wallNext) {
+      hitWall(game, fighter, move);
+    }
   }
 }
 
@@ -105,6 +109,9 @@ export function updateAttack(game, fighter) {
   const active = time >= move.startup && time < activeEnd(move);
   if (active) {
     whileActive(game, fighter, move, time);
+  }
+  if (fighter.move !== move) {
+    return;
   }
   fighter.hitboxActive = active && Boolean(move.hitbox);
   fighter.moveTime++;

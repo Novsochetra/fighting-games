@@ -14,6 +14,15 @@ function glint(game, fighter) {
   addBurst(game, { sprite: 'glint', x, y: fighter.y - 14, scale: 1 });
 }
 
+// stars circle the head of a dazed boss, a new ring every so often while the daze lasts
+function circleStars(game, fighter, move) {
+  const x = fighter.x + fighter.facing * 4;
+  addBurst(game, { sprite: 'stars', x, y: fighter.y + move.stars.y, scale: 1 });
+}
+
+const whileDazed = (move, time) =>
+  Boolean(move.stars) && time % move.stars.every === 0 && time < move.startup + move.active;
+
 function quake(game, fighter) {
   spawnShockwave(game, fighter);
   shake(game, 4, 14);
@@ -24,7 +33,8 @@ const atStrike = (field) => (move, time) => Boolean(move[field]) && time === mov
 // [is it this tick of the move, what happens]: a boss move's own beats, on the ticks its data names
 const CUES = [
   [(move, time) => time === move.glint, glint],
-  [(move, time) => time === 0 && move.bossUltimate, announceBossUltimate],
+  [(move, time) => time === 0 && move.bossUltimate && !move.continues, announceBossUltimate],
+  [whileDazed, circleStars],
   [atStrike('horn'), (game, fighter, move) => blowWarHorn(game, fighter, move.horn)],
   [(move, time) => move.crescents?.includes(time), spawnCrescent],
   [atStrike('boulder'), lobBoulder],

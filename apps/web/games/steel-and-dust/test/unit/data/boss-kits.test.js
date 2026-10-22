@@ -7,12 +7,22 @@ import { ENEMY_TYPES } from '../../../src/data/enemies/enemy-types.js';
 import { moveLength } from '../../../src/data/moves/define-move.js';
 import { BOSS_MOVEMENT } from '../../../src/sim/brains/enemy/boss-movement.js';
 
-const kitMoves = (kit) => [
-  ...kit.close.moves,
-  ...kit.skills.map((skill) => skill.move),
-  ...Object.values(kit.phaseTwo?.swaps ?? {}),
-  ...(kit.ultimate ? [kit.ultimate.move] : []),
-];
+// a kit's moves, and every move a rush turns into at the wall
+function kitMoves(kit) {
+  const moves = [
+    ...kit.close.moves,
+    ...kit.skills.map((skill) => skill.move),
+    ...Object.values(kit.phaseTwo?.swaps ?? {}),
+    ...(kit.ultimate ? [kit.ultimate.move] : []),
+  ];
+  for (const id of moves) {
+    const next = ENEMY_MOVES[id]?.wallNext?.move;
+    if (next && !moves.includes(next)) {
+      moves.push(next);
+    }
+  }
+  return moves;
+}
 
 describe('the boss kits', () => {
   it('belong to bosses, and name a way of moving the brain knows', () => {
@@ -36,6 +46,25 @@ describe('the boss kits', () => {
             `${kind} ${id}`,
           ).toEqual(move.frameAt);
           expect(move.frameAt.at(-1), `${kind} ${id}`).toBeLessThan(moveLength(move));
+        }
+      }
+    }
+  });
+
+  it('loop only frames of their own strips, and turn at the wall only into moves that exist', () => {
+    for (const [kind, kit] of Object.entries(BOSS_KITS)) {
+      const sprite = ENEMY_SPRITES[ENEMY_TYPES[kind].sprite];
+      for (const id of kitMoves(kit)) {
+        const move = ENEMY_MOVES[id];
+        if (move.loopFrames) {
+          const [first, last, ticks] = move.loopFrames;
+          expect(first, `${kind} ${id}`).toBeLessThanOrEqual(last);
+          expect(last, `${kind} ${id}`).toBeLessThan(sprite.strips[move.strip ?? id].frames);
+          expect(ticks, `${kind} ${id}`).toBeGreaterThan(0);
+        }
+        if (move.wallNext) {
+          expect(move.sustain, `${kind} ${id}`).toBe(true);
+          expect(ENEMY_MOVES[move.wallNext.move], `${kind} ${id}`).toBeDefined();
         }
       }
     }

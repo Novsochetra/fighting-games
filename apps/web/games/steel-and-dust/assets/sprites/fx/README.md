@@ -29,6 +29,9 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `boulder.png` | 4 × 56×56 | Rust Colossus: a boulder lobbed or falling (loops) | ChatGPT image, shrunk and cut into frames |
 | `shards.png` | 6 × 64×64 | Rust Colossus: a boulder breaking on the ground | ChatGPT image, shrunk and cut into frames |
 | `spike.png` | 8 × 64×96 | Rust Colossus: a stone spike bursting up and crumbling | ChatGPT image, shrunk and cut into frames |
+| `impact.png` | 6 × 104×104 | Ironhorn: a rush smashing into the wall | ChatGPT image, shrunk and cut into frames |
+| `bamboo.png` | 4 × 160×168 | Ironhorn: a bamboo stalk toppling into the arena | ChatGPT image, shrunk and cut into frames |
+| `stars.png` | 4 × 56×32 | Ironhorn: stars circling his dazed head (loops) | ChatGPT image, shrunk and cut into frames |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to

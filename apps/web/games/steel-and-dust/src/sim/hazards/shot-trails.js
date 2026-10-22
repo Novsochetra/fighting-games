@@ -143,6 +143,7 @@ const TRAILS = {
   boulder: rockTrail,
   shard: () => {},
   spike: () => {},
+  bamboo: () => {},
 };
 
 export function leaveTrail(game, shot) {

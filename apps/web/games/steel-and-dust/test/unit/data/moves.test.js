@@ -71,6 +71,13 @@ describe('move tables', () => {
       'spikeLine',
       'spikeCross',
       'landslide',
+      'hornRush',
+      'uppercut',
+      'dazed',
+      'dazedLong',
+      'stampede',
+      'stampedeBack',
+      'stampedeLast',
     ]);
   });
 

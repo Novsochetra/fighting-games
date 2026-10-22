@@ -47,6 +47,20 @@ function drawCrack(painter, spike) {
   painter.rect(spike.x - 1, spike.y - 2, 2, 1);
 }
 
+// a toppled stalk lies where it fell, then fades
+export function drawBamboo(painter, stalk, sheets) {
+  const frame = Math.min(3, Math.floor(stalk.time / 6));
+  painter.alpha(clamp((70 - stalk.time) / 12, 0, 1));
+  drawFxFrame(painter, sheets, {
+    name: 'bamboo',
+    frame,
+    x: stalk.x,
+    y: stalk.y,
+    facing: stalk.direction,
+  });
+  painter.alpha(1);
+}
+
 export function drawSpike(painter, spike, sheets) {
   if (spike.time < 0) {
     drawCrack(painter, spike);

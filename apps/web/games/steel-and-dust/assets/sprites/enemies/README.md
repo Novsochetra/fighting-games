@@ -38,13 +38,14 @@ ramps keep their order and the outlines, blades and transparency stay as they we
 | -------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `naga.png`     | `cobra.png`    | Naga Raja: green scales to deep jade and emerald with turquoise highlights, the rust-red hood to gold over dark bronze, a richer gold belly, a turquoise slash |
 | `guardian.png` | `colossus.png` | Bayon Guardian: rust to cool grey-green sandstone, a few speckled rust shades to moss, the bright rust highlights and the red eye to a warm gold glow          |
+| `ironhorn.png` | `hornRush` 10 (paws, runs, skids), `uppercut` 8, `dazed` 6 (a loop; the stars are `fx/stars.png`), `stampede` 12 (rears, stomps, runs, skids) |
 
 ## Boss kits
 
 A boss with a kit of its own (`docs/boss-kits.md`) has more rows under the seven above, one per move
 of its own, named as the move is. Each plays on the move's own timeline (`frameAt`), so its strike
-frame only has to lie inside the strip. A boulder held overhead does not fit a 192×112 frame, so `colossus.png` has 192×160 frames with the
-feet at y = 156: its first seven rows are the old ones moved 48px down. They are drawn by an image model, then lifted off their
+frame only has to lie inside the strip. A boulder or a mace held overhead does not fit a 192×112 frame, so `colossus.png` and `ironhorn.png`
+have 192×160 frames with the feet at y = 156: their first seven rows are the old ones moved 48px down. They are drawn by an image model, then lifted off their
 background, cut into frames, shrunk to the boss's idle height, stood on the feet line and folded
 into the sheet's own palette.
 

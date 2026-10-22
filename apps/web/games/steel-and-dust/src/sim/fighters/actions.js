@@ -24,7 +24,7 @@ export function startMove(game, fighter, id) {
   if (fighter.airborne && !move.dive && fighter.vy > 0) {
     fighter.vy *= 0.4;
   }
-  if (fighter.side === 'enemy' && fighter.def.boss) {
+  if (fighter.side === 'enemy' && fighter.def.boss && !move.quiet) {
     game.io.sfx('warn');
   }
   return true;

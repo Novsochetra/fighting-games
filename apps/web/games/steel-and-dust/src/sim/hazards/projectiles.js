@@ -57,7 +57,7 @@ const FLIGHT = {
   boulder: flyBoulder,
   spike: riseSpike,
 };
-const OWN_FLOOR = new Set(['fire', ...Object.keys(FLIGHT)]);
+const OWN_FLOOR = new Set(['fire', 'bamboo', ...Object.keys(FLIGHT)]);
 
 // a thrown or fired shot breaks on a rise in the road
 export function hitsGround(terrain, shot) {

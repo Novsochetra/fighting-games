@@ -31,7 +31,8 @@ function canUse(game, skill, { state, distance }) {
     game.tickCount >= (state.readyAt[skill.move] ?? 0) &&
     distance >= near &&
     distance <= far &&
-    (!skill.alone || standsAlone(game))
+    (!skill.alone || standsAlone(game)) &&
+    (!skill.airborne || game.player.airborne)
   );
 }
 
