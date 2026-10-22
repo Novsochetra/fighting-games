@@ -15,15 +15,19 @@ import { useDurability } from './durability.js';
 
 const DEFLECT_SPEED = 4.6;
 
-function breakIce(game, attacker, target) {
-  if (attacker.move.shatters) {
+function breakIce(game, { attacker, move }, target) {
+  if (move.shatters) {
     shatterIceOn(game, target, attacker.facing);
   }
 }
 
-function hitFighters(game, attacker, area) {
+// the swing's move is held for the whole swing: a parry stops the swing there (guard-counter.js)
+function hitFighters(game, { attacker, move }, area) {
   let connected = false;
   for (const target of game.fighters) {
+    if (!attacker.hitboxActive) {
+      break;
+    }
     if (target.side === attacker.side || attacker.hitTargets.has(target)) {
       continue;
     }
@@ -32,10 +36,10 @@ function hitFighters(game, attacker, area) {
       continue;
     }
     const center = overlapCenter(area, body);
-    if (applyHit(game, { attacker, target, move: attacker.move, ...center })) {
+    if (applyHit(game, { attacker, target, move, ...center })) {
       attacker.hitTargets.add(target);
       connected = true;
-      breakIce(game, attacker, target);
+      breakIce(game, { attacker, move }, target);
     }
   }
   return connected;
@@ -104,8 +108,7 @@ function riseWithHit(attacker, move, strikeEnd) {
   }
 }
 
-function followUpOnHit(game, attacker) {
-  const move = attacker.move;
+function followUpOnHit(game, { attacker, move }) {
   const strikeEnd = activeEnd(move);
   if (!attacker.durabilityUsed) {
     attacker.durabilityUsed = true;
@@ -116,8 +119,9 @@ function followUpOnHit(game, attacker) {
 }
 
 function resolveAttacker(game, attacker) {
+  const swing = { attacker, move: attacker.move };
   const area = swingBox(attacker);
-  const connected = hitFighters(game, attacker, area);
+  const connected = hitFighters(game, swing, area);
   if (!isPlayer(attacker)) {
     return;
   }
@@ -125,7 +129,7 @@ function resolveAttacker(game, attacker) {
   strikePharaohSpells(game, attacker, area);
   deflectKnives(game, attacker, area);
   if (connected) {
-    followUpOnHit(game, attacker);
+    followUpOnHit(game, swing);
   }
 }
 

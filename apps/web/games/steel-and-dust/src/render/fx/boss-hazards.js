@@ -3,6 +3,7 @@ import { drawBamboo, drawBoulder, drawShard, drawSpike } from './rock-hazards.js
 import { drawDustDevil, drawStormStrike, drawThunderBolt } from './storm-hazards.js';
 import { drawCanopic, drawCurseMark, drawMirageBolt, drawScarabs } from './temple-hazards.js';
 import { drawGlob, drawPuddle } from './venom-hazards.js';
+import { drawChainHook, drawRift } from './warden-hazards.js';
 import { drawWasp } from './wasp-hazards.js';
 
 // how each boss's thrown, fired and laid things are drawn, from the fx/ strips
@@ -25,4 +26,6 @@ export const BOSS_HAZARD_DRAWERS = {
   canopic: drawCanopic,
   curseMark: drawCurseMark,
   mirageBolt: drawMirageBolt,
+  chainHook: drawChainHook,
+  rift: drawRift,
 };

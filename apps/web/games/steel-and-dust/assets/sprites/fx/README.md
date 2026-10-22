@@ -54,6 +54,10 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `sunfall.png` | 6 × 96×160 | Sand Pharaoh: the curse going off, a column of sunlight slamming down on the hero | the same, held on the column |
 | `mirageBolt.png` | 4 × 48×24 | Sand Pharaoh: a mirage bolt a copy fires below half health (loops), its orb on the anchor | ChatGPT image on real transparency, shrunk and cut into frames |
 | `thunder.png` | 8 × 232×352 | Storm Djinn: the Eye of the Storm's lightning striking a marked spot, then the sand it throws up | ChatGPT image, shrunk and cut into frames, folded to 255 colors |
+| `hook.png` | 1 × 56×32 | Warden Ox: the Chain Hook's hook, its ring on the anchor; turned along the chain as it flies, level round a caught hero | ChatGPT image on real transparency, shrunk to his frames' scale |
+| `chain.png` | 1 × 48×12 | Warden Ox: four links of the chain, laid end to end from his fist to the hook | cut from the chain in his own throwing frame, shrunk so it repeats every 12 px |
+| `parry.png` | 4 × 96×96 | Warden Ox: the gold burst of a parried blow; small, the glint on his hammer as he sets his guard | ChatGPT image, the painted checker keyed out, shrunk and cut into frames |
+| `axeWhirl.png` | 6 × 176×144 | Warden Ox: the red whirl round him in the Executioner's Round, winding up (0), spinning (1-4, a loop) and dying away (5), drawn behind him | ChatGPT image, the painted checker and the axe at its middle keyed out, shrunk and cut into frames |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to

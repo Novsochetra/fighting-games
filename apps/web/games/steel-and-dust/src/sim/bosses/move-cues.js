@@ -3,6 +3,7 @@ import { bodyPoint, bodySize } from '../fighters/body-point.js';
 import { shake } from '../fx/camera-fx.js';
 import { setBlazes } from '../hazards/blazes.js';
 import { lobBoulder } from '../hazards/boulders.js';
+import { throwHook } from '../hazards/chain-hook.js';
 import { spawnCrescent } from '../hazards/crescents.js';
 import { raiseDustDevils } from '../hazards/dust-devils.js';
 import { releaseScarabs } from '../hazards/scarabs.js';
@@ -31,6 +32,8 @@ import { blinkEndToEnd, castMirages } from './mirage.js';
 import { feed, howl, leap, smashBones, trailEyes } from './pack-hunt.js';
 import { dropRockfall, rockfallIndex } from './rockfall.js';
 import { castCurse, curseReleases, cursingNow, releaseCurse, watchJars } from './sun-curse.js';
+import { cleave, spinWhirl, whirlsAt, whoosh, whooshesAt } from './executioner.js';
+import { raiseGuard } from './guard-counter.js';
 import { blowWarHorn } from './war-horn.js';
 
 // the blade drawn back behind him, his head, and the size of what sparkles there, in his own units
@@ -113,6 +116,11 @@ const CUES = [
     (move, time) => move.rockfall && rockfallIndex(move, time) >= 0,
     (game, fighter, move, time) => dropRockfall(game, fighter, rockfallIndex(move, time)),
   ],
+  [atStrike('hook'), throwHook],
+  [(move, time) => time === move.guard?.glintAt, raiseGuard],
+  [whirlsAt, spinWhirl],
+  [whooshesAt, whoosh],
+  [atStrike('cleave'), cleave],
 ];
 
 export function playMoveCues(game, fighter, move, time) {

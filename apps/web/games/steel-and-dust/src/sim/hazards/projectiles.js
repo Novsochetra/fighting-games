@@ -5,26 +5,11 @@ import { trailColorOf } from '../fighters/hero-colors.js';
 import { showHint } from '../hints.js';
 import { breakCratesIn } from '../items/crates.js';
 import { groundAt } from '../stage/terrain.js';
-import { burnBlaze } from './blazes.js';
-import { standJar } from './canopic-jars.js';
-import { followHero } from './curse-marks.js';
-import { flyBoulder } from './boulders.js';
-import { skimGround } from './crescents.js';
-import { spinDustDevil } from './dust-devils.js';
-import { flyBomb } from './enemy-shots.js';
-import { runLance } from './flame-lances.js';
-import { crawlScarabs } from './scarabs.js';
+import { FLIGHT } from './flights.js';
 import { diveToward } from './shot-aim.js';
 import { hitArea } from './shot-hits.js';
 import { leaveTrail } from './shot-trails.js';
-import { coolLava, flySlagPot } from './slag-pots.js';
 import { SHOT_RULES } from './shot-rules.js';
-import { riseSpike } from './spikes.js';
-import { crackStrike } from './storm-strikes.js';
-import { runThunderBolt } from './thunder-bolts.js';
-import { flyGlob, soakPuddle } from './venom-globs.js';
-import { fadeMark } from './pounce-mark.js';
-import { flyWasp } from './wasps.js';
 
 const DEFAULT_SPEED = 4.6;
 const KNIFE_SPEED = 3.1;
@@ -62,28 +47,6 @@ export function tossKnife(game, fighter) {
   game.io.sfx('swingSpear', false, { vol: 0.6, x: fighter.x, dir: fighter.facing });
 }
 
-// shots that fly their own way, and find their own floor, instead of running straight
-const FLIGHT = {
-  bomb: flyBomb,
-  crescent: skimGround,
-  shard: skimGround,
-  boulder: flyBoulder,
-  spike: riseSpike,
-  glob: flyGlob,
-  puddle: soakPuddle,
-  wasp: flyWasp,
-  pounceMark: fadeMark,
-  thunderBolt: runThunderBolt,
-  dustDevil: spinDustDevil,
-  stormStrike: crackStrike,
-  blaze: burnBlaze,
-  slagPot: flySlagPot,
-  lavaPool: coolLava,
-  flameLance: runLance,
-  scarabs: crawlScarabs,
-  canopic: standJar,
-  curseMark: followHero,
-};
 const OWN_FLOOR = new Set(['fire', 'bamboo', ...Object.keys(FLIGHT)]);
 
 // a thrown or fired shot breaks on a rise in the road

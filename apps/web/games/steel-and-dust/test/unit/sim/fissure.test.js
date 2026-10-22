@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GROUND_Y } from '../../../src/config.js';
-import { fissurePoints } from '../../../src/sim/fx/fissure.js';
+import { fissurePoints, fissureReach } from '../../../src/sim/fx/fissure.js';
 import { groundAt } from '../../../src/sim/stage/terrain.js';
 import { buildTerrain } from '../../support/terrain-game.js';
 
@@ -35,5 +35,14 @@ describe('the fissure the chop opens', () => {
     const earlier = fissurePoints(flat, SPAN).filter(([x]) => x >= 300);
     expect(later).toEqual(earlier);
     expect(later.every(([, y]) => y > GROUND_Y)).toBe(true);
+  });
+
+  it('runs out slowing as it goes, or at a steady pace for a crack to be jumped', () => {
+    const run = 96;
+    const slowing = [24, 48, 72].map((time) => fissureReach({ time, run }));
+    expect(slowing[1] - slowing[0]).toBeGreaterThan(slowing[2] - slowing[1]);
+    const steady = [24, 48, 72].map((time) => fissureReach({ time, run, linear: true }));
+    expect(steady).toEqual([96, 192, 288]);
+    expect(fissureReach({ time: 200, run, linear: true })).toBe(384);
   });
 });

@@ -251,7 +251,8 @@ Matriarch's `slither` keeps the middle distance; the Scorpion Queen's `scuttle` 
 the edge of her sting's reach; the Gnoll Packlord's `packHunter` darts in and out; the Storm Djinn's
 `floater` drifts at the edge of his reach and, crowded, whirls away across the arena; the Furnace
 Knight's `juggernaut` walks in, never backs off and vents steam; the Sand Pharaoh's `illusionist`
-glides at the middle distance and, crowded, steps out of the sand at the far end), swings its
+glides at the middle distance and, crowded, steps out of the sand at the far end; the Warden Ox's
+`warden` comes on in measured strides and never gives ground), swings its
 `close` moves in reach, picks its `skills` by range, chance and cooldown, and on its own road (never as
 a mid-boss) looses its `ultimate` below a share of its health, again every so often. Below half
 health its `phaseTwo` moves quicker, shortens the cooldowns, may chain a skill and may `swap` one for
@@ -304,9 +305,17 @@ step out of the sand with him, move as he moves, fire `mirageBolt`s in phase two
 `curse` (`src/sim/bosses/sun-curse.js`) raises three canopic jars (`canopic-jars.js`) and hangs the
 sun's eye over the hero (`curse-marks.js`): every jar broken in time sends him into `sunBroken`,
 reeling, and a jar left standing at `releaseAt` brings the sunfall down on the hero (rules in
-`temple-rules.js`). They are all projectiles,
+`temple-rules.js`). The Warden Ox's `hook` (`src/sim/hazards/chain-hook.js`, `chain-pull.js`)
+flies at the hero's chest, drags a hero it catches to where his chop lands and lets go as he raises
+the axe; his `guard` (`src/sim/bosses/guard-counter.js`) turns every blow from the front as a block
+would, but a parry: the striker reels and he answers with `guardStrike`; his Executioner's Round
+spins him with a red `whirl` that follows his body (a burst with `follow`, `src/sim/summons/bursts.js`)
+and ends in a `cleave` (`src/sim/bosses/executioner.js`) whose crack runs off both ways at a steady
+pace, each running end a `rift` read from the same reach as the drawn fissure (`rifts.js`; rules in
+`warden-rules.js`). They are all projectiles,
 drawn from the `fx/` strips (`src/render/fx/rock-hazards.js`, `venom-hazards.js`,
-`wasp-hazards.js`, `storm-hazards.js`, `forge-hazards.js`, `temple-hazards.js`, gathered in
+`wasp-hazards.js`, `storm-hazards.js`, `forge-hazards.js`, `temple-hazards.js`,
+`warden-hazards.js`, gathered in
 `boss-hazards.js`; the copies are drawn with the boss in `src/render/fighters/mirages.js`); a
 puddle, a lava pool or a jar, standing on the
 road, is drawn under the fighters' feet, and so is the mark of a lightning strike, while the strike

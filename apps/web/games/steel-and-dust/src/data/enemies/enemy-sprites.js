@@ -38,7 +38,11 @@ export const ENEMY_SPRITES = {
   scorpion: sheet('scorpion.png', 'idle 4, walk 8, attack 9/5, hurt 4, ko 9'),
   assassin: sheet('assassin.png', 'idle 4, walk 8, attack 9/5, hurt 4, ko 9'),
   vulture: sheet('vulture.png', 'idle 4, walk 8, attack 9/4, hurt 4, ko 9'),
-  ox: sheet('ox.png', 'idle 4, walk 8, attack 9/5, hurt 4, ko 9, slam 9/5, charge 8', BOSS),
+  ox: sheet(
+    'ox.png',
+    `${bossStrips(5, 5)}, chainHook 9, guardCounter 8/4, execution 12/9`,
+    BIG_BOSS,
+  ),
   queen: sheet(
     'queen.png',
     `${bossStrips(3, 4)}, burrow 12, emerge 8/4, tailSting 9/4, hiveSwarm 12/8`,

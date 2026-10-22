@@ -8,6 +8,8 @@ const SCUTTLE_TICKS = 30;
 const PROWL_TICKS = 22;
 const DRIFT_TICKS = 50;
 const VENT_TICKS = 200;
+const STRIDE_TICKS = 40;
+const HALT_TICKS = 14;
 
 // a duelist keeps a sword's length and a step away: he backs off a hero who crowds him, closes on
 // one who keeps away, and in between stands his ground or feints a step in
@@ -119,6 +121,18 @@ function juggernaut(boss, { game, distance, pace }) {
   }
 }
 
+// a warden comes on in measured strides, halting between them, and never gives ground
+function warden(boss, { distance, pace }) {
+  const ai = boss.ai;
+  ai.stride = (ai.stride ?? 0) + 1;
+  const halting = ai.stride % (STRIDE_TICKS + HALT_TICKS) >= STRIDE_TICKS;
+  if (distance > 46 && !halting) {
+    walk(boss, 1, pace);
+  } else {
+    standStill(boss);
+  }
+}
+
 export const BOSS_MOVEMENT = {
   duelist,
   bulldozer,
@@ -129,4 +143,5 @@ export const BOSS_MOVEMENT = {
   floater,
   juggernaut,
   illusionist,
+  warden,
 };

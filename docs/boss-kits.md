@@ -209,4 +209,20 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    move as he moves, are a shade thinner and waver now and then, and pop at one blow. The Curse of
    the Sun counts down over the hero's head in the sun's eye; the scarabs bite only feet on the
    ground. In phase two his copies thrust their staffs and fire mirage bolts low along the floor.
-10. Then down the road, 10 to 12. Naga Raja and Bayon Guardian wait for their new sheets.
+10. **Warden Ox**: done. His sheet moved to the big frame (256×160): the axe rises far over his head
+    and the counter thrusts far ahead; his first seven rows were set into it with his feet where they
+    stood. The chain and guard strips came on real transparency; the axe whirl and the parry burst
+    on a painted checkerboard, keyed by their colors, and the axe at the whirl's middle keyed out
+    with it, so the whirl is drawn behind him round his own axe. The chain and hook drawn beyond his
+    fist on the throwing and pulling frames were cut away: the game draws the chain from the fist of
+    the frame he is drawn on to the hook, link by link from a strip cut out of his own chain, so it
+    reaches wherever the hook is. The hook flies at the hero's chest and drags a hero it catches to
+    where his chop lands; a missed hook reels back. The Guard Counter glints gold on his hammer
+    (it does not blink red: he is not striking); a blow on it bursts in gold, the striker reels,
+    and his counter lands. The Executioner's Round spins him to the arena's wall and back, a red
+    whirl round him, then he leaps at the hero and cleaves the road: a red crack runs off both ways
+    at a steady pace, and a hero standing where it passes is thrown up (jump it). Where the chain
+    leaves his fist, where the glint shines, where the whirl spins and where the axe splits the
+    road are read from the art and locked by a test. In phase two he guards more often and his
+    hook ends in two chops, the first only staggering.
+11. Then down the road, 11 to 12. Naga Raja and Bayon Guardian wait for their new sheets.

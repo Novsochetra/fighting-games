@@ -1,3 +1,5 @@
+import { isParrying } from '../bosses/guard-counter.js';
+
 export function isGuarding(fighter) {
   if (fighter.airborne) {
     return false;
@@ -25,7 +27,11 @@ function breaksGuard(move) {
   );
 }
 
+// a boss's guard turns every blow from the front but an ultimate (guard-counter.js)
 export function blocksHit(attacker, target, move) {
+  if (isParrying(target)) {
+    return !move.ultimate && isFacing(target, attacker);
+  }
   if (!target.def.shield || !isGuarding(target)) {
     return false;
   }
