@@ -7,10 +7,10 @@ import { drawFxFrame, fxFrameAt } from './fx-sheets.js';
 const SHARD_BOUNCE = [0, 1, 2, 3, 2, 1];
 
 // the spot a boulder will land on is marked like every boss danger, a blinking red bar on the
-// ground, under a shadow that grows and darkens as it comes down
+// ground as wide as the boulder, under a shadow that grows and darkens as it comes down
 export function drawLandingShadow(painter, rock) {
   const fall = rock.floor - rock.y;
-  const half = Math.round(clamp(16 - fall / 16, 6, 14));
+  const half = Math.round(clamp(16 - fall / 16, 6, 14) * (rock.size ?? 1));
   painter.alpha((rock.time >> 2) & 1 ? 0.65 : 0.4).use(COLORS.red);
   painter.rect(rock.x - half, rock.floor - 1, half * 2, 6);
   painter.use(FX_COLORS.dangerLight).rect(rock.x - half, rock.floor - 1, half * 2, 1);
@@ -29,6 +29,7 @@ export function drawBoulder(painter, rock, sheets) {
     frame,
     x: rock.x,
     y: rock.y,
+    scale: rock.size,
     facing: rock.direction,
   });
 }

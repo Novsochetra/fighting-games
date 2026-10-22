@@ -83,9 +83,12 @@ function timelineFrame({ frameAt, loopFrames, startup, active }, moveTime) {
   return frame;
 }
 
-// wind-up frames lead to the strike frame, which holds while the hitbox is out
+// wind-up frames lead to the strike frame, which holds while the hitbox is out; a move's tick
+// counts on once the tick is played, so the frame drawn is the one for the tick just played, the
+// tick its hitbox and its cues (a boulder leaving his hand) were played on
 function attackFrame(fighter, sprite) {
-  const { move, moveTime } = fighter;
+  const move = fighter.move;
+  const moveTime = Math.max(0, fighter.moveTime - 1);
   const name = stripForMove(sprite, move);
   if (move.frameAt && name === (move.strip ?? move.id)) {
     return [name, timelineFrame(move, moveTime)];
@@ -95,7 +98,7 @@ function attackFrame(fighter, sprite) {
     return [name, Math.floor((moveTime / move.startup) * strike)];
   }
   if (moveTime < move.startup + move.active) {
-    return [name, activeFrame(fighter, { name, strike, last: lastFrame(sprite, name) })];
+    return [name, activeFrame({ move, moveTime }, { name, strike, last: lastFrame(sprite, name) })];
   }
   const recovered = (moveTime - move.startup - move.active) / move.recovery;
   const last = lastFrame(sprite, name);

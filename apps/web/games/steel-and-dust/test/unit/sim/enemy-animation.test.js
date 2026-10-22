@@ -14,6 +14,8 @@ const SPRITE = {
   },
 };
 const MOVE = { id: 'punch', startup: 20, active: 4, recovery: 20 };
+// a move's tick counts on once the tick is played: the frame drawn after tick `tick` of a move
+const after = (tick) => tick + 1;
 
 function fighter(fields) {
   return {
@@ -41,30 +43,37 @@ describe('enemyAnimation', () => {
   });
 
   it('winds up toward the strike frame, holds it while the hitbox is out, then recovers', () => {
-    const enemy = fighter({ state: 'attack', move: MOVE, moveTime: 10 });
+    const enemy = fighter({ state: 'attack', move: MOVE, moveTime: after(10) });
     expect(enemyAnimation(enemy, SPRITE)).toEqual(['attack', 2]);
-    enemy.moveTime = 21;
+    enemy.moveTime = after(21);
     expect(enemyAnimation(enemy, SPRITE)).toEqual(['attack', 4]);
-    enemy.moveTime = 43;
+    enemy.moveTime = after(43);
     expect(enemyAnimation(enemy, SPRITE)).toEqual(['attack', 8]);
   });
 
   it("uses a move's own strip when the sheet has one", () => {
-    const enemy = fighter({ state: 'attack', move: { ...MOVE, id: 'slam' }, moveTime: 20 });
+    const enemy = fighter({ state: 'attack', move: { ...MOVE, id: 'slam' }, moveTime: after(20) });
     expect(enemyAnimation(enemy, SPRITE)).toEqual(['slam', 5]);
   });
 
   it('cycles the charge strip for as long as the rush lasts', () => {
     const charge = { id: 'charge', startup: 10, active: 40, recovery: 10, sustain: true };
-    const enemy = fighter({ state: 'attack', move: charge, moveTime: 10 + 4 * 9 });
+    const enemy = fighter({ state: 'attack', move: charge, moveTime: after(10 + 4 * 9) });
     expect(enemyAnimation(enemy, SPRITE)).toEqual(['charge', 1]);
   });
 
   it('keeps a lunge running from its strike frame to the end of the strip', () => {
     const sprite = { strips: { ...SPRITE.strips, lunge: { row: 7, frames: 9, strike: 5 } } };
     const lunge = { id: 'lunge', startup: 10, active: 40, recovery: 10, sustain: true };
-    const enemy = fighter({ state: 'attack', move: lunge, moveTime: 10 + 4 * 5 });
+    const enemy = fighter({ state: 'attack', move: lunge, moveTime: after(10 + 4 * 5) });
     expect(enemyAnimation(enemy, sprite)).toEqual(['lunge', 6]);
+  });
+
+  it('draws the strike frame on the tick its hitbox comes out, not a tick before', () => {
+    const enemy = fighter({ state: 'attack', move: MOVE, moveTime: after(MOVE.startup - 1) });
+    expect(enemyAnimation(enemy, SPRITE)).toEqual(['attack', 3]);
+    enemy.moveTime = after(MOVE.startup);
+    expect(enemyAnimation(enemy, SPRITE)).toEqual(['attack', 4]);
   });
 
   it('holds the strike of a rush that has no strip of its own', () => {
@@ -95,7 +104,7 @@ describe('enemyAnimation', () => {
   it("plays a move's own strip on its timeline, holding each frame until the next one starts", () => {
     const move = { id: 'horn', startup: 10, active: 30, recovery: 10, frameAt: [0, 5, 10, 40] };
     const frameAt = (moveTime) =>
-      enemyAnimation(fighter({ state: 'attack', move, moveTime }), SPRITE);
+      enemyAnimation(fighter({ state: 'attack', move, moveTime: after(moveTime) }), SPRITE);
     expect(frameAt(0)).toEqual(['horn', 0]);
     expect(frameAt(4)).toEqual(['horn', 0]);
     expect(frameAt(5)).toEqual(['horn', 1]);
