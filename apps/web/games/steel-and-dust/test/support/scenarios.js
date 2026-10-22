@@ -61,6 +61,18 @@ export const SCENARIOS = {
     spawnBossAt: 30,
     scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
   },
+  // the Cobra Matriarch at the Raider Camp: her coil lash, venom spit and, below half health, the
+  // five-glob spray, and below 40% the Hypnotic Gaze holding the hero for her lunge
+  cobra: {
+    mission: 3,
+    boss: 'cobra',
+    seed: 1035,
+    ticks: 4800,
+    sampleEvery: 30,
+    renderEvery: 120,
+    spawnBossAt: 30,
+    scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
+  },
   // the other Shades: their own fighting style on every weapon and their own ultimate
   firefly: {
     hero: 'firefly',

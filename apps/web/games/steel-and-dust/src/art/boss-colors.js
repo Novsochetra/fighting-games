@@ -3,4 +3,5 @@ export const BOSS_ULT_COLORS = {
   khan: { dim: '#1c0e08', title: '#f2c46a', ring: '#f4ecd8' },
   ironhorn: { dim: '#0c0f12', title: '#dfe4ea', ring: '#eef1f4' },
   colossus: { dim: '#140904', title: '#ec9a4e', ring: '#f2d2a2' },
+  cobra: { dim: '#0e0816', title: '#f2c84e', ring: '#c69cf0' },
 };

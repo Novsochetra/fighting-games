@@ -5,6 +5,7 @@ import { point } from '../painter.js';
 import { drawBolt, drawBomb, drawFire, drawSand, drawVenom } from './enemy-shots.js';
 import { drawFxFrame } from './fx-sheets.js';
 import { drawBamboo, drawBoulder, drawShard, drawSpike } from './rock-hazards.js';
+import { drawGlob, drawPuddle } from './venom-hazards.js';
 
 function drawShockPeak(painter, { x, y, height }) {
   for (let row = 0; row <= height; row++) {
@@ -88,10 +89,25 @@ const DRAW_SHOT = {
   shard: drawShard,
   spike: drawSpike,
   bamboo: drawBamboo,
+  glob: drawGlob,
+  puddle: drawPuddle,
 };
+
+// what lies flat on the road is drawn under the fighters' feet
+const ON_GROUND = new Set(['puddle']);
 
 export function drawProjectiles(painter, projectiles, fxSheets) {
   for (const shot of projectiles) {
-    DRAW_SHOT[shot.kind](painter, shot, fxSheets);
+    if (!ON_GROUND.has(shot.kind)) {
+      DRAW_SHOT[shot.kind](painter, shot, fxSheets);
+    }
+  }
+}
+
+export function drawGroundHazards(painter, projectiles, fxSheets) {
+  for (const shot of projectiles) {
+    if (ON_GROUND.has(shot.kind)) {
+      DRAW_SHOT[shot.kind](painter, shot, fxSheets);
+    }
   }
 }

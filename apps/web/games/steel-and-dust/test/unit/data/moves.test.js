@@ -78,6 +78,10 @@ describe('move tables', () => {
       'stampede',
       'stampedeBack',
       'stampedeLast',
+      'venomSpit',
+      'venomSpray',
+      'coilLash',
+      'hypnoticGaze',
     ]);
   });
 

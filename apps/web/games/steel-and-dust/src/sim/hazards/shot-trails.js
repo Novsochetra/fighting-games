@@ -144,6 +144,8 @@ const TRAILS = {
   shard: () => {},
   spike: () => {},
   bamboo: () => {},
+  glob: venomTrail,
+  puddle: () => {},
 };
 
 export function leaveTrail(game, shot) {

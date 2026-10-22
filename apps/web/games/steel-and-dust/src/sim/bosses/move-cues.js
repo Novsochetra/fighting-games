@@ -2,9 +2,11 @@ import { shake } from '../fx/camera-fx.js';
 import { lobBoulder } from '../hazards/boulders.js';
 import { spawnCrescent } from '../hazards/crescents.js';
 import { spawnShockwave } from '../hazards/shockwaves.js';
+import { spitVenom } from '../hazards/venom-globs.js';
 import { raiseSpikes } from '../hazards/spikes.js';
 import { addBurst } from '../summons/bursts.js';
 import { announceBossUltimate } from './announce.js';
+import { circleHeldHero, flashGaze, warnOfGaze, whileHeld } from './hypnotic-gaze.js';
 import { dropRockfall, rockfallIndex } from './rockfall.js';
 import { blowWarHorn } from './war-horn.js';
 
@@ -40,6 +42,10 @@ const CUES = [
   [atStrike('boulder'), lobBoulder],
   [atStrike('spikes'), (game, fighter, move) => raiseSpikes(game, fighter, move.spikes)],
   [(move, time) => move.quakes?.includes(time), quake],
+  [atStrike('globs'), (game, fighter, move) => spitVenom(game, fighter, move.globs)],
+  [(move, time) => time === move.gaze?.warnAt, warnOfGaze],
+  [(move, time) => time === move.gaze?.flashAt, flashGaze],
+  [whileHeld, circleHeldHero],
   [
     (move, time) => move.rockfall && rockfallIndex(move, time) >= 0,
     (game, fighter, move, time) => dropRockfall(game, fighter, rockfallIndex(move, time)),

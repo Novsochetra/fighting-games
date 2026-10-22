@@ -12,6 +12,7 @@ import { hitArea } from './shot-hits.js';
 import { leaveTrail } from './shot-trails.js';
 import { SHOT_RULES } from './shot-rules.js';
 import { riseSpike } from './spikes.js';
+import { flyGlob, soakPuddle } from './venom-globs.js';
 
 const DEFAULT_SPEED = 4.6;
 const KNIFE_SPEED = 3.1;
@@ -56,6 +57,8 @@ const FLIGHT = {
   shard: skimGround,
   boulder: flyBoulder,
   spike: riseSpike,
+  glob: flyGlob,
+  puddle: soakPuddle,
 };
 const OWN_FLOOR = new Set(['fire', 'bamboo', ...Object.keys(FLIGHT)]);
 

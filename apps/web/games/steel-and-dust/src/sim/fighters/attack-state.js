@@ -57,8 +57,13 @@ function releaseStrike(game, fighter, move) {
   }
 }
 
-// a rush that reaches the arena wall stops there with a thud
+// a rush that reaches the arena wall stops there with a thud; a lunge that bites stops on the bite
 function sustainRush(game, fighter, move) {
+  if (move.stopOnHit && fighter.hitConfirmed) {
+    fighter.vx = 0;
+    fighter.moveTime = activeEnd(move) - 1;
+    return;
+  }
   fighter.vx = fighter.facing * move.forward;
   const bounds = arenaBounds(game, fighter);
   const atWall =

@@ -11,6 +11,7 @@ const SHARD_HIT = { knockback: [1.6, -1.2], hitstop: 4, hitstun: 14 };
 const SPIKE_HIT = { knockback: [1.4, -4.6], knockdown: true, hitstop: 7, hitstun: 22 };
 const BAMBOO_HIT = { knockback: [2, -3], knockdown: true, hitstop: 7, hitstun: 22 };
 const VENOM_HIT = { knockback: [1.8, -0.8], hitstop: 4, hitstun: 18 };
+const PUDDLE_HIT = { knockback: [0.4, 0], hitstop: 2, hitstun: 10 };
 
 // how each kind of thrown or fired thing flies, what it covers and what a hit does
 export const SHOT_RULES = {
@@ -85,6 +86,21 @@ export const SHOT_RULES = {
     hit: BAMBOO_HIT,
     enemyWeapon: 'hammer',
     armed: (shot) => shot.time >= 18 && shot.time < 26,
+  },
+  glob: {
+    range: 300,
+    area: (shot) => ({ x: shot.x - 5, y: shot.y - 5, width: 10, height: 10 }),
+    hit: VENOM_HIT,
+    enemyWeapon: 'none',
+    breaksOnHit: true,
+  },
+  // a puddle burns the feet of whoever stands in it, again every so often, until it dries
+  puddle: {
+    range: 400,
+    area: (shot) => ({ x: shot.x - 16, y: shot.y - 5, width: 32, height: 5 }),
+    hit: PUDDLE_HIT,
+    enemyWeapon: 'none',
+    rehitEvery: 40,
   },
   fire: {
     range: 110,

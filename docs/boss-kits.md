@@ -136,4 +136,10 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
 3. **Ironhorn**: done. Taller frames too (the mace swung overhead). The stars GPT drew into the
    Dazed strip were keyed out and are drawn from the stars effect instead, so they also circle him
    after the Stampede. Every wall hit, not only the Stampede's, knocks a bamboo stalk down.
-4. Then down the road, 4 to 12. Naga Raja and Bayon Guardian wait for their new sheets.
+4. **Cobra Matriarch**: done. Her sheet has wider frames (256×112) so the tail laid along the
+   floor fits. GPT drew the Gaze strip on black, with a light green glow round her and frames
+   touching, so the tool floods black in from the edges, peels the glow and takes per-row cut
+   lines. The new colors are picked from spread-out seeds so her glowing eyes keep their own
+   entries. Each glob's landing spot is marked as it leaves her mouth, and puddles are drawn under
+   the fighters' feet.
+5. Then down the road, 5 to 12. Naga Raja and Bayon Guardian wait for their new sheets.

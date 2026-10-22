@@ -10,7 +10,7 @@ import { drawDebugBoxes } from './fx/debug-boxes.js';
 import { drawEchoes } from './fx/echoes.js';
 import { drawEffects } from './fx/effects.js';
 import { drawFloaters } from './fx/floaters.js';
-import { drawProjectiles, drawShockwaves } from './fx/hazards.js';
+import { drawGroundHazards, drawProjectiles, drawShockwaves } from './fx/hazards.js';
 import { drawParticles } from './fx/particles.js';
 import { drawSoldiers } from './fx/soldiers.js';
 import { drawBehindBursts, drawSummons } from './fx/summons.js';
@@ -89,6 +89,7 @@ export function drawWorld(painter, { game, view, cameraX }) {
   drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });
   drawCrates(painter, game.crates, cameraX);
   drawPickups(painter, game.pickups);
+  drawGroundHazards(painter, game.projectiles, view.fxSheets);
   drawFighters(painter, { game, view, cameraX });
   drawSummons(painter, game.summons, view.fxSheets);
   drawShockwaves(painter, game.shockwaves);

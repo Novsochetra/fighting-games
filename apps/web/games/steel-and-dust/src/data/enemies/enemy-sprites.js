@@ -2,6 +2,8 @@ const REGULAR = { frameWidth: 128, frameHeight: 80, feetX: 64, feetY: 76 };
 const BOSS = { frameWidth: 192, frameHeight: 112, feetX: 96, feetY: 108 };
 // a boss whose own moves reach high (a boulder held overhead) keeps its old frames 48px lower
 const TALL_BOSS = { frameWidth: 192, frameHeight: 160, feetX: 96, feetY: 156 };
+// a boss whose own moves reach far ahead (a tail laid along the floor) keeps its old frames 32px in
+const WIDE_BOSS = { frameWidth: 256, frameHeight: 112, feetX: 128, feetY: 108 };
 
 // one PNG per enemy in assets/sprites/enemies/ with a row per strip, in the order listed;
 // "attack 9/4" is a strip of 9 frames whose frame 4 holds while the hitbox is out
@@ -57,7 +59,11 @@ export const ENEMY_SPRITES = {
     `${bossStrips(6, 5)}, hornRush 10/4, uppercut 8/4, dazed 6, stampede 12/6`,
     TALL_BOSS,
   ),
-  cobra: sheet('cobra.png', bossStrips(5, 5), BOSS),
+  cobra: sheet(
+    'cobra.png',
+    `${bossStrips(5, 5)}, venomSpit 8/3, coilLash 10/6, hypnoticGaze 12/9`,
+    WIDE_BOSS,
+  ),
   gnoll: sheet('gnoll.png', bossStrips(6, 4), BOSS),
   djinn: sheet('djinn.png', bossStrips(4, 5), BOSS),
   furnace: sheet('furnace.png', bossStrips(5, 5), BOSS),

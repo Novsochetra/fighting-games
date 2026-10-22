@@ -1,4 +1,5 @@
 import { normalizeMoves } from '../moves/define-move.js';
+import { COBRA_MOVES } from './moves/cobra-moves.js';
 import { COLOSSUS_MOVES } from './moves/colossus-moves.js';
 import { IRONHORN_MOVES } from './moves/ironhorn-moves.js';
 import { KHAN_MOVES } from './moves/khan-moves.js';
@@ -13,4 +14,5 @@ export const ENEMY_MOVES = normalizeMoves({
   ...KHAN_MOVES,
   ...COLOSSUS_MOVES,
   ...IRONHORN_MOVES,
+  ...COBRA_MOVES,
 });
