@@ -49,6 +49,9 @@ describe('live sounds', () => {
         'technique',
         'warHorn',
         'bossUltimate',
+        'venomSpit',
+        'splat',
+        'hypnosis',
       ].sort(),
     );
   });

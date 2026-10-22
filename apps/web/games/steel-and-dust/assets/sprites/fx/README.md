@@ -31,7 +31,10 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `spike.png` | 8 × 64×96 | Rust Colossus: a stone spike bursting up and crumbling | ChatGPT image, shrunk and cut into frames |
 | `impact.png` | 6 × 104×104 | Ironhorn: a rush smashing into the wall | ChatGPT image, shrunk and cut into frames |
 | `bamboo.png` | 4 × 160×168 | Ironhorn: a bamboo stalk toppling into the arena | ChatGPT image, shrunk and cut into frames |
-| `stars.png` | 4 × 56×32 | Ironhorn: stars circling his dazed head (loops) | ChatGPT image, shrunk and cut into frames |
+| `stars.png` | 4 × 56×32 | Ironhorn: stars circling his dazed head (loops); the Cobra's held hero | ChatGPT image, shrunk and cut into frames |
+| `glob.png` | 4 × 44×20 | Cobra Matriarch: a venom glob flying (loops) | ChatGPT image, shrunk and cut into frames |
+| `puddle.png` | 6 × 80×40 | Cobra Matriarch: a poison puddle bubbling (loops) | stand-in ellipses, to be replaced by the ChatGPT strip |
+| `hypnosis.png` | 8 × 128×80 | Cobra Matriarch: the Hypnotic Gaze's rings and flash | ChatGPT image, shrunk and cut into frames; the fading rings kept down to a quarter's opacity |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to

@@ -14,7 +14,6 @@ export const COLOSSUS_KIT = {
     below: 0.5,
     pace: 1.3,
     cooldown: 0.7,
-    chains: {},
     swaps: { spikeLine: 'spikeCross' },
   },
 };

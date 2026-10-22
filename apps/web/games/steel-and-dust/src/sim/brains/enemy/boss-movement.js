@@ -41,4 +41,16 @@ function bull(boss, { distance, pace }) {
   }
 }
 
-export const BOSS_MOVEMENT = { duelist, bulldozer, bull };
+// a serpent keeps the middle distance: she slithers back from a hero who crowds her, closes on one
+// far off and otherwise sways where she is
+function slither(boss, { distance, pace }) {
+  if (distance > 180) {
+    walk(boss, 1, pace);
+  } else if (distance < 90) {
+    walk(boss, -1, 0.9 * pace);
+  } else {
+    standStill(boss);
+  }
+}
+
+export const BOSS_MOVEMENT = { duelist, bulldozer, bull, slither };
