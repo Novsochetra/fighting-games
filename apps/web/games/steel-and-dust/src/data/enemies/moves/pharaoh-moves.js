@@ -62,7 +62,7 @@ export const PHARAOH_MOVES = {
     quiet: true,
     strip: 'hurt',
     loopFrames: [1, 2, 10],
-    stars: { every: 16, y: -44 },
+    stars: { every: 16, up: 44 },
     frameAt: [0, 4, 8, 12],
   }),
 };

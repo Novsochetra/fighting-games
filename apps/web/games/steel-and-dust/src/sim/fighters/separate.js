@@ -16,8 +16,18 @@ function randomSide() {
   return Math.random() < 0.5 ? -1 : 1;
 }
 
+// a boss keeps others off most of its body, so nobody stands inside its art; the rest of it may
+// overlap, as bodies do in a brawl
+const BOSS_BODY_KEPT = 0.75;
+
+function halfBody(fighter, apart) {
+  const shape = fighter.def?.boss && fighter.def.hurtShape;
+  return shape ? (shape[2] / 2) * BOSS_BODY_KEPT * fighter.scale : apart * fighter.scale;
+}
+
 function pushApart(terrain, first, second) {
-  const minimum = (first.side === second.side ? 5 : 7) * (first.scale + second.scale);
+  const apart = first.side === second.side ? 5 : 7;
+  const minimum = halfBody(first, apart) + halfBody(second, apart);
   const dx = second.x - first.x;
   if (Math.abs(dx) >= minimum) {
     return;

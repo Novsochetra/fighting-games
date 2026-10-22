@@ -16,6 +16,8 @@ const PULL = 0.5;
 const PULL_REACH = 72;
 const BEHIND_HERO = 96;
 const MARGIN = 16;
+// the devil rises where his push sends it, in his own units (body-point.js)
+const PUSHED_OUT = 30;
 
 function raiseDevil(game, boss, x) {
   game.projectiles.push({
@@ -35,7 +37,7 @@ function raiseDevil(game, boss, x) {
 
 // one rises in front of him; with two, the second rises on the far side of the hero
 export function raiseDustDevils(game, boss, move) {
-  raiseDevil(game, boss, boss.x + boss.facing * 30);
+  raiseDevil(game, boss, boss.x + boss.facing * PUSHED_OUT * boss.scale);
   if (move.devils > 1) {
     const { left, right } = screenEdges(game);
     const x = game.player.x + boss.facing * BEHIND_HERO;

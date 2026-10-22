@@ -7,10 +7,11 @@ const BLAZE_DAMAGE = 4;
 export const BLAZE_LIGHT = 8;
 export const BLAZE_OUT = 20;
 
-// the swept floor catches fire in a row ahead of the flail, as far as the road runs level
+// the swept floor catches fire in a row ahead of the flail, as far as the road runs level; `at` is
+// in his own units (body-point.js), so the fire lies where his flail swept however big he is
 export function setBlazes(game, boss, { at, life }) {
   for (const ahead of at) {
-    const x = boss.x + boss.facing * ahead;
+    const x = boss.x + boss.facing * ahead * boss.scale;
     if (isWall(game.terrain, x, boss.y)) {
       return;
     }

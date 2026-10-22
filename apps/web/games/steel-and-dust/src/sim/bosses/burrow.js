@@ -1,5 +1,6 @@
 import { moveLength } from '../../data/moves/define-move.js';
 import { startMove } from '../fighters/actions.js';
+import { bodySize } from '../fighters/body-point.js';
 import { floorUnder } from '../fighters/terrain-motion.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust } from '../fx/particles.js';
@@ -7,6 +8,8 @@ import { addBurst } from '../summons/bursts.js';
 
 const TUNNEL_SPEED = 2.2;
 const CLOSE_ENOUGH = 3;
+// the earth bursts up round her whole body (body-point.js)
+const ERUPTION_SIZE = 0.85;
 
 export const isTunnelling = (move, time) =>
   Boolean(move.tunnel?.some(([from, until]) => time >= from && time < until));
@@ -53,7 +56,13 @@ export function surface(game, boss, move) {
 // the earth bursts up behind her, so her stinger stabbing out of it stays in sight
 export function erupt(game, boss) {
   const y = floorUnder(game.terrain, boss);
-  const at = { x: boss.x, y, scale: 0.85, direction: boss.facing, behind: true };
+  const at = {
+    x: boss.x,
+    y,
+    scale: bodySize(boss, ERUPTION_SIZE),
+    direction: boss.facing,
+    behind: true,
+  };
   addBurst(game, { sprite: 'eruption', ...at });
   kickSand(game, boss, 12);
   shake(game, 4, 14);

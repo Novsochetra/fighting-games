@@ -1,4 +1,5 @@
 import { clamp } from '../../lib/math.js';
+import { bodyPoint, bodySize } from '../fighters/body-point.js';
 import { floorUnder } from '../fighters/terrain-motion.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust } from '../fx/particles.js';
@@ -8,6 +9,11 @@ import { hitArea } from './shot-hits.js';
 
 const GRAVITY = 0.18;
 const LOB_LIFT = -4.2;
+// the boulder leaves the front of his fist as the throwing frame thrusts it forward, in his own
+// units (body-point.js), as big as the boulder he lifts over his head
+const RELEASE = { ahead: 32, up: 42 };
+const BOULDER_SIZE = 1.1;
+const LANDING_HALF = 14;
 const DROP_FROM = -24;
 const BOULDER_DAMAGE = 14;
 const SHARD_SPEED = 2.4;
@@ -20,19 +26,29 @@ function addBoulder(game, fields) {
     damage: BOULDER_DAMAGE,
     hitTargets: new Set(),
     floor: floorBelow(game.terrain, fields.x, fields.y),
+    size: 1,
     ...fields,
   });
 }
 
-// the boulder leaves his hands over his head and comes down where the hero stands now
+// the boulder leaves his fist and comes down where the hero stands now
 export function lobBoulder(game, fighter) {
-  const x = fighter.x + fighter.facing * 10;
-  const y = fighter.y - 58;
+  const { x, y } = bodyPoint(fighter, RELEASE);
   const drop = floorUnder(game.terrain, game.player) - y;
   const flight = (-LOB_LIFT + Math.sqrt(LOB_LIFT * LOB_LIFT + 2 * GRAVITY * drop)) / GRAVITY;
-  const speed = clamp(Math.abs(game.player.x - fighter.x) / flight, 0.6, 3.6);
+  const speed = clamp(Math.abs(game.player.x - x) / flight, 0.6, 3.6);
   const direction = fighter.facing;
-  addBoulder(game, { x, y, vy: LOB_LIFT, direction, speed, side: fighter.side, shards: true });
+  const size = bodySize(fighter, BOULDER_SIZE);
+  addBoulder(game, {
+    x,
+    y,
+    vy: LOB_LIFT,
+    direction,
+    speed,
+    side: fighter.side,
+    shards: true,
+    size,
+  });
   game.io.sfx('swingAxeBig', false, { x: fighter.x, dir: direction });
 }
 
@@ -59,11 +75,12 @@ function scatterShards(game, rock) {
 
 function shatter(game, rock) {
   rock.dead = true;
-  addBurst(game, { sprite: 'shards', x: rock.x, y: rock.floor, scale: 1 });
+  addBurst(game, { sprite: 'shards', x: rock.x, y: rock.floor, scale: rock.size });
   addDust(game, { x: rock.x, y: rock.floor, count: 8 });
   shake(game, 3, 10);
   game.io.sfx('break', false, { x: rock.x });
-  const area = { x: rock.x - 14, y: rock.floor - 12, width: 28, height: 12 };
+  const half = LANDING_HALF * rock.size;
+  const area = { x: rock.x - half, y: rock.floor - 12, width: half * 2, height: 12 };
   hitArea(game, { shot: rock, area, hit: LANDING_HIT });
   if (rock.shards) {
     scatterShards(game, rock);

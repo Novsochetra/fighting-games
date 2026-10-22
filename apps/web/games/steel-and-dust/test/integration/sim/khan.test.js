@@ -81,9 +81,11 @@ describe('Gravel Khan in a fight', () => {
     expect(raiders(game)).toHaveLength(2);
   });
 
-  // the hero stands still and cannot fall, and every raider is cleared off as a player would
+  // the hero stands still and cannot fall, and every raider is cleared off as a player would; the
+  // first half he fights at full strength, where his horn belongs (below half health his chained
+  // dash is ready again whenever he is), the second low enough for his Tempest
   it('fights a whole bout with every move of his kit and never leaves the arena', () => {
-    const { game, khan } = khanArena({ hp: 75 });
+    const { game, khan } = khanArena({ hp: 150 });
     const used = new Set();
     for (let i = 0; i < 3600; i++) {
       runTicks(game, 1);
@@ -91,7 +93,10 @@ describe('Gravel Khan in a fight', () => {
         game.fighters = game.fighters.filter((fighter) => !raiders(game).includes(fighter));
       }
       game.player.hp = game.player.maxHp;
-      khan.hp = Math.max(khan.hp, 40);
+      if (i === 1800) {
+        khan.hp = 75;
+      }
+      khan.hp = Math.max(khan.hp, i < 1800 ? 110 : 40);
       if (khan.move) {
         used.add(khan.move.id);
       }

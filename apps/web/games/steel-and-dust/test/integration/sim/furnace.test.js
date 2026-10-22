@@ -51,7 +51,7 @@ describe('the Furnace Knight in a fight', () => {
   });
 
   it('sweeps the flail along the floor and sets it burning ahead of him', () => {
-    const { game, knight } = knightArena({ gap: 70 });
+    const { game, knight } = knightArena({ gap: 50 });
     startMove(game, knight, 'fireFlail');
     const states = playOut(game, knight, 60);
     expect(states.has('juggle')).toBe(true);

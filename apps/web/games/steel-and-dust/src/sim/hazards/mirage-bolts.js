@@ -5,7 +5,7 @@ const BOLT_SPEED = 2.8;
 const BOLT_DAMAGE = 8;
 // the orb on the staff thrust low (scarabCarpet frame 3), in sheet pixels from his feet halved and
 // scaled like his body
-export const THRUST_ORB = { ahead: 21, up: 8 };
+export const THRUST_ORB = { ahead: 27.3, up: 10.4 };
 
 // a copy of the Pharaoh looses a bolt of mirage light from its orb, level at the hero
 export function fireMirageBolt(game, { boss, from }) {

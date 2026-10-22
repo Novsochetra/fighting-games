@@ -1,5 +1,5 @@
 import { isBurning } from './blazes.js';
-import { LANCE_CORE, lanceSpan } from './flame-lances.js';
+import { lanceArea } from './flame-lances.js';
 
 const BLAZE_HIT = { knockback: [1.2, -1.2], knockAway: true, hitstop: 2, hitstun: 10 };
 const POT_HIT = { knockback: [2, -2.4], knockdown: true, hitstop: 6, hitstun: 20 };
@@ -34,13 +34,10 @@ export const FORGE_RULES = {
     rehitEvery: 30,
     groundOnly: true,
   },
-  // the lance's tip leads and the flame trails behind it; only its white-hot core burns
+  // only the lance's white-hot core burns: its tip as it dives, then the level run behind it
   flameLance: {
     range: 140,
-    area: (lance) => {
-      const { left, right } = lanceSpan(lance);
-      return { x: left, y: lance.y - LANCE_CORE, width: right - left, height: LANCE_CORE * 2 };
-    },
+    area: lanceArea,
     hit: LANCE_HIT,
     enemyWeapon: 'none',
   },

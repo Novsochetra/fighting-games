@@ -10,7 +10,8 @@ import { buildTerrain, useTerrain } from '../../support/terrain-game.js';
 
 // Bug: the Meltdown's flame lances did not seem to come from the Furnace Knight's chest. Each lance
 // took its height from the ground under its tip, so over the Iron Works' rising road it flew higher
-// than the furnace it left; and the flame in the furnace's mouth on the firing frame was cut off
+// than the furnace it left (now, his chest standing over a hero's head, it dives from it to run
+// level at a hero's waist); and the flame in the furnace's mouth on the firing frame was cut off
 // square where the drawn beam had been trimmed away. And his Slag Pot appeared high above his head,
 // where his hands are a frame earlier, while the throwing frame thrusts his fist forward
 const originalRandom = Math.random;
@@ -44,7 +45,7 @@ describe('the Furnace Knight’s effects', () => {
     Math.random = originalRandom;
   });
 
-  it('fire the flame lances level at the height they left his chest, over a road that rises ahead', () => {
+  it('fire the flame lances out of his chest, then level at a hero’s waist over a road that rises', () => {
     const terrain = buildTerrain({
       ground: [
         [0, 0],
@@ -65,15 +66,16 @@ describe('the Furnace Knight’s effects', () => {
     startMove(game, knight, 'meltdown');
     runTicks(game, 73);
     const lance = game.projectiles.find((shot) => shot.kind === 'flameLance');
-    const chest = lance.y;
-    const heights = new Set();
+    expect(knight.y - lance.mouth.y).toBeCloseTo(19 * knight.scale, 5);
+    const levelHeights = new Set();
     while (game.projectiles.includes(lance) && lance.x > 60) {
       runTicks(game, 1);
       knight.ai.cooldown = 9999;
-      heights.add(lance.y);
+      if (lance.x < lance.bend.x) {
+        levelHeights.add(lance.y);
+      }
     }
-    expect([...heights]).toEqual([chest]);
-    expect(knight.y - chest).toBeCloseTo(19 * knight.scale, 5);
+    expect([...levelHeights]).toEqual([knight.y - 14]);
   });
 
   it('throw the Slag Pot from his fist as his arm thrusts forward, not above his head', () => {

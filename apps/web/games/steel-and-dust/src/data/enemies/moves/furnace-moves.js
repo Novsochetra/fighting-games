@@ -5,7 +5,7 @@ const fireFlail = (life) => ({
   name: 'Fire Flail',
   frames: [44, 8, 34],
   damage: 14,
-  hitbox: [0, -16, 60, 16],
+  hitbox: [0, -16, 32, 16],
   knockback: [3, -3.4],
   knockdown: true,
   strip: 'fireFlail',

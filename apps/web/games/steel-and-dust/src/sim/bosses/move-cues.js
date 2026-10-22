@@ -1,4 +1,5 @@
 import { activeEnd } from '../../data/moves/define-move.js';
+import { bodyPoint, bodySize } from '../fighters/body-point.js';
 import { shake } from '../fx/camera-fx.js';
 import { setBlazes } from '../hazards/blazes.js';
 import { lobBoulder } from '../hazards/boulders.js';
@@ -32,16 +33,20 @@ import { dropRockfall, rockfallIndex } from './rockfall.js';
 import { castCurse, curseReleases, cursingNow, releaseCurse, watchJars } from './sun-curse.js';
 import { blowWarHorn } from './war-horn.js';
 
+// the blade drawn back behind him, his head, and the size of what sparkles there, in his own units
+const BLADE_BEHIND = { ahead: -18, up: 14 };
+const SPARKLE_SIZE = 1;
+
 // the light catches the blade drawn back behind the boss, a beat before it springs
 function glint(game, fighter) {
-  const x = fighter.x - fighter.facing * 18;
-  addBurst(game, { sprite: 'glint', x, y: fighter.y - 14, scale: 1 });
+  const at = bodyPoint(fighter, BLADE_BEHIND);
+  addBurst(game, { sprite: 'glint', ...at, scale: bodySize(fighter, SPARKLE_SIZE) });
 }
 
 // stars circle the head of a dazed boss, a new ring every so often while the daze lasts
 function circleStars(game, fighter, move) {
-  const x = fighter.x + fighter.facing * 4;
-  addBurst(game, { sprite: 'stars', x, y: fighter.y + move.stars.y, scale: 1 });
+  const at = bodyPoint(fighter, { ahead: 4, up: move.stars.up });
+  addBurst(game, { sprite: 'stars', ...at, scale: bodySize(fighter, SPARKLE_SIZE) });
 }
 
 const whileDazed = (move, time) =>

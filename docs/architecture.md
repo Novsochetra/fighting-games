@@ -190,6 +190,14 @@ Fighters are drawn from PixelLab sprite sheets in `assets/sprites/`: one folder 
 Shade (`src/data/heroes.js`, all four loaded at the start) and one sheet per enemy
 (`src/data/enemies/enemy-sprites.js`). `src/sim/hero-animation.js` and `src/sim/enemy-animation.js`
 pick the frame for a fighter's state; colors that belong to a Shade live in `src/art/hero-themes.js`.
+A boss is drawn at its `scale` (`spriteSize` in `src/render/fighters/enemy-sprites.js`), two to
+three times the hero's height, and its hit and hurt boxes grow with it; raiders are drawn at the
+size of their sheets. Where a boss's effects leave its body (a mouth, eyes, a fist, the furnace in a
+chest) is a `bodyPoint` (`src/sim/fighters/body-point.js`) given at scale 1 and grown with the
+boss, so an effect leaves the same spot on its art at any size; a boss keeps its whole body on
+screen (`arenaBounds`). Its body as drawn (`src/data/enemies/boss-bodies.js`) sets the hurt box a
+hero's blows land on, mirrored as it turns, how far its shared swings reach (`swingBox`), and how
+much of it others are kept off (`src/sim/fighters/separate.js`).
 A Shade's `arsenal/` strips are baked from its sword strips by `tools/bake_hero_weapons.py`, which
 also dresses the Moss, Firefly, Antler Spirit and Blue Shades and their ultimate in their element
 (`tools/shade_fx/`: grove moss and spores, a firefly swarm, teal ghost fire, frost), drawn into the
@@ -283,8 +291,8 @@ hero and then one great one, each struck by lightning that whites out the screen
 (`src/sim/bosses/eye-of-storm.js`, `src/sim/hazards/storm-strikes.js`; their rules in
 `storm-rules.js`). The Furnace Knight's Fire Flail sets a row of `blaze`s burning on the road
 (`src/sim/hazards/blazes.js`), his Slag Pot arcs onto a marked spot and breaks into a lava pool
-(`slag-pots.js`), and his Meltdown roars, then looses `lances` of flame from his chest
-(`flame-lances.js`, `src/sim/bosses/furnace.js`) and goes on, through `then`, into a move that is
+(`slag-pots.js`), and his Meltdown roars, then looses `lances` of flame from his chest that dive
+to a hero's waist and run level (`flame-lances.js`, `src/sim/bosses/furnace.js`) and goes on, through `then`, into a move that is
 `exposed`: an exposed boss takes double damage and every hit where it stands, staying in its move
 (`src/sim/combat/apply-hit.js`); burning ground and lava are `groundOnly`, burning only feet on the
 ground (`src/sim/hazards/shot-hits.js`; their rules in `forge-rules.js`). The Sand Pharaoh's

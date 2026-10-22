@@ -1,5 +1,5 @@
 import { POP_TICKS } from '../../sim/bosses/mirage-run.js';
-import { drawEnemyFrame } from './enemy-sprites.js';
+import { drawEnemyFrame, spriteSize } from './enemy-sprites.js';
 
 const POP_FRAME_TICKS = POP_TICKS / 3;
 const FLICKER_EVERY = 48;
@@ -35,6 +35,7 @@ export function drawMirages(painter, sheets, { fighter, frame, tickCount }) {
       x: mirage.x,
       y: mirage.y,
       facing: mirage.facing,
+      size: spriteSize(fighter),
     });
   }
   painter.alpha(1);

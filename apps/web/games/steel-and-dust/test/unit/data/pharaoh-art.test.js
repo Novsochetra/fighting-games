@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { ENEMY_SPRITES } from '../../../src/data/enemies/enemy-sprites.js';
-import { ENEMY_TYPES } from '../../../src/data/enemies/enemy-types.js';
 import { FX_SPRITES } from '../../../src/data/fx-sprites.js';
 import { RENDER_SCALE } from '../../../src/config.js';
 import { POINTED_ORB, SUN } from '../../../src/sim/bosses/sun-curse.js';
@@ -10,15 +9,12 @@ import { readPngAlpha } from '../../support/png-alpha.js';
 const GAME = new URL('../../../', import.meta.url);
 const sprite = ENEMY_SPRITES.pharaoh;
 const sheet = readPngAlpha(new URL(`assets/sprites/enemies/${sprite.file}`, GAME));
-const { scale } = ENEMY_TYPES.pharaoh;
-
-// the sheet pixel under a point given in the game's units from his feet, on one frame of a strip
+// the sheet pixel under a point on his body (body-point.js): his art is drawn at his scale, so a
+// point in his own units lies RENDER_SCALE sheet pixels per unit from his feet whatever his scale
 function pixelAt(strip, frame, { ahead, up }) {
-  const x = frame * sprite.frameWidth + sprite.feetX + Math.round(ahead * scale * RENDER_SCALE);
+  const x = frame * sprite.frameWidth + sprite.feetX + Math.round(ahead * RENDER_SCALE);
   const y =
-    sprite.strips[strip].row * sprite.frameHeight +
-    sprite.feetY -
-    Math.round(up * scale * RENDER_SCALE);
+    sprite.strips[strip].row * sprite.frameHeight + sprite.feetY - Math.round(up * RENDER_SCALE);
   return { alpha: sheet.alpha(x, y), rgb: sheet.rgb(x, y) };
 }
 

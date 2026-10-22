@@ -84,8 +84,7 @@ function timelineFrame({ frameAt, loopFrames, startup, active }, moveTime) {
 }
 
 // wind-up frames lead to the strike frame, which holds while the hitbox is out
-function attackFrame(fighter, sprite) {
-  const { move, moveTime } = fighter;
+function moveFrame(sprite, move, moveTime) {
   const name = stripForMove(sprite, move);
   if (move.frameAt && name === (move.strip ?? move.id)) {
     return [name, timelineFrame(move, moveTime)];
@@ -95,11 +94,22 @@ function attackFrame(fighter, sprite) {
     return [name, Math.floor((moveTime / move.startup) * strike)];
   }
   if (moveTime < move.startup + move.active) {
-    return [name, activeFrame(fighter, { name, strike, last: lastFrame(sprite, name) })];
+    return [name, activeFrame({ move, moveTime }, { name, strike, last: lastFrame(sprite, name) })];
   }
   const recovered = (moveTime - move.startup - move.active) / move.recovery;
   const last = lastFrame(sprite, name);
   return [name, Math.min(last, strike + 1 + Math.floor(recovered * (last - strike)))];
+}
+
+// a move's tick counts on once the tick is played, so the frame drawn is the one for the tick just
+// played, the tick its hitbox and its cues (a boulder leaving his hand) were played on
+function attackFrame(fighter, sprite) {
+  return moveFrame(sprite, fighter.move, Math.max(0, fighter.moveTime - 1));
+}
+
+// the frame a boss's move draws on tick `time` of it, for a cue played on that tick
+export function moveFrameAt(fighter, time) {
+  return moveFrame(ENEMY_SPRITES[fighter.def.sprite], fighter.move, time);
 }
 
 const FRAME_BY_STATE = {

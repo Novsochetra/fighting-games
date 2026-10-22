@@ -9,7 +9,7 @@ import { isDeflectable } from '../hazards/shot-rules.js';
 import { breakCrate } from '../items/crates.js';
 import { shatterIceOn } from '../summons/ice.js';
 import { applyHit } from './apply-hit.js';
-import { attackBox, crateBox, hurtBox, knifeBox, overlapCenter, overlaps } from './boxes.js';
+import { crateBox, hurtBox, knifeBox, overlapCenter, overlaps, swingBox } from './boxes.js';
 import { addUltMeter } from './combo.js';
 import { useDurability } from './durability.js';
 
@@ -116,7 +116,7 @@ function followUpOnHit(game, attacker) {
 }
 
 function resolveAttacker(game, attacker) {
-  const area = attackBox(attacker, attacker.move.hitbox);
+  const area = swingBox(attacker);
   const connected = hitFighters(game, attacker, area);
   if (!isPlayer(attacker)) {
     return;
