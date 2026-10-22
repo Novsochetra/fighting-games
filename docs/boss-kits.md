@@ -157,4 +157,10 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    walls with a skid instead of Ironhorn's crash and bamboo, and ends with him staggering back into
    the arena to pant. The frenzy strip's third lunge (frame 8) was drawn tangled in the frame
    before it, so its timeline loops frames 4-7 and leaves frame 8 out.
-7. Then down the road, 7 to 12. Naga Raja and Bayon Guardian wait for their new sheets.
+7. **Storm Djinn**: done. Taller frames (192×160) for the storm over his raised hands. Crowded,
+   he slips away in a small dust devil to the side of the hero with more room, at most every 4 s.
+   The Thunder Fist's bolt leaves his fist and dives to run along the floor at shin height. A dust
+   devil pulls slower than the hero walks, so walking away (or a dash through it) gets out, and it
+   blows out after throwing someone. The storm's middle wave leaves the hero's own spot clear, so a
+   hero who ran from the first wave is caught by it; every strike's spot crackles while it gathers.
+8. Then down the road, 8 to 12. Naga Raja and Bayon Guardian wait for their new sheets.

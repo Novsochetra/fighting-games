@@ -6,4 +6,5 @@ export const BOSS_ULT_COLORS = {
   cobra: { dim: '#0e0816', title: '#f2c84e', ring: '#c69cf0' },
   queen: { dim: '#160a04', title: '#ffa94a', ring: '#ffd98a' },
   gnoll: { dim: '#1a0505', title: '#ff5a4a', ring: '#ff9a8a' },
+  djinn: { dim: '#040a18', title: '#7fd8ff', ring: '#e2f6ff' },
 };

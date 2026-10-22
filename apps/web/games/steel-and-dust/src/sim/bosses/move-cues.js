@@ -2,9 +2,11 @@ import { activeEnd } from '../../data/moves/define-move.js';
 import { shake } from '../fx/camera-fx.js';
 import { lobBoulder } from '../hazards/boulders.js';
 import { spawnCrescent } from '../hazards/crescents.js';
+import { raiseDustDevils } from '../hazards/dust-devils.js';
 import { spawnShockwave } from '../hazards/shockwaves.js';
 import { spitVenom } from '../hazards/venom-globs.js';
 import { raiseSpikes } from '../hazards/spikes.js';
+import { fireThunderBolt } from '../hazards/thunder-bolts.js';
 import { releaseWasp, slamPincers, waspAt } from '../hazards/wasps.js';
 import { addBurst } from '../summons/bursts.js';
 import { announceBossUltimate } from './announce.js';
@@ -18,6 +20,7 @@ import {
   surfacesNow,
   tunnelAfterHero,
 } from './burrow.js';
+import { callGreatStrike, callStormWave, stormWaveAt } from './eye-of-storm.js';
 import { circleHeldHero, flashGaze, warnOfGaze, whileHeld } from './hypnotic-gaze.js';
 import { feed, howl, leap, smashBones, trailEyes } from './pack-hunt.js';
 import { dropRockfall, rockfallIndex } from './rockfall.js';
@@ -77,6 +80,13 @@ const CUES = [
     trailEyes,
   ],
   [(move) => Boolean(move.heals), feed],
+  [atStrike('thunderBolt'), fireThunderBolt],
+  [atStrike('devils'), raiseDustDevils],
+  [
+    (move, time) => Boolean(stormWaveAt(move, time)),
+    (game, fighter, move, time) => callStormWave(game, fighter, stormWaveAt(move, time)),
+  ],
+  [(move, time) => time === move.storm?.bigAt, callGreatStrike],
   [
     (move, time) => move.rockfall && rockfallIndex(move, time) >= 0,
     (game, fighter, move, time) => dropRockfall(game, fighter, rockfallIndex(move, time)),

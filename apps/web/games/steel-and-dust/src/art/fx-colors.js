@@ -7,6 +7,7 @@ export const FX_COLORS = {
   knifeHandle: '#a3302a',
   enemyGhost: '#ffcf9a',
   frenzyGhost: '#d8282e',
+  zap: '#7fd8ff',
   telegraph: '#ff4a2a',
   mirage: '#62e6d4',
   mirageDust: '#c9b48a',

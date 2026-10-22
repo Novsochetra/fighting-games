@@ -11,6 +11,12 @@ import {
   drawShard,
   drawSpike,
 } from './rock-hazards.js';
+import {
+  drawDustDevil,
+  drawStormStrike,
+  drawStrikeMark,
+  drawThunderBolt,
+} from './storm-hazards.js';
 import { drawGlob, drawPuddle } from './venom-hazards.js';
 import { drawWasp } from './wasp-hazards.js';
 
@@ -106,10 +112,15 @@ const DRAW_SHOT = {
   puddle: drawPuddle,
   wasp: drawWasp,
   pounceMark: drawPounceMark,
+  thunderBolt: drawThunderBolt,
+  dustDevil: drawDustDevil,
+  stormStrike: drawStormStrike,
 };
 
 // what lies flat on the road is drawn under the fighters' feet
 const ON_GROUND = new Set(['puddle', 'pounceMark']);
+// what strikes from above has its spot marked on the road under the fighters, and itself over them
+const GROUND_MARK = { stormStrike: drawStrikeMark };
 
 export function drawProjectiles(painter, projectiles, fxSheets) {
   for (const shot of projectiles) {
@@ -124,5 +135,6 @@ export function drawGroundHazards(painter, projectiles, fxSheets) {
     if (ON_GROUND.has(shot.kind)) {
       DRAW_SHOT[shot.kind](painter, shot, fxSheets);
     }
+    GROUND_MARK[shot.kind]?.(painter, shot);
   }
 }

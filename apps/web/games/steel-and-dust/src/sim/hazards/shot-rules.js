@@ -1,4 +1,5 @@
 import { knifeBox } from '../combat/boxes.js';
+import { STORM_RULES } from './storm-rules.js';
 
 const KNIFE_HIT = { knockback: [1.6, 0], hitstop: 4, hitstun: 16 };
 const WAVE_HIT = { knockback: [3, -3.6], knockdown: true, hitstop: 6, hitstun: 20 };
@@ -126,6 +127,7 @@ export const SHOT_RULES = {
     enemyWeapon: 'none',
     rehitEvery: 30,
   },
+  ...STORM_RULES,
 };
 
 export function isDeflectable(shot) {
