@@ -130,7 +130,7 @@ export function runRush(game, player, time) {
   }
 }
 
-// back to where the rush started, ready to take up the sword again
+// back to where the rush started, to call up the pride
 export function zipBack(game, player, time) {
   const { rush } = player;
   if (time === RUSH_END) {

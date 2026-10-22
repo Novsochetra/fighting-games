@@ -5,7 +5,7 @@ import { WAKE_AT } from './rush-timing.js';
 const { pride, ripple, hopTicks, cascade, pounceAt, hopHeight, pounceHeight } = POUNDING_LION;
 // they land in a loose heap, not all on one pixel
 const HEAP_SPACING = 8;
-// the heap lies this far ahead of the hero, where his sword pounds the ground
+// the heap lies this far ahead of the hero, where his fists pound the ground
 const HEAP_AHEAD = 40;
 // the scale the leap heights are tuned for
 const BASE_SCALE = 0.5;

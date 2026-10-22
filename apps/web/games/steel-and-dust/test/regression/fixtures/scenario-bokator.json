@@ -2227,12 +2227,12 @@
     }
    ],
    "world": {
-    "particles": "ebfbde5df860a445",
+    "particles": "878123fd375354bb",
     "effects": "cd857852ed982ebe",
     "floaters": "0eed09d910271689",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "4bba5e62a65f5dbd",
+    "summons": "01fc828d82413c03",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -7552,12 +7552,12 @@
    },
    "enemies": [],
    "world": {
-    "particles": "3c160cbff0a941b8",
+    "particles": "4ae31ef1f5662e0e",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "f25fbb8722d770c9",
+    "summons": "99bcdd7ee124d1b1",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -8493,21 +8493,21 @@
    "tick": 1680,
    "frame": {
     "calls": 2391,
-    "digest": "ab24ab61d103f656"
+    "digest": "cee5a6dac668d4cb"
    }
   },
   {
    "tick": 1920,
    "frame": {
     "calls": 2113,
-    "digest": "874f77c2a3fdd47e"
+    "digest": "96fed21a55cadc4d"
    }
   },
   {
    "tick": 2160,
    "frame": {
     "calls": 2813,
-    "digest": "e81a2bf298ec75b6"
+    "digest": "d086160b7c628eaa"
    }
   }
  ]

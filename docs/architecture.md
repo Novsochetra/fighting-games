@@ -216,8 +216,9 @@ Each Shade fights in its own style and has its own ultimate:
   (`src/sim/summons/echoes.js`), drawn the same way from his strips in gold behind the fighters
   (`src/render/fx/echoes.js`); each strikes its raider again, holds the blow and, once woken, flares
   as a lion rises out of it. A burst may be marked `behind` to rise behind the fighters too. An
-  ultimate frame may name its own weapon row (`[strip, frame, row]`), so he rushes bare-handed
-  whatever he holds. A move's signature
+  ultimate frame may name its own weapon row (`[strip, frame, row]`), so he fights his whole ultimate
+  bare-handed whatever he holds, and an ultimate marked `bareHanded` shows the hero bare-handed in
+  its cut-in too. A move's signature
   (`thorns`, `fireflies`, `stags`, `pillars`, `lions`, `soldiers`, and the name call-out of a
   `technique`) fires on its first active frame; a style's `weapons` patch marks every move of one
   weapon (the Ember Shade's spear moves all carry `feathers`, a burst where each hit lands); what a landed move leaves on the raider is in

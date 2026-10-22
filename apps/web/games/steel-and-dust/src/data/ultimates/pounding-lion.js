@@ -1,18 +1,20 @@
-// Bokator: a bow and a slam that throws the raiders up, then he lets the sword go to gold and rushes
-// them bare-handed, a blur of elbows, knees and kicks; every blow leaves a gold echo of him that
-// strikes again, and each echo rises as one of the guardian lions that line Angkor's stairs, the
-// pride pouncing as one where his sword, back in his hand, pounds the ground; bokator means
-// "pounding the lion"
+// Bokator, bare-handed: he bows in the Bokator salute and slams the ground with his fist, throwing
+// the raiders up, then draws the lion's breath and rushes them, a blur of elbows, knees and kicks;
+// every blow leaves a gold echo of him that strikes again, and each echo rises as one of the guardian
+// lions that line Angkor's stairs, the pride pouncing as one as he drives both fists into the ground;
+// bokator means "pounding the lion"
 export const POUNDING_LION = {
   name: 'Pounding the Lion',
   summary:
     'Slams the raiders up and rushes them bare-handed; every blow leaves a gold echo that strikes again, then rises as a lion.',
   damageText: '8 + 6 per blow + 3 per lion + 24',
   intro: 46,
-  // ticks for each frame of the bow, before the blow
-  poseTicks: 16,
+  // he fights it all with his fists, whatever he holds: the cut-in shows him bare-handed too
+  bareHanded: true,
+  // ticks for each frame of the salute, before the blow
+  poseTicks: 12,
   slamAt: 60,
-  // the sword goes to gold and he coils, the lion's breath gathering round him
+  // he coils, the lion's breath gathering round him
   gatherAt: 72,
   rushAt: 86,
   // ticks a zip to the next raider takes, leaving gold images of him along the way

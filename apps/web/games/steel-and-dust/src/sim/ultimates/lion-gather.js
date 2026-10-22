@@ -11,8 +11,8 @@ export const COIL_FRAME = ['rising_dragon', 0, FISTS_ROW];
 const MOTE_TICKS = 14;
 const MOTE_REACH = 46;
 
-// the sword goes to gold in his hand, and he drops into his stance
-export function letSwordGo(game, player) {
+// he draws the lion's breath: gold flares off his fists and a gold flame rises behind him
+export function breatheIn(game, player) {
   const x = player.x + player.facing * 10;
   addSparks(game, { x, y: player.y - 44, count: 14, color: FX_COLORS.lionGold, speed: 2.8 });
   addSparks(game, { x, y: player.y - 30, count: 8, color: FX_COLORS.lionDeep, speed: 1.8 });
