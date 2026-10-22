@@ -230,8 +230,8 @@ Mission 11's layers come from three ChatGPT paintings (1536x1024) in
 `concepts/stages/angkor-wat/chatgpt-prompts.md`: the far scene, a sheet of props on flat magenta and
 the road's cross-section on flat magenta. They were asked for as clean, flat-shaded paintings, not
 pixel art, because ChatGPT's pixel grid is uneven and too coarse; `tools/painting_layers.py` turns
-them into pixel art at the road's own size. The first, PixelLab version of the road is kept beside
-them (`concept.png`, `back-painting.png`, `near-painting.png`, `ground-painting.png`).
+them into pixel art at the road's own size. The first, PixelLab version of the road, its concept
+and Pro paintings, is in the git history up to commit `57a9e87`.
 
 ```
 T=tools/painting_layers.py; C=concepts/stages/angkor-wat/chatgpt; A=<this folder>/angkor-wat
