@@ -102,6 +102,7 @@ const ON_GROUND = new Set(['puddle', 'pounceMark', 'lavaPool', 'canopic', 'stone
 // what strikes from above has its spot marked on the road under the fighters, and itself over them
 const GROUND_MARK = {
   stormStrike: drawStrikeMark,
+  serpentRise: drawStrikeMark,
   gazePillar: drawPillarMark,
   figRoot: drawRootMark,
 };

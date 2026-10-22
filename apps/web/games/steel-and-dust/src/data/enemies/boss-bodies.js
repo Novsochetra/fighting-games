@@ -32,9 +32,10 @@ export const BOSS_BODIES = {
     ...SERPENT,
     reach: { swipe: [2, -51, 40, 50], slam: [0, -30, 26, 30] },
   },
+  // her own sheet, drawn half as fine again: her coil and the fan of hoods round her trunk
   naga: {
-    ...SERPENT,
-    reach: { swipe: [2, -51, 40, 50], slam: [0, -50, 34, 50], charge: [2, -38, 42, 38] },
+    hurtShape: [10, 41, 21, 41],
+    reach: { swipe: [5, -39, 26, 39], slam: [0, -24, 18, 24] },
   },
   // her humanoid body stands over her feet and her scorpion's body runs back from them
   queen: {

@@ -3,6 +3,7 @@ import { BOSS_SOUNDS } from './boss-sounds.js';
 import { ELEMENT_SOUNDS } from './element-sounds.js';
 import { EVENT_SOUNDS } from './event-sounds.js';
 import { MENU_SOUNDS } from './menu-sounds.js';
+import { MOAT_SOUNDS } from './moat-sounds.js';
 import { SIGNATURE_SOUNDS } from './signature-sounds.js';
 import { TEMPLE_SOUNDS } from './temple-sounds.js';
 
@@ -15,6 +16,7 @@ export const LIVE_SOUNDS = {
   ...ELEMENT_SOUNDS,
   ...TEMPLE_SOUNDS,
   ...BAYON_SOUNDS,
+  ...MOAT_SOUNDS,
 };
 
 export function isLiveSound(key) {

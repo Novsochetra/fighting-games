@@ -26,6 +26,10 @@ import { glareFace } from './stone-faces.js';
 import { crackStrike } from './storm-strikes.js';
 import { runThunderBolt } from './thunder-bolts.js';
 import { flyGlob, soakPuddle } from './venom-globs.js';
+import { flyNagaBolt } from './naga-bolts.js';
+import { burstSerpent, sweepSpirit } from './spirit-nagas.js';
+import { rollTide } from './tides.js';
+import { spinOrb } from './rainbow-orb.js';
 import { fadeMark } from './pounce-mark.js';
 import { flyWasp } from './wasps.js';
 
@@ -89,6 +93,11 @@ const FLIGHT = {
   gazePillar: burnPillar,
   figRoot: growRoot,
   stoneFace: glareFace,
+  tide: rollTide,
+  nagaBolt: flyNagaBolt,
+  spiritNaga: sweepSpirit,
+  serpentRise: burstSerpent,
+  rainbowOrb: spinOrb,
 };
 const OWN_FLOOR = new Set(['fire', 'bamboo', ...Object.keys(FLIGHT)]);
 

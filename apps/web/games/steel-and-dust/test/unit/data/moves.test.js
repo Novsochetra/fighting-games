@@ -117,6 +117,13 @@ describe('move tables', () => {
       'figThicket',
       'fourFaces',
       'crumble',
+      'serpentSlash',
+      'tailSlam',
+      'tidalCoil',
+      'tidalCoils',
+      'sevenHeads',
+      'rainbowNaga',
+      'nagaSpent',
     ]);
   });
 

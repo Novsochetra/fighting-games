@@ -59,4 +59,6 @@ export const FX_COLORS = {
   stoneSkin: '#9c9a88',
   stoneSkinDark: '#5d5a4c',
   rootDust: '#8f8a5a',
+  foam: '#d6f6ff',
+  rainbow: ['#ff5a6e', '#ffa63a', '#ffe45a', '#6aff8a', '#4ad8ff', '#6a7aff', '#d27aff'],
 };

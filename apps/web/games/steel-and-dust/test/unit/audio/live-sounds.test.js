@@ -76,6 +76,10 @@ describe('live sounds', () => {
         'faceBeam',
         'crumble',
         'reform',
+        'tide',
+        'splash',
+        'nagaHiss',
+        'rainbow',
       ].sort(),
     );
   });
