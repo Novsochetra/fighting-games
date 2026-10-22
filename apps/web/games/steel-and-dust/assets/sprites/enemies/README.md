@@ -56,7 +56,7 @@ into the sheet's own palette.
 | Sheet      | Rows added                                                                                       |
 | ---------- | ------------------------------------------------------------------------------------------------ |
 | `khan.png` | his `ko` and `slam` rows redrawn, his first sheet's being cut off at its edges; `warHorn` 8 (blows a ram's horn), `crescentDash` 10 (crouch, lunge, slash; redrawn, its blade was cut off at the right), `tempest` 12 (three low swings) |
-| `colossus.png` | `boulderLob` 10 (tears up a boulder, hurls it), `spikeLine` 8 (a stomp), `landslide` 12 (pounds the ground twice, roars) |
+| `colossus.png` | his `slam` row redrawn, his first sheet's having its raised fists cut off at the top; `boulderLob` 10 (tears up a boulder, hurls it), `spikeLine` 8 (a stomp), `landslide` 12 (pounds the ground twice, roars) |
 | `ironhorn.png` | `hornRush` 10 (paws, runs, skids), `uppercut` 8, `dazed` 6 (a loop; the stars are `fx/stars.png`), `stampede` 12 (rears, stomps, runs, skids) |
 | `cobra.png` | `venomSpit` 8 (rears back, spits), `coilLash` 10 (whips the tail round and along the floor), `hypnoticGaze` 12 (rises, hood flared, eyes glowing and flashing, lunges) |
 | `gnoll.png` | `packCall` 8 (crouches, howls at the sky), `leapingMaul` 10 (crouches, leaps with the club overhead, smashes it down), `bloodFrenzy` 12 (hunches with red eyes, cackles, lunges; frame 8 is unused, see `docs/boss-kits.md`) |

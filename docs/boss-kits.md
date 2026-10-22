@@ -134,7 +134,9 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    knock-out, slam and Crescent Dash rows were cut off at the frame's edges and were redrawn; the
    new art fits his 192×112 frames, so his sheet kept its size.
 2. **Rust Colossus**: done. His sheet has taller frames (192×160) so the boulder held overhead
-   fits. The landing spot of every boulder is marked with the same blinking red bar as the lanes.
+   fits. The landing spot of every boulder is marked with the same blinking red bar as the lanes. His slam row
+   had its raised fists cut off at the frame's top and was redrawn.
+
 3. **Ironhorn**: done. Taller frames too (the mace swung overhead). The stars GPT drew into the
    Dazed strip were keyed out and are drawn from the stars effect instead, so they also circle him
    after the Stampede. Every wall hit, not only the Stampede's, knocks a bamboo stalk down.
