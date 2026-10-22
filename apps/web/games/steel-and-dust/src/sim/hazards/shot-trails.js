@@ -141,13 +141,9 @@ const TRAILS = {
   fire: emberTrail,
   crescent: gravelTrail,
   boulder: rockTrail,
-  shard: () => {},
-  spike: () => {},
-  bamboo: () => {},
   glob: venomTrail,
-  puddle: () => {},
 };
 
 export function leaveTrail(game, shot) {
-  TRAILS[shot.kind](game, shot);
+  TRAILS[shot.kind]?.(game, shot);
 }

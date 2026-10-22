@@ -15,7 +15,6 @@ export const COBRA_KIT = {
     below: 0.5,
     pace: 1.2,
     cooldown: 0.7,
-    chains: {},
     swaps: { venomSpit: 'venomSpray' },
   },
 };
