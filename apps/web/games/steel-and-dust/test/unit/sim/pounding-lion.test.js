@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { POUNDING_LION } from '../../../src/data/ultimates/pounding-lion.js';
 import { FINALE_START, poundingFrame } from '../../../src/sim/ultimates/pounding-frames.js';
-import { POUNCE_AT } from '../../../src/sim/ultimates/pounding-lion.js';
 import { FISTS_ROW, RUSH_BLOWS, WAKE_AT } from '../../../src/sim/ultimates/rush-timing.js';
 
-const { intro, poseTicks, slamAt, gatherAt, rushAt, end } = POUNDING_LION;
+const { intro, poseTicks, slamAt, gatherAt, rushAt, pounceAt, end } = POUNDING_LION;
 const stripAt = (time) => poundingFrame(time).slice(0, 2);
 const sameFrame = (first, second) => poundingFrame(first).join() === poundingFrame(second).join();
 
@@ -53,8 +52,8 @@ describe("Pounding the Lion's frames", () => {
     expect(stripAt(WAKE_AT)[0]).toBe('idle');
     expect(stripAt(FINALE_START - 1)[0]).toBe('idle');
     expect(stripAt(FINALE_START)).toEqual(['plunge', 0]);
-    expect(stripAt(POUNCE_AT - 1)).toEqual(['plunge', 1]);
-    expect(stripAt(POUNCE_AT)).toEqual(['plunge', 2]);
+    expect(stripAt(pounceAt - 1)).toEqual(['plunge', 1]);
+    expect(stripAt(pounceAt)).toEqual(['plunge', 2]);
     expect(stripAt(end)).toEqual(['plunge', 3]);
   });
 

@@ -27,10 +27,17 @@ function watchStrips(sheet, images) {
   }
 }
 
+// a hero whose ultimate is drawn from its other strips (Bokator, bare-handed) has none of its own
+export function stripsOf(hero) {
+  return Object.keys(HERO_SPRITES.frames).filter(
+    (name) => !ONE_ROW_STRIPS.has(name) || hero.ultStrip,
+  );
+}
+
 export function loadHeroSprites({ createImage, createCanvas, baseUrl, hero, theme }) {
   const tints = createTintCache(createCanvas);
   const sheet = { images: {}, tints, ready: false, settled: false, theme };
-  const names = Object.keys(HERO_SPRITES.frames);
+  const names = stripsOf(hero);
   for (const name of names) {
     sheet.images[name] = createImage();
   }

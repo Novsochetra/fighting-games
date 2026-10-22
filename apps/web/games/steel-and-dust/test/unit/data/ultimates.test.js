@@ -42,17 +42,19 @@ describe('the ultimates', () => {
     }
   });
 
-  it("has an ultimate strip for every hero, the hero frames' width and at least their height", () => {
-    for (const hero of HEROES) {
+  it("has an ultimate strip for every hero but Bokator, the hero frames' width and at least their height", () => {
+    const withStrips = HEROES.filter((hero) => hero.ultStrip);
+    expect(HEROES.filter((hero) => !hero.ultStrip).map((hero) => hero.id)).toEqual(['bokator']);
+    for (const hero of withStrips) {
       const { width, height } = pngSize(GAME_ROOT + hero.ultStrip);
       expect(width, hero.id).toBe(HERO_SPRITES.frameWidth * HERO_SPRITES.frames.ult);
       expect(height, hero.id).toBeGreaterThanOrEqual(HERO_SPRITES.frameHeight);
     }
-    // only the two Khmer fighters' raised swords need the room
-    const taller = HEROES.filter(
+    // only the Angkor Warrior's raised dav needs the room
+    const taller = withStrips.filter(
       (hero) => pngSize(GAME_ROOT + hero.ultStrip).height > HERO_SPRITES.frameHeight,
     );
-    expect(taller.map((hero) => hero.id)).toEqual(['bokator', 'angkor']);
+    expect(taller.map((hero) => hero.id)).toEqual(['angkor']);
   });
 
   it('has an effect strip for every effect, as long as its frames say', () => {

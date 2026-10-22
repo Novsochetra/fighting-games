@@ -15,8 +15,7 @@ import { runRush, zipBack } from './lion-rush.js';
 import { FINALE_START, poundingFrame } from './pounding-frames.js';
 import { RUSH_END, WAKE_AT } from './rush-timing.js';
 
-const { slamAt, gatherAt, rushAt } = POUNDING_LION;
-export const POUNCE_AT = POUNDING_LION.pounceAt;
+const { slamAt, gatherAt, rushAt, pounceAt } = POUNDING_LION;
 // where his fist meets the ground in the slam frame, ahead of his feet
 const FIST_REACH = 14;
 
@@ -117,7 +116,7 @@ export function runPoundingLion(game, player, time) {
   if (time > WAKE_AT && time < FINALE_START && time % 3 === 0) {
     channel(game, player);
   }
-  if (time === POUNCE_AT) {
+  if (time === pounceAt) {
     pounce(game, player);
   }
   if (time >= POUNDING_LION.end) {

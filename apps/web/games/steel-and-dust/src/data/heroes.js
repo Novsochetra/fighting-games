@@ -1,7 +1,8 @@
 // the heroes the player can pick, five Shades and two Khmer fighters, Bokator and the Angkor Warrior;
 // each has its own sprite set and effect colors, a fighting style (data/styles/) and an ultimate
 // (data/ultimates/); the Moss, Firefly, Antler Spirit and Blue Shades' ultimate is dressed in their
-// element by the same bake as their other strips, so it is drawn from their arsenal too
+// element by the same bake as their other strips, so it is drawn from their arsenal too; Bokator
+// fights his bare-handed from his own strips, so he has no ultimate strip
 export const HEROES = [
   {
     id: 'moss',
@@ -43,7 +44,7 @@ export const HEROES = [
     name: 'Bokator',
     tagline: 'Pounds the lion, as Angkor taught',
     directory: 'assets/sprites/heroes/bokator/arsenal/',
-    ultStrip: 'assets/sprites/heroes/bokator/hero_ult.png',
+    ultStrip: null,
   },
   {
     id: 'angkor',
