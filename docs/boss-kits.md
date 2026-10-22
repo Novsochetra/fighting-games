@@ -130,9 +130,13 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
 1. **Gravel Khan**: done. The first boss the player meets, and the one that built the shared parts
    (kit data, the brain picking skills, extra strips in a sheet, the ultimate with its dim and
    call-out, phase two, the mid-boss version). His War Horn plays only when no raider stands with
-   him, and the dash's dust trail was left out: the gravel the waves throw up was enough.
+   him, and the dash's dust trail was left out: the gravel the waves throw up was enough. His
+   knock-out, slam and Crescent Dash rows were cut off at the frame's edges and were redrawn; the
+   new art fits his 192×112 frames, so his sheet kept its size.
 2. **Rust Colossus**: done. His sheet has taller frames (192×160) so the boulder held overhead
-   fits. The landing spot of every boulder is marked with the same blinking red bar as the lanes.
+   fits. The landing spot of every boulder is marked with the same blinking red bar as the lanes. His slam row
+   had its raised fists cut off at the frame's top and was redrawn.
+
 3. **Ironhorn**: done. Taller frames too (the mace swung overhead). The stars GPT drew into the
    Dazed strip were keyed out and are drawn from the stars effect instead, so they also circle him
    after the Stampede. Every wall hit, not only the Stampede's, knocks a bamboo stalk down.
@@ -141,7 +145,9 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    touching, so the tool floods black in from the edges, peels the glow and takes per-row cut
    lines. The new colors are picked from spread-out seeds so her glowing eyes keep their own
    entries. Each glob's landing spot is marked as it leaves her mouth, and puddles are drawn under
-   the fighters' feet.
+   the fighters' feet. Her knock-out, slam
+   and charge rows were cut off at the frame's edges and were redrawn.
+
 5. **Scorpion Queen**: done. Her sheet has frames both wider and taller (256×160): the sting
    stabs far ahead and the tail stabs straight up as she bursts out. GPT gave real transparent
    PNGs this time; the travelling mound is its own loop, cut at her scale onto the end of her
@@ -156,13 +162,20 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    shockwave. The Pack Call sends hounds rather than the road's raiders. His frenzy turns at the
    walls with a skid instead of Ironhorn's crash and bamboo, and ends with him staggering back into
    the arena to pant. The frenzy strip's third lunge (frame 8) was drawn tangled in the frame
-   before it, so its timeline loops frames 4-7 and leaves frame 8 out.
+   before it, so its timeline loops frames 4-7 and leaves frame 8 out. His swipe,
+   knock-out and slam rows were cut off at the frame's edges and were redrawn (the swipe's raised
+   club ran off the top of the new image and its spike was given back its point); the Leaping
+   Maul's two airborne frames were lifted off the frame's bottom edge and its landing club rests
+   on the feet line, and the unused frenzy frame was cleared.
+
 7. **Storm Djinn**: done. Taller frames (192×160) for the storm over his raised hands. Crowded,
    he slips away in a small dust devil to the side of the hero with more room, at most every 4 s.
    The Thunder Fist's bolt leaves his fist and dives to run along the floor at shin height. A dust
    devil pulls slower than the hero walks, so walking away (or a dash through it) gets out, and it
    blows out after throwing someone. The storm's middle wave leaves the hero's own spot clear, so a
-   hero who ran from the first wave is caught by it; every strike's spot crackles while it gathers.
+   hero who ran from the first wave is caught by it; every strike's spot crackles while it gathers. His knock-out and
+   slam rows were cut off at the frame's edges and were redrawn.
+
 8. **Furnace Knight**: done. His sheet has frames both wider and taller (256×160): the flail
    whirls overhead and sweeps far along the floor. The flail and pot strips came with a painted
    checkerboard, also shut inside the flail's fiery arcs, so the keying also clears closed pockets
