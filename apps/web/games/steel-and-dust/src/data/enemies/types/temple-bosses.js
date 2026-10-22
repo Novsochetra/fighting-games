@@ -9,11 +9,13 @@ export const TEMPLE_BOSSES = {
     material: 'shell',
     hp: 310,
     speed: 0.75,
-    range: 40,
+    range: 60,
     palette: 'brute',
     weapon: 'knife',
     voicePitch: 1.1,
-    scale: 1.3,
+    // drawn half as big again as the other bosses; her reach and every point read from her art grow
+    // with it
+    scale: 1.95,
     armor: true,
     boss: true,
     guardPose: GUARD,

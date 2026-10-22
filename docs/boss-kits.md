@@ -83,7 +83,7 @@ Drawn apart from the body, one row each, in `assets/sprites/fx/boss/`. Sizes are
 | Furnace  | burning ground loop (6, 64x48), lava pool loop (6, 96x32), flame beam segment loop (4, 64x48) and head (4, 64x64), steam vent (6, 48x96) |
 | Pharaoh  | scarab crawl (4, 32x16), canopic jar (1, 48x64) and jar break (6, 64x64), curse mark loop (4, 32x32), mirage shimmer (6, 96x112)         |
 | Ox       | chain hook (1, 32x32), parry glint (4, 48x48), red axe spin (6, 160x112)                                                                 |
-| Naga     | water wave loop (6, 128x80), splash (6, 96x64), spirit naga head (6, 192x128) and body segment (1, 64x64)                                |
+| Naga     | done: `tide` (8), `splash` (7), `serpentRise` (8), `spiritNaga` (7), `nagaBolt` (4)                                                      |
 | Guardian | gold gaze beam segment loop (4, 64x48), fig root burst (8, 64x128), giant stone face (4, 256x256), rubble burst (6, 128x96)              |
 
 ## Prompt rules for generated art
@@ -192,4 +192,21 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    move as he moves, are a shade thinner and waver now and then, and pop at one blow. The Curse of
    the Sun counts down over the hero's head in the sun's eye; the scarabs bite only feet on the
    ground. In phase two his copies thrust their staffs and fire mirage bolts low along the floor.
-10. Then down the road, 10 to 12. Naga Raja and Bayon Guardian wait for their new sheets.
+10. **Naga Raja**: done, ahead of the Warden Ox. Her sheet is new and her own, not the Cobra
+    recolor, and she is half as big again as the other bosses (384×240 frames, scale 1.95), drawn at
+    the same pixel density; her reach, her effects and every point read from her art grow with her. She glides in smooth bursts over the stone and glides back from a hero who
+    crowds her (`glider`). Her slash and her coil slam are her close moves; the slam bursts with moat
+    water. The Tidal Coil crashes her coil down and rolls a wave from its front along the floor (jump
+    it); in phase two two waves come, one after the other. The Seven Heads spit seven water nagas
+    from her mouths in turn: low pairs a jump clears, then high pairs that fly over a standing hero,
+    spaced so a hero who jumped has landed first. The Rainbow Naga gathers the rainbow in her
+    raised hand, sends a spirit naga sweeping along the floor from behind her and then one from
+    behind the hero (jump each), then bursts a serpent of water up on a spot marked under the hero
+    (walk off it), and leaves her spent and open for a while. The images came on black or a painted
+    dark checker, with water, glow and beams drawn over her body and frames touching: they were keyed,
+    split along winding seams (a dagger tip that touched the next frame's tail stays with its own
+    frame), and the water, rocks and glow were peeled off her. Her slash, slam and three skill strips
+    were then drawn again body-only on white, and an orb of rainbow light gathers over her raised
+    hand and follows it from frame to frame before the spirits come; the ultimate's name is called
+    higher (`calloutUp`) so the orb does not cover it.
+11. Then the Warden Ox and the Bayon Guardian.

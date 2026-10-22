@@ -5,6 +5,7 @@ import { FURNACE_KIT } from './furnace.js';
 import { GNOLL_KIT } from './gnoll.js';
 import { IRONHORN_KIT } from './ironhorn.js';
 import { KHAN_KIT } from './khan.js';
+import { NAGA_KIT } from './naga.js';
 import { PHARAOH_KIT } from './pharaoh.js';
 import { QUEEN_KIT } from './queen.js';
 
@@ -19,4 +20,5 @@ export const BOSS_KITS = {
   djinn: DJINN_KIT,
   furnace: FURNACE_KIT,
   pharaoh: PHARAOH_KIT,
+  naga: NAGA_KIT,
 };

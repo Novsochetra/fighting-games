@@ -1,4 +1,11 @@
 import { drawBlaze, drawFlameLance, drawLavaPool, drawSlagPot } from './forge-hazards.js';
+import {
+  drawNagaBolt,
+  drawRainbowOrb,
+  drawSerpentRise,
+  drawSpiritNaga,
+  drawTide,
+} from './moat-hazards.js';
 import { drawBamboo, drawBoulder, drawShard, drawSpike } from './rock-hazards.js';
 import { drawDustDevil, drawStormStrike, drawThunderBolt } from './storm-hazards.js';
 import { drawCanopic, drawCurseMark, drawMirageBolt, drawScarabs } from './temple-hazards.js';
@@ -25,4 +32,9 @@ export const BOSS_HAZARD_DRAWERS = {
   canopic: drawCanopic,
   curseMark: drawCurseMark,
   mirageBolt: drawMirageBolt,
+  tide: drawTide,
+  nagaBolt: drawNagaBolt,
+  spiritNaga: drawSpiritNaga,
+  serpentRise: drawSerpentRise,
+  rainbowOrb: drawRainbowOrb,
 };

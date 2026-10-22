@@ -243,13 +243,14 @@ Matriarch's `slither` keeps the middle distance; the Scorpion Queen's `scuttle` 
 the edge of her sting's reach; the Gnoll Packlord's `packHunter` darts in and out; the Storm Djinn's
 `floater` drifts at the edge of his reach and, crowded, whirls away across the arena; the Furnace
 Knight's `juggernaut` walks in, never backs off and vents steam; the Sand Pharaoh's `illusionist`
-glides at the middle distance and, crowded, steps out of the sand at the far end), swings its
+glides at the middle distance and, crowded, steps out of the sand at the far end; the Naga Raja's
+`glider` glides in bursts at the middle distance and glides back from a hero who crowds her), swings its
 `close` moves in reach, picks its `skills` by range, chance and cooldown, and on its own road (never as
 a mid-boss) looses its `ultimate` below a share of its health, again every so often. Below half
 health its `phaseTwo` moves quicker, shortens the cooldowns, may chain a skill and may `swap` one for
 a stronger one. Its moves live with the other enemy moves (`src/data/enemies/moves/khan-moves.js`,
 `colossus-moves.js`, `ironhorn-moves.js`, `cobra-moves.js`, `queen-moves.js`, `gnoll-moves.js`,
-`djinn-moves.js`, `furnace-moves.js`, `pharaoh-moves.js`) and each plays a strip of its name (or the one its `strip` names) in its sheet on
+`djinn-moves.js`, `furnace-moves.js`, `pharaoh-moves.js`, `naga-moves.js`) and each plays a strip of its name (or the one its `strip` names) in its sheet on
 its own timeline (`frameAt`, the tick each frame starts on; `loopFrames`, a run of frames looped
 while the move is active, for a rush or a daze). A rush that meets the arena's wall turns into the
 move its `wallNext` names (`src/sim/bosses/wall-hit.js`): Ironhorn is left dazed when his Horn Rush
@@ -296,9 +297,14 @@ step out of the sand with him, move as he moves, fire `mirageBolt`s in phase two
 `curse` (`src/sim/bosses/sun-curse.js`) raises three canopic jars (`canopic-jars.js`) and hangs the
 sun's eye over the hero (`curse-marks.js`): every jar broken in time sends him into `sunBroken`,
 reeling, and a jar left standing at `releaseAt` brings the sunfall down on the hero (rules in
-`temple-rules.js`). They are all projectiles,
+`temple-rules.js`). The Naga Raja's coil crashes in a `splash` (`src/sim/bosses/naga.js`), her
+`tides` roll along the floor from the front of her coil (`src/sim/hazards/tides.js`), her Seven
+Heads' `heads` each spit a water naga that waits at its mouth while its lane is marked and dives to
+it, low or high (`naga-bolts.js`), and her Rainbow Naga gathers the rainbow in her hand, sends a
+spirit naga sweeping the floor from each side and marks the spot a serpent of water bursts up out
+of (`spirit-nagas.js`; their rules in `moat-rules.js`). They are all projectiles,
 drawn from the `fx/` strips (`src/render/fx/rock-hazards.js`, `venom-hazards.js`,
-`wasp-hazards.js`, `storm-hazards.js`, `forge-hazards.js`, `temple-hazards.js`, gathered in
+`wasp-hazards.js`, `storm-hazards.js`, `forge-hazards.js`, `temple-hazards.js`, `moat-hazards.js`, gathered in
 `boss-hazards.js`; the copies are drawn with the boss in `src/render/fighters/mirages.js`); a
 puddle, a lava pool or a jar, standing on the
 road, is drawn under the fighters' feet, and so is the mark of a lightning strike, while the strike
@@ -327,7 +333,7 @@ Long sessions must not grow:
 against recorded fixtures: two long runs as the Moss Shade (first captured from the original
 single-file game), one shorter run for each of the other Shades, one against each boss kit (Gravel Khan, the Rust
 Colossus, Ironhorn, the Cobra Matriarch, the Scorpion Queen, the Gnoll Packlord, the Storm Djinn, the
-Furnace Knight, the Sand Pharaoh), one run
+Furnace Knight, the Sand Pharaoh, the Naga Raja), one run
 through the wide zones
 of the fourth mission, one over the hills of the third, one through the seventh, the sandstorm canyon,
 and one through the twelfth, the Bayon.
