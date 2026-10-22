@@ -236,8 +236,7 @@ set ticks is in `src/sim/bosses/move-cues.js`: the sword `glint` (a burst), the 
 (`announce.js`), the war `horn` that calls the road's raiders (`war-horn.js`) and the `crescents`, waves
 that skim the road (`src/sim/hazards/crescents.js`, drawn from `fx/crescent.png`). While an ultimate
 gathers and plays the world dims behind the boss in its own color (`src/render/fighters/boss-ultimate.js`,
-colors in `src/art/boss-colors.js`), and a rush or wave marks its lane on the ground. New boss strips
-are cleaned from generated art by `tools/boss_art/` (sources in `concepts/bosses/`).
+colors in `src/art/boss-colors.js`), and a rush or wave marks its lane on the ground.
 
 The loop runs the simulation at exactly 60 ticks a second and renders once per animation frame.
 A frame that runs several ticks offsets each tick's sounds (`audio.setTickOffset`) so they keep their spacing.

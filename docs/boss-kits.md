@@ -110,9 +110,8 @@ Body strips: `FW x FH = 192 x 112`, `FEET_X = 96`, `FEET_Y = 108`, `W = N x 192`
 Effect strips: the frame size from the table above, `W = N x FW`, `H = FH`; for an effect, replace
 rules 5 to 7 with "centred in every frame, the anchor at the bottom centre for things on the ground".
 
-Whatever comes in is cleaned by `tools/boss_art/` before it goes in the sheet: lifted off its
-background, cut into frames, shrunk to the boss's size, stood on the feet line and folded into the
-sheet's palette (see the enemy sprites' README). Small mistakes are fixed there; the rules keep them
+Whatever comes in is cleaned before it goes in the sheet: lifted off its background, cut into
+frames, shrunk to the boss's size, stood on the feet line and folded into the sheet's palette. Small mistakes are fixed there; the rules keep them
 small.
 
 What came back for Khan, and what the cleaning had to fix (worth asking for in the next prompts):
@@ -122,7 +121,7 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
 - Three of five had a checkerboard painted in as the background. The tool keys out a light grey
   one, but a real transparent PNG is safer: grey is also the color of steel.
 - Frames are not evenly spaced and long blades reach over the next frame's legs, so each strip
-  needs its cut lines picked by eye (`cuts` in the spec). Asking for wide gaps between frames saves
+  needs its cut lines picked by eye. Asking for wide gaps between frames saves
   that step.
 - The images came through chat as WebP, which leaves faint noise; the original PNG is better.
 

@@ -43,10 +43,9 @@ ramps keep their order and the outlines, blades and transparency stay as they we
 
 A boss with a kit of its own (`docs/boss-kits.md`) has more rows under the seven above, one per move
 of its own, named as the move is. Each plays on the move's own timeline (`frameAt`), so its strike
-frame only has to lie inside the strip. They are drawn by an image model to the sheet's frame size
-and cleaned into the sheet by `tools/boss_art/` (`clean_strip.py` cuts, shrinks and stands the
-frames on the feet line; `append_strips.py` lays them under the sheet in its own palette), from the
-sources in `concepts/bosses/<boss>/` and the cuts in `tools/boss_art/specs/<boss>.json`.
+frame only has to lie inside the strip. They are drawn by an image model, then lifted off their
+background, cut into frames, shrunk to the boss's idle height, stood on the feet line and folded
+into the sheet's own palette.
 
 | Sheet      | Rows added                                                                                       |
 | ---------- | ------------------------------------------------------------------------------------------------ |
