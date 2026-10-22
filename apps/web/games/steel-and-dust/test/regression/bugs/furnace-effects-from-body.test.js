@@ -11,7 +11,8 @@ import { buildTerrain, useTerrain } from '../../support/terrain-game.js';
 // Bug: the Meltdown's flame lances did not seem to come from the Furnace Knight's chest. Each lance
 // took its height from the ground under its tip, so over the Iron Works' rising road it flew higher
 // than the furnace it left; and the flame in the furnace's mouth on the firing frame was cut off
-// square where the drawn beam had been trimmed away
+// square where the drawn beam had been trimmed away. And his Slag Pot appeared high above his head,
+// where his hands are a frame earlier, while the throwing frame thrusts his fist forward
 const originalRandom = Math.random;
 const GAME = new URL('../../../', import.meta.url);
 
@@ -35,7 +36,7 @@ function firingFrameFlame() {
   return columns.slice(0, columns.findLastIndex((rows) => rows > 0) + 1);
 }
 
-describe('the Furnace Knight’s flame lances', () => {
+describe('the Furnace Knight’s effects', () => {
   beforeEach(() => {
     Math.random = seededRandom(8);
   });
@@ -43,7 +44,7 @@ describe('the Furnace Knight’s flame lances', () => {
     Math.random = originalRandom;
   });
 
-  it('fly level at the height they left his chest, over a road that rises ahead', () => {
+  it('fire the flame lances level at the height they left his chest, over a road that rises ahead', () => {
     const terrain = buildTerrain({
       ground: [
         [0, 0],
@@ -75,7 +76,23 @@ describe('the Furnace Knight’s flame lances', () => {
     expect(knight.y - chest).toBeCloseTo(19 * knight.scale, 5);
   });
 
-  it('leave a flame on the firing frame that ends in a point, not cut off square', () => {
+  it('throw the Slag Pot from his fist as his arm thrusts forward, not above his head', () => {
+    const game = createPlayingGame();
+    game.arena = { left: 0, right: 384 };
+    game.player.x = 100;
+    spawnEnemy(game, 'furnace', 1);
+    const knight = game.boss;
+    Object.assign(knight, { entering: false, x: 260, facing: -1 });
+    knight.ai.cooldown = 9999;
+    startMove(game, knight, 'slagPot');
+    runTicks(game, knight.move.startup + 1);
+    const pot = game.projectiles.find((shot) => shot.kind === 'slagPot');
+    const fist = { ahead: 36 / 2, up: 52 / 2 };
+    expect(knight.x - pot.x).toBeCloseTo(fist.ahead * knight.scale + pot.speed, 0);
+    expect(Math.abs(knight.y - fist.up * knight.scale - pot.y)).toBeLessThan(6);
+  });
+
+  it('leave the firing frame a flame that ends in a point, not cut off square', () => {
     const flame = firingFrameFlame();
     expect(flame.at(-1)).toBeLessThanOrEqual(3);
     expect(flame.at(-2)).toBeLessThanOrEqual(3);

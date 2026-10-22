@@ -173,5 +173,9 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    cannot crouch under would be unfair), it is three lances at chest height, each a beat after the
    furnace roars, to jump. He overheats as soon as the last lance has gone, so no hit can knock
    him out of it, and while overheated each hit lands for double where he stands. Burning ground and
-   lava only burn a hero on the ground and hop them out, so nobody is juggled in the flames.
+   lava only burn a hero on the ground and hop them out, so nobody is juggled in the flames. His
+   swipe and knock-out rows from his first sheet were cut off at its edges, so they were redrawn;
+   his slam still waits for its new strip. The Slag Pot leaves his fist as the throwing frame
+   thrusts it forward. No boss draws the raiders' white weapon trail any more: each boss sheet
+   draws its own swing arc, and the trail ran along a weapon the sprite did not hold there.
 9. Then down the road, 9 to 12. Naga Raja and Bayon Guardian wait for their new sheets.

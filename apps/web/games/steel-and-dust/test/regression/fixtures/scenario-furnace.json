@@ -547,7 +547,7 @@
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
-    "projectiles": "a356bce7bf51a764",
+    "projectiles": "1f3641b57ef79fc0",
     "summons": "da39a3ee5e6b4b0d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "144113b816b7f8f0"
@@ -643,7 +643,7 @@
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "5395320b7e6b9885",
     "shockwaves": "da39a3ee5e6b4b0d",
-    "projectiles": "d795df036b062916",
+    "projectiles": "07c94ee4d2d06ad5",
     "summons": "da39a3ee5e6b4b0d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "144113b816b7f8f0"
@@ -735,11 +735,11 @@
     }
    ],
    "world": {
-    "particles": "bd079eba6ba895c4",
+    "particles": "d600c5689b5120fc",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "976dca9b48989fad",
     "shockwaves": "da39a3ee5e6b4b0d",
-    "projectiles": "06a3982f271efb3f",
+    "projectiles": "1e16b9767be15b16",
     "summons": "da39a3ee5e6b4b0d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "144113b816b7f8f0"
@@ -835,7 +835,7 @@
     "effects": "99eeb8854e815189",
     "floaters": "5f2058d19ecbd8bc",
     "shockwaves": "da39a3ee5e6b4b0d",
-    "projectiles": "22c40be48fa360da",
+    "projectiles": "a94242104cc931a5",
     "summons": "8031f69b93e9b209",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "144113b816b7f8f0"
@@ -931,7 +931,7 @@
     "effects": "b307c9544914494a",
     "floaters": "cb51ae616db597a6",
     "shockwaves": "da39a3ee5e6b4b0d",
-    "projectiles": "1cd0b73b31111f3d",
+    "projectiles": "c38fec99cf85bb62",
     "summons": "da39a3ee5e6b4b0d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "144113b816b7f8f0"
@@ -1027,7 +1027,7 @@
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "459f3103d7ab9e72",
     "shockwaves": "da39a3ee5e6b4b0d",
-    "projectiles": "96da9f42a4d3dc34",
+    "projectiles": "b6627c84a48bc40a",
     "summons": "da39a3ee5e6b4b0d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "144113b816b7f8f0"
@@ -1126,7 +1126,7 @@
     "effects": "9957cee4f837beef",
     "floaters": "4da453df4e44b701",
     "shockwaves": "da39a3ee5e6b4b0d",
-    "projectiles": "0b1bb02ae32b2b81",
+    "projectiles": "9e68f91834538881",
     "summons": "53ae52ab35a6e49c",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "144113b816b7f8f0"
@@ -1247,7 +1247,7 @@
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "a5fa9fd1bfc133fb",
     "shockwaves": "da39a3ee5e6b4b0d",
-    "projectiles": "58245ebdc10204ea",
+    "projectiles": "c133b41465bc1ebd",
     "summons": "7af895e35d63a665",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "144113b816b7f8f0"
@@ -1390,7 +1390,7 @@
     "effects": "898240331bf3c709",
     "floaters": "605d8290ac65429f",
     "shockwaves": "da39a3ee5e6b4b0d",
-    "projectiles": "25494a6002b3c85c",
+    "projectiles": "6e797aab0054269d",
     "summons": "1f9e04e3268eb2e3",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "144113b816b7f8f0"
@@ -1555,7 +1555,7 @@
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "9466f9876fd57f00",
     "shockwaves": "da39a3ee5e6b4b0d",
-    "projectiles": "dde211d38bf8e86c",
+    "projectiles": "d781f68bd0cbb952",
     "summons": "3e65c74027ad52ae",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "144113b816b7f8f0"
@@ -1720,7 +1720,7 @@
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "77673b1d6b65768a",
     "shockwaves": "da39a3ee5e6b4b0d",
-    "projectiles": "6eea6f481e4684c2",
+    "projectiles": "8b5cfba0c3fff13b",
     "summons": "dee1dccd37514f46",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "144113b816b7f8f0"
@@ -1885,7 +1885,7 @@
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "fec795e0fa5f8c42",
     "shockwaves": "da39a3ee5e6b4b0d",
-    "projectiles": "54e25c2b87e17abe",
+    "projectiles": "ebc9ae0b8b97cb84",
     "summons": "da39a3ee5e6b4b0d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "144113b816b7f8f0"
@@ -20223,7 +20223,7 @@
    "tick": 480,
    "frame": {
     "calls": 2459,
-    "digest": "d9595ad11fde4dd7"
+    "digest": "63a70967fef1636c"
    }
   },
   {

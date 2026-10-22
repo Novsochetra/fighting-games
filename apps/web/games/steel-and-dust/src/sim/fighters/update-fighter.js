@@ -25,13 +25,15 @@ function tickTimers(fighter) {
   }
 }
 
-// a move drawn on a timeline of its own strip carries its own smear in the frames
+// a move drawn on a timeline of its own strip carries its own smear in the frames, and so does every
+// swing of a boss, whose sheet draws its own arc where the drawn weapon really is
 function inSwing(fighter) {
   const move = fighter.move;
   return (
     fighter.state === 'attack' &&
     move &&
     !move.frameAt &&
+    !fighter.def?.boss &&
     fighter.moveTime >= move.startup - 1 &&
     fighter.moveTime <= move.startup + move.active + 1
   );

@@ -9,8 +9,9 @@ const LIFT = -4.2;
 const POT_DAMAGE = 12;
 const POOL_DAMAGE = 5;
 const POOL_LIFE = 300;
-// the pot leaves his hands raised over his head, in sheet pixels from his feet halved and scaled
-const HANDS = { ahead: 8, up: 50 };
+// the pot leaves his fist as his arm thrusts forward at shoulder height on the throwing frame, in
+// sheet pixels from his feet halved and scaled
+const THROWING_FIST = { ahead: 18, up: 26 };
 
 function landingTime(drop) {
   return (-LIFT + Math.sqrt(LIFT * LIFT + 2 * GRAVITY * Math.max(0, drop))) / GRAVITY;
@@ -18,8 +19,8 @@ function landingTime(drop) {
 
 // the pot is aimed at the spot the hero stands on, marked there from the moment it leaves him
 export function lobSlagPot(game, boss) {
-  const x = boss.x + boss.facing * HANDS.ahead * boss.scale;
-  const y = boss.y - HANDS.up * boss.scale;
+  const x = boss.x + boss.facing * THROWING_FIST.ahead * boss.scale;
+  const y = boss.y - THROWING_FIST.up * boss.scale;
   const distance = Math.max(30, (game.player.x - x) * boss.facing);
   const target = x + boss.facing * distance;
   const landing = { x: target, floor: floorBelow(game.terrain, target, y) };
