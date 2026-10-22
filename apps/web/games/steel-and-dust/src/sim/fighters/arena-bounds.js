@@ -1,6 +1,8 @@
 import { VIEW_WIDTH } from '../../config.js';
 
 const MARGIN = 6;
+// a boss keeps his whole body on the screen: half his width, in his own units (body-point.js)
+const BOSS_HALF_WIDTH = 24;
 
 function isLockedScreen(arena) {
   return arena.right - arena.left <= VIEW_WIDTH;
@@ -30,5 +32,6 @@ export function arenaBounds(game, fighter) {
     }
     return { min: -999, max: 99999 };
   }
-  return { min: left + MARGIN, max: right - MARGIN };
+  const margin = fighter.def?.boss ? BOSS_HALF_WIDTH * fighter.scale : MARGIN;
+  return { min: left + margin, max: right - margin };
 }

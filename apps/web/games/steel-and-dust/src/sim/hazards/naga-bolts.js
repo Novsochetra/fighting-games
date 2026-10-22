@@ -11,22 +11,22 @@ const DIVE_TICKS = 8;
 // low skims the shins (jump it), high flies over a standing hero's head (stay down)
 const LANE_HEIGHT = { low: 10, high: 46 };
 // the open mouths of the five heads striking forward in each striking frame of the Seven Heads
-// (sevenHeads frames 4 and 5), top to bottom, [ahead, up] from her feet in her own units (sheet
-// pixels over twice her scale)
+// (sevenHeads frames 4 and 5), top to bottom, [ahead, up] from her feet in her own units
+// (body-point.js)
 export const HEAD_MOUTHS = {
   4: [
-    [20, 29],
-    [18, 25],
-    [17, 21],
-    [15, 17],
-    [13, 13],
+    [26, 38],
+    [23, 33],
+    [22, 27],
+    [20, 22],
+    [17, 17],
   ],
   5: [
-    [19, 27],
-    [16, 22],
-    [19, 19],
-    [17, 15],
-    [15, 11],
+    [25, 35],
+    [21, 29],
+    [25, 25],
+    [22, 20],
+    [20, 14],
   ],
 };
 

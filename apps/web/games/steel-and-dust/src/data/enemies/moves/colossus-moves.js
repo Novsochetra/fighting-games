@@ -9,7 +9,7 @@ const spikeLine = (bothWays) =>
     damage: 0,
     hitbox: null,
     strip: 'spikeLine',
-    lane: 140,
+    lane: 'spikes',
     laneBothWays: bothWays,
     spikes: { count: 6, gap: 22, every: 5, bothWays },
     frameAt: SPIKE_LINE_FRAMES,

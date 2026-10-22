@@ -1,5 +1,6 @@
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { clamp } from '../../lib/math.js';
+import { bodyPoint } from '../fighters/body-point.js';
 import { addSparks } from '../fx/particles.js';
 import { floorBelow } from '../stage/terrain.js';
 
@@ -7,6 +8,7 @@ const GRAVITY = 0.16;
 const GLOB_LIFT = -3;
 const GLOB_DAMAGE = 7;
 const PUDDLE_DAMAGE = 3;
+// her mouth, in her own units (body-point.js)
 const MOUTH = { ahead: 14, up: 33 };
 
 function landingTime(drop) {
@@ -17,8 +19,7 @@ function landingTime(drop) {
 
 // the globs spread round the spot the hero stands on, so stepping aside from one walks into another
 export function spitVenom(game, fighter, { count, gap, puddle }) {
-  const x = fighter.x + fighter.facing * MOUTH.ahead;
-  const y = fighter.y - MOUTH.up;
+  const { x, y } = bodyPoint(fighter, MOUTH);
   const reach = (game.player.x - x) * fighter.facing;
   for (let i = 0; i < count; i++) {
     const distance = Math.max(20, reach + (i - (count - 1) / 2) * gap);

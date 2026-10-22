@@ -20,6 +20,13 @@ export function attackBox(fighter, hitbox) {
   };
 }
 
+// a boss's own art sets how far its shared swings reach (`reach` in its type), so a blow lands
+// where its weapon is drawn
+export const hitboxOf = (fighter, move) => fighter.def?.reach?.[move.id] ?? move.hitbox;
+
+export const swingBox = (fighter, move = fighter.move) =>
+  attackBox(fighter, hitboxOf(fighter, move));
+
 // a boss dug into the ground, or dissolved into sand, is out of every reach until it is back
 export function isOutOfReach(fighter) {
   const move = fighter.state === 'attack' && fighter.move;
@@ -34,8 +41,10 @@ export function hurtBox(fighter) {
   const [left, top, width, height] =
     HURT_SHAPES[fighter.state] || fighter.def?.hurtShape || STANDING_SHAPE;
   const scale = fighter.scale;
+  // a body drawn off its feet (a scorpion's tail behind her) is measured facing right
+  const behind = fighter.facing < 0 ? width - left : left;
   return {
-    x: fighter.x - left * scale,
+    x: fighter.x - behind * scale,
     y: fighter.y - top * scale,
     width: width * scale,
     height: height * scale,

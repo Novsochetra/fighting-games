@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { attackBox, hurtBox, overlapCenter, overlaps } from '../../../src/sim/combat/boxes.js';
+import {
+  attackBox,
+  hurtBox,
+  overlapCenter,
+  overlaps,
+  swingBox,
+} from '../../../src/sim/combat/boxes.js';
 
 const fighter = (extra) => ({
   x: 100,
@@ -32,6 +38,24 @@ describe('hit boxes', () => {
     expect(hurtBox(fighter({ state: 'dash' })).height).toBe(16);
     expect(hurtBox(fighter({ state: 'ko' }))).toBeNull();
     expect(hurtBox(fighter({ removed: true }))).toBeNull();
+  });
+
+  it('mirrors a body drawn off its feet when it turns round', () => {
+    const queen = { hurtShape: [10, 40, 27, 40] };
+    expect(hurtBox(fighter({ def: queen }))).toMatchObject({ x: 90, width: 27 });
+    expect(hurtBox(fighter({ def: queen, facing: -1 }))).toMatchObject({ x: 83, width: 27 });
+  });
+
+  it("reaches a shared swing as far as the boss's own art draws it", () => {
+    const swipe = { id: 'swipe', hitbox: [2, -38, 30, 26] };
+    const reach = { swipe: [2, -29, 42, 29] };
+    expect(swingBox(fighter({ move: swipe })).width).toBe(30);
+    expect(swingBox(fighter({ move: swipe, def: { reach }, scale: 2 }))).toEqual({
+      x: 104,
+      y: 126,
+      width: 84,
+      height: 58,
+    });
   });
 
   it('finds overlaps and their middle', () => {

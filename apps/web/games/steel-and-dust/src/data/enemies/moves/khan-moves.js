@@ -7,7 +7,7 @@ export const KHAN_MOVES = {
     name: 'Crescent Dash',
     frames: [36, 30, 24],
     damage: 14,
-    hitbox: [0, -34, 30, 30],
+    hitbox: [0, -25, 44, 25],
     knockback: [4.2, -3],
     knockdown: true,
     sustain: true,

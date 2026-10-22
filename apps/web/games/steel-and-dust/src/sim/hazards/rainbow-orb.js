@@ -2,11 +2,11 @@ import { FX_COLORS } from '../../art/fx-colors.js';
 import { addSparks } from '../fx/particles.js';
 
 // the top of the hand she raises in the Rainbow Naga's frames 1-3, [ahead, up] from her feet in her
-// own units (sheet pixels over twice her scale)
+// own units (body-point.js)
 export const RAINBOW_HANDS = {
-  1: [7, 31],
-  2: [8, 34],
-  3: [9, 33],
+  1: [9, 40],
+  2: [10, 44],
+  3: [12, 43],
 };
 // the orb's middle floats this far over the top of her hand, in game pixels, so its swirl rests on
 // her fingers

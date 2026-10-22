@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { RENDER_SCALE } from '../../../src/config.js';
 import { ENEMY_SPRITES } from '../../../src/data/enemies/enemy-sprites.js';
-import { ENEMY_TYPES } from '../../../src/data/enemies/enemy-types.js';
 import { FX_SPRITES } from '../../../src/data/fx-sprites.js';
 import { HEAD_MOUTHS } from '../../../src/sim/hazards/naga-bolts.js';
 import { RAINBOW_HANDS } from '../../../src/sim/hazards/rainbow-orb.js';
@@ -11,18 +10,16 @@ import { readPngAlpha } from '../../support/png-alpha.js';
 const GAME = new URL('../../../', import.meta.url);
 const sprite = ENEMY_SPRITES.naga;
 const sheet = readPngAlpha(new URL(`assets/sprites/enemies/${sprite.file}`, GAME));
-const { scale } = ENEMY_TYPES.naga;
+// sheet pixels per unit of hers (body-point.js)
+const UNIT = RENDER_SCALE * sprite.density;
 const EFFECTS = ['tide', 'splash', 'serpentRise', 'spiritNaga', 'nagaBolt', 'rainbowOrb'];
 const ON_THE_GROUND = ['tide', 'splash', 'serpentRise'];
 const fxStrip = (name) => readPngAlpha(new URL(`assets/sprites/fx/${name}.png`, GAME));
 
 // the sheet pixels round a point given in her units from her feet, on one frame of a strip
 function pixelsNear(strip, frame, [ahead, up], reach = 2) {
-  const x = frame * sprite.frameWidth + sprite.feetX + Math.round(ahead * scale * RENDER_SCALE);
-  const y =
-    sprite.strips[strip].row * sprite.frameHeight +
-    sprite.feetY -
-    Math.round(up * scale * RENDER_SCALE);
+  const x = frame * sprite.frameWidth + sprite.feetX + Math.round(ahead * UNIT);
+  const y = sprite.strips[strip].row * sprite.frameHeight + sprite.feetY - Math.round(up * UNIT);
   const pixels = [];
   for (let dy = -reach; dy <= reach; dy++) {
     for (let dx = -reach; dx <= reach; dx++) {

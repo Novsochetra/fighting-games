@@ -1,3 +1,5 @@
+import { BOSS_BODIES } from '../boss-bodies.js';
+
 // mission bosses that fight like warriors and sorcerers; like every boss they swipe, slam and
 // charge
 const GUARD = { frontArm: 1.35, frontForearm: -0.95, weaponAngle: -2.4 };
@@ -6,13 +8,14 @@ export const WARLORD_BOSSES = {
   khan: {
     name: 'Gravel Khan',
     sprite: 'khan',
+    ...BOSS_BODIES.khan,
     hp: 200,
     speed: 0.6,
     range: 38,
     palette: 'brute',
     weapon: 'knife',
     voicePitch: 0.8,
-    scale: 1.3,
+    scale: 1.65,
     armor: true,
     boss: true,
     guardPose: GUARD,
@@ -20,6 +23,7 @@ export const WARLORD_BOSSES = {
   djinn: {
     name: 'Storm Djinn',
     sprite: 'djinn',
+    ...BOSS_BODIES.djinn,
     material: 'sand',
     hp: 280,
     speed: 0.7,
@@ -27,7 +31,7 @@ export const WARLORD_BOSSES = {
     palette: 'brute',
     weapon: 'none',
     voicePitch: 0.9,
-    scale: 1.3,
+    scale: 1.5,
     armor: true,
     boss: true,
     guardPose: GUARD,
@@ -35,6 +39,7 @@ export const WARLORD_BOSSES = {
   furnace: {
     name: 'Furnace Knight',
     sprite: 'furnace',
+    ...BOSS_BODIES.furnace,
     material: 'metal',
     hp: 300,
     speed: 0.5,
@@ -42,7 +47,7 @@ export const WARLORD_BOSSES = {
     palette: 'brute',
     weapon: 'hammer',
     voicePitch: 0.6,
-    scale: 1.35,
+    scale: 1.8,
     armor: true,
     boss: true,
     guardPose: GUARD,
@@ -50,6 +55,7 @@ export const WARLORD_BOSSES = {
   pharaoh: {
     name: 'Sand Pharaoh',
     sprite: 'pharaoh',
+    ...BOSS_BODIES.pharaoh,
     material: 'sand',
     hp: 290,
     speed: 0.6,
@@ -57,7 +63,7 @@ export const WARLORD_BOSSES = {
     palette: 'brute',
     weapon: 'knife',
     voicePitch: 0.7,
-    scale: 1.3,
+    scale: 1.5,
     armor: true,
     boss: true,
     guardPose: GUARD,

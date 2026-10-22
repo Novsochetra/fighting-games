@@ -1,12 +1,15 @@
 import { BOSS_ULT_COLORS } from '../../art/boss-colors.js';
+import { bodyPoint, bodySize } from '../fighters/body-point.js';
 import { addFloatText } from '../fx/effects.js';
 import { addBurst } from '../summons/bursts.js';
 
+// her eyes and the flash's size, in her own units (body-point.js)
 const EYES = { ahead: 5, up: 42 };
+const FLASH_SIZE = 1;
 const STARS_EVERY = 16;
 const CAN_BE_HELD = new Set(['idle', 'walk', 'dash', 'attack', 'hurt', 'squat', 'charge']);
 
-const eyesOf = (boss) => ({ x: boss.x + boss.facing * EYES.ahead, y: boss.y - EYES.up });
+const eyesOf = (boss) => bodyPoint(boss, EYES);
 
 // a hero looking at her is one who faces her: walking away turns the hero round and breaks it
 export function meetsGaze(boss, hero, reach) {
@@ -29,7 +32,7 @@ export function warnOfGaze(game, boss) {
 // the flash goes off from her eyes; a hero who meets it stands held, stars round their head
 export function flashGaze(game, boss, move) {
   const { stun, reach } = move.gaze;
-  addBurst(game, { sprite: 'hypnosis', ...eyesOf(boss), scale: 1 });
+  addBurst(game, { sprite: 'hypnosis', ...eyesOf(boss), scale: bodySize(boss, FLASH_SIZE) });
   game.io.sfx('hypnosis', false, { x: boss.x });
   const hero = game.player;
   boss.ai.heldByGaze = meetsGaze(boss, hero, reach);

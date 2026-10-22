@@ -9,8 +9,8 @@ export const TIDE_RISE = 8;
 export const TIDE_BREAK = 18;
 export const TIDE_RANGE = 150;
 // the front of her coil as it crashes down (tidalCoil frame 5), ahead of her feet in her own units
-// (sheet pixels over twice her scale)
-export const COIL_FRONT = 6;
+// (body-point.js)
+export const COIL_FRONT = 8;
 // the wave rises with the back of its base (tide frames 0-1) on the front of her coil
 const TIDE_BACK = 18;
 

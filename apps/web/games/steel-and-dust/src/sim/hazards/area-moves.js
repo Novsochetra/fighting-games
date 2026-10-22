@@ -2,7 +2,7 @@ import { COLORS } from '../../art/colors.js';
 import { VIEW_WIDTH } from '../../config.js';
 import { randomBetween } from '../../lib/math.js';
 import { applyHit } from '../combat/apply-hit.js';
-import { attackBox, hurtBox, overlaps } from '../combat/boxes.js';
+import { hurtBox, overlaps, swingBox } from '../combat/boxes.js';
 import { floorUnder, nudge } from '../fighters/terrain-motion.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust } from '../fx/particles.js';
@@ -29,7 +29,7 @@ export function quake(game, attacker, move) {
     hitstop: 6,
     hitstun: 20,
   };
-  const swing = attackBox(attacker, move.hitbox);
+  const swing = swingBox(attacker, move);
   for (const target of game.fighters) {
     if (!canBeQuaked(target, attacker)) {
       continue;

@@ -61,7 +61,10 @@ export const SHOT_RULES = {
   },
   boulder: {
     range: 400,
-    area: (shot) => ({ x: shot.x - 8, y: shot.y - 8, width: 16, height: 16 }),
+    area: (shot) => {
+      const half = 8 * shot.size;
+      return { x: shot.x - half, y: shot.y - half, width: half * 2, height: half * 2 };
+    },
     hit: BOULDER_HIT,
     enemyWeapon: 'hammer',
   },

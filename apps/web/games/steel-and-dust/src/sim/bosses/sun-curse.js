@@ -19,8 +19,8 @@ const CURSE_DAMAGE = 30;
 const CURSE_HIT = { knockback: [2.4, -3.6], knockdown: true, hitstop: 12, hitstun: 30 };
 // the sun over his raised staff (curseOfSun frames 4-7) and the orb he points at the hero (frame 9),
 // in sheet pixels from his feet halved and scaled like his body
-export const SUN = { ahead: 4, up: 41 };
-export const POINTED_ORB = { ahead: 20, up: 18 };
+export const SUN = { ahead: 5.2, up: 53.3 };
+export const POINTED_ORB = { ahead: 26, up: 23.4 };
 
 // the jars stand spread across the arena, none on the hero's own spot
 function jarSpots(game, count) {

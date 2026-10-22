@@ -1,3 +1,5 @@
+import { BOSS_BODIES } from '../boss-bodies.js';
+
 // the bosses of the temple roads: the Naga Raja guards Angkor Wat at dawn, and the Bayon Guardian,
 // the strongest of them all, wakes at dusk to end the game
 const GUARD = { frontArm: 1.35, frontForearm: -0.95, weaponAngle: -2.4 };
@@ -6,6 +8,7 @@ export const TEMPLE_BOSSES = {
   naga: {
     name: 'Naga Raja',
     sprite: 'naga',
+    ...BOSS_BODIES.naga,
     material: 'shell',
     hp: 310,
     speed: 0.75,
@@ -13,9 +16,9 @@ export const TEMPLE_BOSSES = {
     palette: 'brute',
     weapon: 'knife',
     voicePitch: 1.1,
-    // drawn half as big again as the other bosses; her reach and every point read from her art grow
-    // with it
-    scale: 1.95,
+    // her sheet is drawn half as fine again (`density`), so at this scale she stands sharp, about two
+    // and a quarter times the hero's height
+    scale: 1.5,
     armor: true,
     boss: true,
     guardPose: GUARD,
@@ -23,6 +26,7 @@ export const TEMPLE_BOSSES = {
   guardian: {
     name: 'Bayon Guardian',
     sprite: 'guardian',
+    ...BOSS_BODIES.guardian,
     material: 'sandstone',
     hp: 360,
     speed: 0.55,
@@ -30,7 +34,7 @@ export const TEMPLE_BOSSES = {
     palette: 'brute',
     weapon: 'hammer',
     voicePitch: 0.5,
-    scale: 1.45,
+    scale: 2.15,
     armor: true,
     boss: true,
     guardPose: GUARD,

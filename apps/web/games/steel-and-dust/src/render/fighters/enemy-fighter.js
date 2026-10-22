@@ -4,7 +4,7 @@ import { ENEMY_SPRITES } from '../../data/enemies/enemy-sprites.js';
 import { enemyAnimation } from '../../sim/enemy-animation.js';
 import { drawDangerZone } from './danger-zone.js';
 import { drawEnemyHealth, drawWindupWarning } from './enemy-markers.js';
-import { drawEnemyFrame } from './enemy-sprites.js';
+import { drawEnemyFrame, spriteSize } from './enemy-sprites.js';
 import { drawMirages } from './mirages.js';
 import { isBossWindingUp, isTelegraphing } from './windup.js';
 
@@ -31,6 +31,7 @@ function drawAfterimages(painter, sheets, fighter) {
       y: image.y,
       facing: image.facing,
       tint: FX_COLORS[image.ghost] ?? FX_COLORS.enemyGhost,
+      size: spriteSize(fighter),
     });
   }
   painter.alpha(1);
@@ -55,6 +56,7 @@ export function drawSpriteEnemy(painter, { sheets, fighter, shakeX, tickCount, f
     x: fighter.x + shakeX,
     y: fighter.y,
     facing: fighter.facing,
+    size: spriteSize(fighter),
   };
   drawMirages(painter, sheets, { fighter, frame: at.frame, tickCount });
   drawEnemyFrame(painter, sheets, { ...at, tint: hitTint(fighter) });

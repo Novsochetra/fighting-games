@@ -9,6 +9,9 @@ describes what is actually built.
 - Every boss runs the same brain (`src/sim/brains/enemy/boss.js`): swipe or slam up close, a rare
   charge from far away, walk otherwise. Same three moves, same numbers (`raider-moves.js`). Only
   health, speed, reach and size differ, so all twelve fight the same way.
+- Every boss towers over the hero, drawn at its `scale`: the Khan, Djinn and Pharaoh about twice
+  the hero's height; the Furnace Knight, Ironhorn, Gnoll, Cobra and Naga about two and a half times;
+  the Colossus, Queen and Ox about three times; the Bayon Guardian the biggest of all.
 - Every boss sheet has the same strips: `idle 4, walk 8, attack 9, hurt 4, ko 9, slam 9, charge 8`.
 - The Naga Raja is a recolor of the Cobra Matriarch, and the Bayon Guardian, the last boss of the
   game, is a recolor of the Rust Colossus.
@@ -130,9 +133,13 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
 1. **Gravel Khan**: done. The first boss the player meets, and the one that built the shared parts
    (kit data, the brain picking skills, extra strips in a sheet, the ultimate with its dim and
    call-out, phase two, the mid-boss version). His War Horn plays only when no raider stands with
-   him, and the dash's dust trail was left out: the gravel the waves throw up was enough.
+   him, and the dash's dust trail was left out: the gravel the waves throw up was enough. His
+   knock-out, slam and Crescent Dash rows were cut off at the frame's edges and were redrawn; the
+   new art fits his 192×112 frames, so his sheet kept its size.
 2. **Rust Colossus**: done. His sheet has taller frames (192×160) so the boulder held overhead
-   fits. The landing spot of every boulder is marked with the same blinking red bar as the lanes.
+   fits. The landing spot of every boulder is marked with the same blinking red bar as the lanes. His slam row
+   had its raised fists cut off at the frame's top and was redrawn.
+
 3. **Ironhorn**: done. Taller frames too (the mace swung overhead). The stars GPT drew into the
    Dazed strip were keyed out and are drawn from the stars effect instead, so they also circle him
    after the Stampede. Every wall hit, not only the Stampede's, knocks a bamboo stalk down.
@@ -141,7 +148,9 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    touching, so the tool floods black in from the edges, peels the glow and takes per-row cut
    lines. The new colors are picked from spread-out seeds so her glowing eyes keep their own
    entries. Each glob's landing spot is marked as it leaves her mouth, and puddles are drawn under
-   the fighters' feet.
+   the fighters' feet. Her knock-out, slam
+   and charge rows were cut off at the frame's edges and were redrawn.
+
 5. **Scorpion Queen**: done. Her sheet has frames both wider and taller (256×160): the sting
    stabs far ahead and the tail stabs straight up as she bursts out. GPT gave real transparent
    PNGs this time; the travelling mound is its own loop, cut at her scale onto the end of her
@@ -156,21 +165,29 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    shockwave. The Pack Call sends hounds rather than the road's raiders. His frenzy turns at the
    walls with a skid instead of Ironhorn's crash and bamboo, and ends with him staggering back into
    the arena to pant. The frenzy strip's third lunge (frame 8) was drawn tangled in the frame
-   before it, so its timeline loops frames 4-7 and leaves frame 8 out.
+   before it, so its timeline loops frames 4-7 and leaves frame 8 out. His swipe,
+   knock-out and slam rows were cut off at the frame's edges and were redrawn (the swipe's raised
+   club ran off the top of the new image and its spike was given back its point); the Leaping
+   Maul's two airborne frames were lifted off the frame's bottom edge and its landing club rests
+   on the feet line, and the unused frenzy frame was cleared.
+
 7. **Storm Djinn**: done. Taller frames (192×160) for the storm over his raised hands. Crowded,
    he slips away in a small dust devil to the side of the hero with more room, at most every 4 s.
    The Thunder Fist's bolt leaves his fist and dives to run along the floor at shin height. A dust
    devil pulls slower than the hero walks, so walking away (or a dash through it) gets out, and it
    blows out after throwing someone. The storm's middle wave leaves the hero's own spot clear, so a
-   hero who ran from the first wave is caught by it; every strike's spot crackles while it gathers.
+   hero who ran from the first wave is caught by it; every strike's spot crackles while it gathers. His knock-out and
+   slam rows were cut off at the frame's edges and were redrawn.
+
 8. **Furnace Knight**: done. His sheet has frames both wider and taller (256×160): the flail
    whirls overhead and sweeps far along the floor. The flail and pot strips came with a painted
    checkerboard, also shut inside the flail's fiery arcs, so the keying also clears closed pockets
    made of the two checker greys and peels the grey fringe off the arcs. The Meltdown image drew each
    beam frame's flame over the next frame's body, so only its first firing frame is used and the
-   beam is drawn as lances, grown out of the flame in his chest and flying level at its height; he
+   beam is drawn as lances, grown out of the flame in his chest, diving to a hero's waist and
+   flying level there; he
    leans into each shot and stands blazing between them. In place of one sweeping beam (a beam the hero
-   cannot crouch under would be unfair), it is three lances at chest height, each a beat after the
+   cannot crouch under would be unfair), it is three lances at a hero's waist, each a beat after the
    furnace roars, to jump. He overheats as soon as the last lance has gone, so no hit can knock
    him out of it, and while overheated each hit lands for double where he stands. Burning ground and
    lava only burn a hero on the ground and hop them out, so nobody is juggled in the flames. His
@@ -193,8 +210,9 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    the Sun counts down over the hero's head in the sun's eye; the scarabs bite only feet on the
    ground. In phase two his copies thrust their staffs and fire mirage bolts low along the floor.
 10. **Naga Raja**: done, ahead of the Warden Ox. Her sheet is new and her own, not the Cobra
-    recolor, and she is half as big again as the other bosses (384×240 frames, scale 1.95), drawn at
-    the same pixel density; her reach, her effects and every point read from her art grow with her. She glides in smooth bursts over the stone and glides back from a hero who
+    recolor. Her 384×240 frames are drawn half as fine again as the other sheets (`density` 1.5), and
+    at scale 1.5, so she stands sharp at about two and a quarter times the hero's
+    height; her reach, her effects and every point read from her art grow with her. She glides in smooth bursts over the stone and glides back from a hero who
     crowds her (`glider`). Her slash and her coil slam are her close moves; the slam bursts with moat
     water. The Tidal Coil crashes her coil down and rolls a wave from its front along the floor (jump
     it); in phase two two waves come, one after the other. The Seven Heads spit seven water nagas
