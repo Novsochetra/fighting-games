@@ -9,6 +9,7 @@ const CRESCENT_HIT = { knockback: [3.4, -3.4], knockdown: true, hitstop: 7, hits
 const BOULDER_HIT = { knockback: [3, -3.2], knockdown: true, hitstop: 8, hitstun: 24 };
 const SHARD_HIT = { knockback: [1.6, -1.2], hitstop: 4, hitstun: 14 };
 const SPIKE_HIT = { knockback: [1.4, -4.6], knockdown: true, hitstop: 7, hitstun: 22 };
+const BAMBOO_HIT = { knockback: [2, -3], knockdown: true, hitstop: 7, hitstun: 22 };
 const VENOM_HIT = { knockback: [1.8, -0.8], hitstop: 4, hitstun: 18 };
 
 // how each kind of thrown or fired thing flies, what it covers and what a hit does
@@ -71,6 +72,19 @@ export const SHOT_RULES = {
     hit: SPIKE_HIT,
     enemyWeapon: 'hammer',
     armed: (shot) => shot.time >= 8 && shot.time < 24,
+  },
+  // a toppling stalk strikes along its length the moment it lands, frame 3 of its strip
+  bamboo: {
+    range: 70,
+    area: (shot) => ({
+      x: shot.direction > 0 ? shot.x : shot.x - 56,
+      y: shot.y - 14,
+      width: 56,
+      height: 14,
+    }),
+    hit: BAMBOO_HIT,
+    enemyWeapon: 'hammer',
+    armed: (shot) => shot.time >= 18 && shot.time < 26,
   },
   fire: {
     range: 110,

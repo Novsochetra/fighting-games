@@ -29,4 +29,16 @@ function bulldozer(boss, { distance, pace }) {
   }
 }
 
-export const BOSS_MOVEMENT = { duelist, bulldozer };
+// a bull keeps room to run: he backs off a hero who comes close, closes on one far away and
+// otherwise stands pawing the ground
+function bull(boss, { distance, pace }) {
+  if (distance > 170) {
+    walk(boss, 1, pace);
+  } else if (distance < 70) {
+    walk(boss, -1, 0.7 * pace);
+  } else {
+    standStill(boss);
+  }
+}
+
+export const BOSS_MOVEMENT = { duelist, bulldozer, bull };

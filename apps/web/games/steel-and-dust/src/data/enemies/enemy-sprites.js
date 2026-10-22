@@ -52,7 +52,11 @@ export const ENEMY_SPRITES = {
     `${bossStrips(5, 4)}, warHorn 8/5, crescentDash 10/4, tempest 12/5`,
     BOSS,
   ),
-  ironhorn: sheet('ironhorn.png', bossStrips(6, 5), BOSS),
+  ironhorn: sheet(
+    'ironhorn.png',
+    `${bossStrips(6, 5)}, hornRush 10/4, uppercut 8/4, dazed 6, stampede 12/6`,
+    TALL_BOSS,
+  ),
   cobra: sheet('cobra.png', bossStrips(5, 5), BOSS),
   gnoll: sheet('gnoll.png', bossStrips(6, 4), BOSS),
   djinn: sheet('djinn.png', bossStrips(4, 5), BOSS),
