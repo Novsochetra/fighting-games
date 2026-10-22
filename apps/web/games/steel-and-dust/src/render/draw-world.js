@@ -1,6 +1,7 @@
 import { HERO_THEMES } from '../art/hero-themes.js';
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../config.js';
 import { heroById } from '../data/heroes.js';
+import { dimForBossUltimate, isBossUltimate } from './fighters/boss-ultimate.js';
 import { drawFighter } from './fighters/draw-fighter.js';
 import { heroSheetFor } from './fighters/hero-sheets.js';
 import { drawTrail } from './fighters/trail.js';
@@ -62,6 +63,9 @@ function drawFighters(painter, { game, view, cameraX }) {
       dimForUltimate(painter, game, cameraX);
       drawBehindFighters(painter, { game, view });
     }
+    if (isBossUltimate(fighter)) {
+      dimForBossUltimate(painter, fighter, cameraX);
+    }
     drawFighter(painter, {
       fighter,
       sheet,
@@ -86,7 +90,7 @@ export function drawWorld(painter, { game, view, cameraX }) {
   drawFighters(painter, { game, view, cameraX });
   drawSummons(painter, game.summons, view.fxSheets);
   drawShockwaves(painter, game.shockwaves);
-  drawProjectiles(painter, game.projectiles);
+  drawProjectiles(painter, game.projectiles, view.fxSheets);
   drawParticles(painter, game.particles);
   drawEffects(painter, game.effects);
   drawFloaters(painter, game.floaters);

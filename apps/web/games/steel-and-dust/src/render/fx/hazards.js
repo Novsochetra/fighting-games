@@ -1,7 +1,10 @@
 import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
+import { FX_SPRITES } from '../../data/fx-sprites.js';
 import { point } from '../painter.js';
 import { drawBolt, drawBomb, drawFire, drawSand, drawVenom } from './enemy-shots.js';
+import { drawFxFrame } from './fx-sheets.js';
+import { drawBoulder, drawShard, drawSpike } from './rock-hazards.js';
 
 function drawShockPeak(painter, { x, y, height }) {
   for (let row = 0; row <= height; row++) {
@@ -59,6 +62,19 @@ function drawSlashWave(painter, wave) {
   painter.alpha(1);
 }
 
+// a crescent wave loops its strip as it skims the road
+function drawCrescent(painter, wave, sheets) {
+  const { frames, ticks } = FX_SPRITES.crescent;
+  const frame = Math.floor(wave.time / ticks) % frames;
+  drawFxFrame(painter, sheets, {
+    name: 'crescent',
+    frame,
+    x: wave.x,
+    y: wave.y,
+    facing: wave.direction,
+  });
+}
+
 const DRAW_SHOT = {
   knife: drawKnife,
   wave: drawSlashWave,
@@ -67,10 +83,14 @@ const DRAW_SHOT = {
   venom: drawVenom,
   bomb: drawBomb,
   fire: drawFire,
+  crescent: drawCrescent,
+  boulder: drawBoulder,
+  shard: drawShard,
+  spike: drawSpike,
 };
 
-export function drawProjectiles(painter, projectiles) {
+export function drawProjectiles(painter, projectiles, fxSheets) {
   for (const shot of projectiles) {
-    DRAW_SHOT[shot.kind](painter, shot);
+    DRAW_SHOT[shot.kind](painter, shot, fxSheets);
   }
 }

@@ -231,6 +231,29 @@ Each Shade fights in its own style and has its own ultimate:
   `src/render/fx/fissure.js`): a crack fixed to the road that runs out to both screen edges with
   light rising out of it.
 
+Bosses are moving from one shared brain to a kit each (the plan for all twelve is in
+`docs/boss-kits.md`). A boss without a kit swipes, slams and charges (`src/sim/brains/enemy/boss.js`).
+A boss with one (`src/data/enemies/boss-kits/`) is run by `src/sim/brains/enemy/boss-kit.js`: it moves
+its own way (`boss-movement.js`: Gravel Khan's `duelist` backs off, closes and feints; the Rust
+Colossus's `bulldozer` walks in and never steps back), swings its
+`close` moves in reach, picks its `skills` by range, chance and cooldown, and on its own road (never as
+a mid-boss) looses its `ultimate` below a share of its health, again every so often. Below half
+health its `phaseTwo` moves quicker, shortens the cooldowns, may chain a skill and may `swap` one for
+a stronger one. Its moves live with the other enemy moves (`src/data/enemies/moves/khan-moves.js`,
+`colossus-moves.js`) and each plays a strip of its name (or the one its `strip` names) in its sheet on
+its own timeline (`frameAt`, the tick each frame starts on). What a move does at
+set ticks is in `src/sim/bosses/move-cues.js`: the sword `glint` (a burst), the ultimate's call-out
+(`announce.js`), the war `horn` that calls the road's raiders (`war-horn.js`), the `crescents`, waves
+that skim the road (`src/sim/hazards/crescents.js`), the lobbed `boulder` and the landslide's
+`rockfall` (`src/sim/hazards/boulders.js`, `src/sim/bosses/rockfall.js`: a boulder breaks where it lands,
+a lobbed one into shards that skid both ways), the `spikes` that burst up in a row under cracks in the
+road (`src/sim/hazards/spikes.js`; a shot's `armed` rule lets a spike strike only while it stands) and
+the `quakes`, shockwaves of the ground pounded. They are all projectiles, drawn from the `fx/` strips
+(`src/render/fx/rock-hazards.js`). While an ultimate
+gathers and plays the world dims behind the boss in its own color (`src/render/fighters/boss-ultimate.js`,
+colors in `src/art/boss-colors.js`), a rush or wave marks its lane on the ground, and a boulder its
+landing spot.
+
 The loop runs the simulation at exactly 60 ticks a second and renders once per animation frame.
 A frame that runs several ticks offsets each tick's sounds (`audio.setTickOffset`) so they keep their spacing.
 
@@ -249,7 +272,7 @@ Long sessions must not grow:
 
 `test/regression/` replays bot-played scenarios and compares every 30th tick and every rendered frame
 against recorded fixtures: two long runs as the Moss Shade (first captured from the original
-single-file game), one shorter run for each of the other Shades, one run through the wide zones
+single-file game), one shorter run for each of the other Shades, one against Gravel Khan's kit, one run through the wide zones
 of the fourth mission, one over the hills of the third, one through the seventh, the sandstorm canyon,
 and one through the twelfth, the Bayon.
 Any change to

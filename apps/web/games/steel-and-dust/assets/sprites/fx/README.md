@@ -1,6 +1,6 @@
 # Effect sprites
 
-The Shades' signature and ultimate effects, made with PixelLab. Each PNG is one row of frames, drawn
+The Shades' signature and ultimate effects, made with PixelLab, and the bosses' effects. Each PNG is one row of frames, drawn
 at the hero sprites' resolution; `src/data/fx-sprites.js` gives each strip's frame size, frame count,
 ticks per frame and anchor (the pixel that sits on the ground, or on the effect's centre).
 
@@ -22,6 +22,11 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `strike.png`  | 7 × 67×53    | Bokator: Pounding the Lion's blows and his echoes striking again | VFX workbench, "Lion Fist Strike" (`848a0eee-7e9e-463c-8064-dd5f05585558`) |
 | `awaken.png`  | 10 × 60×100  | Bokator: an echo flaring into gold as a lion rises out of it | VFX workbench, "Lion Awakening" (`e3e52c54-dbb8-4788-a737-f008bebabba1`) |
 | `gather.png`  | 8 × 67×84    | Bokator: the gold flame he coils in before the rush, drawn behind him | VFX workbench, "Lion Breath Gather" (`9fd9cbe6-9ed9-4200-9d51-4ece36c6f546`), frames 5–12 |
+| `crescent.png` | 6 × 96×64   | Gravel Khan: Khan's Tempest's waves skimming the road (loops) | ChatGPT image, keyed out, shrunk and cut into frames |
+| `glint.png`   | 4 × 32×32    | Gravel Khan: the glint on his blade before the Crescent Dash | ChatGPT image, shrunk and cut into frames |
+| `boulder.png` | 4 × 56×56 | Rust Colossus: a boulder lobbed or falling (loops) | ChatGPT image, shrunk and cut into frames |
+| `shards.png` | 6 × 64×64 | Rust Colossus: a boulder breaking on the ground | ChatGPT image, shrunk and cut into frames |
+| `spike.png` | 8 × 64×96 | Rust Colossus: a stone spike bursting up and crumbling | ChatGPT image, shrunk and cut into frames |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to

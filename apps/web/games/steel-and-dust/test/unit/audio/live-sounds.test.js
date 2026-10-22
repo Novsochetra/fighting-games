@@ -17,7 +17,7 @@ const scheduledNodes = (context) => [
 ];
 
 describe('live sounds', () => {
-  it('covers the menu, event and Shade signature sounds', () => {
+  it('covers the menu, event, Shade signature and boss sounds', () => {
     expect(Object.keys(LIVE_SOUNDS).sort()).toEqual(
       [
         'pickup',
@@ -46,6 +46,8 @@ describe('live sounds', () => {
         'echo',
         'relief',
         'technique',
+        'warHorn',
+        'bossUltimate',
       ].sort(),
     );
   });
