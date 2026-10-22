@@ -122,12 +122,21 @@ const DRAW_BY_KIND = {
   lion: drawLion,
 };
 
-// relief soldiers are drawn from a hero's own sheet, behind the fighters (soldiers.js)
+// relief soldiers and echoes are drawn from a hero's own sheet, behind the fighters (soldiers.js,
+// echoes.js), and so are bursts that rise behind the hero
 export function drawSummons(painter, summons, sheets) {
   for (const summon of summons) {
     const draw = DRAW_BY_KIND[summon.kind];
-    if (summon.time > 0 && draw) {
+    if (summon.time > 0 && draw && !summon.behind) {
       draw(painter, sheets, summon);
+    }
+  }
+}
+
+export function drawBehindBursts(painter, summons, sheets) {
+  for (const summon of summons) {
+    if (summon.kind === 'burst' && summon.behind && summon.time > 0) {
+      drawBurst(painter, sheets, summon);
     }
   }
 }

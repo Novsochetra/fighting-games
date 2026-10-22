@@ -43,6 +43,7 @@ describe('live sounds', () => {
         'phoenix',
         'roar',
         'pounce',
+        'echo',
         'relief',
         'technique',
       ].sort(),

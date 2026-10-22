@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { GROUND_Y, VIEW_WIDTH } from '../../../src/config.js';
 import { ULTIMATES } from '../../../src/data/ultimates/index.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
+import { heapAt } from '../../../src/sim/ultimates/lion-pride.js';
 import { seededRandom } from '../../support/seeded-random.js';
 import { createPlayingGame, runTicks, tap } from '../../support/test-game.js';
 
@@ -124,36 +125,56 @@ describe("each Shade's ultimate", () => {
     expect(game.player).toMatchObject({ state: 'idle', invincible: 40 });
   });
 
-  it('Bokator: the slam throws every raider up, the pride bounds both ways and pounces in turn', () => {
+  it('Bokator: a slam, a bare-handed rush of echoes that strike again, then they rise and pounce', () => {
     const game = startUltimate('bokator');
-    const directions = new Set();
+    const startX = game.player.x;
+    const echoes = new Set();
     const lions = new Set();
-    const impacts = new Map();
+    const bursts = [];
     const seen = watchUltimate(game, (current) => {
       for (const summon of current.summons) {
+        if (summon.kind === 'echo') {
+          echoes.add(summon);
+        }
         if (summon.kind === 'lion') {
-          directions.add(summon.direction);
           lions.add(summon);
         }
-        if (summon.kind === 'burst' && !impacts.has(summon)) {
-          impacts.set(summon, current.camera.x + VIEW_WIDTH / 2);
+        if (summon.kind === 'burst' && !bursts.includes(summon)) {
+          bursts.push(summon);
         }
       }
     });
-    expect(seen.kinds).toEqual(new Set(['lion', 'burst']));
-    expect(directions).toEqual(new Set([1, -1]));
-    const { slam, pounce, pride } = ULTIMATES.bokator;
-    expect(new Set([...lions].map((lion) => lion.scale)).size).toBeGreaterThan(pride.length / 2);
-    // the gold breaks the ground where his sword slams it, then bigger where the pride lands
-    const [slamImpact, pounceImpact] = [...impacts.keys()];
-    expect([slamImpact.sprite, pounceImpact.sprite]).toEqual(['pounce', 'pounce']);
-    expect(Math.abs(slamImpact.x - game.player.x)).toBeLessThan(30);
-    expect(pounceImpact.x).toBe(impacts.get(pounceImpact));
+    expect(seen.kinds).toEqual(new Set(['echo', 'lion', 'burst']));
+    const { slam, blow, echo, pounce, rush, pride } = ULTIMATES.bokator;
+    // a gold echo for every blow of the rush, and a lion rising where each one stood
+    expect(echoes.size).toBe(rush.length);
+    expect(lions.size).toBe(pride.length);
+    const echoXs = [...echoes].map((summon) => summon.x);
+    [...lions].forEach((lion) => expect(echoXs).toContain(lion.flight[0][1]));
+    // he rushes every raider, from either side, and they are all on the field together
+    raiders(game).forEach((raider) => {
+      expect(echoXs.some((x) => Math.abs(x - raider.x) < 120)).toBe(true);
+    });
+    expect(new Set([...echoes].map((summon) => summon.direction))).toEqual(new Set([1, -1]));
+    const sprites = bursts.map((burst) => burst.sprite);
+    expect(sprites.filter((sprite) => sprite === 'strike').length).toBeGreaterThanOrEqual(
+      rush.length * 2,
+    );
+    expect(sprites.filter((sprite) => sprite === 'awaken')).toHaveLength(rush.length);
+    expect(bursts.find((burst) => burst.sprite === 'gather').behind).toBe(true);
+    // the ground breaks under his slam, then bigger where the pride lands ahead of him
+    const [slamImpact, pounceImpact] = bursts.filter((burst) => burst.sprite === 'pounce');
+    expect(Math.abs(slamImpact.x - startX)).toBeLessThan(30);
+    expect(pounceImpact.x).toBe(heapAt(game.player.x, game.player.facing));
     expect(pounceImpact.scale).toBeGreaterThan(slamImpact.scale);
     raiders(game).forEach((raider) => {
-      expect(raider.maxHp - raider.hp).toBeGreaterThanOrEqual(slam.damage + pounce.damage);
+      const least = slam.damage + blow.damage + echo.damage + pounce.damage;
+      expect(raider.maxHp - raider.hp).toBeGreaterThanOrEqual(least);
     });
-    expect(game.player).toMatchObject({ state: 'idle', invincible: 40 });
+    // back where the rush started, on his feet, every echo woken
+    expect(game.summons.filter((summon) => summon.kind === 'echo')).toEqual([]);
+    expect(game.player.x).toBe(startX);
+    expect(game.player).toMatchObject({ state: 'idle', invincible: 40, rush: null });
   });
 
   it('Angkor: a rank of carved soldiers fights each way, then he leaps and splits the ground', () => {

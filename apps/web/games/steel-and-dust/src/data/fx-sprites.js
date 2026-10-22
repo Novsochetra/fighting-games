@@ -16,6 +16,9 @@ export const FX_SPRITES = {
   lion: { frameWidth: 216, frameHeight: 155, frames: 6, ticks: 4, anchorX: 108, anchorY: 151 },
   feathers: { frameWidth: 66, frameHeight: 70, frames: 8, ticks: 2, anchorX: 18, anchorY: 23 },
   pounce: { frameWidth: 202, frameHeight: 127, frames: 8, ticks: 3, anchorX: 101, anchorY: 99 },
+  strike: { frameWidth: 67, frameHeight: 53, frames: 7, ticks: 2, anchorX: 33, anchorY: 27 },
+  awaken: { frameWidth: 60, frameHeight: 100, frames: 10, ticks: 3, anchorX: 30, anchorY: 86 },
+  gather: { frameWidth: 67, frameHeight: 84, frames: 8, ticks: 2, anchorX: 33, anchorY: 76 },
 };
 
 export const FX_SCALE = 1 / RENDER_SCALE;

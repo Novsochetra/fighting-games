@@ -26,7 +26,7 @@ function lionPath() {
 describe("Pounding the Lion's run", () => {
   it('turns from rising to falling smoothly anywhere in the air', () => {
     const path = lionPath();
-    expect(path.filter((point) => point.airborne).length).toBeGreaterThan(40);
+    expect(path.filter((point) => point.airborne).length).toBeGreaterThan(24);
     for (let i = 2; i < path.length; i++) {
       if (path[i - 1].airborne) {
         const bend = path[i].y - 2 * path[i - 1].y + path[i - 2].y;

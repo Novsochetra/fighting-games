@@ -84,6 +84,14 @@ function pounce(live, start) {
   hiss(live, { start, ...dust, attack: 0.01, duration: 0.14, volume: 0.06 });
 }
 
+// an echo of the hero striking again: a soft blow under a short bright chime of gold
+function echo(live, start) {
+  thump(live, { start, from: 160, to: 70, duration: 0.09, volume: 0.18 });
+  metal(live, { start, frequencies: [1760, 2640, 3520], duration: 0.22, volume: 0.03 });
+  const breath = { type: 'bandpass', from: 2400, to: 900, resonance: 1.6 };
+  hiss(live, { start, ...breath, attack: 0.005, duration: 0.1, volume: 0.05 });
+}
+
 // carved stone grinding up out of the ground on the deep beat of a skor drum
 function relief(live, start) {
   thump(live, { start, from: 70, to: 40, duration: 0.3, volume: 0.36 });
@@ -109,6 +117,7 @@ export const SIGNATURE_SOUNDS = {
   phoenix,
   roar,
   pounce,
+  echo,
   relief,
   technique,
 };
