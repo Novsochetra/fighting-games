@@ -21,16 +21,21 @@ describe('the enemy sprite sheets', () => {
     }
   });
 
-  it('draw the temple bosses frame for frame from the sheets they were recolored from', () => {
+  // the source sheets may since have grown taller frames and rows of their own moves
+  it('draw the temple bosses frame for frame from the strips of the sheets they were recolored from', () => {
     for (const [boss, source] of [
       ['naga', 'cobra'],
       ['guardian', 'colossus'],
     ]) {
-      const { file, ...layout } = ENEMY_SPRITES[boss];
-      const { file: sourceFile, ...sourceLayout } = ENEMY_SPRITES[source];
-      expect(file, boss).not.toBe(sourceFile);
-      expect(layout, boss).toEqual(sourceLayout);
-      expect(sheetSize(ENEMY_SPRITES[boss]), boss).toEqual(sheetSize(ENEMY_SPRITES[source]));
+      const { file, strips } = ENEMY_SPRITES[boss];
+      expect(file, boss).not.toBe(ENEMY_SPRITES[source].file);
+      for (const [name, strip] of Object.entries(strips)) {
+        const { frames, strike } = ENEMY_SPRITES[source].strips[name];
+        expect({ frames: strip.frames, strike: strip.strike }, `${boss} ${name}`).toEqual({
+          frames,
+          strike,
+        });
+      }
     }
   });
 });

@@ -1,4 +1,6 @@
+import { BOSS_KITS } from '../../../data/enemies/boss-kits/index.js';
 import { startMove } from '../../fighters/actions.js';
+import { thinkKitBoss } from './boss-kit.js';
 import { standStill, walk } from './movement.js';
 
 function chooseAttack(game, boss, distance) {
@@ -15,6 +17,11 @@ function chooseAttack(game, boss, distance) {
 }
 
 export function thinkBoss(game, boss, distance) {
+  const kit = BOSS_KITS[boss.kind];
+  if (kit) {
+    thinkKitBoss(game, boss, { kit, distance });
+    return;
+  }
   if (boss.ai.cooldown > 0) {
     if (distance > 42) {
       walk(boss, 1, 1);

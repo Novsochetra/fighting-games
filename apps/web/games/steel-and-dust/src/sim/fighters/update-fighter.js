@@ -25,11 +25,13 @@ function tickTimers(fighter) {
   }
 }
 
+// a move drawn on a timeline of its own strip carries its own smear in the frames
 function inSwing(fighter) {
   const move = fighter.move;
   return (
     fighter.state === 'attack' &&
     move &&
+    !move.frameAt &&
     fighter.moveTime >= move.startup - 1 &&
     fighter.moveTime <= move.startup + move.active + 1
   );

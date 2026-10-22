@@ -7,7 +7,7 @@ export function runScenario(driver, scenario) {
   driver.act('play');
   for (let tick = 0; tick < scenario.ticks; tick++) {
     if (tick === scenario.spawnBossAt) {
-      driver.spawn('brute', 1);
+      driver.spawn(scenario.boss ?? 'brute', 1);
     }
     bot.step(tick);
     driver.tick();

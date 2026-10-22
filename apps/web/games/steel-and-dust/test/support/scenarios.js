@@ -26,6 +26,29 @@ export const SCENARIOS = {
     spawnBossAt: 30,
     scheduled: { 400: ['w4'], 1400: ['w3'], 2400: ['w2'], 3200: ['fill'] },
   },
+  // Gravel Khan on his own road: his duelist footwork, Crescent Dash, War Horn and, once the bot
+  // has worn him below 40%, Khan's Tempest
+  khan: {
+    boss: 'khan',
+    seed: 4321,
+    ticks: 4800,
+    sampleEvery: 30,
+    renderEvery: 120,
+    spawnBossAt: 30,
+    scheduled: { 600: ['fill'], 1200: ['w2'], 2400: ['w3'], 3600: ['fill'] },
+  },
+  // the Rust Colossus in the Old Grove: his walk, Spike Line and, below 40%, the Landslide (the bot
+  // never keeps far enough away for a Boulder Lob; test/integration/sim/colossus.test.js covers it)
+  colossus: {
+    mission: 1,
+    boss: 'colossus',
+    seed: 11,
+    ticks: 4800,
+    sampleEvery: 30,
+    renderEvery: 120,
+    spawnBossAt: 30,
+    scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
+  },
   // the other Shades: their own fighting style on every weapon and their own ultimate
   firefly: {
     hero: 'firefly',
