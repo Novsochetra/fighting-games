@@ -142,6 +142,7 @@ const TRAILS = {
   crescent: gravelTrail,
   boulder: rockTrail,
   glob: venomTrail,
+  wasp: emberTrail,
 };
 
 export function leaveTrail(game, shot) {

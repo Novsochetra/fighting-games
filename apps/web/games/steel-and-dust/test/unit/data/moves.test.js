@@ -82,6 +82,11 @@ describe('move tables', () => {
       'venomSpray',
       'coilLash',
       'hypnoticGaze',
+      'burrow',
+      'burrowTwice',
+      'emerge',
+      'tailSting',
+      'hiveSwarm',
     ]);
   });
 

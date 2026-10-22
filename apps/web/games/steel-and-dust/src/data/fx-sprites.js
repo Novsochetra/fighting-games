@@ -25,6 +25,8 @@ export const FX_SPRITES = {
   glob: { frameWidth: 44, frameHeight: 20, frames: 4, ticks: 4, anchorX: 35, anchorY: 10 },
   puddle: { frameWidth: 80, frameHeight: 40, frames: 6, ticks: 6, anchorX: 40, anchorY: 38 },
   hypnosis: { frameWidth: 128, frameHeight: 80, frames: 8, ticks: 3, anchorX: 64, anchorY: 40 },
+  wasp: { frameWidth: 56, frameHeight: 48, frames: 4, ticks: 3, anchorX: 28, anchorY: 24 },
+  eruption: { frameWidth: 144, frameHeight: 144, frames: 6, ticks: 3, anchorX: 72, anchorY: 143 },
   glint: { frameWidth: 32, frameHeight: 32, frames: 4, ticks: 4, anchorX: 16, anchorY: 16 },
   pounce: { frameWidth: 202, frameHeight: 127, frames: 8, ticks: 3, anchorX: 101, anchorY: 99 },
   strike: { frameWidth: 67, frameHeight: 53, frames: 7, ticks: 2, anchorX: 33, anchorY: 27 },

@@ -4,8 +4,19 @@ import { spawnCrescent } from '../hazards/crescents.js';
 import { spawnShockwave } from '../hazards/shockwaves.js';
 import { spitVenom } from '../hazards/venom-globs.js';
 import { raiseSpikes } from '../hazards/spikes.js';
+import { releaseWasp, slamPincers, waspAt } from '../hazards/wasps.js';
 import { addBurst } from '../summons/bursts.js';
 import { announceBossUltimate } from './announce.js';
+import {
+  digIn,
+  erupt,
+  halt,
+  isTunnelling,
+  stopsTunnelling,
+  surface,
+  surfacesNow,
+  tunnelAfterHero,
+} from './burrow.js';
 import { circleHeldHero, flashGaze, warnOfGaze, whileHeld } from './hypnotic-gaze.js';
 import { dropRockfall, rockfallIndex } from './rockfall.js';
 import { blowWarHorn } from './war-horn.js';
@@ -46,6 +57,16 @@ const CUES = [
   [(move, time) => time === move.gaze?.warnAt, warnOfGaze],
   [(move, time) => time === move.gaze?.flashAt, flashGaze],
   [whileHeld, circleHeldHero],
+  [(move, time) => time === 0 && Boolean(move.underground), digIn],
+  [isTunnelling, tunnelAfterHero],
+  [stopsTunnelling, halt],
+  [surfacesNow, surface],
+  [atStrike('erupts'), erupt],
+  [
+    (move, time) => Boolean(waspAt(move, time)),
+    (game, fighter, move, time) => releaseWasp(game, fighter, waspAt(move, time)),
+  ],
+  [(move, time) => time === move.slamAt, slamPincers],
   [
     (move, time) => move.rockfall && rockfallIndex(move, time) >= 0,
     (game, fighter, move, time) => dropRockfall(game, fighter, rockfallIndex(move, time)),

@@ -52,6 +52,9 @@ describe('live sounds', () => {
         'venomSpit',
         'splat',
         'hypnosis',
+        'dig',
+        'eruption',
+        'buzz',
       ].sort(),
     );
   });

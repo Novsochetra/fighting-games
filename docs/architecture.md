@@ -239,12 +239,13 @@ Bosses are moving from one shared brain to a kit each (the plan for all twelve i
 A boss with one (`src/data/enemies/boss-kits/`) is run by `src/sim/brains/enemy/boss-kit.js`: it moves
 its own way (`boss-movement.js`: Gravel Khan's `duelist` backs off, closes and feints; the Rust
 Colossus's `bulldozer` walks in and never steps back; Ironhorn's `bull` keeps room to run; the Cobra
-Matriarch's `slither` keeps the middle distance), swings its
+Matriarch's `slither` keeps the middle distance; the Scorpion Queen's `scuttle` darts to and fro at
+the edge of her sting's reach), swings its
 `close` moves in reach, picks its `skills` by range, chance and cooldown, and on its own road (never as
 a mid-boss) looses its `ultimate` below a share of its health, again every so often. Below half
 health its `phaseTwo` moves quicker, shortens the cooldowns, may chain a skill and may `swap` one for
 a stronger one. Its moves live with the other enemy moves (`src/data/enemies/moves/khan-moves.js`,
-`colossus-moves.js`, `ironhorn-moves.js`, `cobra-moves.js`) and each plays a strip of its name (or the one its `strip` names) in its sheet on
+`colossus-moves.js`, `ironhorn-moves.js`, `cobra-moves.js`, `queen-moves.js`) and each plays a strip of its name (or the one its `strip` names) in its sheet on
 its own timeline (`frameAt`, the tick each frame starts on; `loopFrames`, a run of frames looped
 while the move is active, for a rush or a daze). A rush that meets the arena's wall turns into the
 move its `wallNext` names (`src/sim/bosses/wall-hit.js`): Ironhorn is left dazed when his Horn Rush
@@ -259,9 +260,15 @@ road (`src/sim/hazards/spikes.js`; a shot's `armed` rule lets a spike strike onl
 the `quakes`, shockwaves of the ground pounded, the venom `globs` that arc onto marked spots and
 spread into puddles burning whoever stands in them (`src/sim/hazards/venom-globs.js`), and the
 Cobra's `gaze` (`src/sim/bosses/hypnotic-gaze.js`): a hero facing her when her eyes flash is held
-still for her lunge, which stops where it bites (`stopOnHit`). They are all projectiles, drawn from
-the `fx/` strips (`src/render/fx/rock-hazards.js`, `venom-hazards.js`); a puddle, flat on the road,
-is drawn under the fighters' feet. While an ultimate
+still for her lunge, which stops where it bites (`stopOnHit`). The Scorpion Queen's burrow
+(`src/sim/bosses/burrow.js`) sinks her `underground` (no hurt box, no shove, no shadow: `isUnderground`
+in `src/sim/combat/boxes.js`), her mound `tunnel`s after the hero, stops (a `rumble` only sprays
+sand) and turns into the move its `then` names, the `emerge` that `erupts` up under the hero; her
+Tail Sting leaves `poison` (`src/sim/summons/poison.js`), which bites a little at a time and never
+takes the last of a life; her Hive Swarm's `swarm` sends wasps across the screen, low or high, each
+waiting at the edge while its lane is marked (`src/sim/hazards/wasps.js`). They are all projectiles, drawn from
+the `fx/` strips (`src/render/fx/rock-hazards.js`, `venom-hazards.js`, `wasp-hazards.js`); a puddle,
+flat on the road, is drawn under the fighters' feet. While an ultimate
 gathers and plays the world dims behind the boss in its own color (`src/render/fighters/boss-ultimate.js`,
 colors in `src/art/boss-colors.js`), a rush or wave marks its lane on the ground, and a boulder its
 landing spot.
@@ -285,7 +292,7 @@ Long sessions must not grow:
 `test/regression/` replays bot-played scenarios and compares every 30th tick and every rendered frame
 against recorded fixtures: two long runs as the Moss Shade (first captured from the original
 single-file game), one shorter run for each of the other Shades, one against each boss kit (Gravel Khan, the Rust
-Colossus, Ironhorn, the Cobra Matriarch), one run through the wide zones
+Colossus, Ironhorn, the Cobra Matriarch, the Scorpion Queen), one run through the wide zones
 of the fourth mission, one over the hills of the third, one through the seventh, the sandstorm canyon,
 and one through the twelfth, the Bayon.
 Any change to

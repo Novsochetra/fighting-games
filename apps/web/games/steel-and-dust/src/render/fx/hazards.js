@@ -6,6 +6,7 @@ import { drawBolt, drawBomb, drawFire, drawSand, drawVenom } from './enemy-shots
 import { drawFxFrame } from './fx-sheets.js';
 import { drawBamboo, drawBoulder, drawShard, drawSpike } from './rock-hazards.js';
 import { drawGlob, drawPuddle } from './venom-hazards.js';
+import { drawWasp } from './wasp-hazards.js';
 
 function drawShockPeak(painter, { x, y, height }) {
   for (let row = 0; row <= height; row++) {
@@ -91,6 +92,7 @@ const DRAW_SHOT = {
   bamboo: drawBamboo,
   glob: drawGlob,
   puddle: drawPuddle,
+  wasp: drawWasp,
 };
 
 // what lies flat on the road is drawn under the fighters' feet

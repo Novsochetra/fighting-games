@@ -1,6 +1,7 @@
 import { standStill, walk } from './movement.js';
 
 const FEINT_TICKS = 12;
+const SCUTTLE_TICKS = 30;
 
 // a duelist keeps a sword's length and a step away: he backs off a hero who crowds him, closes on
 // one who keeps away, and in between stands his ground or feints a step in
@@ -53,4 +54,18 @@ function slither(boss, { distance, pace }) {
   }
 }
 
-export const BOSS_MOVEMENT = { duelist, bulldozer, bull, slither };
+// a scorpion never stands still: she closes on a hero far off, backs from one in her face and in
+// between scuttles to and fro at the edge of her sting's reach
+function scuttle(boss, { distance, pace }) {
+  const ai = boss.ai;
+  if (distance > 120) {
+    walk(boss, 1, pace);
+  } else if (distance < 50) {
+    walk(boss, -1, pace);
+  } else {
+    ai.scuttle = (ai.scuttle ?? 0) + 1;
+    walk(boss, Math.floor(ai.scuttle / SCUTTLE_TICKS) % 2 ? -1 : 1, 1.3 * pace);
+  }
+}
+
+export const BOSS_MOVEMENT = { duelist, bulldozer, bull, slither, scuttle };

@@ -73,6 +73,18 @@ export const SCENARIOS = {
     spawnBossAt: 30,
     scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
   },
+  // the Scorpion Queen in the Ember Woods: her scuttle, Tail Sting, Burrow Ambush (going under
+  // twice below half health) and, below 40%, the Hive Swarm's wasps
+  queen: {
+    mission: 4,
+    boss: 'queen',
+    seed: 19,
+    ticks: 4800,
+    sampleEvery: 30,
+    renderEvery: 120,
+    spawnBossAt: 30,
+    scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
+  },
   // the other Shades: their own fighting style on every weapon and their own ultimate
   firefly: {
     hero: 'firefly',
