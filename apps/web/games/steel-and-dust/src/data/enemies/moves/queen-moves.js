@@ -60,7 +60,7 @@ export const QUEEN_MOVES = {
     name: 'Tail Sting',
     frames: [30, 8, 26],
     damage: 10,
-    hitbox: [16, -34, 28, 26],
+    hitbox: [14, -40, 31, 36],
     knockback: [2.2, -1],
     poison: { ticks: 180, every: 30, damage: 2 },
     frameAt: [0, 6, 12, 20, 30, 34, 38, 46, 54],

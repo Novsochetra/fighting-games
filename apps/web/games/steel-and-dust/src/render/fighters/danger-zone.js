@@ -1,6 +1,6 @@
 import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
-import { attackBox } from '../../sim/combat/boxes.js';
+import { hitboxOf, swingBox } from '../../sim/combat/boxes.js';
 import { spikeLineReach } from '../../sim/hazards/spikes.js';
 import { drawText } from '../text/draw-text.js';
 
@@ -9,7 +9,8 @@ import { drawText } from '../text/draw-text.js';
 function laneLength(fighter) {
   const move = fighter.move;
   if (move.lane === 'reach') {
-    return (move.hitbox[0] + move.hitbox[2]) * fighter.scale;
+    const [ahead, , width] = hitboxOf(fighter, move);
+    return (ahead + width) * fighter.scale;
   }
   if (move.lane === 'spikes') {
     return spikeLineReach(fighter, move.spikes);
@@ -34,7 +35,7 @@ function chargeLane(painter, fighter, { floor, direction }) {
 
 function slamZone(painter, fighter, floor) {
   const move = fighter.move;
-  const box = attackBox(fighter, move.hitbox);
+  const box = swingBox(fighter);
   const extra = move.id === 'slam' ? 40 : 0;
   painter.use(COLORS.red).rect(box.x - extra, floor - 1, box.width + extra * 2, 6);
   painter.use(FX_COLORS.dangerLight).rect(box.x - extra, floor - 1, box.width + extra * 2, 1);

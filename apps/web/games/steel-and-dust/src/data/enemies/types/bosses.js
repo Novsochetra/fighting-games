@@ -1,9 +1,12 @@
+import { BOSS_BODIES } from '../boss-bodies.js';
+
 // every boss swipes, slams and charges; the Warden Ox waits at the end of the tenth mission, the
 // desert's last, and the Bayon Guardian (temple-bosses.js) at the end of the game
 export const BOSSES = {
   colossus: {
     name: 'Rust Colossus',
     sprite: 'colossus',
+    ...BOSS_BODIES.colossus,
     material: 'stone',
     hp: 240,
     speed: 0.5,
@@ -19,6 +22,7 @@ export const BOSSES = {
   queen: {
     name: 'Scorpion Queen',
     sprite: 'queen',
+    ...BOSS_BODIES.queen,
     material: 'shell',
     hp: 260,
     speed: 0.65,
@@ -34,6 +38,7 @@ export const BOSSES = {
   brute: {
     name: 'Warden Ox',
     sprite: 'ox',
+    ...BOSS_BODIES.ox,
     hp: 340,
     speed: 0.55,
     range: 36,

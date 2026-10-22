@@ -195,7 +195,9 @@ three times the hero's height, and its hit and hurt boxes grow with it; raiders 
 size of their sheets. Where a boss's effects leave its body (a mouth, eyes, a fist, the furnace in a
 chest) is a `bodyPoint` (`src/sim/fighters/body-point.js`) given at scale 1 and grown with the
 boss, so an effect leaves the same spot on its art at any size; a boss keeps its whole body on
-screen (`arenaBounds`).
+screen (`arenaBounds`). Its body as drawn (`src/data/enemies/boss-bodies.js`) sets the hurt box a
+hero's blows land on, mirrored as it turns, how far its shared swings reach (`swingBox`), and how
+much of it others are kept off (`src/sim/fighters/separate.js`).
 A Shade's `arsenal/` strips are baked from its sword strips by `tools/bake_hero_weapons.py`, which
 also dresses the Moss, Firefly, Antler Spirit and Blue Shades and their ultimate in their element
 (`tools/shade_fx/`: grove moss and spores, a firefly swarm, teal ghost fire, frost), drawn into the

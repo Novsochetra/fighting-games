@@ -1,6 +1,6 @@
 import { COLORS } from '../../art/colors.js';
 import { HUD_COLORS } from '../../art/hud-colors.js';
-import { attackBox, crateBox, hurtBox } from '../../sim/combat/boxes.js';
+import { crateBox, hurtBox, swingBox } from '../../sim/combat/boxes.js';
 import { drawText } from '../text/draw-text.js';
 
 function drawFighterBoxes(painter, fighter) {
@@ -9,7 +9,7 @@ function drawFighterBoxes(painter, fighter) {
     painter.use(COLORS.mint).outline(body.x, body.y, body.width, body.height);
   }
   if (fighter.state === 'attack' && fighter.hitboxActive && fighter.move) {
-    const hit = attackBox(fighter, fighter.move.hitbox);
+    const hit = swingBox(fighter);
     painter
       .alpha(0.45)
       .use(COLORS.red)
