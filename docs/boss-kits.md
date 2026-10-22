@@ -145,7 +145,9 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    touching, so the tool floods black in from the edges, peels the glow and takes per-row cut
    lines. The new colors are picked from spread-out seeds so her glowing eyes keep their own
    entries. Each glob's landing spot is marked as it leaves her mouth, and puddles are drawn under
-   the fighters' feet.
+   the fighters' feet. Her knock-out, slam
+   and charge rows were cut off at the frame's edges and were redrawn.
+
 5. **Scorpion Queen**: done. Her sheet has frames both wider and taller (256×160): the sting
    stabs far ahead and the tail stabs straight up as she bursts out. GPT gave real transparent
    PNGs this time; the travelling mound is its own loop, cut at her scale onto the end of her
