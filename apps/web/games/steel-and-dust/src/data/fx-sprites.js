@@ -19,6 +19,8 @@ export const FX_SPRITES = {
   strike: { frameWidth: 67, frameHeight: 53, frames: 7, ticks: 2, anchorX: 33, anchorY: 27 },
   awaken: { frameWidth: 60, frameHeight: 100, frames: 10, ticks: 3, anchorX: 30, anchorY: 86 },
   gather: { frameWidth: 67, frameHeight: 84, frames: 8, ticks: 2, anchorX: 33, anchorY: 76 },
+  sever: { frameWidth: 58, frameHeight: 67, frames: 10, ticks: 2, anchorX: 29, anchorY: 26 },
+  rubble: { frameWidth: 105, frameHeight: 92, frames: 11, ticks: 2, anchorX: 53, anchorY: 46 },
 };
 
 export const FX_SCALE = 1 / RENDER_SCALE;

@@ -8,6 +8,8 @@ import { FakeImage } from '../../support/fake-image.js';
 import { RecordingCanvas } from '../../support/recording-canvas.js';
 import { createPlayingGame, runTicks, tap } from '../../support/test-game.js';
 
+const HIT = { damage: 5, knockback: [1, -1], hitstop: 3, hitstun: 20 };
+
 function createCanvas(width, height) {
   return Object.assign(new RecordingCanvas(), { width, height });
 }
@@ -31,7 +33,7 @@ describe('the carved soldiers in the light', () => {
   it("draws a finisher's soldier behind the hero, in the world", () => {
     const game = createPlayingGame({ settings: { hero: 'angkor' } });
     runTicks(game, 2);
-    raiseSoldier(game, { x: game.player.x + 30, direction: 1 });
+    raiseSoldier(game, { x: game.player.x + 30, direction: 1, hit: HIT });
     runTicks(game, 10);
     const log = renderedCalls(game);
     const hero = log.findIndex((call) => call.startsWith('drawImage(img(hero_'));
@@ -39,18 +41,20 @@ describe('the carved soldiers in the light', () => {
     expect(soldierCuts(log)[0]).toBeLessThan(hero);
   });
 
-  it("draws the ultimate's ranks over the dimmed world, in the hero's light", () => {
+  it("draws the ultimate's carvings over the dimmed world, in the hero's light", () => {
     const game = createPlayingGame({ settings: { hero: 'angkor' } });
     runTicks(game, 30);
     game.ultMeter = 100;
     tap(game, 'ult');
-    while (game.player.stateTime < ULTIMATES.angkor.ranks[0].at + 20) {
+    while (game.player.stateTime < ULTIMATES.angkor.releaseAt - 1) {
       runTicks(game, 1);
     }
     const log = renderedCalls(game);
     const dim = log.indexOf(`fillStyle=${HERO_THEMES.angkor.ult.dim}`);
     expect(dim).toBeGreaterThan(-1);
-    expect(soldierCuts(log).length).toBeGreaterThan(4);
-    expect(soldierCuts(log).every((cut) => cut > dim)).toBe(true);
+    // each carving is drawn solid stone, after the dim and straight after it
+    const carved = log.slice(dim).filter((call) => call === 'globalAlpha=0.95');
+    expect(carved.length).toBeGreaterThanOrEqual(ULTIMATES.angkor.passes.length - 1);
+    expect(log.slice(dim + 1, dim + 5)).toContain('globalAlpha=0.95');
   });
 });

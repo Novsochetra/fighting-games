@@ -92,6 +92,14 @@ function echo(live, start) {
   hiss(live, { start, ...breath, attack: 0.005, duration: 0.1, volume: 0.05 });
 }
 
+// every cut landing at once: a high ring of the blade over a slicing hiss and a deep blow
+function sever(live, start) {
+  metal(live, { start, frequencies: [2093, 3136, 4186], duration: 0.4, volume: 0.05 });
+  const slice = { type: 'highpass', from: 6000, to: 2200, resonance: 1.8 };
+  hiss(live, { start, ...slice, attack: 0.004, duration: 0.18, volume: 0.1 });
+  thump(live, { start: start + 0.02, from: 130, to: 45, duration: 0.3, volume: 0.36 });
+}
+
 // carved stone grinding up out of the ground on the deep beat of a skor drum
 function relief(live, start) {
   thump(live, { start, from: 70, to: 40, duration: 0.3, volume: 0.36 });
@@ -118,6 +126,7 @@ export const SIGNATURE_SOUNDS = {
   roar,
   pounce,
   echo,
+  sever,
   relief,
   technique,
 };

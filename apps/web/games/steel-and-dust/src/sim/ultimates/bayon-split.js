@@ -1,6 +1,6 @@
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { VIEW_WIDTH } from '../../config.js';
-import { MARCH_OF_THE_BAYON } from '../../data/ultimates/march-of-the-bayon.js';
+import { THOUSAND_CUTS } from '../../data/ultimates/thousand-cuts.js';
 import { randomBetween } from '../../lib/math.js';
 import { themeOf } from '../fighters/hero-colors.js';
 import { addFissure } from '../fx/fissure.js';
@@ -9,7 +9,7 @@ import { groundAt } from '../stage/terrain.js';
 import { addBurst } from '../summons/bursts.js';
 import { finaleFlash, hitEveryTarget, ultTargets } from './common.js';
 
-const { edge, fissureRun, fissureTicks, split } = MARCH_OF_THE_BAYON;
+const { edge, fissureRun, fissureTicks, split } = THOUSAND_CUTS;
 // where the dav's edge bites the ground in the chop frame, ahead of his feet
 const BLADE_REACH = 20;
 const DEBRIS_STEP = 20;

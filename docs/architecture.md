@@ -209,9 +209,12 @@ Each Shade fights in its own style and has its own ultimate:
   (`flight.js`), and a point may carry a hop, so the lion bounds to it in an arc and lands there. A carved soldier is drawn from the strips of the hero who raised it, carved in
   sandstone (the frame's own light and shade under the stone's color, a `relief` copy in
   `src/render/fighters/tint.js`), rising out of the ground behind the fighters
-  (`src/render/fx/soldiers.js`). A finisher's soldier thrusts once; the ultimate's soldiers rise in a
-  wave from the hero's feet and each fights a chain of the hero's own attack strips, striking in step
-  with its rank on the rank's `beats`, and they stand in the hero's light over the dimmed world.
+  (`src/render/fx/soldiers.js`, the carving itself in `carved.js`); a finisher's soldier thrusts
+  once. The Angkor Warrior's ultimate leaves `hangingCut`s of gold on the raiders he cuts through
+  (`src/sim/summons/hanging-cuts.js`, drawn by `src/render/fx/hanging-cuts.js`), riding them until
+  they all land at once, and a `carving` of him in sandstone where he stopped after each cut
+  (`src/sim/summons/carvings.js`, `src/render/fx/carvings.js`), which swings with them and crumbles.
+  What stands behind the fighters stands in the hero's light over the dimmed world in an ultimate.
   Bokator's ultimate leaves gold `echo`es of him where his rush lands each blow
   (`src/sim/summons/echoes.js`), drawn the same way from his strips in gold behind the fighters
   (`src/render/fx/echoes.js`); each strikes its raider again, holds the blow and, once woken, flares

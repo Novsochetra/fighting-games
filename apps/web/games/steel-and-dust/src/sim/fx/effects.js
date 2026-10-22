@@ -32,6 +32,11 @@ export function addCutLine(game, { x, y, angle, color }) {
   game.effects.push({ kind: 'cut', x, y, angle, color, time: 0, duration: 12 });
 }
 
+// one great slash across the whole field, through (x, y), as an ultimate's cuts all land
+export function addScreenCut(game, { x, y, angle, color }) {
+  game.effects.push({ kind: 'screenCut', x, y, angle, color, time: 0, duration: 16 });
+}
+
 export function addFloatText(game, { x, y, text, color }) {
   game.floaters.push({ x, y, text, color, time: 0, big: true });
 }

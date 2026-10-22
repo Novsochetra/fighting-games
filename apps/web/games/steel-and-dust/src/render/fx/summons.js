@@ -1,6 +1,7 @@
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { FX_SPRITES } from '../../data/fx-sprites.js';
 import { drawFxFrame, fxFrameAt } from './fx-sheets.js';
+import { drawHangingCut } from './hanging-cuts.js';
 import { drawLion } from './lion.js';
 
 // the encasing spikes grow, then hold at full height until the ice shatters
@@ -120,10 +121,11 @@ const DRAW_BY_KIND = {
   burn: drawBurn,
   phoenix: drawPhoenix,
   lion: drawLion,
+  hangingCut: drawHangingCut,
 };
 
-// relief soldiers and echoes are drawn from a hero's own sheet, behind the fighters (soldiers.js,
-// echoes.js), and so are bursts that rise behind the hero
+// relief soldiers, carvings and echoes are drawn from a hero's own sheet, behind the fighters
+// (soldiers.js, carvings.js, echoes.js), and so are bursts that rise behind the hero
 export function drawSummons(painter, summons, sheets) {
   for (const summon of summons) {
     const draw = DRAW_BY_KIND[summon.kind];
