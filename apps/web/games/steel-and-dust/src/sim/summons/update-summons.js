@@ -11,6 +11,7 @@ import { updatePillar } from './pillars.js';
 import { updatePoison } from './poison.js';
 import { updateSoldier } from './soldiers.js';
 import { updateStag } from './stags.js';
+import { updateStoneSkin } from './stone-skin.js';
 import { updateThorn } from './thorns.js';
 
 const UPDATE_BY_KIND = {
@@ -22,6 +23,7 @@ const UPDATE_BY_KIND = {
   pillar: updatePillar,
   burn: updateBurn,
   poison: updatePoison,
+  stoneSkin: updateStoneSkin,
   phoenix: updatePhoenix,
   lion: updateLion,
   soldier: updateSoldier,

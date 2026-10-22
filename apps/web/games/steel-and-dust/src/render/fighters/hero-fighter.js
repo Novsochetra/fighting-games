@@ -1,4 +1,5 @@
 import { COLORS } from '../../art/colors.js';
+import { FX_COLORS } from '../../art/fx-colors.js';
 import { CHARGE_LEVEL1, CHARGE_MAX, CHARGE_TAP } from '../../config.js';
 import { WEAPONS } from '../../data/weapons/index.js';
 import { heroAnimation } from '../../sim/hero-animation.js';
@@ -69,12 +70,12 @@ export function drawHeroFighter(painter, { sheet, fighter, shakeX, tickCount }) 
   if (color) {
     drawGlow(painter, sheet, { fighter, frame, row, shakeX, color });
   }
-  drawHeroFrame(painter, sheet, {
-    frame,
-    x: fighter.x + shakeX,
-    y: fighter.y,
-    facing: fighter.facing,
-    tint: hitTint(fighter),
-    row,
-  });
+  const at = { frame, x: fighter.x + shakeX, y: fighter.y, facing: fighter.facing, row };
+  drawHeroFrame(painter, sheet, { ...at, tint: hitTint(fighter) });
+  // turned slow as stone by the guardian's gaze: grey stone washed over the hero
+  if (fighter.stoned) {
+    painter.alpha(0.62);
+    drawHeroFrame(painter, sheet, { ...at, tint: FX_COLORS.stoneSkin });
+    painter.alpha(1);
+  }
 }

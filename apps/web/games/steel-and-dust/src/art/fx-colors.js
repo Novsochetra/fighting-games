@@ -52,4 +52,11 @@ export const FX_COLORS = {
   reliefShade: '#6e5a44',
   reliefRim: '#ffe7a3',
   fissureDark: '#26150c',
+  gazeGold: '#ffd84a',
+  gazeWhite: '#fff6c8',
+  gazeEmber: '#ff9f2a',
+  guardianGlow: '#ffcf4a',
+  stoneSkin: '#9c9a88',
+  stoneSkinDark: '#5d5a4c',
+  rootDust: '#8f8a5a',
 };

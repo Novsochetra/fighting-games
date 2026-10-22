@@ -14,6 +14,7 @@ import { fireThunderBolt } from '../hazards/thunder-bolts.js';
 import { releaseWasp, slamPincers, waspAt } from '../hazards/wasps.js';
 import { addBurst } from '../summons/bursts.js';
 import { announceBossUltimate } from './announce.js';
+import { BAYON_CUES } from './bayon-cues.js';
 import {
   digIn,
   erupt,
@@ -113,6 +114,7 @@ const CUES = [
     (move, time) => move.rockfall && rockfallIndex(move, time) >= 0,
     (game, fighter, move, time) => dropRockfall(game, fighter, rockfallIndex(move, time)),
   ],
+  ...BAYON_CUES,
 ];
 
 export function playMoveCues(game, fighter, move, time) {

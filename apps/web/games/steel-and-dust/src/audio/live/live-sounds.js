@@ -1,3 +1,4 @@
+import { BAYON_SOUNDS } from './bayon-sounds.js';
 import { BOSS_SOUNDS } from './boss-sounds.js';
 import { ELEMENT_SOUNDS } from './element-sounds.js';
 import { EVENT_SOUNDS } from './event-sounds.js';
@@ -13,6 +14,7 @@ export const LIVE_SOUNDS = {
   ...BOSS_SOUNDS,
   ...ELEMENT_SOUNDS,
   ...TEMPLE_SOUNDS,
+  ...BAYON_SOUNDS,
 };
 
 export function isLiveSound(key) {

@@ -13,8 +13,8 @@ describes what is actually built.
   the hero's height; the Furnace Knight, Ironhorn, Gnoll, Cobra and Naga about two and a half times;
   the Colossus, Queen and Ox about three times; the Bayon Guardian the biggest of all.
 - Every boss sheet has the same strips: `idle 4, walk 8, attack 9, hurt 4, ko 9, slam 9, charge 8`.
-- The Naga Raja is a recolor of the Cobra Matriarch, and the Bayon Guardian, the last boss of the
-  game, is a recolor of the Rust Colossus.
+- The Naga Raja is a recolor of the Cobra Matriarch. The Bayon Guardian, the last boss of the game,
+  has his own sheet now (see 12 below).
 - Several bosses come back as mid-bosses (Khan on road 6, Colossus on 8, Cobra on 9, Ironhorn and
   Queen on 10, Djinn on 11, Pharaoh and Ox on 12).
 
@@ -209,4 +209,37 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    move as he moves, are a shade thinner and waver now and then, and pop at one blow. The Curse of
    the Sun counts down over the hero's head in the sun's eye; the scarabs bite only feet on the
    ground. In phase two his copies thrust their staffs and fire mirage bolts low along the floor.
-10. Then down the road, 10 to 12. Naga Raja and Bayon Guardian wait for their new sheets.
+10. Then down the road, 10 and 11. The Naga Raja waits for her new sheet.
+11. **Bayon Guardian** (12): done, built ahead of 10 and 11 as his art came first. His own sheet, a
+    mossy four-faced temple golem with gold veins, has frames both wider and taller (256×160) for
+    his arms raised in the ritual and the roots round him. The images came on a painted checker
+    (the punch on white); white-hot eyes, cracks and the beam's core are as light as the checker, so
+    the light patches enclosed by gold glow were put back after keying. Frames touch in the punch
+    and ritual strips, so each frame was grown out from its feet through its own body, with a cut
+    line drawn by hand where two hands overlap. Every strip is shrunk so his head is drawn as big as in his idle frame (matched picture
+    to picture at many sizes: a strip that starts in a crouch, sized by its height, drew him up to
+    13% bigger), stood two sheet pixels under the feet line and held by the back heel (by both feet in
+    the idle loop, by the front foot once he lies in the knock-out). At his size his straight punch
+    passes over a standing hero, so it is his anti-air (`swipe`, only at a hero in the air) and the
+    slam is his blow up close. The Stone Gaze draws a ray from his eyes down to the marked spot and
+    a gold pillar bursts there; it leaves the hero `stoned`, walking at under half pace. The Fig
+    Roots run along the floor, then burst under where the hero stood, its spot cracking first. The
+    Four Faces rise at the screen's edges, left, right, left, right, while he glows gold; each
+    glares, its reach marked
+    red on the floor, then breathes a beam at a hero's waist for 24 ticks, short enough to clear in
+    one jump, across 60% of the arena, so the far side is safe. The beam is drawn in code a
+    screen pixel at a time (`face-beam.js`, `beam-flares.js`): a waving gold body with a white-hot
+    core, pulses of light running out along it, forks of lightning crackling round it, a turning
+    flare in the mouth, a star at the tip and its light on the road; it shoots out over its first
+    ticks, and the hit grows with it. A tiled strip cut from the image and a PixelLab beam were both
+    tried and looked flat beside it. At half health
+    he crumbles to rubble (out of reach) and plays the strip back to stand again with a gold rim,
+    sparks at each footfall; his gaze then raises three pillars and his roots run both ways. The
+    first stone face and rock burst images had frames drawn over each other, so both were drawn
+    again with wide gaps (the prompts asked for 20 px clear round every frame): the face looks
+    across the arena in profile, opens its mouth with no beam drawn, then cracks and crumbles where
+    it stands, its rubble sunk deep enough into the road that its mouth breathes at a hero's waist.
+    The ritual strip's frame 2 drew its raised hand hidden behind the next frame's, so frame 1 holds
+    in its place; its frames 4-6 were drawn bigger than the rest and are shrunk one by one, and
+    its frames 7-8, drawn smaller and turned to the viewer, are left out (frame 6's prayer holds); a redrawn ritual came out about a fifth slimmer than his walk, so the first one
+    stays, matching his bulk.

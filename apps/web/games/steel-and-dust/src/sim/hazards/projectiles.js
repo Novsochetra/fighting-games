@@ -12,7 +12,9 @@ import { flyBoulder } from './boulders.js';
 import { skimGround } from './crescents.js';
 import { spinDustDevil } from './dust-devils.js';
 import { flyBomb } from './enemy-shots.js';
+import { growRoot } from './fig-roots.js';
 import { runLance } from './flame-lances.js';
+import { burnPillar } from './gaze-pillars.js';
 import { crawlScarabs } from './scarabs.js';
 import { diveToward } from './shot-aim.js';
 import { hitArea } from './shot-hits.js';
@@ -20,6 +22,7 @@ import { leaveTrail } from './shot-trails.js';
 import { coolLava, flySlagPot } from './slag-pots.js';
 import { SHOT_RULES } from './shot-rules.js';
 import { riseSpike } from './spikes.js';
+import { glareFace } from './stone-faces.js';
 import { crackStrike } from './storm-strikes.js';
 import { runThunderBolt } from './thunder-bolts.js';
 import { flyGlob, soakPuddle } from './venom-globs.js';
@@ -83,6 +86,9 @@ const FLIGHT = {
   scarabs: crawlScarabs,
   canopic: standJar,
   curseMark: followHero,
+  gazePillar: burnPillar,
+  figRoot: growRoot,
+  stoneFace: glareFace,
 };
 const OWN_FLOOR = new Set(['fire', 'bamboo', ...Object.keys(FLIGHT)]);
 

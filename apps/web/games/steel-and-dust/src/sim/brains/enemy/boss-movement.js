@@ -1,4 +1,5 @@
 import { ventSteam } from '../../bosses/furnace.js';
+import { stomp } from '../../bosses/stomp.js';
 import { slipAway } from './blink.js';
 import { illusionist } from './illusionist.js';
 import { standStill, walk } from './movement.js';
@@ -119,6 +120,16 @@ function juggernaut(boss, { game, distance, pace }) {
   }
 }
 
+// a colossus stomps at the hero and never steps back, the road shaking under each footfall
+function colossus(boss, { game, distance, pace }) {
+  if (distance > 44) {
+    walk(boss, 1, pace);
+    stomp(game, boss);
+  } else {
+    standStill(boss);
+  }
+}
+
 export const BOSS_MOVEMENT = {
   duelist,
   bulldozer,
@@ -129,4 +140,5 @@ export const BOSS_MOVEMENT = {
   floater,
   juggernaut,
   illusionist,
+  colossus,
 };

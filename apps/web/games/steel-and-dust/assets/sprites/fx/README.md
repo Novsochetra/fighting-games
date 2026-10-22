@@ -52,6 +52,10 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `canopic.png` | 6 × 80×64 | Sand Pharaoh: a canopic jar of the Curse of the Sun standing (0) and breaking (1-5) | the same, held on the jar's foot |
 | `curse.png` | 4 × 48×48 | Sand Pharaoh: the sun's eye over the cursed hero (loops, quicker as the curse nears) | the same |
 | `sunfall.png` | 6 × 96×160 | Sand Pharaoh: the curse going off, a column of sunlight slamming down on the hero | the same, held on the column |
+| `gazePillar.png` | 8 × 104×210 | Bayon Guardian: the Stone Gaze's gold pillar bursting up, burning (2-5) and winding away | ChatGPT image, the painted checker keyed out, white-hot cores put back, shrunk and held on the pillar's foot |
+| `figRoot.png` | 8 × 96×104 | Bayon Guardian: a fig root bursting up, striking (2-5) and crumbling | the same, held on the root's foot |
+| `rockBurst.png` | 8 × 104×140 | Bayon Guardian: rubble and dust bursting up as he crumbles and as a stone face crumbles | ChatGPT image drawn again with wide gaps, the painted checker keyed out |
+| `stoneFace.png` | 8 × 144×216 | Bayon Guardian: a giant stone face in profile rising out of rubble (0-3), glaring (4), breathing gold (5), cracking (6) and crumbling (7) | the same, a hole in its glowing mouth filled |
 | `mirageBolt.png` | 4 × 48×24 | Sand Pharaoh: a mirage bolt a copy fires below half health (loops), its orb on the anchor | ChatGPT image on real transparency, shrunk and cut into frames |
 | `thunder.png` | 8 × 232×352 | Storm Djinn: the Eye of the Storm's lightning striking a marked spot, then the sand it throws up | ChatGPT image, shrunk and cut into frames, folded to 255 colors |
 

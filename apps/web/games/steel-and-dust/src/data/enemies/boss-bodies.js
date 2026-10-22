@@ -19,7 +19,11 @@ export const BOSS_BODIES = {
     reach: { swipe: [2, -29, 42, 29], slam: [0, -28, 27, 28] },
   },
   colossus: COLOSSUS,
-  guardian: COLOSSUS,
+  // his punch lands at his own chest height, over a standing hero: it swats jumpers
+  guardian: {
+    hurtShape: [16, 43, 33, 43],
+    reach: { swipe: [4, -33, 37, 15], slam: [0, -30, 25, 30], charge: [2, -38, 20, 34] },
+  },
   ironhorn: {
     hurtShape: [11, 31, 20, 31],
     reach: { swipe: [2, -36, 36, 36], slam: [0, -44, 37, 44] },

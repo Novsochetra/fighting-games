@@ -37,6 +37,26 @@ function drawAfterimages(painter, sheets, fighter) {
   painter.alpha(1);
 }
 
+// a boss that has reformed glows: a gold rim one screen pixel round its sprite, pulsing
+const RIM = [
+  [-0.5, 0],
+  [0.5, 0],
+  [0, -0.5],
+];
+
+function drawRim(painter, sheets, at, tickCount) {
+  painter.alpha(0.45 + 0.3 * Math.abs(Math.sin(tickCount / 14)));
+  for (const [dx, dy] of RIM) {
+    drawEnemyFrame(painter, sheets, {
+      ...at,
+      x: at.x + dx,
+      y: at.y + dy,
+      tint: FX_COLORS.guardianGlow,
+    });
+  }
+  painter.alpha(1);
+}
+
 // the red wash over the sprite blinks in the last frames of a wind-up
 function drawTelegraph(painter, sheets, at) {
   painter.alpha(0.55);
@@ -59,6 +79,9 @@ export function drawSpriteEnemy(painter, { sheets, fighter, shakeX, tickCount, f
     size: spriteSize(fighter),
   };
   drawMirages(painter, sheets, { fighter, frame: at.frame, tickCount });
+  if (fighter.glowing) {
+    drawRim(painter, sheets, at, tickCount);
+  }
   drawEnemyFrame(painter, sheets, { ...at, tint: hitTint(fighter) });
   if (isTelegraphing(fighter, tickCount)) {
     drawTelegraph(painter, sheets, at);

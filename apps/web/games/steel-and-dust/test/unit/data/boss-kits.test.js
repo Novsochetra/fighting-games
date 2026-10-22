@@ -39,7 +39,11 @@ describe('the boss kits', () => {
         const move = ENEMY_MOVES[id];
         expect(move, `${kind} ${id}`).toBeDefined();
         if (move.frameAt) {
-          expect(sprite.strips[move.strip ?? id].frames, `${kind} ${id}`).toBe(move.frameAt.length);
+          const steps = move.frameOrder ?? move.frameAt.map((_, frame) => frame);
+          expect(steps, `${kind} ${id}`).toHaveLength(move.frameAt.length);
+          expect(sprite.strips[move.strip ?? id].frames, `${kind} ${id}`).toBe(
+            Math.max(...steps) + 1,
+          );
           expect(move.frameAt[0], `${kind} ${id}`).toBe(0);
           expect(
             [...move.frameAt].sort((first, second) => first - second),

@@ -111,6 +111,12 @@ describe('move tables', () => {
       'scarabCarpet',
       'curseOfSun',
       'sunBroken',
+      'stoneGaze',
+      'stoneGlare',
+      'figRoots',
+      'figThicket',
+      'fourFaces',
+      'crumble',
     ]);
   });
 

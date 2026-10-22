@@ -1,8 +1,10 @@
+import { drawFigRoot, drawGazePillar } from './bayon-hazards.js';
 import { drawBlaze, drawFlameLance, drawLavaPool, drawSlagPot } from './forge-hazards.js';
 import { drawBamboo, drawBoulder, drawShard, drawSpike } from './rock-hazards.js';
 import { drawDustDevil, drawStormStrike, drawThunderBolt } from './storm-hazards.js';
 import { drawCanopic, drawCurseMark, drawMirageBolt, drawScarabs } from './temple-hazards.js';
 import { drawGlob, drawPuddle } from './venom-hazards.js';
+import { drawStoneFace } from './stone-face-draw.js';
 import { drawWasp } from './wasp-hazards.js';
 
 // how each boss's thrown, fired and laid things are drawn, from the fx/ strips
@@ -25,4 +27,7 @@ export const BOSS_HAZARD_DRAWERS = {
   canopic: drawCanopic,
   curseMark: drawCurseMark,
   mirageBolt: drawMirageBolt,
+  gazePillar: drawGazePillar,
+  figRoot: drawFigRoot,
+  stoneFace: drawStoneFace,
 };

@@ -70,8 +70,9 @@ function activeFrame({ move, moveTime }, { name, strike, last }) {
 }
 
 // a move with a timeline of its own starts each frame of its strip on the tick it names; while it
-// is active it may loop a run of frames instead, for as long as a rush or a daze lasts
-function timelineFrame({ frameAt, loopFrames, startup, active }, moveTime) {
+// is active it may loop a run of frames instead, for as long as a rush or a daze lasts, and its
+// `frameOrder` may play the strip back on itself (a body falling to rubble and building back up)
+function timelineFrame({ frameAt, frameOrder, loopFrames, startup, active }, moveTime) {
   if (loopFrames && moveTime >= startup && moveTime < startup + active) {
     const [first, last, ticks] = loopFrames;
     return first + (Math.floor((moveTime - startup) / ticks) % (last - first + 1));
@@ -80,7 +81,7 @@ function timelineFrame({ frameAt, loopFrames, startup, active }, moveTime) {
   while (frame + 1 < frameAt.length && frameAt[frame + 1] <= moveTime) {
     frame++;
   }
-  return frame;
+  return frameOrder ? frameOrder[frame] : frame;
 }
 
 // wind-up frames lead to the strike frame, which holds while the hitbox is out

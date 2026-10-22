@@ -91,5 +91,9 @@ export const ENEMY_SPRITES = {
     BIG_BOSS,
   ),
   naga: sheet('naga.png', bossStrips(5, 5), BOSS),
-  guardian: sheet('guardian.png', bossStrips(3, 4), BOSS),
+  guardian: sheet(
+    'guardian.png',
+    `${bossStrips(3, 4)}, stoneGaze 8/4, figRoots 8/3, fourFaces 12/5, crumble 8`,
+    BIG_BOSS,
+  ),
 };

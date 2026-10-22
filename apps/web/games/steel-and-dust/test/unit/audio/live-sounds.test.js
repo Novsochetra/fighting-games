@@ -69,6 +69,13 @@ describe('live sounds', () => {
         'sunBreak',
         'sunfall',
         'mirageBolt',
+        'stoneGaze',
+        'goldPillar',
+        'roots',
+        'faceRise',
+        'faceBeam',
+        'crumble',
+        'reform',
       ].sort(),
     );
   });
