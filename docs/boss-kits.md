@@ -173,7 +173,9 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    The Thunder Fist's bolt leaves his fist and dives to run along the floor at shin height. A dust
    devil pulls slower than the hero walks, so walking away (or a dash through it) gets out, and it
    blows out after throwing someone. The storm's middle wave leaves the hero's own spot clear, so a
-   hero who ran from the first wave is caught by it; every strike's spot crackles while it gathers.
+   hero who ran from the first wave is caught by it; every strike's spot crackles while it gathers. His knock-out and
+   slam rows were cut off at the frame's edges and were redrawn.
+
 8. **Furnace Knight**: done. His sheet has frames both wider and taller (256×160): the flail
    whirls overhead and sweeps far along the floor. The flail and pot strips came with a painted
    checkerboard, also shut inside the flail's fiery arcs, so the keying also clears closed pockets
