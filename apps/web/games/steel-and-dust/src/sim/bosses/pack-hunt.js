@@ -1,5 +1,6 @@
 import { COLORS } from '../../art/colors.js';
 import { arenaBounds } from '../fighters/arena-bounds.js';
+import { moveFrameAt } from '../enemy-animation.js';
 import { bodyPoint, bodySize } from '../fighters/body-point.js';
 import { GRAVITY } from '../fighters/physics.js';
 import { floorUnder } from '../fighters/terrain-motion.js';
@@ -11,7 +12,10 @@ import { addBurst } from '../summons/bursts.js';
 
 // his throat and his eyes, and how big the effects round him are, in his own units (body-point.js)
 const MOUTH = { ahead: 12, up: 52 };
-const EYES = { ahead: 26, up: 40 };
+// his eyes on the frenzy's lunge frames: the last one thrusts his head forward, and on the others
+// his face is behind his forearm
+const EYES = { ahead: 13, up: 26 };
+const EYES_ON_FRAME = { 7: { ahead: 21.5, up: 25 } };
 const SNOUT = { ahead: 14 };
 const BURST_SIZE = 1;
 const FEED_TEXT = { up: 60 };
@@ -61,9 +65,13 @@ export function smashBones(game, boss) {
 // his eyes leave a red streak behind him as he lunges
 export function trailEyes(game, boss, move, time) {
   if ((time - move.startup) % 2 === 0) {
+    const [, frame] = moveFrameAt(boss, time);
+    const eyes = bodyPoint(boss, EYES_ON_FRAME[frame] ?? EYES);
+    // he lunges on after his cues on this tick, and is drawn there
     addBurst(game, {
       sprite: 'redeye',
-      ...bodyPoint(boss, EYES),
+      x: eyes.x + boss.facing * move.forward,
+      y: eyes.y,
       scale: bodySize(boss, BURST_SIZE),
       direction: -boss.facing,
     });
