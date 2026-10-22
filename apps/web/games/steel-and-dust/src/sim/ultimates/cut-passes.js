@@ -3,7 +3,6 @@ import { THOUSAND_CUTS } from '../../data/ultimates/thousand-cuts.js';
 import { clamp, randomBetween } from '../../lib/math.js';
 import { arenaBounds } from '../fighters/arena-bounds.js';
 import { themeOf } from '../fighters/hero-colors.js';
-import { addCutLine } from '../fx/effects.js';
 import { groundAt } from '../stage/terrain.js';
 import { leaveCarving } from '../summons/carvings.js';
 import { hangCut } from '../summons/hanging-cuts.js';
@@ -81,7 +80,8 @@ function cross(game, player, since) {
 }
 
 // the cut lands lightly in passing, with the dav whatever he holds, staggering the raider where it
-// stands, and a cut of gold is left hanging on it, each a little apart from the last on the same raider
+// stands, and a crescent of gold flares and is left hanging on it, bowing the way he went, each a
+// little apart from the last on the same raider
 function cutThrough(game, player, index) {
   const { target } = player.cuts.pass;
   const [strip] = PASSES[index].sprite;
@@ -92,16 +92,14 @@ function cutThrough(game, player, index) {
   }
   const count = player.cuts.made.get(target) ?? 0;
   player.cuts.made.set(target, count + 1);
-  const y = target.y - 18 * target.scale;
   strikeTarget(
     game,
     { x: player.x, direction: player.facing, side: 'player' },
     { target, move: CUT },
   );
   const color = themeOf(game).blade;
-  addCutLine(game, { x: target.x, y, angle, color });
   const offset = [randomBetween(-4, 4), (count % 3) * 6 - 6];
-  hangCut(game, { target, angle, color, offset });
+  hangCut(game, { target, angle, bow: player.facing, color, offset });
 }
 
 // each pass: he winds up, crosses through his raider in a blur of sandstone images and holds the

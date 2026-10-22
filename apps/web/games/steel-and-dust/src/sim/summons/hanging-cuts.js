@@ -1,15 +1,18 @@
 import { addBurst } from './bursts.js';
 import { strikeTarget } from './strike.js';
 
+// ticks a cut flares white as it is cut, before it settles to gold
+export const CUT_FLARE_TICKS = 5;
 // ticks a cut flares white and widens once it lands, before it is gone
 export const SEVER_TICKS = 8;
 // a cut nothing lands is gone after this long
 const CUT_LIFE = 600;
 const BODY_HEIGHT = 18;
 
-// a cut of gold left hanging on a raider the hero cut through; it rides the raider where it stands
-// and lands only when the ultimate says so
-export function hangCut(game, { target, angle, color, offset }) {
+// a cut of gold left hanging on a raider the hero cut through, along `angle` and bowing out `bow`
+// (1 or -1) the way his swing went; it rides the raider where it stands and lands only when the
+// ultimate says so
+export function hangCut(game, { target, angle, bow, color, offset }) {
   game.summons.push({
     kind: 'hangingCut',
     target,
@@ -17,6 +20,7 @@ export function hangCut(game, { target, angle, color, offset }) {
     y: target.y - BODY_HEIGHT * target.scale,
     offset,
     angle,
+    bow,
     color,
     side: 'player',
     time: 0,
@@ -40,8 +44,8 @@ export function updateHangingCut(_game, cut) {
   cut.done = severed || cut.time >= CUT_LIFE;
 }
 
-// the cut lands: it strikes its raider with the dav, from the side the hero stands, and bursts along
-// its line
+// the cut lands: it strikes its raider with the dav, from the side the hero stands, and bursts in a
+// crescent sweeping away from him
 export function severCut(game, cut, { from, move }) {
   cut.severedAt = cut.time;
   const { target } = cut;
@@ -52,6 +56,6 @@ export function severCut(game, cut, { from, move }) {
     x: cut.x,
     y: cut.y,
     scale: 0.8,
-    direction: Math.sign(cut.angle) || 1,
+    direction,
   });
 }

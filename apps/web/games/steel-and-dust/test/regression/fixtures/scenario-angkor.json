@@ -2162,7 +2162,7 @@
    ],
    "world": {
     "particles": "f6202f9335aa681d",
-    "effects": "736150eb8e2ed1e9",
+    "effects": "fe7b94457d731e91",
     "floaters": "8967c144cd4cee9d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
@@ -2283,7 +2283,7 @@
    ],
    "world": {
     "particles": "4c8f3de3333f52ef",
-    "effects": "fa5b6d47b30055ec",
+    "effects": "aed064162489f6a8",
     "floaters": "c914b246f1253f70",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
@@ -2529,7 +2529,7 @@
     "floaters": "14987a834735813b",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "25bb2e4f0ac8a3f4",
+    "summons": "1d4353d4e0d408ec",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "48c970d3fe7cdfa7"
    }
@@ -6718,7 +6718,7 @@
    ],
    "world": {
     "particles": "da39a3ee5e6b4b0d",
-    "effects": "d9554812e3483805",
+    "effects": "ab57473e7ad59795",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
@@ -7375,7 +7375,7 @@
    "enemies": [],
    "world": {
     "particles": "98757498fd4bfb0d",
-    "effects": "477953373c754a08",
+    "effects": "f87d995ebcb6c1ec",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",

@@ -30,7 +30,7 @@ describe("the Angkor Warrior's hanging cuts", () => {
 
   it('hangs on its raider, riding it where it goes, and strikes nothing until it lands', () => {
     const { game, raider } = gameWithRaider();
-    hangCut(game, { target: raider, angle: 0.7, color: '#ffe08a', offset: [2, -6] });
+    hangCut(game, { target: raider, angle: 0.7, bow: 1, color: '#ffe08a', offset: [2, -6] });
     raider.x += 30;
     runTicks(game, 60);
     const [cut] = ofKind(game, 'hangingCut');
@@ -40,7 +40,7 @@ describe("the Angkor Warrior's hanging cuts", () => {
 
   it('lands as a blow of the dav from the side the hero stands, bursts, flares and is gone', () => {
     const { game, raider } = gameWithRaider();
-    hangCut(game, { target: raider, angle: 0.7, color: '#ffe08a', offset: [0, 0] });
+    hangCut(game, { target: raider, angle: 0.7, bow: 1, color: '#ffe08a', offset: [0, 0] });
     runTicks(game, 2);
     const [cut] = ofKind(game, 'hangingCut');
     severCut(game, cut, { from: game.player, move: SEVER });

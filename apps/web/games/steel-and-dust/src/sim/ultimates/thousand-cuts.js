@@ -17,8 +17,9 @@ const BLAZE_TICKS = 6;
 const CHOP_TICKS = 6;
 const MOTE_EVERY = 3;
 const ECHO_EVERY = 2;
-// the great slash rises a little toward the way he faces' far side
+// the great slash crosses the field at chest height, rising a little to the right
 const SCREEN_CUT_ANGLE = -0.18;
+const SCREEN_CUT_HEIGHT = 30;
 
 // his frames: raising the dav (0-1) and its blade blazing (2-4) through the cut-in, the passes in
 // his own sword strips, the dav lowered while he waits, the leap (5-6), the chop (7), then kneeling
@@ -75,7 +76,8 @@ function release(game, player) {
     }
   }
   const x = game.camera.x + VIEW_WIDTH / 2;
-  addScreenCut(game, { x, y: player.y - 24, angle: SCREEN_CUT_ANGLE, color: themeOf(game).blade });
+  const color = themeOf(game).blade;
+  addScreenCut(game, { x, y: player.y - SCREEN_CUT_HEIGHT, angle: SCREEN_CUT_ANGLE, color });
   game.flashTime = 6;
   shake(game, 4, 14);
   game.io.sfx('sever');
