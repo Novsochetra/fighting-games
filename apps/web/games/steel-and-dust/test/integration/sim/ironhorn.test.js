@@ -41,14 +41,20 @@ describe('Ironhorn in a fight', () => {
     Math.random = originalRandom;
   });
 
-  it('is left dazed when his rush misses and meets the wall, which drops a bamboo stalk', () => {
+  it('bounces off the wall dazed when his rush misses, and the wall drops a bamboo stalk', () => {
     const { game, ironhorn } = ironhornArena();
     game.player.invincible = 9999;
     startMove(game, ironhorn, 'hornRush');
-    const { moves, shots } = watch(game, ironhorn, 200);
-    expect(moves.slice(0, 2)).toEqual(['hornRush', 'dazed']);
-    expect(shots.filter((shot) => shot.kind === 'bamboo')).toHaveLength(1);
-    expect(ironhorn.x).toBeLessThan(10);
+    let furthest = ironhorn.x;
+    let dazedAt = null;
+    for (let i = 0; i < 200 && dazedAt === null; i++) {
+      runTicks(game, 1);
+      furthest = Math.min(furthest, ironhorn.x);
+      dazedAt = ironhorn.move?.id === 'dazed' ? ironhorn.x : null;
+    }
+    expect(dazedAt).not.toBeNull();
+    expect(dazedAt - furthest).toBeCloseTo(10, 0);
+    expect(game.projectiles.filter((shot) => shot.kind === 'bamboo')).toHaveLength(1);
   });
 
   it('is not dazed when his rush runs the hero down first', () => {
