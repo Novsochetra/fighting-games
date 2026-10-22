@@ -19,11 +19,14 @@ function ironhornArena({ gap = 150, hp } = {}) {
 }
 
 // the moves he plays and the shots he makes while the hero stands and cannot fall
+// plays one move out, with nothing else for him to start, noting each move it turns into and every
+// shot it looses
 function watch(game, ironhorn, ticks) {
   const moves = [];
   const shots = new Set();
   for (let i = 0; i < ticks; i++) {
     runTicks(game, 1);
+    ironhorn.ai.cooldown = 9999;
     game.player.hp = game.player.maxHp;
     if (ironhorn.move && moves.at(-1) !== ironhorn.move.id) {
       moves.push(ironhorn.move.id);

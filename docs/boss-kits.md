@@ -9,6 +9,9 @@ describes what is actually built.
 - Every boss runs the same brain (`src/sim/brains/enemy/boss.js`): swipe or slam up close, a rare
   charge from far away, walk otherwise. Same three moves, same numbers (`raider-moves.js`). Only
   health, speed, reach and size differ, so all twelve fight the same way.
+- Every boss towers over the hero, drawn at its `scale`: the Khan, Djinn and Pharaoh about twice
+  the hero's height; the Furnace Knight, Ironhorn, Gnoll, Cobra and Naga about two and a half times;
+  the Colossus, Queen and Ox about three times; the Bayon Guardian the biggest of all.
 - Every boss sheet has the same strips: `idle 4, walk 8, attack 9, hurt 4, ko 9, slam 9, charge 8`.
 - The Naga Raja is a recolor of the Cobra Matriarch, and the Bayon Guardian, the last boss of the
   game, is a recolor of the Rust Colossus.
@@ -181,9 +184,10 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    checkerboard, also shut inside the flail's fiery arcs, so the keying also clears closed pockets
    made of the two checker greys and peels the grey fringe off the arcs. The Meltdown image drew each
    beam frame's flame over the next frame's body, so only its first firing frame is used and the
-   beam is drawn as lances, grown out of the flame in his chest and flying level at its height; he
+   beam is drawn as lances, grown out of the flame in his chest, diving to a hero's waist and
+   flying level there; he
    leans into each shot and stands blazing between them. In place of one sweeping beam (a beam the hero
-   cannot crouch under would be unfair), it is three lances at chest height, each a beat after the
+   cannot crouch under would be unfair), it is three lances at a hero's waist, each a beat after the
    furnace roars, to jump. He overheats as soon as the last lance has gone, so no hit can knock
    him out of it, and while overheated each hit lands for double where he stands. Burning ground and
    lava only burn a hero on the ground and hop them out, so nobody is juggled in the flames. His

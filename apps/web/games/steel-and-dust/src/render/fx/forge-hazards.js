@@ -1,6 +1,6 @@
 import { clamp } from '../../lib/math.js';
 import { BLAZE_LIGHT, BLAZE_OUT } from '../../sim/hazards/blazes.js';
-import { lanceSpan } from '../../sim/hazards/flame-lances.js';
+import { lanceParts } from '../../sim/hazards/flame-lances.js';
 import { drawFxFrame } from './fx-sheets.js';
 import { drawLandingShadow } from './rock-hazards.js';
 
@@ -65,20 +65,24 @@ export function drawLavaPool(painter, pool, sheets) {
   painter.alpha(1);
 }
 
-// only what has left the furnace's mouth is drawn, so the lance grows out of his chest
-export function drawFlameLance(painter, lance, sheets) {
-  const { left, right } = lanceSpan(lance);
+// one stretch of the lance: the beam turned along its path and cut to the part that lies there, so
+// it bends down out of his chest and runs on level, joined to the fire it came from
+function drawLancePart(painter, sheets, { lance, frame, part }) {
+  const { tip, angle, from, to } = part;
   const context = painter.context;
   context.save();
+  context.translate(tip.x, tip.y);
+  context.rotate(lance.direction > 0 ? angle : -angle);
   context.beginPath();
-  context.rect(left, lance.y - 24, right - left, 48);
+  context.rect(lance.direction > 0 ? -to : from, -24, to - from, 48);
   context.clip();
-  drawFxFrame(painter, sheets, {
-    name: 'beam',
-    frame: Math.floor(lance.time / 3) % 4,
-    x: lance.x,
-    y: lance.y,
-    facing: lance.direction,
-  });
+  drawFxFrame(painter, sheets, { name: 'beam', frame, x: 0, y: 0, facing: lance.direction });
   context.restore();
+}
+
+export function drawFlameLance(painter, lance, sheets) {
+  const frame = Math.floor(lance.time / 3) % 4;
+  for (const part of lanceParts(lance)) {
+    drawLancePart(painter, sheets, { lance, frame, part });
+  }
 }

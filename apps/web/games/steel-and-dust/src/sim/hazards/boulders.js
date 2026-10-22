@@ -1,4 +1,5 @@
 import { clamp } from '../../lib/math.js';
+import { bodyPoint } from '../fighters/body-point.js';
 import { floorUnder } from '../fighters/terrain-motion.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust } from '../fx/particles.js';
@@ -8,6 +9,8 @@ import { hitArea } from './shot-hits.js';
 
 const GRAVITY = 0.18;
 const LOB_LIFT = -4.2;
+// the boulder held over his head, in his own units (body-point.js)
+const OVERHEAD = { ahead: 10, up: 58 };
 const DROP_FROM = -24;
 const BOULDER_DAMAGE = 14;
 const SHARD_SPEED = 2.4;
@@ -26,8 +29,7 @@ function addBoulder(game, fields) {
 
 // the boulder leaves his hands over his head and comes down where the hero stands now
 export function lobBoulder(game, fighter) {
-  const x = fighter.x + fighter.facing * 10;
-  const y = fighter.y - 58;
+  const { x, y } = bodyPoint(fighter, OVERHEAD);
   const drop = floorUnder(game.terrain, game.player) - y;
   const flight = (-LOB_LIFT + Math.sqrt(LOB_LIFT * LOB_LIFT + 2 * GRAVITY * drop)) / GRAVITY;
   const speed = clamp(Math.abs(game.player.x - fighter.x) / flight, 0.6, 3.6);

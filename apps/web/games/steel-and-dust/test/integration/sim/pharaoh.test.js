@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { hurtBox } from '../../../src/sim/combat/boxes.js';
 import { jump, startMove } from '../../../src/sim/fighters/actions.js';
+import { arenaBounds } from '../../../src/sim/fighters/arena-bounds.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
 import { seededRandom } from '../../support/seeded-random.js';
 import { createPlayingGame, runTicks } from '../../support/test-game.js';
@@ -94,7 +95,7 @@ describe('the Sand Pharaoh in a fight', () => {
     game.player.invincible = 9999;
     startMove(game, pharaoh, 'mirageBlink');
     playOut(game, pharaoh, 30);
-    expect(pharaoh.x).toBeGreaterThan(330);
+    expect(pharaoh.x).toBeGreaterThan(arenaBounds(game, pharaoh).max - 40);
   });
 
   it('pours a carpet of scarabs along the floor: a hero who stands is bitten, one who jumps clears it', () => {

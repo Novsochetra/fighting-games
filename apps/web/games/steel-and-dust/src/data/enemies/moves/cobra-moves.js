@@ -23,7 +23,7 @@ export const COBRA_MOVES = {
     hitbox: [6, -8, 40, 8],
     knockback: [2.4, -3.2],
     knockdown: true,
-    lane: 60,
+    lane: 'reach',
     frameAt: [0, 5, 10, 16, 22, 27, 30, 38, 48, 58],
   }),
   // the hood flares and her eyes glow from warnAt; at flashAt a hero facing her within reach is

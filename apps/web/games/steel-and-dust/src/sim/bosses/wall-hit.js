@@ -1,17 +1,23 @@
 import { shake } from '../fx/camera-fx.js';
 import { startMove } from '../fighters/actions.js';
+import { bodyPoint, bodySize } from '../fighters/body-point.js';
 import { floorUnder } from '../fighters/terrain-motion.js';
 import { dropBamboo } from '../hazards/bamboo.js';
 import { addBurst } from '../summons/bursts.js';
 
 // a boss left dazed bounces back off the wall, so the hero sees him whole while he reels
 const WALL_BOUNCE = 10;
+// where his horns meet the wall, the burst there and its size, in his own units (body-point.js)
+const HORNS = { ahead: 14 };
+const BURST = { ahead: 6 };
+const IMPACT_SIZE = 1;
 
 function smashWall(game, fighter) {
   const floor = floorUnder(game.terrain, fighter);
-  const wallX = fighter.x + fighter.facing * 14;
-  const burstX = fighter.x + fighter.facing * 6;
-  addBurst(game, { sprite: 'impact', x: burstX, y: floor, scale: 1, direction: fighter.facing });
+  const wallX = bodyPoint(fighter, HORNS).x;
+  const burstX = bodyPoint(fighter, BURST).x;
+  const scale = bodySize(fighter, IMPACT_SIZE);
+  addBurst(game, { sprite: 'impact', x: burstX, y: floor, scale, direction: fighter.facing });
   dropBamboo(game, { x: wallX, direction: -fighter.facing, side: fighter.side });
   shake(game, 6, 18);
   game.io.sfx('boom', false, { x: fighter.x });

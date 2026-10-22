@@ -1,10 +1,24 @@
 import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { attackBox } from '../../sim/combat/boxes.js';
+import { spikeLineReach } from '../../sim/hazards/spikes.js';
 import { drawText } from '../text/draw-text.js';
 
+// a lane runs as far as the rush or wave goes; a tail sweep's as far as the tail reaches, and a
+// spike line's as far as its spikes rise, both growing with the boss
+function laneLength(fighter) {
+  const move = fighter.move;
+  if (move.lane === 'reach') {
+    return (move.hitbox[0] + move.hitbox[2]) * fighter.scale;
+  }
+  if (move.lane === 'spikes') {
+    return spikeLineReach(fighter, move.spikes);
+  }
+  return move.lane ?? 130;
+}
+
 function chargeLane(painter, fighter, { floor, direction }) {
-  const length = fighter.move.lane ?? 130;
+  const length = laneLength(fighter);
   const x = direction > 0 ? fighter.x : fighter.x - length;
   painter.use(COLORS.red).rect(x, floor - 1, length, 6);
   for (let i = 1; i < Math.round(length / 22); i++) {

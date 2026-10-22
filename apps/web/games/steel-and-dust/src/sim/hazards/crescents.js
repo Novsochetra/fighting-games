@@ -2,10 +2,12 @@ import { groundAt, isWall } from '../stage/terrain.js';
 
 const CRESCENT_SPEED = 3.2;
 const CRESCENT_DAMAGE = 12;
+// the wave leaves the end of his swing, in his own units (body-point.js)
+const SWING_END = 20;
 
 // a crescent wave skims the road away from the swing, low enough for the hero to jump
 export function spawnCrescent(game, fighter) {
-  const x = fighter.x + fighter.facing * 20;
+  const x = fighter.x + fighter.facing * SWING_END * fighter.scale;
   game.projectiles.push({
     kind: 'crescent',
     x,

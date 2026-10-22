@@ -2,7 +2,14 @@ import { addDust } from '../fx/particles.js';
 import { groundAt, isWall } from '../stage/terrain.js';
 
 const SPIKE_DAMAGE = 12;
+// the first spike rises just past his stamping foot, in his own units (body-point.js)
 const FIRST_GAP = 26;
+const SPIKE_HALF = 4;
+
+// the stretch of road a spike line covers, from his feet to the far side of its last spike
+export function spikeLineReach(fighter, { count, gap }) {
+  return FIRST_GAP * fighter.scale + (count - 1) * gap + SPIKE_HALF;
+}
 
 // the stomp splits the road: stone spikes burst up one after another away from the boss, until a
 // rise too tall to step up stops the line
@@ -11,7 +18,7 @@ export function raiseSpikes(game, fighter, { count, gap, every, bothWays }) {
   for (const direction of directions) {
     let floor = groundAt(game.terrain, fighter.x);
     for (let i = 0; i < count; i++) {
-      const x = fighter.x + direction * (FIRST_GAP + i * gap);
+      const x = fighter.x + direction * (FIRST_GAP * fighter.scale + i * gap);
       if (isWall(game.terrain, x, floor)) {
         break;
       }

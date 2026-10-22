@@ -1,5 +1,6 @@
 import { COLORS } from '../../art/colors.js';
 import { arenaBounds } from '../fighters/arena-bounds.js';
+import { bodyPoint, bodySize } from '../fighters/body-point.js';
 import { GRAVITY } from '../fighters/physics.js';
 import { floorUnder } from '../fighters/terrain-motion.js';
 import { shake } from '../fx/camera-fx.js';
@@ -8,13 +9,16 @@ import { markPounce } from '../hazards/pounce-mark.js';
 import { floorBelow } from '../stage/terrain.js';
 import { addBurst } from '../summons/bursts.js';
 
+// his throat and his eyes, and how big the effects round him are, in his own units (body-point.js)
 const MOUTH = { ahead: 12, up: 52 };
 const EYES = { ahead: 26, up: 40 };
+const SNOUT = { ahead: 14 };
+const BURST_SIZE = 1;
+const FEED_TEXT = { up: 60 };
 
 // the howl rings out from his throat, and the pack answers from both sides of the screen
 export function howl(game, boss, move, time) {
-  const x = boss.x + boss.facing * MOUTH.ahead;
-  addBurst(game, { sprite: 'howl', x, y: boss.y - MOUTH.up, scale: 1 });
+  addBurst(game, { sprite: 'howl', ...bodyPoint(boss, MOUTH), scale: bodySize(boss, BURST_SIZE) });
   if (time !== move.howls[0]) {
     return;
   }
@@ -43,20 +47,24 @@ export function leap(game, boss, move) {
 
 export function smashBones(game, boss) {
   const y = floorUnder(game.terrain, boss);
-  const x = boss.x + boss.facing * 14;
-  addBurst(game, { sprite: 'bones', x, y, scale: 1, direction: boss.facing });
+  const { x } = bodyPoint(boss, SNOUT);
+  addBurst(game, {
+    sprite: 'bones',
+    x,
+    y,
+    scale: bodySize(boss, BURST_SIZE),
+    direction: boss.facing,
+  });
   shake(game, 5, 14);
 }
 
 // his eyes leave a red streak behind him as he lunges
 export function trailEyes(game, boss, move, time) {
   if ((time - move.startup) % 2 === 0) {
-    const x = boss.x + boss.facing * EYES.ahead;
     addBurst(game, {
       sprite: 'redeye',
-      x,
-      y: boss.y - EYES.up,
-      scale: 1,
+      ...bodyPoint(boss, EYES),
+      scale: bodySize(boss, BURST_SIZE),
       direction: -boss.facing,
     });
   }
@@ -73,5 +81,5 @@ export function feed(game, boss, move, time) {
   const healed = Math.min(boss.maxHp - boss.hp, move.heals);
   boss.ai.fed = true;
   boss.hp += healed;
-  addFloatText(game, { x: boss.x, y: boss.y - 60, text: `+${healed}`, color: COLORS.scarlet });
+  addFloatText(game, { ...bodyPoint(boss, FEED_TEXT), text: `+${healed}`, color: COLORS.scarlet });
 }

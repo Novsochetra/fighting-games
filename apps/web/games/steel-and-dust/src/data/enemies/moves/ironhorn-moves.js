@@ -30,7 +30,7 @@ const dazed = (ticks) =>
     quiet: true,
     strip: 'dazed',
     loopFrames: [0, 5, 6],
-    stars: { every: 16, y: -38 },
+    stars: { every: 16, up: 38 },
     frameAt: [0, 6, 12, 18, 24, 30],
   });
 

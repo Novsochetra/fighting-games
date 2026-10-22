@@ -1,6 +1,7 @@
 import { FX_COLORS } from '../../../art/fx-colors.js';
 import { clamp } from '../../../lib/math.js';
 import { arenaBounds } from '../../fighters/arena-bounds.js';
+import { bodySize } from '../../fighters/body-point.js';
 import { floorUnder, placeOnGround } from '../../fighters/terrain-motion.js';
 import { addDust, addSparks } from '../../fx/particles.js';
 import { addBurst } from '../../summons/bursts.js';
@@ -10,6 +11,8 @@ const AMBUSH_GAP = 26;
 const ESCAPE_GAP = 110;
 const SLIP_COOLDOWN = 240;
 const SLIP_CHANCE = 0.08;
+// the whirl he leaves in is a dust devil his own size (body-point.js)
+const WHIRL_SIZE = 0.5;
 
 function sandPuff(game, fighter) {
   const color = FX_COLORS.mirage;
@@ -21,7 +24,7 @@ function sandPuff(game, fighter) {
 // a djinn leaves in a whirl of sand, the dust devil he is, in small
 function whirl(game, fighter) {
   const y = floorUnder(game.terrain, fighter);
-  addBurst(game, { sprite: 'tornado', x: fighter.x, y, scale: 0.5 });
+  addBurst(game, { sprite: 'tornado', x: fighter.x, y, scale: bodySize(fighter, WHIRL_SIZE) });
   addDust(game, { x: fighter.x, y, count: 8, color: FX_COLORS.mirageDust });
 }
 
