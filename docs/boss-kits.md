@@ -162,7 +162,12 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    shockwave. The Pack Call sends hounds rather than the road's raiders. His frenzy turns at the
    walls with a skid instead of Ironhorn's crash and bamboo, and ends with him staggering back into
    the arena to pant. The frenzy strip's third lunge (frame 8) was drawn tangled in the frame
-   before it, so its timeline loops frames 4-7 and leaves frame 8 out.
+   before it, so its timeline loops frames 4-7 and leaves frame 8 out. His swipe,
+   knock-out and slam rows were cut off at the frame's edges and were redrawn (the swipe's raised
+   club ran off the top of the new image and its spike was given back its point); the Leaping
+   Maul's two airborne frames were lifted off the frame's bottom edge and its landing club rests
+   on the feet line, and the unused frenzy frame was cleared.
+
 7. **Storm Djinn**: done. Taller frames (192×160) for the storm over his raised hands. Crowded,
    he slips away in a small dust devil to the side of the hero with more room, at most every 4 s.
    The Thunder Fist's bolt leaves his fist and dives to run along the floor at shin height. A dust
