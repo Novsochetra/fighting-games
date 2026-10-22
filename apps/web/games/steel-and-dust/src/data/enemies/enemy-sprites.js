@@ -45,7 +45,11 @@ export const ENEMY_SPRITES = {
   spitter: sheet('spitter.png', 'idle 4, walk 8, attack 9/5, hurt 4, ko 9'),
   stoker: sheet('stoker.png', 'idle 4, walk 8, attack 9/2, hurt 4, ko 9'),
   tombguard: sheet('tombguard.png', 'idle 4, walk 8, attack 9/2, hurt 4, ko 9'),
-  khan: sheet('khan.png', bossStrips(5, 4), BOSS),
+  khan: sheet(
+    'khan.png',
+    `${bossStrips(5, 4)}, warHorn 8/5, crescentDash 10/4, tempest 12/5`,
+    BOSS,
+  ),
   ironhorn: sheet('ironhorn.png', bossStrips(6, 5), BOSS),
   cobra: sheet('cobra.png', bossStrips(5, 5), BOSS),
   gnoll: sheet('gnoll.png', bossStrips(6, 4), BOSS),

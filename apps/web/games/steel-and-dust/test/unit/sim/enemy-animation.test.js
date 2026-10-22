@@ -10,6 +10,7 @@ const SPRITE = {
     ko: { row: 4, frames: 9 },
     slam: { row: 5, frames: 9, strike: 5 },
     charge: { row: 6, frames: 8 },
+    horn: { row: 7, frames: 4, strike: 2 },
   },
 };
 const MOVE = { id: 'punch', startup: 20, active: 4, recovery: 20 };
@@ -89,5 +90,23 @@ describe('enemyAnimation', () => {
     expect(enemyAnimation(enemy, SPRITE)).toEqual(['ko', 8]);
     expect(enemyAnimation(fighter({ state: 'getup', stateTime: 0 }), SPRITE)).toEqual(['ko', 8]);
     expect(enemyAnimation(fighter({ state: 'getup', stateTime: 15 }), SPRITE)).toEqual(['ko', 5]);
+  });
+
+  it("plays a move's own strip on its timeline, holding each frame until the next one starts", () => {
+    const move = { id: 'horn', startup: 10, active: 30, recovery: 10, frameAt: [0, 5, 10, 40] };
+    const frameAt = (moveTime) =>
+      enemyAnimation(fighter({ state: 'attack', move, moveTime }), SPRITE);
+    expect(frameAt(0)).toEqual(['horn', 0]);
+    expect(frameAt(4)).toEqual(['horn', 0]);
+    expect(frameAt(5)).toEqual(['horn', 1]);
+    expect(frameAt(39)).toEqual(['horn', 2]);
+    expect(frameAt(49)).toEqual(['horn', 3]);
+  });
+
+  it('falls back to the attack strip when the sheet has no strip for a timed move', () => {
+    const move = { id: 'warHorn', startup: 10, active: 4, recovery: 10, frameAt: [0, 5] };
+    expect(enemyAnimation(fighter({ state: 'attack', move, moveTime: 12 }), SPRITE)[0]).toBe(
+      'attack',
+    );
   });
 });

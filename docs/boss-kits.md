@@ -110,13 +110,26 @@ Body strips: `FW x FH = 192 x 112`, `FEET_X = 96`, `FEET_Y = 108`, `W = N x 192`
 Effect strips: the frame size from the table above, `W = N x FW`, `H = FH`; for an effect, replace
 rules 5 to 7 with "centred in every frame, the anchor at the bottom centre for things on the ground".
 
-Whatever comes in, it is sliced by content, pinned back to the feet line, sized to the frame and
-reduced to an indexed palette before it goes in the sheet, the same way the current sheets were
-cleaned, so small mistakes can be fixed; the rules keep them small.
+Whatever comes in is cleaned by `tools/boss_art/` before it goes in the sheet: lifted off its
+background, cut into frames, shrunk to the boss's size, stood on the feet line and folded into the
+sheet's palette (see the enemy sprites' README). Small mistakes are fixed there; the rules keep them
+small.
+
+What came back for Khan, and what the cleaning had to fix (worth asking for in the next prompts):
+
+- Every image was 2000x667, whatever size was asked for; the tool scales by the boss's idle height,
+  so the size matters less than the figure being the same size in every frame.
+- Three of five had a checkerboard painted in as the background. The tool keys out a light grey
+  one, but a real transparent PNG is safer: grey is also the color of steel.
+- Frames are not evenly spaced and long blades reach over the next frame's legs, so each strip
+  needs its cut lines picked by eye (`cuts` in the spec). Asking for wide gaps between frames saves
+  that step.
+- The images came through chat as WebP, which leaves faint noise; the original PNG is better.
 
 ## Order
 
-1. **Gravel Khan** first: the first boss the player meets, and the one that builds the shared parts
+1. **Gravel Khan**: done. The first boss the player meets, and the one that built the shared parts
    (kit data, the brain picking skills, extra strips in a sheet, the ultimate with its dim and
-   call-out, phase two, the mid-boss version).
+   call-out, phase two, the mid-boss version). His War Horn plays only when no raider stands with
+   him, and the dash's dust trail was left out: the gravel the waves throw up was enough.
 2. Then down the road, 2 to 12. Naga Raja and Bayon Guardian wait for their new sheets.

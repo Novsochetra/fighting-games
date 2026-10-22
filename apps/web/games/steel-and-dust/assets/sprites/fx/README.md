@@ -1,6 +1,6 @@
 # Effect sprites
 
-The Shades' signature and ultimate effects, made with PixelLab. Each PNG is one row of frames, drawn
+The Shades' signature and ultimate effects, made with PixelLab, and the bosses' effects. Each PNG is one row of frames, drawn
 at the hero sprites' resolution; `src/data/fx-sprites.js` gives each strip's frame size, frame count,
 ticks per frame and anchor (the pixel that sits on the ground, or on the effect's centre).
 
@@ -19,6 +19,8 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `lion.png`    | 6 × 216×155  | Bokator: the golden lion (3 frames rising, 3 leaping) | ChatGPT image sheet on black: the body solid with its dark lines, only the glow round it see-through |
 | `feathers.png` | 8 × 66×70   | Ember: feathers where a spear hit lands         | VFX workbench, "Phoenix Feathers" (`d2f23d08-4f1d-46c8-ae4f-270b3608ada3`)    |
 | `pounce.png`  | 8 × 202×127  | Bokator: the ground breaking under his slam and the lion's pounce | VFX workbench, "Lion Pounce Impact" (`5b6ed44c-958d-4c1c-b3a4-6b9a6d0250b4`) |
+| `crescent.png` | 6 × 96×64   | Gravel Khan: Khan's Tempest's waves skimming the road (loops) | ChatGPT image, cleaned by `tools/boss_art/` (`concepts/bosses/khan/crescent.webp`) |
+| `glint.png`   | 4 × 32×32    | Gravel Khan: the glint on his blade before the Crescent Dash | ChatGPT image, cleaned by `tools/boss_art/` (`concepts/bosses/khan/glint.webp`) |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to

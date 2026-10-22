@@ -38,3 +38,16 @@ ramps keep their order and the outlines, blades and transparency stay as they we
 | -------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `naga.png`     | `cobra.png`    | Naga Raja: green scales to deep jade and emerald with turquoise highlights, the rust-red hood to gold over dark bronze, a richer gold belly, a turquoise slash |
 | `guardian.png` | `colossus.png` | Bayon Guardian: rust to cool grey-green sandstone, a few speckled rust shades to moss, the bright rust highlights and the red eye to a warm gold glow          |
+
+## Boss kits
+
+A boss with a kit of its own (`docs/boss-kits.md`) has more rows under the seven above, one per move
+of its own, named as the move is. Each plays on the move's own timeline (`frameAt`), so its strike
+frame only has to lie inside the strip. They are drawn by an image model to the sheet's frame size
+and cleaned into the sheet by `tools/boss_art/` (`clean_strip.py` cuts, shrinks and stands the
+frames on the feet line; `append_strips.py` lays them under the sheet in its own palette), from the
+sources in `concepts/bosses/<boss>/` and the cuts in `tools/boss_art/specs/<boss>.json`.
+
+| Sheet      | Rows added                                                                                       |
+| ---------- | ------------------------------------------------------------------------------------------------ |
+| `khan.png` | `warHorn` 8 (blows a ram's horn), `crescentDash` 10 (crouch, lunge, slash), `tempest` 12 (three low swings) |

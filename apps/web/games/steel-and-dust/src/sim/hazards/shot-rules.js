@@ -5,6 +5,7 @@ const WAVE_HIT = { knockback: [3, -3.6], knockdown: true, hitstop: 6, hitstun: 2
 const BOLT_HIT = { knockback: [3, -2.4], knockdown: true, hitstop: 6, hitstun: 22 };
 const SAND_HIT = { knockback: [2.6, -1.2], hitstop: 5, hitstun: 20 };
 const FIRE_HIT = { knockback: [1.2, -1.8], hitstop: 3, hitstun: 14 };
+const CRESCENT_HIT = { knockback: [3.4, -3.4], knockdown: true, hitstop: 7, hitstun: 22 };
 const VENOM_HIT = { knockback: [1.8, -0.8], hitstop: 4, hitstun: 18 };
 
 // how each kind of thrown or fired thing flies, what it covers and what a hit does
@@ -41,6 +42,12 @@ export const SHOT_RULES = {
     area: (shot) => ({ x: shot.x - 3, y: shot.y - 3, width: 6, height: 6 }),
     hit: null,
     enemyWeapon: 'hammer',
+  },
+  crescent: {
+    range: 160,
+    area: (shot) => ({ x: shot.x - 8 - shot.direction * 8, y: shot.y - 14, width: 16, height: 14 }),
+    hit: CRESCENT_HIT,
+    enemyWeapon: 'knife',
   },
   fire: {
     range: 110,

@@ -4,6 +4,7 @@ import { trailColorOf } from '../fighters/hero-colors.js';
 import { showHint } from '../hints.js';
 import { breakCratesIn } from '../items/crates.js';
 import { groundAt } from '../stage/terrain.js';
+import { skimGround } from './crescents.js';
 import { flyBomb } from './enemy-shots.js';
 import { diveToward } from './shot-aim.js';
 import { hitArea } from './shot-hits.js';
@@ -46,9 +47,12 @@ export function tossKnife(game, fighter) {
   game.io.sfx('swingSpear', false, { vol: 0.6, x: fighter.x, dir: fighter.facing });
 }
 
-// a thrown or fired shot breaks on a rise in the road; fire pots and fire find their own floor
+const OWN_FLOOR = new Set(['bomb', 'fire', 'crescent']);
+
+// a thrown or fired shot breaks on a rise in the road; fire pots, fire and crescent waves find
+// their own floor
 export function hitsGround(terrain, shot) {
-  return shot.kind !== 'bomb' && shot.kind !== 'fire' && shot.y >= groundAt(terrain, shot.x);
+  return !OWN_FLOOR.has(shot.kind) && shot.y >= groundAt(terrain, shot.x);
 }
 
 function moveShot(game, shot) {
@@ -56,6 +60,8 @@ function moveShot(game, shot) {
   shot.time++;
   if (shot.kind === 'bomb') {
     flyBomb(game, shot);
+  } else if (shot.kind === 'crescent') {
+    skimGround(game, shot);
   } else if (shot.vy) {
     shot.y += shot.vy;
   }

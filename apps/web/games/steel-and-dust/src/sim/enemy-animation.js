@@ -67,10 +67,22 @@ function activeFrame({ move, moveTime }, { name, strike, last }) {
   return strike + (((moveTime - move.startup) >> 2) % (last - strike + 1));
 }
 
+// a move with a timeline of its own starts each frame of its strip on the tick it names
+function timelineFrame({ frameAt }, moveTime) {
+  let frame = 0;
+  while (frame + 1 < frameAt.length && frameAt[frame + 1] <= moveTime) {
+    frame++;
+  }
+  return frame;
+}
+
 // wind-up frames lead to the strike frame, which holds while the hitbox is out
 function attackFrame(fighter, sprite) {
   const { move, moveTime } = fighter;
   const name = stripForMove(sprite, move);
+  if (move.frameAt && name === move.id) {
+    return [name, timelineFrame(move, moveTime)];
+  }
   const strike = sprite.strips[name].strike ?? 0;
   if (moveTime < move.startup) {
     return [name, Math.floor((moveTime / move.startup) * strike)];

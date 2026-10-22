@@ -64,6 +64,9 @@ describe('move tables', () => {
       'bolt',
       'spit',
       'sandblast',
+      'crescentDash',
+      'warHorn',
+      'tempest',
     ]);
   });
 

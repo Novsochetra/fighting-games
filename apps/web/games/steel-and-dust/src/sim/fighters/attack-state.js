@@ -6,6 +6,7 @@ import { pullIn, quake } from '../hazards/area-moves.js';
 import { fireEnemyShot } from '../hazards/enemy-shots.js';
 import { spawnSlashWave, tossKnife } from '../hazards/projectiles.js';
 import { spawnShockwave } from '../hazards/shockwaves.js';
+import { playMoveCues } from '../bosses/move-cues.js';
 import { SIGNATURE_STRIKES } from '../summons/signatures.js';
 import { endMove } from './actions.js';
 import { arenaBounds } from './arena-bounds.js';
@@ -100,11 +101,12 @@ export function updateAttack(game, fighter) {
   if (time === move.startup) {
     releaseStrike(game, fighter, move);
   }
+  playMoveCues(game, fighter, move, time);
   const active = time >= move.startup && time < activeEnd(move);
   if (active) {
     whileActive(game, fighter, move, time);
   }
-  fighter.hitboxActive = active;
+  fighter.hitboxActive = active && Boolean(move.hitbox);
   fighter.moveTime++;
   if (fighter.moveTime >= moveLength(move)) {
     endMove(game, fighter);

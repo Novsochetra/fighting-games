@@ -13,6 +13,8 @@ export const FX_COLORS = {
   venom: '#8fe03a',
   venomDark: '#3f7a1a',
   venomLight: '#e6ffb0',
+  gravel: '#a8703e',
+  gravelDark: '#6e4426',
   boltShaft: '#8a5a2c',
   boltFletch: '#e0533d',
   potClay: '#c4472e',

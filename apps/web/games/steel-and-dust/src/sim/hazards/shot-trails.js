@@ -97,6 +97,23 @@ function venomTrail(game, shot) {
   }
 }
 
+// gravel thrown up behind a wave skimming the road
+function gravelTrail(game, shot) {
+  if (shot.time % 3 === 0) {
+    game.particles.push({
+      kind: 'dust',
+      x: shot.x - shot.direction * randomBetween(6, 16),
+      y: shot.y - randomBetween(0, 3),
+      vx: -shot.direction * randomBetween(0.2, 0.7),
+      vy: randomBetween(-1.1, -0.4),
+      life: randomBetween(10, 16) | 0,
+      maxLife: 16,
+      size: 2,
+      color: shot.time % 2 ? FX_COLORS.gravel : FX_COLORS.gravelDark,
+    });
+  }
+}
+
 const TRAILS = {
   knife: streakTrail(3, 4),
   wave: sparkTrail,
@@ -105,6 +122,7 @@ const TRAILS = {
   venom: venomTrail,
   bomb: fuseTrail,
   fire: emberTrail,
+  crescent: gravelTrail,
 };
 
 export function leaveTrail(game, shot) {
