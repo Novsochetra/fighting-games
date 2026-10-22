@@ -84,7 +84,8 @@ function hitTerrainWall(game, fighter, from) {
 }
 
 // the ultimate places the hero itself; the floor is measured from where the fighter was, so a
-// platform only catches what comes down onto it from above
+// platform only catches what comes down onto it from above. The screen edge moves the fighter
+// before the landing check, or a scrolling camera drags a falling body into a slope.
 export function applyPhysics(game, fighter) {
   if (fighter.state === 'ult') {
     return;
@@ -96,7 +97,7 @@ export function applyPhysics(game, fighter) {
   fighter.y += fighter.vy;
   applyFriction(fighter);
   hitTerrainWall(game, fighter, from);
-  touchGround(game, fighter, floorBelow(terrain, fighter.x, from.y));
   stayInBounds(game, fighter);
+  touchGround(game, fighter, floorBelow(terrain, fighter.x, from.y));
   followFloor(terrain, fighter);
 }

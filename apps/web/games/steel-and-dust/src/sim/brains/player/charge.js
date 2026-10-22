@@ -3,6 +3,8 @@ import { dash, startMove, startSquat } from '../../fighters/actions.js';
 import { autoFace } from '../../fighters/aim.js';
 import { consumeBuffer, dashDirection } from './controls.js';
 
+const CHARGE_CREEP = 0.7;
+
 function chargedMoveId(chargeTime) {
   if (chargeTime >= CHARGE_MAX) {
     return 'C2';
@@ -32,6 +34,7 @@ export function thinkCharge(game, player, intent) {
   const held = game.input.held;
   if (intent.direction) {
     player.facing = intent.direction;
+    player.vx = intent.direction * CHARGE_CREEP;
   }
   if (player.stateTime <= 4 && (held.up || held.down)) {
     startMove(game, player, 'UK');

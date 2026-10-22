@@ -5,6 +5,8 @@ import { autoFace } from '../../fighters/aim.js';
 import { consumeBuffer } from './controls.js';
 import { pickAirMove, pickGroundMove } from './pick-move.js';
 
+const GROUND_STEP = 0.25;
+
 // a launcher that connects jumps after the enemy while up is held or jump is pressed
 function jumpCancel(game, player, buffer) {
   const move = player.move;
@@ -66,11 +68,22 @@ function dashCancel(game, player, { buffer, direction }) {
   }
 }
 
+// on the ground only the way the hero faces steps in, so a swing never slides backwards
+function drift(player, direction) {
+  const move = player.move;
+  if (!direction || move.dive) {
+    return;
+  }
+  if (player.airborne) {
+    player.vx = clamp(player.vx + direction * 0.08, -1.9, 1.9);
+  } else if (direction === player.facing && !move.sustain) {
+    player.vx += direction * GROUND_STEP;
+  }
+}
+
 export function thinkAttack(game, player, intent) {
   const { buffer, direction } = intent;
-  if (player.airborne && direction && !player.move.dive) {
-    player.vx = clamp(player.vx + direction * 0.08, -1.9, 1.9);
-  }
+  drift(player, direction);
   if (jumpCancel(game, player, buffer) || !buffer) {
     return;
   }
