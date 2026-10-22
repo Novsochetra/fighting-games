@@ -17,7 +17,7 @@ import { shout } from './sounds.js';
 function damageOf(game, target, move) {
   return isPlayer(target)
     ? Math.max(1, Math.round(move.damage * difficultyOf(game.settings).damage))
-    : move.damage;
+    : move.damage * (target.move?.exposed ? 2 : 1);
 }
 
 function hitDirection({ attacker, target, move }) {
@@ -131,6 +131,10 @@ export function applyHit(game, hit) {
   }
   if (target.side === 'enemy') {
     shout(game, target, big ? 'big' : 'hurt');
+  }
+  // an overheated boss takes every hit where it stands and stays overheated
+  if (target.move?.exposed) {
+    return true;
   }
   if (absorbsHit(target, move, damage)) {
     target.armorFlash = 6;

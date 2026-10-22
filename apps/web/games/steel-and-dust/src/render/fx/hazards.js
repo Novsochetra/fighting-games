@@ -3,6 +3,7 @@ import { FX_COLORS } from '../../art/fx-colors.js';
 import { FX_SPRITES } from '../../data/fx-sprites.js';
 import { point } from '../painter.js';
 import { drawBolt, drawBomb, drawFire, drawSand, drawVenom } from './enemy-shots.js';
+import { drawBlaze, drawFlameLance, drawLavaPool, drawSlagPot } from './forge-hazards.js';
 import { drawFxFrame } from './fx-sheets.js';
 import {
   drawBamboo,
@@ -115,10 +116,14 @@ const DRAW_SHOT = {
   thunderBolt: drawThunderBolt,
   dustDevil: drawDustDevil,
   stormStrike: drawStormStrike,
+  blaze: drawBlaze,
+  slagPot: drawSlagPot,
+  lavaPool: drawLavaPool,
+  flameLance: drawFlameLance,
 };
 
 // what lies flat on the road is drawn under the fighters' feet
-const ON_GROUND = new Set(['puddle', 'pounceMark']);
+const ON_GROUND = new Set(['puddle', 'pounceMark', 'lavaPool']);
 // what strikes from above has its spot marked on the road under the fighters, and itself over them
 const GROUND_MARK = { stormStrike: drawStrikeMark };
 

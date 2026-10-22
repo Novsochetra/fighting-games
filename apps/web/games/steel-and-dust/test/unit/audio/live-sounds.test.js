@@ -59,6 +59,9 @@ describe('live sounds', () => {
         'zap',
         'gust',
         'thunder',
+        'flame',
+        'steam',
+        'sizzle',
       ].sort(),
     );
   });

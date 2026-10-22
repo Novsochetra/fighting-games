@@ -1,4 +1,4 @@
-import { blip, click, hiss, thump } from './layers.js';
+import { blip, hiss, thump } from './layers.js';
 
 // a ram's horn blown across the hills: a low brassy note with its fifth, over the player's breath
 function warHorn(live, start) {
@@ -87,31 +87,6 @@ function howl(live, start) {
   hiss(live, { start, ...throat, attack: 0.05, duration: 0.6, volume: 0.04 });
 }
 
-// lightning leaving a fist: a run of hard electric cracks over a buzz that drops away
-function zap(live, start) {
-  for (let i = 0; i < 5; i++) {
-    click(live, { start: start + i * 0.018, volume: 0.12, frequency: 2500 });
-  }
-  blip(live, { start, frequency: 1180, duration: 0.18, volume: 0.05, wave: 'sawtooth' });
-  const crackle = { type: 'highpass', from: 3000, to: 1500, resonance: 1.2 };
-  hiss(live, { start, ...crackle, attack: 0.005, duration: 0.25, volume: 0.06 });
-}
-
-// a dust devil spinning up: wind that rises in pitch as it gathers
-function gust(live, start) {
-  const wind = { type: 'bandpass', from: 250, to: 900, resonance: 2.5 };
-  hiss(live, { start, ...wind, attack: 0.25, duration: 0.9, volume: 0.1 });
-}
-
-// lightning striking the ground: a sharp crack, then thunder rolling away under it
-function thunder(live, start) {
-  const crack = { type: 'highpass', from: 2400, to: 900, resonance: 0.8 };
-  hiss(live, { start, ...crack, attack: 0.003, duration: 0.18, volume: 0.16 });
-  thump(live, { start, from: 90, to: 32, duration: 0.9, volume: 0.34 });
-  const rumble = { type: 'lowpass', from: 600, to: 120, resonance: 0.7 };
-  hiss(live, { start: start + 0.05, ...rumble, attack: 0.08, duration: 1.3, volume: 0.14 });
-}
-
 export const BOSS_SOUNDS = {
   warHorn,
   bossUltimate,
@@ -122,7 +97,4 @@ export const BOSS_SOUNDS = {
   eruption,
   buzz,
   howl,
-  zap,
-  gust,
-  thunder,
 };

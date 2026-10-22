@@ -80,7 +80,11 @@ export const ENEMY_SPRITES = {
     `${bossStrips(4, 5)}, thunderFist 8/3, dustDevil 8/4, eyeOfStorm 12/6`,
     TALL_BOSS,
   ),
-  furnace: sheet('furnace.png', bossStrips(5, 5), BOSS),
+  furnace: sheet(
+    'furnace.png',
+    `${bossStrips(5, 5)}, fireFlail 10/6, slagPot 8/4, meltdown 9/4`,
+    BIG_BOSS,
+  ),
   pharaoh: sheet('pharaoh.png', bossStrips(5, 5), BOSS),
   naga: sheet('naga.png', bossStrips(5, 5), BOSS),
   guardian: sheet('guardian.png', bossStrips(3, 4), BOSS),

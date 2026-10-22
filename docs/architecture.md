@@ -241,13 +241,14 @@ its own way (`boss-movement.js`: Gravel Khan's `duelist` backs off, closes and f
 Colossus's `bulldozer` walks in and never steps back; Ironhorn's `bull` keeps room to run; the Cobra
 Matriarch's `slither` keeps the middle distance; the Scorpion Queen's `scuttle` darts to and fro at
 the edge of her sting's reach; the Gnoll Packlord's `packHunter` darts in and out; the Storm Djinn's
-`floater` drifts at the edge of his reach and, crowded, whirls away across the arena), swings its
+`floater` drifts at the edge of his reach and, crowded, whirls away across the arena; the Furnace
+Knight's `juggernaut` walks in, never backs off and vents steam), swings its
 `close` moves in reach, picks its `skills` by range, chance and cooldown, and on its own road (never as
 a mid-boss) looses its `ultimate` below a share of its health, again every so often. Below half
 health its `phaseTwo` moves quicker, shortens the cooldowns, may chain a skill and may `swap` one for
 a stronger one. Its moves live with the other enemy moves (`src/data/enemies/moves/khan-moves.js`,
 `colossus-moves.js`, `ironhorn-moves.js`, `cobra-moves.js`, `queen-moves.js`, `gnoll-moves.js`,
-`djinn-moves.js`) and each plays a strip of its name (or the one its `strip` names) in its sheet on
+`djinn-moves.js`, `furnace-moves.js`) and each plays a strip of its name (or the one its `strip` names) in its sheet on
 its own timeline (`frameAt`, the tick each frame starts on; `loopFrames`, a run of frames looped
 while the move is active, for a rush or a daze). A rush that meets the arena's wall turns into the
 move its `wallNext` names (`src/sim/bosses/wall-hit.js`): Ironhorn is left dazed when his Horn Rush
@@ -279,10 +280,17 @@ his `devils` drift after the hero, pull a hero on the ground in and throw them h
 (`src/sim/hazards/dust-devils.js`); his Eye of the Storm's `storm` marks waves of spots round the
 hero and then one great one, each struck by lightning that whites out the screen
 (`src/sim/bosses/eye-of-storm.js`, `src/sim/hazards/storm-strikes.js`; their rules in
-`storm-rules.js`). They are all projectiles, drawn from the `fx/` strips
-(`src/render/fx/rock-hazards.js`, `venom-hazards.js`, `wasp-hazards.js`, `storm-hazards.js`); a
-puddle, flat on the road, is drawn under the fighters' feet, and so is the mark of a lightning
-strike, while the strike itself is drawn over them. While an ultimate
+`storm-rules.js`). The Furnace Knight's Fire Flail sets a row of `blaze`s burning on the road
+(`src/sim/hazards/blazes.js`), his Slag Pot arcs onto a marked spot and breaks into a lava pool
+(`slag-pots.js`), and his Meltdown roars, then looses `lances` of flame from his chest
+(`flame-lances.js`, `src/sim/bosses/furnace.js`) and goes on, through `then`, into a move that is
+`exposed`: an exposed boss takes double damage and every hit where it stands, staying in its move
+(`src/sim/combat/apply-hit.js`); burning ground and lava are `groundOnly`, burning only feet on the
+ground (`src/sim/hazards/shot-hits.js`; their rules in `forge-rules.js`). They are all projectiles,
+drawn from the `fx/` strips (`src/render/fx/rock-hazards.js`, `venom-hazards.js`,
+`wasp-hazards.js`, `storm-hazards.js`, `forge-hazards.js`); a puddle or a lava pool, flat on the
+road, is drawn under the fighters' feet, and so is the mark of a lightning strike, while the strike
+itself is drawn over them. While an ultimate
 gathers and plays the world dims behind the boss in its own color (`src/render/fighters/boss-ultimate.js`,
 colors in `src/art/boss-colors.js`), a rush or wave marks its lane on the ground, and a boulder its
 landing spot.
@@ -306,7 +314,8 @@ Long sessions must not grow:
 `test/regression/` replays bot-played scenarios and compares every 30th tick and every rendered frame
 against recorded fixtures: two long runs as the Moss Shade (first captured from the original
 single-file game), one shorter run for each of the other Shades, one against each boss kit (Gravel Khan, the Rust
-Colossus, Ironhorn, the Cobra Matriarch, the Scorpion Queen, the Gnoll Packlord, the Storm Djinn), one run
+Colossus, Ironhorn, the Cobra Matriarch, the Scorpion Queen, the Gnoll Packlord, the Storm Djinn, the
+Furnace Knight), one run
 through the wide zones
 of the fourth mission, one over the hills of the third, one through the seventh, the sandstorm canyon,
 and one through the twelfth, the Bayon.

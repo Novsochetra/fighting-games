@@ -100,6 +100,11 @@ describe('move tables', () => {
       'dustDevil',
       'dustDevils',
       'eyeOfStorm',
+      'fireFlail',
+      'fireFlailHot',
+      'slagPot',
+      'meltdown',
+      'overheated',
     ]);
   });
 

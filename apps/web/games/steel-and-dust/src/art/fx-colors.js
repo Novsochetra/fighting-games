@@ -8,6 +8,7 @@ export const FX_COLORS = {
   enemyGhost: '#ffcf9a',
   frenzyGhost: '#d8282e',
   zap: '#7fd8ff',
+  slag: '#ff7a1e',
   telegraph: '#ff4a2a',
   mirage: '#62e6d4',
   mirageDust: '#c9b48a',
