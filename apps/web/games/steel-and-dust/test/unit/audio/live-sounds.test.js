@@ -69,6 +69,10 @@ describe('live sounds', () => {
         'sunBreak',
         'sunfall',
         'mirageBolt',
+        'tide',
+        'splash',
+        'nagaHiss',
+        'rainbow',
       ].sort(),
     );
   });

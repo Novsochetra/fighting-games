@@ -52,4 +52,6 @@ export const FX_COLORS = {
   reliefShade: '#6e5a44',
   reliefRim: '#ffe7a3',
   fissureDark: '#26150c',
+  foam: '#d6f6ff',
+  rainbow: ['#ff5a6e', '#ffa63a', '#ffe45a', '#6aff8a', '#4ad8ff', '#6a7aff', '#d27aff'],
 };

@@ -1,5 +1,6 @@
 import { ventSteam } from '../../bosses/furnace.js';
 import { slipAway } from './blink.js';
+import { glider } from './glider.js';
 import { illusionist } from './illusionist.js';
 import { standStill, walk } from './movement.js';
 
@@ -129,4 +130,5 @@ export const BOSS_MOVEMENT = {
   floater,
   juggernaut,
   illusionist,
+  glider,
 };

@@ -9,4 +9,5 @@ export const BOSS_ULT_COLORS = {
   djinn: { dim: '#040a18', title: '#7fd8ff', ring: '#e2f6ff' },
   furnace: { dim: '#1a0802', title: '#ff8a3a', ring: '#ffc98a' },
   pharaoh: { dim: '#140c02', title: '#ffd24a', ring: '#fff1b8' },
+  naga: { dim: '#02101a', title: '#7ff0ff', ring: '#e6fbff' },
 };

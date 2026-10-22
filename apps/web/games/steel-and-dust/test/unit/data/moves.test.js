@@ -111,6 +111,13 @@ describe('move tables', () => {
       'scarabCarpet',
       'curseOfSun',
       'sunBroken',
+      'serpentSlash',
+      'tailSlam',
+      'tidalCoil',
+      'tidalCoils',
+      'sevenHeads',
+      'rainbowNaga',
+      'nagaSpent',
     ]);
   });
 

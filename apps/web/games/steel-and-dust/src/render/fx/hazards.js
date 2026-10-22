@@ -99,7 +99,7 @@ const DRAW_SHOT = {
 // what lies flat on the road is drawn under the fighters' feet
 const ON_GROUND = new Set(['puddle', 'pounceMark', 'lavaPool', 'canopic']);
 // what strikes from above has its spot marked on the road under the fighters, and itself over them
-const GROUND_MARK = { stormStrike: drawStrikeMark };
+const GROUND_MARK = { stormStrike: drawStrikeMark, serpentRise: drawStrikeMark };
 
 export function drawProjectiles(painter, projectiles, fxSheets) {
   for (const shot of projectiles) {

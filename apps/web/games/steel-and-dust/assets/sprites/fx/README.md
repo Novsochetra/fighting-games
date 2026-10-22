@@ -53,6 +53,12 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `curse.png` | 4 × 48×48 | Sand Pharaoh: the sun's eye over the cursed hero (loops, quicker as the curse nears) | the same |
 | `sunfall.png` | 6 × 96×160 | Sand Pharaoh: the curse going off, a column of sunlight slamming down on the hero | the same, held on the column |
 | `mirageBolt.png` | 4 × 48×24 | Sand Pharaoh: a mirage bolt a copy fires below half health (loops), its orb on the anchor | ChatGPT image on real transparency, shrunk and cut into frames |
+| `tide.png` | 8 × 95×99 | Naga Raja: the Tidal Coil's wave of moat water rising (0-1), rolling on its curl (2-4, a loop) and breaking (5-7), on the road at the anchor | ChatGPT image on a painted dark checker: every neutral grey keyed out, shrunk and cut into frames |
+| `splash.png` | 7 × 78×99 | Naga Raja: moat water bursting up where her coil crashes and where the rising serpent breaks out | Same |
+| `serpentRise.png` | 8 × 192×195 | Naga Raja: the Rainbow Naga's serpent of water bursting up out of its marked spot and falling back | Same |
+| `spiritNaga.png` | 7 × 134×108 | Naga Raja: a spirit naga of water taking shape (0-2), sweeping (3-4, a loop) and coming apart (5-6), held by its crown on the anchor | Same; each frame placed by the gold of its crown, so the head stays put while the water churns behind |
+| `rainbowOrb.png` | 8 × 104×104 | Naga Raja: the rainbow orb gathering over her raised hand (0-2), spinning (3-6, a loop) and bursting (7), held by its middle | ChatGPT image, a 4×2 grid on a painted light checker: only colored pixels kept, plus the white core at each swirl's middle |
+| `nagaBolt.png` | 4 × 65×53 | Naga Raja: the small water naga each of her Seven Heads spits, taking shape (0-1) and darting (2-3) | Frames 1-4 of the spirit naga's image, shrunk smaller |
 | `thunder.png` | 8 × 232×352 | Storm Djinn: the Eye of the Storm's lightning striking a marked spot, then the sand it throws up | ChatGPT image, shrunk and cut into frames, folded to 255 colors |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be

@@ -5,13 +5,15 @@ import { addFloatText, addRing } from '../fx/effects.js';
 
 // its chest and the air over its head, in its own units (body-point.js)
 const CHEST = { ahead: 6, up: 26 };
-const ABOVE_HEAD = { up: 56 };
+const ABOVE_HEAD_UP = 56;
 
-// a boss calls its ultimate by name as it gathers itself, so the player knows what is coming
+// a boss calls its ultimate by name as it gathers itself, so the player knows what is coming; a move
+// that raises something over the boss (the Naga Raja's orb) calls it higher, clear of it
 export function announceBossUltimate(game, boss, move) {
   const colors = BOSS_ULT_COLORS[boss.kind];
+  const aboveHead = { up: move.calloutUp ?? ABOVE_HEAD_UP };
   addRing(game, { ...bodyPoint(boss, CHEST), color: colors.ring, big: true });
-  addFloatText(game, { ...bodyPoint(boss, ABOVE_HEAD), text: move.name, color: colors.title });
+  addFloatText(game, { ...bodyPoint(boss, aboveHead), text: move.name, color: colors.title });
   shake(game, 3, 20);
   game.io.sfx('bossUltimate', false, { x: boss.x });
 }

@@ -1,5 +1,6 @@
 import { knifeBox } from '../combat/boxes.js';
 import { FORGE_RULES } from './forge-rules.js';
+import { MOAT_RULES } from './moat-rules.js';
 import { STORM_RULES } from './storm-rules.js';
 import { TEMPLE_RULES } from './temple-rules.js';
 
@@ -135,6 +136,7 @@ export const SHOT_RULES = {
   ...STORM_RULES,
   ...FORGE_RULES,
   ...TEMPLE_RULES,
+  ...MOAT_RULES,
 };
 
 export function isDeflectable(shot) {

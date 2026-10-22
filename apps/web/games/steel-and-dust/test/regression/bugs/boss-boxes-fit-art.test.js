@@ -13,13 +13,14 @@ function artExtent(id, strip, frame) {
   const sheet = readPngAlpha(new URL(`assets/sprites/enemies/${sprite.file}`, GAME));
   const left = frame * sprite.frameWidth;
   const top = sprite.strips[strip].row * sprite.frameHeight;
+  const unit = RENDER_SCALE * (sprite.density ?? 1);
   let ahead = -Infinity;
   let up = -Infinity;
   for (let y = 0; y < sprite.frameHeight; y++) {
     for (let x = 0; x < sprite.frameWidth; x++) {
       if (sheet.alpha(left + x, top + y) > SOLID) {
-        ahead = Math.max(ahead, (x - sprite.feetX) / RENDER_SCALE);
-        up = Math.max(up, (sprite.feetY - y) / RENDER_SCALE);
+        ahead = Math.max(ahead, (x - sprite.feetX) / unit);
+        up = Math.max(up, (sprite.feetY - y) / unit);
       }
     }
   }

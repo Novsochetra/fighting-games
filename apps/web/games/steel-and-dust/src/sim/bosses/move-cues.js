@@ -6,11 +6,14 @@ import { lobBoulder } from '../hazards/boulders.js';
 import { spawnCrescent } from '../hazards/crescents.js';
 import { raiseDustDevils } from '../hazards/dust-devils.js';
 import { releaseScarabs } from '../hazards/scarabs.js';
+import { headAt, spitHead } from '../hazards/naga-bolts.js';
 import { spawnShockwave } from '../hazards/shockwaves.js';
 import { lobSlagPot } from '../hazards/slag-pots.js';
 import { spitVenom } from '../hazards/venom-globs.js';
 import { raiseSpikes } from '../hazards/spikes.js';
 import { fireThunderBolt } from '../hazards/thunder-bolts.js';
+import { conjureOrb } from '../hazards/rainbow-orb.js';
+import { releaseTide } from '../hazards/tides.js';
 import { releaseWasp, slamPincers, waspAt } from '../hazards/wasps.js';
 import { addBurst } from '../summons/bursts.js';
 import { announceBossUltimate } from './announce.js';
@@ -28,6 +31,7 @@ import { callGreatStrike, callStormWave, stormWaveAt } from './eye-of-storm.js';
 import { fireLance, lanceAt, roar, roarsAt, vent, ventsAt } from './furnace.js';
 import { circleHeldHero, flashGaze, warnOfGaze, whileHeld } from './hypnotic-gaze.js';
 import { blinkEndToEnd, castMirages } from './mirage.js';
+import { callSerpent, callSpirit, crashCoil, serpentRisesAt, sweepAt } from './naga.js';
 import { feed, howl, leap, smashBones, trailEyes } from './pack-hunt.js';
 import { dropRockfall, rockfallIndex } from './rockfall.js';
 import { castCurse, curseReleases, cursingNow, releaseCurse, watchJars } from './sun-curse.js';
@@ -109,6 +113,18 @@ const CUES = [
   [atStrike('curse'), castCurse],
   [cursingNow, watchJars],
   [curseReleases, releaseCurse],
+  [atStrike('splash'), crashCoil],
+  [(move, time) => Boolean(move.tides?.includes(time)), releaseTide],
+  [
+    (move, time) => Boolean(headAt(move, time)),
+    (game, fighter, move, time) => spitHead(game, fighter, headAt(move, time)),
+  ],
+  [(move, time) => time === move.rainbow?.orbAt, conjureOrb],
+  [
+    (move, time) => Boolean(sweepAt(move, time)),
+    (game, fighter, move, time) => callSpirit(game, fighter, sweepAt(move, time)),
+  ],
+  [serpentRisesAt, callSerpent],
   [
     (move, time) => move.rockfall && rockfallIndex(move, time) >= 0,
     (game, fighter, move, time) => dropRockfall(game, fighter, rockfallIndex(move, time)),
