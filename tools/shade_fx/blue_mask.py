@@ -115,7 +115,19 @@ def eye_added(lines, inside):
     return np.zeros_like(inside)
 
 
-# the drawn eye turns to ice whatever colour the frame gave it, so every face has the one look
+# the drawn eye turns to ice whatever colour the frame gave it, so every face has the one look; a
+# glint far smaller than the eye beside it would read as a second eye, so it goes dark
 def eye_painted(sword, plate):
-    eye = eye_drawn(sword, plate)
-    return eye, ramp_by_light(sword, eye, ICY_EYES, ICY_EYE_CUTS)
+    lights = eye_drawn(sword, plate)
+    eye = eyes_of(lights)
+    return eye, ramp_by_light(sword, eye, ICY_EYES, ICY_EYE_CUTS), lights & ~eye
+
+
+# a front view's two eyes are near one size, so only a piece under half the biggest is a glint
+def eyes_of(lights):
+    labels, count = nd.label(lights, structure=EIGHT)
+    sizes = np.bincount(labels.ravel(), minlength=count + 1)
+    sizes[0] = 0
+    keep = sizes * 2 >= sizes.max()
+    keep[0] = False
+    return keep[labels]

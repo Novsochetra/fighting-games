@@ -50,11 +50,14 @@ height from its image).
   `under` boxes where the weapon passes behind his body (a spear's butt behind his hood), and `burst`
   boxes that give back the glow the blade's erase took (a thrust's burst, a smear's end the blade runs
   into), recoloured with the smear. The Firefly and Blue Shades' entries also use the Moss Shade's
-  `paint`, `clear` and `tint`, and `aim`, the point a drawn weapon points at from his grip. The
-  Firefly Shade's small loose cyan sparks stay as drawn in every row. A pale blade's smear follows
-  its stroke: a darker rim, the lightest colour only on its core line. The Ember Shade's spear keeps
-  the sword's fire smear, and a few of its frames with no smear take their grip from detection (or
-  `EMBER_OVERRIDES`) instead of the Moss Shade's "hide" overrides.
+  `paint`, `clear` and `tint`, and `aim`, the point a drawn weapon points at from his grip. A few
+  pixels of air shut in by a drawn weapon, against the body or by the effects drawn after it, take the
+  weapon's outline (a frame's `pocket` allows a larger one), and a single pixel the effects shut in
+  anywhere takes the colour round it. The Firefly Shade's small loose cyan
+  sparks stay as drawn in every row. A pale blade's smear follows its stroke: a darker rim, the
+  lightest colour only on its core line. The Ember Shade's spear keeps the sword's fire smear, and a
+  few of its frames with no smear take their grip from detection (or `EMBER_OVERRIDES`) instead of
+  the Moss Shade's "hide" overrides.
 - The bake dresses the Firefly, Antler Spirit and Blue Shades (and the Moss Shade, `../hero/`) in
   their element with `tools/shade_fx/` (`<shade>.py` and its `<shade>_*.py` parts), the way the
   Ember Shade's frames burn, in every row of every `arsenal/` strip and in `arsenal/hero_ult.png`; the
@@ -69,7 +72,8 @@ height from its image).
     each ring turns one spacing a loop. The swarm lights the cloak's back edge, which breaks into
     flickering motes, sixteen resting fireflies blink along its edge, hem and folds, sparks lift off the
     hem, fireflies gather a few pixels outside each swing, his eyes get a white core and the blade a
-    soft cyan bloom; in the ultimate a second ring closes in on the raised blade. The win strip is timed
+    soft cyan bloom (where a hilt's glint or the hood's edge passes for his eye, `firefly_eyes.py`
+    names the eye by hand); in the ultimate a second ring closes in on the raised blade. The win strip is timed
 as the game plays it, a loop over its last three frames with the first half a step between them, so
 the swarm turns evenly both in a fight and on the select card that plays all four.
   - Antler Spirit: the cloak's back edge and hem burn in teal ghost fire, hottest low at his back,
@@ -79,12 +83,15 @@ the swarm turns evenly both in a fight and on the select card that plays all fou
     teal halo sits round the blade, smear and burning edge.
   - Blue: the black cape gets an icy rim along its back and top edges, two fold lines hung a set
     distance in from its back edge so they swing with the cloth, and frost spikes, needles and short
-    icicles along its hem; ice motes drift back off it, a third of them twinkling once as a cross, mist
-    curls at his feet, each armour seam gets a glint, the blade core and smears turn cold white in a
+    icicles along its hem; ice motes drift back off it, spaced apart, a third of them twinkling once as
+    a cross, mist curls at his feet, each armour seam away from his eye gets a glint, the blade core
+    and smears turn cold white in a
     soft blue halo, and warm eyes turn to ice. His black trousers are told apart from the cape and left
     plain. His head is kept out of the frost (`blue_head.py`), so the hood's flat black frames his face
     as in his PixelLab design (gallery `1792398516784`): where a side view drew the face as a flat blue
-    plate, it is drawn black in the hood, lit only along its front and chin, with its eye.
+    plate, or as a closed lit ring, it is drawn black in the hood, lit only along its front and chin,
+    with its eye. The few motes, twinkles and flecks no rule can tell apart are set by hand in
+    `blue_touchups.py`.
 - `ember/spear/` holds the Ember Shade's own spear moves, one row per attack strip with the sword
   strip's frame count; the bake puts them in the spear row of `ember/arsenal/` in place of the sword
   swings. Each is a PixMiniMax animation (8 frames) of the arsenal's spear idle frame: a jab, a low

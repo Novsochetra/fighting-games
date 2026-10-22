@@ -9,6 +9,7 @@ from dataclasses import dataclass
 import numpy as np
 from scipy import ndimage as nd
 from .paint import CROSS, EIGHT, box, luma, opaque
+from .firefly_eyes import eyes_by_hand
 
 FACE_REACH = 6
 FACE_SHARE = 0.28
@@ -48,7 +49,7 @@ def scene_of(frame):
     top, bottom, left, right = box(body) or (0, frame.height - 1, 0, body.shape[1] - 1)
     ys, xs = np.nonzero(body)
     centre = (float(xs.mean()), float(ys.mean())) if len(xs) else (64.0, 48.0)
-    eyes = eyes_of(frame, top, bottom)
+    eyes = by_hand if (by_hand := eyes_by_hand(frame)) is not None else eyes_of(frame, top, bottom)
     blade = blade_of(frame) & ~nd.binary_dilation(eyes, structure=EIGHT, iterations=FACE_REACH)
     keep = kept_clear(frame, eyes, blade, (top, bottom))
     cloth = cloth_of(frame)

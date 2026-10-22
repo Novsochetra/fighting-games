@@ -1,13 +1,15 @@
 """The Blue Shade's face under his hood. Where a frame drew his mask as a flat blue plate it is drawn
 as his design has it (blue_mask.py): the face black in the hood, lit only along its edge, with its
-eye. A face drawn as bare skin gets the same mask (blue_skin.py), and one drawn as no more than the
-lit line down its front gets the chin and eye (blue_profile.py)."""
+eye. A face drawn as bare skin gets the same mask (blue_skin.py), one drawn as a lit ring below the
+hood's band is opened into it (blue_ring.py), and one drawn as no more than the lit line down its
+front gets the chin and eye (blue_profile.py)."""
 import numpy as np
 from scipy import ndimage as nd
 from .paint import EIGHT
 from .blue_mask import bridge_colours, eye_added, eye_painted, face_lines
 from .blue_palette import PALE
 from .blue_profile import dress_profile
+from .blue_ring import dress_ring
 from .blue_skin import dress_skin
 
 HOOD_DEPTH = 14
@@ -85,10 +87,11 @@ def dress_face(frame, sword):
     plate = plate_of(frame.glow, face_zone(frame.glow, frame.extra['cape']['cape']), sword)
     drawn = None if plate is None else face_lines(plate, sword)
     if drawn is None or drawn[2].sum() < SMALLEST_FILL:
-        dress_profile(frame, sword, HOOD_BLACK)
+        if not dress_ring(frame, sword, HOOD_BLACK):
+            dress_profile(frame, sword, HOOD_BLACK)
         return
     lines, added, inside = drawn
-    eye, painted = eye_painted(sword, plate)
+    eye, painted, glints = eye_painted(sword, plate)
     if not eye.any():
         eye = eye_added(lines, inside)
         painted[eye] = PALE
@@ -96,5 +99,5 @@ def dress_face(frame, sword):
     lit = added | eye
     for row in frame.rows:
         same = (row == sword).all(-1)
-        row[inside & same] = HOOD_BLACK
+        row[(inside | glints) & same] = HOOD_BLACK
         row[lit & same] = painted[lit & same]

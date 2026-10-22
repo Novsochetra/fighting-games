@@ -18,6 +18,9 @@ def light_eyes(frames):
         spill = outer_ring(eyes) & opaque(sword) & (luma(sword) < FACE_SHADOW)
         shown = [np.all(row == sword, axis=-1) for row in frame.rows]
         for row, same in zip(frame.rows, shown):
+            # where a row's weapon bake took the glint away there is no eye to light round
+            if not (eyes & same).any():
+                continue
             row[spill & same] = EYE_SPILL
             row[eyes & same] = EYE
             row[brightest & same] = EYE_CORE

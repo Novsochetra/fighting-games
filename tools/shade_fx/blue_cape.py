@@ -62,6 +62,7 @@ def cape_parts(plain, frame):
     # the air shut in between his boots lies over no cloth's top
     open_air = empty & ~nd.binary_fill_holes(~empty)
     top = edged & shifted(open_air, 0, 1) & shifted(unarmoured, 0, -1) & ~back & backed_by(cape, 0, 1)
+    top &= ~front_steps(empty)
     bottom = edged & shifted(open_below(empty), 0, -1) & shifted(unarmoured, 0, 1)
     hem = without_specks(bottom, SHORTEST_HEM)
     head, guard = hood_parts(frame)
@@ -75,6 +76,14 @@ def backed_by(cape, dx, dy):
     return cape | shifted(cape, -dx, -dy) | shifted(cape, -2 * dx, -2 * dy)
 
 
+# a step down his front (open air before it and before the pixel under it, and him behind it) faces
+# forward out of the light from above: lit, it would break his outline there; a spike of cloth, open
+# behind too, still catches the light at its tip
+def front_steps(empty):
+    before = shifted(empty, -1, 0)
+    return before & shifted(before, 0, -1) & ~shifted(empty, 1, 0)
+
+
 # cloth hanging between his legs has a leg either side of the air under it all the way down to his
 # feet, where under the cape's own hem the air opens out behind him
 def between_legs(hem, body):
@@ -86,6 +95,16 @@ def between_legs(hem, body):
         right = below[:, x + 1:x + 1 + LEG_REACH].any(1)
         out[y, x] = len(below) > 0 and left.all() and right.all()
     return out
+
+
+# a step down his front just under the guard round his hood is the underside of his chin, out of the
+# light from above: no rime grows on it, though motes still shed off it as off the rest of the hem
+CHIN_REACH = 2
+
+
+def chin_of(parts):
+    near = nd.binary_dilation(parts['guard'], structure=EIGHT, iterations=CHIN_REACH)
+    return parts['hem'] & front_steps(parts['empty']) & near
 
 
 # the hem is the cape's lower edge with open air under it, where under the hood's brim lies the
@@ -120,7 +139,7 @@ def dress_cape(frame, plain):
     back = parts['back'] & ~over_limbs(limbs_of(parts, frame.body))
     rim = back | parts['top']
     inside = (shifted(back, 1, 0) | shifted(rim, 0, 1)) & parts['cape'] & ~rim
-    dress_rime(frame, parts, paint_cloth)
+    dress_rime(frame, {**parts, 'hem': parts['hem'] & ~chin_of(parts)}, paint_cloth)
     paint_cloth(frame, parts['top'], PALE)
     paint_cloth(frame, back, ICE)
     paint_cloth(frame, inside, DEEP)

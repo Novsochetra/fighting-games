@@ -6,6 +6,7 @@ from .particles import Particle, draw, generator, points_of, position, spawn
 from .paint import hashed, outer_ring, rows_between
 from .blue_palette import BLUE, DEEP, ICE, PALE, WHITE
 from .blue_palette import MIST_THICK as THICK, MIST_THIN as THIN
+from .blue_spacing import spaced
 
 MOTES_A_FRAME = 4
 MOTE_LIFE = (4, 8)
@@ -123,8 +124,8 @@ def dress_air(frames):
         frame.extra['apart'] = nd.distance_transform_edt(frame.extra['cape']['empty'])
     strip = frames[0].strip
     mote_most, wisp_most = longest_life(frames, MOTE_LIFE), longest_life(frames, WISP_LIFE)
-    motes = spawn(frames, generator('blue', strip, 'motes'), mote_points,
-                  mote_maker(frames, mote_most), MOTES_A_FRAME, mote_most)
+    motes = spaced(frames, spawn(frames, generator('blue', strip, 'motes'), mote_points,
+                                 mote_maker(frames, mote_most), MOTES_A_FRAME, mote_most))
     wisps = spawn(frames, generator('blue', strip, 'mist'), mist_points,
                   wisp_maker(frames, wisp_most), WISPS_A_FRAME, wisp_most)
     before = [[row.copy() for row in frame.rows] for frame in frames]
