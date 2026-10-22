@@ -150,4 +150,11 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    mound and sprays sand, with no red, so the player learns which stop is real. The swarm's two
    waves (from behind her, then from behind the hero) never fly at the same time, so a low and a
    high wasp can never reach the hero together. The poison never takes the last of a life.
-6. Then down the road, 6 to 12. Naga Raja and Bayon Guardian wait for their new sheets.
+6. **Gnoll Packlord**: done. Taller frames (192×160) for the club raised high in the leap. He
+   leaps for real, through the air, onto a spot marked under the hero as he takes off (only that
+   spot is marked, not the ground under him), and lands with the bone burst and a small
+   shockwave. The Pack Call sends hounds rather than the road's raiders. His frenzy turns at the
+   walls with a skid instead of Ironhorn's crash and bamboo, and ends with him staggering back into
+   the arena to pant. The frenzy strip's third lunge (frame 8) was drawn tangled in the frame
+   before it, so its timeline loops frames 4-7 and leaves frame 8 out.
+7. Then down the road, 7 to 12. Naga Raja and Bayon Guardian wait for their new sheets.

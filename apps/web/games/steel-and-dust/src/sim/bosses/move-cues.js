@@ -1,3 +1,4 @@
+import { activeEnd } from '../../data/moves/define-move.js';
 import { shake } from '../fx/camera-fx.js';
 import { lobBoulder } from '../hazards/boulders.js';
 import { spawnCrescent } from '../hazards/crescents.js';
@@ -18,6 +19,7 @@ import {
   tunnelAfterHero,
 } from './burrow.js';
 import { circleHeldHero, flashGaze, warnOfGaze, whileHeld } from './hypnotic-gaze.js';
+import { feed, howl, leap, smashBones, trailEyes } from './pack-hunt.js';
 import { dropRockfall, rockfallIndex } from './rockfall.js';
 import { blowWarHorn } from './war-horn.js';
 
@@ -67,6 +69,14 @@ const CUES = [
     (game, fighter, move, time) => releaseWasp(game, fighter, waspAt(move, time)),
   ],
   [(move, time) => time === move.slamAt, slamPincers],
+  [(move, time) => Boolean(move.howls?.includes(time)), howl],
+  [(move, time) => time === move.leapAt, leap],
+  [atStrike('bones'), smashBones],
+  [
+    (move, time) => Boolean(move.eyeTrail) && time >= move.startup && time < activeEnd(move),
+    trailEyes,
+  ],
+  [(move) => Boolean(move.heals), feed],
   [
     (move, time) => move.rockfall && rockfallIndex(move, time) >= 0,
     (game, fighter, move, time) => dropRockfall(game, fighter, rockfallIndex(move, time)),

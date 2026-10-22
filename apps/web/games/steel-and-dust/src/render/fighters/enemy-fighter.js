@@ -29,7 +29,7 @@ function drawAfterimages(painter, sheets, fighter) {
       x: image.x,
       y: image.y,
       facing: image.facing,
-      tint: FX_COLORS.enemyGhost,
+      tint: FX_COLORS[image.ghost] ?? FX_COLORS.enemyGhost,
     });
   }
   painter.alpha(1);

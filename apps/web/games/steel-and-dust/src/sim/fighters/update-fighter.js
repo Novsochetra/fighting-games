@@ -74,6 +74,7 @@ function addAfterimage(fighter) {
     sprite: isPlayer(fighter) ? heroAnimation(fighter) : enemySpriteFrame(fighter),
     row: isPlayer(fighter) ? WEAPONS[fighter.weapon.id].spriteRow : 0,
     life: 12,
+    ghost: fighter.move?.ghost,
   });
 }
 

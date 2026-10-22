@@ -55,6 +55,7 @@ describe('live sounds', () => {
         'dig',
         'eruption',
         'buzz',
+        'howl',
       ].sort(),
     );
   });
