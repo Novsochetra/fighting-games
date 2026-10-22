@@ -5,6 +5,7 @@ import { FURNACE_KIT } from './furnace.js';
 import { GNOLL_KIT } from './gnoll.js';
 import { IRONHORN_KIT } from './ironhorn.js';
 import { KHAN_KIT } from './khan.js';
+import { PHARAOH_KIT } from './pharaoh.js';
 import { QUEEN_KIT } from './queen.js';
 
 // each boss with a kit of its own skills and ultimate; a boss without one swipes, slams and charges
@@ -17,4 +18,5 @@ export const BOSS_KITS = {
   gnoll: GNOLL_KIT,
   djinn: DJINN_KIT,
   furnace: FURNACE_KIT,
+  pharaoh: PHARAOH_KIT,
 };

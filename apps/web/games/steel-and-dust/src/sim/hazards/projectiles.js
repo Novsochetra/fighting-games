@@ -1,15 +1,19 @@
 import { COLORS } from '../../art/colors.js';
 import { VIEW_WIDTH } from '../../config.js';
+import { strikePharaohSpells } from '../bosses/pharaoh-targets.js';
 import { trailColorOf } from '../fighters/hero-colors.js';
 import { showHint } from '../hints.js';
 import { breakCratesIn } from '../items/crates.js';
 import { groundAt } from '../stage/terrain.js';
 import { burnBlaze } from './blazes.js';
+import { standJar } from './canopic-jars.js';
+import { followHero } from './curse-marks.js';
 import { flyBoulder } from './boulders.js';
 import { skimGround } from './crescents.js';
 import { spinDustDevil } from './dust-devils.js';
 import { flyBomb } from './enemy-shots.js';
 import { runLance } from './flame-lances.js';
+import { crawlScarabs } from './scarabs.js';
 import { diveToward } from './shot-aim.js';
 import { hitArea } from './shot-hits.js';
 import { leaveTrail } from './shot-trails.js';
@@ -76,6 +80,9 @@ const FLIGHT = {
   slagPot: flySlagPot,
   lavaPool: coolLava,
   flameLance: runLance,
+  scarabs: crawlScarabs,
+  canopic: standJar,
+  curseMark: followHero,
 };
 const OWN_FLOOR = new Set(['fire', 'bamboo', ...Object.keys(FLIGHT)]);
 
@@ -125,6 +132,7 @@ export function updateProjectiles(game) {
     }
     if (shot.side === 'player') {
       breakCratesIn(game, area);
+      strikePharaohSpells(game, shot, area);
     }
   }
   game.projectiles = game.projectiles.filter((shot) => stillFlying(game, shot));

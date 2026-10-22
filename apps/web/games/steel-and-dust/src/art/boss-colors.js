@@ -8,4 +8,5 @@ export const BOSS_ULT_COLORS = {
   gnoll: { dim: '#1a0505', title: '#ff5a4a', ring: '#ff9a8a' },
   djinn: { dim: '#040a18', title: '#7fd8ff', ring: '#e2f6ff' },
   furnace: { dim: '#1a0802', title: '#ff8a3a', ring: '#ffc98a' },
+  pharaoh: { dim: '#140c02', title: '#ffd24a', ring: '#fff1b8' },
 };

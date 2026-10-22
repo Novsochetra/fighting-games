@@ -62,6 +62,13 @@ describe('live sounds', () => {
         'flame',
         'steam',
         'sizzle',
+        'mirage',
+        'scarabs',
+        'curse',
+        'jarBreak',
+        'sunBreak',
+        'sunfall',
+        'mirageBolt',
       ].sort(),
     );
   });

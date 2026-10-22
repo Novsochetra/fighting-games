@@ -4,6 +4,7 @@ import { setBlazes } from '../hazards/blazes.js';
 import { lobBoulder } from '../hazards/boulders.js';
 import { spawnCrescent } from '../hazards/crescents.js';
 import { raiseDustDevils } from '../hazards/dust-devils.js';
+import { releaseScarabs } from '../hazards/scarabs.js';
 import { spawnShockwave } from '../hazards/shockwaves.js';
 import { lobSlagPot } from '../hazards/slag-pots.js';
 import { spitVenom } from '../hazards/venom-globs.js';
@@ -25,8 +26,10 @@ import {
 import { callGreatStrike, callStormWave, stormWaveAt } from './eye-of-storm.js';
 import { fireLance, lanceAt, roar, roarsAt, vent, ventsAt } from './furnace.js';
 import { circleHeldHero, flashGaze, warnOfGaze, whileHeld } from './hypnotic-gaze.js';
+import { blinkEndToEnd, castMirages } from './mirage.js';
 import { feed, howl, leap, smashBones, trailEyes } from './pack-hunt.js';
 import { dropRockfall, rockfallIndex } from './rockfall.js';
+import { castCurse, curseReleases, cursingNow, releaseCurse, watchJars } from './sun-curse.js';
 import { blowWarHorn } from './war-horn.js';
 
 // the light catches the blade drawn back behind the boss, a beat before it springs
@@ -95,6 +98,12 @@ const CUES = [
   [roarsAt, roar],
   [lanceAt, fireLance],
   [ventsAt, vent],
+  [atStrike('mirages'), castMirages],
+  [atStrike('blink'), blinkEndToEnd],
+  [atStrike('scarabs'), releaseScarabs],
+  [atStrike('curse'), castCurse],
+  [cursingNow, watchJars],
+  [curseReleases, releaseCurse],
   [
     (move, time) => move.rockfall && rockfallIndex(move, time) >= 0,
     (game, fighter, move, time) => dropRockfall(game, fighter, rockfallIndex(move, time)),

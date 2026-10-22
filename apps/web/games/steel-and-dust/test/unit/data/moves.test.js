@@ -105,6 +105,12 @@ describe('move tables', () => {
       'slagPot',
       'meltdown',
       'overheated',
+      'mirageClones',
+      'mirageVolley',
+      'mirageBlink',
+      'scarabCarpet',
+      'curseOfSun',
+      'sunBroken',
     ]);
   });
 

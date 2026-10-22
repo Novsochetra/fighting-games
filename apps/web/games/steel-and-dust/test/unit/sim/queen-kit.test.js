@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { QUEEN_KIT } from '../../../src/data/enemies/boss-kits/queen.js';
 import { ENEMY_MOVES } from '../../../src/data/enemies/enemy-moves.js';
 import { thinkKitBoss } from '../../../src/sim/brains/enemy/boss-kit.js';
-import { isUnderground } from '../../../src/sim/combat/boxes.js';
+import { isOutOfReach } from '../../../src/sim/combat/boxes.js';
 import { startMove } from '../../../src/sim/fighters/actions.js';
 import { waspAt } from '../../../src/sim/hazards/wasps.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
@@ -75,11 +75,11 @@ describe('her burrow', () => {
     const { game, queen } = queenAt(200);
     startMove(game, queen, 'burrow');
     queen.moveTime = 10;
-    expect(isUnderground(queen)).toBe(false);
+    expect(isOutOfReach(queen)).toBe(false);
     queen.moveTime = 60;
-    expect(isUnderground(queen)).toBe(true);
+    expect(isOutOfReach(queen)).toBe(true);
     startMove(game, queen, 'emerge');
-    expect(isUnderground(queen)).toBe(false);
+    expect(isOutOfReach(queen)).toBe(false);
   });
 });
 
