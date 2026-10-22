@@ -13,6 +13,7 @@ import { leaveTrail } from './shot-trails.js';
 import { SHOT_RULES } from './shot-rules.js';
 import { riseSpike } from './spikes.js';
 import { flyGlob, soakPuddle } from './venom-globs.js';
+import { flyWasp } from './wasps.js';
 
 const DEFAULT_SPEED = 4.6;
 const KNIFE_SPEED = 3.1;
@@ -59,6 +60,7 @@ const FLIGHT = {
   spike: riseSpike,
   glob: flyGlob,
   puddle: soakPuddle,
+  wasp: flyWasp,
 };
 const OWN_FLOOR = new Set(['fire', 'bamboo', ...Object.keys(FLIGHT)]);
 

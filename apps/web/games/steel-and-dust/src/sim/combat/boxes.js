@@ -20,8 +20,14 @@ export function attackBox(fighter, hitbox) {
   };
 }
 
+// a boss dug into the ground is out of every reach until she bursts up again
+export function isUnderground(fighter) {
+  const span = fighter.state === 'attack' && fighter.move?.underground;
+  return Boolean(span) && fighter.moveTime >= span[0] && fighter.moveTime < span[1];
+}
+
 export function hurtBox(fighter) {
-  if (fighter.removed || fighter.state === 'ko') {
+  if (fighter.removed || fighter.state === 'ko' || isUnderground(fighter)) {
     return null;
   }
   const [left, top, width, height] =

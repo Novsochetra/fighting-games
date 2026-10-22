@@ -5,6 +5,7 @@ import {
   TELEGRAPH_PALETTE,
 } from '../../art/tinted-palettes.js';
 import { BODY_ART } from '../../art/weapon-art.js';
+import { isUnderground } from '../../sim/combat/boxes.js';
 import { isPlayer } from '../../sim/fighters/loadout.js';
 import { drawSkeletonAfterimages } from './afterimages.js';
 import { drawBody } from './body.js';
@@ -91,7 +92,9 @@ export function drawFighter(painter, { fighter, sheet, enemySheets, tickCount, f
   if (!fighter.joints || isBlinkedOut(fighter, tickCount)) {
     return;
   }
-  drawShadow(painter, fighter, floor);
+  if (!isUnderground(fighter)) {
+    drawShadow(painter, fighter, floor);
+  }
   const shakeX = hitShakeOffset(fighter);
   if (isPlayer(fighter) && sheet.ready) {
     drawHeroFighter(painter, { sheet, fighter, shakeX, tickCount });

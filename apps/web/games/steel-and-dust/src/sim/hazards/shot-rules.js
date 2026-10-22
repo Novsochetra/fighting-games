@@ -12,6 +12,7 @@ const SPIKE_HIT = { knockback: [1.4, -4.6], knockdown: true, hitstop: 7, hitstun
 const BAMBOO_HIT = { knockback: [2, -3], knockdown: true, hitstop: 7, hitstun: 22 };
 const VENOM_HIT = { knockback: [1.8, -0.8], hitstop: 4, hitstun: 18 };
 const PUDDLE_HIT = { knockback: [0.4, 0], hitstop: 2, hitstun: 10 };
+const WASP_HIT = { knockback: [2.2, -2.2], hitstop: 5, hitstun: 18 };
 
 // how each kind of thrown or fired thing flies, what it covers and what a hit does
 export const SHOT_RULES = {
@@ -101,6 +102,15 @@ export const SHOT_RULES = {
     hit: PUDDLE_HIT,
     enemyWeapon: 'none',
     rehitEvery: 40,
+  },
+  // a wasp only stings once it leaves the screen's edge, after its lane has been marked
+  wasp: {
+    range: 200,
+    area: (shot) => ({ x: shot.x - 7, y: shot.y - 4, width: 14, height: 8 }),
+    hit: WASP_HIT,
+    enemyWeapon: 'none',
+    breaksOnHit: true,
+    armed: (shot) => shot.time >= shot.warn,
   },
   fire: {
     range: 110,

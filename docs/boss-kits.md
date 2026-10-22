@@ -142,4 +142,12 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    lines. The new colors are picked from spread-out seeds so her glowing eyes keep their own
    entries. Each glob's landing spot is marked as it leaves her mouth, and puddles are drawn under
    the fighters' feet.
-5. Then down the road, 5 to 12. Naga Raja and Bayon Guardian wait for their new sheets.
+5. **Scorpion Queen**: done. Her sheet has frames both wider and taller (256×160): the sting
+   stabs far ahead and the tail stabs straight up as she bursts out. GPT gave real transparent
+   PNGs this time; the travelling mound is its own loop, cut at her scale onto the end of her
+   burrow row, so the mound is simply her while she is under. Out of reach while under, she
+   surfaces in a separate move with a red mark under it; the phase-two second dive only shakes the
+   mound and sprays sand, with no red, so the player learns which stop is real. The swarm's two
+   waves (from behind her, then from behind the hero) never fly at the same time, so a low and a
+   high wasp can never reach the hero together. The poison never takes the last of a life.
+6. Then down the road, 6 to 12. Naga Raja and Bayon Guardian wait for their new sheets.

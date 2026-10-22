@@ -4,6 +4,8 @@ const BOSS = { frameWidth: 192, frameHeight: 112, feetX: 96, feetY: 108 };
 const TALL_BOSS = { frameWidth: 192, frameHeight: 160, feetX: 96, feetY: 156 };
 // a boss whose own moves reach far ahead (a tail laid along the floor) keeps its old frames 32px in
 const WIDE_BOSS = { frameWidth: 256, frameHeight: 112, feetX: 128, feetY: 108 };
+// a boss whose moves reach both (a sting stabbing ahead, a tail stabbing straight up) gets both
+const BIG_BOSS = { frameWidth: 256, frameHeight: 160, feetX: 128, feetY: 156 };
 
 // one PNG per enemy in assets/sprites/enemies/ with a row per strip, in the order listed;
 // "attack 9/4" is a strip of 9 frames whose frame 4 holds while the hitbox is out
@@ -37,7 +39,11 @@ export const ENEMY_SPRITES = {
   assassin: sheet('assassin.png', 'idle 4, walk 8, attack 9/5, hurt 4, ko 9'),
   vulture: sheet('vulture.png', 'idle 4, walk 8, attack 9/4, hurt 4, ko 9'),
   ox: sheet('ox.png', 'idle 4, walk 8, attack 9/5, hurt 4, ko 9, slam 9/5, charge 8', BOSS),
-  queen: sheet('queen.png', 'idle 4, walk 8, attack 9/3, hurt 4, ko 9, slam 9/4, charge 8', BOSS),
+  queen: sheet(
+    'queen.png',
+    `${bossStrips(3, 4)}, burrow 12, emerge 8/4, tailSting 9/4, hiveSwarm 12/8`,
+    BIG_BOSS,
+  ),
   colossus: sheet(
     'colossus.png',
     'idle 4, walk 8, attack 9/3, hurt 4, ko 9, slam 9/4, charge 8, boulderLob 10/6, spikeLine 8/4, landslide 12/9',

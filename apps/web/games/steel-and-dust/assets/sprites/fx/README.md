@@ -35,6 +35,8 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `glob.png` | 4 × 44×20 | Cobra Matriarch: a venom glob flying (loops) | ChatGPT image, shrunk and cut into frames |
 | `puddle.png` | 6 × 80×40 | Cobra Matriarch: a poison puddle bubbling (loops) | stand-in ellipses, to be replaced by the ChatGPT strip |
 | `hypnosis.png` | 8 × 128×80 | Cobra Matriarch: the Hypnotic Gaze's rings and flash | ChatGPT image, shrunk and cut into frames; the fading rings kept down to a quarter's opacity |
+| `wasp.png` | 4 × 56×48 | Scorpion Queen: an ember wasp of the Hive Swarm flying (loops) | ChatGPT image, shrunk and cut into frames |
+| `eruption.png` | 6 × 144×144 | Scorpion Queen: the earth bursting up behind her as she surfaces | ChatGPT image, shrunk and cut into frames |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to

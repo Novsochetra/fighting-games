@@ -46,4 +46,43 @@ function hypnosis(live, start) {
   hiss(live, { start, ...shimmer, attack: 0.05, duration: 0.7, volume: 0.03 });
 }
 
-export const BOSS_SOUNDS = { warHorn, bossUltimate, venomSpit, splat, hypnosis };
+// claws raking into sand: a run of short gritty scrapes over a low rumble
+function dig(live, start) {
+  thump(live, { start, from: 90, to: 50, duration: 0.3, volume: 0.14 });
+  for (let i = 0; i < 4; i++) {
+    const grit = { type: 'bandpass', from: 1400, to: 700, resonance: 1.5 };
+    hiss(live, { start: start + i * 0.06, ...grit, attack: 0.01, duration: 0.07, volume: 0.06 });
+  }
+}
+
+// the ground bursting open under the hero: a deep crack and a spray of falling earth
+function eruption(live, start) {
+  thump(live, { start, from: 120, to: 38, duration: 0.45, volume: 0.32 });
+  const earth = { type: 'lowpass', from: 2400, to: 500, resonance: 0.8 };
+  hiss(live, { start: start + 0.02, ...earth, attack: 0.01, duration: 0.5, volume: 0.1 });
+}
+
+// a wasp coming in: quick sawtooth wingbeats that swell, then fall away
+function buzz(live, start) {
+  for (let i = 0; i < 8; i++) {
+    const volume = 0.012 + 0.008 * Math.min(i, 7 - i);
+    blip(live, {
+      start: start + i * 0.035,
+      frequency: 205 + i * 3,
+      duration: 0.05,
+      volume,
+      wave: 'sawtooth',
+    });
+  }
+}
+
+export const BOSS_SOUNDS = {
+  warHorn,
+  bossUltimate,
+  venomSpit,
+  splat,
+  hypnosis,
+  dig,
+  eruption,
+  buzz,
+};
