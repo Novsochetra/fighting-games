@@ -9,7 +9,6 @@ export function markPounce(game, { x, y, side, life }) {
     side,
     time: 0,
     life,
-    hitTargets: new Set(),
   });
 }
 
