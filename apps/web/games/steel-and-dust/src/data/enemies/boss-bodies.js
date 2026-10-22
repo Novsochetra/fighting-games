@@ -34,8 +34,8 @@ export const BOSS_BODIES = {
   },
   // her humanoid body stands over her feet and her scorpion's body runs back from them
   queen: {
-    hurtShape: [10, 40, 27, 40],
-    reach: { swipe: [2, -22, 38, 22], slam: [0, -32, 31, 32] },
+    hurtShape: [12, 42, 31, 42],
+    reach: { swipe: [2, -30, 48, 30], slam: [0, -32, 32, 32] },
   },
   gnoll: {
     hurtShape: [12, 36, 24, 36],

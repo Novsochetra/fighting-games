@@ -158,7 +158,10 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    surfaces in a separate move with a red mark under it; the phase-two second dive only shakes the
    mound and sprays sand, with no red, so the player learns which stop is real. The swarm's two
    waves (from behind her, then from behind the hero) never fly at the same time, so a low and a
-   high wasp can never reach the hero together. The poison never takes the last of a life.
+   high wasp can never reach the hero together. The poison never takes the last of a life. Her first seven rows were later drawn again in the style of her skill rows (a light painted
+   checker keyed out), each strip scaled to the same body size as her Tail Sting stance and stood on
+   her feet line, every frame laid over the one before; the skill rows were slid to match, so
+   nothing jumps when a move starts or ends.
 6. **Gnoll Packlord**: done. Taller frames (192×160) for the club raised high in the leap. He
    leaps for real, through the air, onto a spot marked under the hero as he takes off (only that
    spot is marked, not the ground under him), and lands with the bone burst and a small
