@@ -1,10 +1,13 @@
+import { ventSteam } from '../../bosses/furnace.js';
 import { slipAway } from './blink.js';
+import { illusionist } from './illusionist.js';
 import { standStill, walk } from './movement.js';
 
 const FEINT_TICKS = 12;
 const SCUTTLE_TICKS = 30;
 const PROWL_TICKS = 22;
 const DRIFT_TICKS = 50;
+const VENT_TICKS = 200;
 
 // a duelist keeps a sword's length and a step away: he backs off a hero who crowds him, closes on
 // one who keeps away, and in between stands his ground or feints a step in
@@ -102,4 +105,28 @@ function floater(boss, { game, distance, pace }) {
   }
 }
 
-export const BOSS_MOVEMENT = { duelist, bulldozer, bull, slither, scuttle, packHunter, floater };
+// a juggernaut walks at the hero behind his guard and never steps back, venting steam now and then
+function juggernaut(boss, { game, distance, pace }) {
+  const ai = boss.ai;
+  ai.vent = (ai.vent ?? 0) + 1;
+  if (ai.vent % VENT_TICKS === 0) {
+    ventSteam(game, boss);
+  }
+  if (distance > 44) {
+    walk(boss, 1, pace);
+  } else {
+    standStill(boss);
+  }
+}
+
+export const BOSS_MOVEMENT = {
+  duelist,
+  bulldozer,
+  bull,
+  slither,
+  scuttle,
+  packHunter,
+  floater,
+  juggernaut,
+  illusionist,
+};

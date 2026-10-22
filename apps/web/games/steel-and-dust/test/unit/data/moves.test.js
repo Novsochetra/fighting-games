@@ -100,6 +100,17 @@ describe('move tables', () => {
       'dustDevil',
       'dustDevils',
       'eyeOfStorm',
+      'fireFlail',
+      'fireFlailHot',
+      'slagPot',
+      'meltdown',
+      'overheated',
+      'mirageClones',
+      'mirageVolley',
+      'mirageBlink',
+      'scarabCarpet',
+      'curseOfSun',
+      'sunBroken',
     ]);
   });
 

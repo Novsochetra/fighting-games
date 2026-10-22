@@ -1,4 +1,4 @@
-import { isUnderground } from '../combat/boxes.js';
+import { isOutOfReach } from '../combat/boxes.js';
 import { nudge, onOneLevel } from './terrain-motion.js';
 
 const SOLID_STATES = new Set(['idle', 'walk', 'attack', 'hurt', 'charge', 'squat']);
@@ -8,7 +8,7 @@ function isSolid(fighter) {
     !fighter.airborne &&
     !fighter.entering &&
     SOLID_STATES.has(fighter.state) &&
-    !isUnderground(fighter)
+    !isOutOfReach(fighter)
   );
 }
 

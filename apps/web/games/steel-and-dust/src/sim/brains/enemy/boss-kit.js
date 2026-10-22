@@ -1,4 +1,5 @@
 import { startMove } from '../../fighters/actions.js';
+import { hasMirages } from '../../bosses/mirage.js';
 import { isMissionBoss } from '../../stage/mission.js';
 import { BOSS_MOVEMENT } from './boss-movement.js';
 import { standStill } from './movement.js';
@@ -25,13 +26,14 @@ function standsAlone(game) {
   );
 }
 
-function canUse(game, skill, { state, distance }) {
+function canUse(game, skill, { boss, state, distance }) {
   const [near, far] = skill.range;
   return (
     game.tickCount >= (state.readyAt[skill.move] ?? 0) &&
     distance >= near &&
     distance <= far &&
     (!skill.alone || standsAlone(game)) &&
+    (!skill.noMirages || !hasMirages(boss)) &&
     (!skill.airborne || game.player.airborne)
   );
 }
@@ -53,7 +55,7 @@ function tryUltimate(game, boss, { kit, state }) {
 
 function trySkill(game, boss, { kit, state, distance, phase }) {
   for (const skill of kit.skills) {
-    if (canUse(game, skill, { state, distance }) && Math.random() < skill.chance) {
+    if (canUse(game, skill, { boss, state, distance }) && Math.random() < skill.chance) {
       startMove(game, boss, phase.swaps?.[skill.move] ?? skill.move);
       state.readyAt[skill.move] = game.tickCount + Math.round(skill.cooldown * phase.cooldown);
       const repeats = (phase.chains?.[skill.move] ?? 1) - 1;

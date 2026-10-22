@@ -1,5 +1,6 @@
 import { COLORS } from '../../art/colors.js';
 import { activeEnd } from '../../data/moves/define-move.js';
+import { strikePharaohSpells } from '../bosses/pharaoh-targets.js';
 import { isPlayer } from '../fighters/loadout.js';
 import { addFloatText, addRing } from '../fx/effects.js';
 import { addSparks } from '../fx/particles.js';
@@ -121,6 +122,7 @@ function resolveAttacker(game, attacker) {
     return;
   }
   hitCrates(game, attacker, area);
+  strikePharaohSpells(game, attacker, area);
   deflectKnives(game, attacker, area);
   if (connected) {
     followUpOnHit(game, attacker);

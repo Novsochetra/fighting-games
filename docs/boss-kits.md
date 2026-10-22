@@ -163,4 +163,33 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    devil pulls slower than the hero walks, so walking away (or a dash through it) gets out, and it
    blows out after throwing someone. The storm's middle wave leaves the hero's own spot clear, so a
    hero who ran from the first wave is caught by it; every strike's spot crackles while it gathers.
-8. Then down the road, 8 to 12. Naga Raja and Bayon Guardian wait for their new sheets.
+8. **Furnace Knight**: done. His sheet has frames both wider and taller (256×160): the flail
+   whirls overhead and sweeps far along the floor. The flail and pot strips came with a painted
+   checkerboard, also shut inside the flail's fiery arcs, so the keying also clears closed pockets
+   made of the two checker greys and peels the grey fringe off the arcs. The Meltdown image drew each
+   beam frame's flame over the next frame's body, so only its first firing frame is used and the
+   beam is drawn as lances, grown out of the flame in his chest and flying level at its height; he
+   leans into each shot and stands blazing between them. In place of one sweeping beam (a beam the hero
+   cannot crouch under would be unfair), it is three lances at chest height, each a beat after the
+   furnace roars, to jump. He overheats as soon as the last lance has gone, so no hit can knock
+   him out of it, and while overheated each hit lands for double where he stands. Burning ground and
+   lava only burn a hero on the ground and hop them out, so nobody is juggled in the flames. His
+   swipe, knock-out and slam rows from his first sheet were cut off at its edges, so they were
+   redrawn. The Slag Pot leaves his fist as the throwing frame
+   thrusts it forward. No boss draws the raiders' white weapon trail any more: each boss sheet
+   draws its own swing arc, and the trail ran along a weapon the sprite did not hold there.
+9. **Sand Pharaoh**: done. His sheet has frames both wider and taller (256×160): the sun rises far
+   over his staff and the staff thrusts far ahead. The first images came with a painted
+   checkerboard, scarabs drawn over his feet and a beam drawn over the next frame's body, so the
+   body strips were drawn again on real transparency, with no effects in them; the jar, the eye and
+   the scarab came through the checker cleaning. Frames touch in the new images, so they are split
+   by connected pieces rather than cut lines, shrunk so the stance matches his idle frame, stood on
+   his idle feet line and held in place by the back heel (by the staff's orb while only sand is
+   left). Where the scarabs leave, where the bolts leave, where the sun bursts and where the curse
+   flashes are read from the art and locked by a test. Crowded, he dissolves and steps out at the
+   far end (`mirageBlink`, out of reach while only sand is left). The Mirage Clones step him out at
+   one of three spots across the arena, his copies at the others, none on the hero; the copies
+   move as he moves, are a shade thinner and waver now and then, and pop at one blow. The Curse of
+   the Sun counts down over the hero's head in the sun's eye; the scarabs bite only feet on the
+   ground. In phase two his copies thrust their staffs and fire mirage bolts low along the floor.
+10. Then down the road, 10 to 12. Naga Raja and Bayon Guardian wait for their new sheets.

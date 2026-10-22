@@ -5,6 +5,7 @@ import { enemyAnimation } from '../../sim/enemy-animation.js';
 import { drawDangerZone } from './danger-zone.js';
 import { drawEnemyHealth, drawWindupWarning } from './enemy-markers.js';
 import { drawEnemyFrame } from './enemy-sprites.js';
+import { drawMirages } from './mirages.js';
 import { isBossWindingUp, isTelegraphing } from './windup.js';
 
 function hitTint(fighter) {
@@ -55,6 +56,7 @@ export function drawSpriteEnemy(painter, { sheets, fighter, shakeX, tickCount, f
     y: fighter.y,
     facing: fighter.facing,
   };
+  drawMirages(painter, sheets, { fighter, frame: at.frame, tickCount });
   drawEnemyFrame(painter, sheets, { ...at, tint: hitTint(fighter) });
   if (isTelegraphing(fighter, tickCount)) {
     drawTelegraph(painter, sheets, at);

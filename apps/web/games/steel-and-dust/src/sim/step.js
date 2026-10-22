@@ -3,6 +3,7 @@ import { VIEW_WIDTH } from '../config.js';
 import { isLastMission } from '../data/missions/index.js';
 import { clamp, randomBetween } from '../lib/math.js';
 import { endCombo } from './combat/combo.js';
+import { updateMirages } from './bosses/mirage-run.js';
 import { resolveHits } from './combat/resolve-hits.js';
 import { arenaBounds } from './fighters/arena-bounds.js';
 import { separateFighters } from './fighters/separate.js';
@@ -30,6 +31,7 @@ function updateWorld(game) {
   separateFighters(game.fighters, game.terrain);
   updateShockwaves(game);
   updateProjectiles(game);
+  updateMirages(game);
   updateSummons(game);
   updatePickups(game);
   updateEffects(game);

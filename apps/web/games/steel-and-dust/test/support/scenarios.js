@@ -110,6 +110,32 @@ export const SCENARIOS = {
     spawnBossAt: 30,
     scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
   },
+  // the Furnace Knight in the Iron Works: his steady walk, Slag Pot and its lava pool, the Fire Flail
+  // (its ground burning longer below half health) and, below 40%, the Meltdown's flame lances and
+  // his overheating after
+  furnace: {
+    mission: 7,
+    boss: 'furnace',
+    seed: 40,
+    ticks: 4800,
+    sampleEvery: 30,
+    renderEvery: 120,
+    spawnBossAt: 30,
+    scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
+  },
+  // the Sand Pharaoh in the Mirage Temple: his gliding and stepping out of the sand at the far end,
+  // the Mirage Clones (firing below half health), the Scarab Carpet and, below 40%, the Curse of
+  // the Sun with its canopic jars
+  pharaoh: {
+    mission: 8,
+    boss: 'pharaoh',
+    seed: 9,
+    ticks: 4800,
+    sampleEvery: 30,
+    renderEvery: 120,
+    spawnBossAt: 30,
+    scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
+  },
   // the other Shades: their own fighting style on every weapon and their own ultimate
   firefly: {
     hero: 'firefly',

@@ -241,13 +241,15 @@ its own way (`boss-movement.js`: Gravel Khan's `duelist` backs off, closes and f
 Colossus's `bulldozer` walks in and never steps back; Ironhorn's `bull` keeps room to run; the Cobra
 Matriarch's `slither` keeps the middle distance; the Scorpion Queen's `scuttle` darts to and fro at
 the edge of her sting's reach; the Gnoll Packlord's `packHunter` darts in and out; the Storm Djinn's
-`floater` drifts at the edge of his reach and, crowded, whirls away across the arena), swings its
+`floater` drifts at the edge of his reach and, crowded, whirls away across the arena; the Furnace
+Knight's `juggernaut` walks in, never backs off and vents steam; the Sand Pharaoh's `illusionist`
+glides at the middle distance and, crowded, steps out of the sand at the far end), swings its
 `close` moves in reach, picks its `skills` by range, chance and cooldown, and on its own road (never as
 a mid-boss) looses its `ultimate` below a share of its health, again every so often. Below half
 health its `phaseTwo` moves quicker, shortens the cooldowns, may chain a skill and may `swap` one for
 a stronger one. Its moves live with the other enemy moves (`src/data/enemies/moves/khan-moves.js`,
 `colossus-moves.js`, `ironhorn-moves.js`, `cobra-moves.js`, `queen-moves.js`, `gnoll-moves.js`,
-`djinn-moves.js`) and each plays a strip of its name (or the one its `strip` names) in its sheet on
+`djinn-moves.js`, `furnace-moves.js`, `pharaoh-moves.js`) and each plays a strip of its name (or the one its `strip` names) in its sheet on
 its own timeline (`frameAt`, the tick each frame starts on; `loopFrames`, a run of frames looped
 while the move is active, for a rush or a daze). A rush that meets the arena's wall turns into the
 move its `wallNext` names (`src/sim/bosses/wall-hit.js`): Ironhorn is left dazed when his Horn Rush
@@ -264,8 +266,8 @@ the `quakes`, shockwaves of the ground pounded, the venom `globs` that arc onto 
 spread into puddles burning whoever stands in them (`src/sim/hazards/venom-globs.js`), and the
 Cobra's `gaze` (`src/sim/bosses/hypnotic-gaze.js`): a hero facing her when her eyes flash is held
 still for her lunge, which stops where it bites (`stopOnHit`). The Scorpion Queen's burrow
-(`src/sim/bosses/burrow.js`) sinks her `underground` (no hurt box, no shove, no shadow: `isUnderground`
-in `src/sim/combat/boxes.js`), her mound `tunnel`s after the hero, stops (a `rumble` only sprays
+(`src/sim/bosses/burrow.js`) sinks her `underground` (no hurt box, no shove, no shadow: `isOutOfReach`
+in `src/sim/combat/boxes.js`, which also covers a move's `vanish`), her mound `tunnel`s after the hero, stops (a `rumble` only sprays
 sand) and turns into the move its `then` names, the `emerge` that `erupts` up under the hero; her
 Tail Sting leaves `poison` (`src/sim/summons/poison.js`), which bites a little at a time and never
 takes the last of a life; her Hive Swarm's `swarm` sends wasps across the screen, low or high, each
@@ -279,10 +281,28 @@ his `devils` drift after the hero, pull a hero on the ground in and throw them h
 (`src/sim/hazards/dust-devils.js`); his Eye of the Storm's `storm` marks waves of spots round the
 hero and then one great one, each struck by lightning that whites out the screen
 (`src/sim/bosses/eye-of-storm.js`, `src/sim/hazards/storm-strikes.js`; their rules in
-`storm-rules.js`). They are all projectiles, drawn from the `fx/` strips
-(`src/render/fx/rock-hazards.js`, `venom-hazards.js`, `wasp-hazards.js`, `storm-hazards.js`); a
-puddle, flat on the road, is drawn under the fighters' feet, and so is the mark of a lightning
-strike, while the strike itself is drawn over them. While an ultimate
+`storm-rules.js`). The Furnace Knight's Fire Flail sets a row of `blaze`s burning on the road
+(`src/sim/hazards/blazes.js`), his Slag Pot arcs onto a marked spot and breaks into a lava pool
+(`slag-pots.js`), and his Meltdown roars, then looses `lances` of flame from his chest
+(`flame-lances.js`, `src/sim/bosses/furnace.js`) and goes on, through `then`, into a move that is
+`exposed`: an exposed boss takes double damage and every hit where it stands, staying in its move
+(`src/sim/combat/apply-hit.js`); burning ground and lava are `groundOnly`, burning only feet on the
+ground (`src/sim/hazards/shot-hits.js`; their rules in `forge-rules.js`). The Sand Pharaoh's
+`mirages` are copies of him kept on the boss (`src/sim/bosses/mirage.js`, `mirage-run.js`): they
+step out of the sand with him, move as he moves, fire `mirageBolt`s in phase two
+(`src/sim/hazards/mirage-bolts.js`) and pop at one blow, as the jars break
+(`src/sim/bosses/pharaoh-targets.js`, called where blows and the hero's shots break crates); his
+`blink` steps him out at the far end, his `scarabs` crawl along the floor (`scarabs.js`), and his
+`curse` (`src/sim/bosses/sun-curse.js`) raises three canopic jars (`canopic-jars.js`) and hangs the
+sun's eye over the hero (`curse-marks.js`): every jar broken in time sends him into `sunBroken`,
+reeling, and a jar left standing at `releaseAt` brings the sunfall down on the hero (rules in
+`temple-rules.js`). They are all projectiles,
+drawn from the `fx/` strips (`src/render/fx/rock-hazards.js`, `venom-hazards.js`,
+`wasp-hazards.js`, `storm-hazards.js`, `forge-hazards.js`, `temple-hazards.js`, gathered in
+`boss-hazards.js`; the copies are drawn with the boss in `src/render/fighters/mirages.js`); a
+puddle, a lava pool or a jar, standing on the
+road, is drawn under the fighters' feet, and so is the mark of a lightning strike, while the strike
+itself is drawn over them. While an ultimate
 gathers and plays the world dims behind the boss in its own color (`src/render/fighters/boss-ultimate.js`,
 colors in `src/art/boss-colors.js`), a rush or wave marks its lane on the ground, and a boulder its
 landing spot.
@@ -306,7 +326,8 @@ Long sessions must not grow:
 `test/regression/` replays bot-played scenarios and compares every 30th tick and every rendered frame
 against recorded fixtures: two long runs as the Moss Shade (first captured from the original
 single-file game), one shorter run for each of the other Shades, one against each boss kit (Gravel Khan, the Rust
-Colossus, Ironhorn, the Cobra Matriarch, the Scorpion Queen, the Gnoll Packlord, the Storm Djinn), one run
+Colossus, Ironhorn, the Cobra Matriarch, the Scorpion Queen, the Gnoll Packlord, the Storm Djinn, the
+Furnace Knight, the Sand Pharaoh), one run
 through the wide zones
 of the fourth mission, one over the hills of the third, one through the seventh, the sandstorm canyon,
 and one through the twelfth, the Bayon.

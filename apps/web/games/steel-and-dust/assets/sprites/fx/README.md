@@ -42,6 +42,17 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `redeye.png` | 4 × 56×16 | Gnoll Packlord: the red streak his eyes leave in the Blood Frenzy | the same sheet's third row, drawn flying left and mirrored as he lunges |
 | `zap.png` | 4 × 120×56 | Storm Djinn: the Thunder Fist's bolt, a loop, its head on the anchor | ChatGPT image, drawn flying left, so mirrored before it was shrunk and cut into frames |
 | `tornado.png` | 8 × 136×160 | Storm Djinn: a dust devil rising (0-2), spinning (3-5, a loop) and blowing away (6-7); small, his whirl as he slips away | ChatGPT image, shrunk and cut into frames, folded to 255 colors |
+| `blaze.png` | 6 × 80×64 | Furnace Knight: the ground his Fire Flail sets burning, lit (0), burning (1-4, a loop), dying down (5) | ChatGPT image, shrunk and cut into frames, folded to 255 colors |
+| `slag.png` | 4 × 96×64 | Furnace Knight: the Slag Pot tumbling through the air | ChatGPT image, shrunk and cut into frames |
+| `lava.png` | 6 × 112×72 | Furnace Knight: the lava pool bursting up as the pot breaks (1-4), then smouldering (0 and 5) | ChatGPT image, shrunk and cut into frames, folded to 255 colors |
+| `beam.png` | 4 × 160×72 | Furnace Knight: a Meltdown flame lance, a loop, its tip on the anchor | ChatGPT image, drawn flying left, so mirrored before it was shrunk and cut into frames |
+| `flare.png` | 4 × 128×96 | Furnace Knight: fire bursting from his open chest as a lance leaves it, and before, as the furnace roars | ChatGPT image, shrunk and cut into frames, folded to 255 colors |
+| `steam.png` | 6 × 80×128 | Furnace Knight: steam venting from the ground at his back as he walks, and on both sides while he is overheated | ChatGPT image, shrunk and cut into frames, folded to 255 colors |
+| `scarab.png` | 4 × 48×24 | Sand Pharaoh: a scarab of the Scarab Carpet crawling (loops); five drawn as the carpet, a back row a step behind | ChatGPT image, the painted checker keyed out, shrunk and cut into frames, held on the eye |
+| `canopic.png` | 6 × 80×64 | Sand Pharaoh: a canopic jar of the Curse of the Sun standing (0) and breaking (1-5) | the same, held on the jar's foot |
+| `curse.png` | 4 × 48×48 | Sand Pharaoh: the sun's eye over the cursed hero (loops, quicker as the curse nears) | the same |
+| `sunfall.png` | 6 × 96×160 | Sand Pharaoh: the curse going off, a column of sunlight slamming down on the hero | the same, held on the column |
+| `mirageBolt.png` | 4 × 48×24 | Sand Pharaoh: a mirage bolt a copy fires below half health (loops), its orb on the anchor | ChatGPT image on real transparency, shrunk and cut into frames |
 | `thunder.png` | 8 × 232×352 | Storm Djinn: the Eye of the Storm's lightning striking a marked spot, then the sand it throws up | ChatGPT image, shrunk and cut into frames, folded to 255 colors |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be

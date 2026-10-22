@@ -3,22 +3,10 @@ import { FX_COLORS } from '../../art/fx-colors.js';
 import { FX_SPRITES } from '../../data/fx-sprites.js';
 import { point } from '../painter.js';
 import { drawBolt, drawBomb, drawFire, drawSand, drawVenom } from './enemy-shots.js';
+import { BOSS_HAZARD_DRAWERS } from './boss-hazards.js';
 import { drawFxFrame } from './fx-sheets.js';
-import {
-  drawBamboo,
-  drawBoulder,
-  drawLandingShadow,
-  drawShard,
-  drawSpike,
-} from './rock-hazards.js';
-import {
-  drawDustDevil,
-  drawStormStrike,
-  drawStrikeMark,
-  drawThunderBolt,
-} from './storm-hazards.js';
-import { drawGlob, drawPuddle } from './venom-hazards.js';
-import { drawWasp } from './wasp-hazards.js';
+import { drawLandingShadow } from './rock-hazards.js';
+import { drawStrikeMark } from './storm-hazards.js';
 
 function drawShockPeak(painter, { x, y, height }) {
   for (let row = 0; row <= height; row++) {
@@ -104,21 +92,12 @@ const DRAW_SHOT = {
   bomb: drawBomb,
   fire: drawFire,
   crescent: drawCrescent,
-  boulder: drawBoulder,
-  shard: drawShard,
-  spike: drawSpike,
-  bamboo: drawBamboo,
-  glob: drawGlob,
-  puddle: drawPuddle,
-  wasp: drawWasp,
   pounceMark: drawPounceMark,
-  thunderBolt: drawThunderBolt,
-  dustDevil: drawDustDevil,
-  stormStrike: drawStormStrike,
+  ...BOSS_HAZARD_DRAWERS,
 };
 
 // what lies flat on the road is drawn under the fighters' feet
-const ON_GROUND = new Set(['puddle', 'pounceMark']);
+const ON_GROUND = new Set(['puddle', 'pounceMark', 'lavaPool', 'canopic']);
 // what strikes from above has its spot marked on the road under the fighters, and itself over them
 const GROUND_MARK = { stormStrike: drawStrikeMark };
 
