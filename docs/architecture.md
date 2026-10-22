@@ -121,7 +121,8 @@ length.
   `src/render/overlays/loading-screen.js`. Once a road is in, the next mission's road loads behind
   it, so the wait is usually over before the mission is. A file that fails to load still settles,
   and the plain road is drawn in its place.
-- The twelve missions are one road, painted end to end with PixelLab: six forests from sunrise to
+- The twelve missions are one road, painted end to end with PixelLab (Angkor Wat repainted with
+  ChatGPT and turned into pixel art by `tools/painting_layers.py`): six forests from sunrise to
   night (Pine Ridge, Old Grove, Bamboo Pass, Raider Camp, Ember Woods, Firefly Hollow), then out of
   the woods into the desert from dawn to night: Sandstorm Pass (a red-rock canyon in a dawn
   sandstorm), Iron Works (the raiders' foundry at a smoggy midday), Mirage Temple (a half-buried sun

@@ -1,5 +1,5 @@
 export const ANGKOR_WAT = {
-  ground: { sand: '#c6826c', rock: '#4f2c3c', grass: '#708438' },
+  ground: { sand: '#d09d4f', rock: '#4f2c3c', grass: '#708438' },
   ambient: {
     shaft: '#fce0a4',
     bird: '#30233c',

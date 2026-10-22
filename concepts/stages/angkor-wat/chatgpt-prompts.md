@@ -90,14 +90,8 @@ From top to bottom: a thin fringe of short grass and tiny ferns poking above the
 - Even palms: "Group the palms in two or three uneven clusters instead of an even row."
 - Props touching: "Spread the props out with wide magenta gaps; nothing may touch."
 
-## Sending the results back
+## The results
 
-Download each image at full size (not a screenshot) and upload it to
-`concepts/stages/angkor-wat/chatgpt/` on the branch `claude/busy-bardeen-jlqrh4`, named
-`back.png`, `near-props.png` and `ground.png`.
-
-The bake then crops the plate's 3:1 band, scales it to 640x216 and reduces it to the dawn palette;
-keys and cuts the props, scales them all by one factor (the lion about a fighter's height), lays
-them out on the 768 wide near strip and hazes them toward the moat mist; makes the cross-section
-seamless and redraws `cliff.png` from its colours; and moves the light shafts, moat glints and
-incense smoke onto the new sun, water and spirit house.
+The three paintings these prompts gave are in `chatgpt/` beside this file (`back.webp`,
+`near-props.webp`, `ground.webp`). How they were baked into the road, command by command, is in the
+Angkor Wat section of `apps/web/games/steel-and-dust/assets/backdrops/README.md`.
