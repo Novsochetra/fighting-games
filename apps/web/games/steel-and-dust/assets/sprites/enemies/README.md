@@ -55,7 +55,7 @@ into the sheet's own palette.
 
 | Sheet      | Rows added                                                                                       |
 | ---------- | ------------------------------------------------------------------------------------------------ |
-| `khan.png` | `warHorn` 8 (blows a ram's horn), `crescentDash` 10 (crouch, lunge, slash), `tempest` 12 (three low swings) |
+| `khan.png` | his `ko` and `slam` rows redrawn, his first sheet's being cut off at its edges; `warHorn` 8 (blows a ram's horn), `crescentDash` 10 (crouch, lunge, slash; redrawn, its blade was cut off at the right), `tempest` 12 (three low swings) |
 | `colossus.png` | `boulderLob` 10 (tears up a boulder, hurls it), `spikeLine` 8 (a stomp), `landslide` 12 (pounds the ground twice, roars) |
 | `ironhorn.png` | `hornRush` 10 (paws, runs, skids), `uppercut` 8, `dazed` 6 (a loop; the stars are `fx/stars.png`), `stampede` 12 (rears, stomps, runs, skids) |
 | `cobra.png` | `venomSpit` 8 (rears back, spits), `coilLash` 10 (whips the tail round and along the floor), `hypnoticGaze` 12 (rises, hood flared, eyes glowing and flashing, lunges) |

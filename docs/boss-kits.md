@@ -130,7 +130,9 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
 1. **Gravel Khan**: done. The first boss the player meets, and the one that built the shared parts
    (kit data, the brain picking skills, extra strips in a sheet, the ultimate with its dim and
    call-out, phase two, the mid-boss version). His War Horn plays only when no raider stands with
-   him, and the dash's dust trail was left out: the gravel the waves throw up was enough.
+   him, and the dash's dust trail was left out: the gravel the waves throw up was enough. His
+   knock-out, slam and Crescent Dash rows were cut off at the frame's edges and were redrawn; the
+   new art fits his 192×112 frames, so his sheet kept its size.
 2. **Rust Colossus**: done. His sheet has taller frames (192×160) so the boulder held overhead
    fits. The landing spot of every boulder is marked with the same blinking red bar as the lanes.
 3. **Ironhorn**: done. Taller frames too (the mace swung overhead). The stars GPT drew into the
