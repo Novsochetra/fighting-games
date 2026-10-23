@@ -251,16 +251,21 @@ Matriarch's `slither` keeps the middle distance; the Scorpion Queen's `scuttle` 
 the edge of her sting's reach; the Gnoll Packlord's `packHunter` darts in and out; the Storm Djinn's
 `floater` drifts at the edge of his reach and, crowded, whirls away across the arena; the Furnace
 Knight's `juggernaut` walks in, never backs off and vents steam; the Sand Pharaoh's `illusionist`
-glides at the middle distance and, crowded, steps out of the sand at the far end; the Warden Ox's
-`warden` comes on in measured strides and never gives ground), swings its
+glides at the middle distance and, crowded, steps out of the sand at the far end; the Naga Raja's
+`glider` glides in bursts at the middle distance and glides back from a hero who crowds her; the
+Bayon Guardian's `colossus` stomps in, never steps back, and shakes the road at each footfall,
+`src/sim/bosses/stomp.js`; the Warden Ox's `warden` comes on in measured strides and never gives
+ground), swings its
 `close` moves in reach, picks its `skills` by range, chance and cooldown, and on its own road (never as
 a mid-boss) looses its `ultimate` below a share of its health, again every so often. Below half
 health its `phaseTwo` moves quicker, shortens the cooldowns, may chain a skill and may `swap` one for
-a stronger one. Its moves live with the other enemy moves (`src/data/enemies/moves/khan-moves.js`,
+a stronger one, and its `opener` (the Bayon Guardian's crumbling) plays once as it crosses the line.
+Its moves live with the other enemy moves (`src/data/enemies/moves/khan-moves.js`,
 `colossus-moves.js`, `ironhorn-moves.js`, `cobra-moves.js`, `queen-moves.js`, `gnoll-moves.js`,
-`djinn-moves.js`, `furnace-moves.js`, `pharaoh-moves.js`) and each plays a strip of its name (or the one its `strip` names) in its sheet on
+`djinn-moves.js`, `furnace-moves.js`, `pharaoh-moves.js`, `naga-moves.js`, `guardian-moves.js`) and each plays a strip of its name (or the one its `strip` names) in its sheet on
 its own timeline (`frameAt`, the tick each frame starts on; `loopFrames`, a run of frames looped
-while the move is active, for a rush or a daze). A rush that meets the arena's wall turns into the
+while the move is active, for a rush or a daze; `frameOrder`, the strip's frame each step shows,
+where a strip plays back on itself or skips a frame). A rush that meets the arena's wall turns into the
 move its `wallNext` names (`src/sim/bosses/wall-hit.js`): Ironhorn is left dazed when his Horn Rush
 misses, and his Stampede turns and runs back twice; every wall hit bursts and knocks a bamboo stalk
 into the arena (`src/sim/hazards/bamboo.js`), unless the turn is `soft`, as the Gnoll's five frenzy
@@ -305,8 +310,20 @@ step out of the sand with him, move as he moves, fire `mirageBolt`s in phase two
 `curse` (`src/sim/bosses/sun-curse.js`) raises three canopic jars (`canopic-jars.js`) and hangs the
 sun's eye over the hero (`curse-marks.js`): every jar broken in time sends him into `sunBroken`,
 reeling, and a jar left standing at `releaseAt` brings the sunfall down on the hero (rules in
-`temple-rules.js`). The Warden Ox's `hook` (`src/sim/hazards/chain-hook.js`, `chain-pull.js`)
-flies at the hero's chest, drags a hero it catches to where his chop lands and lets go as he raises
+`temple-rules.js`). The Naga Raja's coil crashes in a `splash` (`src/sim/bosses/naga.js`), her
+`tides` roll along the floor from the front of her coil (`src/sim/hazards/tides.js`), her Seven
+Heads' `heads` each spit a water naga that waits at its mouth while its lane is marked and dives to
+it, low or high (`naga-bolts.js`), and her Rainbow Naga gathers the rainbow in her hand, sends a
+spirit naga sweeping the floor from each side and marks the spot a serpent of water bursts up out
+of (`spirit-nagas.js`; their rules in `moat-rules.js`). The Bayon Guardian's cues are gathered in
+`src/sim/bosses/bayon-cues.js`: his `gaze` marks the ground under the hero, and either side of it in
+phase two, and a gold pillar bursts there that leaves the hero `stoned`, slowed to under half pace
+for a while (`src/sim/hazards/gaze-pillars.js`, `src/sim/summons/stone-skin.js`, through
+`afflict.js`); his `roots` burst along the floor and then under the hero (`fig-roots.js`); his
+`faces` rise at the screen's edges in turn and breathe a beam at a hero's waist across most of the
+arena (`stone-faces.js`); and his crumble falls to rubble out of reach and reforms him `glowing`
+(`src/sim/bosses/crumble.js`; rules in `bayon-rules.js`). The Warden Ox's `hook` (`src/sim/hazards/chain-hook.js`, `chain-pull.js`)
+flies at the hero's waist (jump it), drags a hero it catches to where his chop lands and lets go as he raises
 the axe; his `guard` (`src/sim/bosses/guard-counter.js`) turns every blow from the front as a block
 would, but a parry: the striker reels and he answers with `guardStrike`; his Executioner's Round
 spins him with a red `whirl` that follows his body (a burst with `follow`, `src/sim/summons/bursts.js`)
@@ -314,10 +331,11 @@ and ends in a `cleave` (`src/sim/bosses/executioner.js`) whose crack runs off bo
 pace, each running end a `rift` read from the same reach as the drawn fissure (`rifts.js`; rules in
 `warden-rules.js`). They are all projectiles,
 drawn from the `fx/` strips (`src/render/fx/rock-hazards.js`, `venom-hazards.js`,
-`wasp-hazards.js`, `storm-hazards.js`, `forge-hazards.js`, `temple-hazards.js`,
-`warden-hazards.js`, gathered in
+`wasp-hazards.js`, `storm-hazards.js`, `forge-hazards.js`, `temple-hazards.js`, `moat-hazards.js`,
+`bayon-hazards.js`, `stone-face-draw.js` with the face's beam drawn in code in `face-beam.js` and
+`beam-flares.js`, `warden-hazards.js`, gathered in
 `boss-hazards.js`; the copies are drawn with the boss in `src/render/fighters/mirages.js`); a
-puddle, a lava pool or a jar, standing on the
+puddle, a lava pool, a jar or a stone face, standing on the
 road, is drawn under the fighters' feet, and so is the mark of a lightning strike, while the strike
 itself is drawn over them. While an ultimate
 gathers and plays the world dims behind the boss in its own color (`src/render/fighters/boss-ultimate.js`,
@@ -344,7 +362,7 @@ Long sessions must not grow:
 against recorded fixtures: two long runs as the Moss Shade (first captured from the original
 single-file game), one shorter run for each of the other Shades, one against each boss kit (Gravel Khan, the Rust
 Colossus, Ironhorn, the Cobra Matriarch, the Scorpion Queen, the Gnoll Packlord, the Storm Djinn, the
-Furnace Knight, the Sand Pharaoh), one run
+Furnace Knight, the Sand Pharaoh, the Naga Raja, the Bayon Guardian), one run
 through the wide zones
 of the fourth mission, one over the hills of the third, one through the seventh, the sandstorm canyon,
 and one through the twelfth, the Bayon.

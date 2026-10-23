@@ -41,7 +41,7 @@ export function drawEnemyFrame(
     width: frameWidth,
     height: frameHeight,
   });
-  const scale = size / RENDER_SCALE;
+  const scale = size / (RENDER_SCALE * (sprite.density ?? 1));
   const context = painter.context;
   context.save();
   context.translate(

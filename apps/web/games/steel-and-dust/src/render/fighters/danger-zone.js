@@ -1,6 +1,7 @@
 import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { hitboxOf, swingBox } from '../../sim/combat/boxes.js';
+import { rootLineReach } from '../../sim/hazards/fig-roots.js';
 import { spikeLineReach } from '../../sim/hazards/spikes.js';
 import { drawText } from '../text/draw-text.js';
 
@@ -14,6 +15,9 @@ function laneLength(fighter) {
   }
   if (move.lane === 'spikes') {
     return spikeLineReach(fighter, move.spikes);
+  }
+  if (move.lane === 'roots') {
+    return rootLineReach(fighter, move.roots);
   }
   return move.lane ?? 130;
 }

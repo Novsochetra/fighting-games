@@ -10,4 +10,6 @@ export const BOSS_ULT_COLORS = {
   furnace: { dim: '#1a0802', title: '#ff8a3a', ring: '#ffc98a' },
   pharaoh: { dim: '#140c02', title: '#ffd24a', ring: '#fff1b8' },
   brute: { dim: '#120404', title: '#ff4a3a', ring: '#ffb09a' },
+  guardian: { dim: '#070a04', title: '#ffd85a', ring: '#fff3c0' },
+  naga: { dim: '#02101a', title: '#7ff0ff', ring: '#e6fbff' },
 };

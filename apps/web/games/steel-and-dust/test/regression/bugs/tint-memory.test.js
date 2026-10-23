@@ -56,6 +56,7 @@ describe('tinted sprites', () => {
     const tinted = created.slice(before);
     // past 64 copies the cache lends the canvas it evicts instead of making a new one
     expect(tinted.length).toBeGreaterThanOrEqual(Math.min(raiders.length * TINTS.length, 64));
-    expect(pixels(tinted)).toBeLessThan(1_500_000);
+    // a few frames, the Naga Raja's half as big again as the others; one sheet alone is over 7 million
+    expect(pixels(tinted)).toBeLessThan(2_000_000);
   });
 });

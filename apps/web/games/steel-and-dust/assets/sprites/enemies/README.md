@@ -1,7 +1,7 @@
 # Enemy sprites
 
-Thirty-one enemies. Twenty-nine were designed and animated with PixelLab; the two temple bosses are
-recolors of two of them (below). The first sixteen came from one batch of 64×64 side-view concepts
+Thirty-one enemies. Twenty-nine were designed and animated with PixelLab; the two temple bosses
+were drawn new by an image model (Boss kits, below), having first been recolors of two of them. The first sixteen came from one batch of 64×64 side-view concepts
 (`concepts/enemies/` at the repo root, `01` to `16`), and their three bosses were redrawn at 96×96
 first. The thirteen added with the missions (`17` to `29`: seven bosses at 96×96, six raiders at
 64×64) were drawn with Create Image (Pro), styled after the first batch.
@@ -29,16 +29,6 @@ Regular enemies use 128×80 frames with the feet at x=64, y=76; bosses use 192×
 x=96, y=108. Hit splashes and flashes the model painted onto hurt and knock-out frames were removed.
 Where a generated knock-out landed early or late, its frames were picked to fit the 1-4 / 5-8 split.
 
-The two bosses of the temple roads are palette swaps of finished sheets, so they keep every frame,
-the strips and the strike frames of their source. A short Python (PIL) script rewrote each indexed
-sheet's palette, mapping every entry by hue band and lightness onto a new ramp, so the shading
-ramps keep their order and the outlines, blades and transparency stay as they were:
-
-| Sheet          | From           | Recolor                                                                                                                                                        |
-| -------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `naga.png`     | `cobra.png`    | Naga Raja: green scales to deep jade and emerald with turquoise highlights, the rust-red hood to gold over dark bronze, a richer gold belly, a turquoise slash |
-| `guardian.png` | `colossus.png` | Bayon Guardian: rust to cool grey-green sandstone, a few speckled rust shades to moss, the bright rust highlights and the red eye to a warm gold glow          |
-
 ## Boss kits
 
 A boss with a kit of its own (`docs/boss-kits.md`) has more rows under the seven above, one per move
@@ -63,4 +53,6 @@ into the sheet's own palette.
 | `djinn.png` | his `ko` and `slam` rows redrawn, his first sheet's being cut off at its edges (his palette was full, so colors in his old rows less than 5 levels apart were merged to make room); `thunderFist` 8 (fists crackling, a punch trailing lightning), `dustDevil` 8 (whips sand round himself, pushes it out), `eyeOfStorm` 12 (raises his arms into a storm, drives lightning down) |
 | `furnace.png` | his `attack` (swipe), `ko` and `slam` rows redrawn too, his first sheet's being cut off at its edges (the `ko` row's last lying frame is used twice); `fireFlail` 10 (whirls the flail overhead, sweeps it along the floor), `slagPot` 8 (lifts a pot of slag over his head, hurls it; the flying pot was keyed out, it is `fx/slag.png`), `meltdown` 10 (opens the chest furnace, fires, blazes between lances, then red hot and cooling; the image's later beam frames were drawn over each other's bodies, so only the first firing frame is kept, its flame trimmed to a ragged tip, the blazing frame is used twice and the lances are `fx/beam.png`) |
 | `pharaoh.png` | `mirage` 9 (raises the staff, dissolves into a spiral of gold sand, steps out of it crouched, stands; the copies pop on its frames 3-5), `scarabCarpet` 8 (raises the staff, thrusts it low, the orb pulsing; the scarabs are `fx/scarab.png`), `curseOfSun` 12 (raises the staff in gold ribbons, the sun over it pulsing, 4-7 a loop, then points the orb at the hero) |
+| `guardian.png` | all ten rows his own, drawn new (a mossy four-faced temple golem with gold veins), in 256×160 frames: the seven shared rows (his `attack` a straight punch, his `slam` both fists into the road) and `stoneGaze` 8 (eyes kindling and flaring), `figRoots` 8 (fists into the ground, gold-veined roots bursting round him), `fourFaces` 12 (raises his arms, glows gold, 4-5 a loop, prays, stands; frame 2 unused, its hand drawn hidden), `crumble` 8 (falls to rubble; played back to reform). Folded into one 255-color palette (most colors moved under 10 levels) |
+| `naga.png` | drawn new, not recolored, and half as fine again as the other sheets (`density` 1.5, so she stays sharp drawn big): all ten rows are hers, in 384×240 frames with the feet at x = 192, y = 236, each strip shrunk from the source images so its stance stands as tall as her idle (129 px) and laid over the frame before by its coil. Her `attack` (slash; the arc is in frame 4) and `slam` rows were redrawn body-only; `tidalCoil` 9 (leans back, rears up, crashes her coil flat, rises), `sevenHeads` 8 (fans her hoods, strikes forward in frames 4 and 5, in turn; in those two frames her face turns left), `rainbowNaga` 12 (raises her empty hand, rises with both arms up, 4-7 a loop, points her dagger, sags); the water, the orb and the spirits are `fx/` strips |
 | `queen.png` | `burrow` 12 (digs in until only the stinger shows, 0-7; then her mound tunnelling, a loop, 8-11), `emerge` 8 (bursts up, stinger stabbing straight up), `tailSting` 9 (stabs over her head), `hiveSwarm` 12 (rears, shrieks, tail glowing with embers, slams the pincers down) |

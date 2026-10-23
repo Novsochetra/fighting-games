@@ -73,6 +73,17 @@ describe('live sounds', () => {
         'parry',
         'axeWhirl',
         'cleave',
+        'stoneGaze',
+        'goldPillar',
+        'roots',
+        'faceRise',
+        'faceBeam',
+        'crumble',
+        'reform',
+        'tide',
+        'splash',
+        'nagaHiss',
+        'rainbow',
       ].sort(),
     );
   });

@@ -121,6 +121,19 @@ describe('move tables', () => {
       'executionersRound',
       'roundBack',
       'roundCleave',
+      'stoneGaze',
+      'stoneGlare',
+      'figRoots',
+      'figThicket',
+      'fourFaces',
+      'crumble',
+      'serpentSlash',
+      'tailSlam',
+      'tidalCoil',
+      'tidalCoils',
+      'sevenHeads',
+      'rainbowNaga',
+      'nagaSpent',
     ]);
   });
 

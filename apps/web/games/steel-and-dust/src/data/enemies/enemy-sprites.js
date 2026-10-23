@@ -6,6 +6,9 @@ const TALL_BOSS = { frameWidth: 192, frameHeight: 160, feetX: 96, feetY: 156 };
 const WIDE_BOSS = { frameWidth: 256, frameHeight: 112, feetX: 128, feetY: 108 };
 // a boss whose moves reach both (a sting stabbing ahead, a tail stabbing straight up) gets both
 const BIG_BOSS = { frameWidth: 256, frameHeight: 160, feetX: 128, feetY: 156 };
+// the Naga Raja's sheet is drawn half as fine again (`density`: sheet pixels per world pixel at
+// scale 1, over the usual two), so she stays sharp drawn big
+const HUGE_BOSS = { frameWidth: 384, frameHeight: 240, feetX: 192, feetY: 236, density: 1.5 };
 
 // one PNG per enemy in assets/sprites/enemies/ with a row per strip, in the order listed;
 // "attack 9/4" is a strip of 9 frames whose frame 4 holds while the hitbox is out
@@ -94,6 +97,14 @@ export const ENEMY_SPRITES = {
     `${bossStrips(5, 5)}, mirage 9, scarabCarpet 8/3, curseOfSun 12/9`,
     BIG_BOSS,
   ),
-  naga: sheet('naga.png', bossStrips(5, 5), BOSS),
-  guardian: sheet('guardian.png', bossStrips(3, 4), BOSS),
+  naga: sheet(
+    'naga.png',
+    'idle 4, walk 8, attack 9/4, hurt 4, ko 9, slam 9/5, charge 8, tidalCoil 9/5, sevenHeads 8/4, rainbowNaga 12/3',
+    HUGE_BOSS,
+  ),
+  guardian: sheet(
+    'guardian.png',
+    `${bossStrips(3, 4)}, stoneGaze 8/4, figRoots 8/3, fourFaces 12/5, crumble 8`,
+    BIG_BOSS,
+  ),
 };

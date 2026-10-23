@@ -12,11 +12,13 @@ export const TEMPLE_BOSSES = {
     material: 'shell',
     hp: 310,
     speed: 0.75,
-    range: 40,
+    range: 60,
     palette: 'brute',
     weapon: 'knife',
     voicePitch: 1.1,
-    scale: 1.9,
+    // her sheet is drawn half as fine again (`density`), so at this scale she stands sharp, about two
+    // and a quarter times the hero's height
+    scale: 1.5,
     armor: true,
     boss: true,
     guardPose: GUARD,

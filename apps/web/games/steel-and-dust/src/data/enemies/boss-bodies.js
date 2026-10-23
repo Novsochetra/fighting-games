@@ -19,7 +19,11 @@ export const BOSS_BODIES = {
     reach: { swipe: [2, -29, 42, 29], slam: [0, -28, 27, 28] },
   },
   colossus: COLOSSUS,
-  guardian: COLOSSUS,
+  // his punch lands at his own chest height, over a standing hero: it swats jumpers
+  guardian: {
+    hurtShape: [16, 43, 33, 43],
+    reach: { swipe: [4, -33, 37, 15], slam: [0, -30, 25, 30], charge: [2, -38, 20, 34] },
+  },
   ironhorn: {
     hurtShape: [11, 31, 20, 31],
     reach: { swipe: [2, -36, 36, 36], slam: [0, -44, 37, 44] },
@@ -28,9 +32,10 @@ export const BOSS_BODIES = {
     ...SERPENT,
     reach: { swipe: [2, -51, 40, 50], slam: [0, -30, 26, 30] },
   },
+  // her own sheet, drawn half as fine again: her coil and the fan of hoods round her trunk
   naga: {
-    ...SERPENT,
-    reach: { swipe: [2, -51, 40, 50], slam: [0, -50, 34, 50], charge: [2, -38, 42, 38] },
+    hurtShape: [10, 41, 21, 41],
+    reach: { swipe: [5, -39, 26, 39], slam: [0, -24, 18, 24] },
   },
   // her humanoid body stands over her feet and her scorpion's body runs back from them
   queen: {

@@ -149,6 +149,30 @@ export const SCENARIOS = {
     spawnBossAt: 30,
     scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
   },
+  // the Bayon Guardian at the end of the game: his stomping walk, the Stone Gaze and the Fig Roots,
+  // crumbling and reforming at half health, and below 40% the Four Faces
+  guardian: {
+    mission: 11,
+    boss: 'guardian',
+    seed: 12,
+    ticks: 2700,
+    sampleEvery: 30,
+    renderEvery: 120,
+    spawnBossAt: 30,
+    scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'] },
+  },
+  // the Naga Raja at Angkor Wat: her glides, the Tidal Coil (in pairs below half health), the Seven
+  // Heads and, below 40%, the Rainbow Naga and the spent sag after it
+  naga: {
+    mission: 10,
+    boss: 'naga',
+    seed: 20,
+    ticks: 4800,
+    sampleEvery: 30,
+    renderEvery: 120,
+    spawnBossAt: 30,
+    scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
+  },
   // the other Shades: their own fighting style on every weapon and their own ultimate
   firefly: {
     hero: 'firefly',

@@ -3,6 +3,7 @@ import { FX_COLORS } from '../../art/fx-colors.js';
 import { FX_SPRITES } from '../../data/fx-sprites.js';
 import { point } from '../painter.js';
 import { drawBolt, drawBomb, drawFire, drawSand, drawVenom } from './enemy-shots.js';
+import { drawPillarMark, drawRootMark } from './bayon-hazards.js';
 import { BOSS_HAZARD_DRAWERS } from './boss-hazards.js';
 import { drawFxFrame } from './fx-sheets.js';
 import { drawLandingShadow } from './rock-hazards.js';
@@ -97,9 +98,14 @@ const DRAW_SHOT = {
 };
 
 // what lies flat on the road is drawn under the fighters' feet
-const ON_GROUND = new Set(['puddle', 'pounceMark', 'lavaPool', 'canopic']);
+const ON_GROUND = new Set(['puddle', 'pounceMark', 'lavaPool', 'canopic', 'stoneFace']);
 // what strikes from above has its spot marked on the road under the fighters, and itself over them
-const GROUND_MARK = { stormStrike: drawStrikeMark };
+const GROUND_MARK = {
+  stormStrike: drawStrikeMark,
+  serpentRise: drawStrikeMark,
+  gazePillar: drawPillarMark,
+  figRoot: drawRootMark,
+};
 
 export function drawProjectiles(painter, projectiles, fxSheets) {
   for (const shot of projectiles) {

@@ -1,5 +1,6 @@
 import { dash, startCharge, startMove, startSquat } from '../../fighters/actions.js';
 import { dropThrough } from '../../fighters/terrain-motion.js';
+import { stoneDrag } from '../../summons/stone-skin.js';
 import { consumeBuffer, dashDirection, faceOrAim } from './controls.js';
 import { pickGroundMove } from './pick-move.js';
 
@@ -35,7 +36,7 @@ export function thinkGrounded(game, player, { buffer, direction }) {
   }
   if (direction) {
     player.facing = direction;
-    player.vx = direction * 1.55;
+    player.vx = direction * 1.55 * stoneDrag(player);
     player.state = 'walk';
     player.walkDirection = 1;
   } else {

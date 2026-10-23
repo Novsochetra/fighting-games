@@ -20,23 +20,29 @@ describe('the enemy sprite sheets', () => {
       }
     }
   });
+});
 
-  // the source sheets may since have grown taller frames and rows of their own moves
-  it('draw the temple bosses frame for frame from the strips of the sheets they were recolored from', () => {
-    for (const [boss, source] of [
-      ['naga', 'cobra'],
-      ['guardian', 'colossus'],
-    ]) {
-      const { file, strips } = ENEMY_SPRITES[boss];
-      expect(file, boss).not.toBe(ENEMY_SPRITES[source].file);
-      for (const [name, strip] of Object.entries(strips)) {
-        const { frames, strike } = ENEMY_SPRITES[source].strips[name];
-        expect({ frames: strip.frames, strike: strip.strike }, `${boss} ${name}`).toEqual({
-          frames,
-          strike,
-        });
-      }
-    }
+describe('the Naga Raja', () => {
+  // drawn new, not recolored from the Cobra Matriarch, and half as big again as the other bosses:
+  // her hoods and crown reach high and her coil and slash far ahead
+  it('has a sheet of her own, with a row for each move of her own', () => {
+    const naga = ENEMY_SPRITES.naga;
+    expect({ width: naga.frameWidth, height: naga.frameHeight }).toEqual({
+      width: 384,
+      height: 240,
+    });
+    expect(Object.keys(naga.strips)).toEqual([
+      'idle',
+      'walk',
+      'attack',
+      'hurt',
+      'ko',
+      'slam',
+      'charge',
+      'tidalCoil',
+      'sevenHeads',
+      'rainbowNaga',
+    ]);
   });
 });
 

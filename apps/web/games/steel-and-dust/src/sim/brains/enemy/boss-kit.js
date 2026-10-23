@@ -38,6 +38,17 @@ function canUse(game, skill, { boss, state, distance }) {
   );
 }
 
+// a boss whose phase two opens with a move of its own (crumbling and reforming) plays it once, as
+// soon as it is free after falling below the line
+function tryOpener(game, boss, { kit, state }) {
+  const opener = kit.phaseTwo?.opener;
+  if (!opener || state.opened || healthShare(boss) > kit.phaseTwo.below) {
+    return false;
+  }
+  state.opened = true;
+  return startMove(game, boss, opener);
+}
+
 // a mid-boss met on a later road fights with its skills but keeps its ultimate for its own road
 function tryUltimate(game, boss, { kit, state }) {
   const ultimate = kit.ultimate;
@@ -93,6 +104,9 @@ export function thinkKitBoss(game, boss, { kit, distance }) {
   const state = kitState(boss);
   const phase = phaseOf(boss, kit);
   const player = game.player;
+  if (tryOpener(game, boss, { kit, state })) {
+    return;
+  }
   if (state.chain && player.state !== 'down' && player.state !== 'getup') {
     continueChain(game, boss, state);
     return;

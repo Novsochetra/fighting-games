@@ -7,8 +7,9 @@ export function isBossWindingUp(fighter) {
   );
 }
 
-// the last frames of a raider's wind-up blink red, but not a boss already sinking out of sight, nor
-// one raising a guard: its gold glint is the tell (guard-counter.js)
+// the last frames of a raider's wind-up blink red, but not a boss already sinking out of sight or
+// falling to rubble, which is no blow, nor one raising a guard: its gold glint is the tell
+// (guard-counter.js)
 export function isTelegraphing(fighter, tickCount) {
   const move = fighter.move;
   const windingUp =
@@ -17,6 +18,7 @@ export function isTelegraphing(fighter, tickCount) {
     windingUp &&
     !move.underground &&
     !move.guard &&
+    !move.collapseAt &&
     move.startup - fighter.moveTime <= 10 &&
     Boolean((tickCount >> 1) & 1)
   );
