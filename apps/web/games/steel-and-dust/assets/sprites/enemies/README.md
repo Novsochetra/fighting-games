@@ -26,7 +26,20 @@ the feet position and each strip's row, frame count and strike frame:
 | `charge` | 8      | bosses: a running loop                                               |
 
 Regular enemies use 128×80 frames with the feet at x=64, y=76; bosses use 192×112 with the feet at
-x=96, y=108. Hit splashes and flashes the model painted onto hurt and knock-out frames were removed.
+x=96, y=108.
+
+## Packed sheets
+
+The game does not load these grid sheets: most of every cell is empty, and a browser keeps every
+pixel of a sheet it draws, so the grid sheets would take 251 MB once unpacked (the Naga Raja's
+alone 42 MB). It loads `packed/`, where each frame is cut to its paint with a clear pixel round it
+and identical frames are kept once, in the sheet's own palette (40 MB for all 31). After changing a
+sheet here, run
+
+    python3 tools/pack_enemy_sheets.py
+
+which rewrites `packed/` and `src/data/enemies/atlas/` (where each piece sits in its cell);
+`test/unit/data/enemy-atlas.test.js` fails until you do. Hit splashes and flashes the model painted onto hurt and knock-out frames were removed.
 Where a generated knock-out landed early or late, its frames were picked to fit the 1-4 / 5-8 split.
 
 ## Boss kits

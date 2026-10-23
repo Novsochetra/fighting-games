@@ -200,6 +200,16 @@ Fighters are drawn from PixelLab sprite sheets in `assets/sprites/`: one folder 
 Shade (`src/data/heroes.js`, all four loaded at the start) and one sheet per enemy
 (`src/data/enemies/enemy-sprites.js`). `src/sim/hero-animation.js` and `src/sim/enemy-animation.js`
 pick the frame for a fighter's state; colors that belong to a Shade live in `src/art/hero-themes.js`.
+An enemy's grid sheet (a row per strip, a cell per frame) is the source its art is drawn in, but a
+cell is as big as the enemy's widest move and a browser keeps every pixel of a sheet it draws, so
+the game loads each sheet packed: `tools/pack_enemy_sheets.py` cuts every frame to its paint with a
+clear pixel round it, packs the pieces into `assets/sprites/enemies/packed/` in the sheet's own
+palette and writes where each piece sat in its cell to `src/data/enemies/atlas/` (the 31 sheets
+take 40 MB unpacked instead of 251 MB). `drawEnemyFrame` lands each piece on the screen pixels its
+cell put it on, its edges drawn in to whole screen pixels and a centre exactly between two sheet
+pixels taking the first (`TIE_BREAK`). Run the tool again after changing a grid sheet:
+`test/unit/data/enemy-atlas.test.js` checks every packed piece against its cell, and
+`test/regression/bugs/enemy-sheet-memory.test.js` keeps the loaded sheets small.
 The hero runs wherever it goes on foot (`src/sim/brains/player/run.js`): a held direction sets off
 at a walk's pace and picks up to `RUN_SPEED`, and a ground dash held its way runs straight on, in the
 hero's run strip, kicking dust up behind each stride (`src/sim/fighters/motion-effects.js`). Attacks

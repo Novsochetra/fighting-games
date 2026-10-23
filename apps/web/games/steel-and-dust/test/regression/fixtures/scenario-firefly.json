@@ -8376,21 +8376,21 @@
    "tick": 240,
    "frame": {
     "calls": 2590,
-    "digest": "91ffecac47fd1aef"
+    "digest": "87faa76a0fb0d8d6"
    }
   },
   {
    "tick": 480,
    "frame": {
     "calls": 2372,
-    "digest": "588d0c8c30104244"
+    "digest": "572e6062fa972ef5"
    }
   },
   {
    "tick": 720,
    "frame": {
     "calls": 3012,
-    "digest": "434bb7ea9342d1d5"
+    "digest": "5ec3067ed51f47e8"
    }
   },
   {
@@ -8404,14 +8404,14 @@
    "tick": 1200,
    "frame": {
     "calls": 3009,
-    "digest": "2a6cee8c3addafb8"
+    "digest": "d75825eda136445c"
    }
   },
   {
    "tick": 1440,
    "frame": {
     "calls": 3417,
-    "digest": "7d635bf837ed94f2"
+    "digest": "58ae605d90be101d"
    }
   },
   {
