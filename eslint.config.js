@@ -38,7 +38,8 @@ const comments = {
 };
 
 export default [
-  { ignores: ['node_modules/', 'dist/', 'coverage/', '**/assets/**'] },
+  // .claude/ holds Claude Code's own worktrees, copies of this repo it lints on its own
+  { ignores: ['node_modules/', 'dist/', 'coverage/', '**/assets/**', '.claude/'] },
   js.configs.recommended,
   prettier,
   {

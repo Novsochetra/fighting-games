@@ -43,6 +43,15 @@ folded into one 255-color palette (no color moved more than 9 levels). They are 
 background, cut into frames, shrunk to the boss's idle height, stood on the feet line and folded
 into the sheet's own palette.
 
+All twelve boss sheets are then finished as pixel art, so they sit beside the raiders: a row the
+image model drew came out a shrunk painting (some 250 colors, over half its pixels matching no
+neighbour). Rows already drawn as pixel art (a few dozen colors, few lone pixels) are kept as they
+are and their colors seed a small sheet palette; the other rows are mapped onto it (14 to 40 more
+colors picked by k-means in Lab), grey left from a background is taken into the glow round it,
+lone pixels close in color to their neighbours are merged into flat clusters, and the body gets a
+one-pixel dark outline (not the glows, sparks or thin streaks round it). A regression test keeps
+every boss sheet under 100 colors with under 0.3 of its pixels alone.
+
 | Sheet      | Rows added                                                                                       |
 | ---------- | ------------------------------------------------------------------------------------------------ |
 | `khan.png` | his `ko` and `slam` rows redrawn, his first sheet's being cut off at its edges; `warHorn` 8 (blows a ram's horn), `crescentDash` 10 (crouch, lunge, slash; redrawn, its blade was cut off at the right), `tempest` 12 (three low swings) |

@@ -79,5 +79,12 @@ export function readPngAlpha(path) {
     const start = colorType === 6 ? at : pixels[at] * 3;
     return [source[start], source[start + 1], source[start + 2]];
   };
-  return { width, height, alpha, rgb };
+  // the color as one number, for counting and comparing many pixels without building arrays
+  const colorKey = (x, y) => {
+    const at = (y * width + x) * bytesPerPixel;
+    const source = colorType === 6 ? pixels : chunks.PLTE;
+    const start = colorType === 6 ? at : pixels[at] * 3;
+    return (source[start] << 16) | (source[start + 1] << 8) | source[start + 2];
+  };
+  return { width, height, alpha, rgb, colorKey };
 }

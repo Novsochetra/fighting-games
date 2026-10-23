@@ -4,6 +4,12 @@ The Shades' signature and ultimate effects, made with PixelLab, and the bosses' 
 at the hero sprites' resolution; `src/data/fx-sprites.js` gives each strip's frame size, frame count,
 ticks per frame and anchor (the pixel that sits on the ground, or on the effect's centre).
 
+The bosses' effects are pixel art too: the ones an image model drew, shrunk to thousands of colors,
+were each mapped onto a 16-color palette of their own, their noise merged into flat clusters and
+the solid shapes in them outlined (the Bayon Guardian's pillar, roots and rubble, already drawn by
+hand, and the Cobra's flat puddle were kept). A regression test keeps every boss effect under 32
+colors.
+
 | Strip         | Frames  | Used for                                            | Made with                                                                     |
 | ------------- | ------- | --------------------------------------------------- | ----------------------------------------------------------------------------- |
 | `thorns.png`  | 14 × 93×131  | Moss: finisher brambles, Thornwood Requiem      | VFX workbench, "Thornwood Eruption" (`c14f520c-1ef0-4a69-bf56-a40ccb7cff79`)    |
