@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { playHitSound } from '../../../src/sim/combat/hit-sound.js';
+import { playHitSound, playUltStrike } from '../../../src/sim/combat/hit-sound.js';
 
 function gameWith(heroState) {
   const played = [];
@@ -41,5 +41,15 @@ describe('playHitSound', () => {
     const { game, played } = gameWith('ult');
     playHitSound(game, hitBy(raider), 4);
     expect(played).toEqual([{ key: 'blade', big: false }]);
+  });
+
+  it('playUltStrike bursts a thrown blow, big for a heavy one, landed or not', () => {
+    const { game, played } = gameWith('ult');
+    playUltStrike(game, { hitstop: 3 }, 50);
+    playUltStrike(game, { hitstop: 14 }, 60);
+    expect(played).toEqual([
+      { key: 'ultHit', big: false },
+      { key: 'ultHit', big: true },
+    ]);
   });
 });

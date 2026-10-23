@@ -3,6 +3,7 @@ import { ULT_SPRITES } from '../../data/hero-sprites.js';
 import { ABSOLUTE_ZERO } from '../../data/ultimates/absolute-zero.js';
 import { clamp } from '../../lib/math.js';
 import { applyHit } from '../combat/apply-hit.js';
+import { playUltStrike } from '../combat/hit-sound.js';
 import { freezeTarget } from '../combat/freeze.js';
 import { arenaBounds } from '../fighters/arena-bounds.js';
 import { themeOf } from '../fighters/hero-colors.js';
@@ -42,6 +43,7 @@ function blinkTo(game, player, target, side) {
 
 // each cut lands in passing and leaves the raider frozen where it stood
 function iaiCut(game, player, strike) {
+  playUltStrike(game, ABSOLUTE_ZERO.cut, player.x);
   const targets = ultTargets(game);
   player.ultFrame = ULT_SPRITES[strike % ULT_SPRITES.length];
   if (!targets.length) {

@@ -27,3 +27,9 @@ export function playHitSound(game, hit, hitstop) {
     rate: hitPitch(game, hit.attacker),
   });
 }
+
+// an ultimate's own blow bursts as it is thrown, whether or not anything is there to take it; a blow
+// that lands plays the same burst at the same moment, which the sound bank merges into one
+export function playUltStrike(game, move, x) {
+  game.io.sfx('ultHit', move.hitstop >= 9, { x });
+}

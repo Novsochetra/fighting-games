@@ -2,6 +2,7 @@ import { FX_COLORS } from '../../art/fx-colors.js';
 import { POUNDING_LION } from '../../data/ultimates/pounding-lion.js';
 import { clamp, randomBetween } from '../../lib/math.js';
 import { applyHit } from '../combat/apply-hit.js';
+import { playUltStrike } from '../combat/hit-sound.js';
 import { arenaBounds } from '../fighters/arena-bounds.js';
 import { addSparks } from '../fx/particles.js';
 import { groundAt } from '../stage/terrain.js';
@@ -92,6 +93,7 @@ function strike(game, player, index) {
   const target = spot.target;
   const hitY = target ? target.y - 18 * target.scale : player.y - 22;
   const hitX = target ? target.x : player.x + player.facing * 18;
+  playUltStrike(game, move, hitX);
   if (target) {
     applyHit(game, { attacker: player, target, move, x: hitX, y: hitY });
   }

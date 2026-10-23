@@ -1,5 +1,6 @@
 import { VIEW_WIDTH } from '../../config.js';
 import { applyHit } from '../combat/apply-hit.js';
+import { playUltStrike } from '../combat/hit-sound.js';
 import { shake } from '../fx/camera-fx.js';
 
 const POSE_LAST_FRAME = 8;
@@ -24,6 +25,7 @@ export function poseFrame(time, ticks, first = 0) {
 }
 
 export function hitEveryTarget(game, player, move) {
+  playUltStrike(game, move, player.x);
   const facing = player.facing;
   for (const target of ultTargets(game)) {
     player.facing = target.x >= player.x ? 1 : -1;
