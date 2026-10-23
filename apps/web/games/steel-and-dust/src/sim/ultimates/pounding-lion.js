@@ -31,7 +31,6 @@ function slam(game, player) {
   addSparks(game, { x: fist.x, y: fist.y - 4, count: 18, color: FX_COLORS.lionGold, speed: 4.4 });
   addDust(game, { ...fist, count: 8 });
   shake(game, 5, 16);
-  game.io.sfx('heavy');
 }
 
 // while he stands in his stance, gold rises off him into the lions

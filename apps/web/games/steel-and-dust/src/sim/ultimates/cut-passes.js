@@ -1,6 +1,7 @@
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { THOUSAND_CUTS } from '../../data/ultimates/thousand-cuts.js';
 import { clamp, randomBetween } from '../../lib/math.js';
+import { playUltStrike } from '../combat/hit-sound.js';
 import { arenaBounds } from '../fighters/arena-bounds.js';
 import { themeOf } from '../fighters/hero-colors.js';
 import { groundAt } from '../stage/terrain.js';
@@ -87,6 +88,7 @@ function cutThrough(game, player, index) {
   const [strip] = PASSES[index].sprite;
   const angle = CUT_ANGLES[strip] ?? 0;
   game.io.sfx('swingSword', true, { x: player.x });
+  playUltStrike(game, CUT, player.x);
   if (!target) {
     return;
   }
