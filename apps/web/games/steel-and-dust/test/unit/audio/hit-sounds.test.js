@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { SOUND_DEFINITIONS } from '../../../src/audio/bank/definitions.js';
 import { BIG, hitPair, NORMAL } from '../../../src/audio/bank/hit-size.js';
+import { GROUP_CAPS } from '../../../src/audio/bank/voice-pool.js';
 
 describe('hitPair', () => {
   it('makes a hit and its big version, longer and lower, from one builder', () => {
@@ -27,5 +28,13 @@ describe('the weapon hits in the bank', () => {
       expect(SOUND_DEFINITIONS[key].group).toBe('hit');
       expect(SOUND_DEFINITIONS[`${key}Big`].group).toBe('hit');
     }
+  });
+
+  it('plays the ULT press in a group of its own, above the hits, and the ultimate hits as hits', () => {
+    expect(SOUND_DEFINITIONS.ult).toMatchObject({ group: 'ult', priority: 3 });
+    expect(GROUP_CAPS.ult).toBe(2);
+    expect(SOUND_DEFINITIONS.ult.priority).toBeGreaterThan(SOUND_DEFINITIONS.blade.priority);
+    expect(SOUND_DEFINITIONS.ultHit).toMatchObject({ group: 'hit', takes: 4 });
+    expect(SOUND_DEFINITIONS.ultHitBig.level).toBeGreaterThan(SOUND_DEFINITIONS.ultHit.level);
   });
 });

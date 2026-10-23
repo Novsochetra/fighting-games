@@ -498,5 +498,51 @@
    "length": 55125,
    "digest": "7e5df907cc61b810"
   }
+ ],
+ "ult": [
+  {
+   "length": 19845,
+   "digest": "c90890fb40bbe672"
+  },
+  {
+   "length": 19845,
+   "digest": "7478c9c08fe8a4b5"
+  }
+ ],
+ "ultHit": [
+  {
+   "length": 28665,
+   "digest": "867d75fd6951aa77"
+  },
+  {
+   "length": 28665,
+   "digest": "278225bf875e69c6"
+  },
+  {
+   "length": 28665,
+   "digest": "4a0aacb158c98076"
+  },
+  {
+   "length": 28665,
+   "digest": "d3e09f6a55b91d68"
+  }
+ ],
+ "ultHitBig": [
+  {
+   "length": 38698,
+   "digest": "66a80ce567aea11a"
+  },
+  {
+   "length": 38698,
+   "digest": "6a573193f41dfd6f"
+  },
+  {
+   "length": 38698,
+   "digest": "9d08a9fbfef5f5ce"
+  },
+  {
+   "length": 38698,
+   "digest": "259f61cd1a30bde0"
+  }
  ]
 }

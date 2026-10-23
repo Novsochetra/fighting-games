@@ -79,6 +79,28 @@ describe('audio, from the first tap to a fight with music', () => {
     expect(nodesOfKind(context, 'stereoPanner')).toHaveLength(3);
   });
 
+  it('plays the ULT press and the ultimate hits from the bank, beside a full group of hits', () => {
+    const game = gameState();
+    game.mode = 'play';
+    const audio = createAudio(game);
+    audio.unlock();
+    vi.runAllTimers();
+    const [context] = contexts;
+    context.currentTime = 2;
+    for (const hit of ['blade', 'heavy', 'blunt', 'pierce']) {
+      audio.sfx(hit, false, { x: 120 });
+    }
+    const before = nodesOfKind(context, 'bufferSource').length;
+    audio.sfx('ult');
+    audio.sfx('ultHit', true, { x: 140 });
+    expect(audio.debugState().voices).toBe(5);
+    const played = nodesOfKind(context, 'bufferSource').slice(before);
+    expect(played).toHaveLength(2);
+    for (const source of played) {
+      expect(reaches(source, context.destination)).toBe(true);
+    }
+  });
+
   it('ducks and restores the music as the game pauses and resumes, and mutes everything', () => {
     const game = gameState();
     game.mode = 'play';
