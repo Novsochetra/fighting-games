@@ -1,6 +1,6 @@
 # Shade Assassin: Draw Things prompt
 
-One prompt for Draw Things that draws the new Shade's base pose: standing, facing right, sword held
+Prompts for Draw Things that draw the new Shade's base pose: standing, facing right, sword held
 low, at the same size as the other five Shades. The game's animation strips are made from this one
 frame afterwards, the way the Ember Shade's were made from its concept sprite.
 
@@ -20,8 +20,35 @@ Shrinking the 1024 × 640 picture 8× lands it exactly on the game's 128 × 80 f
   drawn in).
 - `init-silhouette.png`: the same canvas with only the Moss Shade's silhouette on flat green. Load
   it as the starting image, so the assassin comes out in the right place at the right size.
+- `shade-reference.png`: the Blue Shade's idle frame at 8× on flat green, for a model that takes
+  reference images (FLUX.2 in the Moodboard): it copies the size, place and pixel style from it.
 
-## Draw Things settings
+## FLUX.2 [klein] in Draw Things
+
+FLUX.2 redraws a reference image well, so give it a Shade at the right size and ask for a new one.
+
+1. **Model:** FLUX.2 [klein] 4B, then **Try recommended settings** under it.
+2. **LoRA:** Disabled.
+3. **Image Size:** 1024 × 640. If that exact size is not offered, the nearest landscape size will do:
+   the cut scales by body height.
+4. **Strength:** Text to Image, 100 %.
+5. **Moodboard:** add `shade-reference.png`.
+6. **Negative prompt:** leave it empty; the distilled FLUX models do not use it.
+7. Paste the prompt below, set the count on the generate button to 4 and generate.
+
+```
+Redraw the character in the reference image as a new hero, the Shade Assassin. Keep exactly the same canvas, the same pixel-art style and pixel size, the same side view facing right, the same pose, the same position and the same height: the top of the hood and the soles of the feet stay exactly where they are, and the flat green background stays exactly the same.
+
+Turn the character into a slim, agile shadow assassin: a deep hood over a pitch-black faceless face with two small glowing violet eyes, a dark cloth mask over the lower face, tight wrapped charcoal leather armor with thin glowing violet trim, bandage-wrapped forearms and shins, soft dark boots. Replace the long cape with a short tattered black cloak and two long scarf tails trailing behind. Replace the sword with one short straight sword held low in the same hand, pointing forward and down, its edge glowing violet with a pale lilac core.
+
+Use only these colors on the character: near-black #0e0b12, deep plum #231a2e, dusk purple #3b2a4d, muted mauve #5c4470, dull grey-violet #6e6478 for the bandages, violet glow #9b5cff and pale lilac #e2ccff. No green and no blue on the character. Hard square pixels, a dark outline, flat shading, no blur, no anti-aliasing, no ground, no shadow, no text.
+```
+
+If it copies the Blue Shade or ignores the reference, empty the Moodboard, drag
+`init-silhouette.png` onto the canvas, switch Strength to **Image to Image at 75 %** and use the
+full-sentence prompt below instead.
+
+## Draw Things settings for SDXL or FLUX.1
 
 - **Image size:** 1024 × 640.
 - **Model:** an SDXL model with a pixel-art LoRA (for example Pixel Art XL, at 0.8 to 1.0), or
@@ -50,7 +77,7 @@ front view, three-quarter view, facing left, facing the viewer, back view, turna
 ```
 A pixel art game sprite of a hooded shadow assassin for a 16-bit side-scrolling beat 'em up. One character only, in a strict side view, facing right, full body, standing in a low ready stance with knees bent and both feet flat on the ground.
 
-Look: slim and agile. A deep hood hides a pitch-black, faceless face with two small glowing violet eyes; a dark cloth mask covers the lower face. Tight wrapped charcoal leather armor with thin glowing violet trim, bandage-wrapped forearms and shins, soft dark boots. A short tattered black cloak and two long scarf tails trail behind. One short straight sword is held low in the front hand, pointing forward and down, its edge glowing violet. Colors: near-black and deep plum with violet glow accents.
+Look: slim and agile. A deep hood hides a pitch-black, faceless face with two small glowing violet eyes; a dark cloth mask covers the lower face. Tight wrapped charcoal leather armor with thin glowing violet trim, bandage-wrapped forearms and shins, soft dark boots. A short tattered black cloak and two long scarf tails trail behind. One short straight sword is held low in the front hand, pointing forward and down, its edge glowing violet with a pale lilac core. Colors: near-black #0e0b12, deep plum #231a2e, dusk purple #3b2a4d, muted mauve #5c4470, dull grey-violet #6e6478 bandages, violet glow #9b5cff and pale lilac #e2ccff.
 
 Style: crisp 1-pixel dark outline, flat cel shading, a small limited palette, hard pixel edges, no blur, no anti-aliasing.
 
