@@ -1,5 +1,5 @@
 // how many bank sounds of each group may play at once, and in all
-export const GROUP_CAPS = { swing: 3, hit: 4, movement: 3, crash: 4, voice: 3 };
+export const GROUP_CAPS = { swing: 3, hit: 4, movement: 3, crash: 4, voice: 3, ult: 2 };
 export const MAX_VOICES = 14;
 const MERGE_SECONDS = 0.035;
 
