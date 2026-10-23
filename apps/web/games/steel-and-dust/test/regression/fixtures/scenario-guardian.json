@@ -2367,9 +2367,9 @@
     }
    ],
    "world": {
-    "particles": "047f5c815be11b7d",
+    "particles": "c943a997c8519fdd",
     "effects": "9159e2da5596c9e5",
-    "floaters": "a0306b93863ae803",
+    "floaters": "91fb238f38bf0329",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "b86c02b94d8e120b",
@@ -3946,9 +3946,9 @@
     }
    ],
    "world": {
-    "particles": "400c05c3bafcd0d2",
-    "effects": "9cdb0a4d1daed34f",
-    "floaters": "ce2f7591dbadf787",
+    "particles": "a9b2e8b9e9af6bf6",
+    "effects": "610c6d41944fa460",
+    "floaters": "3b4f1aa772cceb19",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "2b6af41cfe263206",
@@ -4135,7 +4135,7 @@
    "world": {
     "particles": "e83195b7efca15a1",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "f26dcf1b60ad4213",
+    "floaters": "54344fd569fb8954",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "409527acbc4bb5cd",
@@ -5070,7 +5070,7 @@
    "world": {
     "particles": "015a5f4ecf84faf4",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "cbf6cafb2b657d54",
+    "floaters": "a2840f8d97a2765c",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "64db73376643a02c",
@@ -5816,9 +5816,9 @@
     }
    ],
    "world": {
-    "particles": "3e232773dadf4b96",
-    "effects": "4015f1f826505e71",
-    "floaters": "a178f030da9de1e8",
+    "particles": "d8e1e361f32652e1",
+    "effects": "a55a22c8d07fb3ce",
+    "floaters": "b8c0a3f56e4bc06a",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "d625d993d0e53bc0",
@@ -6005,7 +6005,7 @@
    "world": {
     "particles": "42b63364fd66c844",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "b08a4694d9a48e0a",
+    "floaters": "04faec3b88ab4b62",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "514d40538b23935d",
@@ -8225,9 +8225,9 @@
     }
    ],
    "world": {
-    "particles": "27750a70aaf82e60",
+    "particles": "0eedc195dc9f0e8b",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "c79cb7a7be26ab11",
+    "floaters": "5231de569dadadc7",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "f211237e0ecfeaa1",
@@ -8654,9 +8654,9 @@
     }
    ],
    "world": {
-    "particles": "1904b6a8da65728b",
-    "effects": "300fe7bb55f1341c",
-    "floaters": "982395ed25c83bf1",
+    "particles": "0a48fb0613a7ca16",
+    "effects": "b90ef1d555592cf3",
+    "floaters": "f1d9f40d9928b404",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "328303f92c4b1088",
     "summons": "2f2b88ce8a1c1c24",
@@ -8799,7 +8799,7 @@
    "world": {
     "particles": "da39a3ee5e6b4b0d",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "1162ed14374d53e4",
+    "floaters": "af84ca2b05070030",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "30917a8db61b600a",
     "summons": "60f555d68956f1fe",
@@ -8940,9 +8940,9 @@
     }
    ],
    "world": {
-    "particles": "40c4af59c30c903f",
-    "effects": "3a41eead0695a5e0",
-    "floaters": "fb2b491ade552709",
+    "particles": "e4d0ee0ef90d23f1",
+    "effects": "275856ba4f365a76",
+    "floaters": "d68d4131c450c30c",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "92f87989771f38b5",
     "summons": "bd12b4737c46337b",
@@ -9085,7 +9085,7 @@
    "world": {
     "particles": "1bc28cfcd328c61b",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "e7e74383eb9cd749",
+    "floaters": "05cd462440989488",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "b08ee8b1deb02713",
     "summons": "5917e9f3dcd5f5e1",
@@ -9369,9 +9369,9 @@
     }
    ],
    "world": {
-    "particles": "2451aff4daa79e76",
-    "effects": "3460782e50a03641",
-    "floaters": "c7c9c9606ff8589e",
+    "particles": "456420f8cdc086b7",
+    "effects": "8e1a1fae2f16d3a0",
+    "floaters": "ec4d3dce3ab06779",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "2fbab264f0f7dbcd",
     "summons": "77fe3669193ad950",
@@ -9514,7 +9514,7 @@
    "world": {
     "particles": "acb624f123f365f9",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "baed2cbf2f08e435",
+    "floaters": "2dcab05d001cf77b",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "22b8b77b23954910",
     "summons": "a1633a910241b649",
@@ -9665,12 +9665,12 @@
     0,
     0,
     0,
-    45,
+    43,
     0,
     7,
-    1996,
+    1994,
     10,
-    21,
+    23,
     0,
     0,
     5
@@ -9687,7 +9687,7 @@
    "player": {
     "kind": "player",
     "x": 566.2317152938327,
-    "y": 99.53999999999998,
+    "y": 91.99999999999997,
     "vx": 0,
     "vy": -1.4,
     "state": "attack",
@@ -9698,9 +9698,9 @@
     "durability": 26,
     "airborne": true,
     "move": "Air Twirl",
-    "moveTime": 12,
+    "moveTime": 10,
     "juggle": 0,
-    "invincible": 4,
+    "invincible": 6,
     "hitstop": 0,
     "token": false,
     "entering": false,
@@ -9721,7 +9721,7 @@
      "weapon": "hammer",
      "airborne": true,
      "move": null,
-     "moveTime": 241,
+     "moveTime": 239,
      "juggle": 0,
      "invincible": 0,
      "hitstop": 0,
@@ -9732,11 +9732,11 @@
     }
    ],
    "world": {
-    "particles": "05baa0b529f747a0",
-    "effects": "64b9541ba3316f1e",
-    "floaters": "50e1e09754144640",
+    "particles": "9c4b02f4ba8a6f0b",
+    "effects": "4f6597c181ead0d6",
+    "floaters": "897826e328948e61",
     "shockwaves": "da39a3ee5e6b4b0d",
-    "projectiles": "b66cc532c6b9bd43",
+    "projectiles": "0b8336b583e0589f",
     "summons": "da39a3ee5e6b4b0d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "3214007336edd393"
@@ -9764,12 +9764,12 @@
     0,
     0,
     0,
-    15,
+    13,
     0,
     17,
-    1996,
+    1994,
     0,
-    11,
+    13,
     0,
     0,
     5
@@ -9786,7 +9786,7 @@
    "player": {
     "kind": "player",
     "x": 566.2317152938327,
-    "y": 102.03999999999998,
+    "y": 94.49999999999997,
     "vx": 0,
     "vy": 1.6000000000000003,
     "state": "attack",
@@ -9797,7 +9797,7 @@
     "durability": 26,
     "airborne": true,
     "move": "Air Twirl",
-    "moveTime": 22,
+    "moveTime": 20,
     "juggle": 0,
     "invincible": 0,
     "hitstop": 0,
@@ -9820,7 +9820,7 @@
      "weapon": "hammer",
      "airborne": true,
      "move": null,
-     "moveTime": 241,
+     "moveTime": 239,
      "juggle": 0,
      "invincible": 0,
      "hitstop": 0,
@@ -9831,11 +9831,11 @@
     }
    ],
    "world": {
-    "particles": "4019277512f184e4",
+    "particles": "39a7df8abd9fe740",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "340055f4659ee5af",
+    "floaters": "2387c20524bc6d07",
     "shockwaves": "da39a3ee5e6b4b0d",
-    "projectiles": "d89390417ecde6d5",
+    "projectiles": "de9df51615c73ee6",
     "summons": "da39a3ee5e6b4b0d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "3214007336edd393"
@@ -9865,8 +9865,8 @@
     0,
     0,
     0,
-    37,
-    1996,
+    39,
+    1994,
     0,
     0,
     0,
@@ -9909,9 +9909,9 @@
     {
      "kind": "guardian",
      "x": 550.001956419519,
-     "y": 179.16,
+     "y": 177.9,
      "vx": 0,
-     "vy": -1.02,
+     "vy": -0.5,
      "state": "ko",
      "stateTime": 0,
      "hp": 0,
@@ -9919,7 +9919,7 @@
      "weapon": "hammer",
      "airborne": true,
      "move": null,
-     "moveTime": 241,
+     "moveTime": 239,
      "juggle": 0,
      "invincible": 0,
      "hitstop": 0,
@@ -9930,9 +9930,9 @@
     }
    ],
    "world": {
-    "particles": "52a37efd99337977",
+    "particles": "a9ed6ad66e7724a2",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "fc5fbbf67fa9c490",
+    "floaters": "e75e44593af647cf",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "b4c549cb6e911433",
     "summons": "f0eac794e7488cf3",
@@ -9964,8 +9964,8 @@
     0,
     0,
     0,
-    67,
-    1996,
+    69,
+    1994,
     0,
     0,
     0,
@@ -10012,13 +10012,13 @@
      "vx": 0,
      "vy": 0,
      "state": "ko",
-     "stateTime": 19,
+     "stateTime": 21,
      "hp": 0,
      "facing": 1,
      "weapon": "hammer",
      "airborne": false,
      "move": null,
-     "moveTime": 241,
+     "moveTime": 239,
      "juggle": 0,
      "invincible": 0,
      "hitstop": 0,
@@ -10031,7 +10031,7 @@
    "world": {
     "particles": "f0b18484d86d3fd9",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "527868ca7d3dee6d",
+    "floaters": "83808e8d2047daf0",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "3c49900f41c3dca7",
@@ -10063,8 +10063,8 @@
     0,
     0,
     0,
-    97,
-    1996,
+    99,
+    1994,
     0,
     0,
     0,
@@ -10111,13 +10111,13 @@
      "vx": 0,
      "vy": 0,
      "state": "ko",
-     "stateTime": 49,
+     "stateTime": 51,
      "hp": 0,
      "facing": 1,
      "weapon": "hammer",
      "airborne": false,
      "move": null,
-     "moveTime": 241,
+     "moveTime": 239,
      "juggle": 0,
      "invincible": 0,
      "hitstop": 0,
@@ -10162,8 +10162,8 @@
     0,
     0,
     0,
-    127,
-    1996,
+    129,
+    1994,
     0,
     0,
     0,
@@ -10238,8 +10238,8 @@
     0,
     0,
     0,
-    157,
-    1996,
+    159,
+    1994,
     0,
     0,
     0,
@@ -10314,8 +10314,8 @@
     0,
     0,
     0,
-    187,
-    1996,
+    189,
+    1994,
     0,
     0,
     0,
@@ -10390,8 +10390,8 @@
     0,
     0,
     0,
-    217,
-    1996,
+    219,
+    1994,
     0,
     0,
     0,
@@ -10466,8 +10466,8 @@
     0,
     0,
     0,
-    247,
-    1996,
+    249,
+    1994,
     0,
     0,
     0,
@@ -10542,8 +10542,8 @@
     0,
     0,
     0,
-    277,
-    1996,
+    279,
+    1994,
     0,
     0,
     0,
@@ -10618,8 +10618,8 @@
     0,
     0,
     0,
-    307,
-    1996,
+    309,
+    1994,
     0,
     0,
     0,
@@ -10694,8 +10694,8 @@
     0,
     0,
     0,
-    337,
-    1996,
+    339,
+    1994,
     0,
     0,
     0,
@@ -10770,8 +10770,8 @@
     0,
     0,
     0,
-    367,
-    1996,
+    369,
+    1994,
     0,
     0,
     0,
@@ -10846,8 +10846,8 @@
     0,
     0,
     0,
-    397,
-    1996,
+    399,
+    1994,
     0,
     0,
     0,
@@ -10922,8 +10922,8 @@
     0,
     0,
     0,
-    427,
-    1996,
+    429,
+    1994,
     0,
     0,
     0,
@@ -11022,7 +11022,7 @@
    "tick": 720,
    "frame": {
     "calls": 4058,
-    "digest": "24451a5164ae849e"
+    "digest": "8c1d5b5b3adb3ef1"
    }
   },
   {
@@ -11057,63 +11057,63 @@
    "tick": 1320,
    "frame": {
     "calls": 3764,
-    "digest": "48fd184aa07520d0"
+    "digest": "6da7af848b78f80b"
    }
   },
   {
    "tick": 1440,
    "frame": {
-    "calls": 5736,
-    "digest": "55c95482242ffd61"
+    "calls": 5739,
+    "digest": "4b63842953338212"
    }
   },
   {
    "tick": 1560,
    "frame": {
-    "calls": 3721,
-    "digest": "112c994b6d483e2a"
+    "calls": 4049,
+    "digest": "7b45c7c3c31c1427"
    }
   },
   {
    "tick": 1680,
    "frame": {
-    "calls": 3576,
-    "digest": "2b9ac19dfe1a4b08"
+    "calls": 3683,
+    "digest": "0eff7a91ee04a05d"
    }
   },
   {
    "tick": 1800,
    "frame": {
-    "calls": 3450,
-    "digest": "b7cb6a5febe10b19"
+    "calls": 3557,
+    "digest": "e752c07d7d3fb4dc"
    }
   },
   {
    "tick": 1920,
    "frame": {
-    "calls": 4083,
-    "digest": "363d7ea7a9a7c58e"
+    "calls": 4190,
+    "digest": "b15b80f27e04fd4f"
    }
   },
   {
    "tick": 2040,
    "frame": {
-    "calls": 4210,
-    "digest": "673726abb47b12d9"
+    "calls": 4318,
+    "digest": "7152c3bc09eab385"
    }
   },
   {
    "tick": 2160,
    "frame": {
-    "calls": 3311,
-    "digest": "0419de1c801d04a2"
+    "calls": 3418,
+    "digest": "e4bb9d239e4b09c8"
    }
   },
   {
    "tick": 2280,
    "frame": {
-    "calls": 3231,
-    "digest": "d32afeb3bc3e07b3"
+    "calls": 3324,
+    "digest": "37afceb04357414f"
    }
   },
   {

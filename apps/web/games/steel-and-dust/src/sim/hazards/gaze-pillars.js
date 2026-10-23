@@ -5,9 +5,9 @@ import { addSparks } from '../fx/particles.js';
 import { groundAt } from '../stage/terrain.js';
 
 const PILLAR_DAMAGE = 10;
-// his eyes as the gaze strip draws them flaring (frames 3-4), in his own units (body-point.js);
-// the ray leaves them
-export const GAZE_EYES = { ahead: 9, up: 39 };
+// the middle of his front eye as the gaze strip draws it flaring (frames 3-4), in his own units
+// (body-point.js); the ray leaves it
+export const GAZE_EYES = { ahead: 8.75, up: 37.25 };
 // the pillar strip burns from frame 2 to frame 5 (4 ticks a frame)
 export const PILLAR_BURNS = [8, 24];
 

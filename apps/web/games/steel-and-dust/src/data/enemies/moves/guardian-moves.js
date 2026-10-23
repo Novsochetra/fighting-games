@@ -36,8 +36,9 @@ export const GUARDIAN_MOVES = {
   stoneGlare: stoneGaze('Stone Gaze', [-64, 0, 64]),
   figRoots: figRoots('Fig Roots', false),
   figThicket: figRoots('Fig Roots', true),
-  // he raises his arms and glows gold (0-5), holds it while four faces rise at the screen's edges
-  // and breathe gold across the arena, then prays, spent (6), and stands (9-11)
+  // he raises his arms as gold climbs him from the feet (0-3), holds them up glowing while four
+  // faces rise at the screen's edges and breathe gold across the arena (4-5), lowers them into
+  // prayer as the gold drains (6-8), and stands (9-11)
   fourFaces: defineMove({
     name: 'Four Faces',
     frames: [60, 300, 110],
@@ -52,9 +53,6 @@ export const GUARDIAN_MOVES = {
       { at: 260, side: 1 },
     ],
     loopFrames: [4, 5, 12],
-    // frame 2's raised hand was drawn hidden behind the next frame's, so frame 1 holds in its place;
-    // frames 7-8 were drawn smaller and turned to the viewer, so frame 6's prayer holds instead
-    frameOrder: [0, 1, 1, 3, 4, 5, 6, 6, 6, 9, 10, 11],
     frameAt: [0, 8, 16, 28, 40, 52, 360, 376, 392, 420, 440, 456],
   }),
   // at half health he falls to rubble, out of reach while only rubble is left, and builds himself

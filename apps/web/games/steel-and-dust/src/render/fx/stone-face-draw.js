@@ -1,8 +1,8 @@
 import { COLORS } from '../../art/colors.js';
-import { FX_COLORS } from '../../art/fx-colors.js';
 import { FACE_TIMES, isBreathing, mouthOf } from '../../sim/hazards/stone-faces.js';
 import { drawFaceBeam } from './face-beam.js';
 import { drawFxFrame } from './fx-sheets.js';
+import { drawMouthGather } from './mouth-gather.js';
 
 const RISE_TICKS = 8;
 // a face climbs this far up out of the road as it rises, and settles back as it crumbles
@@ -33,17 +33,12 @@ function faceDepth(face) {
 
 const faceAlpha = (face) => Math.min(1, Math.max(0, (FACE_TIMES.gone - face.time) / FADE_TICKS));
 
-// while it glares, the floor under the beam's reach blinks red and its mouth gathers light
+// while it glares, the floor under the beam's reach blinks red
 function drawWarning(painter, face) {
   const mouth = mouthOf(face);
   const left = face.direction > 0 ? mouth.x : mouth.x - face.reach;
   painter.alpha((face.time >> 2) & 1 ? 0.7 : 0.35).use(COLORS.red);
-  painter.rect(left, face.floor - 1, face.reach, 4);
-  const glow = (face.time - FACE_TIMES.glare) / (FACE_TIMES.fire - FACE_TIMES.glare);
-  if (glow > 0) {
-    painter.alpha(0.5 + glow * 0.5).use(FX_COLORS.gazeWhite);
-    painter.rect(mouth.x - 1, mouth.y - glow * 3, 2, glow * 6);
-  }
+  painter.rect(left, face.floor - 1, Math.round(face.reach), 4);
   painter.alpha(1);
 }
 
@@ -67,6 +62,14 @@ export function drawStoneFace(painter, face, sheets) {
   context.restore();
   if (face.time < FACE_TIMES.fire) {
     drawWarning(painter, face);
+  }
+}
+
+// the light it gathers and breathes, drawn over the fighters and over the world dimmed for the
+// guardian's ultimate, so the dim never dulls it
+export function drawStoneFaceLight(painter, face) {
+  if (face.time >= FACE_TIMES.glare && face.time < FACE_TIMES.fire) {
+    drawMouthGather(painter.context, face);
   } else if (isBreathing(face)) {
     drawFaceBeam(painter, face);
   }

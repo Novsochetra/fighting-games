@@ -334,12 +334,19 @@ pace, each running end a `rift` read from the same reach as the drawn fissure (`
 `warden-rules.js`). They are all projectiles,
 drawn from the `fx/` strips (`src/render/fx/rock-hazards.js`, `venom-hazards.js`,
 `wasp-hazards.js`, `storm-hazards.js`, `forge-hazards.js`, `temple-hazards.js`, `moat-hazards.js`,
-`bayon-hazards.js`, `stone-face-draw.js` with the face's beam drawn in code in `face-beam.js` and
-`beam-flares.js`, `warden-hazards.js`, gathered in
+`bayon-hazards.js`, `stone-face-draw.js`, `warden-hazards.js`, gathered in
 `boss-hazards.js`; the copies are drawn with the boss in `src/render/fighters/mirages.js`); a
 puddle, a lava pool, a jar or a stone face, standing on the
 road, is drawn under the fighters' feet, and so is the mark of a lightning strike, while the strike
-itself is drawn over them. While an ultimate
+itself is drawn over them. The Bayon Guardian's light is drawn in code, a screen pixel at a time
+(`fine-pixels.js`, its stars and halos in `light-star.js`): the gaze's ray and the flares at his
+eyes and where it lands (`gaze-ray.js`, `gaze-flares.js`), the ring of runes it marks and the
+pillar's shock ring (`rune-ring.js`, `pillar-burst.js`), the crack a root opens in the road
+(`root-crack.js` along `crack-path.js`), and a face's beam (`face-beam.js`, `beam-flares.js`) and
+the light it gathers first (`mouth-gather.js`), which is drawn over the fighters and over his
+ultimate's dim. His footfalls' dust, the light of his reforming, and once reformed his gold rim
+and the motes rising off him are drawn with his sprite (`src/render/fighters/guardian-light.js`).
+While an ultimate
 gathers and plays the world dims behind the boss in its own color (`src/render/fighters/boss-ultimate.js`,
 colors in `src/art/boss-colors.js`), a rush or wave marks its lane on the ground, and a boulder its
 landing spot.
