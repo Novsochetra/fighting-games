@@ -1,3 +1,16 @@
+// the hero select's art: the side cards' idle loop and the middle card's; a Shade's are the sword
+// row of its own idle and win strips, cut out by tools/pack_hero_strips.py (`cutFrom`), so the menu
+// loads one row of each, and the Khmer fighters' are drawn for their cards (tools/hero_cards)
+const shadeCards = (folder) => ({
+  side: `${folder}card_idle.png`,
+  middle: `${folder}card_win.png`,
+  cutFrom: { side: 'idle', middle: 'win' },
+});
+const drawnCards = (folder) => ({
+  side: `${folder}card_idle.png`,
+  middle: `${folder}card_pose.png`,
+});
+
 // the heroes the player can pick, five Shades and two Khmer fighters, Bokator and the Angkor Warrior;
 // each has its own sprite set and effect colors, a fighting style (data/styles/) and an ultimate
 // (data/ultimates/); the Moss, Firefly, Antler Spirit and Blue Shades' ultimate is dressed in their
@@ -10,6 +23,7 @@ export const HEROES = [
     tagline: 'Patient blade of the old grove',
     directory: 'assets/sprites/hero/arsenal/',
     ultStrip: 'assets/sprites/hero/arsenal/hero_ult.png',
+    cards: shadeCards('assets/sprites/hero/'),
   },
   {
     id: 'firefly',
@@ -17,6 +31,7 @@ export const HEROES = [
     tagline: 'Fights in a swarm of sparks',
     directory: 'assets/sprites/heroes/firefly/arsenal/',
     ultStrip: 'assets/sprites/heroes/firefly/arsenal/hero_ult.png',
+    cards: shadeCards('assets/sprites/heroes/firefly/'),
   },
   {
     id: 'antler',
@@ -24,6 +39,7 @@ export const HEROES = [
     tagline: 'Horned ghost of the dunes',
     directory: 'assets/sprites/heroes/antler/arsenal/',
     ultStrip: 'assets/sprites/heroes/antler/arsenal/hero_ult.png',
+    cards: shadeCards('assets/sprites/heroes/antler/'),
   },
   {
     id: 'blue',
@@ -31,6 +47,7 @@ export const HEROES = [
     tagline: 'Cold steel, no shadow',
     directory: 'assets/sprites/heroes/blue/arsenal/',
     ultStrip: 'assets/sprites/heroes/blue/arsenal/hero_ult.png',
+    cards: shadeCards('assets/sprites/heroes/blue/'),
   },
   {
     id: 'ember',
@@ -38,6 +55,7 @@ export const HEROES = [
     tagline: 'Walked out of the burning woods',
     directory: 'assets/sprites/heroes/ember/arsenal/',
     ultStrip: 'assets/sprites/heroes/ember/hero_ult.png',
+    cards: shadeCards('assets/sprites/heroes/ember/'),
   },
   {
     id: 'bokator',
@@ -45,6 +63,7 @@ export const HEROES = [
     tagline: 'Pounds the lion, as Angkor taught',
     directory: 'assets/sprites/heroes/bokator/arsenal/',
     ultStrip: null,
+    cards: drawnCards('assets/sprites/heroes/bokator/'),
   },
   {
     id: 'angkor',
@@ -52,6 +71,7 @@ export const HEROES = [
     tagline: 'Steps out of the Bayon walls',
     directory: 'assets/sprites/heroes/angkor/arsenal/',
     ultStrip: 'assets/sprites/heroes/angkor/hero_ult.png',
+    cards: drawnCards('assets/sprites/heroes/angkor/'),
   },
 ];
 

@@ -7,12 +7,17 @@ import { bootArt, heroCardArt } from '../../../src/ui/loading/boot-art.js';
 const GAME = new URL('../../../', import.meta.url);
 
 describe('the art loaded before the title', () => {
-  it("takes every hero's standing and cheering strips from the heroes table", () => {
+  it("takes every hero's card strips, standing and cheering, from the heroes table", () => {
     const art = heroCardArt();
     expect(art).toHaveLength(HEROES.length * 2);
-    expect(art).toContain('assets/sprites/hero/arsenal/hero_idle.png');
-    expect(art).toContain('assets/sprites/heroes/bokator/arsenal/hero_win.png');
-    expect(heroCardArt([{ directory: 'x/' }])).toEqual(['x/hero_idle.png', 'x/hero_win.png']);
+    expect(art).toContain('assets/sprites/hero/card_idle.png');
+    expect(art).toContain('assets/sprites/hero/card_win.png');
+    expect(art).toContain('assets/sprites/heroes/bokator/card_pose.png');
+    expect(art.some((file) => file.includes('arsenal/'))).toBe(false);
+    expect(heroCardArt([{ cards: { side: 'x/a.png', middle: 'x/b.png' } }])).toEqual([
+      'x/a.png',
+      'x/b.png',
+    ]);
   });
 
   it('is the menu art and the hero cards, each file once and every one of them there', () => {

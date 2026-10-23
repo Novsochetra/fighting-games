@@ -63,7 +63,7 @@ describe('game menus on the real page', () => {
       'angkor',
     ]);
     expect(document.querySelector('.hero-card.picked').dataset.hero).toBe('moss');
-    expect(cards[1].getAttribute('style')).toContain('heroes/firefly/arsenal/hero_idle.png');
+    expect(cards[1].getAttribute('style')).toContain('heroes/firefly/card_idle.png');
     expect(cards.map((card) => card.textContent.trim())).toEqual([
       'Moss Shade',
       'Firefly Shade',

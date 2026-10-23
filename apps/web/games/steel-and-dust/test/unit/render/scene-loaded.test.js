@@ -13,9 +13,19 @@ describe('the scene gate', () => {
     expect(sceneLoaded(view, game('moss'))).toBe(false);
     images.loadWhere((src) => !heroStrip('hero/')(src));
     expect(sceneLoaded(view, game('moss'))).toBe(false);
-    expect(sceneLoaded(view, game('blue'))).toBe(true);
     images.loadAll();
     expect(sceneLoaded(view, game('moss'))).toBe(true);
+  });
+
+  it("loads only the picked Shade's strips, and another's once it is picked", () => {
+    const { view, images } = createLateView();
+    sceneLoaded(view, game('moss'));
+    expect(images.waiting().filter(heroStrip('heroes/'))).toEqual([]);
+    images.loadAll();
+    expect(sceneLoaded(view, game('blue'))).toBe(false);
+    expect(Object.keys(view.heroSheets)).toEqual(['blue']);
+    images.loadAll();
+    expect(sceneLoaded(view, game('blue'))).toBe(true);
   });
 
   it("waits for the sheets of every enemy its road can call, and the next road's only after", () => {
@@ -47,7 +57,6 @@ describe('the scene gate', () => {
     images.failAll();
     expect(sceneLoaded(view, game('antler'))).toBe(true);
     expect(view.heroSheets.antler.ready).toBe(false);
-    expect(view.heroSheets.moss.ready).toBe(true);
   });
 });
 

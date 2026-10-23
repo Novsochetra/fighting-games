@@ -1,12 +1,13 @@
 import { missionAt } from '../data/missions/index.js';
 import { keepMissionEnemies, missionEnemiesSettled } from './fighters/enemy-sheets.js';
-import { heroSheetFor } from './fighters/hero-sheets.js';
+import { heroSheetFor, keepPickedHero } from './fighters/hero-sheets.js';
 import { backdropFor, backdropPieces, missionRoadLoaded } from './scene/backdrop.js';
 
 // the clock holds and the loading screen stays up until the mission's road, its enemies' sheets and
 // the picked Shade's strips are in, so neither the hero nor a raider shows as the bare body drawn
-// for fighters without a sprite
+// for fighters without a sprite; a Shade picked to go on as loads then
 export function sceneLoaded(view, game) {
+  keepPickedHero(view, game.settings.hero);
   const enemies = missionEnemiesSettled(view.enemySheets, game.missionIndex);
   return (
     missionRoadLoaded(view, game.missionIndex) &&

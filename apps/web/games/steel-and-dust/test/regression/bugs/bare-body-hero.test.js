@@ -7,7 +7,8 @@ import { createPlayingGame, createTestGame } from '../../support/test-game.js';
 // Bug: coming back as another Shade after a fall, or starting a run as a Shade picked on the
 // title, showed the hero as the bare jointed body the game drew before it had sprites, not one of
 // the four Shades. A Shade's strips only started loading the first time it was drawn, and until
-// they were in the renderer fell back to that body.
+// they were in the renderer fell back to that body. Only the picked Shade's strips are kept now, so
+// a newly picked one is still on its way: the loading screen covers the road until it is in.
 const drawsAnything = (log) => log.some((call) => call.startsWith('drawImage('));
 const drawsHeroStrip = (log) => log.some((call) => call.startsWith('drawImage(img(hero_'));
 
@@ -31,13 +32,16 @@ function fallen() {
 }
 
 describe('a newly picked Shade', () => {
-  it('is drawn from its own strips on its first frame back after a fall', () => {
+  it('comes back after a fall from its own strips, the loading screen up until they are in', () => {
     const { game, late } = fallen();
     continueAs(game, 'blue');
+    expect(drawsAnything(frameOf(game, late))).toBe(false);
+    late.images.loadAll();
     expect(drawsHeroStrip(frameOf(game, late))).toBe(true);
+    expect(Object.keys(late.view.heroSheets)).toEqual(['blue']);
   });
 
-  it('is drawn from its own strips on the first frame of a run started from the title', () => {
+  it('starts a run picked on the title from its own strips, the loading screen up until then', () => {
     const late = createLateView();
     const game = createTestGame();
     renderFrame(game, late.view);
@@ -45,6 +49,8 @@ describe('a newly picked Shade', () => {
     frameOf(game, late);
     game.settings.hero = 'antler';
     startPlay(game);
+    expect(drawsAnything(frameOf(game, late))).toBe(false);
+    late.images.loadAll();
     expect(drawsHeroStrip(frameOf(game, late))).toBe(true);
   });
 

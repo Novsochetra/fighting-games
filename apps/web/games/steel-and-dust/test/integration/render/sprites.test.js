@@ -38,18 +38,16 @@ describe('drawing from the sprite sheets', () => {
     expect(drawn).toContain('drawImage(img(hero_idle.png)');
   });
 
-  it("loads every Shade's strips at the start, so any Shade picked later is ready to draw", () => {
+  it("keeps only the picked Shade's strips, and lets them go when another Shade is picked", () => {
+    const game = createPlayingGame({ settings: { hero: 'ember' } });
     const { view } = recordedView();
-    expect(Object.keys(view.heroSheets)).toEqual([
-      'moss',
-      'firefly',
-      'antler',
-      'blue',
-      'ember',
-      'bokator',
-      'angkor',
-    ]);
-    expect(Object.values(view.heroSheets).every((sheet) => sheet.ready)).toBe(true);
+    expect(Object.keys(view.heroSheets)).toEqual([]);
+    renderFrame(game, view);
+    expect(Object.keys(view.heroSheets)).toEqual(['ember']);
+    expect(view.heroSheets.ember.ready).toBe(true);
+    game.settings.hero = 'bokator';
+    renderFrame(game, view);
+    expect(Object.keys(view.heroSheets)).toEqual(['bokator']);
   });
 
   it("draws the Shade's own ultimate strip and portrait during its cut-in", () => {

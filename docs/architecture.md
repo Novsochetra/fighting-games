@@ -73,7 +73,10 @@ turning to gold behind him as files settle (its own art, in `assets/ui/loading/`
 card strips) and the pixel font before the fighters' sprites, so no menu or popup shows art still on
 its way; a file that fails counts as settled and a stalled boot gives up after a time limit. In play
 the same screen covers a mission's road and the picked Shade while they load (`missionWait` in
-`src/render/scene-loaded.js`), after a short grace so a cached road never flashes it.
+`src/render/scene-loaded.js`), after a short grace so a cached road never flashes it. The hero select
+shows each hero from card strips of one row (`cards` in `src/data/heroes.js`): a Shade's are the
+sword row of its idle and win strips, cut out by `tools/pack_hero_strips.py` (`cutFrom`), and the
+Khmer fighters' are drawn for them (`tools/hero_cards`).
 
 The menus and the HUD share one carved-sandstone kit in `assets/ui/` (see its README): nine-slice
 frames for the hero cards, the settings panel and the HUD panels, which the HUD draws with
@@ -206,7 +209,9 @@ length.
   on the sheer step.
 
 Fighters are drawn from PixelLab sprite sheets in `assets/sprites/`: one folder of strips per playable
-Shade (`src/data/heroes.js`, all four loaded at the start) and one sheet per enemy
+Shade (`src/data/heroes.js`; only the picked Shade's are kept, `keepPickedHero` in
+`src/render/fighters/hero-sheets.js`, so another picked to go on as loads behind the loading screen
+and the last one's are let go) and one sheet per enemy
 (`src/data/enemies/enemy-sprites.js`). `src/sim/hero-animation.js` and `src/sim/enemy-animation.js`
 pick the frame for a fighter's state; colors that belong to a Shade live in `src/art/hero-themes.js`.
 An enemy's grid sheet (a row per strip, a cell per frame) is the source its art is drawn in, but a
@@ -223,8 +228,8 @@ A Shade's strips are packed the same way (`tools/pack_hero_strips.py`, both tool
 `tools/sheet_packing.py`): each strip's packed copy sits in `packed/` beside it, in its own palette
 or colors, and `src/data/hero-atlas/<shade>.js` holds each strip's frame height and pieces, a line
 to a strip (the seven Shades take 49 MB unpacked instead of 142 MB). A hero is drawn a sheet pixel
-to a screen pixel, so its pieces land exactly where their frames did. The hero select still shows
-the grid `hero_idle.png` and `hero_win.png`. Run the tool again after changing or baking a strip:
+to a screen pixel, so its pieces land exactly where their frames did. Run the tool again after
+changing or baking a strip:
 `test/unit/data/hero-atlas.test.js` and `test/regression/bugs/hero-strip-memory.test.js` hold it.
 The hero runs wherever it goes on foot (`src/sim/brains/player/run.js`): a held direction sets off
 at a walk's pace and picks up to `RUN_SPEED`, and a ground dash held its way runs straight on, in the

@@ -9,6 +9,10 @@ seven Shades' strips took 142 MB once a browser had unpacked them; tools/sheet_p
 down. Each strip's packed copy goes to packed/ beside it, and src/data/hero-atlas/<id>.js gets each
 strip's frame height and each frame's piece, a strip to a line so a Shade's table stays short.
 
+The hero select shows only the sword row (the first) of a Shade's idle and win strips, so that row
+is cut out to the card strips its `cards` name (card_idle.png and card_win.png), and the menu
+loads a quarter of each strip; the Khmer fighters' cards are drawn for them (tools/hero_cards).
+
 Run it again after changing or baking a strip: test/unit/data/hero-atlas.test.js fails until you do.
 """
 
@@ -19,7 +23,7 @@ import sys
 
 from PIL import Image
 
-from sheet_packing import pack_sheet
+from sheet_packing import pack_sheet, save_like
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GAME = os.path.join(ROOT, 'apps', 'web', 'games', 'steel-and-dust')
@@ -38,6 +42,7 @@ const { HEROES } = await import(process.argv[2]);
 const heroes = HEROES.map((hero) => [
   hero.id,
   data.stripsOf(hero).map((name) => [name, data.stripPath(hero, name), data.packedStripPath(hero, name), data.stripRows(name)]),
+  Object.entries(hero.cards.cutFrom ?? {}).map(([slot, name]) => [hero.cards[slot], data.stripPath(hero, name), data.stripRows(name)]),
 ]);
 console.log(JSON.stringify({ frameWidth: data.HERO_SPRITES.frameWidth, heroes }));
 """
@@ -61,6 +66,14 @@ def pack_strip(path, packed_path, rows, frame_width):
     frame_height = sheet.height // rows
     entries, pixels = pack_sheet(sheet, frame_width, frame_height, os.path.join(GAME, packed_path))
     return frame_height, entries, pixels
+
+
+def cut_cards(cards):
+    for card_path, strip_path, rows in cards:
+        sheet = Image.open(os.path.join(GAME, strip_path))
+        row = sheet.crop((0, 0, sheet.width, sheet.height // rows))
+        save_like(row, sheet, os.path.join(GAME, card_path))
+        print(f'  card {card_path}: {sheet.width}x{sheet.height // rows} of {strip_path}')
 
 
 def module_text(lines):
@@ -91,12 +104,13 @@ def main():
     os.makedirs(ATLAS, exist_ok=True)
     table = read_strips()
     before = after = 0
-    for hero_id, strips in table['heroes']:
+    for hero_id, strips, cards in table['heroes']:
         grid, packed = pack_hero(hero_id, strips, table['frameWidth'])
         before, after = before + grid, after + packed
+        cut_cards(cards)
     index = os.path.join(ATLAS, 'index.js')
     with open(index, 'w') as out:
-        out.write(index_text(sorted(hero_id for hero_id, _ in table['heroes'])))
+        out.write(index_text(sorted(hero_id for hero_id, *_ in table['heroes'])))
     subprocess.run(['npx', 'prettier', '--write', '--log-level', 'warn', index], cwd=ROOT, check=True)
     print(f'all strips unpacked: {before * 4 / 2**20:.0f} MB -> {after * 4 / 2**20:.0f} MB')
 

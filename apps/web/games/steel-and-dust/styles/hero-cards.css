@@ -115,7 +115,7 @@
   height: calc(var(--px) * 80px);
   margin-inline: calc(var(--px) * -32px);
   background-image: var(--idle);
-  background-size: calc(var(--px) * 768px) calc(var(--px) * 320px);
+  background-size: calc(var(--px) * 768px) calc(var(--px) * 80px);
   background-position: 0 0;
   background-repeat: no-repeat;
   image-rendering: pixelated;
@@ -126,7 +126,7 @@
    spore and wisp drawn round a hero into a blob of the accent color */
 .hero-card[data-depth='0'] .hero-art {
   background-image: var(--win);
-  background-size: calc(var(--px) * 512px) calc(var(--px) * 320px);
+  background-size: calc(var(--px) * 512px) calc(var(--px) * 80px);
   animation: hero-win var(--duration-sprite-win) var(--easing-step-4) infinite;
   filter: drop-shadow(0 0 var(--glow-edge) var(--accent))
     drop-shadow(0 0 var(--glow-spread) color-mix(in srgb, var(--accent) 55%, transparent));
@@ -141,14 +141,6 @@
   background-position: 0 calc(var(--px) * -32px);
 }
 
-.hero-card[data-hero='bokator'] .hero-art {
-  background-image: url('../assets/sprites/heroes/bokator/card_idle.png');
-}
-
-.hero-card[data-hero='angkor'] .hero-art {
-  background-image: url('../assets/sprites/heroes/angkor/card_idle.png');
-}
-
 /* standing up each is a head taller than the crouch he fights in, so the middle card shows a flourish
    drawn smaller (card_pose.png) to stand as tall as the Shades on theirs, at the side cards' pace;
    it is drawn over the crest, which his raised blade reaches */
@@ -159,16 +151,11 @@
   animation: hero-idle var(--duration-sprite-idle) var(--easing-step-6) infinite;
 }
 
-.hero-card[data-hero='bokator'][data-depth='0'] .hero-art {
-  background-image: url('../assets/sprites/heroes/bokator/card_pose.png');
-}
-
 /* the Angkor Warrior's dav, raised, burns up above the window, so his starts 18 px higher, over the
    top of the frame, to show the star that flares at its point */
 .hero-card[data-hero='angkor'][data-depth='0'] .hero-art {
   height: calc(var(--px) * 98px);
   margin-top: calc(var(--px) * -18px);
-  background-image: url('../assets/sprites/heroes/angkor/card_pose.png');
   background-position: 0 calc(var(--px) * -14px);
 }
 

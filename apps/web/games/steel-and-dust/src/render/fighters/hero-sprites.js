@@ -84,6 +84,10 @@ export function drawHeroFrame(
   sheet,
   { frame: [name, index], x, y, facing, tint, relief, row },
 ) {
+  // a strip still on its way draws nothing, and one that failed would throw
+  if (!sheet.ready) {
+    return;
+  }
   const sourceRow = ONE_ROW_STRIPS.has(name) ? 0 : row || 0;
   const piece = sheet.pieces[name][1 + sourceRow]?.[index];
   if (!piece) {

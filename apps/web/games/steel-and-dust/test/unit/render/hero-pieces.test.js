@@ -24,7 +24,7 @@ function misplaced(pieces, { name, row, index }) {
   const { feetX, feetY, frameHeight, scale } = HERO_SPRITES;
   const height = pieces[name][0];
   const [sx, sy, width, tall, left, top] = pieces[name][1 + row][index];
-  const sheet = { pieces, images: { [name]: {} }, tints: null };
+  const sheet = { pieces, images: { [name]: {} }, tints: null, ready: true };
   const [call] = drawnPieces(sheet, { frame: [name, index], row });
   const frameTop = -(feetY + height - frameHeight) * scale;
   const expected = [sx, sy, width, tall, -feetX * scale + left * scale, frameTop + top * scale];
@@ -49,7 +49,12 @@ describe('a Shade drawn from its packed strips', () => {
   });
 
   it('draws nothing for a frame its strip leaves empty', () => {
-    const sheet = { pieces: { idle: [80, [null]] }, images: { idle: {} }, tints: null };
+    const sheet = {
+      pieces: { idle: [80, [null]] },
+      images: { idle: {} },
+      tints: null,
+      ready: true,
+    };
     expect(drawnPieces(sheet, { frame: ['idle', 0], row: 0 })).toEqual([]);
   });
 });

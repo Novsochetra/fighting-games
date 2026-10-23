@@ -1,5 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { stripPath, stripRows } from '../../../src/data/hero-sprites.js';
+import { HEROES, heroById } from '../../../src/data/heroes.js';
 import { readPngAlpha } from '../../support/png-alpha.js';
 import { pngSize } from '../../support/png-size.js';
 
@@ -7,7 +9,23 @@ const STYLES = new URL('../../../styles/', import.meta.url);
 const HEROES_DIR = new URL('../../../assets/sprites/heroes/', import.meta.url);
 const imagesIn = (css) =>
   [...css.matchAll(/url\('([^']+)'\)/g)].map((match) => new URL(match[1], STYLES));
+const GAME = new URL('../../../', import.meta.url);
 const KHMER = ['bokator', 'angkor'];
+
+// the pixels of a card strip that differ from the first row of the strip it was cut from
+function rowMismatches(card, source) {
+  let wrong = 0;
+  for (let y = 0; y < card.height; y++) {
+    for (let x = 0; x < card.width; x++) {
+      const alpha = card.alpha(x, y);
+      const same =
+        alpha === source.alpha(x, y) &&
+        (alpha === 0 || card.colorKey(x, y) === source.colorKey(x, y));
+      wrong += same ? 0 : 1;
+    }
+  }
+  return wrong;
+}
 const LOOPS = KHMER.flatMap((hero) => [
   [hero, 'card_pose.png'],
   [hero, 'card_idle.png'],
@@ -41,13 +59,27 @@ describe('the hero select cards', () => {
     }
   });
 
+  // a re-baked strip without tools/pack_hero_strips.py run again after it fails here
+  it.each(HEROES.filter((hero) => hero.cards.cutFrom).map((hero) => hero.id))(
+    "shows the %s Shade's sword row, cut from its own idle and win strips",
+    (id) => {
+      const hero = heroById(id);
+      for (const [slot, strip] of Object.entries(hero.cards.cutFrom)) {
+        const card = readPngAlpha(new URL(hero.cards[slot], GAME));
+        const source = readPngAlpha(new URL(stripPath(hero, strip), GAME));
+        expect([card.width, card.height]).toEqual([source.width, source.height / stripRows(strip)]);
+        expect(rowMismatches(card, source), `${id} ${slot}`).toBe(0);
+      }
+    },
+  );
+
   // in his win sheet's other frames he turns his back, so Bokator's middle card held its first
   // frame, and both Khmer heroes stood still on the select screen while every Shade moved
   it.each(KHMER)(
     "plays the %s hero's drawn flourish in the middle, six frames at the idle's pace",
     (hero) => {
       const middle = declared(`.hero-card[data-hero='${hero}'][data-depth='0'] .hero-art`);
-      expect(middle).toContain(`${hero}/card_pose.png`);
+      expect(heroById(hero).cards.middle).toBe(`assets/sprites/heroes/${hero}/card_pose.png`);
       expect(middle).toContain(
         'animation: hero-idle var(--duration-sprite-idle) var(--easing-step-6) infinite;',
       );
@@ -57,7 +89,7 @@ describe('the hero select cards', () => {
 
   it.each(KHMER)("plays the %s hero's drawn guard on the side cards", (hero) => {
     const side = declared(`.hero-card[data-hero='${hero}'] .hero-art`);
-    expect(side).toContain(`${hero}/card_idle.png`);
+    expect(heroById(hero).cards.side).toBe(`assets/sprites/heroes/${hero}/card_idle.png`);
     expect(side).toContain('background-size: calc(var(--px) * 768px) calc(var(--px) * 112px);');
   });
 

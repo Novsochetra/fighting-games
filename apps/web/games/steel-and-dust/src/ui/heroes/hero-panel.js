@@ -7,9 +7,9 @@ function pageFolder(baseUri) {
 }
 
 function heroCardHtml(hero, { picked, folder }) {
-  const strip = (name) => `url(${folder}${hero.directory}hero_${name}.png)`;
+  const art = (path) => `url(${folder}${path})`;
   return `<button class="hero-card${picked ? ' picked' : ''}" data-act="hero-${hero.id}"
-    data-hero="${hero.id}" style="--idle: ${strip('idle')}; --win: ${strip('win')}">
+    data-hero="${hero.id}" style="--idle: ${art(hero.cards.side)}; --win: ${art(hero.cards.middle)}">
     <span class="hero-art" aria-hidden="true"></span>
     <span class="hero-info">
       <span class="hero-name">${hero.name}</span>
