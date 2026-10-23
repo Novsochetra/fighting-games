@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { HERO_SPRITES } from '../../../src/data/hero-sprites.js';
+import { HERO_SPRITES, stripsOf } from '../../../src/data/hero-sprites.js';
 import { HEROES, heroById } from '../../../src/data/heroes.js';
-import { stripsOf } from '../../../src/render/fighters/hero-sprites.js';
 
 describe("the strips a hero's sheet loads", () => {
   it('loads every strip, the ultimate too, for a hero with an ultimate strip', () => {

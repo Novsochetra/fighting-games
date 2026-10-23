@@ -1,4 +1,5 @@
 import { RENDER_SCALE } from '../config.js';
+import { WEAPON_IDS } from './weapons/index.js';
 
 export const HERO_SPRITES = {
   frameWidth: 128,
@@ -35,6 +36,25 @@ export const HERO_SPRITES = {
 
 // the ultimate strip has a single row: every Shade calls up its own blade for it, whatever it holds
 export const ONE_ROW_STRIPS = new Set(['ult']);
+
+// a hero whose ultimate is drawn from its other strips (Bokator, bare-handed) has none of its own
+export function stripsOf(hero) {
+  return Object.keys(HERO_SPRITES.frames).filter(
+    (name) => !ONE_ROW_STRIPS.has(name) || hero.ultStrip,
+  );
+}
+
+export const stripRows = (name) => (ONE_ROW_STRIPS.has(name) ? 1 : WEAPON_IDS.length);
+
+// the grid strip the art is drawn in, which the hero select shows
+export function stripPath(hero, name) {
+  return ONE_ROW_STRIPS.has(name) ? hero.ultStrip : `${hero.directory}hero_${name}.png`;
+}
+
+// the strip cut down to its painted pieces (tools/pack_hero_strips.py), which the game draws from
+export function packedStripPath(hero, name) {
+  return stripPath(hero, name).replace(/[^/]+$/, 'packed/$&');
+}
 
 // move id -> [strip, strike frame]; a move's own `sprite` wins over this table
 export const HERO_MOVE_SPRITES = {

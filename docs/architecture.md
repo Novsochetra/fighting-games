@@ -210,6 +210,13 @@ cell put it on, its edges drawn in to whole screen pixels and a centre exactly b
 pixels taking the first (`TIE_BREAK`). Run the tool again after changing a grid sheet:
 `test/unit/data/enemy-atlas.test.js` checks every packed piece against its cell, and
 `test/regression/bugs/enemy-sheet-memory.test.js` keeps the loaded sheets small.
+A Shade's strips are packed the same way (`tools/pack_hero_strips.py`, both tools on
+`tools/sheet_packing.py`): each strip's packed copy sits in `packed/` beside it, in its own palette
+or colors, and `src/data/hero-atlas/<shade>.js` holds each strip's frame height and pieces, a line
+to a strip (the seven Shades take 49 MB unpacked instead of 142 MB). A hero is drawn a sheet pixel
+to a screen pixel, so its pieces land exactly where their frames did. The hero select still shows
+the grid `hero_idle.png` and `hero_win.png`. Run the tool again after changing or baking a strip:
+`test/unit/data/hero-atlas.test.js` and `test/regression/bugs/hero-strip-memory.test.js` hold it.
 The hero runs wherever it goes on foot (`src/sim/brains/player/run.js`): a held direction sets off
 at a walk's pace and picks up to `RUN_SPEED`, and a ground dash held its way runs straight on, in the
 hero's run strip, kicking dust up behind each stride (`src/sim/fighters/motion-effects.js`). Attacks

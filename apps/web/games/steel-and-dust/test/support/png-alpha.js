@@ -88,3 +88,14 @@ export function readPngAlpha(path) {
   };
   return { width, height, alpha, rgb, colorKey };
 }
+
+// how many of an image's pixels are painted at all
+export function paintedPixels(image) {
+  let painted = 0;
+  for (let y = 0; y < image.height; y++) {
+    for (let x = 0; x < image.width; x++) {
+      painted += image.alpha(x, y) > 0 ? 1 : 0;
+    }
+  }
+  return painted;
+}

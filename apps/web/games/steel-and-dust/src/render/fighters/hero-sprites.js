@@ -1,11 +1,12 @@
 import { RENDER_SCALE } from '../../config.js';
-import { HERO_SPRITES, ONE_ROW_STRIPS } from '../../data/hero-sprites.js';
-import { WEAPON_IDS } from '../../data/weapons/index.js';
+import { HERO_ATLAS } from '../../data/hero-atlas/index.js';
+import {
+  HERO_SPRITES,
+  ONE_ROW_STRIPS,
+  packedStripPath,
+  stripsOf,
+} from '../../data/hero-sprites.js';
 import { createTintCache, frameSource } from './tint.js';
-
-function stripPath(hero, name) {
-  return ONE_ROW_STRIPS.has(name) ? hero.ultStrip : `${hero.directory}hero_${name}.png`;
-}
 
 // a strip that fails to load settles the sheet too, so a missing file cannot hold the loading
 // screen up forever; the sheet is only drawn from once every strip is in, and counts the strips
@@ -27,56 +28,35 @@ function watchStrips(sheet, images) {
   }
 }
 
-// a hero whose ultimate is drawn from its other strips (Bokator, bare-handed) has none of its own
-export function stripsOf(hero) {
-  return Object.keys(HERO_SPRITES.frames).filter(
-    (name) => !ONE_ROW_STRIPS.has(name) || hero.ultStrip,
-  );
-}
-
+// the strips cut down to their painted pieces: a browser keeps every pixel of a strip it draws, and
+// most of a grid strip's cells is empty; a strip's pieces are [frame height, then a row of pieces
+// per weapon], each piece [x, y, width, height, left, top], where it is and where it sat in its frame
 export function loadHeroSprites({ createImage, createCanvas, baseUrl, hero, theme }) {
   const tints = createTintCache(createCanvas);
-  const sheet = { images: {}, tints, ready: false, settled: false, theme };
+  const pieces = HERO_ATLAS[hero.id];
+  const sheet = { images: {}, pieces, tints, ready: false, settled: false, theme };
   const names = stripsOf(hero);
   for (const name of names) {
     sheet.images[name] = createImage();
   }
   watchStrips(sheet, Object.values(sheet.images));
   for (const name of names) {
-    sheet.images[name].src = `${baseUrl}${stripPath(hero, name)}`;
+    sheet.images[name].src = `${baseUrl}${packedStripPath(hero, name)}`;
   }
   return sheet;
 }
 
-// a hero whose sword reaches higher than the Shades' frames has taller ones: a strip's frame height
-// comes from its image, a row per weapon or the one row of the ultimate, and the feet keep the same
-// gap above the frame's bottom edge
+// a hero whose sword reaches higher than the Shades' frames has taller ones, and the feet keep the
+// same gap above the frame's bottom edge
 export function frameBox(sheet, name) {
   const { frameHeight, feetY } = HERO_SPRITES;
-  const rows = ONE_ROW_STRIPS.has(name) ? 1 : WEAPON_IDS.length;
-  const height = sheet.images[name].height / rows || frameHeight;
+  const height = sheet.pieces[name][0];
   return { frameHeight: height, feetY: height - (frameHeight - feetY) };
 }
 
-export function drawHeroFrame(
-  painter,
-  sheet,
-  { frame: [name, index], x, y, facing, tint, relief, row },
-) {
-  const { frameWidth, feetX, scale } = HERO_SPRITES;
-  const { frameHeight, feetY } = frameBox(sheet, name);
-  const sourceRow = ONE_ROW_STRIPS.has(name) ? 0 : row || 0;
-  const source = frameSource(sheet.tints, {
-    image: sheet.images[name],
-    key: name,
-    color: tint,
-    relief,
-    sx: index * frameWidth,
-    sy: sourceRow * frameHeight,
-    width: frameWidth,
-    height: frameHeight,
-  });
-  const context = painter.context;
+function drawPiece(context, source, { piece, box, x, y, facing }) {
+  const { feetX, scale } = HERO_SPRITES;
+  const [, , width, height, left, top] = piece;
   context.save();
   context.translate(
     Math.round(x * RENDER_SCALE) / RENDER_SCALE,
@@ -89,12 +69,36 @@ export function drawHeroFrame(
     source.image,
     source.sx,
     source.sy,
-    frameWidth,
-    frameHeight,
-    -feetX * scale,
-    -feetY * scale,
-    frameWidth * scale,
-    frameHeight * scale,
+    width,
+    height,
+    (left - feetX) * scale,
+    (top - box.feetY) * scale,
+    width * scale,
+    height * scale,
   );
   context.restore();
+}
+
+export function drawHeroFrame(
+  painter,
+  sheet,
+  { frame: [name, index], x, y, facing, tint, relief, row },
+) {
+  const sourceRow = ONE_ROW_STRIPS.has(name) ? 0 : row || 0;
+  const piece = sheet.pieces[name][1 + sourceRow]?.[index];
+  if (!piece) {
+    return;
+  }
+  const [sx, sy, width, height] = piece;
+  const source = frameSource(sheet.tints, {
+    image: sheet.images[name],
+    key: name,
+    color: tint,
+    relief,
+    sx,
+    sy,
+    width,
+    height,
+  });
+  drawPiece(painter.context, source, { piece, box: frameBox(sheet, name), x, y, facing });
 }

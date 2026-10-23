@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
+import { HERO_ATLAS } from '../../../src/data/hero-atlas/index.js';
 import { HERO_SPRITES } from '../../../src/data/hero-sprites.js';
 import { frameBox } from '../../../src/render/fighters/hero-sprites.js';
 
-const sheetOf = (frameHeight) => ({
-  images: { ult: { height: frameHeight }, idle: { height: frameHeight * 4 } },
-});
+// a strip's pieces start with the height of its frames
+const sheetOf = (frameHeight) => ({ pieces: { ult: [frameHeight, []], idle: [frameHeight, []] } });
 
 describe('the box a hero frame is cut from', () => {
   it("is the Shades' frame for a strip with a row per weapon, or the one row of the ultimate", () => {
@@ -18,7 +18,10 @@ describe('the box a hero frame is cut from', () => {
     expect(frameBox(sheetOf(112), 'ult')).toEqual({ frameHeight: 112, feetY: 108 });
   });
 
-  it('falls back to the shared frame while the strip has no size yet', () => {
-    expect(frameBox(sheetOf(0), 'idle').frameHeight).toBe(HERO_SPRITES.frameHeight);
+  it('is known before the strip has loaded, from the packed strips', () => {
+    expect(frameBox({ pieces: HERO_ATLAS.bokator }, 'idle').frameHeight).toBe(112);
+    expect(frameBox({ pieces: HERO_ATLAS.moss }, 'idle').frameHeight).toBe(
+      HERO_SPRITES.frameHeight,
+    );
   });
 });

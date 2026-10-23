@@ -1,8 +1,8 @@
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { loadEnemySprites } from '../../../src/render/fighters/enemy-sprites.js';
-import { FakeImage } from '../../support/fake-image.js';
-import { readPngAlpha } from '../../support/png-alpha.js';
+import { paintedPixels, readPngAlpha } from '../../support/png-alpha.js';
+import { TrackedImage } from '../../support/tracked-image.js';
 
 // Bug: the enemy sheets took 251 MB once the browser had unpacked them to draw, 42 MB for the Naga
 // Raja alone, and every one of them loaded at the start. A boss's sheet is a grid of cells each as
@@ -12,13 +12,6 @@ const GAME_ROOT = join(import.meta.dirname, '../../../');
 const MEGABYTE = 1024 * 1024;
 const MOST_MEGABYTES = 64;
 const LEAST_PAINTED = 0.25;
-
-class TrackedImage extends FakeImage {
-  set src(value) {
-    this.path = value;
-    super.src = value;
-  }
-}
 
 function loadedSheets() {
   const sheets = loadEnemySprites({
@@ -31,13 +24,7 @@ function loadedSheets() {
 
 function paintedShare(path) {
   const image = readPngAlpha(join(GAME_ROOT, path));
-  let painted = 0;
-  for (let y = 0; y < image.height; y++) {
-    for (let x = 0; x < image.width; x++) {
-      painted += image.alpha(x, y) > 0 ? 1 : 0;
-    }
-  }
-  return painted / (image.width * image.height);
+  return paintedPixels(image) / (image.width * image.height);
 }
 
 describe('the enemy sheets the game loads', () => {

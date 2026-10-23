@@ -41,6 +41,10 @@ height from its image).
   placed with the feet on x=64, the air poses lowered to the other Shades' height and the juggle
   re-centred; frames where the model painted a hit flash were left out. Its ultimate is a 12-frame
   PixMiniMax take ("raises the sword into a column of fire"), nine frames of it kept.
+- The game draws a packed copy of every strip it loads, from `packed/` beside the strip: each frame
+  cut to its paint, so the seven Shades take 49 MB once unpacked instead of 142 MB. After changing
+  or baking a strip, run `python3 tools/pack_hero_strips.py`; `test/unit/data/hero-atlas.test.js`
+  fails until you do. The hero select still shows the grid `hero_idle.png` and `hero_win.png`.
 - `<shade>/arsenal/` is built from these sword strips by `tools/bake_hero_weapons.py <shade>`, with
   rows for the sword, fists, spear and axe, exactly like `../hero/arsenal/`, and for the Firefly,
   Antler Spirit and Blue Shades then dressed in their element (below). The Firefly and Blue Shades' blades

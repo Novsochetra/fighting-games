@@ -14,6 +14,7 @@ axe lying along the ground keeps its blade above it.
     pip install numpy scipy pillow
     python3 tools/bake_hero_weapons.py            # Moss Shade, assets/sprites/hero/
     python3 tools/bake_hero_weapons.py firefly    # assets/sprites/heroes/firefly/ (also antler, blue, ember, bokator, angkor)
+    python3 tools/pack_hero_strips.py             # then pack the strips the game draws from
 
 The Moss Shade's blade glows green; the Firefly, Antler Spirit and Blue Shades' blades glow blue or
 teal, so for them the glow tests read the stronger of the green and blue channels, and the Firefly
