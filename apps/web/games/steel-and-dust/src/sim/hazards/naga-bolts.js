@@ -8,6 +8,9 @@ const BOLT_DAMAGE = 9;
 // a head's water naga hovers at its mouth while its lane is marked, then dives to its lane
 export const BOLT_WARN = 16;
 const DIVE_TICKS = 8;
+// it takes shape this far ahead of the mouth that spits it, in her units, so it leaves the head
+// that spat it in sight
+const MOUTH_LEAD = 10;
 // low skims the shins (jump it), high flies over a standing hero's head (stay down)
 const LANE_HEIGHT = { low: 10, high: 46 };
 // the open mouths of the five heads striking forward in each striking frame of the Seven Heads
@@ -38,7 +41,7 @@ export function headAt(move, time) {
 // a head spits from its open mouth in the striking frame she shows on that tick
 export function spitHead(game, boss, [at, head, lane]) {
   const [ahead, up] = HEAD_MOUTHS[timelineFrame(boss.move, at)][head];
-  const x = boss.x + boss.facing * ahead * boss.scale;
+  const x = boss.x + boss.facing * (ahead + MOUTH_LEAD) * boss.scale;
   const y = boss.y - up * boss.scale;
   game.projectiles.push({
     kind: 'nagaBolt',

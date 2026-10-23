@@ -76,8 +76,8 @@ export function drawNagaBolt(painter, bolt, sheets) {
   });
 }
 
-// a spirit naga's lane is marked at the screen's edge while it waits; then it takes shape (1-2),
-// sweeps (3-4) and, at the far side, comes apart (5-6)
+// a spirit naga's lane is marked at the screen's edge while it waits; then it takes shape (1-2)
+// and sweeps (3-4) on across the arena and out past its far side
 export function drawSpiritNaga(painter, spirit, sheets) {
   if (spirit.time < SWEEP_WARN) {
     drawLaneMark(painter, {

@@ -4,6 +4,10 @@ import { markSerpent, sendSpirit } from '../hazards/spirit-nagas.js';
 import { COIL_FRONT } from '../hazards/tides.js';
 import { addBurst } from '../summons/bursts.js';
 
+// her coil crashes at the strike, and again for every wave it sends rolling
+export const crashesAt = (move, time) =>
+  Boolean(move.splash) && (time === move.startup || Boolean(move.tides?.includes(time)));
+
 // her coil comes down in a burst of moat water at its front
 export function crashCoil(game, boss) {
   const y = floorUnder(game.terrain, boss);

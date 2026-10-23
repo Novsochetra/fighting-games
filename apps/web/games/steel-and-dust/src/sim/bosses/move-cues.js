@@ -33,7 +33,7 @@ import { callGreatStrike, callStormWave, stormWaveAt } from './eye-of-storm.js';
 import { fireLance, lanceAt, roar, roarsAt, vent, ventsAt } from './furnace.js';
 import { circleHeldHero, flashGaze, warnOfGaze, whileHeld } from './hypnotic-gaze.js';
 import { blinkEndToEnd, castMirages } from './mirage.js';
-import { callSerpent, callSpirit, crashCoil, serpentRisesAt, sweepAt } from './naga.js';
+import { callSerpent, callSpirit, crashCoil, crashesAt, serpentRisesAt, sweepAt } from './naga.js';
 import { feed, howl, leap, smashBones, trailEyes } from './pack-hunt.js';
 import { dropRockfall, rockfallIndex } from './rockfall.js';
 import { castCurse, curseReleases, cursingNow, releaseCurse, watchJars } from './sun-curse.js';
@@ -117,7 +117,7 @@ const CUES = [
   [atStrike('curse'), castCurse],
   [cursingNow, watchJars],
   [curseReleases, releaseCurse],
-  [atStrike('splash'), crashCoil],
+  [crashesAt, crashCoil],
   [(move, time) => Boolean(move.tides?.includes(time)), releaseTide],
   [
     (move, time) => Boolean(headAt(move, time)),

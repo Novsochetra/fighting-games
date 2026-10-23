@@ -14,6 +14,12 @@ const tidalCoil = (tides, recovery) => ({
   frameAt: [0, 8, 16, 26, 34, 40, 50, 62, 72],
 });
 
+// in phase two she rises off the first crash (7, 2-4) and crashes again (5) for the second wave
+const CRASH_TWICE = {
+  frameAt: [0, 8, 16, 26, 34, 40, 48, 56, 62, 68, 74, 80, 88, 96, 100],
+  frameOrder: [0, 1, 2, 3, 4, 5, 6, 7, 2, 3, 4, 5, 6, 7, 8],
+};
+
 // the Seven Heads' strikes: [the tick a head spits its water naga, which of the five striking
 // heads (top to bottom), the lane it flies in]. Low ones come in pairs a jump can clear, high ones
 // fly over a standing hero, and a high pair comes long enough after a jump for the hero to have
@@ -53,7 +59,7 @@ export const NAGA_MOVES = {
     frameAt: [0, 6, 12, 20, 28, 34, 44, 54, 62],
   }),
   tidalCoil: defineMove(tidalCoil([40], 40)),
-  tidalCoils: defineMove(tidalCoil([40, 80], 56)),
+  tidalCoils: defineMove({ ...tidalCoil([40, 80], 56), ...CRASH_TWICE }),
   // her hoods rise and fan, then strike forward again and again (frames 4 and 5, in turn), each
   // strike spitting a water naga, low or high
   sevenHeads: defineMove({
@@ -99,7 +105,7 @@ export const NAGA_MOVES = {
     quiet: true,
     strip: 'hurt',
     loopFrames: [2, 3, 14],
-    stars: { every: 16, up: 57 },
+    stars: { every: 16, up: 36 },
     frameAt: [0, 4, 8, 12],
   }),
 };

@@ -311,10 +311,11 @@ step out of the sand with him, move as he moves, fire `mirageBolt`s in phase two
 sun's eye over the hero (`curse-marks.js`): every jar broken in time sends him into `sunBroken`,
 reeling, and a jar left standing at `releaseAt` brings the sunfall down on the hero (rules in
 `temple-rules.js`). The Naga Raja's coil crashes in a `splash` (`src/sim/bosses/naga.js`), her
-`tides` roll along the floor from the front of her coil (`src/sim/hazards/tides.js`), her Seven
-Heads' `heads` each spit a water naga that waits at its mouth while its lane is marked and dives to
-it, low or high (`naga-bolts.js`), and her Rainbow Naga gathers the rainbow in her hand, sends a
-spirit naga sweeping the floor from each side and marks the spot a serpent of water bursts up out
+`tides` roll along the floor from the front of her coil (`src/sim/hazards/tides.js`), each out of
+a crash of its own (in phase two she rises and crashes again for the second), her Seven
+Heads' `heads` each spit a water naga that takes shape just ahead of its mouth while its lane is
+marked and dives to it, low or high (`naga-bolts.js`), and her Rainbow Naga gathers the rainbow in
+her hand, sends a spirit naga sweeping the floor from each side and marks the spot a serpent of water bursts up out
 of (`spirit-nagas.js`; their rules in `moat-rules.js`). The Bayon Guardian's cues are gathered in
 `src/sim/bosses/bayon-cues.js`: his `gaze` marks the ground under the hero, and either side of it in
 phase two, and a gold pillar bursts there that leaves the hero `stoned`, slowed to under half pace
