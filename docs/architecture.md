@@ -52,7 +52,7 @@ The game keeps a strict split:
 | `src/art/`    | sprite and scene colors (the only JS allowed to hold hex values)    | no                                  |
 | `src/sim/`    | the 60 Hz simulation: one `game` object in, the same object changed | no                                  |
 | `src/render/` | draws a `game` onto a 2D canvas context it is given                 | canvas only                         |
-| `src/audio/`  | synthesized sound and music, and the announcer's voice              | Web Audio and speech only           |
+| `src/audio/`  | synthesized sound and music, and the announcer's recorded calls     | Web Audio only                      |
 | `src/input/`  | keyboard, gamepad and touch write into `game.input`                 | yes                                 |
 | `src/ui/`     | menus, the hero carousel, settings, help, screen fit, full screen   | yes                                 |
 | `src/main.js` | wires the pieces together and runs the fixed-step loop              | yes                                 |
@@ -134,9 +134,13 @@ length.
   mission opens out of that night the same way over `REVEAL_FRAMES` drawn frames; the last mission
   stays lit behind the All clear. The ticks it all keeps to are in `src/data/mission-handoff.js`,
   and `src/sim/stage/handoff-cues.js` sends out the sounds on the same ticks: the announcer's call
-  ("Mission 1 complete!", "Mission 2, start!") as a card starts to fall, a `stamp` as each letter
-  strikes, the `wipe` rushing in and the `reveal` as the next road opens. The announcer
-  (`src/audio/announcer.js`) speaks in the browser's own voice, at the sound effects volume. A
+  ("Mission one! Complete!" while the boss falls, "Mission two! Start!" as its card starts to
+  fall), a `stamp` as each letter strikes, the `wipe` rushing in and the `reveal` as the next road
+  opens. The calls are the game's one set of recorded sounds, since oscillators cannot say words:
+  `assets/audio/announcer/`, two MP3s a mission, voiced by `tools/announcer_voice.py` (Kokoro's
+  bm_george, pitched down, cut to the Neo Geo's 18.5 kHz and left to ring in a stone hall).
+  `src/audio/announcer.js` loads a mission's calls and the next one's start as it is played, as its
+  road does, and plays them through the effects bus; a call not yet in is skipped. A
   mission is drawn and its clock runs only once its painted road has loaded (`missionRoadLoaded`
   in `src/render/scene/backdrop.js`) and so have the picked Shade's strips (`sceneLoaded` in
   `src/render/scene-loaded.js`), so the hero is never drawn as the bare body; until then `main.js` holds the ticks and the screen shows

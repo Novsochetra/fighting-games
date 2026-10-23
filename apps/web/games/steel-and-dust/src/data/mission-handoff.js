@@ -10,6 +10,9 @@ export const CARD_HOT_TICKS = 4;
 const CLEAR_CARD_DELAY = 19;
 const OPEN_CARD_DELAY = 12;
 export const WIPE_TICKS = 44;
+// the clear's call starts while the boss still falls in slow motion, so its "Complete!" is said as
+// the letters stamp in and is over before the wipe comes; a mission's own call starts with its card
+export const CLEAR_CALL_TICK = 8;
 
 export function cardLetterCount(text) {
   return text.replaceAll(' ', '').length;
@@ -29,13 +32,16 @@ export function cardDoneAt(letterCount) {
   return (letterCount - 1) * CARD_STAGGER + CARD_DROP_TICKS + CARD_HOT_TICKS;
 }
 
-// what the announcer calls as each card comes down
-export function clearCall(missionNumber, isLast) {
-  return isLast
-    ? `Mission ${missionNumber} complete. All clear!`
-    : `Mission ${missionNumber} complete!`;
+// the announcer's calls, one recorded clip each in assets/audio/announcer/ (voiced by
+// tools/announcer_voice.py); the last mission's clear call ends "All clear!"
+function call(missionNumber, kind) {
+  return `mission-${String(missionNumber).padStart(2, '0')}-${kind}`;
 }
 
 export function startCall(missionNumber) {
-  return `Mission ${missionNumber}, start!`;
+  return call(missionNumber, 'start');
+}
+
+export function clearCall(missionNumber) {
+  return call(missionNumber, 'complete');
 }

@@ -21,7 +21,7 @@ export function createSession({ window }) {
     io: {
       ...persistencePorts(window.localStorage),
       sfx: (key, big, options) => ports.audio.sfx(key, big, options),
-      announce: (line) => ports.audio.announce(line),
+      announce: (call) => ports.audio.announce(call),
       setMuted: () => ports.audio.syncVolumes(),
       vibrate: (pattern) => vibrate(window.navigator, pattern),
     },

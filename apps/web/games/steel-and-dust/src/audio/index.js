@@ -1,4 +1,4 @@
-import { announce, createAnnouncer, primeAnnouncer } from './announcer.js';
+import { createAnnouncer, playCall, preloadCalls } from './announcer.js';
 import { SOUND_DEFINITIONS } from './bank/definitions.js';
 import { applyVolumes } from './context/volumes.js';
 import { resumeAudio, unlockAudio } from './context/unlock.js';
@@ -20,7 +20,8 @@ function describeState(audio) {
   };
 }
 
-// game is only read: camera.x, muted, settings.music, settings.sfx, mode, clearTime, boss
+// game is only read: camera.x, muted, settings.music, settings.sfx, mode, clearTime, boss,
+// missionIndex
 export function createAudio(game) {
   const audio = {
     context: null,
@@ -33,19 +34,22 @@ export function createAudio(game) {
     music: createMusicState(),
     ducked: null,
   };
-  const announcer = createAnnouncer(globalThis);
+  const announcer = createAnnouncer();
   return {
     unlock: () => {
       unlockAudio(audio, game);
-      primeAnnouncer(announcer);
+      preloadCalls(audio, announcer, game);
     },
     resume: () => resumeAudio(audio),
     sfx: (key, big, options) => playSound(audio, game, { key, big, options }),
-    announce: (line) => announce(announcer, game, line),
+    announce: (call) => playCall(audio, announcer, { game, call }),
     setTickOffset: (seconds) => {
       audio.tickOffset = seconds;
     },
-    update: () => updateMusic(audio, game),
+    update: () => {
+      updateMusic(audio, game);
+      preloadCalls(audio, announcer, game);
+    },
     syncVolumes: () => applyVolumes(audio.chain, game),
     debugState: () => describeState(audio),
   };

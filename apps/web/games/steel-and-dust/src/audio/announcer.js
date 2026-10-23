@@ -1,58 +1,71 @@
-// the announcer speaks in the browser's own voice: every other sound is built from oscillators and
-// noise, and those cannot say a line of words
-const PITCH = 0.6;
-const RATE = 0.95;
+import { clearCall, startCall } from '../data/mission-handoff.js';
+import { MISSIONS } from '../data/missions/index.js';
+import { startTime } from './timing.js';
 
-export function createAnnouncer(scope) {
-  const { speechSynthesis, SpeechSynthesisUtterance } = scope;
-  const usable = Boolean(speechSynthesis && SpeechSynthesisUtterance);
-  return {
-    synth: usable ? speechSynthesis : null,
-    Utterance: SpeechSynthesisUtterance,
-    voice: null,
-    primed: false,
+const CLIPS = 'assets/audio/announcer/';
+const VOLUME = 0.9;
+
+// the announcer's calls are the one recorded sound: oscillators and noise cannot say words
+export function createAnnouncer() {
+  return { clips: new Map(), loadedFor: null, playing: null };
+}
+
+// a call is fetched and decoded once; one still on its way, or one that failed, stays silent
+function loadCall(audio, announcer, call) {
+  if (announcer.clips.has(call)) {
+    return;
+  }
+  announcer.clips.set(call, null);
+  Promise.resolve()
+    .then(() => globalThis.fetch(`${CLIPS}${call}.mp3`))
+    .then((response) => (response.ok ? response.arrayBuffer() : Promise.reject(response.status)))
+    .then((data) => audio.context.decodeAudioData(data))
+    .then((clip) => announcer.clips.set(call, clip))
+    .catch(() => {});
+}
+
+// a mission's own calls and the next one's start come in while it is played, as its road does
+export function preloadCalls(audio, announcer, game) {
+  const index = game.missionIndex;
+  if (!audio.context || announcer.loadedFor === index) {
+    return;
+  }
+  announcer.loadedFor = index;
+  const next = MISSIONS[index + 1];
+  const calls = [
+    startCall(index + 1),
+    clearCall(index + 1),
+    ...(next ? [startCall(index + 2)] : []),
+  ];
+  calls.forEach((call) => loadCall(audio, announcer, call));
+}
+
+function stopPlaying(announcer) {
+  try {
+    announcer.playing?.stop();
+  } catch {
+    // it had already ended
+  }
+}
+
+// through the effects bus, so it keeps to the sound effects volume and stands in the same room
+export function playCall(audio, announcer, { game, call }) {
+  const clip = announcer.clips.get(call);
+  if (!clip || !audio.chain || game.muted || audio.context.state !== 'running') {
+    return;
+  }
+  stopPlaying(announcer);
+  const source = audio.context.createBufferSource();
+  const gain = audio.context.createGain();
+  source.buffer = clip;
+  gain.gain.value = VOLUME;
+  source.connect(gain).connect(audio.chain.effectsBus);
+  source.onended = () => {
+    gain.disconnect();
+    if (announcer.playing === source) {
+      announcer.playing = null;
+    }
   };
-}
-
-// an English voice on the device itself starts at once; one fetched from a server lags the card
-function pickVoice(synth) {
-  const english = synth.getVoices().filter((voice) => voice.lang?.toLowerCase().startsWith('en'));
-  return english.find((voice) => voice.localService) ?? english[0] ?? null;
-}
-
-function speak(announcer, { line, volume }) {
-  const { synth, Utterance } = announcer;
-  const utterance = new Utterance(line);
-  announcer.voice ??= pickVoice(synth);
-  if (announcer.voice) {
-    utterance.voice = announcer.voice;
-  }
-  Object.assign(utterance, { lang: 'en-US', pitch: PITCH, rate: RATE, volume });
-  synth.cancel();
-  synth.speak(utterance);
-}
-
-// iPhone only lets a page speak once it has spoken inside a tap, so the first tap says nothing
-export function primeAnnouncer(announcer) {
-  if (!announcer.synth || announcer.primed) {
-    return;
-  }
-  announcer.primed = true;
-  try {
-    speak(announcer, { line: '', volume: 0 });
-  } catch {
-    announcer.primed = false;
-  }
-}
-
-export function announce(announcer, game, line) {
-  const volume = game.muted ? 0 : game.settings.sfx / 100;
-  if (!announcer.synth || volume <= 0) {
-    return;
-  }
-  try {
-    speak(announcer, { line, volume });
-  } catch {
-    // a browser that refuses to speak leaves the cards silent; the game goes on
-  }
+  source.start(startTime(audio, 0.005));
+  announcer.playing = source;
 }

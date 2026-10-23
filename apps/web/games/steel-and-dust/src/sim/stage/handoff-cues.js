@@ -2,6 +2,7 @@ import {
   CARD_STAGGER,
   cardAge,
   cardLetterCount,
+  CLEAR_CALL_TICK,
   clearCall,
   letterHitsAt,
   startCall,
@@ -20,14 +21,18 @@ function letterHitsNow(age, letterCount) {
 
 function callOut(game, clearing) {
   const { number } = missionOf(game);
-  return clearing ? clearCall(number, isLastMission(game.missionIndex)) : startCall(number);
+  return clearing ? clearCall(number) : startCall(number);
 }
 
-// the announcer calls the mission as its card starts to fall, and each letter stamps as it strikes
+function callsNow(game, age, clearing) {
+  return clearing ? game.clearTime === CLEAR_CALL_TICK : age === 0;
+}
+
+// the announcer calls the mission, and each letter of its card stamps as it strikes
 function cueTitleCard(game, banner) {
   const clearing = game.clearTime > 0;
   const age = cardAge(banner, clearing);
-  if (age === 0) {
+  if (callsNow(game, age, clearing)) {
     game.io.announce(callOut(game, clearing));
   }
   if (letterHitsNow(age, cardLetterCount(banner.text))) {

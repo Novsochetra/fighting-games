@@ -10,7 +10,7 @@ function listenedGame(missionIndex) {
   const heard = [];
   const io = {
     sfx: (key) => heard.push({ tick: game.tickCount, mission: game.missionIndex, key }),
-    announce: (line) => heard.push({ tick: game.tickCount, mission: game.missionIndex, line }),
+    announce: (call) => heard.push({ tick: game.tickCount, mission: game.missionIndex, call }),
   };
   const game = createTestGame({ io });
   selectMission(game, missionIndex);
@@ -37,12 +37,12 @@ describe('the sounds of the hand-off between two missions', () => {
   const cleared = ofMission(heard, 0);
   const next = ofMission(heard, 1);
 
-  it('calls the cleared mission as its card falls, then stamps each of its letters', () => {
-    const lines = cleared.filter((sound) => sound.line);
-    expect(lines.map((sound) => sound.line)).toEqual(['Mission 1 complete!']);
+  it('calls the cleared mission as the boss falls, then stamps each letter of its card', () => {
+    const calls = cleared.filter((sound) => sound.call);
+    expect(calls.map((sound) => sound.call)).toEqual(['mission-01-complete']);
     const stamps = stampTicks(cleared);
     expect(stamps).toHaveLength('MISSIONCOMPLETE'.length);
-    expect(stamps[0]).toBeGreaterThan(lines[0].tick);
+    expect(stamps[0]).toBeGreaterThan(calls[0].tick);
   });
 
   it('stamps the letters one after another, in step with them dropping in', () => {
@@ -56,18 +56,25 @@ describe('the sounds of the hand-off between two missions', () => {
     expect(wipes[0].tick).toBeGreaterThan(stampTicks(cleared).at(-1));
   });
 
+  // the call runs about two and a half seconds, its hall included
+  it('leaves the clear call time to be said before the wipe rushes in', () => {
+    const call = cleared.find((sound) => sound.call);
+    const wipe = cleared.find((sound) => sound.key === 'wipe');
+    expect(wipe.tick - call.tick).toBeGreaterThan(2.3 * 60);
+  });
+
   it('opens the next mission with its rush, its call and a stamp for each letter', () => {
     expect(next[0].key).toBe('reveal');
-    expect(next.filter((sound) => sound.line).map((sound) => sound.line)).toEqual([
-      'Mission 2, start!',
+    expect(next.filter((sound) => sound.call).map((sound) => sound.call)).toEqual([
+      'mission-02-start',
     ]);
     expect(stampTicks(next)).toHaveLength('MISSION2'.length);
   });
 
   it('calls the whole game clear on the last mission, with no wipe to a next one', () => {
     const last = clearAndWalkOn(MISSIONS.length - 1);
-    expect(last.filter((sound) => sound.line).map((sound) => sound.line)).toEqual([
-      'Mission 12 complete. All clear!',
+    expect(last.filter((sound) => sound.call).map((sound) => sound.call)).toEqual([
+      'mission-12-complete',
     ]);
     expect(last.some((sound) => sound.key === 'wipe')).toBe(false);
     expect(stampTicks(last)).toHaveLength('ALLCLEAR'.length);
