@@ -1,3 +1,4 @@
+import { COLORS } from '../../art/colors.js';
 import { RENDER_SCALE } from '../../config.js';
 import { HUD_FRAMES } from '../../data/hud-frames.js';
 import { drawNineSlice } from '../nine-slice.js';
@@ -27,4 +28,14 @@ export function drawHudFrame(painter, sheets, kind, rect) {
     rect,
     scale: RENDER_SCALE,
   });
+}
+
+// the dark fill keeps the text readable on a bright sky
+export function drawPlaque(painter, sheets, kind, rect) {
+  painter
+    .alpha(0.55)
+    .use(COLORS.night)
+    .rect(rect.x + 2, rect.y + 2, rect.width - 4, rect.height - 4);
+  painter.alpha(1);
+  drawHudFrame(painter, sheets, kind, rect);
 }

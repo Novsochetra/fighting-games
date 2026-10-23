@@ -1,14 +1,14 @@
 import { COLORS } from '../../art/colors.js';
-import { drawText } from '../text/draw-text.js';
 import { drawBar } from './bar.js';
-import { drawHudFrame } from './hud-frames.js';
+import { drawPlaque } from './hud-frames.js';
 import { drawLives, LIVES_WIDTH } from './lives.js';
-import { HERO_PLAQUE, ROW_ONE, ROW_TWO } from './top-bar.js';
+import { LIVES_BOX, ROW_ONE, ROW_TWO, VITALS_BOX } from './top-bar.js';
 import { drawUltGauge } from './ult-gauge.js';
-import { drawWeaponSlot } from './weapon-slot.js';
+import { drawWeaponBox } from './weapon-box.js';
 
-const VITALS_X = 52;
-const VITALS_RIGHT = 201;
+const BAR_INSET = 6;
+const BAR_X = VITALS_BOX.x + BAR_INSET;
+const BAR_WIDTH = VITALS_BOX.width - BAR_INSET * 2;
 
 function healthColor(fraction, tickCount) {
   if (fraction > 0.5) {
@@ -23,33 +23,30 @@ function healthColor(fraction, tickCount) {
 function drawHealth(painter, player, tickCount) {
   const fraction = player.hp / player.maxHp;
   drawBar(painter, {
-    x: VITALS_X,
+    x: BAR_X,
     y: ROW_ONE - 1,
-    width: 132,
+    width: BAR_WIDTH,
     height: 6,
     fraction,
     lag: player.hpLag / player.maxHp,
     color: healthColor(fraction, tickCount),
   });
-  drawText(painter, `${Math.ceil(player.hp)}`, {
-    x: VITALS_RIGHT,
-    y: ROW_ONE,
-    color: fraction <= 0.25 ? COLORS.salmon : COLORS.lilac,
-    align: 'right',
+}
+
+function drawLivesBox(painter, game, view) {
+  drawPlaque(painter, view.hudFrames, 'panel', LIVES_BOX);
+  drawLives(painter, {
+    lives: game.lives,
+    x: LIVES_BOX.x + Math.floor((LIVES_BOX.width - LIVES_WIDTH) / 2),
+    y: LIVES_BOX.y + 5,
   });
 }
 
-// two rows: the health bar over the ULT gauge and the lives, beside the weapon slot
+// the weapon in one box, health over the ULT gauge in the next, and the lives under the weapon
 export function drawPlayerPanel(painter, game, view) {
-  const { width, height } = HERO_PLAQUE;
-  painter
-    .alpha(0.55)
-    .use(COLORS.night)
-    .rect(2, 2, width - 4, height - 4);
-  painter.alpha(1);
-  drawHudFrame(painter, view.hudFrames, 'panel', HERO_PLAQUE);
-  drawWeaponSlot(painter, game);
+  drawWeaponBox(painter, game, view);
+  drawPlaque(painter, view.hudFrames, 'panel', VITALS_BOX);
   drawHealth(painter, game.player, game.tickCount);
-  drawUltGauge(painter, game, { x: VITALS_X, y: ROW_TWO });
-  drawLives(painter, { lives: game.lives, x: VITALS_RIGHT - LIVES_WIDTH, y: ROW_TWO });
+  drawUltGauge(painter, game, { x: BAR_X, y: ROW_TWO, width: BAR_WIDTH });
+  drawLivesBox(painter, game, view);
 }

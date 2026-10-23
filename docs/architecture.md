@@ -72,10 +72,10 @@ the same screen covers a mission's road and the picked Shade while they load (`m
 The menus and the HUD share one carved-sandstone kit in `assets/ui/` (see its README): nine-slice
 frames for the hero cards, the settings panel and the HUD panels, which the HUD draws with
 `src/render/nine-slice.js`.
-The HUD keeps to two rows along the top (`src/render/hud/top-bar.js`): the hero's plaque (the weapon
-slot, health over the ULT gauge and the lives) and the score plaque after it (score over clock, with
-the best combo and the wave beside them). Nothing sits in the top right corner, which is the touch
-pause button's.
+The HUD sits along the top (`src/render/hud/top-bar.js`): the weapon box (icon, name and hits left)
+with the lives in a small box under it, health over the ULT gauge beside it, the clock in the middle
+(with the wave under it while the camera is locked on a zone), and the score and best combo flush
+with the top right corner.
 
 The touch buttons and the stick can be moved and resized (Settings, Button layout). The editor is its
 own menu, `layout`, in `src/ui/layout/` with `styles/layout-editor.css`: it drags a copy of the touch

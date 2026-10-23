@@ -1,7 +1,7 @@
 import { difficultyOf } from '../../data/difficulty.js';
 import { MISSIONS } from '../../data/missions/index.js';
 import { WEAPONS } from '../../data/weapons/index.js';
-import { formatClock } from '../../render/hud/score.js';
+import { formatClock } from '../../render/hud/clock.js';
 
 function titleTip({ ui, fullscreen, isIos, padConnected }) {
   if (ui.isTouchOn()) {

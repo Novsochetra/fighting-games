@@ -3,10 +3,11 @@ import { HUD_COLORS } from '../../art/hud-colors.js';
 import { WEAPONS } from '../../data/weapons/index.js';
 import { drawItemIcon } from '../scene/item-icons.js';
 import { drawText, textWidth } from '../text/draw-text.js';
-import { ROW_ONE, ROW_TWO } from './top-bar.js';
+import { drawPlaque } from './hud-frames.js';
+import { ROW_ONE, ROW_TWO, WEAPON_BOX } from './top-bar.js';
 
-const SLOT = { x: 6, y: 5, size: 18 };
-const COLUMN_X = 28;
+const SLOT = { x: WEAPON_BOX.x + 7, y: 5, size: 18 };
+const COLUMN_X = SLOT.x + SLOT.size + 4;
 
 // a 9x5 infinity sign as [left, width] runs, one row at a time from the top
 const LOOP_EDGE = [
@@ -75,7 +76,8 @@ function drawSlot(painter, { weapon, def, popup }) {
 }
 
 // the icon spans both rows, with the weapon's name over the hits it has left
-export function drawWeaponSlot(painter, game) {
+export function drawWeaponBox(painter, game, view) {
+  drawPlaque(painter, view.hudFrames, 'panel', WEAPON_BOX);
   const weapon = game.player.weapon;
   const def = WEAPONS[weapon.id];
   const pop = drawSlot(painter, { weapon, def, popup: game.weaponPopup });
