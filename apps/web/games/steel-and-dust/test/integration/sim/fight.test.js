@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { ULT_MAX } from '../../../src/config.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { heroMoves } from '../../../src/data/styles/index.js';
 import { movesetOf, setWeapon } from '../../../src/sim/fighters/loadout.js';
@@ -198,6 +199,7 @@ describe('a fight, with every system running', () => {
     Object.assign(boss, { entering: false, x: 200, hp: 1 });
     game.player.x = boss.x - 20;
     game.player.facing = 1;
+    game.ultMeter = ULT_MAX;
     tap(game, 'heavy');
     runTicks(game, 60);
     return boss;

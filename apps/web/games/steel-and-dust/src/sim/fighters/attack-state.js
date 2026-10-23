@@ -1,6 +1,7 @@
 import { activeEnd, moveLength } from '../../data/moves/define-move.js';
 import { playSwing, swingLeadTicks } from '../combat/sounds.js';
 import { shake } from '../fx/camera-fx.js';
+import { updateHeavyFeel } from '../fx/heavy-feel.js';
 import { addDust } from '../fx/particles.js';
 import { pullIn, quake } from '../hazards/area-moves.js';
 import { fireEnemyShot } from '../hazards/enemy-shots.js';
@@ -111,6 +112,7 @@ export function updateAttack(game, fighter) {
     releaseStrike(game, fighter, move);
   }
   playMoveCues(game, fighter, move, time);
+  updateHeavyFeel(game, fighter, move, time);
   const active = time >= move.startup && time < activeEnd(move);
   if (active) {
     whileActive(game, fighter, move, time);

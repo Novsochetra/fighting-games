@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { ULT_MAX } from '../../../src/config.js';
 import { createPlayingGame, press, release, runTicks, tap } from '../../support/test-game.js';
 
 function readyGame() {
@@ -41,6 +42,7 @@ describe('moving while attacking', () => {
 
   it('creeps along while charging a heavy', () => {
     const game = readyGame();
+    game.ultMeter = ULT_MAX;
     press(game, 'left');
     press(game, 'heavy');
     runTicks(game, 1);

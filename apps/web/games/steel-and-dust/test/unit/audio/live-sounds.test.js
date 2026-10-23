@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { buildChain } from '../../../src/audio/context/build-chain.js';
+import { HEAVY_SOUNDS } from '../../../src/audio/live/heavy/index.js';
 import { LIVE_SOUNDS } from '../../../src/audio/live/live-sounds.js';
+import { HEROES } from '../../../src/data/heroes.js';
 import { click } from '../../../src/audio/live/layers.js';
 import { createFakeAudioContext, nodesOfKind, reaches } from './fake-audio-context.js';
 
@@ -18,7 +20,8 @@ const scheduledNodes = (context) => [
 
 describe('live sounds', () => {
   it('covers the menu, event, Shade signature and boss sounds', () => {
-    expect(Object.keys(LIVE_SOUNDS).sort()).toEqual(
+    const shared = Object.keys(LIVE_SOUNDS).filter((key) => !Object.hasOwn(HEAVY_SOUNDS, key));
+    expect(shared.sort()).toEqual(
       [
         'pickup',
         'heal',
@@ -86,6 +89,19 @@ describe('live sounds', () => {
         'rainbow',
       ].sort(),
     );
+  });
+
+  // each Shade's heavy has a charge of its own (and may have more), named after the Shade
+  it('gives every Shade a heavy charge and the empty bar its fizzle', () => {
+    expect(Object.keys(HEAVY_SOUNDS)).toContain('heavyEmpty');
+    for (const { id } of HEROES) {
+      expect(Object.keys(HEAVY_SOUNDS)).toContain(
+        `heavy${id[0].toUpperCase()}${id.slice(1)}Charge`,
+      );
+    }
+    for (const key of Object.keys(HEAVY_SOUNDS)) {
+      expect(key.startsWith('heavy')).toBe(true);
+    }
   });
 
   it.each(Object.keys(LIVE_SOUNDS))(

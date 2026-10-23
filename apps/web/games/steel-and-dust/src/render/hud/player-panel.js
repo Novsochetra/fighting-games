@@ -6,6 +6,7 @@ import { drawText } from '../text/draw-text.js';
 import { drawBar } from './bar.js';
 import { drawHudFrame } from './hud-frames.js';
 import { drawLives } from './lives.js';
+import { drawUltGauge } from './ult-gauge.js';
 
 const FRAME = { x: 0, y: 0, width: 132, height: 62 };
 // the stone frame's corners would cover the panel's first letters, so everything inside moves in
@@ -82,33 +83,6 @@ function drawWeaponSlot(painter, game) {
   }
   drawText(painter, def.name, { x: 27, y: 18, color: pop ? def.trailColor : COLORS.sand });
   drawDurability(painter, weapon, def, game.tickCount);
-}
-
-function ultColor(full, tickCount) {
-  if (!full) {
-    return HUD_COLORS.ultFill;
-  }
-  return (tickCount >> 2) & 1 ? COLORS.gold : COLORS.cream;
-}
-
-function drawUltGauge(painter, game) {
-  const full = game.ultMeter >= 100;
-  const tickCount = game.tickCount;
-  drawText(painter, 'ULT', { x: 6, y: 37, color: full ? COLORS.gold : COLORS.lilac });
-  painter.use(COLORS.outline).rect(21, 36, 72, 7);
-  painter.use(HUD_COLORS.barBack).rect(22, 37, 70, 5);
-  painter.use(ultColor(full, tickCount)).rect(22, 37, Math.round((70 * game.ultMeter) / 100), 5);
-  for (let i = 1; i < 4; i++) {
-    painter.use(COLORS.outline).rect(22 + Math.round(i * 17.5), 37, 1, 5);
-  }
-  if (!full) {
-    return;
-  }
-  drawText(painter, (tickCount >> 4) & 1 ? 'READY' : '', { x: 96, y: 37, color: COLORS.gold });
-  if ((tickCount >> 2) & 1) {
-    painter.alpha(0.5).use(COLORS.gold).outline(20, 35, 74, 9);
-    painter.alpha(1);
-  }
 }
 
 export function drawPlayerPanel(painter, game, view) {

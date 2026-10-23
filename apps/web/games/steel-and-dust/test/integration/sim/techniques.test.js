@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { ULT_MAX } from '../../../src/config.js';
 import { freezeTarget } from '../../../src/sim/combat/freeze.js';
 import { equipWeapon } from '../../../src/sim/stage/flow.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
@@ -19,6 +20,7 @@ function fightRaiders(hero, { weapon = 'sword', offsets = [16] } = {}) {
   equipWeapon(game, weapon);
   const raiders = offsets.map((offset) => addRaider(game, offset));
   game.player.facing = 1;
+  game.ultMeter = ULT_MAX;
   return { game, raiders, sounds };
 }
 

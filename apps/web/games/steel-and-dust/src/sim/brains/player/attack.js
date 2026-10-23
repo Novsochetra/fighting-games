@@ -1,8 +1,9 @@
 import { activeEnd } from '../../../data/moves/define-move.js';
 import { clamp } from '../../../lib/math.js';
-import { dash, jump, startCharge, startMove } from '../../fighters/actions.js';
+import { dash, jump } from '../../fighters/actions.js';
 import { autoFace } from '../../fighters/aim.js';
 import { consumeBuffer } from './controls.js';
+import { startHeroMove, tryCharge } from './heavy-gate.js';
 import { pickAirMove, pickGroundMove } from './pick-move.js';
 
 const GROUND_STEP = 0.25;
@@ -42,7 +43,7 @@ function chainAttack(game, player, { buffer, direction }) {
   const id = player.airborne ? pickAirMove(buffer, held, move) : pickGroundMove(buffer, held, move);
   if (id) {
     faceForFollowUp(game, player, direction);
-    startMove(game, player, id);
+    startHeroMove(game, player, id);
     consumeBuffer(game);
     return true;
   }
@@ -51,7 +52,7 @@ function chainAttack(game, player, { buffer, direction }) {
     if (direction) {
       player.facing = direction;
     }
-    startCharge(player);
+    tryCharge(game, player);
     consumeBuffer(game);
     return true;
   }

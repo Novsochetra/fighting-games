@@ -24,6 +24,10 @@ export const HINTS = {
     keys: 'bulwarks block light hits: use K heavy or hit them from behind',
     touch: 'Bulwarks block light hits: use HEAVY or get behind them',
   },
+  heavyBar: {
+    keys: 'light hits fill the bar: each heavy uses a little, a ULT uses half',
+    touch: 'ATTACK hits fill the bar: each HEAVY uses a little, a ULT uses half',
+  },
   sling: {
     keys: 'jump or dash over thrown knives, or hit them back',
     touch: 'JUMP or DASH over thrown knives, or hit them back',

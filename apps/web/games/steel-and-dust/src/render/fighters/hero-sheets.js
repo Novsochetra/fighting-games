@@ -12,6 +12,9 @@ export function createHeroSheets(view) {
   view.heroSheets = {};
   for (const hero of HEROES) {
     const theme = HERO_THEMES[hero.id];
-    view.heroSheets[hero.id] = loadHeroSprites({ ...view.loaders, hero, theme });
+    // the sheet fills in as its strips load, so it is tagged, not copied
+    const sheet = loadHeroSprites({ ...view.loaders, hero, theme });
+    sheet.heroId = hero.id;
+    view.heroSheets[hero.id] = sheet;
   }
 }

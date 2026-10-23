@@ -10,6 +10,7 @@ export function findElements(document) {
     stickKnob: byId('stickKnob'),
     pauseButton: byId('pauseBtn'),
     ultButton: document.querySelector('#touch [data-action="ult"]'),
+    heavyButton: document.querySelector('#touch [data-action="heavy"]'),
     touchButtons: [...document.querySelectorAll('#touch .tb')],
     menus: byId('menus'),
     settingsList: byId('settingsList'),

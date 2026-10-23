@@ -241,6 +241,29 @@ Each Shade fights in its own style and has its own ultimate:
   The Angkor Warrior's chop opens a `fissure` effect (`src/sim/fx/fissure.js`, drawn by
   `src/render/fx/fissure.js`): a crack fixed to the road that runs out to both screen edges with
   light rising out of it.
+- Light fills the ULT bar and Heavy spends it (`src/sim/combat/ult-bar.js`). The bar holds two
+  ultimates (`ULT_MAX`); a ULT spends one (`ULT_FULL`). Only the hero's own light blows fill it
+  (`meterForHit`: not heavies, ultimates, or the summons and shots they leave), and so do blows
+  the hero takes. Every heavy move (`isHeavyMove`, `src/data/moves/heavy-moves.js`) pays the
+  difficulty's `heavyCost`; the player brains start moves through `src/sim/brains/player/heavy-gate.js`,
+  which refuses a heavy, or a charge, the bar cannot pay for, with a fizzle, "No power", the
+  `heavyBar` hint and a red blink of the gauge (`src/render/hud/ult-gauge.js`, drawn in two halves);
+  the touch HEAVY button greys out (`empty`). A heavy let go out of a charge always comes out.
+- Each Shade's heavy is dressed by a kit of its own, run by `src/sim/fx/heavy-feel.js` on every
+  tick of a hero's heavy: `windup` and its charge sound as it starts, `gather` over the wind-up,
+  `release` (and a lunge, unless the move moves on its own) as it strikes, `trail` while it is
+  active, and `impact` on each blow that lands (from `showImpact`); afterimages in the Shade's
+  trail color run from just before the strike to just after. A Shade's heavy is five files named
+  after it: `src/art/heavy-fx/` (its glow, flash, trail and mote colors), `src/data/heavy-feel/`
+  (lean, lunge, afterimages), `src/sim/fx/heavy/` (the kit and its own particle kinds, which
+  `update-effects.js` moves), `src/render/fx/heavy/` (those kinds' drawing and layers under and
+  over the hero, through `src/render/fighters/heavy-glow.js`) and `src/audio/live/heavy/`
+  (its sounds); each folder's `index.js` gathers the seven. The wind-up glow (dim, full, then hot
+  as it strikes) and the lean are drawn only (`heavy-glow.js`), so a heavy reaches as far as ever.
+  A kit draws its randomness from `fxRandom` (`src/sim/fx/fx-random.js`), a seeded stream of the
+  game's own, never `Math.random`, so dressing a heavy never changes how a fight goes;
+  `test/unit/sim/heavy-kits.test.js` and `test/integration/sim/heavy-feel.test.js` hold every kit
+  to this contract.
 
 Bosses are moving from one shared brain to a kit each (the plan for all twelve is in
 `docs/boss-kits.md`). A boss without a kit swipes, slams and charges (`src/sim/brains/enemy/boss.js`).

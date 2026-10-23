@@ -7,7 +7,7 @@ const TIPS = [
   'Up + light lifts you into the air with the raider. In the air, down + light bounces off their head, up to three times a jump.',
   'The thin bar under the combo counter shows how long you have to land the next hit.',
   'Each hero has four <b>techniques</b> of its own, on every weapon: heavy then light (K J), K K J, K K K J, and Air K J. The help lists them for your hero.',
-  "Landing hits and taking damage fill the <b>ULT</b> bar. When it is full, your hero's own ultimate hits every raider on screen.",
+  "<b>Light fills the bar, Heavy spends it.</b> Light hits and taking damage fill the <b>ULT</b> bar; every heavy uses a little of it, and with too little left heavy does nothing. The bar holds two ultimates: when half is full, your hero's own ultimate hits every raider on screen.",
   'Pick your <b>hero</b> after pressing Play. Each one fights in its own style: Moss raises thorns, Firefly looses fireflies, Antler sends spirit stags, Blue freezes raiders solid, Ember sets them burning, Bokator sends a golden lion pouncing and the Angkor Warrior calls carved soldiers out of the stone.',
   '<b>Knife Slingers</b> and <b>Crossbow Sentries</b> shoot from a distance: jump or dash over the shot, or hit it back at them.',
   '<b>Fire-Pot Bombers</b> lob pots that burst into fire. Step out of the flames.',

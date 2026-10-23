@@ -2,6 +2,7 @@ import { CHARGE_LEVEL1, CHARGE_MAX } from '../../../config.js';
 import { dash, startMove, startSquat } from '../../fighters/actions.js';
 import { autoFace } from '../../fighters/aim.js';
 import { consumeBuffer, dashDirection } from './controls.js';
+import { startHeroMove } from './heavy-gate.js';
 
 const CHARGE_CREEP = 0.7;
 
@@ -37,7 +38,7 @@ export function thinkCharge(game, player, intent) {
     player.vx = intent.direction * CHARGE_CREEP;
   }
   if (player.stateTime <= 4 && (held.up || held.down)) {
-    startMove(game, player, 'UK');
+    startHeroMove(game, player, 'UK');
     return;
   }
   if (cancelCharge(game, player, intent)) {
@@ -47,6 +48,6 @@ export function thinkCharge(game, player, intent) {
     if (!intent.direction) {
       autoFace(game, player);
     }
-    startMove(game, player, chargedMoveId(player.stateTime));
+    startHeroMove(game, player, chargedMoveId(player.stateTime));
   }
 }

@@ -1,5 +1,6 @@
 import { heroById } from '../../data/heroes.js';
 import { ultimateOf } from '../../data/ultimates/index.js';
+import { spendUlt } from '../combat/ult-bar.js';
 import { themeOf } from '../fighters/hero-colors.js';
 import { shake } from '../fx/camera-fx.js';
 import { addSparks } from '../fx/particles.js';
@@ -25,7 +26,7 @@ export function startUlt(game, player) {
   Object.assign(player, { state: 'ult', stateTime: 0, move: null, hitboxActive: false });
   player.trail.length = 0;
   Object.assign(player, { vx: 0, vy: 0, invincible: 999, ultFrame: ['ult', 0] });
-  game.ultMeter = 0;
+  spendUlt(game);
   game.ultFreeze = ultimateOf(game.settings.hero).intro;
   game.io.sfx('ult');
   shake(game, 2, 12);

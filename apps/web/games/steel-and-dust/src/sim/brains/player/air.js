@@ -1,6 +1,7 @@
 import { clamp } from '../../../lib/math.js';
-import { dash, startMove } from '../../fighters/actions.js';
+import { dash } from '../../fighters/actions.js';
 import { consumeBuffer, dashDirection, faceOrAim } from './controls.js';
+import { startHeroMove } from './heavy-gate.js';
 import { pickAirMove } from './pick-move.js';
 
 export function thinkAir(game, player, { buffer, direction }) {
@@ -16,7 +17,7 @@ export function thinkAir(game, player, { buffer, direction }) {
     const id = pickAirMove(buffer, game.input.held, null);
     if (id) {
       faceOrAim(game, player, direction);
-      startMove(game, player, id);
+      startHeroMove(game, player, id);
       consumeBuffer(game);
     }
   }

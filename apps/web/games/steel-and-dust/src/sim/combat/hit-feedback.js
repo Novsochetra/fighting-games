@@ -6,6 +6,7 @@ import { isPlayer } from '../fighters/loadout.js';
 import { punch, shake } from '../fx/camera-fx.js';
 import { addImpact, addRing, addSpeedLines } from '../fx/effects.js';
 import { buzz } from '../fx/haptics.js';
+import { heavyImpact } from '../fx/heavy-feel.js';
 import { addSparks } from '../fx/particles.js';
 
 function shakeAmount(hitstop) {
@@ -43,6 +44,7 @@ export function showImpact(game, hit, { direction, hitstop }) {
     direction,
   });
   addSparks(game, { x: hit.x, y: hit.y, count: heavy ? 10 : 6, color, speed: heavy ? 3.2 : 2.4 });
+  heavyImpact(game, hit);
   return color;
 }
 

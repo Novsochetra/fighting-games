@@ -1,4 +1,5 @@
 import { floorBelow } from '../stage/terrain.js';
+import { HEAVY_PARTICLE_MOVERS } from './heavy/index.js';
 
 const MAX_PARTICLES = 500;
 
@@ -36,6 +37,7 @@ const MOVE_PARTICLE = {
   },
 };
 MOVE_PARTICLE.streak = MOVE_PARTICLE.mote;
+Object.assign(MOVE_PARTICLE, HEAVY_PARTICLE_MOVERS);
 
 function updateParticles(game) {
   for (const particle of game.particles) {

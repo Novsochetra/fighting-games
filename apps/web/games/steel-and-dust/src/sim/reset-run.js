@@ -49,6 +49,8 @@ function resetCamera(camera) {
 function resetScore(game) {
   Object.assign(game, {
     ultMeter: 0,
+    heavyRefusedAt: -Infinity,
+    fxSeed: 1,
     ultFreeze: 0,
     flashTime: 0,
     slashBandTime: 0,

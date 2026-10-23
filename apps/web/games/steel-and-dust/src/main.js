@@ -8,6 +8,7 @@ import { TICK_MS } from './config.js';
 import { createView } from './render/create-view.js';
 import { renderFrame } from './render/render-frame.js';
 import { missionWait, sceneLoaded } from './render/scene-loaded.js';
+import { canAffordHeavy, ultReady } from './sim/combat/ult-bar.js';
 import { beginTick, runTick } from './sim/tick.js';
 import { installTitleScene } from './ui/screen/title-scene.js';
 import { createUiState } from './ui/ui-state.js';
@@ -37,7 +38,9 @@ function syncDom() {
       touchStick.rest();
     }
   }
-  elements.ultButton.classList.toggle('ready', game.ultMeter >= 100 && game.mode === 'play');
+  const playing = game.mode === 'play';
+  elements.ultButton.classList.toggle('ready', ultReady(game) && playing);
+  elements.heavyButton.classList.toggle('empty', !canAffordHeavy(game) && playing);
 }
 
 // a frame that runs several ticks offsets each tick's sounds, so they keep their spacing

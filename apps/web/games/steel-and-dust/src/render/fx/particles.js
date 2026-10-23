@@ -1,6 +1,7 @@
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { COLORS } from '../../art/colors.js';
 import { point } from '../painter.js';
+import { HEAVY_PARTICLE_DRAWS } from './heavy/index.js';
 
 function spark(painter, particle) {
   const tail = point(particle.x - particle.vx * 1.5, particle.y - particle.vy * 1.5);
@@ -36,7 +37,7 @@ function streak(painter, particle) {
   painter.alpha(1);
 }
 
-const DRAW_PARTICLE = { spark, dust, chunk, mote, streak };
+const DRAW_PARTICLE = { spark, dust, chunk, mote, streak, ...HEAVY_PARTICLE_DRAWS };
 
 export function drawParticles(painter, particles) {
   for (const particle of particles) {

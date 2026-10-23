@@ -1,7 +1,8 @@
-import { dash, startCharge, startMove, startSquat } from '../../fighters/actions.js';
+import { dash, startSquat } from '../../fighters/actions.js';
 import { dropThrough } from '../../fighters/terrain-motion.js';
 import { stoneDrag } from '../../summons/stone-skin.js';
 import { consumeBuffer, dashDirection, faceOrAim } from './controls.js';
+import { startHeroMove, tryCharge } from './heavy-gate.js';
 import { pickGroundMove } from './pick-move.js';
 
 // down and jump on a platform drops through it; anywhere else it is a jump
@@ -20,11 +21,11 @@ function act(game, player, { buffer, direction }) {
     dash(game, player, dashDirection(buffer, direction, player));
   } else if (buffer.action === 'heavy' && !(buffer.up || buffer.down || held.up || held.down)) {
     faceOrAim(game, player, direction);
-    startCharge(player);
+    tryCharge(game, player);
   } else {
     const id = pickGroundMove(buffer, held, null);
     faceOrAim(game, player, direction);
-    startMove(game, player, id);
+    startHeroMove(game, player, id);
   }
   consumeBuffer(game);
 }
@@ -55,7 +56,7 @@ export function thinkSquat(game, player, { buffer, direction }) {
     if (direction) {
       player.facing = direction;
     }
-    startMove(game, player, id);
+    startHeroMove(game, player, id);
     consumeBuffer(game);
   }
 }

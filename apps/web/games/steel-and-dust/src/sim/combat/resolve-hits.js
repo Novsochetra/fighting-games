@@ -1,5 +1,6 @@
 import { COLORS } from '../../art/colors.js';
 import { activeEnd } from '../../data/moves/define-move.js';
+import { isHeavyMove } from '../../data/moves/heavy-moves.js';
 import { strikePharaohSpells } from '../bosses/pharaoh-targets.js';
 import { isPlayer } from '../fighters/loadout.js';
 import { addFloatText, addRing } from '../fx/effects.js';
@@ -10,8 +11,8 @@ import { breakCrate } from '../items/crates.js';
 import { shatterIceOn } from '../summons/ice.js';
 import { applyHit } from './apply-hit.js';
 import { crateBox, hurtBox, knifeBox, overlapCenter, overlaps, swingBox } from './boxes.js';
-import { addUltMeter } from './combo.js';
 import { useDurability } from './durability.js';
+import { addUltMeter } from './ult-bar.js';
 
 const DEFLECT_SPEED = 4.6;
 
@@ -70,7 +71,10 @@ function deflectKnife(game, attacker, knife) {
   addRing(game, { x: knife.x, y: knife.y, color: COLORS.gold });
   game.io.sfx('armor');
   addFloatText(game, { x: knife.x, y: knife.y - 10, text: 'deflect!', color: COLORS.gold });
-  addUltMeter(game, 4);
+  // a knife turned with a light blow charges the bar, as the blow itself would
+  if (!isHeavyMove(attacker.move)) {
+    addUltMeter(game, 4);
+  }
 }
 
 function deflectKnives(game, attacker, area) {

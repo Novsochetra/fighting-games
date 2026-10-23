@@ -1,7 +1,8 @@
-import { dash, jump, startMove } from '../../fighters/actions.js';
+import { dash, jump } from '../../fighters/actions.js';
 import { floorUnder } from '../../fighters/terrain-motion.js';
 import { addDust } from '../../fx/particles.js';
 import { consumeBuffer, dashDirection } from './controls.js';
+import { startHeroMove } from './heavy-gate.js';
 import { pickAirMove } from './pick-move.js';
 
 const MAX_DASH_CHAIN = 2;
@@ -66,7 +67,7 @@ export function thinkDash(game, player, intent) {
     if (direction) {
       player.facing = direction;
     }
-    startMove(game, player, dashAttackId(game, player, buffer));
+    startHeroMove(game, player, dashAttackId(game, player, buffer));
     consumeBuffer(game);
   } else if (buffer.action === 'jump' && !player.airborne) {
     jump(game, player, { vy: -5.8, vx: player.facing * 2.2 });

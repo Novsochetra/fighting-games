@@ -6,13 +6,14 @@ import { burstMaterial } from '../fx/material-bursts.js';
 import { scatterFeathers } from '../fx/phoenix-feathers.js';
 import { afflictTarget } from './afflict.js';
 import { blockHit } from './block-hit.js';
-import { addUltMeter, endCombo } from './combo.js';
+import { endCombo } from './combo.js';
 import { blocksHit, canBeHit, isFacing, isGuarding } from './guard.js';
 import { feelHit, showBigHit, showDamageNumber, showImpact } from './hit-feedback.js';
 import { absorbsHit, reactToHit } from './hit-reaction.js';
 import { playHitSound } from './hit-sound.js';
 import { knockOut } from './knock-out.js';
 import { shout } from './sounds.js';
+import { addUltMeter, meterForHit } from './ult-bar.js';
 
 function damageOf(game, target, move) {
   return isPlayer(target)
@@ -39,12 +40,8 @@ function announceGuardBreak(game, { attacker, target }) {
   }
 }
 
-function chargeMeters(game, { attacker, target, move }, damage) {
-  if (isPlayer(attacker) && !move.ultimate) {
-    addUltMeter(game, damage * 0.8);
-  } else if (isPlayer(target)) {
-    addUltMeter(game, damage);
-  }
+function chargeMeters(game, hit, damage) {
+  addUltMeter(game, meterForHit(game, hit, damage));
 }
 
 function freezeOnHit({ attacker, target, move }, damage) {

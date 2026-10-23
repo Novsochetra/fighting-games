@@ -13,3 +13,5 @@ export const CHARGE_TAP = 10;
 export const CHARGE_LEVEL1 = 24;
 export const CHARGE_MAX = 66;
 export const ULT_FULL = 100;
+// the bar holds two ultimates
+export const ULT_MAX = 200;

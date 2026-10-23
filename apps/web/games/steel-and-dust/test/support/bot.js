@@ -1,4 +1,4 @@
-import { compileProgram, PROGRAMS } from './bot-programs.js';
+import { compileProgram, PROGRAMS, usesHeavy } from './bot-programs.js';
 
 const REACH = 26;
 const RESUME_AFTER = 20;
@@ -41,10 +41,21 @@ export function createBot(driver, scheduled) {
     }
   }
 
-  function startProgram(tick) {
+  // with too little bar for a heavy, a player plays light to fill it
+  function nextProgram(view) {
+    for (let tries = 0; tries < PROGRAMS.length; tries++) {
+      const program = PROGRAMS[bot.programIndex % PROGRAMS.length];
+      bot.programIndex += 1;
+      if (view.canHeavy || !usesHeavy(program)) {
+        return program;
+      }
+    }
+    return PROGRAMS[0];
+  }
+
+  function startProgram(tick, view) {
     holdDirection(0);
-    bot.events = compileProgram(PROGRAMS[bot.programIndex % PROGRAMS.length], tick + 1);
-    bot.programIndex += 1;
+    bot.events = compileProgram(nextProgram(view), tick + 1);
   }
 
   function runEvents(tick) {
@@ -78,7 +89,7 @@ export function createBot(driver, scheduled) {
       walkToward(Math.sign(dx), view);
       return;
     }
-    startProgram(tick);
+    startProgram(tick, view);
   }
 
   function handleMenus(tick, view) {

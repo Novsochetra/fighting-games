@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { ULT_MAX } from '../../../src/config.js';
 import { equipWeapon } from '../../../src/sim/stage/flow.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
 import { seededRandom } from '../../support/seeded-random.js';
@@ -18,6 +19,7 @@ function fightOneRaider(hero, weapon = 'fists') {
   raider.maxHp = 300;
   raider.ai.cooldown = 999;
   game.player.facing = 1;
+  game.ultMeter = ULT_MAX;
   return { game, raider };
 }
 

@@ -1,4 +1,5 @@
 import { COLORS } from '../../art/colors.js';
+import { ULT_MAX } from '../../config.js';
 import { addFloatText, showBanner } from '../fx/effects.js';
 import { equipWeapon, pause } from '../stage/flow.js';
 
@@ -17,7 +18,7 @@ function toggleMute(game) {
 
 function fillUlt(game) {
   const player = game.player;
-  game.ultMeter = 100;
+  game.ultMeter = ULT_MAX;
   addFloatText(game, { x: player.x, y: player.y - 48, text: 'ULT ready', color: COLORS.gold });
   game.io.sfx('chargeMax');
 }

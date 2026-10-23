@@ -38,7 +38,3 @@ export function commitScore(game) {
     game.io.saveRecords(game.records);
   }
 }
-
-export function addUltMeter(game, amount) {
-  game.ultMeter = Math.min(100, game.ultMeter + amount);
-}

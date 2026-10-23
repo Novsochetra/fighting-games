@@ -1,4 +1,5 @@
 import { HINTS } from '../data/hints.js';
+import { ultReady } from './combat/ult-bar.js';
 
 const MIN_SHOWN = 150;
 const SHOWN_FOR = 240;
@@ -23,7 +24,7 @@ function dueHints(game) {
     ['move', playTime > 30],
     ['crate', playTime > 300 && !arena && zone === 0],
     ['weapon', game.player.weapon.id !== 'fists'],
-    ['ult', game.ultMeter >= 100],
+    ['ult', ultReady(game)],
     ['launch', arena && stage.waveIndex >= 1 && zone === 0],
     ['dash', arena && zone === 1],
   ];

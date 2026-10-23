@@ -88,6 +88,13 @@
   animation: ult-ready var(--duration-pulse) var(--easing-step-2) infinite;
 }
 
+/* heavy spends the bar: with too little left it greys out, as the press would do nothing */
+.tb-heavy.empty {
+  color: var(--color-text-muted);
+  background: var(--color-touch-button);
+  border-color: var(--color-touch-border);
+}
+
 @keyframes ult-ready {
   50% {
     box-shadow: var(--shadow-ult-ready);

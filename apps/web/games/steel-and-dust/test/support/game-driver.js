@@ -1,4 +1,5 @@
 import { defaultSettings } from '../../src/data/settings.js';
+import { canAffordHeavy } from '../../src/sim/combat/ult-bar.js';
 import { createGame } from '../../src/sim/create-game.js';
 import { isFlat } from '../../src/sim/fighters/terrain-motion.js';
 import { continueRun, resumePlay, selectMission, startPlay } from '../../src/sim/stage/flow.js';
@@ -67,6 +68,7 @@ export function createGameDriver(game, renderFrame) {
     observe: () => ({
       mode: game.mode,
       meter: game.ultMeter,
+      canHeavy: canAffordHeavy(game),
       player: { x: game.player.x, y: game.player.y, state: game.player.state },
       enemies: game.fighters
         .filter((fighter) => fighter.side === 'enemy')

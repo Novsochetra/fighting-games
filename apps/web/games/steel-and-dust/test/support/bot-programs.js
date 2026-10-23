@@ -23,6 +23,10 @@ export const PROGRAMS = [
 ];
 
 const DEFAULT_HOLD = { K: 2 };
+
+export function usesHeavy(program) {
+  return program.split(' ').some((token) => /(^|\+)K(:|$)/.test(token));
+}
 const TOKEN = /^(?:(up|down)\+)?(\w+)(?::(\d+))?$/;
 
 function parseToken(token) {
