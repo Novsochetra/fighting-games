@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { SCORE_PLAQUE_X } from '../../../src/render/hud/score.js';
+import { HERO_PLAQUE } from '../../../src/render/hud/top-bar.js';
 import { renderFrame } from '../../../src/render/render-frame.js';
 import { createLateView } from '../../support/late-images.js';
 import { createPlayingGame, runTicks } from '../../support/test-game.js';
@@ -34,6 +36,8 @@ describe('the carved frames on the HUD', () => {
   it('still draws the panel and the score while their frames are on the way', () => {
     const log = fightFrame({ hudFrames: 'waiting' });
     expect(framesDrawn(log)).toEqual([]);
-    expect(log.some((call) => call.includes('translate(2,2)'))).toBe(true);
+    const { width, height } = HERO_PLAQUE;
+    expect(log).toContain(`fillRect(2,2,${width - 4},${height - 4})`);
+    expect(log.some((call) => call.startsWith(`fillRect(${SCORE_PLAQUE_X + 2},2,`))).toBe(true);
   });
 });

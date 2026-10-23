@@ -72,6 +72,10 @@ the same screen covers a mission's road and the picked Shade while they load (`m
 The menus and the HUD share one carved-sandstone kit in `assets/ui/` (see its README): nine-slice
 frames for the hero cards, the settings panel and the HUD panels, which the HUD draws with
 `src/render/nine-slice.js`.
+The HUD keeps to two rows along the top (`src/render/hud/top-bar.js`): the hero's plaque (the weapon
+slot, health over the ULT gauge and the lives) and the score plaque after it (score over clock, with
+the best combo and the wave beside them). Nothing sits in the top right corner, which is the touch
+pause button's.
 
 The touch buttons and the stick can be moved and resized (Settings, Button layout). The editor is its
 own menu, `layout`, in `src/ui/layout/` with `styles/layout-editor.css`: it drags a copy of the touch
@@ -106,7 +110,7 @@ length.
   earlier on its road is a mid-boss and only opens the road. The score, clock, continues, lives and
   ULT bar carry into the next mission (`enterNextMission`); the hero starts it fresh. Every run
   starts at mission 1; there is no mission select.
-- A run has five lives (`START_LIVES` in `src/data/player.js`), shown as hearts under the hero's
+- A run has five lives (`START_LIVES` in `src/data/player.js`), shown as hearts on the hero's
   panel (`src/render/hud/lives.js`). Every fall costs one (`loseLife` in `src/sim/stage/lives.js`)
   and nothing gives one back: not a continue, a restart of the mission or a new mission. While lives
   are left, a fallen hero continues where they fell, as any Shade: Continue opens the Shade list,

@@ -2,6 +2,7 @@ import { COLORS } from '../../art/colors.js';
 import { HERO_THEMES } from '../../art/hero-themes.js';
 import { GROUND_Y, VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
 import { heroById } from '../../data/heroes.js';
+import { TOP_BAR_HEIGHT } from '../hud/top-bar.js';
 import { drawText, textWidth } from '../text/draw-text.js';
 import { clearFadeOpacity } from './clear-fade.js';
 import { drawUltCutIn } from './ult-cut-in.js';
@@ -13,13 +14,13 @@ function hintOpacity(time) {
   return time > 220 ? (240 - time) / 20 : 1;
 }
 
-// a tip for new players, just under the health panel and clear of the action
+// a tip for new players, just under the HUD's top bar and clear of the action
 function drawHint(painter, game) {
   const { hint, device } = game;
   const text = (device.touchUsed || device.coarsePointer ? hint.touch : hint.keys).toUpperCase();
   const width = textWidth(text, 1);
   const alpha = hintOpacity(hint.time);
-  const y = 54;
+  const y = TOP_BAR_HEIGHT + 8;
   painter
     .alpha(0.75 * alpha)
     .use(COLORS.night)

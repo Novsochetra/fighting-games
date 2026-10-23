@@ -3,6 +3,8 @@ import { HUD_COLORS } from '../../art/hud-colors.js';
 import { START_LIVES } from '../../data/player.js';
 
 const HEART_GAP = 9;
+const HEART_WIDTH = 7;
+export const LIVES_WIDTH = (START_LIVES - 1) * HEART_GAP + HEART_WIDTH;
 
 // a 7x6 pixel heart as [left, width] runs, one row at a time from the top
 const HEART_ROWS = [
@@ -10,8 +12,8 @@ const HEART_ROWS = [
     [1, 2],
     [4, 2],
   ],
-  [[0, 7]],
-  [[0, 7]],
+  [[0, HEART_WIDTH]],
+  [[0, HEART_WIDTH]],
   [[1, 5]],
   [[2, 3]],
   [[3, 1]],

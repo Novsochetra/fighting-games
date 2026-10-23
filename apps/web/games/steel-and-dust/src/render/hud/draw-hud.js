@@ -2,12 +2,11 @@ import { drawBanner, drawBossBar, drawGoArrow, drawOffscreenArrows } from './ale
 import { drawCombo } from './combo.js';
 import { drawFrameData } from './frame-data.js';
 import { drawPlayerPanel } from './player-panel.js';
-import { drawScore, drawWaveLabel } from './score.js';
+import { drawScore } from './score.js';
 
 export function drawHud(painter, game, view) {
   drawPlayerPanel(painter, game, view);
   drawScore(painter, game, view);
-  drawWaveLabel(painter, game);
   drawCombo(painter, game);
   drawBossBar(painter, game.boss);
   drawGoArrow(painter, game);
