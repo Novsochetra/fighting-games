@@ -2,34 +2,14 @@ import { RENDER_SCALE } from '../../config.js';
 import { ENEMY_ATLAS } from '../../data/enemies/atlas/index.js';
 import { ENEMY_SPRITES } from '../../data/enemies/enemy-sprites.js';
 import { PIXEL, snap } from '../fx/fine-pixels.js';
-import { createTintCache, frameSource } from './tint.js';
+import { frameSource } from './tint.js';
 
-// the sheets cut down to their painted pieces (tools/pack_enemy_sheets.py): a browser keeps every
-// pixel of a sheet it draws, and the grid sheets the art is drawn in are mostly empty cells
-const DIRECTORY = 'assets/sprites/enemies/packed/';
 // a span computed a hair past a whole screen pixel still ends on it
 const EPSILON = 1e-6;
 // a screen pixel centred exactly on the line between two sheet pixels takes the first, as the grid
 // sheets mostly drew it, however the browser's rounding leans; no other pixel centre of a frame at
 // any enemy's scale comes this close to such a line
 export const TIE_BREAK = 1 / 1024;
-
-export function loadEnemySprites({ createImage, createCanvas, baseUrl }) {
-  const sheets = { images: {}, ready: {}, tints: createTintCache(createCanvas) };
-  for (const [id, sprite] of Object.entries(ENEMY_SPRITES)) {
-    const image = createImage();
-    image.onload = () => {
-      sheets.ready[id] = true;
-    };
-    image.src = `${baseUrl}${DIRECTORY}${sprite.file}`;
-    sheets.images[id] = image;
-  }
-  return sheets;
-}
-
-export function hasEnemySprite(sheets, id) {
-  return Boolean(id && sheets.ready[id]);
-}
 
 // a boss is drawn at its own scale, so its art grows with the reach of its blows and the points its
 // effects leave from; raiders are drawn as their sheets are

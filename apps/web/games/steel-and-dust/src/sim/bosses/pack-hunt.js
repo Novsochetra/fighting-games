@@ -27,7 +27,7 @@ export function howl(game, boss, move, time) {
     return;
   }
   for (let i = 0; i < move.pack; i++) {
-    game.stage.spawnQueue.push({ kind: 'hound', side: i % 2 ? 1 : -1, delay: 30 + i * 20 });
+    game.stage.spawnQueue.push({ kind: move.packKind, side: i % 2 ? 1 : -1, delay: 30 + i * 20 });
   }
   game.stage.reinforcementTimer = 0;
   game.io.sfx('howl', false, { x: boss.x });

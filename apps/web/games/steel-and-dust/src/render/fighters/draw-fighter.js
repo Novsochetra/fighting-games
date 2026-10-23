@@ -12,7 +12,7 @@ import { drawBody } from './body.js';
 import { drawDangerZone } from './danger-zone.js';
 import { drawEnemyHealth, drawWindupWarning } from './enemy-markers.js';
 import { drawSpriteEnemy } from './enemy-fighter.js';
-import { hasEnemySprite } from './enemy-sprites.js';
+import { enemySheetReady } from './enemy-sheets.js';
 import { drawHeroFighter } from './hero-fighter.js';
 import { isBossWindingUp, isTelegraphing } from './windup.js';
 
@@ -98,7 +98,7 @@ export function drawFighter(painter, { fighter, sheet, enemySheets, tickCount, f
   const shakeX = hitShakeOffset(fighter);
   if (isPlayer(fighter) && sheet.ready) {
     drawHeroFighter(painter, { sheet, fighter, shakeX, tickCount });
-  } else if (!isPlayer(fighter) && hasEnemySprite(enemySheets, fighter.def.sprite)) {
+  } else if (!isPlayer(fighter) && enemySheetReady(enemySheets, fighter.def.sprite)) {
     drawSpriteEnemy(painter, { sheets: enemySheets, fighter, shakeX, tickCount, floor });
   } else {
     drawSkeletonFighter(painter, { fighter, shakeX, tickCount, floor });

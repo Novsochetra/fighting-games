@@ -13,6 +13,7 @@ const packCall = (count) => ({
   armor: true,
   strip: 'packCall',
   pack: count,
+  packKind: 'hound',
   howls: [24, 40, 56, 72],
   frameAt: [0, 6, 12, 18, 24, 32, 84, 92],
 });

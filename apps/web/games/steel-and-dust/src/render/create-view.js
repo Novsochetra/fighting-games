@@ -1,4 +1,4 @@
-import { loadEnemySprites } from './fighters/enemy-sprites.js';
+import { loadEnemySprites } from './fighters/enemy-sheets.js';
 import { createHeroSheets } from './fighters/hero-sheets.js';
 import { loadFxSheets } from './fx/fx-sheets.js';
 import { loadHudFrames } from './hud/hud-frames.js';

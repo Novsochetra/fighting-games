@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { HEROES } from '../../../src/data/heroes.js';
 import { MISSIONS, missionAt } from '../../../src/data/missions/index.js';
+import { missionEnemyKinds } from '../../../src/data/missions/mission-enemies.js';
 import { restartRun } from '../../../src/sim/stage/flow.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
 import { createBot } from '../../support/bot.js';
@@ -58,6 +59,7 @@ function measure(game, largest) {
     largest[key] = Math.max(largest[key], game[key].length);
   }
   largest.fighterList = Math.max(largest.fighterList, longestFighterList(game));
+  game.fighters.forEach((fighter) => fighter.side === 'enemy' && largest.kinds.add(fighter.kind));
 }
 
 function fightBoss(game, mission) {
@@ -65,6 +67,7 @@ function fightBoss(game, mission) {
   const bot = createBot(driver, ultFills());
   const largest = {
     fighterList: 0,
+    kinds: new Set(),
     ...Object.fromEntries(Object.keys(LIMITS).map((key) => [key, 0])),
   };
   driver.act('play');
@@ -98,6 +101,12 @@ describe('a long fight against every road boss', () => {
         expect(largest[key], `${label} ${key}`).toBeLessThanOrEqual(limit);
       }
       expect(largest.fighterList, label).toBeLessThanOrEqual(FIGHTER_LIST_LIMIT);
+      // a kind the road does not list would load its sheet only as it walks on
+      const listed = missionEnemyKinds(mission);
+      expect(
+        [...largest.kinds].filter((kind) => !listed.has(kind)),
+        label,
+      ).toEqual([]);
       restartRun(game);
       expect(game.fighters, label).toEqual([game.player]);
       expect(game.boss, label).toBeNull();

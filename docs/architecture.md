@@ -131,6 +131,15 @@ length.
   `src/render/overlays/loading-screen.js`. Once a road is in, the next mission's road loads behind
   it, so the wait is usually over before the mission is. A file that fails to load still settles,
   and the plain road is drawn in its place.
+- A mission waits for its enemies' sheets too, and only for those: every kind that can walk onto
+  its road (`missionEnemyKinds` in `src/data/missions/mission-enemies.js`: its waves, mid-bosses
+  and boss among them, its reinforcements, and a pack a boss howls in, a move's `packKind`). Once
+  they are in, the next mission's load behind them, and as a mission starts every other enemy's
+  sheet is let go (`keepMissionEnemies` in `src/render/fighters/enemy-sheets.js`), so a run holds
+  one road's raiders and bosses and the next's, never the whole game's. A fighter whose sheet no
+  road listed loads it the first time it is drawn and keeps it until the mission changes.
+  `test/regression/bugs/enemy-sheets-per-mission.test.js` holds this, and the boss fights in
+  `test/integration/sim/boss-long-run.test.js` check every raider a boss calls is on its road's list.
 - The twelve missions are one road, painted end to end with PixelLab (Angkor Wat repainted with
   ChatGPT and turned into pixel art by `tools/painting_layers.py`): six forests from sunrise to
   night (Pine Ridge, Old Grove, Bamboo Pass, Raider Camp, Ember Woods, Firefly Hollow), then out of
