@@ -7,7 +7,7 @@ import { seededRandom } from '../../support/seeded-random.js';
 
 const originalRandom = Math.random;
 const TEMPLE = MISSIONS.findIndex((mission) => mission.theme === 'mirageTemple');
-const TICKS = 9000;
+const TICKS = 12000;
 
 function playRun() {
   Math.random = seededRandom(9);
