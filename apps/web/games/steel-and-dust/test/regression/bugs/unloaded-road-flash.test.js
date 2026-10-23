@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { renderFrame } from '../../../src/render/render-frame.js';
-import { stageClear } from '../../../src/sim/stage/stage-clear.js';
+import { REVEAL_FRAMES, stageClear } from '../../../src/sim/stage/stage-clear.js';
 import { createLateView } from '../../support/late-images.js';
 import { createPlayingGame, runTicks } from '../../support/test-game.js';
 
@@ -32,13 +32,13 @@ describe('the walk on to the next mission', () => {
     }
   });
 
-  it('fades the next road in from night once it is in', () => {
+  it('opens the next road out of night once it is in', () => {
     const { game, view, images, log } = clearFirstMission();
     renderFrame(game, view);
     images.loadAll();
     log.length = 0;
     renderFrame(game, view);
     expect(log.some((call) => call.startsWith('drawImage(img(ground.png)'))).toBe(true);
-    expect(game.fadeIn).toBe(23);
+    expect(game.fadeIn).toBe(REVEAL_FRAMES - 1);
   });
 });

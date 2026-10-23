@@ -39,6 +39,8 @@ function renderForest(fronts) {
   selectMission(game, MISSIONS.find((mission) => mission.theme === THEME).index);
   startPlay(game);
   runTicks(game, 30);
+  // in play, the wipe that opens a mission over: its mosaic samples the frame drawn before it
+  game.fadeIn = 0;
   screen.recording.log.length = 0;
   renderFrame(game, view);
   random.mockRestore();

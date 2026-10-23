@@ -46,7 +46,7 @@ const OTHER = [
 // every take has its own number, so a player can say which one they mean
 export function soundTestHtml() {
   return [
-    '<p class="wmeta">Every sound is made by the game itself, no recordings. Tap one to hear it.</p>',
+    '<p class="wmeta">Every sound here is made by the game itself, no recordings (only the announcer is recorded). Tap one to hear it.</p>',
     row('Raider screams', takes('voiceDie', 'Scream')),
     row('Raider grunts', takes('voiceHurt', 'Grunt')),
     row('Boss', [...takes('voiceBoss', 'Growl'), ['Roar', 'voiceBossKo', 0]]),

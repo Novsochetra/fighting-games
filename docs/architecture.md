@@ -52,7 +52,7 @@ The game keeps a strict split:
 | `src/art/`    | sprite and scene colors (the only JS allowed to hold hex values)    | no                                  |
 | `src/sim/`    | the 60 Hz simulation: one `game` object in, the same object changed | no                                  |
 | `src/render/` | draws a `game` onto a 2D canvas context it is given                 | canvas only                         |
-| `src/audio/`  | synthesized sound and music                                         | Web Audio only                      |
+| `src/audio/`  | synthesized sound and music, and the announcer's recorded calls     | Web Audio only                      |
 | `src/input/`  | keyboard, gamepad and touch write into `game.input`                 | yes                                 |
 | `src/ui/`     | menus, the hero carousel, settings, help, screen fit, full screen   | yes                                 |
 | `src/main.js` | wires the pieces together and runs the fixed-step loop              | yes                                 |
@@ -99,7 +99,7 @@ stands on, widened to reach past its rim (`stick-place.js`); `layout.stickRest` 
 the custom centre to rest on. The buttons come after the zone in the page, so they stay on top of it.
 
 `sim/` reaches the outside world only through `game.io` ports
-(`sfx`, `vibrate`, `saveRecords`, `saveHints`, `saveSettings`, `setMuted`), so it runs in Node tests unchanged.
+(`sfx`, `announce`, `vibrate`, `saveRecords`, `saveHints`, `saveSettings`, `setMuted`), so it runs in Node tests unchanged.
 
 ### Missions
 
@@ -126,8 +126,24 @@ length.
   and `continueAs` (`src/sim/stage/flow.js`) brings the hero back as the one picked, keeping the
   run. The last fall is Game over: the defeat menu offers only Start from mission 1, a new run with
   five lives, and Quit.
-- The walk on to the next mission is never seen: over the end of the clear screen the cleared road
-  fades to night (`src/render/overlays/clear-fade.js`), and the next mission fades in from it. A
+- A mission ends and the next begins the way the arcade run-and-guns do it. A mission's title
+  card (a `stamp` banner: "Mission 2" as it starts, "Mission complete" or "All clear" as its boss
+  falls) stamps in a letter at a time (`src/render/hud/title-card.js`, the letters in
+  `src/render/text/card-letter.js`, colors in `src/art/title-card.js`): each falls, strikes its
+  place, bounces and cools from white to gold, then a band of light runs over the card. The walk on
+  to the next mission is never seen: over the end of the clear screen a wave of diamonds burning at
+  their edges sweeps night over the cleared road while the road breaks up into ever bigger blocks
+  (`src/render/overlays/mission-wipe.js`, `mosaic.js`, timed by `wipe-timing.js`), and the next
+  mission opens out of that night the same way over `REVEAL_FRAMES` drawn frames; the last mission
+  stays lit behind the All clear. The ticks it all keeps to are in `src/data/mission-handoff.js`,
+  and `src/sim/stage/handoff-cues.js` sends out the sounds on the same ticks: the announcer's call
+  ("Mission one! Complete!" while the boss falls, "Mission two! Start!" as its card starts to
+  fall), a `stamp` as each letter strikes, the `wipe` rushing in and the `reveal` as the next road
+  opens. The calls are the game's one set of recorded sounds, since oscillators cannot say words:
+  `assets/audio/announcer/`, two MP3s a mission, voiced by `tools/announcer_voice.py` (Kokoro's
+  bm_george, pitched down, cut to the Neo Geo's 18.5 kHz and left to ring in a stone hall).
+  `src/audio/announcer.js` loads a mission's calls and the next one's start as it is played, as its
+  road does, and plays them through the effects bus; a call not yet in is skipped. A
   mission is drawn and its clock runs only once its painted road has loaded (`missionRoadLoaded`
   in `src/render/scene/backdrop.js`) and so have the picked Shade's strips (`sceneLoaded` in
   `src/render/scene-loaded.js`), so the hero is never drawn as the bare body; until then `main.js` holds the ticks and the screen shows

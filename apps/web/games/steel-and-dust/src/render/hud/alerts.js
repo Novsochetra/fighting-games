@@ -1,10 +1,12 @@
 import { COLORS } from '../../art/colors.js';
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
+import { cardAge } from '../../data/mission-handoff.js';
 import { clamp } from '../../lib/math.js';
 import { currentZone } from '../../sim/stage/mission.js';
 import { BANNER_FOREVER } from '../../sim/stage/stage-clear.js';
 import { drawText } from '../text/draw-text.js';
 import { drawBar } from './bar.js';
+import { drawTitleCard } from './title-card.js';
 
 export function drawBossBar(painter, boss) {
   if (!boss || boss.state === 'ko' || boss.entering) {
@@ -77,7 +79,8 @@ export function drawOffscreenArrows(painter, game) {
   }
 }
 
-export function drawBanner(painter, banner) {
+export function drawBanner(painter, game) {
+  const { banner } = game;
   if (!banner) {
     return;
   }
@@ -85,6 +88,10 @@ export function drawBanner(painter, banner) {
   const age = banner.startTime - banner.time;
   const blink = banner.time < BANNER_FOREVER && banner.time < 20 && (banner.time >> 1) % 2;
   if (blink) {
+    return;
+  }
+  if (banner.stamp) {
+    drawTitleCard(painter, { banner, age: cardAge(banner, game.clearTime > 0) });
     return;
   }
   const slide = age < 6 ? (6 - age) * 10 : 0;

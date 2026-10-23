@@ -3,8 +3,10 @@ import { createCameraTransform } from './camera-transform.js';
 import { drawWorld } from './draw-world.js';
 import { drawHud } from './hud/draw-hud.js';
 import { drawLoadingScreen } from './overlays/loading-screen.js';
+import { pixelate } from './overlays/mosaic.js';
 import { drawOverlays, drawScreenFlashes } from './overlays/overlays.js';
 import { drawVignette } from './overlays/vignette.js';
+import { missionWipe, mosaicBlock } from './overlays/wipe-timing.js';
 import { missionOf } from '../sim/stage/mission.js';
 import { drawAmbient } from './scene/ambient/index.js';
 import { sceneLoaded } from './scene-loaded.js';
@@ -43,6 +45,10 @@ export function renderFrame(game, view) {
   context.setTransform(RENDER_SCALE, 0, 0, RENDER_SCALE, 0, 0);
   drawScreenFlashes(painter, game);
   drawVignette(painter, game, view);
+  const wipe = missionWipe(game);
+  if (wipe) {
+    pixelate(painter, view, mosaicBlock(wipe));
+  }
   if (game.mode !== 'title') {
     drawHud(painter, game, view);
   }

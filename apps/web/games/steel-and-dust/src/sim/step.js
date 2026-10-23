@@ -18,6 +18,7 @@ import { expireBuffer } from './input/read-input.js';
 import { updatePickups } from './items/pickups.js';
 import { updateCamera } from './stage/camera.js';
 import { enterNextMission } from './stage/flow.js';
+import { cueHandoff } from './stage/handoff-cues.js';
 import { missionOf } from './stage/mission.js';
 import { updateSummons } from './summons/update-summons.js';
 import { BANNER_FOREVER, CLEAR_TICKS } from './stage/stage-clear.js';
@@ -75,10 +76,20 @@ function countDown(game) {
   if (game.goArrowTime > 0) {
     game.goArrowTime--;
   }
-  if (game.banner && game.banner.time < BANNER_FOREVER && --game.banner.time <= 0) {
+  ageBanner(game);
+  advanceClearScreen(game);
+  cueHandoff(game);
+}
+
+function ageBanner(game) {
+  const { banner } = game;
+  if (!banner) {
+    return;
+  }
+  banner.age++;
+  if (banner.time < BANNER_FOREVER && --banner.time <= 0) {
     game.banner = null;
   }
-  advanceClearScreen(game);
 }
 
 // the wrecked tanks by the road still smoke from their engine deck
