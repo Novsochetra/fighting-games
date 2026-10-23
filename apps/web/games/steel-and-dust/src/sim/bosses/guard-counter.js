@@ -2,7 +2,6 @@ import { COLORS } from '../../art/colors.js';
 import { activeEnd } from '../../data/moves/define-move.js';
 import { startMove } from '../fighters/actions.js';
 import { bodyPoint, bodySize } from '../fighters/body-point.js';
-import { isPlayer } from '../fighters/loadout.js';
 import { shake } from '../fx/camera-fx.js';
 import { addFloatText } from '../fx/effects.js';
 import { addBurst } from '../summons/bursts.js';
@@ -41,18 +40,18 @@ function stagger(hero, boss) {
 }
 
 // a blow on his guard bursts in gold where it lands; a hero who struck it reels, and he answers
-// with the counter at once. A shot is only turned aside
+// with the counter at once. A shot is only turned aside, the hero's thorns, waves and shockwaves
+// too: they strike through a stand-in on the hero's side that is not a fighter and cannot reel
 export function parryHit(game, { attacker, target, x, y }) {
   addBurst(game, { sprite: 'parry', x, y, scale: PARRY_SIZE });
-  const over = isPlayer(attacker)
-    ? { x: attacker.x, y: attacker.y - ABOVE_HERO }
-    : { x, y: y - ABOVE_SHOT };
+  const byHero = attacker === game.player;
+  const over = byHero ? { x: attacker.x, y: attacker.y - ABOVE_HERO } : { x, y: y - ABOVE_SHOT };
   addFloatText(game, { ...over, text: 'parry!', color: COLORS.gold });
   target.hitstop = PARRY_FREEZE;
   attacker.hitstop = PARRY_FREEZE;
   shake(game, 3, 8);
   game.io.sfx('parry', false, { x });
-  if (isPlayer(attacker)) {
+  if (byHero) {
     stagger(attacker, target);
     target.facing = Math.sign(attacker.x - target.x) || target.facing;
     startMove(game, target, 'guardStrike');
