@@ -4,6 +4,7 @@ import { slipAway } from './blink.js';
 import { glider } from './glider.js';
 import { illusionist } from './illusionist.js';
 import { standStill, walk } from './movement.js';
+import { warden } from './warden.js';
 
 const FEINT_TICKS = 12;
 const SCUTTLE_TICKS = 30;
@@ -143,4 +144,5 @@ export const BOSS_MOVEMENT = {
   illusionist,
   colossus,
   glider,
+  warden,
 };

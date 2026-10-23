@@ -117,8 +117,7 @@ export function applyHit(game, hit) {
     return false;
   }
   if (blocksHit(hit.attacker, target, move)) {
-    blockHit(game, hit);
-    return true;
+    return blockHit(game, hit);
   }
   announceGuardBreak(game, hit);
   const direction = hitDirection(hit);

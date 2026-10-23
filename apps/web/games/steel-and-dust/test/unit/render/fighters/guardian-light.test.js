@@ -21,6 +21,7 @@ import { boundsOf, drawnRects, offGrid, recordingPainter } from '../fx/fx-record
 const crumble = GUARDIAN_MOVES.crumble;
 
 const guardian = (overrides = {}) => ({
+  kind: 'guardian',
   def: ENEMY_TYPES.guardian,
   scale: ENEMY_TYPES.guardian.scale,
   x: 200,
@@ -43,6 +44,11 @@ describe("the colossus's footfall", () => {
     expect(isStomping(guardian({ ai: { stride: 10 } }))).toBe(false);
     expect(isStomping(guardian({ state: 'attack' }))).toBe(false);
     expect(isStomping(guardian({ ai: {} }))).toBe(false);
+  });
+
+  // the Warden Ox counts his strides too, but halts between them and never shakes the road
+  it('kicks up no dust under a boss that walks without stomping', () => {
+    expect(isStomping(guardian({ kind: 'brute', def: ENEMY_TYPES.brute }))).toBe(false);
   });
 
   it('rolls its dust out along the road, growing and thinning in steps', () => {

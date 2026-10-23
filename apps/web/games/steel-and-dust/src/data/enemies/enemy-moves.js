@@ -8,6 +8,7 @@ import { GUARDIAN_MOVES } from './moves/guardian-moves.js';
 import { IRONHORN_MOVES } from './moves/ironhorn-moves.js';
 import { KHAN_MOVES } from './moves/khan-moves.js';
 import { MELEE_MOVES } from './moves/melee-moves.js';
+import { OX_MOVES } from './moves/ox-moves.js';
 import { NAGA_MOVES } from './moves/naga-moves.js';
 import { PHARAOH_MOVES } from './moves/pharaoh-moves.js';
 import { QUEEN_MOVES } from './moves/queen-moves.js';
@@ -27,6 +28,7 @@ export const ENEMY_MOVES = normalizeMoves({
   ...DJINN_MOVES,
   ...FURNACE_MOVES,
   ...PHARAOH_MOVES,
+  ...OX_MOVES,
   ...GUARDIAN_MOVES,
   ...NAGA_MOVES,
 });

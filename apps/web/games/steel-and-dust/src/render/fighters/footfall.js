@@ -1,5 +1,6 @@
 import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
+import { BOSS_KITS } from '../../data/enemies/boss-kits/index.js';
 import { easeOutCubic } from '../../lib/math.js';
 import { lastFootfall } from '../../sim/bosses/stomp.js';
 import { PIXEL, ellipseRows, fillRows, snap } from '../fx/fine-pixels.js';
@@ -26,7 +27,9 @@ export function footfallPuff(since) {
   };
 }
 
+// a warden counts his strides as well, but only a colossus's land as footfalls
 export const isStomping = (fighter) =>
+  BOSS_KITS[fighter.kind]?.movement === 'colossus' &&
   fighter.state === 'walk' &&
   fighter.ai?.stride !== undefined &&
   lastFootfall(fighter).since < PUFF_TICKS;

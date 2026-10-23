@@ -1,7 +1,8 @@
 import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { VIEW_WIDTH } from '../../config.js';
-import { clamp, easeOutCubic, hashInt } from '../../lib/math.js';
+import { clamp, hashInt } from '../../lib/math.js';
+import { fissureReach } from '../../sim/fx/fissure.js';
 import { point } from '../painter.js';
 
 // at about one point of the crack in so many, light pours up out of it as the crack runs past, each
@@ -12,10 +13,6 @@ const SHAFT_GROWS = 3;
 const SHAFT_DIES = 24;
 // the white-hot stretch just behind the crack's running ends
 const HOT_REACH = 28;
-
-export function fissureReach(effect) {
-  return easeOutCubic(Math.min(1, effect.time / effect.run)) * VIEW_WIDTH;
-}
 
 // it burns at full strength through the first half of its life, then cools away
 export function fissureGlow(progress) {

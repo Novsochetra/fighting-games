@@ -1,5 +1,5 @@
 import { VIEW_WIDTH } from '../../config.js';
-import { hashInt } from '../../lib/math.js';
+import { easeOutCubic, hashInt } from '../../lib/math.js';
 import { groundAt } from '../stage/terrain.js';
 
 const STEP = 4;
@@ -15,9 +15,16 @@ export function fissurePoints(terrain, { left, right }) {
   return points;
 }
 
+// how far each way the crack has run: slowing as it goes, or at a steady pace for a crack the
+// hero has to jump as it passes (rifts.js runs with it)
+export function fissureReach({ time, run, linear }) {
+  const share = Math.min(1, time / run);
+  return (linear ? share : easeOutCubic(share)) * VIEW_WIDTH;
+}
+
 // a crack that runs out from `x` both ways across the screen over `run` ticks
-export function addFissure(game, { x, color, run, duration }) {
+export function addFissure(game, { x, color, run, duration, linear = false }) {
   const left = game.camera.x - STEP;
   const points = fissurePoints(game.terrain, { left, right: left + VIEW_WIDTH + STEP });
-  game.effects.push({ kind: 'fissure', x, points, color, run, time: 0, duration });
+  game.effects.push({ kind: 'fissure', x, points, color, run, linear, time: 0, duration });
 }
