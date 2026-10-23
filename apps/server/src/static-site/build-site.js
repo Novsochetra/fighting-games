@@ -4,6 +4,7 @@ import { serializeCatalog } from '../catalog/build-catalog.js';
 import { loadCatalog } from '../catalog/read-catalog.js';
 import { GAMES_ROOT, WEB_ROOT } from '../paths.js';
 import { isHiddenName } from '../public-files.js';
+import { versionModules } from './version-modules.js';
 
 export function isPublishedPath(webRoot, sourcePath) {
   const relative = path.relative(webRoot, sourcePath);
@@ -26,6 +27,7 @@ export async function buildSite({
     recursive: true,
     filter: (sourcePath) => isPublishedPath(webRoot, sourcePath),
   });
+  await versionModules(outDir);
   const catalog = await loadCatalog({ gamesRoot, warn });
   await mkdir(path.join(outDir, 'api'), { recursive: true });
   // No extension on purpose: the page fetches the relative URL api/games on the server and on Pages.

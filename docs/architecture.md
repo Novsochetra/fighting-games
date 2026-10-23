@@ -35,6 +35,12 @@ docs/                     this file
 
 Every URL in the pages is relative, so the same files work under the GitHub Pages sub path.
 `npm run build` writes the static site to `dist/`, including `dist/api/games`, because Pages has no server.
+The build also versions every module URL (`./x.js?v=<hash>`, and the pages' module scripts) from the
+module's content and its imports' versions (`apps/server/src/static-site/version-modules.js`). Pages
+lets a browser keep any file for ten minutes, so without it a deploy could link a new module against an
+old cached one that lacks an export, and the game would never start (the loading screen waited at 97%).
+If a module still fails to load, the game page reloads itself once under a fresh address
+(`src/boot/boot-recovery.js`). `npm run dev` serves the files as they are.
 
 ## Game: Steel & Dust
 
