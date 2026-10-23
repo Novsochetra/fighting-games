@@ -4,8 +4,8 @@ export const HINTS = {
     touch: 'stick moves   ATTACK fights   HEAVY hits hard',
   },
   crate: {
-    keys: 'break crates for weapons and food',
-    touch: 'break crates for weapons and food',
+    keys: 'break crates for food',
+    touch: 'break crates for food',
   },
   weapon: {
     keys: 'weapons break after a number of hits',

@@ -13,6 +13,7 @@ import {
 } from '../../../src/sim/stage/flow.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
 import { seededRandom } from '../../support/seeded-random.js';
+import { placeCrate } from '../../support/terrain-game.js';
 import { createPlayingGame, press, release, runTicks, tap } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
@@ -24,6 +25,19 @@ function walkInto(game, x) {
     runTicks(game, 1);
   }
   release(game, 'right');
+}
+
+// the crate is set on the road before the first zone, so reaching it starts no fight
+function sweepFirstCrateOpen(game) {
+  placeCrate(game, game.crates[0], 180);
+  game.player.x = game.crates[0].x - 15;
+  press(game, 'down');
+  tap(game, 'light');
+  release(game, 'down');
+  runTicks(game, 10);
+  expect(game.crates[0].broken).toBe(true);
+  game.player.x = game.crates[0].x;
+  runTicks(game, 40);
 }
 
 // the hero goes down and stays down until the defeat menu comes up
@@ -85,16 +99,18 @@ describe('a fight, with every system running', () => {
     expect(enemies(game)).toHaveLength(0);
   });
 
-  it('sweeps a crate open and picks up the weapon inside', () => {
+  it('sweeps a crate open and eats the ration inside for 10 HP, keeping the fists', () => {
     const game = createPlayingGame();
-    game.player.x = game.crates[0].x - 15;
-    press(game, 'down');
-    tap(game, 'light');
-    release(game, 'down');
-    runTicks(game, 10);
-    expect(game.crates[0].broken).toBe(true);
-    game.player.x = game.crates[0].x;
-    runTicks(game, 40);
+    game.player.hp = 50;
+    sweepFirstCrateOpen(game);
+    expect(game.player.hp).toBe(60);
+    expect(game.player.weapon.id).toBe('fists');
+  });
+
+  it('still hands over the weapon a crate holds', () => {
+    const game = createPlayingGame();
+    game.crates[0].item = 'sword';
+    sweepFirstCrateOpen(game);
     expect(game.player.weapon).toEqual({ id: 'sword', durability: 40 });
   });
 

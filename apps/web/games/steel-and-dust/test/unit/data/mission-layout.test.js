@@ -8,7 +8,7 @@ const SPEC = {
   theme: 'pineRidge',
   boss: 'khan',
   reinforcements: ['grunt'],
-  crates: ['sword', 'ration'],
+  crates: ['ration', 'sword'],
   endWall: 'palisade',
   zones: [
     { screens: 1, waves: [['grunt'], ['grunt', 'knife']] },
@@ -62,14 +62,12 @@ describe('laying out a mission', () => {
     ]);
   });
 
-  it('puts crates before every zone and inside the wide ones, and the wall at the end', () => {
-    expect(mission.crates).toHaveLength(5);
-    expect(mission.crates.map((crate) => crate.item)).toEqual([
-      'sword',
-      'ration',
-      'sword',
-      'ration',
-      'sword',
+  it('puts crates before every zone and inside the wide ones, leaves the weapon ones out, and the wall at the end', () => {
+    const [first, wide, , camp] = mission.zones;
+    expect(mission.crates.map((crate) => [crate.x, crate.item])).toEqual([
+      [first.left - 120, 'ration'],
+      [wide.left + VIEW_WIDTH + 60, 'ration'],
+      [camp.left - 120, 'ration'],
     ]);
     expect(mission.props).toEqual([{ kind: 'palisade', x: mission.length - 12, y: GROUND_Y }]);
   });

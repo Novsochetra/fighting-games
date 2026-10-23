@@ -44,6 +44,10 @@ export function createTerrainGame(spec, options) {
   return useTerrain(createPlayingGame(options), buildTerrain(spec));
 }
 
+export function placeCrate(game, crate, x) {
+  Object.assign(crate, { x, y: groundAt(game.terrain, x) });
+}
+
 export function placeFighter(game, fighter, { x, y }) {
   Object.assign(fighter, { x, y: y ?? groundAt(game.terrain, x), vx: 0, vy: 0 });
 }
