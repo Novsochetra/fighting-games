@@ -232,7 +232,10 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
     frame), and the water, rocks and glow were peeled off her. Her slash, slam and three skill strips
     were then drawn again body-only on white, and an orb of rainbow light gathers over her raised
     hand and follows it from frame to frame before the spirits come; the ultimate's name is called
-    higher (`calloutUp`) so the orb does not cover it.
+    higher (`calloutUp`) so the orb does not cover it. Her idle was drawn apart from the stance
+    her moves start and end in, so it is now four of those stances breathing; the grey matte the
+    white backgrounds left round her redrawn strips was recoloured to her own outline greens and
+    browns, and the rising serpent's first frame bursts out of the road instead of floating over it.
 11. **Warden Ox**: done, after the Naga Raja and the Bayon Guardian. His sheet moved to the big frame (256×160): the hammer rises far over his head
     and the counter thrusts far ahead; his first seven rows were set into it with his feet where they
     stood. The chain and guard strips came on real transparency; the axe whirl and the parry burst
