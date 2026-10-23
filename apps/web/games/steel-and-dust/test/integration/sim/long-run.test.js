@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
+import { HEROES } from '../../../src/data/heroes.js';
 import { restartRun } from '../../../src/sim/stage/flow.js';
 import { createBot } from '../../support/bot.js';
 import { createGameDriver, createScenarioGame } from '../../support/game-driver.js';
@@ -44,7 +45,7 @@ describe('a long run through the zones', () => {
   });
 
   it('keeps every world list bounded zone after zone, for every Shade', () => {
-    for (const hero of ['moss', 'firefly', 'antler', 'blue', 'ember']) {
+    for (const { id: hero } of HEROES) {
       Math.random = seededRandom(77);
       const game = createScenarioGame(hero);
       const { largest, zones } = playZones(game, 5000);

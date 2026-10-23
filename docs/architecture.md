@@ -407,8 +407,9 @@ Long sessions must not grow:
   so anything left connected piles up run after run until the sound stutters and stops.
 - Flashes, glows and afterimages tint one frame at a time into a small least-recently-used cache
   (`src/render/fighters/tint.js`), never a whole sprite sheet.
-- `test/regression/bugs/audio-node-leak.test.js`, `tint-memory.test.js` and
-  `test/integration/sim/long-run.test.js` hold these lines.
+- `test/regression/bugs/audio-node-leak.test.js`, `tint-memory.test.js`,
+  `test/integration/sim/long-run.test.js` (every Shade, zone after zone) and `boss-long-run.test.js`
+  (every road's boss, kept in phase two so its ultimate and hazards keep coming) hold these lines.
 
 ### Behavior lock
 
