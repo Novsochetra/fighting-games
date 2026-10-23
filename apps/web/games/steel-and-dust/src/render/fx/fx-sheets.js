@@ -17,6 +17,10 @@ export function loadFxSheets({ createImage, createCanvas, baseUrl }) {
   return sheets;
 }
 
+// a frame drawn `pixels` screen pixels to each of its own, grown with a boss or spreading, has its
+// edges cut to whole screen pixels: one between two is smoothed
+export const onScreenPixels = (value, pixels) => Math.round(value * pixels) / pixels;
+
 // one frame of an effect strip with its anchor on (x, y); scale 1 is the hero sprites' density
 export function drawFxFrame(painter, sheets, { name, frame, x, y, scale = 1, facing = 1, tint }) {
   if (!sheets.ready[name]) {
@@ -33,6 +37,9 @@ export function drawFxFrame(painter, sheets, { name, frame, x, y, scale = 1, fac
     height: frameHeight,
   });
   const size = scale * FX_SCALE;
+  const pixels = size * RENDER_SCALE;
+  const left = onScreenPixels(-anchorX, pixels);
+  const top = onScreenPixels(-anchorY, pixels);
   const context = painter.context;
   context.save();
   context.translate(
@@ -46,10 +53,10 @@ export function drawFxFrame(painter, sheets, { name, frame, x, y, scale = 1, fac
     source.sy,
     frameWidth,
     frameHeight,
-    -anchorX,
-    -anchorY,
-    frameWidth,
-    frameHeight,
+    left,
+    top,
+    onScreenPixels(frameWidth - anchorX, pixels) - left,
+    onScreenPixels(frameHeight - anchorY, pixels) - top,
   );
   context.restore();
 }

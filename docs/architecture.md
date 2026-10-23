@@ -346,6 +346,11 @@ pillar's shock ring (`rune-ring.js`, `pillar-burst.js`), the crack a root opens 
 the light it gathers first (`mouth-gather.js`), which is drawn over the fighters and over his
 ultimate's dim. His footfalls' dust, the light of his reforming, and once reformed his gold rim
 and the motes rising off him are drawn with his sprite (`src/render/fighters/guardian-light.js`).
+Every boss and everything it leaves lands on the screen's pixel grid: a boss's frame and an
+effect's frame grown with a boss have their edges cut to whole screen pixels (`snap` in
+`fine-pixels.js`, `onScreenPixels` in `fx-sheets.js`), and a strip laid along a slant (the Furnace
+Knight's flame lances, the Warden Ox's chain and flying hook) is never rotated but stepped down the
+slope a column of screen pixels at a time (`slanted-frame.js`).
 While an ultimate
 gathers and plays the world dims behind the boss in its own color (`src/render/fighters/boss-ultimate.js`,
 colors in `src/art/boss-colors.js`), a rush or wave marks its lane on the ground, and a boulder its
