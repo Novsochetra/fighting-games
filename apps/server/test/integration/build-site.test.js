@@ -66,6 +66,17 @@ describe('npm run build', () => {
     }
   });
 
+  // a bare import could pair a new module with an old cached one after a deploy (see
+  // regression/mixed-deploy.test.js)
+  it('versions every relative import in the built site', async () => {
+    const bare = /(\bfrom\s*|\bimport\s*)'\.\.?\/[^']+\.js'/;
+    const game = await readFile(path.join(outDir, 'games/steel-and-dust/src/main.js'), 'utf8');
+    expect(game).toMatch(/from '\.\/boot\/boot-loading\.js\?v=[0-9a-f]{10}'/);
+    expect(game).not.toMatch(bare);
+    const page = await readFile(path.join(outDir, 'games/steel-and-dust/index.html'), 'utf8');
+    expect(page).toMatch(/src="src\/main\.js\?v=[0-9a-f]{10}"/);
+  });
+
   it('refuses an output folder that overlaps the web root', async () => {
     await expect(buildSite({ outDir: WEB_ROOT })).rejects.toThrow(/must not overlap/);
     await expect(buildSite({ outDir: path.dirname(WEB_ROOT) })).rejects.toThrow(/must not overlap/);
