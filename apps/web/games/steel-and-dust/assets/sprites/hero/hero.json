@@ -20,6 +20,12 @@
       "frames": 8,
       "loop": true
     },
+    "run": {
+      "spec": "S22",
+      "file": "hero_run.png",
+      "frames": 8,
+      "loop": true
+    },
     "jump": {
       "spec": "S03",
       "file": "hero_jump.png",
