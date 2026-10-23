@@ -1,3 +1,4 @@
+import { announce, createAnnouncer, primeAnnouncer } from './announcer.js';
 import { SOUND_DEFINITIONS } from './bank/definitions.js';
 import { applyVolumes } from './context/volumes.js';
 import { resumeAudio, unlockAudio } from './context/unlock.js';
@@ -32,10 +33,15 @@ export function createAudio(game) {
     music: createMusicState(),
     ducked: null,
   };
+  const announcer = createAnnouncer(globalThis);
   return {
-    unlock: () => unlockAudio(audio, game),
+    unlock: () => {
+      unlockAudio(audio, game);
+      primeAnnouncer(announcer);
+    },
     resume: () => resumeAudio(audio),
     sfx: (key, big, options) => playSound(audio, game, { key, big, options }),
+    announce: (line) => announce(announcer, game, line),
     setTickOffset: (seconds) => {
       audio.tickOffset = seconds;
     },

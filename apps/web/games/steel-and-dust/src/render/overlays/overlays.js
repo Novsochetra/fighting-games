@@ -4,8 +4,9 @@ import { GROUND_Y, VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
 import { heroById } from '../../data/heroes.js';
 import { HUD_BOTTOM } from '../hud/top-bar.js';
 import { drawText, textWidth } from '../text/draw-text.js';
-import { clearFadeOpacity } from './clear-fade.js';
+import { drawMissionWipe } from './mission-wipe.js';
 import { drawUltCutIn } from './ult-cut-in.js';
+import { missionWipe } from './wipe-timing.js';
 
 function hintOpacity(time) {
   if (time < 10) {
@@ -52,11 +53,10 @@ export function drawScreenFlashes(painter, game) {
 }
 
 // the fade-in counts down here, once per drawn frame, as it always has
-function drawNightFades(painter, game) {
-  const opacity = Math.max(game.fadeIn / 24, clearFadeOpacity(game));
-  if (opacity > 0) {
-    painter.alpha(opacity).use(COLORS.night).rect(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
-    painter.alpha(1);
+function drawMissionHandoff(painter, game, view) {
+  const wipe = missionWipe(game);
+  if (wipe) {
+    drawMissionWipe(painter, view, wipe);
   }
   if (game.fadeIn > 0) {
     game.fadeIn--;
@@ -70,7 +70,7 @@ export function drawOverlays(painter, { game, view }) {
   if (game.hint && game.mode === 'play' && game.ultFreeze <= 0) {
     drawHint(painter, game);
   }
-  drawNightFades(painter, game);
+  drawMissionHandoff(painter, game, view);
   if (game.mode === 'title') {
     painter.alpha(0.35).use(COLORS.night).rect(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
     painter.alpha(1);

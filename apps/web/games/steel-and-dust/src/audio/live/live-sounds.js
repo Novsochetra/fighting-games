@@ -2,6 +2,7 @@ import { BAYON_SOUNDS } from './bayon-sounds.js';
 import { BOSS_SOUNDS } from './boss-sounds.js';
 import { ELEMENT_SOUNDS } from './element-sounds.js';
 import { EVENT_SOUNDS } from './event-sounds.js';
+import { HANDOFF_SOUNDS } from './handoff-sounds.js';
 import { HEAVY_SOUNDS } from './heavy/index.js';
 import { MENU_SOUNDS } from './menu-sounds.js';
 import { MOAT_SOUNDS } from './moat-sounds.js';
@@ -13,6 +14,7 @@ import { WARDEN_SOUNDS } from './warden-sounds.js';
 export const LIVE_SOUNDS = {
   ...MENU_SOUNDS,
   ...EVENT_SOUNDS,
+  ...HANDOFF_SOUNDS,
   ...SIGNATURE_SOUNDS,
   ...BOSS_SOUNDS,
   ...ELEMENT_SOUNDS,

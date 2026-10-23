@@ -13,7 +13,7 @@ export function drawHud(painter, game, view) {
   drawBossBar(painter, game.boss);
   drawGoArrow(painter, game);
   drawOffscreenArrows(painter, game);
-  drawBanner(painter, game.banner);
+  drawBanner(painter, game);
   if (game.settings.hitboxes) {
     drawFrameData(painter, game);
   }

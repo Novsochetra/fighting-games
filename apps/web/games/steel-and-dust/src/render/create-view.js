@@ -21,6 +21,8 @@ export function createView({ context, createCanvas, createImage, baseUrl }) {
     shownScore: 0,
     loadingFrames: 0,
     vignette: null,
+    diamonds: new Map(),
+    mosaic: null,
   };
   createHeroSheets(view);
   return view;

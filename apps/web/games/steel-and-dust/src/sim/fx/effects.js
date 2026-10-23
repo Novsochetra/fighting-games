@@ -41,6 +41,7 @@ export function addFloatText(game, { x, y, text, color }) {
   game.floaters.push({ x, y, text, color, time: 0, big: true });
 }
 
-export function showBanner(game, { text, color, time, sub }) {
-  game.banner = { text, color, time, sub };
+// a `stamp` banner is a mission's title card, its letters stamped in one by one
+export function showBanner(game, { text, color, time, sub, stamp }) {
+  game.banner = { text, color, time, sub, stamp, age: 0 };
 }

@@ -4,6 +4,7 @@ import {
   createRng,
   directionOf,
   easeInOutCubic,
+  easeOutBack,
   easeOutCubic,
   hashInt,
   randomBetween,
@@ -21,6 +22,12 @@ describe('math helpers', () => {
     expect(easeOutCubic(1)).toBe(1);
     expect(easeInOutCubic(0.5)).toBe(0.5);
     expect(easeInOutCubic(0.25)).toBeLessThan(0.25);
+  });
+
+  it('eases past 1 and settles back on it, as a bounce', () => {
+    expect(easeOutBack(0)).toBeCloseTo(0, 10);
+    expect(easeOutBack(1)).toBe(1);
+    expect(easeOutBack(0.8)).toBeGreaterThan(1);
   });
 
   it('hashes the same input to the same unsigned value', () => {

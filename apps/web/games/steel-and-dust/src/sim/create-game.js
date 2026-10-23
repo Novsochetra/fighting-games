@@ -3,6 +3,7 @@ import { resetRun } from './reset-run.js';
 
 const SILENT_IO = {
   sfx() {},
+  announce() {},
   vibrate() {},
   saveRecords() {},
   saveHints() {},

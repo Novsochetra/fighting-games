@@ -12,17 +12,19 @@ import { refreshPose } from '../pose/refresh-pose.js';
 import { resetRun } from '../reset-run.js';
 import { hasLivesLeft } from './lives.js';
 import { missionOf } from './mission.js';
+import { REVEAL_FRAMES } from './stage-clear.js';
 
 function announceMission(game) {
   const mission = missionOf(game);
-  game.fadeIn = 24;
+  game.fadeIn = REVEAL_FRAMES;
   showBanner(game, {
     text: `Mission ${mission.number}`,
     sub: mission.name,
     color: COLORS.amber,
-    time: 100,
+    time: 140,
+    stamp: true,
   });
-  game.io.sfx('go');
+  game.io.sfx('reveal');
 }
 
 export function startPlay(game) {

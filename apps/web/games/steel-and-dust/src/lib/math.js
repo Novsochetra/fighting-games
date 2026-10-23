@@ -16,6 +16,12 @@ export function easeOutCubic(progress) {
   return 1 - Math.pow(1 - progress, 3);
 }
 
+// runs a little past the end and settles back, as a thing dropped bounces
+export function easeOutBack(progress) {
+  const past = progress - 1;
+  return 1 + 2.70158 * past * past * past + 1.70158 * past * past;
+}
+
 export function easeInOutCubic(progress) {
   if (progress < 0.5) {
     return 4 * progress * progress * progress;

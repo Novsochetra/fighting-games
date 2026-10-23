@@ -7,6 +7,8 @@ import { buzz } from '../fx/haptics.js';
 
 export const BANNER_FOREVER = 9999;
 export const CLEAR_TICKS = 170;
+// the drawn frames the next mission takes to open out of the cleared one's wipe
+export const REVEAL_FRAMES = 36;
 
 export function stageClear(game) {
   game.clearTime = 1;
@@ -17,7 +19,7 @@ export function stageClear(game) {
     }
   }
   const text = isLastMission(game.missionIndex) ? 'All clear' : 'Mission complete';
-  showBanner(game, { text, color: COLORS.amber, time: BANNER_FOREVER });
+  showBanner(game, { text, color: COLORS.amber, time: BANNER_FOREVER, stamp: true });
   game.io.sfx('clear');
   endCombo(game);
   commitScore(game);
