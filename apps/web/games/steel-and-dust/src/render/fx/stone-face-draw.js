@@ -1,6 +1,7 @@
 import { COLORS } from '../../art/colors.js';
 import { FACE_TIMES, isBreathing, mouthOf } from '../../sim/hazards/stone-faces.js';
 import { drawFaceBeam } from './face-beam.js';
+import { snap } from './fine-pixels.js';
 import { drawFxFrame } from './fx-sheets.js';
 import { drawMouthGather } from './mouth-gather.js';
 
@@ -47,7 +48,8 @@ export function drawStoneFace(painter, face, sheets) {
   const context = painter.context;
   context.save();
   context.beginPath();
-  context.rect(face.x - 120, face.floor - 240, 240, 240);
+  // cut on whole screen pixels: a clip edge between two is smoothed
+  context.rect(snap(face.x) - 120, snap(face.floor) - 240, 240, 240);
   context.clip();
   const y = face.y + faceDepth(face);
   painter.alpha(faceAlpha(face));

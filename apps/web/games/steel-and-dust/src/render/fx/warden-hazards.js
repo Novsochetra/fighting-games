@@ -2,20 +2,21 @@ import { FX_SCALE, FX_SPRITES } from '../../data/fx-sprites.js';
 import { bodySize } from '../../sim/fighters/body-point.js';
 import { fistOf } from '../../sim/hazards/chain-fist.js';
 import { HOOK_SIZE } from '../../sim/hazards/chain-pull.js';
-import { drawFxFrame } from './fx-sheets.js';
+import { drawSlantedFrame } from './slanted-frame.js';
 
 // the chain is the one strip of links laid end to end along the line, cut where the line ends
-function drawLinks(painter, sheets, { length, scale }) {
-  const context = painter.context;
+function drawLinks(painter, sheets, { line, length, scale }) {
   const step = FX_SPRITES.chain.frameWidth * FX_SCALE * scale;
-  context.save();
-  context.beginPath();
-  context.rect(0, -step, length, step * 2);
-  context.clip();
-  for (let at = 0; at < length; at += step) {
-    drawFxFrame(painter, sheets, { name: 'chain', frame: 0, x: at, y: 0, scale });
+  for (let shift = 0; shift < length; shift += step) {
+    drawSlantedFrame(painter, sheets, {
+      name: 'chain',
+      frame: 0,
+      scale,
+      line,
+      shift,
+      window: { from: 0, to: length },
+    });
   }
-  context.restore();
 }
 
 const isCaught = (hook) => hook.state === 'pull' || hook.state === 'held';
@@ -28,27 +29,16 @@ export function drawChainHook(painter, hook, sheets) {
   const length = Math.hypot(dx, hook.y - fist.y);
   const angle = Math.atan2(hook.y - fist.y, Math.abs(dx));
   const facing = dx < 0 ? -1 : 1;
-  const context = painter.context;
-  context.save();
-  context.translate(fist.x, fist.y);
-  context.scale(facing, 1);
-  context.rotate(angle);
-  drawLinks(painter, sheets, { length, scale: bodySize(hook.owner, 1) });
-  context.restore();
+  const line = { x: fist.x, y: fist.y, facing, angle };
+  drawLinks(painter, sheets, { line, length, scale: bodySize(hook.owner, 1) });
   const level = isCaught(hook);
   const outward = level ? Math.sign(hook.x - hook.owner.x) || facing : facing;
-  context.save();
-  context.translate(hook.x, hook.y);
-  context.scale(outward, 1);
-  context.rotate(level ? 0 : angle);
-  drawFxFrame(painter, sheets, {
+  drawSlantedFrame(painter, sheets, {
     name: 'hook',
     frame: 0,
-    x: 0,
-    y: 0,
     scale: bodySize(hook.owner, HOOK_SIZE),
+    line: { x: hook.x, y: hook.y, facing: outward, angle: level ? 0 : angle },
   });
-  context.restore();
 }
 
 // the crack a rift runs along is the fissure drawn with it (rifts.js); the rift itself shows nothing
