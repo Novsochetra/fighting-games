@@ -14,12 +14,12 @@ describe('pressing ULT before the bar is full', () => {
     expect(game.player.move).toBeNull();
   });
 
-  it('still lets the player walk on that tick', () => {
+  it('still lets the player run on that tick', () => {
     const game = createPlayingGame();
     runTicks(game, 30);
     game.input.held.right = true;
     tap(game, 'ult');
-    expect(game.player.state).toBe('walk');
+    expect(game.player.state).toBe('run');
   });
 
   it('starts the ultimate when the bar is full', () => {

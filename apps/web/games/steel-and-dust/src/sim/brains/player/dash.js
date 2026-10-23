@@ -3,7 +3,7 @@ import { floorUnder } from '../../fighters/terrain-motion.js';
 import { addDust } from '../../fx/particles.js';
 import { consumeBuffer, dashDirection } from './controls.js';
 import { isAttack, startDashAttack } from './dash-attack.js';
-import { runsOnFromDash } from './run.js';
+import { runBack, runsOnFromDash } from './run.js';
 
 const MAX_DASH_CHAIN = 2;
 
@@ -36,9 +36,7 @@ function brakeAndTurn(game, player, { buffer, direction }) {
     player.state = 'air';
     player.vx = direction * 0.6;
   } else {
-    player.state = 'walk';
-    player.walkDirection = 1;
-    player.vx = direction * 0.9;
+    runBack(player, direction);
   }
   return true;
 }
@@ -59,7 +57,6 @@ export function thinkDash(game, player, intent) {
     startDashAttack(game, player, intent);
   } else if (buffer.action === 'jump' && !player.airborne) {
     jump(game, player, { vy: -5.8, vx: player.facing * 2.2 });
-    player.runningJump = true;
     consumeBuffer(game);
   }
 }

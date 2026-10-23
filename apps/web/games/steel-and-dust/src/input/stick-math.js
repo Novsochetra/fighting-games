@@ -1,5 +1,5 @@
 // a direction switches on past the outer threshold and off only below the inner one, so a thumb
-// resting on the edge does not flicker between walking and standing
+// resting on the edge does not flicker between running and standing
 const THRESHOLDS = { horizontal: [0.38, 0.22], vertical: [0.6, 0.45] };
 
 function engaged(value, wasOn, [on, off]) {

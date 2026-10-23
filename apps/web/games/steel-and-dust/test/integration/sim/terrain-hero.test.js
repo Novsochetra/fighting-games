@@ -8,7 +8,7 @@ import { press, release, runTicks, tap } from '../../support/test-game.js';
 const originalRandom = Math.random;
 
 // holds a direction until the hero reaches x or the ticks run out, checking him every tick
-function walkTo(game, x, check = () => {}) {
+function runTo(game, x, check = () => {}) {
   const side = Math.sign(x - game.player.x);
   const direction = side > 0 ? 'right' : 'left';
   press(game, direction);
@@ -33,7 +33,7 @@ describe('the hero on uneven ground', () => {
     Math.random = originalRandom;
   });
 
-  it('walks up a ramp and down the other side without ever leaving his feet', () => {
+  it('runs up a ramp and down the other side without ever leaving his feet', () => {
     const game = createTerrainGame({
       ground: [
         [150, 0],
@@ -45,12 +45,12 @@ describe('the hero on uneven ground', () => {
     const heights = new Set();
     const onHisFeet = (player) => {
       expect(player.airborne).toBe(false);
-      expect(player.state).toBe('walk');
+      expect(player.state).toBe('run');
       expect(player.y).toBe(groundAt(game.terrain, player.x));
       heights.add(player.y);
     };
-    walkTo(game, 330, onHisFeet);
-    walkTo(game, 120, onHisFeet);
+    runTo(game, 330, onHisFeet);
+    runTo(game, 120, onHisFeet);
     expect(Math.min(...heights)).toBe(GROUND_Y - 24);
     expect(game.player.y).toBe(GROUND_Y);
   });
@@ -76,7 +76,7 @@ describe('the hero on uneven ground', () => {
     expect(game.player).toMatchObject({ y: GROUND_Y - 20, airborne: false });
   });
 
-  it('walks off a ledge into the air and lands on the road below', () => {
+  it('runs off a ledge into the air and lands on the road below', () => {
     const game = createTerrainGame({
       ground: [
         [100, 0],
@@ -87,13 +87,13 @@ describe('the hero on uneven ground', () => {
     });
     placeFighter(game, game.player, { x: 180 });
     const states = [];
-    walkTo(game, 240, (player) => states.push(player.state));
+    runTo(game, 240, (player) => states.push(player.state));
     runTicks(game, 30);
     expect(states).toContain('air');
     expect(game.player).toMatchObject({ y: GROUND_Y, airborne: false });
   });
 
-  it('jumps up through a platform onto it, then drops through it and walks off its end', () => {
+  it('jumps up through a platform onto it, then drops through it and runs off its end', () => {
     const game = createTerrainGame({
       platforms: [{ at: 160, width: 80, rise: 40, kind: 'planks' }],
     });
@@ -113,7 +113,7 @@ describe('the hero on uneven ground', () => {
     tap(game, 'jump');
     runTicks(game, 60);
     expect(game.player.y).toBe(top);
-    walkTo(game, 250);
+    runTo(game, 250);
     runTicks(game, 40);
     expect(game.player).toMatchObject({ y: GROUND_Y, airborne: false });
   });

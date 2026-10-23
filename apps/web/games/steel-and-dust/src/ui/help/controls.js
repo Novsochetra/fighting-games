@@ -3,7 +3,7 @@ import { keycap as key, table } from './key-label.js';
 function touchRows(stick) {
   return [
     [
-      'Move',
+      'Run',
       stick === 'fixed'
         ? 'drag the stick in the bottom-left corner'
         : 'drag anywhere on the left half of the screen',
@@ -12,7 +12,6 @@ function touchRows(stick) {
     ['HEAVY', 'heavy attack, uses a little ULT bar; hold to charge, let go to release'],
     ['JUMP', 'jump; push the stick sideways to jump that way'],
     ['DASH', 'quick invincible dash, works once in the air'],
-    ['Run', 'DASH and keep pushing the stick that way'],
     ['Launcher', 'push the stick up or down, then HEAVY'],
     ['Low sweep', 'push the stick down, then ATTACK'],
     ['Rising strike', 'push the stick up, then ATTACK'],
@@ -24,10 +23,9 @@ function touchRows(stick) {
 }
 
 const KEY_ROWS = [
-  ['Move', `${key('←')} ${key('→')} or ${key('A')} ${key('D')}`],
+  ['Run', `${key('←')} ${key('→')} or ${key('A')} ${key('D')}`],
   ['Jump', `${key('↑')} / ${key('W')} / ${key('Space')}, hold a direction to jump that way`],
   ['Dash', `${key('Shift')} or tap ${key('←')} / ${key('→')} twice (invincible)`],
-  ['Run', `dash and keep holding ${key('←')} / ${key('→')}`],
   ['Light attack', `${key('J')} or ${key('Z')}`],
   ['Heavy attack', `${key('K')} or ${key('X')}, hold to charge; uses a little ULT bar`],
   ['Launcher', `${key('↓')} + ${key('K')}, or ${key('↑')} + ${key('K')} to jump after them`],
@@ -42,9 +40,8 @@ const KEY_ROWS = [
 ];
 
 const PAD_ROWS = [
-  ['Move', 'left stick or d-pad'],
+  ['Run', 'left stick or d-pad'],
   ['Jump / Dash', 'A / B'],
-  ['Run', 'B and keep holding the stick that way'],
   ['Light / Heavy', 'X / Y (hold Y to charge)'],
   ['Ultimate', 'RB or RT'],
   ['Pause', 'Start'],

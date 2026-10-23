@@ -11,7 +11,7 @@ Generated with PixelLab (character `cc048154-e5ab-4e97-8b1b-53f5390bc28c`, "Vari
 S22, eight frames that loop, two strides with a flight phase: the PixelLab v3 animation "run_v2"
 (east), started from his dash's lean (dash_v2 frame 3), its 92×88 frames placed at (+12, +2) so his
 hips sit at x=64, the stance foot of frames 1 and 2 lowered 2 px onto the feet line. He runs in his
-dash's crouch, lower than he walks. The game plays it while a dash held to its end runs on.
+dash's crouch, lower than he walks. The game plays it whenever he moves on foot.
 
 ## Ultimate (`hero_ult.png`)
 

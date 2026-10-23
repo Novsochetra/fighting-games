@@ -5,7 +5,7 @@ import { createPlayingGame, runTicks, tap } from '../../support/test-game.js';
 
 // Fixed in b12d442: frame 0 of the dash strip is a full-body smear that looked like a glitch.
 // Fixed in 1cfcafc: the dash used to stop dead; it now eases down to walking pace, and held on its
-// way to its end, runs on.
+// way to its end, runs on; held the other way, it runs back.
 describe('dash', () => {
   function dashingGame() {
     const game = createPlayingGame();
@@ -48,10 +48,10 @@ describe('dash', () => {
     expect(game.player.state).toBe('run');
   });
 
-  it('flows straight into a walk back while the other direction is held', () => {
+  it('flows straight into a run back while the other direction is held', () => {
     const game = dashingGame();
     game.input.held.left = true;
     runTicks(game, DASH_TICKS + 2);
-    expect(game.player).toMatchObject({ state: 'walk', facing: -1 });
+    expect(game.player).toMatchObject({ state: 'run', facing: -1 });
   });
 });

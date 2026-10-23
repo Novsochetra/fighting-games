@@ -13,7 +13,7 @@ function dashAttackId(game, player, buffer) {
   return player.airborne ? pickAirMove(buffer, game.input.held, null) : 'UK';
 }
 
-// dash and run attacks go the way you hold
+// dash attacks go the way you hold
 export function startDashAttack(game, player, { buffer, direction }) {
   if (direction) {
     player.facing = direction;

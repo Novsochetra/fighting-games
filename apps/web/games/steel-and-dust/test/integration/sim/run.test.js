@@ -5,6 +5,7 @@ import { createTerrainGame, placeFighter } from '../../support/terrain-game.js';
 import { createPlayingGame, press, release, runTicks, tap } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
+const OLD_WALK_SPEED = 1.55;
 
 function doubleTapAndHold(game, direction) {
   tap(game, direction);
@@ -33,26 +34,62 @@ describe('the hero running', () => {
     Math.random = originalRandom;
   });
 
-  it('runs on out of a double-tap dash held its way, faster than a walk', () => {
-    const walking = createPlayingGame();
-    runTicks(walking, 30);
-    press(walking, 'right');
-    const walked = distanceIn(walking, 80);
-    const running = createPlayingGame();
-    runTicks(running, 30);
-    doubleTapAndHold(running, 'right');
-    expect(running.player.state).toBe('dash');
-    const ran = distanceIn(running, 79);
-    expect(running.player.state).toBe('run');
-    expect(running.player.vx).toBeCloseTo(RUN_SPEED, 1);
-    expect(ran).toBeGreaterThan(walked * 1.4);
+  it('runs while a direction is held, picking up to the run pace, far faster than the old walk', () => {
+    const game = createPlayingGame();
+    runTicks(game, 30);
+    press(game, 'right');
+    runTicks(game, 1);
+    expect(game.player.state).toBe('run');
+    const ran = distanceIn(game, 79);
+    expect(game.player.state).toBe('run');
+    expect(game.player.vx).toBeCloseTo(RUN_SPEED, 1);
+    expect(ran).toBeGreaterThan(OLD_WALK_SPEED * 80 * 1.4);
+  });
+
+  it('runs on straight out of a double-tap dash held its way', () => {
+    const game = createPlayingGame();
+    runTicks(game, 30);
+    doubleTapAndHold(game, 'right');
+    expect(game.player.state).toBe('dash');
+    const states = new Set();
+    for (let i = 0; i < DASH_TICKS + 10; i++) {
+      runTicks(game, 1);
+      states.add(game.player.state);
+    }
+    expect([...states]).toEqual(['dash', 'run']);
+    expect(game.player.vx).toBeGreaterThan(1.7);
+  });
+
+  it('runs back the other way when the direction is turned', () => {
+    const game = createPlayingGame();
+    runTicks(game, 30);
+    press(game, 'right');
+    runTicks(game, 30);
+    release(game, 'right');
+    press(game, 'left');
+    runTicks(game, 30);
+    expect(game.player).toMatchObject({ state: 'run', facing: -1 });
+    expect(game.player.vx).toBeLessThan(-2);
+  });
+
+  it('starts the light combo out of the run and strings it on', () => {
+    const game = createPlayingGame();
+    runTicks(game, 30);
+    press(game, 'right');
+    runTicks(game, 20);
+    tap(game, 'light');
+    expect(game.player.move.id).toBe('L1');
+    runTicks(game, 8);
+    tap(game, 'light');
+    runUntil(game, (player) => player.move?.id !== 'L1', 30);
+    expect(game.player.move.id).toBe('L2');
   });
 
   it('skids to a stop when the direction is let go', () => {
     const game = createPlayingGame();
     runTicks(game, 30);
-    doubleTapAndHold(game, 'right');
-    runTicks(game, DASH_TICKS + 20);
+    press(game, 'right');
+    runTicks(game, 40);
     release(game, 'right');
     runTicks(game, 12);
     expect(game.player.state).toBe('idle');
@@ -62,8 +99,8 @@ describe('the hero running', () => {
   it('comes down from a running jump still running while the run is held', () => {
     const game = createPlayingGame();
     runTicks(game, 30);
-    doubleTapAndHold(game, 'right');
-    runTicks(game, DASH_TICKS + 10);
+    press(game, 'right');
+    runTicks(game, 30);
     tap(game, 'jump');
     expect(game.player.state).toBe('air');
     runUntil(game, (player) => !player.airborne);
@@ -74,8 +111,8 @@ describe('the hero running', () => {
   it('kicks up dust and streams wind lines past the hero as it runs', () => {
     const game = createPlayingGame();
     runTicks(game, 30);
-    doubleTapAndHold(game, 'right');
-    runTicks(game, DASH_TICKS + 30);
+    press(game, 'right');
+    runTicks(game, 40);
     expect(game.player.state).toBe('run');
     const kinds = new Set(game.particles.map((particle) => particle.kind));
     expect(kinds).toContain('dust');
@@ -92,7 +129,7 @@ describe('the hero running', () => {
       ],
     });
     placeFighter(game, game.player, { x: 70 });
-    doubleTapAndHold(game, 'right');
+    press(game, 'right');
     const states = new Set();
     runUntil(game, (player) => {
       states.add(player.state);

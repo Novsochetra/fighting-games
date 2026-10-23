@@ -9,7 +9,7 @@ export const BUFFER_TICKS = 8;
 export const DOUBLE_TAP_TICKS = 15;
 export const FRESH_DIRECTION_TICKS = 10;
 export const DASH_TICKS = 17;
-// a dash held on to its end runs on at this pace, between the walk and the dash's burst
+// the hero runs at this pace, under the dash's burst
 export const RUN_SPEED = 2.5;
 export const CHARGE_TAP = 10;
 export const CHARGE_LEVEL1 = 24;

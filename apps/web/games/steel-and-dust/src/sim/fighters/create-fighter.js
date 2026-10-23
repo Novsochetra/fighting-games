@@ -28,7 +28,6 @@ function combatFlags() {
     hasToken: false,
     airHits: 0,
     airDashUsed: false,
-    runningJump: false,
     dashChain: 0,
     pogoCount: 0,
   };

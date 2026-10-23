@@ -200,8 +200,10 @@ Fighters are drawn from PixelLab sprite sheets in `assets/sprites/`: one folder 
 Shade (`src/data/heroes.js`, all four loaded at the start) and one sheet per enemy
 (`src/data/enemies/enemy-sprites.js`). `src/sim/hero-animation.js` and `src/sim/enemy-animation.js`
 pick the frame for a fighter's state; colors that belong to a Shade live in `src/art/hero-themes.js`.
-A ground dash held its way to its end runs on (`src/sim/brains/player/run.js`) at `RUN_SPEED` in
-the hero's run strip, kicking dust up behind each stride (`src/sim/fighters/motion-effects.js`).
+The hero runs wherever it goes on foot (`src/sim/brains/player/run.js`): a held direction sets off
+at a walk's pace and picks up to `RUN_SPEED`, and a ground dash held its way runs straight on, in the
+hero's run strip, kicking dust up behind each stride (`src/sim/fighters/motion-effects.js`). Attacks
+out of the run are the ones from a stand; jump is a long running leap.
 A boss is drawn at its `scale` (`spriteSize` in `src/render/fighters/enemy-sprites.js`), two to
 three times the hero's height, and its hit and hurt boxes grow with it; raiders are drawn at the
 size of their sheets. Where a boss's effects leave its body (a mouth, eyes, a fist, the furnace in a
