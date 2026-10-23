@@ -8,23 +8,24 @@ Open it from the arcade home page, or go straight to `games/steel-and-dust/` on 
 
 ## Controls
 
-| Action              | Keyboard                                                                                              | Touch                                                                  | Gamepad         |
-| ------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------------- |
-| Move                | ← → or A D                                                                                            | the stick in the bottom-left corner (or a floating stick, in Settings) | stick or d-pad  |
-| Jump                | ↑ / W / Space (hold ← or → to jump that way)                                                          | JUMP                                                                   | A               |
-| Dash (invincible)   | Shift, or tap ← → twice; once more in the air. Hold the other way to turn, or dash again to dash back | DASH                                                                   | B               |
-| Light attack        | J or Z                                                                                                | ATTACK (hold to keep the combo going)                                  | X               |
-| Heavy attack        | tap K or X                                                                                            | HEAVY                                                                  | Y               |
-| Charge attack       | hold K, let go (level 1 after 0.4 s, max after 1.1 s)                                                 | hold HEAVY                                                             | hold Y          |
-| Launcher            | ↓ + K, or ↑ + K to launch and jump after the enemy                                                    | stick up or down + HEAVY                                               | stick + Y       |
-| Low sweep           | ↓ + J                                                                                                 | stick down + ATTACK                                                    | stick down + X  |
-| Rising strike       | ↑ + J together                                                                                        | stick up + ATTACK                                                      | stick up + X    |
-| Air pogo            | in the air, ↓ + J                                                                                     | in the air, stick down + ATTACK                                        | stick down + X  |
-| Air dive            | in the air, ↓ + K                                                                                     | in the air, stick down + HEAVY                                         | stick down + Y  |
-| Dash attack         | J during a dash (K for a sliding launcher)                                                            | ATTACK during a dash                                                   | X during a dash |
-| Ultimate            | L or U when the ULT bar is full                                                                       | ULT                                                                    | RB or RT        |
-| Pause               | P or Esc                                                                                              | II                                                                     | Start           |
-| Full screen / sound | F / M                                                                                                 | menu                                                                   | menu            |
+| Action              | Keyboard                                                                                              | Touch                                                                  | Gamepad                       |
+| ------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------- |
+| Move                | ← → or A D                                                                                            | the stick in the bottom-left corner (or a floating stick, in Settings) | stick or d-pad                |
+| Jump                | ↑ / W / Space (hold ← or → to jump that way)                                                          | JUMP                                                                   | A                             |
+| Dash (invincible)   | Shift, or tap ← → twice; once more in the air. Hold the other way to turn, or dash again to dash back | DASH                                                                   | B                             |
+| Run                 | dash and keep holding ← or →                                                                          | DASH and keep the stick that way                                       | B and keep the stick that way |
+| Light attack        | J or Z                                                                                                | ATTACK (hold to keep the combo going)                                  | X                             |
+| Heavy attack        | tap K or X                                                                                            | HEAVY                                                                  | Y                             |
+| Charge attack       | hold K, let go (level 1 after 0.4 s, max after 1.1 s)                                                 | hold HEAVY                                                             | hold Y                        |
+| Launcher            | ↓ + K, or ↑ + K to launch and jump after the enemy                                                    | stick up or down + HEAVY                                               | stick + Y                     |
+| Low sweep           | ↓ + J                                                                                                 | stick down + ATTACK                                                    | stick down + X                |
+| Rising strike       | ↑ + J together                                                                                        | stick up + ATTACK                                                      | stick up + X                  |
+| Air pogo            | in the air, ↓ + J                                                                                     | in the air, stick down + ATTACK                                        | stick down + X                |
+| Air dive            | in the air, ↓ + K                                                                                     | in the air, stick down + HEAVY                                         | stick down + Y                |
+| Dash attack         | J during a dash or a run (K for a sliding launcher)                                                   | ATTACK during a dash or a run                                          | X during a dash or a run      |
+| Ultimate            | L or U when the ULT bar is full                                                                       | ULT                                                                    | RB or RT                      |
+| Pause               | P or Esc                                                                                              | II                                                                     | Start                         |
+| Full screen / sound | F / M                                                                                                 | menu                                                                   | menu                          |
 
 Menus work with the arrow keys and Enter (Esc goes back), with a gamepad (A / B), or by touch.
 

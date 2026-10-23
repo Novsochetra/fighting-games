@@ -19,6 +19,15 @@ height from its image).
 - Most strips are PixelLab v3 animations from the character's east view. Hurt, juggle and get-up start
   from the Shade's own knock-out and lying frames, and dash and jump use the PixMiniMax model, because
   the first takes of those moves did not read well.
+- `hero_run.png` is each hero's run (S22, eight frames that loop, two strides with a flight phase,
+  the blade trailing low behind), and every one was baked into its arsenal with run entries in
+  `OWN_OVERRIDES` where the blade's line or its erase needed a hand. The Firefly Shade's is a PixelLab
+  v3 animation from his dash's lean; the Antler Spirit, Ember, Bokator and Angkor Warrior's
+  are PixMiniMax takes of their own dash lean frame, pinned to end on it so the loop closes, cut to
+  their own palettes (the Khmer fighters' with their dark outline). The Blue Shade's was drawn by hand
+  when the month's generations ran out: his dash's body, cape and blade, stood 8° more upright over
+  legs drawn as a sprint in his walk's colours. The Shades run in their dash's crouch, lower than they
+  walk; the Khmer fighters run nearly upright.
 - Attack strips are ordered so the frame with the biggest slash sits at the strike frame the game
   holds while the hitbox is out (`src/data/hero-sprites.js`).
 - `<shade>/hero_ult.png` is the Shade's ultimate, nine frames on one row with no weapon rows (the
