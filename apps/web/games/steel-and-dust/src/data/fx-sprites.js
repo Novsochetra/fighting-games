@@ -1,4 +1,5 @@
 import { RENDER_SCALE } from '../config.js';
+import { HEAVY_FX_SPRITES } from './heavy-fx-sprites/index.js';
 
 // PixelLab effect strips in assets/sprites/fx/: one row of frames, drawn at the hero sprites'
 // resolution; anchor = the pixel that sits on the effect's point (ground or centre)
@@ -72,6 +73,7 @@ export const FX_SPRITES = {
   gather: { frameWidth: 67, frameHeight: 84, frames: 8, ticks: 2, anchorX: 33, anchorY: 76 },
   sever: { frameWidth: 55, frameHeight: 55, frames: 7, ticks: 2, anchorX: 24, anchorY: 27 },
   rubble: { frameWidth: 105, frameHeight: 92, frames: 11, ticks: 2, anchorX: 53, anchorY: 46 },
+  ...HEAVY_FX_SPRITES,
 };
 
 export const FX_SCALE = 1 / RENDER_SCALE;

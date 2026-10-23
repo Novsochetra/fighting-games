@@ -258,7 +258,9 @@ Each Shade fights in its own style and has its own ultimate:
   (lean, lunge, afterimages), `src/sim/fx/heavy/` (the kit and its own particle kinds, which
   `update-effects.js` moves), `src/render/fx/heavy/` (those kinds' drawing and layers under and
   over the hero, through `src/render/fighters/heavy-glow.js`) and `src/audio/live/heavy/`
-  (its sounds); each folder's `index.js` gathers the seven. The wind-up glow (dim, full, then hot
+  (its sounds), and its own effect strips, if it has any, in `src/data/heavy-fx-sprites/` (joined to
+  `FX_SPRITES`, played with `addBurst`; `test/unit/data/heavy-fx-sprites.test.js` checks each strip's size
+  and keeps it to 32 colors); each folder's `index.js` gathers the seven. The wind-up glow (dim, full, then hot
   as it strikes) and the lean are drawn only (`heavy-glow.js`), so a heavy reaches as far as ever.
   A kit draws its randomness from `fxRandom` (`src/sim/fx/fx-random.js`), a seeded stream of the
   game's own, never `Math.random`, so dressing a heavy never changes how a fight goes;
