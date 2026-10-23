@@ -1,5 +1,5 @@
 const TIPS = [
-  '<b>Break crates</b> for weapons and rations. Weapons break after a number of hits; your fists never do.',
+  '<b>Break crates</b> for rations that heal you.',
   'Raiders <b>flash red</b> just before they strike. Dash through the hit: you are invincible while dashing.',
   '<b>Launch</b> raiders with up or down + heavy, follow them into the air and keep hitting.',
   "A fifth light hit chases a knocked-back raider and launches them. Down + light sweeps low, under a Bulwark's shield.",

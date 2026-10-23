@@ -2,6 +2,10 @@ import { VIEW_WIDTH } from '../../config.js';
 import { layoutProps } from './props-layout.js';
 import { groundAt, layoutTerrain } from './terrain.js';
 
+// weapon crates are off for now so every hero fights with the weapon they start with; the rations
+// stay where they are
+const WEAPON_CRATES = false;
+
 const FIRST_ZONE = 300;
 const ROAD = 300;
 // a zone starts once the hero is this far past its left wall
@@ -51,7 +55,9 @@ function layoutCrates(zones, items, terrain) {
   const spots = zones.flatMap((zone) =>
     zone.screens > 1 ? [zone.left - 120, zone.left + VIEW_WIDTH + 60] : [zone.left - 120],
   );
-  return spots.map((x, i) => ({ x, y: groundAt(terrain, x), item: items[i % items.length] }));
+  return spots
+    .map((x, i) => ({ x, y: groundAt(terrain, x), item: items[i % items.length] }))
+    .filter((crate) => WEAPON_CRATES || crate.item === 'ration');
 }
 
 // turns a mission's list of zones into places on the road

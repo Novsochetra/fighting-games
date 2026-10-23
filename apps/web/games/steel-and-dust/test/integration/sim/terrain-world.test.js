@@ -10,6 +10,7 @@ import { seededRandom } from '../../support/seeded-random.js';
 import {
   createTerrainGame,
   hillyTerrain,
+  placeCrate,
   placeFighter,
   useTerrain,
 } from '../../support/terrain-game.js';
@@ -89,7 +90,7 @@ describe('raiders, hazards and pickups on uneven ground', () => {
     expect(fire.y).toBe(top);
   });
 
-  it('drops a crate on a hill open and the hero picks up what was inside', () => {
+  it('drops a crate on a hill open and the hero eats what was inside', () => {
     const game = createTerrainGame({
       ground: [
         [100, 0],
@@ -99,7 +100,9 @@ describe('raiders, hazards and pickups on uneven ground', () => {
       ],
     });
     const crate = game.crates[0];
+    placeCrate(game, crate, 180);
     expect(crate.y).toBe(GROUND_Y - 20);
+    game.player.hp = 50;
     placeFighter(game, game.player, { x: crate.x - 15 });
     game.player.facing = 1;
     press(game, 'down');
@@ -110,7 +113,7 @@ describe('raiders, hazards and pickups on uneven ground', () => {
     placeFighter(game, game.player, { x: crate.x });
     runTicks(game, 40);
     expect(game.pickups).toHaveLength(0);
-    expect(game.player.weapon.id).toBe('sword');
+    expect(game.player.hp).toBe(60);
   });
 });
 

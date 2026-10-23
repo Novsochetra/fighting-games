@@ -5,7 +5,6 @@ import { ENEMY_SPRITES } from '../../../src/data/enemies/enemy-sprites.js';
 import { ENEMY_TYPES } from '../../../src/data/enemies/enemy-types.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { PROP_SPRITES } from '../../../src/data/prop-sprites.js';
-import { WEAPON_IDS } from '../../../src/data/weapons/index.js';
 
 const kindsIn = (mission) =>
   mission.zones.flatMap((zone) => zone.waves.flatMap((wave) => wave.kinds));
@@ -132,10 +131,11 @@ describe('the twelve missions', () => {
     expect(MISSIONS.at(-1).length).toBe(Math.max(...MISSIONS.map((mission) => mission.length)));
   });
 
-  it('fill their crates with weapons and food that exist', () => {
+  it('fill their crates with rations only, while weapon crates are off', () => {
     for (const mission of MISSIONS) {
+      expect(mission.crates.length, mission.name).toBeGreaterThan(0);
       for (const crate of mission.crates) {
-        expect([...WEAPON_IDS, 'ration'], mission.name).toContain(crate.item);
+        expect(crate.item, mission.name).toBe('ration');
       }
     }
   });
