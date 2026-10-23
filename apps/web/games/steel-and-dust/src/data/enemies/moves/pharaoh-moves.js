@@ -53,7 +53,9 @@ export const PHARAOH_MOVES = {
     loopFrames: [4, 7, 8],
     frameAt: [0, 12, 28, 48, 72, 80, 88, 96, 432, 440, 448, 470],
   }),
-  // every jar broken, the sun bursts over him and leaves him reeling
+  // every jar broken, the sun bursts over him and leaves him reeling on the two frames of his
+  // flinch thrown back (his head thrown back behind his feet, where the stars ring it); rocking on
+  // into the hunched frame would jerk his head to and fro
   sunBroken: defineMove({
     name: 'Sun Broken',
     frames: [0, 150, 12],
@@ -61,8 +63,8 @@ export const PHARAOH_MOVES = {
     hitbox: null,
     quiet: true,
     strip: 'hurt',
-    loopFrames: [1, 2, 10],
-    stars: { every: 16, up: 44 },
+    loopFrames: [0, 1, 10],
+    stars: { every: 16, up: 40, ahead: -10 },
     frameAt: [0, 4, 8, 12],
   }),
 };

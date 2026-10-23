@@ -1,14 +1,26 @@
 import { describe, expect, it } from 'vitest';
-import { drawsPatch, headMiddle, patchOf, readSheet } from '../../support/sheet-cells.js';
+import { blobsOf, headMiddle, readSheet } from '../../support/sheet-cells.js';
 
 // Bug: the Sand Pharaoh changed as his strips changed. His swipe's arc was filled with a slab of grey
-// left from its background, his staff lost its orb whenever he flinched or slammed, his head turned
-// into a gaping beast's in his flinch, his walk slid him back and forth over his feet, and the sun
-// over his staff jumped sideways each time the curse's loop began again
+// left from its background, his staff lost its orb whenever he flinched or slammed, his walk slid
+// him back and forth over his feet, and the sun over his staff jumped sideways each time the
+// curse's loop began again. (His flinch also wore a gaping beast's head; his first seven strips have
+// since been redrawn whole after his skill art, the flinch with his own mask.)
 const { image, cellOf } = readSheet('pharaoh');
-// his staff's orb and his face as his idle frame draws them, in that frame's pixels
-const ORB = patchOf(image, cellOf('idle', 0), { x: 155, y: 84, width: 7, height: 5 });
-const FACE = patchOf(image, cellOf('idle', 0), { x: 118, y: 80, width: 22, height: 15 });
+// the orb is a round blue patch a few pixels across; the gems on his collar and belt are smaller
+// and the rays of the slam's burst are long and thin
+const ORB_ACROSS = [5, 8];
+const ORB_PIXELS = 12;
+
+const orbBlue = ([red, , blue]) => blue >= 150 && blue - red >= 80;
+const across = (size) => size >= ORB_ACROSS[0] && size <= ORB_ACROSS[1];
+
+function drawsOrb(cell) {
+  return blobsOf(image, cell, orbBlue).some(
+    ({ left, right, top, bottom, count }) =>
+      count >= ORB_PIXELS && across(right - left + 1) && across(bottom - top + 1),
+  );
+}
 
 function greyPixels(cell) {
   let count = 0;
@@ -49,13 +61,7 @@ describe('the Sand Pharaoh, strip to strip', () => {
     const frames = [0, 1, 2, 3].map((frame) => ['hurt', frame]);
     frames.push(...[1, 2, 3, 4, 5, 6, 7, 8].map((frame) => ['slam', frame]));
     for (const [strip, frame] of frames) {
-      expect(drawsPatch(image, cellOf(strip, frame), ORB), `${strip} ${frame}`).toBe(true);
-    }
-  });
-
-  it('keeps his own face as he flinches', () => {
-    for (const frame of [0, 1, 2]) {
-      expect(drawsPatch(image, cellOf('hurt', frame), FACE), `hurt ${frame}`).toBe(true);
+      expect(drawsOrb(cellOf(strip, frame)), `${strip} ${frame}`).toBe(true);
     }
   });
 

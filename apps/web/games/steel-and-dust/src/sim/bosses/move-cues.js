@@ -53,7 +53,7 @@ function glint(game, fighter) {
 
 // stars circle the head of a dazed boss, a new ring every so often while the daze lasts
 function circleStars(game, fighter, move) {
-  const at = bodyPoint(fighter, { ahead: 4, up: move.stars.up });
+  const at = bodyPoint(fighter, { ahead: move.stars.ahead ?? 4, up: move.stars.up });
   addBurst(game, { sprite: 'stars', ...at, scale: bodySize(fighter, SPARKLE_SIZE) });
 }
 

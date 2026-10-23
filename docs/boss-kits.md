@@ -212,9 +212,14 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    move as he moves, are a shade thinner and waver now and then, and pop at one blow. The Curse of
    the Sun counts down over the hero's head in the sun's eye; the scarabs bite only feet on the
    ground. In phase two his copies thrust their staffs and fire mirage bolts low along the floor.
-   His first seven rows were cleaned to read as the same pharaoh: his staff keeps its orb, his
-   flinch keeps his own face, his walk keeps his body over his feet and his swipe lost the grey
-   slab left in its arc.
+   His first seven rows (idle, walk, swipe, flinch, knock-out, slam, run) were drawn again after his
+   skill art, one image per strip with his skill frames and the old strip as the pose to follow:
+   cut into frames, shrunk to his stance height, folded into the colors his skill rows use, and
+   stood on his feet line by the middle of his feet (by his head in the walk and the run, so his
+   body holds still). His old swing arc and slam burst were carried over onto the new swipe and
+   slam frames, the burst kept off the orb; the knock-out's flying frames keep the heights of his
+   old fall. Sun Broken reels on the two flinch frames thrown back, the daze stars round his head
+   behind his feet (`stars.ahead`), as the frame hunched forward would jerk his head to and fro.
 10. **Naga Raja**: done, ahead of the Warden Ox. Her sheet is new and her own, not the Cobra
     recolor. Her 384×240 frames are drawn half as fine again as the other sheets (`density` 1.5), and
     at scale 1.5, so she stands sharp at about two and a quarter times the hero's

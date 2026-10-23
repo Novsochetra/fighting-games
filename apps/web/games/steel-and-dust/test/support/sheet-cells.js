@@ -27,39 +27,6 @@ export function lowestRow(image, { left, top, width, height }) {
   return -1;
 }
 
-// the opaque pixels of a box inside a frame, as offsets from the box's corner and their colors
-export function patchOf(image, cell, { x, y, width, height }) {
-  const pixels = [];
-  for (let dy = 0; dy < height; dy++) {
-    for (let dx = 0; dx < width; dx++) {
-      if (image.alpha(cell.left + x + dx, cell.top + y + dy) > 0) {
-        pixels.push({ dx, dy, rgb: image.rgb(cell.left + x + dx, cell.top + y + dy).join() });
-      }
-    }
-  }
-  return pixels;
-}
-
-function patchAt(image, cell, pixels, { x, y }) {
-  return pixels.every(
-    ({ dx, dy, rgb }) =>
-      image.alpha(cell.left + x + dx, cell.top + y + dy) > 0 &&
-      image.rgb(cell.left + x + dx, cell.top + y + dy).join() === rgb,
-  );
-}
-
-// whether a frame draws the same pixels somewhere: the same piece of art, wherever it stands
-export function drawsPatch(image, cell, pixels) {
-  for (let y = 0; y < cell.height; y++) {
-    for (let x = 0; x < cell.width; x++) {
-      if (patchAt(image, cell, pixels, { x, y })) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
 // the middle, left to right, of the top rows a frame draws: where its head and shoulders are
 export function headMiddle(image, cell, rows) {
   let top = 0;
@@ -77,6 +44,46 @@ export function headMiddle(image, cell, rows) {
     }
   }
   return sum / count;
+}
+
+const NEIGHBOURS = [-1, 0, 1].flatMap((dy) => [-1, 0, 1].map((dx) => [dx, dy]));
+
+function floodBox(cell, start, joins) {
+  const box = { left: start.x, right: start.x, top: start.y, bottom: start.y, count: 0 };
+  const stack = [start];
+  while (stack.length > 0) {
+    const { x, y } = stack.pop();
+    box.count++;
+    Object.assign(box, {
+      left: Math.min(box.left, x),
+      right: Math.max(box.right, x),
+      top: Math.min(box.top, y),
+      bottom: Math.max(box.bottom, y),
+    });
+    stack.push(...NEIGHBOURS.map(([dx, dy]) => ({ x: x + dx, y: y + dy })).filter(joins));
+  }
+  return box;
+}
+
+// the box and size of each separate patch of a frame whose pixels pass a test of their color
+export function blobsOf(image, cell, passes) {
+  const taken = new Set();
+  const joins = ({ x, y }) => {
+    const inside = x >= 0 && y >= 0 && x < cell.width && y < cell.height;
+    const key = y * cell.width + x;
+    const fits = inside && !taken.has(key) && image.alpha(cell.left + x, cell.top + y) > 0;
+    const join = fits && passes(image.rgb(cell.left + x, cell.top + y));
+    return join && taken.add(key);
+  };
+  const blobs = [];
+  for (let y = 0; y < cell.height; y++) {
+    for (let x = 0; x < cell.width; x++) {
+      if (joins({ x, y })) {
+        blobs.push(floodBox(cell, { x, y }, joins));
+      }
+    }
+  }
+  return blobs;
 }
 
 function rowDrawn(image, cell, y) {
