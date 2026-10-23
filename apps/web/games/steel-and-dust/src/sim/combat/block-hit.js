@@ -5,13 +5,14 @@ import { addImpact } from '../fx/effects.js';
 import { addSparks } from '../fx/particles.js';
 import { showHint } from '../hints.js';
 
-// whether the blow connected: a block does, so the striker's follow-up plays; a parried blow does
-// not, its striker already reeling (guard-counter.js)
+// whether the blow connected: a block does, so the striker's follow-up plays; the hero's parried
+// blow does not, the hero already reeling (guard-counter.js), but a parried shot or summon is
+// spent on the guard as on a block, or it would strike him again from behind as it passes
 export function blockHit(game, hit) {
   const { attacker, target } = hit;
   if (isParrying(target)) {
     parryHit(game, hit);
-    return false;
+    return attacker !== game.player;
   }
   const x = target.x + target.facing * 9 * target.scale;
   const y = target.y - 20 * target.scale;
