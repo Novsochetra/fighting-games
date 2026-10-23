@@ -1,6 +1,6 @@
 import { FX_SCALE, FX_SPRITES } from '../../data/fx-sprites.js';
 import { bodySize } from '../../sim/fighters/body-point.js';
-import { fistOf } from '../../sim/hazards/chain-hook.js';
+import { fistOf } from '../../sim/hazards/chain-fist.js';
 import { HOOK_SIZE } from '../../sim/hazards/chain-pull.js';
 import { drawFxFrame } from './fx-sheets.js';
 

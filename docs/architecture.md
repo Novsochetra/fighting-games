@@ -324,7 +324,8 @@ for a while (`src/sim/hazards/gaze-pillars.js`, `src/sim/summons/stone-skin.js`,
 arena (`stone-faces.js`); and his crumble falls to rubble out of reach and reforms him `glowing`
 (`src/sim/bosses/crumble.js`; rules in `bayon-rules.js`). The Warden Ox's `hook` (`src/sim/hazards/chain-hook.js`, `chain-pull.js`)
 flies at the hero's waist (jump it), drags a hero it catches to where his chop lands and lets go as he raises
-the axe; his `guard` (`src/sim/bosses/guard-counter.js`) turns every blow from the front as a block
+the hammer (the chain runs from the fist of the frame he is drawn on, `chain-fist.js`, and a held
+hook's ring never sits behind it); his `guard` (`src/sim/bosses/guard-counter.js`) turns every blow from the front as a block
 would, but a parry: the striker reels and he answers with `guardStrike`; his Executioner's Round
 spins him with a red `whirl` that follows his body (a burst with `follow`, `src/sim/summons/bursts.js`)
 and ends in a `cleave` (`src/sim/bosses/executioner.js`) whose crack runs off both ways at a steady

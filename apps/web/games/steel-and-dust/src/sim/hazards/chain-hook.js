@@ -1,28 +1,17 @@
 import { activeEnd } from '../../data/moves/define-move.js';
 import { hurtBox, overlaps } from '../combat/boxes.js';
 import { canBeHit } from '../combat/guard.js';
-import { enemySpriteFrame } from '../enemy-animation.js';
 import { bodyPoint } from '../fighters/body-point.js';
 import { groundAt } from '../stage/terrain.js';
+import { FIST_ON_FRAME, fistOf } from './chain-fist.js';
 import { dragIn, grab, holdHero, letGo } from './chain-pull.js';
 
-// where the chain leaves his fist on each frame that holds it, in his own units (body-point.js)
-export const FIST_ON_FRAME = {
-  3: { ahead: 33, up: 28 },
-  4: { ahead: 20, up: 21 },
-  5: { ahead: 13, up: 16 },
-};
 // it flies at a hero's waist, in pixels off the ground, low enough to jump as it comes
 const AIM = 12;
 const HOOK_SPEED = 7;
 const REEL_SPEED = 9;
 // as far as the hook flies from his fist; the move's lane (ox-moves.js) runs this far past it
 const REACH = 196;
-
-export function fistOf(boss) {
-  const [, frame] = enemySpriteFrame(boss);
-  return bodyPoint(boss, FIST_ON_FRAME[frame] ?? FIST_ON_FRAME[3]);
-}
 
 export const hookArea = (hook) => ({ x: hook.x - 5, y: hook.y - 5, width: 10, height: 10 });
 

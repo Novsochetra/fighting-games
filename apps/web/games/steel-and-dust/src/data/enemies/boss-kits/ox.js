@@ -1,5 +1,5 @@
 // The Warden Ox is a warden: he walks at the hero step by step and never gives ground. His Chain
-// Hook drags the hero in for an axe chop, and a hero who crowds him may meet his Guard Counter: a
+// Hook drags the hero in for a hammer chop, and a hero who crowds him may meet his Guard Counter: a
 // blow on it is parried and answered at once. Below 40% his Executioner's Round spins
 // him across the arena and back, then he leaps and cleaves the road, splitting it both ways.
 // Below half health he guards more often and chops twice

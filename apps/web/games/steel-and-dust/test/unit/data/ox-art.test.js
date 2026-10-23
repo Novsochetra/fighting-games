@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { RENDER_SCALE } from '../../../src/config.js';
 import { ENEMY_SPRITES } from '../../../src/data/enemies/enemy-sprites.js';
-import { AXE_HEAD, WAIST } from '../../../src/sim/bosses/executioner.js';
+import { HAMMER_HEAD, WAIST } from '../../../src/sim/bosses/executioner.js';
 import { GUARD_GLINT } from '../../../src/sim/bosses/guard-counter.js';
-import { FIST_ON_FRAME } from '../../../src/sim/hazards/chain-hook.js';
+import { FIST_ON_FRAME } from '../../../src/sim/hazards/chain-fist.js';
 import { readPngAlpha } from '../../support/png-alpha.js';
 
 const GAME = new URL('../../../', import.meta.url);
@@ -38,8 +38,8 @@ describe("the Warden Ox's art and his skills", () => {
     expect(isSteel(pixelAt('guardCounter', 2, GUARD_GLINT))).toBe(true);
   });
 
-  it('splits the road where the axe meets it as he cleaves', () => {
-    expect(isSteel(pixelAt('execution', 9, { ...AXE_HEAD, up: 4 }))).toBe(true);
+  it('splits the road where the hammer meets it as he cleaves', () => {
+    expect(isSteel(pixelAt('execution', 9, { ...HAMMER_HEAD, up: 3 }))).toBe(true);
   });
 
   it('spins the whirl round the middle of his body', () => {

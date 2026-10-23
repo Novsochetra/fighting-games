@@ -51,7 +51,7 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `scarab.png` | 4 × 48×24 | Sand Pharaoh: a scarab of the Scarab Carpet crawling (loops); five drawn as the carpet, a back row a step behind | ChatGPT image, the painted checker keyed out, shrunk and cut into frames, held on the eye |
 | `canopic.png` | 6 × 80×64 | Sand Pharaoh: a canopic jar of the Curse of the Sun standing (0) and breaking (1-5) | the same, held on the jar's foot |
 | `curse.png` | 4 × 48×48 | Sand Pharaoh: the sun's eye over the cursed hero (loops, quicker as the curse nears) | the same |
-| `sunfall.png` | 6 × 96×160 | Sand Pharaoh: the curse going off, a column of sunlight slamming down on the hero | the same, held on the column |
+| `sunfall.png` | 6 × 96×160 | Sand Pharaoh: the curse going off, a column of sunlight slamming down on the hero | the same, held on the column; blue squares left in the column were painted out in its gold |
 | `gazePillar.png` | 8 × 104×210 | Bayon Guardian: the Stone Gaze's gold pillar bursting up, burning (2-5) and winding away | ChatGPT image, the painted checker keyed out, white-hot cores put back, shrunk and held on the pillar's foot |
 | `figRoot.png` | 8 × 96×104 | Bayon Guardian: a fig root bursting up, striking (2-5) and crumbling | the same, held on the root's foot |
 | `rockBurst.png` | 8 × 104×140 | Bayon Guardian: rubble and dust bursting up as he crumbles and as a stone face crumbles | ChatGPT image drawn again with wide gaps, the painted checker keyed out |
@@ -67,7 +67,7 @@ ticks per frame and anchor (the pixel that sits on the ground, or on the effect'
 | `hook.png` | 1 × 56×32 | Warden Ox: the Chain Hook's hook, its ring on the anchor; turned along the chain as it flies, level round a caught hero | ChatGPT image on real transparency, shrunk to his frames' scale |
 | `chain.png` | 1 × 48×12 | Warden Ox: four links of the chain, laid end to end from his fist to the hook | cut from the chain in his own throwing frame, shrunk so it repeats every 12 px |
 | `parry.png` | 4 × 96×96 | Warden Ox: the gold burst of a parried blow; small, the glint on his hammer as he sets his guard | ChatGPT image, the painted checker keyed out, shrunk and cut into frames |
-| `axeWhirl.png` | 6 × 176×144 | Warden Ox: the red whirl round him in the Executioner's Round, winding up (0), spinning (1-4, a loop) and dying away (5), drawn behind him | ChatGPT image, the painted checker and the axe at its middle keyed out, shrunk and cut into frames |
+| `axeWhirl.png` | 6 × 176×144 | Warden Ox: the red whirl round him in the Executioner's Round, winding up (0), spinning (1-4, a loop) and dying away (5), drawn behind him | ChatGPT image, the painted checker and the axe at its middle keyed out, shrunk and cut into frames; the steel and white edges the axe left, and loose fragments inside the ring, were taken out |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to

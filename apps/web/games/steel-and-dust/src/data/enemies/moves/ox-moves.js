@@ -14,7 +14,7 @@ const chainHook = (chop) => ({
   frameAt: [0, 8, 18, 30, 120, 120, 132, 132, 132],
 });
 
-// a hooked hero is dragged in (4, 5), let go as he raises the axe (6) and chopped (7)
+// a hooked hero is dragged in (4, 5), let go as he raises the hammer (6) and chopped (7)
 const CHOP = {
   name: 'Chain Hook',
   damage: 18,
@@ -27,7 +27,7 @@ const CHOP = {
   frameAt: [0, 0, 0, 0, 0, 8, 16, 30, 44],
 };
 
-// the spin strikes from his feet to the whirl ahead of him as he spins on (frames 4-6 swing the axe
+// the spin strikes from his feet to the whirl ahead of him as he spins on (frames 4-6 swing the hammer
 // 38 of his units ahead); what trails behind has passed, so a hero who dashes through him in time
 // is clear
 const SPIN = {
@@ -93,7 +93,7 @@ export const OX_MOVES = {
     strip: 'guardCounter',
     frameAt: [0, 0, 0, 0, 8, 20, 30, 40],
   }),
-  // he raises the axe overhead (1-2) and spins across the arena to its wall (4-6), and back
+  // he raises the hammer overhead (1-2) and spins across the arena to its wall (4-6), and back
   executionersRound: defineMove({
     name: "Executioner's Round",
     frames: [66, 200, 0],
@@ -111,7 +111,7 @@ export const OX_MOVES = {
     frameAt: [0, 0, 0, 0, 8, 8, 8, 207, 207, 207, 207, 207],
   }),
   // then he leaps at the hero (8) and cleaves the ground (9), splitting it both ways in red, and
-  // stands with the axe stuck in the road (10) before he wrenches it free (11)
+  // stands with the hammer driven into the road (10) before he wrenches it free (11)
   roundCleave: defineMove({
     name: "Executioner's Round",
     frames: [40, 4, 66],

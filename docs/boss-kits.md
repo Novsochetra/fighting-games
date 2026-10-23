@@ -50,7 +50,7 @@ describes what is actually built.
 | 7   | Storm Djinn     | Sandstorm Pass    | floater: hovers, blinks away when closed in  | **Thunder Fist**: punch fires a lightning bolt along the floor             | **Dust Devil**: a tornado drifts at the hero, pulls in and launches       | **Eye of the Storm**: rises, the storm whites out, lightning strikes marked spots in three waves, then one big strike                      | two dust devils at once                     |
 | 8   | Furnace Knight  | Iron Works        | juggernaut: slow guard-up walk, vents steam  | **Fire Flail**: sweeping flail leaves burning ground                       | **Slag Pot**: lobs molten slag, leaves a lava pool                        | **Meltdown**: opens the chest furnace, a flame beam sweeps the arena (jump it); then overheats, armor off, takes double damage for 3 s     | burning ground lasts longer                 |
 | 9   | Sand Pharaoh    | Mirage Temple     | illusionist: glides, blinks end to end       | **Mirage Clones**: two copies cast with him; a clone pops when hit         | **Scarab Carpet**: a wave of scarabs crawls along the floor; jump it      | **Curse of the Sun**: the hero is cursed; break three canopic jars around the arena in 6 s or the curse goes off                           | clones also fire                            |
-| 10  | Warden Ox       | Warden's Fortress | warden: methodical, blocks                   | **Chain Hook**: chain pulls the hero in, then an axe chop                  | **Guard Counter**: a parry stance (glint); hit him and he counters        | **Executioner's Round**: spins across the screen twice, then a leaping cleave that splits the ground (the fissure, in red)                 | guards more often, chops twice              |
+| 10  | Warden Ox       | Warden's Fortress | warden: methodical, blocks                   | **Chain Hook**: chain pulls the hero in, then a hammer chop                | **Guard Counter**: a parry stance (glint); hit him and he counters        | **Executioner's Round**: spins across the screen twice, then a leaping cleave that splits the ground (the fissure, in red)                 | guards more often, chops twice              |
 | 11  | Naga Raja       | Angkor Wat        | glider: rears up, glides on the stone        | **Tidal Coil**: a wave of moat water rolls along the floor; jump it        | **Seven Heads**: seven hoods strike in turn, low and high                 | **Rainbow Naga**: a spirit naga crosses the sky, sweeps the floor twice, then dives on a marked spot                                       | waves come in pairs                         |
 | 12  | Bayon Guardian  | Bayon             | colossus: three phases, crumbles and reforms | **Stone Gaze**: one face turns, a gold beam; standing in it slows to stone | **Fig Roots**: roots burst up under the hero, then along the floor        | **Four Faces**: four giant stone faces at the screen edges fire gold beams in turn with gaps to stand in                                   | at 50% crumbles and reforms faster, glowing |
 
@@ -85,7 +85,7 @@ Drawn apart from the body, one row each, in `assets/sprites/fx/boss/`. Sizes are
 | Djinn    | lightning bolt loop (4, 96x32), tornado loop (8, 96x160), lightning strike (6, 64x432)                                                   |
 | Furnace  | burning ground loop (6, 64x48), lava pool loop (6, 96x32), flame beam segment loop (4, 64x48) and head (4, 64x64), steam vent (6, 48x96) |
 | Pharaoh  | scarab crawl (4, 32x16), canopic jar (1, 48x64) and jar break (6, 64x64), curse mark loop (4, 32x32), mirage shimmer (6, 96x112)         |
-| Ox       | chain hook (1, 32x32), parry glint (4, 48x48), red axe spin (6, 160x112)                                                                 |
+| Ox       | done: `hook` (1), `chain` (1), `parry` (4), `axeWhirl` (6)                                                                               |
 | Naga     | done: `tide` (8), `splash` (7), `serpentRise` (8), `spiritNaga` (7), `nagaBolt` (4)                                                      |
 | Guardian | gold gaze beam segment loop (4, 64x48), fig root burst (8, 64x128), giant stone face (4, 256x256), rubble burst (6, 128x96)              |
 
@@ -212,6 +212,9 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    move as he moves, are a shade thinner and waver now and then, and pop at one blow. The Curse of
    the Sun counts down over the hero's head in the sun's eye; the scarabs bite only feet on the
    ground. In phase two his copies thrust their staffs and fire mirage bolts low along the floor.
+   His first seven rows were cleaned to read as the same pharaoh: his staff keeps its orb, his
+   flinch keeps his own face, his walk keeps his body over his feet and his swipe lost the grey
+   slab left in its arc.
 10. **Naga Raja**: done, ahead of the Warden Ox. Her sheet is new and her own, not the Cobra
     recolor. Her 384×240 frames are drawn half as fine again as the other sheets (`density` 1.5), and
     at scale 1.5, so she stands sharp at about two and a quarter times the hero's
@@ -230,11 +233,11 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
     were then drawn again body-only on white, and an orb of rainbow light gathers over her raised
     hand and follows it from frame to frame before the spirits come; the ultimate's name is called
     higher (`calloutUp`) so the orb does not cover it.
-11. **Warden Ox**: done, after the Naga Raja and the Bayon Guardian. His sheet moved to the big frame (256×160): the axe rises far over his head
+11. **Warden Ox**: done, after the Naga Raja and the Bayon Guardian. His sheet moved to the big frame (256×160): the hammer rises far over his head
     and the counter thrusts far ahead; his first seven rows were set into it with his feet where they
     stood. The chain and guard strips came on real transparency; the axe whirl and the parry burst
     on a painted checkerboard, keyed by their colors, and the axe at the whirl's middle keyed out
-    with it, so the whirl is drawn behind him round his own axe. The chain and hook drawn beyond his
+    with it, so the whirl is drawn behind him round his own hammer. The chain and hook drawn beyond his
     fist on the throwing and pulling frames were cut away: the game draws the chain from the fist of
     the frame he is drawn on to the hook, link by link from a strip cut out of his own chain, so it
     reaches wherever the hook is. The hook flies at the hero's waist (jump it) and drags a hero it catches to
@@ -243,9 +246,12 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
     and his counter lands. The Executioner's Round spins him to the arena's wall and back, a red
     whirl round him, then he leaps at the hero and cleaves the road: a red crack runs off both ways
     at a steady pace, and a hero standing where it passes is thrown up (jump it). Where the chain
-    leaves his fist, where the glint shines, where the whirl spins and where the axe splits the
+    leaves his fist, where the glint shines, where the whirl spins and where the hammer splits the
     road are read from the art and locked by a test. In phase two he guards more often and his
-    hook ends in two chops, the first only staggering.
+    hook ends in two chops, the first only staggering. The image model drew his weapon as a hammer,
+    a bearded axe or a double axe from frame to frame, and in a few not at all; every head was
+    redrawn as the block hammer of his first rows, so he holds one weapon throughout, and a hero
+    dragged in close is held with the hook's ring ahead of his fist, never behind it.
 12. **Bayon Guardian** (12): done, ahead of the Warden Ox, as his art came first. His own sheet, a
     mossy four-faced temple golem with gold veins, has frames both wider and taller (256×160) for
     his arms raised in the ritual and the roots round him. The images came on a painted checker

@@ -3,6 +3,7 @@ import { startMove } from '../fighters/actions.js';
 import { placeOnGround } from '../fighters/terrain-motion.js';
 import { shake } from '../fx/camera-fx.js';
 import { addSparks } from '../fx/particles.js';
+import { fistOf } from './chain-fist.js';
 
 // the hook bites a hero at the chest and holds them where his chop lands (ox-moves.js): his own
 // units ahead of him, and a hero's height in pixels. Its ring is drawn this far in his units short
@@ -11,15 +12,21 @@ const CHEST = 14;
 const HOLD_AT = 22;
 export const HOOK_SIZE = 0.7;
 const HOOK_BITE = 14;
+// held close, the ring stays at least this far ahead of his fist, in his units
+const RING_LEAD = 3;
 const HELD = 999;
 const PULL_SPEED = 6;
-// let go as he raises the axe, a hero stays reeling till the chop comes down
+// let go as he raises the hammer, a hero stays reeling till the chop comes down
 const LET_GO_STUN = 18;
 
-// the ring sits on the hero's near side, so the hook's curve closes round them
+// the ring sits on the hero's near side, so the hook's curve closes round them; a hero dragged in
+// close would put it behind his fist, and the chain would run back into his own legs
 function pinHook(hook, hero) {
-  const toward = Math.sign(hook.owner.x - hero.x) || -hook.owner.facing;
-  hook.x = hero.x + toward * HOOK_BITE * hook.owner.scale;
+  const boss = hook.owner;
+  const toward = Math.sign(boss.x - hero.x) || -boss.facing;
+  const ring = hero.x + toward * HOOK_BITE * boss.scale;
+  const lead = fistOf(boss).x + boss.facing * RING_LEAD * boss.scale;
+  hook.x = (ring - lead) * boss.facing < 0 ? lead : ring;
   hook.y = hero.y - CHEST;
 }
 

@@ -47,7 +47,7 @@ export const FX_SPRITES = {
   canopic: { frameWidth: 80, frameHeight: 64, frames: 6, ticks: 4, anchorX: 40, anchorY: 59 },
   curse: { frameWidth: 48, frameHeight: 48, frames: 4, ticks: 6, anchorX: 24, anchorY: 24 },
   sunfall: { frameWidth: 96, frameHeight: 160, frames: 6, ticks: 4, anchorX: 48, anchorY: 156 },
-  mirageBolt: { frameWidth: 48, frameHeight: 24, frames: 4, ticks: 3, anchorX: 30, anchorY: 12 },
+  mirageBolt: { frameWidth: 48, frameHeight: 24, frames: 4, ticks: 3, anchorX: 37, anchorY: 12 },
   tide: { frameWidth: 95, frameHeight: 99, frames: 8, ticks: 4, anchorX: 42, anchorY: 96 },
   splash: { frameWidth: 78, frameHeight: 99, frames: 7, ticks: 3, anchorX: 39, anchorY: 96 },
   serpentRise: {

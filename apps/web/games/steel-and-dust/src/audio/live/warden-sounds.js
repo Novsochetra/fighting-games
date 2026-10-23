@@ -17,13 +17,13 @@ function parry(live, start) {
   hiss(live, { start, ...shimmer, attack: 0.005, duration: 0.3, volume: 0.03 });
 }
 
-// the axe sweeping round him: a deep rushing whoosh that rises and falls
+// the hammer sweeping round him: a deep rushing whoosh that rises and falls
 function axeWhirl(live, start) {
   const rush = { type: 'bandpass', from: 380, to: 1100, resonance: 2.2 };
   hiss(live, { start, ...rush, attack: 0.08, duration: 0.22, volume: 0.09 });
 }
 
-// the axe splitting the road: a crushing blow, the stone cracking and grit falling
+// the hammer splitting the road: a crushing blow, the stone cracking and grit falling
 function cleave(live, start) {
   thump(live, { start, from: 110, to: 34, duration: 0.55, volume: 0.36 });
   crunch(live, { start, duration: 0.35, volume: 0.24, frequency: 700 });

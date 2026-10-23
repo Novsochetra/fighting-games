@@ -8,7 +8,7 @@ import { readPngAlpha } from '../../support/png-alpha.js';
 // few pixels, the last specks of a fading arc
 const MOST_ON_AN_EDGE = 3;
 const GAME = new URL('../../../', import.meta.url);
-const CHECKED = ['furnace', 'khan', 'colossus', 'cobra', 'gnoll', 'djinn', 'naga'];
+const CHECKED = ['furnace', 'khan', 'colossus', 'cobra', 'gnoll', 'djinn', 'naga', 'pharaoh', 'ox'];
 
 function edgePixels(sheet, { left, top, width, height }) {
   let count = 0;
