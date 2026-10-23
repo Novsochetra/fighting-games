@@ -145,146 +145,146 @@
  ],
  "blunt": [
   {
-   "length": 13230,
-   "digest": "09058e03c47bce69"
+   "length": 15435,
+   "digest": "12dc13943955eed2"
   },
   {
-   "length": 13230,
-   "digest": "b05013eff3719b0d"
+   "length": 15435,
+   "digest": "0f2a5cb5105c09d7"
   },
   {
-   "length": 13230,
-   "digest": "9e268264a39a0e4a"
+   "length": 15435,
+   "digest": "c34e27301bff4e8e"
   },
   {
-   "length": 13230,
-   "digest": "7ff3d309323d9a96"
+   "length": 15435,
+   "digest": "fde0cda94f807ec4"
   }
  ],
  "bluntBig": [
   {
-   "length": 19845,
-   "digest": "d16ef78a5d714c41"
+   "length": 26460,
+   "digest": "41882f55025a5637"
   },
   {
-   "length": 19845,
-   "digest": "0baaf9b35ae737b5"
+   "length": 26460,
+   "digest": "79aa28c7a0929768"
   },
   {
-   "length": 19845,
-   "digest": "7d81c718600a1b19"
+   "length": 26460,
+   "digest": "5717f465fe2f078c"
   },
   {
-   "length": 19845,
-   "digest": "b49c4cd0fa4b5f16"
+   "length": 26460,
+   "digest": "d67b120919d75359"
   }
  ],
  "blade": [
   {
-   "length": 18522,
-   "digest": "78330c87434f2c94"
+   "length": 35280,
+   "digest": "7a38aa866875ed80"
   },
   {
-   "length": 18522,
-   "digest": "b3a888500cc9ed92"
+   "length": 35280,
+   "digest": "9369c74062e895d3"
   },
   {
-   "length": 18522,
-   "digest": "01ab23db713b09d8"
+   "length": 35280,
+   "digest": "f1e82c259100e213"
   },
   {
-   "length": 18522,
-   "digest": "fc8a2afacbc6c9f1"
+   "length": 35280,
+   "digest": "b7d9a9c2e03400c5"
   }
  ],
  "bladeBig": [
   {
-   "length": 24697,
-   "digest": "78da4a4ddfb14bec"
+   "length": 47628,
+   "digest": "fa1df24fe2e1a3b0"
   },
   {
-   "length": 24697,
-   "digest": "e1876e01ce3a4e80"
+   "length": 47628,
+   "digest": "d9eae6122af8954d"
   },
   {
-   "length": 24697,
-   "digest": "6d14e9c18ed184f1"
+   "length": 47628,
+   "digest": "86fc68118084e40a"
   },
   {
-   "length": 24697,
-   "digest": "f2f221bb2d6f45f1"
+   "length": 47628,
+   "digest": "8930c9ed5c00de05"
   }
  ],
  "pierce": [
   {
-   "length": 14112,
-   "digest": "e3d06c76ba8a24a6"
+   "length": 26460,
+   "digest": "ff344497eb4e8362"
   },
   {
-   "length": 14112,
-   "digest": "376482ca5958f6b8"
+   "length": 26460,
+   "digest": "498f59e15c02e430"
   },
   {
-   "length": 14112,
-   "digest": "f8ec76b1167408a4"
+   "length": 26460,
+   "digest": "f02f56e933d4a1ce"
   },
   {
-   "length": 14112,
-   "digest": "037a56e5bfecb3b3"
+   "length": 26460,
+   "digest": "6f45521c9ab9c722"
   }
  ],
  "pierceBig": [
   {
-   "length": 20286,
-   "digest": "d389e7bb449bf90c"
+   "length": 35721,
+   "digest": "469963d0b3cebddd"
   },
   {
-   "length": 20286,
-   "digest": "427b8573b6a8b4d5"
+   "length": 35721,
+   "digest": "c4e85986986dabb0"
   },
   {
-   "length": 20286,
-   "digest": "64bc1f7ff6bdb1d0"
+   "length": 35721,
+   "digest": "e5613a7a956a782b"
   },
   {
-   "length": 20286,
-   "digest": "ef7f1059d67a3e48"
+   "length": 35721,
+   "digest": "20619d830bfdc32d"
   }
  ],
  "heavy": [
   {
-   "length": 19404,
-   "digest": "83982e8ade708fd4"
+   "length": 35280,
+   "digest": "b2a56e91027bd152"
   },
   {
-   "length": 19404,
-   "digest": "8054ad5fe330b267"
+   "length": 35280,
+   "digest": "7144e9262d3da59a"
   },
   {
-   "length": 19404,
-   "digest": "92fd8aa3ee498a86"
+   "length": 35280,
+   "digest": "d089b41ff05a7f5b"
   },
   {
-   "length": 19404,
-   "digest": "17b3e4afe1eae2a0"
+   "length": 35280,
+   "digest": "cb9b5122f75ef1a3"
   }
  ],
  "heavyBig": [
   {
-   "length": 27342,
-   "digest": "af50b467ef20fda8"
+   "length": 47628,
+   "digest": "8f00d8d4d405fc82"
   },
   {
-   "length": 27342,
-   "digest": "ae7b56887d1c0725"
+   "length": 47628,
+   "digest": "580b3f0da7bd4aff"
   },
   {
-   "length": 27342,
-   "digest": "edef64de83a6ce4e"
+   "length": 47628,
+   "digest": "d2e8576e62b96094"
   },
   {
-   "length": 27342,
-   "digest": "090b62979f8faefe"
+   "length": 47628,
+   "digest": "9943803250a42a28"
   }
  ],
  "armor": [

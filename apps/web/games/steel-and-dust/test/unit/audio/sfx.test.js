@@ -44,8 +44,8 @@ describe('sfx routing', () => {
     const { audio, context } = runningAudio();
     audio.sfx('blunt');
     const [source] = sources(context);
-    expect(source.buffer.length).toBe(Math.ceil(0.3 * 44100));
-    expect(source.connections[0].gain.value).toBe(0.95);
+    expect(source.buffer.length).toBe(Math.ceil(0.35 * 44100));
+    expect(source.connections[0].gain.value).toBe(1);
     expect(reaches(source, context.destination)).toBe(true);
     expect(audio.debugState().voices).toBe(1);
   });
@@ -54,7 +54,7 @@ describe('sfx routing', () => {
     const { audio, context } = runningAudio();
     audio.sfx('blunt', true);
     audio.sfx('armor', true);
-    expect(sources(context).map((source) => source.buffer.length)).toEqual([19845, 26460]);
+    expect(sources(context).map((source) => source.buffer.length)).toEqual([26460, 26460]);
   });
 
   it('builds live sounds from oscillators instead of the bank', () => {
