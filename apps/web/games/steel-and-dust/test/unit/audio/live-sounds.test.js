@@ -30,6 +30,8 @@ describe('live sounds', () => {
         'go',
         'chargeLevel1',
         'chargeMax',
+        'ult',
+        'ultEnd',
         'ui',
         'uiOk',
         'uiBack',
@@ -115,6 +117,20 @@ describe('live sounds', () => {
       }
     },
   );
+
+  it('builds the ultimate as a swelling detuned chord with a held gain', () => {
+    const live = fakeLive();
+    LIVE_SOUNDS.ult(live, 0);
+    const saws = nodesOfKind(live.context, 'oscillator').filter((node) => node.type === 'sawtooth');
+    expect(saws).toHaveLength(8);
+    const swell = nodesOfKind(live.context, 'gain')[0];
+    expect(swell.gain.events.map((event) => event[0])).toEqual([
+      'setValueAtTime',
+      'linearRampToValueAtTime',
+      'setValueAtTime',
+      'exponentialRampToValueAtTime',
+    ]);
+  });
 
   it('click is a short highpassed tick', () => {
     const live = fakeLive();

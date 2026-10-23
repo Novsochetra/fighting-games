@@ -42,7 +42,7 @@ describe('unlock', () => {
     const audioSession = { type: 'auto' };
     vi.stubGlobal('navigator', { audioSession });
     const audio = createAudio(gameState());
-    expect(audio.debugState()).toEqual({ state: 'none', voices: 0, bank: '0/34' });
+    expect(audio.debugState()).toEqual({ state: 'none', voices: 0, bank: '0/32' });
     audio.unlock();
     audio.unlock();
     expect(contexts).toHaveLength(1);
