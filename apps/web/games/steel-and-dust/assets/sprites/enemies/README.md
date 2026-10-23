@@ -52,7 +52,12 @@ lone pixels close in color to their neighbours are merged into flat clusters, an
 one-pixel dark outline. Fire, glows, sparks and thin streaks keep their own colour to the edge: an
 edge pixel mostly surrounded by glow is never outlined, the grey a background left round a glow
 is dropped from its edge and recoloured inside it, and the charred lump the image model left in
-the Furnace Knight's sweep along the road (`fireFlail` 6, behind his back foot) was cut out. A regression test keeps
+the Furnace Knight's sweep along the road (`fireFlail` 6, behind his back foot) was cut out. His
+flames (`attack`, `ko`, `slam`, `fireFlail`, `slagPot`, `meltdown`) were streaked with washed-out
+white and peach where the image model blended a pale smear over its background: every such pixel
+inside a flame, and the background grey left there, takes the colour of his own fire ramp for its
+brightness (dark red to pale yellow, two steps darker on a flame's edge) before the sheet is
+outlined, so the outline sees it as fire; `fx/lava.png` was burned the same way. A regression test keeps
 every boss sheet under 100 colors with under 0.3 of its pixels alone.
 
 | Sheet      | Rows added                                                                                       |
