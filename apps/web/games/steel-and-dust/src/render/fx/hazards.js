@@ -7,6 +7,7 @@ import { drawPillarMark, drawRootMark } from './bayon-hazards.js';
 import { BOSS_HAZARD_DRAWERS } from './boss-hazards.js';
 import { drawFxFrame } from './fx-sheets.js';
 import { drawLandingShadow } from './rock-hazards.js';
+import { drawStoneFaceLight } from './stone-face-draw.js';
 import { drawStrikeMark } from './storm-hazards.js';
 
 function drawShockPeak(painter, { x, y, height }) {
@@ -107,11 +108,15 @@ const GROUND_MARK = {
   figRoot: drawRootMark,
 };
 
+// the light a thing on the road throws is drawn over the fighters, with what flies
+const LIGHT_OVER = { stoneFace: drawStoneFaceLight };
+
 export function drawProjectiles(painter, projectiles, fxSheets) {
   for (const shot of projectiles) {
     if (!ON_GROUND.has(shot.kind)) {
       DRAW_SHOT[shot.kind](painter, shot, fxSheets);
     }
+    LIGHT_OVER[shot.kind]?.(painter, shot);
   }
 }
 

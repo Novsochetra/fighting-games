@@ -8,7 +8,7 @@ import { addDust, addSparks } from '../fx/particles.js';
 import { addBurst } from '../summons/bursts.js';
 
 // his chest, the air over his head and the size of the rubble he falls into, in his own units
-const CHEST = { ahead: 2, up: 24 };
+export const CHEST = { ahead: 2, up: 24 };
 const ABOVE_HEAD = { up: 50 };
 const RUBBLE_SIZE = 0.8;
 
