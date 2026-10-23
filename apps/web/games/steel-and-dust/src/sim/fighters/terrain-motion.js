@@ -21,9 +21,11 @@ export function placeOnGround(terrain, fighter) {
   }
 }
 
-function leaveGround(fighter) {
+const ON_FOOT = new Set(['idle', 'walk', 'run']);
+
+export function leaveGround(fighter) {
   fighter.airborne = true;
-  if (fighter.state === 'idle' || fighter.state === 'walk') {
+  if (ON_FOOT.has(fighter.state)) {
     fighter.state = 'air';
   }
 }

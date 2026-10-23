@@ -20,6 +20,7 @@ export const ULTIMATES = {
 export const ULT_START_STATES = new Set([
   'idle',
   'walk',
+  'run',
   'attack',
   'air',
   'dash',

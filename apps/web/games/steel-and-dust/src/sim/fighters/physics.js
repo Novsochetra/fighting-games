@@ -3,7 +3,7 @@ import { addDust } from '../fx/particles.js';
 import { floorBelow } from '../stage/terrain.js';
 import { arenaBounds } from './arena-bounds.js';
 import { land } from './landing.js';
-import { blockWall, followFloor } from './terrain-motion.js';
+import { blockWall, followFloor, leaveGround } from './terrain-motion.js';
 
 export const GRAVITY = 0.3;
 const TUMBLE_GRAVITY = 0.26;
@@ -23,10 +23,7 @@ function wallHit(game, fighter, side) {
 
 function applyGravity(fighter, floor) {
   if (!fighter.airborne && fighter.y < floor - 0.5) {
-    fighter.airborne = true;
-    if (fighter.state === 'idle' || fighter.state === 'walk') {
-      fighter.state = 'air';
-    }
+    leaveGround(fighter);
   }
   if (fighter.airborne) {
     const tumbling = fighter.state === 'juggle' || fighter.state === 'ko';
@@ -37,10 +34,12 @@ function applyGravity(fighter, floor) {
   }
 }
 
+const STRIDING = new Set(['walk', 'run', 'dash']);
+
 function keepsMomentum(fighter) {
   const rushing =
     fighter.state === 'attack' && fighter.move && fighter.move.sustain && fighter.hitboxActive;
-  return fighter.airborne || fighter.state === 'walk' || fighter.state === 'dash' || rushing;
+  return fighter.airborne || STRIDING.has(fighter.state) || rushing;
 }
 
 function applyFriction(fighter) {

@@ -29,12 +29,12 @@ describe('the scene gate', () => {
 });
 
 describe("the loading screen's share of the scene", () => {
-  // Pine Ridge is a back plate, a near strip, its ground and its cliff; a Shade has 22 strips
+  // Pine Ridge is a back plate, a near strip, its ground and its cliff; a Shade has 23 strips
   it('counts each layer of the road and each strip of the Shade once', () => {
     const { view, images } = createLateView();
     expect(sceneProgress(view, game('moss'))).toBe(0);
     images.loadWhere(firstRoad);
-    expect(sceneProgress(view, game('moss'))).toBe(4 / 26);
+    expect(sceneProgress(view, game('moss'))).toBe(4 / 27);
     images.loadWhere(heroStrip('hero/'));
     expect(sceneProgress(view, game('moss'))).toBe(1);
   });
@@ -43,7 +43,7 @@ describe("the loading screen's share of the scene", () => {
     const { view, images } = createLateView();
     sceneProgress(view, game('blue'));
     images.loadWhere((src) => !heroStrip('heroes/blue/')(src));
-    expect(sceneProgress(view, game('blue'))).toBe(4 / 26);
+    expect(sceneProgress(view, game('blue'))).toBe(4 / 27);
     images.failAll();
     expect(sceneProgress(view, game('blue'))).toBe(1);
   });

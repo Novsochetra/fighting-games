@@ -4,6 +4,7 @@ const TIPS = [
   '<b>Launch</b> raiders with up or down + heavy, follow them into the air and keep hitting.',
   "A fifth light hit chases a knocked-back raider and launches them. Down + light sweeps low, under a Bulwark's shield.",
   'Dashing the wrong way? Hold the other direction to turn, or dash again to dash back.',
+  'Keep holding the way you dash and you <b>run</b> on. Attack out of the run for a dash attack, or jump for a long running leap.',
   'Up + light lifts you into the air with the raider. In the air, down + light bounces off their head, up to three times a jump.',
   'The thin bar under the combo counter shows how long you have to land the next hit.',
   'Each hero has four <b>techniques</b> of its own, on every weapon: heavy then light (K J), K K J, K K K J, and Air K J. The help lists them for your hero.',

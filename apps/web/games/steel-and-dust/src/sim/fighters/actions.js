@@ -87,3 +87,9 @@ export function dash(game, fighter, direction) {
     addDust(game, { x: fighter.x, y: floorUnder(game.terrain, fighter), count: 4 });
   }
 }
+
+export function startRun(fighter) {
+  fighter.state = 'run';
+  fighter.stateTime = 0;
+  clearMove(fighter);
+}

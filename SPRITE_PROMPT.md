@@ -39,7 +39,7 @@ The game screen will be 480×270 to fit this character size.
 
 # Part 1: Sable with the sword (do these first)
 
-Order: S01 → S02 first, then the attacks S12–S21, then the rest.
+Order: S01 → S02 first, then the attacks S12–S21, then the rest (S22, the run, came last).
 
 ### S01 · `sable_idle.png`
 
@@ -511,6 +511,29 @@ ANIMATION: plunge (diving straight down with the sword), 3 frames.
 3: landing: crouched, sword stabbed into the ground in front of him.
 ```
 
+### S22 · `sable_run.png`
+
+```
+[Attach the Sable reference sheet]
+Make a pixel-art animation strip of SABLE. Match the attached reference exactly:
+same design, colors and pixel style.
+
+RULES
+- Side view, facing RIGHT in every frame.
+- Frame size 128x80 px. Feet centered at x=64, boot soles on y=76, in every frame.
+- Character about 58 px tall, same size as the reference.
+- Face hidden in hood shadow with two small glowing cyan eyes, in every frame.
+- Transparent background, hard pixels, nothing touching the frame edges.
+- Output one PNG: all frames in a single row, left to right, no gaps.
+
+ANIMATION: run, 8 frames, looping.
+Running in place (the game moves him), a fast sprint out of the dash.
+Torso leaned forward, knees high, both feet off the ground between strides.
+Sword held low in the front hand, angled back and down, clear of the hood.
+Cape and coat tails stream out behind him. Body bobs 2 px.
+Frame 8 must flow smoothly back into frame 1.
+```
+
 ---
 
 # Part 2: Other weapons (later, optional)
@@ -728,4 +751,5 @@ Output one PNG with 4 frames in a single row, left to right, no gaps.
 | ☐ | sable_getup | | ☐ | pickups |
 | ☐ | sable_ko | | | |
 | ☐ | sable_win | | | |
+| ☐ | sable_run | | | |
 | ☐ | sable_slash1 … sable_plunge (10 attacks) | | | |

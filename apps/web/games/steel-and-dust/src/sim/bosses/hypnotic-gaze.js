@@ -7,7 +7,7 @@ import { addBurst } from '../summons/bursts.js';
 const EYES = { ahead: 5, up: 42 };
 const FLASH_SIZE = 1;
 const STARS_EVERY = 16;
-const CAN_BE_HELD = new Set(['idle', 'walk', 'dash', 'attack', 'hurt', 'squat', 'charge']);
+const CAN_BE_HELD = new Set(['idle', 'walk', 'run', 'dash', 'attack', 'hurt', 'squat', 'charge']);
 
 const eyesOf = (boss) => bodyPoint(boss, EYES);
 

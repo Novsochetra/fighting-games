@@ -1,15 +1,11 @@
-import { dash, jump } from '../../fighters/actions.js';
+import { dash, jump, startRun } from '../../fighters/actions.js';
 import { floorUnder } from '../../fighters/terrain-motion.js';
 import { addDust } from '../../fx/particles.js';
 import { consumeBuffer, dashDirection } from './controls.js';
-import { startHeroMove } from './heavy-gate.js';
-import { pickAirMove } from './pick-move.js';
+import { isAttack, startDashAttack } from './dash-attack.js';
+import { runsOnFromDash } from './run.js';
 
 const MAX_DASH_CHAIN = 2;
-
-function isAttack(buffer) {
-  return buffer?.action === 'light' || buffer?.action === 'heavy';
-}
 
 // a new dash the other way starts at once; the same way only late in the dash
 function redash(game, player, { buffer, direction }) {
@@ -47,30 +43,23 @@ function brakeAndTurn(game, player, { buffer, direction }) {
   return true;
 }
 
-function dashAttackId(game, player, buffer) {
-  if (buffer.action === 'light') {
-    return player.airborne ? 'AL' : 'DA';
-  }
-  return player.airborne ? pickAirMove(buffer, game.input.held, null) : 'UK';
-}
-
-// dash attacks go the way you hold
 export function thinkDash(game, player, intent) {
   if (redash(game, player, intent) || brakeAndTurn(game, player, intent)) {
     return;
   }
-  const { buffer, direction } = intent;
+  if (runsOnFromDash(player, intent)) {
+    startRun(player);
+    return;
+  }
+  const { buffer } = intent;
   if (!buffer || player.stateTime < 2) {
     return;
   }
   if (isAttack(buffer)) {
-    if (direction) {
-      player.facing = direction;
-    }
-    startHeroMove(game, player, dashAttackId(game, player, buffer));
-    consumeBuffer(game);
+    startDashAttack(game, player, intent);
   } else if (buffer.action === 'jump' && !player.airborne) {
     jump(game, player, { vy: -5.8, vx: player.facing * 2.2 });
+    player.runningJump = true;
     consumeBuffer(game);
   }
 }

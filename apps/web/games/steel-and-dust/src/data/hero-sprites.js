@@ -9,6 +9,7 @@ export const HERO_SPRITES = {
   frames: {
     idle: 6,
     walk: 8,
+    run: 8,
     jump: 8,
     land: 4,
     dash: 4,

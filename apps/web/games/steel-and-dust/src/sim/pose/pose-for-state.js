@@ -78,6 +78,7 @@ function winPose(fighter, pose) {
 const POSE_BY_STATE = {
   idle: idlePose,
   walk: walkPose,
+  run: walkPose,
   air: airPose,
   attack: (fighter, pose) => attackPose(fighter, pose),
   hurt: (_fighter, pose) => Object.assign(pose, HURT_POSE),

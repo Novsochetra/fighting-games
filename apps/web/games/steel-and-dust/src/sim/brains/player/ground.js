@@ -1,9 +1,10 @@
-import { dash, startSquat } from '../../fighters/actions.js';
+import { dash, startRun, startSquat } from '../../fighters/actions.js';
 import { dropThrough } from '../../fighters/terrain-motion.js';
 import { stoneDrag } from '../../summons/stone-skin.js';
 import { consumeBuffer, dashDirection, faceOrAim } from './controls.js';
 import { startHeroMove, tryCharge } from './heavy-gate.js';
 import { pickGroundMove } from './pick-move.js';
+import { runsOnFromJump } from './run.js';
 
 // down and jump on a platform drops through it; anywhere else it is a jump
 function jumpOrDrop(game, player, { buffer, direction }) {
@@ -31,6 +32,12 @@ function act(game, player, { buffer, direction }) {
 }
 
 export function thinkGrounded(game, player, { buffer, direction }) {
+  const runsOn = !buffer && runsOnFromJump(player, direction);
+  player.runningJump = false;
+  if (runsOn) {
+    startRun(player);
+    return;
+  }
   if (buffer) {
     act(game, player, { buffer, direction });
     return;

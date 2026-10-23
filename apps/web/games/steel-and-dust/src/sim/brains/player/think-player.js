@@ -9,10 +9,14 @@ import { thinkCharge } from './charge.js';
 import { consumeBuffer, heldDirection } from './controls.js';
 import { thinkDash } from './dash.js';
 import { thinkGrounded, thinkSquat } from './ground.js';
+import { thinkRun } from './run.js';
+
+const ON_FOOT = new Set(['idle', 'walk', 'run']);
 
 const THINK_BY_STATE = {
   idle: thinkGrounded,
   walk: thinkGrounded,
+  run: thinkRun,
   squat: thinkSquat,
   charge: thinkCharge,
   air: thinkAir,
@@ -24,7 +28,7 @@ function idleBetweenFights(game, player) {
   if (player.state === 'charge' || player.state === 'squat') {
     player.state = 'idle';
   }
-  if (player.state === 'idle' || player.state === 'walk') {
+  if (ON_FOOT.has(player.state)) {
     player.vx *= 0.6;
     player.state = game.clearTime > 0 ? 'win' : 'idle';
   }

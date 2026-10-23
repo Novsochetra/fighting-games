@@ -2,6 +2,9 @@ import { CHARGE_TAP } from '../config.js';
 import { HERO_MOVE_SPRITES, HERO_SPRITES } from '../data/hero-sprites.js';
 
 const FRAMES = HERO_SPRITES.frames;
+const RUN_FRAME_TICKS = 4;
+// the run strip is two strides, one per leg
+export const RUN_STRIDE_TICKS = (RUN_FRAME_TICKS * FRAMES.run) / 2;
 const JUMP_FRAME_BY_SPEED = [
   [-3, 2],
   [-1.5, 3],
@@ -80,6 +83,7 @@ function winFrame(fighter) {
 const FRAME_BY_STATE = {
   idle: groundFrame,
   walk: groundFrame,
+  run: (fighter) => play(fighter, 'run', RUN_FRAME_TICKS, true),
   air: jumpFrame,
   squat: (fighter) => hold(fighter, 'jump', fighter.stateTime < 2 ? 0 : 1),
   charge: (fighter) =>

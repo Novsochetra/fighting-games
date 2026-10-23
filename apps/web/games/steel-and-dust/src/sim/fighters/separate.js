@@ -1,7 +1,7 @@
 import { isOutOfReach } from '../combat/boxes.js';
 import { nudge, onOneLevel } from './terrain-motion.js';
 
-const SOLID_STATES = new Set(['idle', 'walk', 'attack', 'hurt', 'charge', 'squat']);
+const SOLID_STATES = new Set(['idle', 'walk', 'run', 'attack', 'hurt', 'charge', 'squat']);
 
 function isSolid(fighter) {
   return (
