@@ -498,17 +498,5 @@
    "length": 55125,
    "digest": "7e5df907cc61b810"
   }
- ],
- "ult": [
-  {
-   "length": 46305,
-   "digest": "f77998cf12ed1e6f"
-  }
- ],
- "ultEnd": [
-  {
-   "length": 70560,
-   "digest": "ebb040740e6cae6c"
-  }
  ]
 }

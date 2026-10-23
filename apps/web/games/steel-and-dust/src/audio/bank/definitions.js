@@ -7,7 +7,6 @@ import { HEAVY_SOUNDS } from './hits-heavy.js';
 import { PIERCE_SOUNDS } from './hits-pierce.js';
 import { MOVEMENT_SOUNDS } from './movement.js';
 import { SWING_SOUNDS } from './swings.js';
-import { ULTIMATE_SOUNDS } from './ultimate.js';
 import { VOICE_SOUNDS } from './voices.js';
 
 // combat sounds synthesized once into a few takes each: { group, level, takes, seconds, priority,
@@ -28,7 +27,6 @@ export const SOUND_DEFINITIONS = {
   release,
   ...CRASH_SOUNDS,
   ...VOICE_SOUNDS,
-  ...ULTIMATE_SOUNDS,
 };
 
 export const SOUND_TAKES = Object.fromEntries(

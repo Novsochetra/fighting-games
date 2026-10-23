@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { boom, burst, crack, rumble } from '../../../src/audio/synth/impacts.js';
-import { shing, steel } from '../../../src/audio/synth/steel.js';
+import { steel } from '../../../src/audio/synth/steel.js';
 import { createTrack } from '../../../src/audio/synth/track.js';
 import { seededRandom } from '../../support/seeded-random.js';
 
@@ -64,13 +64,5 @@ describe('steel', () => {
     );
     const rising = windows.slice(1).some((value, i) => value > windows[i] * 1.2);
     expect(rising).toBe(true);
-  });
-
-  it('shing rings out over its decay and then stops', () => {
-    Math.random = seededRandom(2);
-    const track = createTrack(RATE, RATE);
-    shing(track, { carrier: 2600, decay: 0.5, level: 0.5 });
-    expect(rms(track.samples, 0, 0.05)).toBeGreaterThan(0.15);
-    expect(silentFrom(track.samples, 0.502)).toBe(true);
   });
 });

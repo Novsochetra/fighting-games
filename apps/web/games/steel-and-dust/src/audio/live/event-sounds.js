@@ -1,4 +1,4 @@
-import { blip, hiss } from './layers.js';
+import { blip, crunch, hiss, metal, thump } from './layers.js';
 import { biquad, envelopeGain, oscillator } from './nodes.js';
 
 const CLEAR_NOTES = [523, 659, 784, 1047];
@@ -67,4 +67,54 @@ function chargeMax(live, start) {
   });
 }
 
-export const EVENT_SOUNDS = { clear, chargeLevel1, chargeMax };
+// a detuned saw chord opening up under a falling thump
+function ult(live, start) {
+  const destination = live.chain.effectsBus;
+  const swell = envelopeGain(live, {
+    destination,
+    start,
+    attack: 0.25,
+    peak: 0.06,
+    decay: 0.5,
+    hold: 0.15,
+  });
+  const lowpass = biquad(live, {
+    type: 'lowpass',
+    from: 400,
+    to: 4200,
+    resonance: 1.2,
+    start,
+    duration: 0.45,
+    destination: swell,
+  });
+  for (const frequency of [392, 523, 659, 784]) {
+    oscillator(live, {
+      wave: 'sawtooth',
+      from: frequency,
+      start,
+      duration: 0.95,
+      destination: lowpass,
+    });
+    const detuned = frequency * 1.006;
+    oscillator(live, {
+      wave: 'sawtooth',
+      from: detuned,
+      start,
+      duration: 0.95,
+      destination: lowpass,
+    });
+  }
+  thump(live, { start, from: 70, to: 34, duration: 0.7, volume: 0.8 });
+  const rise = { type: 'bandpass', from: 300, to: 5000, resonance: 1.3 };
+  hiss(live, { start, ...rise, attack: 0.3, duration: 0.5, volume: 0.14 });
+}
+
+function ultEnd(live, start) {
+  thump(live, { start, from: 100, to: 28, duration: 0.8, volume: 1.0 });
+  crunch(live, { start, duration: 0.3, volume: 0.4, frequency: 600 });
+  const fall = { type: 'lowpass', from: 3000, to: 60, resonance: 0.7 };
+  hiss(live, { start, ...fall, attack: 0.003, duration: 0.7, volume: 0.45 });
+  metal(live, { start, frequencies: [1600, 2400, 3600], duration: 0.6, volume: 0.05 });
+}
+
+export const EVENT_SOUNDS = { clear, chargeLevel1, chargeMax, ult, ultEnd };
