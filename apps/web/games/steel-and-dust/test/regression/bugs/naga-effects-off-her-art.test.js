@@ -10,9 +10,10 @@ import { readSheet } from '../../support/sheet-cells.js';
 import { createPlayingGame, runTicks } from '../../support/test-game.js';
 
 // Bug: the Naga Raja's effects did not sit on her art. The daze stars of her Spent sag spun some
-// thirty pixels over her head, each water naga of the Seven Heads took shape on top of the head
-// that spat it and hid it, and in phase two the Tidal Coil's second wave rolled out while she
-// stood upright, with no crash of her coil to send it
+// thirty pixels over her head (and, once her flinch was redrawn lower, beside it), each water
+// naga of the Seven Heads took shape on top of the head that spat it and hid it, and in phase two
+// the Tidal Coil's second wave rolled out while she stood upright, with no crash of her coil to
+// send it
 const originalRandom = Math.random;
 const { sprite, image, cellOf } = readSheet('naga');
 const UNIT = 2 * sprite.density;
@@ -39,17 +40,31 @@ function playOut(game, naga, ticks, everyTick) {
   }
 }
 
-// her head's top in her own units above her feet, on a frame of a strip
-function headTop(strip, frame) {
-  const { left, top, width } = cellOf(strip, frame);
-  for (let y = 0; y < sprite.frameHeight; y++) {
-    for (let x = 0; x < width; x++) {
-      if (image.alpha(left + x, top + y) > 0) {
-        return (sprite.feetY - y) / UNIT;
-      }
+const HEAD_ROWS = 15;
+
+function drawnColumns(cell, y) {
+  const columns = [];
+  for (let x = 0; x < cell.width; x++) {
+    if (image.alpha(cell.left + x, cell.top + y) > 0) {
+      columns.push(x);
     }
   }
-  return 0;
+  return columns;
+}
+
+// the top of her head on a frame of a strip and its middle, in her own units from her feet
+function headOf(strip, frame) {
+  const cell = cellOf(strip, frame);
+  let top = 0;
+  while (drawnColumns(cell, top).length === 0) {
+    top++;
+  }
+  const columns = [];
+  for (let y = top; y < top + HEAD_ROWS; y++) {
+    columns.push(...drawnColumns(cell, y));
+  }
+  const middle = columns.reduce((sum, x) => sum + x, 0) / columns.length;
+  return { ahead: (middle - sprite.feetX) / UNIT, up: (sprite.feetY - top) / UNIT };
 }
 
 describe("the Naga Raja's effects on her art", () => {
@@ -61,9 +76,11 @@ describe("the Naga Raja's effects on her art", () => {
   });
 
   it('rings her sagging head with the daze stars', () => {
-    const { up } = NAGA_MOVES.nagaSpent.stars;
+    const { up, ahead = 4 } = NAGA_MOVES.nagaSpent.stars;
     for (const frame of [2, 3]) {
-      expect(Math.abs(up - headTop('hurt', frame)), `hurt ${frame}`).toBeLessThanOrEqual(7);
+      const head = headOf('hurt', frame);
+      expect(Math.abs(up - head.up), `up on hurt ${frame}`).toBeLessThanOrEqual(7);
+      expect(Math.abs(ahead - head.ahead), `ahead on hurt ${frame}`).toBeLessThanOrEqual(3);
     }
   });
 

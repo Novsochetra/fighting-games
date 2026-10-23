@@ -241,6 +241,15 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
     her moves start and end in, so it is now four of those stances breathing; the grey matte the
     white backgrounds left round her redrawn strips was recoloured to her own outline greens and
     browns, and the rising serpent's first frame bursts out of the road instead of floating over it.
+    Her walk, flinch, knock-out and run, still in her first design (a tall spire crown, a pale hood),
+    were drawn again after her stance, the stance alone as the model to follow (shown her fanned
+    Seven Heads, the image model fanned her hood in every pose). Each strip is shrunk so her head,
+    shoulders and hood match her stance rather than her full height, as the model drew her coil
+    shorter than hers, folded into her new strips' colors and stood on her ground line: the walk by
+    her upper body, which holds still as the tail ripples, the flinch and the run by the front of
+    her coil, the knock-out's flying frames at the heights of her old fall. Her Spent sag rocks on
+    the two flinch frames that differ only in a sway, the daze stars over her drooping head
+    (`stars.ahead`).
 11. **Warden Ox**: done, after the Naga Raja and the Bayon Guardian. His sheet moved to the big frame (256×160): the hammer rises far over his head
     and the counter thrusts far ahead; his first seven rows were set into it with his feet where they
     stood. The chain and guard strips came on real transparency; the axe whirl and the parry burst

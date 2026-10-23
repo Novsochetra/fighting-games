@@ -8,7 +8,17 @@ import { readSheet } from '../../support/sheet-cells.js';
 // her redrawn strips kept a grey keying matte round their outline and along the road; and the first
 // frame of her rising serpent floated over its spot, its bottom cut off by a box edge
 const { sprite, image, cellOf } = readSheet('naga');
-const REDRAWN = ['attack', 'slam', 'tidalCoil', 'sevenHeads', 'rainbowNaga'];
+const REDRAWN = [
+  'walk',
+  'attack',
+  'hurt',
+  'ko',
+  'slam',
+  'charge',
+  'tidalCoil',
+  'sevenHeads',
+  'rainbowNaga',
+];
 // the few dark greys her own shading uses at her edge; the matte left hundreds
 const MOST_GREY_ON_THE_EDGE = 60;
 const serpent = readPngAlpha(

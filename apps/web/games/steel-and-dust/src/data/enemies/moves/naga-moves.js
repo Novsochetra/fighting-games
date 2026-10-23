@@ -96,7 +96,8 @@ export const NAGA_MOVES = {
     then: 'nagaSpent',
     frameAt: [0, 8, 30, 52, 64, 76, 88, 100, 360, 372, 384, 392],
   }),
-  // the summoning spent, she sags on her coil, open to every blow
+  // the summoning spent, she sags on her coil, open to every blow; the stars ring her head drooping
+  // over the middle of her coil
   nagaSpent: defineMove({
     name: 'Spent',
     frames: [0, 150, 12],
@@ -105,7 +106,7 @@ export const NAGA_MOVES = {
     quiet: true,
     strip: 'hurt',
     loopFrames: [2, 3, 14],
-    stars: { every: 16, up: 36 },
+    stars: { every: 16, up: 33, ahead: 0 },
     frameAt: [0, 4, 8, 12],
   }),
 };
