@@ -158,7 +158,10 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
    surfaces in a separate move with a red mark under it; the phase-two second dive only shakes the
    mound and sprays sand, with no red, so the player learns which stop is real. The swarm's two
    waves (from behind her, then from behind the hero) never fly at the same time, so a low and a
-   high wasp can never reach the hero together. The poison never takes the last of a life.
+   high wasp can never reach the hero together. The poison never takes the last of a life. Her first seven rows were later drawn again in the style of her skill rows (a light painted
+   checker keyed out), each strip scaled to the same body size as her Tail Sting stance and stood on
+   her feet line, every frame laid over the one before; the skill rows were slid to match, so
+   nothing jumps when a move starts or ends.
 6. **Gnoll Packlord**: done. Taller frames (192×160) for the club raised high in the leap. He
    leaps for real, through the air, onto a spot marked under the hero as he takes off (only that
    spot is marked, not the ground under him), and lands with the bone burst and a small
@@ -227,7 +230,22 @@ What came back for Khan, and what the cleaning had to fix (worth asking for in t
     were then drawn again body-only on white, and an orb of rainbow light gathers over her raised
     hand and follows it from frame to frame before the spirits come; the ultimate's name is called
     higher (`calloutUp`) so the orb does not cover it.
-11. Then the Warden Ox.
+11. **Warden Ox**: done, after the Naga Raja and the Bayon Guardian. His sheet moved to the big frame (256×160): the axe rises far over his head
+    and the counter thrusts far ahead; his first seven rows were set into it with his feet where they
+    stood. The chain and guard strips came on real transparency; the axe whirl and the parry burst
+    on a painted checkerboard, keyed by their colors, and the axe at the whirl's middle keyed out
+    with it, so the whirl is drawn behind him round his own axe. The chain and hook drawn beyond his
+    fist on the throwing and pulling frames were cut away: the game draws the chain from the fist of
+    the frame he is drawn on to the hook, link by link from a strip cut out of his own chain, so it
+    reaches wherever the hook is. The hook flies at the hero's waist (jump it) and drags a hero it catches to
+    where his chop lands; a missed hook reels back. The Guard Counter glints gold on his hammer
+    (it does not blink red: he is not striking); a blow on it bursts in gold, the striker reels,
+    and his counter lands. The Executioner's Round spins him to the arena's wall and back, a red
+    whirl round him, then he leaps at the hero and cleaves the road: a red crack runs off both ways
+    at a steady pace, and a hero standing where it passes is thrown up (jump it). Where the chain
+    leaves his fist, where the glint shines, where the whirl spins and where the axe splits the
+    road are read from the art and locked by a test. In phase two he guards more often and his
+    hook ends in two chops, the first only staggering.
 12. **Bayon Guardian** (12): done, ahead of the Warden Ox, as his art came first. His own sheet, a
     mossy four-faced temple golem with gold veins, has frames both wider and taller (256×160) for
     his arms raised in the ritual and the roots round him. The images came on a painted checker

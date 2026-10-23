@@ -136,6 +136,19 @@ export const SCENARIOS = {
     spawnBossAt: 30,
     scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
   },
+  // the Warden Ox in his fortress: his measured strides, the Chain Hook (missing once, then chopping
+  // twice below half health), the Guard Counter parrying the bot's blow and answering it, and below
+  // 40% the Executioner's Round and the crack it splits the road with
+  ox: {
+    mission: 9,
+    boss: 'brute',
+    seed: 5,
+    ticks: 4800,
+    sampleEvery: 30,
+    renderEvery: 120,
+    spawnBossAt: 30,
+    scheduled: { 600: ['fill'], 1200: ['w3'], 2400: ['w2'], 3600: ['fill'] },
+  },
   // the Bayon Guardian at the end of the game: his stomping walk, the Stone Gaze and the Fig Roots,
   // crumbling and reforming at half health, and below 40% the Four Faces
   guardian: {

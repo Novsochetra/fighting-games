@@ -1,10 +1,18 @@
 import { COLORS } from '../../art/colors.js';
+import { isParrying, parryHit } from '../bosses/guard-counter.js';
 import { isPlayer } from '../fighters/loadout.js';
 import { addImpact } from '../fx/effects.js';
 import { addSparks } from '../fx/particles.js';
 import { showHint } from '../hints.js';
 
-export function blockHit(game, { attacker, target }) {
+// whether the blow connected: a block does, so the striker's follow-up plays; a parried blow does
+// not, its striker already reeling (guard-counter.js)
+export function blockHit(game, hit) {
+  const { attacker, target } = hit;
+  if (isParrying(target)) {
+    parryHit(game, hit);
+    return false;
+  }
   const x = target.x + target.facing * 9 * target.scale;
   const y = target.y - 20 * target.scale;
   target.blockFlash = 10;
@@ -29,4 +37,5 @@ export function blockHit(game, { attacker, target }) {
   }
   game.floaters.push({ x, y: y - 8, text: 'block', color: COLORS.ice, time: 0 });
   showHint(game, 'shield');
+  return true;
 }

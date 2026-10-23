@@ -6,6 +6,7 @@ import { MENU_SOUNDS } from './menu-sounds.js';
 import { MOAT_SOUNDS } from './moat-sounds.js';
 import { SIGNATURE_SOUNDS } from './signature-sounds.js';
 import { TEMPLE_SOUNDS } from './temple-sounds.js';
+import { WARDEN_SOUNDS } from './warden-sounds.js';
 
 // the rarer menu, event and boss sounds, built from live nodes each time: { key: (live, start) => {} }
 export const LIVE_SOUNDS = {
@@ -15,6 +16,7 @@ export const LIVE_SOUNDS = {
   ...BOSS_SOUNDS,
   ...ELEMENT_SOUNDS,
   ...TEMPLE_SOUNDS,
+  ...WARDEN_SOUNDS,
   ...BAYON_SOUNDS,
   ...MOAT_SOUNDS,
 };
