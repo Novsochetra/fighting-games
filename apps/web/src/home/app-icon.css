@@ -49,7 +49,7 @@
   font-size: var(--font-size-monogram);
   font-weight: var(--font-weight-semibold);
   line-height: var(--leading-none);
-  color: var(--color-label);
+  color: var(--color-icon-monogram-letter);
   background: linear-gradient(
     to bottom,
     var(--color-icon-monogram-top),
@@ -60,9 +60,9 @@
 .app__label {
   inline-size: calc(var(--icon-size) + 2 * var(--label-bleed));
   overflow: hidden;
-  font-size: var(--font-size-app-label);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--leading-tight);
+  font-size: var(--font-size-apple-caption);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-apple-caption);
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -101,7 +101,8 @@
 
 @media (min-width: 40rem) {
   .app__label {
-    font-size: var(--font-size-app-label-lg);
+    font-size: var(--font-size-apple-footnote);
+    line-height: var(--leading-apple-footnote);
   }
 }
 

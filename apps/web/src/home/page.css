@@ -9,7 +9,7 @@
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light dark;
   background: var(--color-launcher-background);
   scroll-padding-block: var(--space-12);
   -webkit-text-size-adjust: 100%;
@@ -20,8 +20,8 @@ body {
   margin: 0;
   min-block-size: 100dvh;
   font-family: var(--font-system);
-  font-size: var(--font-size-md);
-  line-height: var(--leading-normal);
+  font-size: var(--font-size-apple-body);
+  line-height: var(--leading-apple-body);
   color: var(--color-label);
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: var(--color-clear);
@@ -55,15 +55,14 @@ body {
 }
 
 .masthead__title {
-  font-size: var(--font-size-launcher-title);
+  font-size: var(--font-size-apple-large-title);
   font-weight: var(--font-weight-bold);
-  line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-apple-large-title);
 }
 
 .masthead__meta {
-  font-size: var(--font-size-body-lg);
-  line-height: var(--leading-snug);
+  font-size: var(--font-size-apple-subheadline);
+  line-height: var(--leading-apple-subheadline);
   font-variant-numeric: tabular-nums;
   color: var(--color-label-muted);
 }
@@ -81,6 +80,14 @@ body {
 
   .masthead {
     padding-block: var(--space-12) var(--space-10);
+  }
+}
+
+/* Safari and every browser on iOS have SF Pro, Apple's own face, which Inter stands in for elsewhere;
+   only WebKit knows the -apple-system-body font. */
+@supports (font: -apple-system-body) {
+  body {
+    font-family: var(--font-system-apple);
   }
 }
 
