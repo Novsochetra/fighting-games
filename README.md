@@ -1,7 +1,8 @@
 # Retro Arcade
 
 A small arcade of browser games. A Node server lists the games through an API, the home page shows
-them as app icons, like a tablet's home screen, and each game lives in its own folder.
+them as a game hub, like the Apple TV app (a carousel of game cards over the selected game's art,
+with sound), and each game lives in its own folder.
 
 Play it online at **https://novsochetra.github.io/fighting-games/**.
 
@@ -57,8 +58,9 @@ The home page and each game are independent apps: none loads a file from another
 
 Create `apps/web/games/<id>/` with a `game.json` (id, title, tagline, description, genre, players,
 cover), an `index.html` and the game's files, including its own `styles/tokens.css`. A game loads
-nothing from outside its folder. The server finds it and the home page shows its cover as the game's
-icon, so make the cover a square image.
+nothing from outside its folder. The server finds it and the home page shows it. Make the cover a
+square icon, and add the optional `banner` (16:9 key art for the game's card and the backdrop
+behind it) and `poster` (a tall crop of it for phones); without them the home page uses the cover.
 
 ## Deploy
 

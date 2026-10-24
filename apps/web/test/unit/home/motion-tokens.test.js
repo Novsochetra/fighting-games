@@ -1,8 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
+  animateWith,
   parseDuration,
   prefersReducedMotion,
   readLaunchTiming,
+  readTiming,
 } from '../../../src/home/motion-tokens.js';
 
 const fakeDocument = (properties) => ({
@@ -50,5 +52,36 @@ describe('prefersReducedMotion', () => {
     expect(prefersReducedMotion({ matchMedia: () => ({ matches: true }) })).toBe(true);
     expect(prefersReducedMotion({ matchMedia: () => ({ matches: false }) })).toBe(false);
     expect(prefersReducedMotion({})).toBe(false);
+  });
+});
+
+describe('readTiming', () => {
+  it('reads any pair of duration and easing tokens', () => {
+    const document = fakeDocument({ '--duration-rise': '500ms', '--easing-spring': 'ease' });
+    expect(
+      readTiming(document, { duration: '--duration-rise', easing: '--easing-spring' }),
+    ).toEqual({ duration: 500, easing: 'ease' });
+  });
+});
+
+describe('animateWith', () => {
+  const element = ({ reduced = false } = {}) => ({
+    ownerDocument: { defaultView: { matchMedia: () => ({ matches: reduced }) } },
+    animate: vi.fn(() => 'animation'),
+  });
+  const timing = { duration: 300, easing: 'ease' };
+
+  it('plays the keyframes with the timing from the tokens', () => {
+    const target = element();
+    expect(animateWith(target, [{ opacity: 0 }, { opacity: 1 }], timing)).toBe('animation');
+    expect(target.animate).toHaveBeenCalledWith([{ opacity: 0 }, { opacity: 1 }], timing);
+  });
+
+  it('stays still for reduced motion, missing tokens or no Web Animations', () => {
+    const reduced = element({ reduced: true });
+    expect(animateWith(reduced, [], timing)).toBeNull();
+    expect(reduced.animate).not.toHaveBeenCalled();
+    expect(animateWith(element(), [], { duration: 0, easing: 'linear' })).toBeNull();
+    expect(animateWith({ ...element(), animate: undefined }, [], timing)).toBeNull();
   });
 });

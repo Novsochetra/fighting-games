@@ -84,6 +84,15 @@ describe('iconFrame', () => {
   it('starts exactly on the icon', () => {
     expect(parseTransform(iconFrame(icon, icon).transform)).toEqual([0, 0, 1]);
   });
+
+  it('keeps a wide card in shape, as wide as the panel lets it be', () => {
+    const card = { x: 50, y: 300, width: 320, height: 180 };
+    expect(parseTransform(iconFrame(card, card).transform)).toEqual([0, 0, 1]);
+    const [x, y, scale] = parseTransform(iconFrame({ x: 0, y: 0, ...viewport }, card).transform);
+    expect(scale).toBeCloseTo(400 / 320);
+    expect(x).toBeCloseTo(-50);
+    expect(y).toBeCloseTo((800 - 180 * scale) / 2 - 300);
+  });
 });
 
 describe('iconOpacityAt and radiusAt', () => {

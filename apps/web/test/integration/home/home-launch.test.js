@@ -3,32 +3,40 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   bootWithGames,
   bootWithRealCatalog,
-  gameLinks,
+  byId,
+  cards,
   loadHomeMarkup,
   press,
   stopHomes,
+  tiles,
 } from '../../support/home-harness.js';
 
 const SCREEN = { left: 0, top: 0, width: 400, height: 800 };
-const ICON = { left: 40, top: 100, width: 60, height: 60 };
+const NOTHING = { left: 0, top: 0, width: 0, height: 0 };
+const boxes = new Map([
+  ['card__frame', { left: 40, top: 100, width: 320, height: 180 }],
+  ['tile__frame', { left: 20, top: 900, width: 360, height: 202 }],
+]);
 
 // happy-dom has no layout, so every box measures zero; give the launch a phone-sized screen.
-function stubLayout() {
+function stubLayout(overrides = {}) {
   const boxFor = (element) => {
     if (!element.isConnected) {
-      return { left: 0, top: 0, width: 0, height: 0 };
+      return NOTHING;
     }
     if (element.classList.contains('launch') || element.id === 'home') {
       return SCREEN;
     }
-    return element.classList.contains('app__icon')
-      ? ICON
-      : { left: 0, top: 0, width: 0, height: 0 };
+    const name = [...boxes.keys()].find((className) => element.classList.contains(className));
+    return overrides[name] ?? boxes.get(name) ?? NOTHING;
   };
   vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function measure() {
-    return { ...boxFor(this), right: 0, bottom: 0, x: 0, y: 0 };
+    const box = boxFor(this);
+    return { ...box, right: box.left + box.width, bottom: box.top + box.height, x: 0, y: 0 };
   });
 }
+
+const cardFrame = () => cards()[0].querySelector('.card__frame');
 
 const layer = () => document.querySelector('.launch');
 // happy-dom's PageTransitionEvent drops the persisted flag, so the event carries it by hand.
@@ -41,7 +49,7 @@ function restoreFromCache(persisted = true) {
 beforeEach(async () => {
   document.body.innerHTML = '';
   await loadHomeMarkup();
-  stubLayout();
+  vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(SCREEN.height);
 });
 
 afterEach(() => {
@@ -50,28 +58,45 @@ afterEach(() => {
 });
 
 describe('launching a game', () => {
-  it('grows the icon into a screen-sized panel, then opens the game', async () => {
+  beforeEach(() => stubLayout());
+
+  it('grows the card into a screen-sized panel, then opens the game', async () => {
     const { navigate } = await bootWithRealCatalog();
     press('Enter');
     expect(layer()).not.toBeNull();
     expect(layer().getAttribute('aria-hidden')).toBe('true');
     // happy-dom loads no images, so the panel keeps the plain splash color
     expect(layer().querySelector('.launch__panel').style.getPropertyValue('--splash-top')).toBe('');
-    expect(layer().querySelector('.launch__icon img').getAttribute('src')).toBe(
-      gameLinks()[0].querySelector('img').getAttribute('src'),
+    const icon = layer().querySelector('.launch__icon');
+    expect(icon.querySelector('img').getAttribute('src')).toBe(
+      cardFrame().querySelector('img').getAttribute('src'),
     );
-    expect(gameLinks()[0].classList.contains('is-launching')).toBe(true);
-    expect(document.getElementById('home').style.transformOrigin).toBe('70px 130px');
+    expect(icon.style.width).toBe('320px');
+    expect(icon.style.height).toBe('180px');
+    expect(cardFrame().classList.contains('is-launching')).toBe(true);
+    expect(byId('home').style.transformOrigin).toBe('200px 190px');
     expect(navigate).not.toHaveBeenCalled();
 
     await vi.waitFor(() => expect(navigate).toHaveBeenCalledWith('games/steel-and-dust/'));
   });
 
+  it('opens from the library tile when the carousel has scrolled out of sight', async () => {
+    stubLayout({
+      card__frame: { left: 40, top: -600, width: 320, height: 180 },
+      tile__frame: { left: 20, top: 300, width: 360, height: 202 },
+    });
+    await bootWithRealCatalog();
+    press('Enter');
+    expect(tiles()[0].querySelector('.tile__frame').classList.contains('is-launching')).toBe(true);
+    expect(cardFrame().classList.contains('is-launching')).toBe(false);
+  });
+
   it('ignores more presses while a game is opening', async () => {
     const { navigate } = await bootWithGames(['alpha', 'bravo']);
     press('Enter');
-    press('ArrowRight');
+    expect(press('ArrowRight').defaultPrevented).toBe(false);
     press('Enter');
+    expect(byId('spotlight-title').textContent).toBe('alpha');
     await vi.waitFor(() => expect(navigate).toHaveBeenCalled());
     expect(navigate.mock.calls).toEqual([['games/alpha/']]);
     expect(document.querySelectorAll('.launch')).toHaveLength(1);
@@ -88,6 +113,8 @@ describe('launching a game', () => {
 });
 
 describe('coming back from a game', () => {
+  beforeEach(() => stubLayout());
+
   async function launchAndLeave() {
     const started = await bootWithRealCatalog();
     press('Enter');
@@ -95,15 +122,15 @@ describe('coming back from a game', () => {
     return started;
   }
 
-  it('shrinks the panel back into the icon when the page is restored from the cache', async () => {
+  it('shrinks the panel back into the card when the page is restored from the cache', async () => {
     const { home } = await launchAndLeave();
     expect(layer()).not.toBeNull();
     restoreFromCache();
     await vi.waitFor(() => expect(layer()).toBeNull());
-    expect(gameLinks()[0].classList.contains('is-launching')).toBe(false);
+    expect(cardFrame().classList.contains('is-launching')).toBe(false);
     expect(home.launcher.isFlying()).toBe(false);
-    expect(document.getElementById('home').getAnimations()).toEqual([]);
-    expect(document.getElementById('home').style.transformOrigin).toBe('');
+    expect(byId('home').getAnimations()).toEqual([]);
+    expect(byId('home').style.transformOrigin).toBe('');
   });
 
   it('can open a game again after coming back', async () => {
@@ -121,10 +148,21 @@ describe('coming back from a game', () => {
     expect(layer()).not.toBeNull();
   });
 
-  it('fades the panel away when its icon is gone', async () => {
+  it('fades the panel away when its card is gone', async () => {
     await launchAndLeave();
-    document.getElementById('app-grid').innerHTML = '';
+    byId('carousel-track').innerHTML = '';
     restoreFromCache();
     await vi.waitFor(() => expect(layer()).toBeNull());
+  });
+
+  it('brings the Recent list up to date with the game just played', async () => {
+    const { navigate } = await bootWithRealCatalog();
+    document.querySelector('[data-filter="recent"]').click();
+    press('Enter');
+    await vi.waitFor(() => expect(navigate).toHaveBeenCalled());
+    expect(tiles()).toHaveLength(0);
+    restoreFromCache();
+    await vi.waitFor(() => expect(layer()).toBeNull());
+    expect(tiles()).toHaveLength(1);
   });
 });

@@ -1,0 +1,105 @@
+.glass-button,
+.pill-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-family: inherit;
+  font-size: var(--font-size-apple-body);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-label);
+  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  outline: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  transition:
+    scale var(--duration-press) var(--easing-standard),
+    background-color var(--duration-normal) var(--easing-standard),
+    filter var(--duration-press) var(--easing-standard);
+}
+
+.glass-button {
+  flex: none;
+  inline-size: var(--size-glass-button);
+  block-size: var(--size-glass-button);
+  background: var(--color-glass);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  backdrop-filter: var(--blur-glass);
+}
+
+.glass-button--large {
+  inline-size: var(--size-glass-button-large);
+  block-size: var(--size-glass-button-large);
+}
+
+.glass-button--large .icon {
+  inline-size: var(--size-icon-large);
+  block-size: var(--size-icon-large);
+}
+
+.pill-button {
+  gap: var(--space-2);
+  block-size: var(--size-pill-button);
+  padding-inline: var(--space-6);
+  border-radius: var(--radius-pill);
+}
+
+.pill-button--primary {
+  padding-inline: var(--space-6) var(--space-7);
+  color: var(--color-on-button-primary);
+  background: var(--color-button-primary);
+}
+
+.pill-button--primary .icon {
+  inline-size: var(--size-icon-play);
+  block-size: var(--size-icon-play);
+}
+
+.pill-button--glass {
+  background: var(--color-glass);
+  box-shadow: var(--shadow-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  backdrop-filter: var(--blur-glass);
+}
+
+.pill-button--surface {
+  font-size: var(--font-size-apple-callout);
+  background: var(--color-button-surface);
+}
+
+@media (hover: hover) {
+  .glass-button:hover,
+  .pill-button--glass:hover {
+    background: var(--color-glass-hover);
+  }
+
+  .pill-button--primary:hover,
+  .pill-button--surface:hover {
+    filter: brightness(var(--dim-pressed));
+  }
+}
+
+.glass-button:active,
+.pill-button:active {
+  scale: var(--scale-pressed);
+  transition-duration: var(--duration-fast);
+}
+
+.glass-button:focus-visible,
+.pill-button:focus-visible {
+  outline: var(--border-width-ring) solid var(--color-focus-ring);
+  outline-offset: var(--border-width-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-button,
+  .pill-button {
+    transition: none;
+  }
+}

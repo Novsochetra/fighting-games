@@ -9,7 +9,7 @@ apps/
     src/
     test/{unit,integration}
   web/                    everything the browser loads
-    index.html            home page: a launcher with an icon per game
+    index.html            home page: a game hub with a card per game
     src/home/             home page modules and styles; tokens.css holds its colors, type and motion
     games/
       <game-id>/          one self-contained app: it loads nothing from outside its folder
@@ -30,7 +30,8 @@ docs/                     this file
 The home page and every game are separate apps that share no file. Each has its own design tokens
 (`src/home/tokens.css`, `games/<id>/styles/tokens.css`), styles and modules, so a game can change its
 look without touching the arcade or another game. The home page knows a game only through its
-`game.json` and its cover; a game links back to the arcade only by address (`../../`).
+`game.json` and the art it names (`cover`, `banner`, `poster`); a game links back to the arcade only
+by address (`../../`).
 `test/integration/independence.test.js` fails if a game loads a file from outside its folder or the
 home page loads a file from a game.
 
@@ -38,7 +39,7 @@ home page loads a file from a game.
 
 1. `GET /` serves `apps/web/index.html`. The home page fetches `api/games`.
 2. `GET /api/games` reads every `apps/web/games/*/game.json` and returns `{ games: [...] }`.
-3. An icon links to `games/<id>/`, which serves that game's `index.html`.
+3. Play links to `games/<id>/`, which serves that game's `index.html`.
 
 Every URL in the pages is relative, so the same files work under the GitHub Pages sub path.
 `npm run build` writes the static site to `dist/`, including `dist/api/games`, because Pages has no server.
@@ -51,22 +52,48 @@ If a module still fails to load, the game page reloads itself once under a fresh
 
 ## Home page
 
-The home page is a launcher, like a tablet's home screen: a title and a grid of game icons on a
-plain background, each the game's `cover` with its title under it. It follows Apple's interface
-guidelines: their system colors in light and dark appearance, their text styles (Large Title, Body,
-Footnote, Caption), and SF Pro on Apple devices with Inter standing in for it elsewhere. The columns
-are as wide as an icon and spread edge to edge, so the icons line up with the title. Icons, their
-focus ring, their shadow and the launch panel share one corner radius (`--radius-app-icon`), so
-every outline stays concentric. Arrows, WASD, a gamepad, a click or a tap pick a game.
+The home page is a game hub in Apple's dark appearance, like the Apple TV app: the selected game's
+key art fills the top of the screen behind a carousel of 16:9 cards, and a library of every game sits
+below. Type follows Apple's text styles (Large Title, Title, Body, Subheadline, Footnote) in SF Pro
+on Apple devices, with Inter standing in for it elsewhere; buttons are Apple's white Play pill and
+frosted glass ones (`buttons.css`).
+
+- **Hero** (`hero.css`, `spotlight-view.js`): the game's `banner` (its `poster`, a tall crop, on
+  narrow screens) cross-fades in behind a dim, under one slow Ken Burns zoom on the whole stack. Its
+  title, genre line and first sentence rise in under the carousel, over Play, Details and a heart.
+- **Carousel** (`carousel-layout.js`, `carousel-view.js`, `carousel.css`): the cards loop. A card's
+  slot is a plain function of its distance from the selected one: the center card is full size and
+  ringed, the next ones shrink, dim and sit edge to edge, and from the third on they are hidden. The
+  view only writes each slot as custom properties (`--side`, `--shift`, `--scale`, ...); the CSS
+  turns them into one transform, so every move is a compositor transition on the spring easing. A
+  card that crosses to the other side of the loop jumps and fades in instead of sliding over the
+  center. Arrows and A/D, the round arrow buttons, a click on a side card, a swipe
+  (`gestures.js`) and a sideways trackpad scroll move it; Enter, Play or a click on the center card
+  opens the game.
+- **Library** (`library-filter.js`, `library-view.js`, `library-controller.js`): a grid of tiles
+  under an iOS segmented control: All (eight, then Show more), Recent (newest first) and Favorites.
+  A tile selects its game and scrolls the hero back into view. Favorites, recent games and the sound
+  switch are kept in `localStorage` (`preferences.js`); a browser that refuses storage just starts
+  fresh. The arcade opens on the game played last.
+- **Details** (`details-sheet.js`, `sheet.css`): a `<dialog>` form sheet with the whole description
+  and the controls, centered on wide screens and rising from the bottom on phones.
 
 Opening a game plays an app-launch animation before the page changes (`src/home/launcher.js`): the
-icon grows into a screen-sized panel in the colors of the icon's background (sampled from its
-corners, `launch-splash.js`), so every game opens into its own colors, and the home zooms away
-behind it. The launcher itself stays neutral graphite, so no one game's palette colors the arcade.
-The keyframes are plain functions of the icon's box and the screen (`launch-geometry.js`), and their
-timing comes from `--duration-launch` and `--easing-launch` in `src/home/tokens.css`. When the browser brings
-the page back from its back/forward cache, the panel shrinks back into the icon. With reduced motion
-the game opens at once.
+card's art grows into a screen-sized panel in the colors of its edges (sampled from its corners,
+`launch-splash.js`), so every game opens into its own colors, and the home zooms away behind it. It
+flies from the carousel card, or from the library tile when the carousel has scrolled out of sight
+(`launch-source.js`). The keyframes are plain functions of the art's box and the screen
+(`launch-geometry.js`), and their timing comes from `--duration-launch` and `--easing-launch` in
+`src/home/tokens.css`. When the browser brings the page back from its back/forward cache, the panel
+shrinks back into the card and the Recent list catches up. With reduced motion the game opens at
+once, and the zoom, the slides and the rises are off.
+
+Every interaction has a short sound (`sound-cues.js`): a soft tick as the carousel moves, a rising C
+major chime and a breath of noise on Play, a pop for the heart, a click for the segmented control,
+and airy sweeps for the sheet and for coming back. They are synthesized with Web Audio
+(`sound-synth.js`), so the home page ships no audio files; `sound-player.js` makes the audio context
+on the first cue, which always follows a tap, click or key press as browsers require, and plays
+everything through one master gain and a limiter. The speaker button in the top bar turns them off.
 
 ## Game: Steel & Dust
 

@@ -27,6 +27,8 @@ describe('GET /api/games', () => {
       title: 'Steel & Dust',
       path: 'games/steel-and-dust/',
       cover: 'games/steel-and-dust/assets/icons/icon-512.png',
+      banner: 'games/steel-and-dust/assets/ui/select/bg-landscape.png',
+      poster: 'games/steel-and-dust/assets/ui/select/bg-portrait.png',
     });
   });
 
@@ -35,12 +37,13 @@ describe('GET /api/games', () => {
     expect(await (await get('/api/games')).text()).toBe(expected);
   });
 
-  it('points every cover at a file the server serves', async () => {
+  it('points every cover, banner and poster at an image the server serves', async () => {
     const { games } = await (await get('/api/games')).json();
-    for (const game of games) {
-      const cover = await get(`/${game.cover}`);
-      expect(cover.status, game.cover).toBe(200);
-      expect(cover.headers.get('content-type')).toMatch(/^image\//);
+    const artPaths = games.flatMap((game) => [game.cover, game.banner, game.poster]);
+    for (const artPath of artPaths.filter(Boolean)) {
+      const art = await get(`/${artPath}`);
+      expect(art.status, artPath).toBe(200);
+      expect(art.headers.get('content-type')).toMatch(/^image\//);
     }
   });
 

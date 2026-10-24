@@ -25,31 +25,31 @@ export async function loadHomeMarkup() {
 
 const bootedHomes = [];
 
-export function startHome(fetchFn) {
+export function startHome(fetchFn, options = {}) {
   const navigate = vi.fn();
-  const home = bootHome({ document, fetch: fetchFn, navigate });
+  const home = bootHome({ document, fetch: fetchFn, navigate, ...options });
   bootedHomes.push(home);
   return { navigate, home };
 }
 
-export async function boot(fetchFn) {
-  const started = startHome(fetchFn);
+export async function boot(fetchFn, options) {
+  const started = startHome(fetchFn, options);
   await started.home.ready;
   return started;
 }
 
 export const stopHomes = () => bootedHomes.splice(0).forEach((home) => home.stop());
 
-export async function bootWithGames(ids) {
+export async function bootWithGames(ids, options) {
   const { games } = JSON.parse(await realCatalogJson());
   const base = games.find((game) => game.id === 'steel-and-dust');
   const copies = ids.map((id) => ({ ...base, id, title: id, path: `games/${id}/` }));
-  return boot(async () => jsonReply(JSON.stringify({ games: copies })));
+  return boot(async () => jsonReply(JSON.stringify({ games: copies })), options);
 }
 
-export const bootWithRealCatalog = async () => {
+export const bootWithRealCatalog = async (options) => {
   const body = await realCatalogJson();
-  return { body, ...(await boot(async () => jsonReply(body))) };
+  return { body, ...(await boot(async () => jsonReply(body), options)) };
 };
 
 export const press = (key, target = document) => {
@@ -58,5 +58,17 @@ export const press = (key, target = document) => {
   return event;
 };
 
-export const gameLinks = () => [...document.querySelectorAll('#app-grid a.app')];
-export const selectedLink = () => document.querySelector('#app-grid .app.is-selected');
+export const click = (target, init = {}) => {
+  const event = new MouseEvent('click', { bubbles: true, cancelable: true, button: 0, ...init });
+  target.dispatchEvent(event);
+  return event;
+};
+
+export const byId = (id) => document.getElementById(id);
+export const cards = () => [...document.querySelectorAll('#carousel-track .card')];
+export const tiles = () => [...document.querySelectorAll('#library-grid .tile')];
+export const centerCard = () => document.querySelector('#carousel-track .card.is-center');
+export const selectedTile = () => document.querySelector('#library-grid .tile.is-selected');
+export const spotlightTitle = () => byId('spotlight-title').textContent;
+export const tileTitles = () =>
+  tiles().map((tile) => tile.querySelector('.tile__title').textContent);

@@ -1,29 +1,55 @@
 // Only plain relative paths: the catalog is data, and a "javascript:" or "//host" href must never
 // become a link on the page.
 const RELATIVE_URL_PATTERN = /^[\w-][\w.-]*(?:\/[\w-][\w.-]*)*\/?$/;
+const SENTENCE_END = /[.!?](?=\s|$)/;
 
-const asText = (value) => (typeof value === 'string' ? value : '');
+const asText = (value) => (typeof value === 'string' ? value.trim() : '');
+const asUrl = (value) => (isRelativeUrl(value) ? value : '');
 
 export function isRelativeUrl(value) {
   return typeof value === 'string' && RELATIVE_URL_PATTERN.test(value);
 }
 
 export function isPlayableGame(game) {
-  return Boolean(game) && isRelativeUrl(game.path) && asText(game.title).trim() !== '';
+  return Boolean(game) && isRelativeUrl(game.path) && asText(game.title) !== '';
 }
 
 export function monogramOf(title) {
-  const [first = ''] = Array.from(asText(title).trim());
+  const [first = ''] = Array.from(asText(title));
   return first.toLocaleUpperCase('en');
 }
 
+export function firstSentence(text) {
+  const value = asText(text);
+  const end = SENTENCE_END.exec(value);
+  return end ? value.slice(0, end.index + 1) : value;
+}
+
+export function metaLine({ genre, players, year }) {
+  const yearText = Number.isInteger(year) ? String(year) : '';
+  return [asText(genre), asText(players), yearText].filter((part) => part !== '').join(' · ');
+}
+
+function controlsOf(game) {
+  return Array.isArray(game.controls) ? game.controls.map(asText).filter(Boolean) : [];
+}
+
 export function toGameCard(game) {
+  const coverSrc = asUrl(game.cover);
+  const bannerSrc = asUrl(game.banner) || coverSrc;
   return {
     id: asText(game.id),
     title: asText(game.title),
     monogram: monogramOf(game.title),
     href: game.path,
-    coverSrc: isRelativeUrl(game.cover) ? game.cover : '',
+    coverSrc,
+    bannerSrc,
+    posterSrc: asUrl(game.poster) || bannerSrc,
+    genre: asText(game.genre),
+    meta: metaLine(game),
+    summary: firstSentence(game.description),
+    description: asText(game.description),
+    controls: controlsOf(game),
   };
 }
 

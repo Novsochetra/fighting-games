@@ -6,8 +6,13 @@ import {
   readGamepadActions,
 } from '../../../src/home/gamepad.js';
 import { createGamepadPoller } from '../../../src/home/gamepad-poller.js';
-import { actionForKey, isFormControl, isPlainClick } from '../../../src/home/input-actions.js';
-import { hasPointerMoved } from '../../../src/home/input-modality.js';
+import {
+  actionForKey,
+  focusZone,
+  handlesEnter,
+  isPlainClick,
+  isTextField,
+} from '../../../src/home/input-actions.js';
 
 const pad = ({ pressed = [], axes = [0, 0] } = {}) => ({
   buttons: Array.from({ length: 17 }, (_, i) => ({
@@ -43,12 +48,30 @@ describe('actionForKey', () => {
   });
 });
 
-describe('isFormControl', () => {
-  it('spots buttons and fields, which handle Enter and Space themselves', () => {
-    expect(isFormControl({ tagName: 'BUTTON' })).toBe(true);
-    expect(isFormControl({ tagName: 'INPUT' })).toBe(true);
-    expect(isFormControl({ tagName: 'A' })).toBe(false);
-    expect(isFormControl(null)).toBe(false);
+describe('isTextField and handlesEnter', () => {
+  it('spots fields, where every key is typing', () => {
+    expect(isTextField({ tagName: 'INPUT' })).toBe(true);
+    expect(isTextField({ tagName: 'TEXTAREA' })).toBe(true);
+    expect(isTextField({ tagName: 'BUTTON' })).toBe(false);
+    expect(isTextField(null)).toBe(false);
+  });
+
+  it('spots links and buttons, which answer Enter and Space themselves', () => {
+    expect(handlesEnter({ tagName: 'A' })).toBe(true);
+    expect(handlesEnter({ tagName: 'BUTTON' })).toBe(true);
+    expect(handlesEnter({ tagName: 'BODY' })).toBe(false);
+    expect(handlesEnter(undefined)).toBe(false);
+  });
+});
+
+describe('focusZone', () => {
+  const inside = (selector) => ({ closest: (wanted) => (wanted === selector ? {} : null) });
+
+  it('tells a carousel card from a library tile', () => {
+    expect(focusZone(inside('.card'))).toBe('carousel');
+    expect(focusZone(inside('.tile'))).toBe('library');
+    expect(focusZone(inside('.other'))).toBeNull();
+    expect(focusZone(null)).toBeNull();
   });
 });
 
@@ -67,17 +90,6 @@ describe('isPlainClick', () => {
     { altKey: true },
   ])('leaves %j to the browser, which opens a tab or window', (overrides) => {
     expect(isPlainClick(click(overrides))).toBe(false);
-  });
-});
-
-describe('hasPointerMoved', () => {
-  it('counts the first event and any change of position as a move', () => {
-    expect(hasPointerMoved(null, { clientX: 5, clientY: 5 })).toBe(true);
-    expect(hasPointerMoved({ x: 5, y: 5 }, { clientX: 6, clientY: 5 })).toBe(true);
-  });
-
-  it('ignores an event at the same spot, which the browser sends when the page scrolls', () => {
-    expect(hasPointerMoved({ x: 5, y: 5 }, { clientX: 5, clientY: 5 })).toBe(false);
   });
 });
 

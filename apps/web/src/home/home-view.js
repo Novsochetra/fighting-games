@@ -1,6 +1,7 @@
-import { countGridColumns } from './navigation.js';
-import { renderAppGrid } from './render-app.js';
-import { formatGameCount } from './view-models.js';
+import { createCarouselView } from './carousel-view.js';
+import { pickLaunchSource } from './launch-source.js';
+import { createLibraryView } from './library-view.js';
+import { createSpotlightView } from './spotlight-view.js';
 
 export const LOADING_MESSAGE = 'Loading games…';
 export const ERROR_MESSAGE = 'The game list did not load. Check your connection, then try again.';
@@ -10,60 +11,66 @@ function findElements(document) {
   const byId = (id) => document.getElementById(id);
   return {
     home: byId('home'),
+    hero: byId('hero'),
+    stage: byId('stage'),
     notice: byId('notice'),
     status: byId('status'),
     retry: byId('retry'),
-    count: byId('game-count'),
-    grid: byId('app-grid'),
+    carousel: byId('carousel'),
+    track: byId('carousel-track'),
+    pager: byId('pager'),
+    previous: byId('previous'),
+    next: byId('next'),
   };
 }
 
-function showNotice(elements, { message, tone }) {
+function showNotice({ elements, library }, { message, tone }) {
   elements.notice.hidden = false;
   elements.notice.dataset.tone = tone;
   elements.status.textContent = message;
   elements.retry.hidden = tone !== 'error';
-  elements.grid.hidden = true;
+  elements.stage.hidden = true;
+  library.hide();
 }
 
-function showGrid(elements, cards) {
-  elements.count.textContent = formatGameCount(cards.length);
+function showGames({ elements, carousel, spotlight, library }, cards) {
   if (cards.length === 0) {
-    showNotice(elements, { message: EMPTY_MESSAGE, tone: 'empty' });
+    showNotice({ elements, library }, { message: EMPTY_MESSAGE, tone: 'empty' });
     return;
   }
   elements.notice.hidden = true;
   elements.status.textContent = '';
-  elements.grid.innerHTML = renderAppGrid(cards);
-  elements.grid.hidden = false;
-}
-
-function selectApp(elements, index, { focus = false }) {
-  for (const link of elements.grid.querySelectorAll('[data-game-index]')) {
-    const isSelected = Number(link.dataset.gameIndex) === index;
-    link.classList.toggle('is-selected', isSelected);
-    link.tabIndex = isSelected ? 0 : -1;
-    if (isSelected && focus) {
-      link.focus({ preventScroll: true });
-      link.scrollIntoView?.({ block: 'nearest' });
-    }
-  }
+  carousel.render(cards);
+  spotlight.render(cards);
+  elements.stage.hidden = false;
+  library.show();
 }
 
 export function createHomeView(document) {
   const elements = findElements(document);
-  const readTrackList = () =>
-    document.defaultView.getComputedStyle(elements.grid).gridTemplateColumns;
-  return {
+  const { track, pager, previous, next } = elements;
+  const parts = {
     elements,
-    showLoading: () => {
-      elements.count.textContent = '';
-      showNotice(elements, { message: LOADING_MESSAGE, tone: 'loading' });
-    },
-    showError: () => showNotice(elements, { message: ERROR_MESSAGE, tone: 'error' }),
-    showGrid: (cards) => showGrid(elements, cards),
-    select: (index, options = {}) => selectApp(elements, index, options),
-    findLink: (index) => elements.grid.querySelector(`[data-game-index="${Number(index)}"]`),
-    countColumns: () => countGridColumns(readTrackList()),
+    carousel: createCarouselView({ track, pager, arrows: [previous, next] }),
+    spotlight: createSpotlightView(document),
+    library: createLibraryView(document),
+  };
+  const select = (index, card, { animate = false, focus = null } = {}) => {
+    parts.carousel.select(index, { focus: focus === 'carousel' });
+    parts.spotlight.show(card, index, { animate });
+    parts.library.select(index, { focus: focus === 'library' });
+  };
+  return {
+    ...parts,
+    showLoading: () => showNotice(parts, { message: LOADING_MESSAGE, tone: 'loading' }),
+    showError: () => showNotice(parts, { message: ERROR_MESSAGE, tone: 'error' }),
+    showGames: (cards) => showGames(parts, cards),
+    select,
+    revealHero: () => elements.hero.scrollIntoView?.({ block: 'start' }),
+    findLaunchSource: (index) =>
+      pickLaunchSource(
+        [parts.carousel.frameAt(index), parts.library.frameAt(index)],
+        document.defaultView.innerHeight,
+      ),
   };
 }

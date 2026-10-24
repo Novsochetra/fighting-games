@@ -59,11 +59,12 @@ describe('npm run build', () => {
     }
   });
 
-  it('ships every cover the catalog points at', async () => {
+  it('ships every cover, banner and poster the catalog points at', async () => {
     const { games } = JSON.parse(await readFile(path.join(outDir, 'api', 'games'), 'utf8'));
     expect(games.length).toBeGreaterThan(0);
-    for (const game of games) {
-      expect(await exists(path.join(outDir, game.cover)), game.cover).toBe(true);
+    const artPaths = games.flatMap((game) => [game.cover, game.banner, game.poster]);
+    for (const artPath of artPaths.filter(Boolean)) {
+      expect(await exists(path.join(outDir, artPath)), artPath).toBe(true);
     }
   });
 

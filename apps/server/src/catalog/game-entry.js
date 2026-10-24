@@ -1,4 +1,7 @@
 const REQUIRED_TEXT_FIELDS = ['id', 'title', 'tagline', 'description', 'genre', 'players', 'cover'];
+// The cover is the square icon; banner (16:9) and poster (portrait) are the optional key art the home
+// page shows on its cards and behind them.
+const ART_FIELDS = ['cover', 'banner', 'poster'];
 const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const RELATIVE_FILE_PATTERN = /^[\w-][\w.-]*(?:\/[\w-][\w.-]*)*$/;
 
@@ -24,12 +27,16 @@ function checkId(entry, folderName) {
     : ['"id" may only use lowercase letters, digits and dashes'];
 }
 
-function checkCover(entry) {
-  if (!isFilledText(entry.cover) || RELATIVE_FILE_PATTERN.test(entry.cover)) {
+function checkArtPath(entry, field) {
+  const value = entry[field];
+  const isMissing = field === 'cover' ? !isFilledText(value) : value === undefined;
+  if (isMissing || (typeof value === 'string' && RELATIVE_FILE_PATTERN.test(value))) {
     return [];
   }
-  return ['"cover" must be a relative file path inside the game folder'];
+  return [`"${field}" must be a relative file path inside the game folder`];
 }
+
+const checkArt = (entry) => ART_FIELDS.flatMap((field) => checkArtPath(entry, field));
 
 function checkControls(entry) {
   if (entry.controls === undefined) {
@@ -39,7 +46,7 @@ function checkControls(entry) {
   return isTextList ? [] : ['"controls" must be a list of non-empty strings'];
 }
 
-const CHECKS = [checkRequiredFields, checkId, checkCover, checkControls];
+const CHECKS = [checkRequiredFields, checkId, checkArt, checkControls];
 
 export function validateGameEntry(entry, folderName) {
   if (!isPlainObject(entry)) {
@@ -50,5 +57,9 @@ export function validateGameEntry(entry, folderName) {
 
 export function toCatalogGame(entry) {
   const gamePath = `games/${entry.id}/`;
-  return { ...entry, cover: `${gamePath}${entry.cover}`, path: gamePath };
+  const art = ART_FIELDS.filter((field) => entry[field] !== undefined).map((field) => [
+    field,
+    `${gamePath}${entry[field]}`,
+  ]);
+  return { ...entry, ...Object.fromEntries(art), path: gamePath };
 }

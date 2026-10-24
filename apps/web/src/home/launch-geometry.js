@@ -1,4 +1,4 @@
-// The icon art fades out over this stretch of the launch, so the splash shows by mid-flight.
+// The art fades out over this stretch of the launch, so the splash shows by mid-flight.
 export const ICON_FADE = { start: 0.2, end: 0.75 };
 export const HOME_ZOOM = 1.12;
 
@@ -47,11 +47,12 @@ export function panelFrame(rect, viewport, radius) {
   };
 }
 
+// The art keeps its shape and stays centered in the growing panel, as large as fits inside it.
 export function iconFrame(rect, from) {
-  const size = Math.min(rect.width, rect.height);
-  const x = rect.x + (rect.width - size) / 2 - from.x;
-  const y = rect.y + (rect.height - size) / 2 - from.y;
-  return { transform: `translate(${x}px, ${y}px) scale(${size / from.width})` };
+  const scale = Math.min(rect.width / from.width, rect.height / from.height);
+  const x = rect.x + (rect.width - from.width * scale) / 2 - from.x;
+  const y = rect.y + (rect.height - from.height * scale) / 2 - from.y;
+  return { transform: `translate(${x}px, ${y}px) scale(${scale})` };
 }
 
 export function iconOpacityAt(progress) {
