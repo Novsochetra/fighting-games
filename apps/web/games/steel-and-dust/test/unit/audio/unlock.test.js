@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createAudio, installAudioUnlock } from '../../../src/audio/index.js';
+import { createAudio, installAudioUnlock, SOUND_TAKES } from '../../../src/audio/index.js';
 import { nodesOfKind, stubAudioContext } from './fake-audio-context.js';
 
 const gameState = () => ({ mode: 'title', muted: false, settings: { music: 60, sfx: 80 } });
@@ -42,7 +42,8 @@ describe('unlock', () => {
     const audioSession = { type: 'auto' };
     vi.stubGlobal('navigator', { audioSession });
     const audio = createAudio(gameState());
-    expect(audio.debugState()).toEqual({ state: 'none', voices: 0, bank: '0/35' });
+    const sounds = Object.keys(SOUND_TAKES).length;
+    expect(audio.debugState()).toEqual({ state: 'none', voices: 0, bank: `0/${sounds}` });
     audio.unlock();
     audio.unlock();
     expect(contexts).toHaveLength(1);
