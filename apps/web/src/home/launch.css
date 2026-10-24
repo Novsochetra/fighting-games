@@ -9,18 +9,13 @@
 .launch__panel {
   position: absolute;
   inset: 0;
-  overflow: hidden;
-  background: var(--color-splash);
+  background: linear-gradient(
+    to bottom,
+    var(--splash-top, var(--color-splash)),
+    var(--splash-bottom, var(--color-splash))
+  );
   transform-origin: 0 0;
   will-change: transform;
-}
-
-.launch__backdrop {
-  position: absolute;
-  inset: 0;
-  inline-size: 100%;
-  block-size: 100%;
-  opacity: 0.85;
 }
 
 .launch__icon {
@@ -30,15 +25,4 @@
   transform-origin: 0 0;
   container-type: inline-size;
   will-change: transform, opacity;
-}
-
-@supports (corner-shape: squircle) {
-  .launch__panel {
-    corner-shape: squircle;
-  }
-
-  .launch__icon {
-    border-radius: var(--radius-app-icon-squircle);
-    corner-shape: squircle;
-  }
 }

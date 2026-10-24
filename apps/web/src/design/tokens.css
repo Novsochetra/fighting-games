@@ -88,21 +88,28 @@
   --color-loader-sky-warm: var(--color-dusk-wine);
   --color-loader-water: var(--color-night);
 
-  --color-wallpaper-top: var(--color-night-deep);
-  --color-wallpaper-mid: var(--color-dusk-navy);
-  --color-wallpaper-low: var(--color-dusk-violet);
-  --color-wallpaper-warm: var(--color-dusk-wine);
-  --color-wallpaper-glow: color-mix(in srgb, var(--color-amber) 42%, transparent);
-  --color-wallpaper-haze: color-mix(in srgb, var(--color-teal) 16%, transparent);
+  --color-graphite-200: #3b3e48;
+  --color-graphite-400: #262931;
+  --color-graphite-600: #1b1d24;
+  --color-graphite-800: #111318;
+  --color-graphite-950: #08090c;
+
+  --color-wallpaper-top: var(--color-graphite-600);
+  --color-wallpaper-mid: var(--color-graphite-800);
+  --color-wallpaper-low: var(--color-graphite-950);
+  --color-wallpaper-light: color-mix(in srgb, var(--color-white) 7%, transparent);
+  --color-wallpaper-shade: color-mix(in srgb, var(--color-black) 45%, transparent);
   --color-label: var(--color-white);
   --color-label-muted: color-mix(in srgb, var(--color-white) 64%, transparent);
   --color-glass: color-mix(in srgb, var(--color-white) 11%, transparent);
   --color-glass-strong: color-mix(in srgb, var(--color-white) 20%, transparent);
   --color-glass-edge: color-mix(in srgb, var(--color-white) 16%, transparent);
-  --color-icon-edge: color-mix(in srgb, var(--color-white) 14%, transparent);
-  --color-icon-blank: var(--color-panel-raised);
+  --color-icon-edge: color-mix(in srgb, var(--color-white) 12%, transparent);
+  --color-icon-blank: var(--color-graphite-400);
+  --color-icon-monogram-top: var(--color-graphite-200);
+  --color-icon-monogram-bottom: var(--color-graphite-400);
   --color-focus-ring: color-mix(in srgb, var(--color-white) 92%, transparent);
-  --color-splash: var(--color-night);
+  --color-splash: var(--color-graphite-950);
 
   --font-display: 'Silkscreen', 'Courier New', monospace;
   --font-body: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -183,7 +190,6 @@
   --radius-xl: 8px;
   --radius-round: 50%;
   --radius-app-icon: 22.4%;
-  --radius-app-icon-squircle: 30%;
   --radius-sheet: 1.5rem;
   --radius-pill: 999px;
 
@@ -206,7 +212,7 @@
   --shadow-app-icon-lifted:
     0 4px 10px color-mix(in srgb, var(--color-black) 35%, transparent),
     0 24px 40px -10px color-mix(in srgb, var(--color-black) 65%, transparent);
-  --shadow-icon-edge: inset 0 0 0 1px var(--color-icon-edge);
+  --shadow-icon-edge: inset 0 0 0 0.5px var(--color-icon-edge);
   --shadow-glass:
     0 10px 30px color-mix(in srgb, var(--color-black) 30%, transparent),
     inset 0 0 0 1px var(--color-glass-edge);

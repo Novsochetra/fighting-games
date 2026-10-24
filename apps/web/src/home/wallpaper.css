@@ -6,14 +6,13 @@
   block-size: 100lvh;
   pointer-events: none;
   background:
-    radial-gradient(130% 60% at 50% 112%, var(--color-wallpaper-glow) 0%, var(--color-clear) 70%),
-    radial-gradient(70% 45% at 8% 4%, var(--color-wallpaper-haze) 0%, var(--color-clear) 75%),
+    radial-gradient(90% 55% at 50% -10%, var(--color-wallpaper-light) 0%, var(--color-clear) 70%),
+    radial-gradient(150% 80% at 50% 125%, var(--color-wallpaper-shade) 0%, var(--color-clear) 65%),
     linear-gradient(
       to bottom,
       var(--color-wallpaper-top) 0%,
-      var(--color-wallpaper-mid) 40%,
-      var(--color-wallpaper-low) 74%,
-      var(--color-wallpaper-warm) 100%
+      var(--color-wallpaper-mid) 55%,
+      var(--color-wallpaper-low) 100%
     );
 }
 

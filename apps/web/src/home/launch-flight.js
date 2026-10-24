@@ -6,7 +6,7 @@ import {
   reverseKeyframes,
   toRect,
 } from './launch-geometry.js';
-import { createBackdrop } from './launch-backdrop.js';
+import { sampleSplash } from './launch-splash.js';
 
 const ICON_SELECTOR = '.app__icon';
 const keepOrder = (keyframes) => keyframes;
@@ -26,7 +26,11 @@ function buildLayer(document, iconBox) {
   if (art) {
     icon.append(art.cloneNode(true));
   }
-  panel.append(createBackdrop(document, art));
+  const splash = sampleSplash(document, art);
+  if (splash) {
+    panel.style.setProperty('--splash-top', splash.top);
+    panel.style.setProperty('--splash-bottom', splash.bottom);
+  }
   layer.append(panel, icon);
   document.body.append(layer);
   return { layer, panel, icon };

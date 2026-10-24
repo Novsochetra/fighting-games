@@ -45,14 +45,18 @@ If a module still fails to load, the game page reloads itself once under a fresh
 ## Home page
 
 The home page is a launcher, like a tablet's home screen: a wallpaper and a grid of game icons, each
-the game's `cover` with its title under it. Arrows, WASD, a gamepad, a click or a tap pick a game.
+the game's `cover` with its title under it. Icons, their focus ring, their shadow and the launch
+panel share one corner radius (`--radius-app-icon`), so every outline stays concentric. Arrows,
+WASD, a gamepad, a click or a tap pick a game.
 
 Opening a game plays an app-launch animation before the page changes (`src/home/launcher.js`): the
-icon grows into a screen-sized panel tinted with the icon's own colors, and the home zooms away
-behind it. The keyframes are plain functions of the icon's box and the screen
-(`launch-geometry.js`), and their timing comes from `--duration-launch` and `--easing-launch` in
-`tokens.css`. When the browser brings the page back from its back/forward cache, the panel shrinks
-back into the icon. With reduced motion the game opens at once.
+icon grows into a screen-sized panel in the colors of the icon's background (sampled from its
+corners, `launch-splash.js`), so every game opens into its own colors, and the home zooms away
+behind it. The launcher itself stays neutral graphite, so no one game's palette colors the arcade.
+The keyframes are plain functions of the icon's box and the screen (`launch-geometry.js`), and their
+timing comes from `--duration-launch` and `--easing-launch` in `tokens.css`. When the browser brings
+the page back from its back/forward cache, the panel shrinks back into the icon. With reduced motion
+the game opens at once.
 
 ## Game: Steel & Dust
 

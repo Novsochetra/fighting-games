@@ -51,7 +51,11 @@
   font-weight: var(--font-weight-semibold);
   line-height: var(--leading-none);
   color: var(--color-label);
-  background: linear-gradient(160deg, var(--color-dusk-violet), var(--color-dusk-wine));
+  background: linear-gradient(
+    to bottom,
+    var(--color-icon-monogram-top),
+    var(--color-icon-monogram-bottom)
+  );
 }
 
 .app__label {
@@ -100,14 +104,6 @@
 @media (min-width: 40rem) {
   .app__label {
     font-size: var(--font-size-app-label-lg);
-  }
-}
-
-@supports (corner-shape: squircle) {
-  .app__icon,
-  .app__icon::after {
-    border-radius: var(--radius-app-icon-squircle);
-    corner-shape: squircle;
   }
 }
 

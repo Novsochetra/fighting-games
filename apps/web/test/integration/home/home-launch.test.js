@@ -55,7 +55,8 @@ describe('launching a game', () => {
     press('Enter');
     expect(layer()).not.toBeNull();
     expect(layer().getAttribute('aria-hidden')).toBe('true');
-    expect(layer().querySelector('.launch__panel canvas.launch__backdrop')).not.toBeNull();
+    // happy-dom loads no images, so the panel keeps the plain splash color
+    expect(layer().querySelector('.launch__panel').style.getPropertyValue('--splash-top')).toBe('');
     expect(layer().querySelector('.launch__icon img').getAttribute('src')).toBe(
       gameLinks()[0].querySelector('img').getAttribute('src'),
     );
