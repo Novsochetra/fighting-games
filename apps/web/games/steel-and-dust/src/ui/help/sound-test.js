@@ -37,6 +37,7 @@ const HITS = [
 const OTHER = [
   ['Jump', 'jump'],
   ['Land', 'land'],
+  ['Footstep', 'step'],
   ['KO', 'ko'],
   ['Shockwave', 'boom'],
   ['Crate', 'break'],

@@ -11,8 +11,9 @@ import { ULTIMATE_SOUNDS } from './ultimate.js';
 import { VOICE_SOUNDS } from './voices.js';
 
 // combat sounds synthesized once into a few takes each: { group, level, takes, seconds, priority,
-// build(track, pitch, take) -> finish shape }. The order is the warm-up order
-const { jump, land, warp, release } = MOVEMENT_SOUNDS;
+// build(track, pitch, take) -> finish shape }. The order is the warm-up order; a sound added later
+// goes last, so the takes before it keep the seeds the sound bank's recording made them with
+const { jump, land, warp, release, step } = MOVEMENT_SOUNDS;
 
 export const SOUND_DEFINITIONS = {
   ...SWING_SOUNDS,
@@ -29,6 +30,7 @@ export const SOUND_DEFINITIONS = {
   ...CRASH_SOUNDS,
   ...VOICE_SOUNDS,
   ...ULTIMATE_SOUNDS,
+  step,
 };
 
 export const SOUND_TAKES = Object.fromEntries(

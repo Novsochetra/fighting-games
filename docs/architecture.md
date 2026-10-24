@@ -290,7 +290,10 @@ changing or baking a strip:
 `test/unit/data/hero-atlas.test.js` and `test/regression/bugs/hero-strip-memory.test.js` hold it.
 The hero runs wherever it goes on foot (`src/sim/brains/player/run.js`): a held direction sets off
 at a walk's pace and picks up to `RUN_SPEED`, and a ground dash held its way runs straight on, in the
-hero's run strip, kicking dust up behind each stride (`src/sim/fighters/motion-effects.js`). Attacks
+hero's run strip, kicking dust up behind each stride and sounding a footstep with it
+(`src/sim/fighters/motion-effects.js`; the `step` sound in `src/audio/bank/movement.js`, the bank's
+lowest priority, so a footstep never takes a voice from another sound and is the first to go in a
+crowded fight). Attacks
 out of the run are the ones from a stand; jump is a long running leap.
 A boss is drawn at its `scale` (`spriteSize` in `src/render/fighters/enemy-sprites.js`), two to
 three times the hero's height, and its hit and hurt boxes grow with it; raiders are drawn at the

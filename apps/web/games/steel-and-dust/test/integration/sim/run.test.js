@@ -1,5 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DASH_TICKS, GROUND_Y, RUN_SPEED } from '../../../src/config.js';
+import { RUN_STRIDE_TICKS } from '../../../src/sim/hero-animation.js';
 import { seededRandom } from '../../support/seeded-random.js';
 import { createTerrainGame, placeFighter } from '../../support/terrain-game.js';
 import { createPlayingGame, press, release, runTicks, tap } from '../../support/test-game.js';
@@ -18,6 +19,21 @@ function distanceIn(game, ticks) {
   const start = game.player.x;
   runTicks(game, ticks);
   return game.player.x - start;
+}
+
+// the ticks a footstep is heard on, each with where the hero stood and whether it was in the air
+function footsteps(game, sfx, ticks) {
+  const heard = [];
+  for (let tick = 0; tick < ticks; tick++) {
+    const before = sfx.mock.calls.length;
+    runTicks(game, 1);
+    for (const [key, big, options] of sfx.mock.calls.slice(before)) {
+      if (key === 'step') {
+        heard.push({ tick, big, x: options.x, heroX: game.player.x, air: game.player.airborne });
+      }
+    }
+  }
+  return heard;
 }
 
 function runUntil(game, done, limit = 120) {
@@ -117,6 +133,37 @@ describe('the hero running', () => {
     const kinds = new Set(game.particles.map((particle) => particle.kind));
     expect(kinds).toContain('dust');
     expect(kinds).toContain('streak');
+  });
+
+  it('is heard: a footstep on every stride, from where the hero is', () => {
+    const sfx = vi.fn();
+    const game = createPlayingGame({ io: { sfx } });
+    expect(footsteps(game, sfx, 30)).toEqual([]);
+    press(game, 'right');
+    const heard = footsteps(game, sfx, RUN_STRIDE_TICKS * 6);
+    expect(heard.length).toBeGreaterThan(4);
+    const gaps = heard.slice(1).map((step, i) => step.tick - heard[i].tick);
+    expect(new Set(gaps)).toEqual(new Set([RUN_STRIDE_TICKS]));
+    for (const step of heard) {
+      expect(step.big).toBe(false);
+      expect(Math.abs(step.x - step.heroX)).toBeLessThan(RUN_SPEED * 2);
+    }
+  });
+
+  it('is not heard while the hero is in the air or once it has stopped', () => {
+    const sfx = vi.fn();
+    const game = createPlayingGame({ io: { sfx } });
+    runTicks(game, 30);
+    press(game, 'right');
+    runTicks(game, 30);
+    tap(game, 'jump');
+    const inAir = footsteps(game, sfx, 20);
+    expect(game.player.airborne).toBe(true);
+    expect(inAir).toEqual([]);
+    release(game, 'right');
+    runUntil(game, (player) => !player.airborne);
+    runTicks(game, 20);
+    expect(footsteps(game, sfx, RUN_STRIDE_TICKS * 3)).toEqual([]);
   });
 
   it('runs off a ledge into the air and lands on the road below', () => {

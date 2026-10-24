@@ -50,12 +50,13 @@ function addWindLine(game, fighter) {
   });
 }
 
-// a run kicks dust up behind each stride and streams the air past the hero
+// a run kicks dust up and sounds a footstep with each stride, and streams the air past the hero
 function addRunEffects(game, fighter) {
   const strideTime = fighter.animTime - fighter.spriteStart;
   if (strideTime % RUN_STRIDE_TICKS === 0) {
     const y = floorUnder(game.terrain, fighter);
     addDust(game, { x: fighter.x - fighter.facing * 6, y, count: 2 });
+    game.io.sfx('step', false, { x: fighter.x });
   }
   if (fighter.animTime % RUN_WIND_TICKS === 0) {
     addWindLine(game, fighter);
