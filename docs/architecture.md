@@ -59,7 +59,9 @@ standing in for it elsewhere; buttons are Apple's Play pill and frosted glass on
 
 It comes in Apple's dark and light appearances. Dark is the default set of tokens in `tokens.css`;
 `:root[data-appearance='light']` swaps in the light colors, a lighter shadow, side cards that dim
-less, and a light wash of white over the painting, which stays as sharp as in dark mode. The root's `data-appearance`
+less, and a painting that stays sharp at the top and frosts toward the bottom, behind the title
+and buttons: a blur on its own layer (`.hero__frost`), faded in by a mask, under a wash of white
+that thickens toward the bottom too. The root's `data-appearance`
 follows the device, and the sun and moon button in the top bar flips it (`appearance.js`, which
 cross-fades the page through a view transition). The choice is kept with the device's appearance at
 the time, so when the device next changes (at sunset, say) the arcade follows it again.

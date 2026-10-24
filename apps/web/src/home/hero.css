@@ -8,6 +8,7 @@
 }
 
 .hero__backdrops,
+.hero__frost,
 .hero__scrim {
   position: absolute;
   inset: 0;
@@ -46,11 +47,20 @@
   image-rendering: pixelated;
 }
 
+/* A blur that fades in toward the bottom, like iOS's progressive blur: the painting stays sharp at
+   the top and frosts behind the title and buttons. The mask fades the blur itself, not the art. */
+.hero__frost {
+  -webkit-backdrop-filter: var(--blur-hero-floor);
+  backdrop-filter: var(--blur-hero-floor);
+  mask-image: linear-gradient(to bottom, var(--color-clear) 46%, var(--color-black) 78%);
+}
+
 .hero__scrim {
   background: linear-gradient(
     to bottom,
-    var(--color-scrim) 0%,
-    var(--color-scrim) 72%,
+    var(--color-scrim-top) 0%,
+    var(--color-scrim-middle) 45%,
+    var(--color-scrim-low) 75%,
     var(--color-scrim-floor) 100%
   );
 }

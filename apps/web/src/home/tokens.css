@@ -36,6 +36,9 @@
   --color-on-button-primary: var(--color-black);
   --color-button-surface: var(--color-apple-gray-6);
   --color-scrim: rgb(0 0 0 / 42%);
+  --color-scrim-top: var(--color-scrim);
+  --color-scrim-middle: var(--color-scrim);
+  --color-scrim-low: var(--color-scrim);
   --color-scrim-floor: var(--color-launcher-background);
   --color-card-blank: var(--color-apple-gray-6);
   --color-card-edge: rgb(255 255 255 / 16%);
@@ -157,6 +160,7 @@
 
   --blur-glass: blur(24px) saturate(180%);
   --blur-sheet-backdrop: blur(12px);
+  --blur-hero-floor: none;
 
   --dim-pressed: 0.85;
   --dim-strength: 1;
@@ -205,8 +209,9 @@
   --layer-launch: 200;
 }
 
-/* Apple's light appearance. The painting behind the cards stays sharp under a light wash of white,
-   so dark type reads over it; side cards dim less, since dark cards look heavy on white. */
+/* Apple's light appearance. The painting behind the cards stays sharp at the top and frosts toward
+   the bottom, where a whiter wash lets the title and buttons read; side cards dim less, since dark
+   cards look heavy on white. */
 :root[data-appearance='light'] {
   --color-launcher-background: var(--color-white);
   --color-launcher-surface: var(--color-apple-gray-6-light);
@@ -225,7 +230,9 @@
   --color-button-primary: var(--color-black);
   --color-on-button-primary: var(--color-white);
   --color-button-surface: var(--color-apple-gray-6-light);
-  --color-scrim: rgb(255 255 255 / 38%);
+  --color-scrim-top: rgb(255 255 255 / 34%);
+  --color-scrim-middle: rgb(255 255 255 / 18%);
+  --color-scrim-low: rgb(255 255 255 / 58%);
   --color-card-blank: var(--color-apple-gray-5-light);
   --color-card-edge: rgb(0 0 0 / 8%);
   --color-card-monogram-top: var(--color-apple-gray-4-light);
@@ -250,4 +257,5 @@
   --shadow-sheet: 0 24px 64px rgb(0 0 0 / 22%);
 
   --dim-strength: 0.4;
+  --blur-hero-floor: blur(14px) saturate(140%);
 }
