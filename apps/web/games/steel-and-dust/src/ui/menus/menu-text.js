@@ -1,7 +1,9 @@
 import { difficultyOf } from '../../data/difficulty.js';
+import { rankOf } from '../../data/leaderboard.js';
 import { MISSIONS } from '../../data/missions/index.js';
 import { WEAPONS } from '../../data/weapons/index.js';
 import { formatClock } from '../../render/hud/clock.js';
+import { hasLivesLeft } from '../../sim/stage/lives.js';
 
 function titleTip({ ui, fullscreen, isIos, padConnected }) {
   if (ui.isTouchOn()) {
@@ -30,6 +32,10 @@ export function titleNoteHtml(game, context) {
   return records.join('<span class="dot"> · </span>') + separator + tip;
 }
 
+export function continueSavedLabel(checkpoint) {
+  return `Continue mission ${checkpoint.mission + 1}`;
+}
+
 function livesLeftHtml(lives) {
   if (lives === 1) {
     return '<b>last life</b>';
@@ -37,9 +43,21 @@ function livesLeftHtml(lives) {
   return lives > 0 ? `lives left <b>${lives}</b>` : '<b>no lives left</b>';
 }
 
+function boardPlace(game) {
+  const rank = rankOf(game.leaderboard, game.lastRun);
+  return rank ? `#${rank}` : '';
+}
+
+// a fall with lives left has not ended the run, so the place shown would be the last run's
+function boardPlaceHtml(game) {
+  const place = hasLivesLeft(game) ? '' : boardPlace(game);
+  return place ? `<br><span class="keep">Leaderboard <b>${place}</b></span>` : '';
+}
+
 export function overNoteHtml(game) {
   const mission = `Mission <b>${game.missionIndex + 1}</b>`;
-  return `${mission} &nbsp;·&nbsp; score <b>${game.score}</b> &nbsp;·&nbsp; ${livesLeftHtml(game.lives)}`;
+  const note = `${mission} &nbsp;·&nbsp; score <b>${game.score}</b> &nbsp;·&nbsp; ${livesLeftHtml(game.lives)}`;
+  return note + boardPlaceHtml(game);
 }
 
 export function clearStatsHtml(game) {
@@ -48,12 +66,16 @@ export function clearStatsHtml(game) {
     ['Missions', `${game.missionIndex + 1} / ${MISSIONS.length}`],
     ['Time', formatClock(game.playTime)],
     ['Score', game.score + best],
+    ['Leaderboard', boardPlace(game)],
     ['Best combo', `${game.records.bestCombo} hits`],
     ['Continues', game.continues],
     ['Lives left', game.lives],
     ['Difficulty', difficultyOf(game.settings).name],
   ];
-  return rows.map(([name, value]) => `<dt>${name}</dt><dd>${value}</dd>`).join('');
+  return rows
+    .filter(([, value]) => value !== '')
+    .map(([name, value]) => `<dt>${name}</dt><dd>${value}</dd>`)
+    .join('');
 }
 
 export function weaponButtonLabel(game) {

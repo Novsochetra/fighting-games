@@ -30,6 +30,8 @@ describe('game menus on the real page', () => {
 
   it('moves the highlight with the arrow keys and opens How to play with Enter', () => {
     key('ArrowDown');
+    expect(selected().textContent).toBe('Leaderboard');
+    key('ArrowDown');
     expect(selected().textContent).toBe('How to play');
     key('Enter');
     expect(openMenu().id).toBe('m-help');
@@ -163,7 +165,7 @@ describe('game menus on the real page', () => {
     expect(document.getElementById('overTitle').textContent).toBe('Game over');
     expect(document.getElementById('overNote').textContent).toContain('Mission 3');
     expect(document.getElementById('overNote').textContent).toContain('no lives left');
-    expect(visibleButtons()).toEqual(['Start from mission 1', 'Quit to title']);
+    expect(visibleButtons()).toEqual(['Start from mission 1', 'Leaderboard', 'Quit to title']);
     key('Enter');
     expect(page.game).toMatchObject({ mode: 'play', missionIndex: 0, lives: 5, score: 0 });
   });

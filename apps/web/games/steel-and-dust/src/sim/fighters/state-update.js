@@ -2,6 +2,7 @@ import { COLORS } from '../../art/colors.js';
 import { CHARGE_LEVEL1, CHARGE_MAX, CHARGE_TAP, DASH_TICKS } from '../../config.js';
 import { randomBetween } from '../../lib/math.js';
 import { commitScore } from '../combat/combo.js';
+import { saveFall } from '../stage/checkpoint.js';
 import { loseLife } from '../stage/lives.js';
 import { shake } from '../fx/camera-fx.js';
 import { addSparks } from '../fx/particles.js';
@@ -55,6 +56,7 @@ function updateKnockedOut(game, fighter) {
     game.mode = 'over';
     loseLife(game);
     commitScore(game);
+    saveFall(game);
   }
 }
 

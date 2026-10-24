@@ -1,11 +1,28 @@
 import { hasLivesLeft } from '../../sim/stage/lives.js';
-import { clearStatsHtml, overNoteHtml, titleNoteHtml, weaponButtonLabel } from './menu-text.js';
+import {
+  clearStatsHtml,
+  continueSavedLabel,
+  overNoteHtml,
+  titleNoteHtml,
+  weaponButtonLabel,
+} from './menu-text.js';
+
+// with a run saved, Continue takes the lead and Play starts a new one in its place
+function showSavedRun(byId, checkpoint) {
+  const continueButton = byId('continueSavedBtn');
+  const playButton = byId('playBtn');
+  continueButton.hidden = !checkpoint;
+  continueButton.textContent = checkpoint ? continueSavedLabel(checkpoint) : '';
+  playButton.textContent = checkpoint ? 'New game' : 'Play';
+  playButton.classList.toggle('primary', !checkpoint);
+}
 
 // fills in the live text of a base menu when it opens
 export function createMenuRefreshers({ document, game, context }) {
   const byId = (id) => document.getElementById(id);
   return {
     title() {
+      showSavedRun(byId, game.checkpoint);
       byId('titleNote').innerHTML = titleNoteHtml(game, context());
       context().fullscreen.refreshLabels();
     },
@@ -23,6 +40,7 @@ export function createMenuRefreshers({ document, game, context }) {
       byId('startOverBtn').hidden = !out;
       byId('continueBtn').hidden = out;
       byId('restartMissionBtn').hidden = out;
+      byId('overBoardBtn').hidden = !out;
     },
     clear() {
       byId('clearStats').innerHTML = clearStatsHtml(game);

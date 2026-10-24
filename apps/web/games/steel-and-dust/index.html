@@ -37,6 +37,7 @@
     <link rel="stylesheet" href="styles/panels.css" />
     <link rel="stylesheet" href="styles/settings.css" />
     <link rel="stylesheet" href="styles/help.css" />
+    <link rel="stylesheet" href="styles/leaderboard.css" />
     <link rel="stylesheet" href="styles/stone.css" />
     <link rel="stylesheet" href="styles/stone-menus.css" />
     <link rel="stylesheet" href="styles/heroes.css" />
@@ -113,7 +114,11 @@
         <section class="menu" id="m-title" aria-label="Main menu">
           <h1 class="logo">Steel &amp; Dust<span>pixel brawler</span></h1>
           <div class="mlist">
-            <button class="mbtn primary" data-act="play">Play</button>
+            <button class="mbtn primary" data-act="continueSaved" id="continueSavedBtn" hidden>
+              Continue
+            </button>
+            <button class="mbtn primary" data-act="play" id="playBtn">Play</button>
+            <button class="mbtn" data-act="leaderboard">Leaderboard</button>
             <button class="mbtn" data-act="help">How to play</button>
             <button class="mbtn" data-act="settings">Settings</button>
             <button class="mbtn" data-act="fullscreen" data-fs>Full screen</button>
@@ -145,6 +150,9 @@
             </button>
             <button class="mbtn primary" data-act="continue" id="continueBtn">Continue</button>
             <button class="mbtn" data-act="restart" id="restartMissionBtn">Restart mission</button>
+            <button class="mbtn" data-act="leaderboard" id="overBoardBtn" hidden>
+              Leaderboard
+            </button>
             <button class="mbtn" data-act="quit">Quit to title</button>
           </div>
         </section>
@@ -154,6 +162,7 @@
           <dl class="stats" id="clearStats"></dl>
           <div class="mlist">
             <button class="mbtn primary" data-act="again">Play again</button>
+            <button class="mbtn" data-act="leaderboard">Leaderboard</button>
             <button class="mbtn" data-act="quit">Title</button>
             <button class="mbtn" data-act="arcade">Back to arcade</button>
           </div>
@@ -193,6 +202,16 @@
               <div class="tabs" role="tablist" id="helpTabs"></div>
               <div id="helpBody"></div>
             </div>
+          </div>
+        </section>
+
+        <section class="menu sub" id="m-leaderboard" aria-label="Leaderboard">
+          <div class="box stone-panel">
+            <header>
+              <h2>Leaderboard</h2>
+              <button class="xbtn stone-btn" data-act="back">Back</button>
+            </header>
+            <div class="scroll" id="leaderboardList"></div>
           </div>
         </section>
 
