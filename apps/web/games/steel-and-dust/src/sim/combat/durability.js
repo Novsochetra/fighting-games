@@ -1,7 +1,7 @@
 import { COLORS } from '../../art/colors.js';
 import { WEAPONS } from '../../data/weapons/index.js';
 import { randomBetween } from '../../lib/math.js';
-import { setWeapon } from '../fighters/loadout.js';
+import { holdsOwnWeapon, takeOwnWeapon } from '../fighters/loadout.js';
 import { shake } from '../fx/camera-fx.js';
 import { addFloatText, addRing } from '../fx/effects.js';
 
@@ -28,12 +28,12 @@ function shatterWeapon(game, player, weapon) {
   });
   game.io.sfx('shatter');
   shake(game, 2, 8);
-  setWeapon(game, player, 'fists');
+  takeOwnWeapon(game, player);
   game.weaponPopup = 40;
 }
 
 export function useDurability(game, player) {
-  if (player.weapon.id === 'fists') {
+  if (holdsOwnWeapon(player)) {
     return;
   }
   player.weapon.durability--;

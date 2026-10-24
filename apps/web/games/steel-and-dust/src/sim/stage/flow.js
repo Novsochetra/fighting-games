@@ -2,7 +2,7 @@ import { COLORS } from '../../art/colors.js';
 import { HERO_THEMES } from '../../art/hero-themes.js';
 import { heroById } from '../../data/heroes.js';
 import { WEAPON_IDS, WEAPONS } from '../../data/weapons/index.js';
-import { setWeapon } from '../fighters/loadout.js';
+import { holdsOwnWeapon, setWeapon, takeOwnWeapon } from '../fighters/loadout.js';
 import { floorUnder, placeOnGround } from '../fighters/terrain-motion.js';
 import { releaseToken } from '../fighters/tokens.js';
 import { shake } from '../fx/camera-fx.js';
@@ -27,7 +27,9 @@ function announceMission(game) {
   game.io.sfx('reveal');
 }
 
+// the road is set up before the hero is picked, so the hero takes up its own weapon only now
 export function startPlay(game) {
+  takeOwnWeapon(game, game.player);
   game.mode = 'play';
   game.hint = null;
   announceMission(game);
@@ -108,7 +110,8 @@ export function continueRun(game) {
   addSparks(game, { x: player.x, y: player.y - 20, count: 20, color: COLORS.butter, speed: 3.5 });
 }
 
-// a fallen hero may come back as another Shade: the run, the weapon in hand and the ULT bar stay
+// a fallen hero may come back as another Shade: the run, a weapon picked up and the ULT bar stay,
+// and a hero who held only their own weapon comes back with the new one's
 export function continueAs(game, heroId) {
   if (!hasLivesLeft(game)) {
     return;
@@ -116,8 +119,11 @@ export function continueAs(game, heroId) {
   const hero = heroById(heroId);
   game.settings.hero = hero.id;
   game.io.saveSettings(game.settings);
-  continueRun(game);
   const { player } = game;
+  if (holdsOwnWeapon(player)) {
+    takeOwnWeapon(game, player);
+  }
+  continueRun(game);
   addFloatText(game, {
     x: player.x,
     y: player.y - 52,

@@ -10,7 +10,7 @@ const originalRandom = Math.random;
 function fightOneRaider(hero, weapon = 'fists') {
   const game = createPlayingGame({ settings: { hero } });
   runTicks(game, 30);
-  if (weapon !== 'fists') {
+  if (game.player.weapon.id !== weapon) {
     equipWeapon(game, weapon);
   }
   spawnEnemy(game, 'grunt', 1);

@@ -2,6 +2,7 @@ import { difficultyOf } from '../data/difficulty.js';
 import { START_LIVES } from '../data/player.js';
 import { missionAt } from '../data/missions/index.js';
 import { createFighter } from './fighters/create-fighter.js';
+import { takeOwnWeapon } from './fighters/loadout.js';
 import { createCrates } from './items/crates.js';
 import { refreshPose } from './pose/refresh-pose.js';
 import { attachScarf } from './pose/scarf.js';
@@ -77,5 +78,6 @@ export function resetRun(game, missionIndex = 0) {
   resetWorld(game, player, missionIndex);
   resetCamera(game.camera);
   resetScore(game);
+  takeOwnWeapon(game, player);
   refreshPose(player);
 }

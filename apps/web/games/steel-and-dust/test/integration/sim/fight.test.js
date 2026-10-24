@@ -100,19 +100,19 @@ describe('a fight, with every system running', () => {
     expect(enemies(game)).toHaveLength(0);
   });
 
-  it('sweeps a crate open and eats the ration inside for 10 HP, keeping the fists', () => {
+  it('sweeps a crate open and eats the ration inside for 10 HP, keeping the sword', () => {
     const game = createPlayingGame();
     game.player.hp = 50;
     sweepFirstCrateOpen(game);
     expect(game.player.hp).toBe(60);
-    expect(game.player.weapon.id).toBe('fists');
+    expect(game.player.weapon.id).toBe('sword');
   });
 
   it('still hands over the weapon a crate holds', () => {
     const game = createPlayingGame();
-    game.crates[0].item = 'sword';
+    game.crates[0].item = 'spear';
     sweepFirstCrateOpen(game);
-    expect(game.player.weapon).toEqual({ id: 'sword', durability: 40 });
+    expect(game.player.weapon).toEqual({ id: 'spear', durability: 40 });
   });
 
   it('hits every raider on screen with the ultimate', () => {

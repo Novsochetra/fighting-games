@@ -266,6 +266,11 @@ pixels of every frame the way the Ember Shade's frames burn. The two Khmer fight
 play loops drawn for them, `card_pose.png` and `card_idle.png`, cut from their sheets and lit by
 `tools/hero_cards/`.
 
+Every hero sets out with their own weapon (`weapon` in `src/data/heroes.js`: the Shades' sword, the
+Khmer fighters' fists), which never breaks (`takeOwnWeapon` in `src/sim/fighters/loadout.js`, given
+by `resetRun` and again by `startPlay`, since the road is set up before the hero is picked); a weapon
+picked up breaks after its hits and leaves the hero their own again.
+
 Each Shade fights in its own style and has its own ultimate:
 
 - `src/data/styles/` turns every weapon's moves into a Shade's moves once, at load
