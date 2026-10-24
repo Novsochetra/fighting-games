@@ -9,7 +9,8 @@ export function parseDuration(value) {
   return match[2] === 's' ? amount * 1000 : amount;
 }
 
-// The launch reads its timing from tokens.css like the CSS does; without the tokens it does not animate.
+// The launch reads its timing from the home page's tokens like the CSS does; without them it does not
+// animate.
 export function readLaunchTiming(document) {
   const style = document.defaultView.getComputedStyle(document.documentElement);
   return {

@@ -10,22 +10,29 @@ apps/
     test/{unit,integration}
   web/                    everything the browser loads
     index.html            home page: a launcher with an icon per game
-    src/
-      design/tokens.css   every UI color, font, size, radius, shadow and motion value
-      home/               home page modules
+    src/home/             home page modules and styles; tokens.css holds its colors, type and motion
     games/
-      <game-id>/
+      <game-id>/          one self-contained app: it loads nothing from outside its folder
         game.json         catalog entry, read by the server
         index.html        the game page
         assets/           sprites, icons, manifest
-        styles/           the game page CSS (tokens only)
+        styles/           the game page CSS; tokens.css holds the game's own design tokens
         src/              game modules
         test/{unit,integration,regression,support}
-    test/{unit,integration}  home page tests
+    test/{unit,integration,regression}  home page tests
 scripts/                  thin CLIs (the static site build lives in apps/server/src/static-site/)
 tools/eslint-rules/       the project's own lint rules
 docs/                     this file
 ```
+
+## Independent games
+
+The home page and every game are separate apps that share no file. Each has its own design tokens
+(`src/home/tokens.css`, `games/<id>/styles/tokens.css`), styles and modules, so a game can change its
+look without touching the arcade or another game. The home page knows a game only through its
+`game.json` and its cover; a game links back to the arcade only by address (`../../`).
+`test/integration/independence.test.js` fails if a game loads a file from outside its folder or the
+home page loads a file from a game.
 
 ## Request flow
 
@@ -57,7 +64,7 @@ icon grows into a screen-sized panel in the colors of the icon's background (sam
 corners, `launch-splash.js`), so every game opens into its own colors, and the home zooms away
 behind it. The launcher itself stays neutral graphite, so no one game's palette colors the arcade.
 The keyframes are plain functions of the icon's box and the screen (`launch-geometry.js`), and their
-timing comes from `--duration-launch` and `--easing-launch` in `tokens.css`. When the browser brings
+timing comes from `--duration-launch` and `--easing-launch` in `src/home/tokens.css`. When the browser brings
 the page back from its back/forward cache, the panel shrinks back into the icon. With reduced motion
 the game opens at once.
 

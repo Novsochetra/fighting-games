@@ -27,10 +27,14 @@ themselves. Read `docs/architecture.md` before changing structure.
   `//` comment.
 - No `TODO` / `FIXME` comments (`no-warning-comments`). Put follow-up work in the tracker as a ticket.
 - Put logic in plain functions with unit tests. Components and route handlers stay thin.
-- All UI colors, type, radii, shadows and motion come from `apps/web/src/design/tokens.css`. No raw
-  hex values in components (`local/no-raw-hex`, Stylelint). Colors painted on a game's canvas
-  (sprites, scenery, effects, HUD) are pixel-art data, like the PNGs, and live only in that game's
-  `src/art/` palette files, the one place lint allows hex in JS.
+- Each game is independent: it loads nothing from outside its own folder, and the home page loads
+  nothing from a game (`apps/web/test/integration/independence.test.js` checks both). Never share a
+  file, token or module between the home page and a game, or between games.
+- The home page's UI colors, type, radii, shadows and motion come from `apps/web/src/home/tokens.css`,
+  and each game's from its own `games/<id>/styles/tokens.css`. No raw hex values in components
+  (`local/no-raw-hex`, Stylelint). Colors painted on a game's canvas (sprites, scenery, effects, HUD)
+  are pixel-art data, like the PNGs, and live only in that game's `src/art/` palette files, the one
+  place lint allows hex in JS.
 - Never install packages without asking; concurrent installs corrupt `node_modules`.
 
 ## Code style
@@ -54,5 +58,5 @@ themselves. Read `docs/architecture.md` before changing structure.
 
 ## Layout of a game
 
-`apps/web/games/<id>/` holds `game.json` (the catalog entry), `index.html`, `assets/`, `styles/`,
-`src/` and `test/`. Adding a folder with a valid `game.json` adds the game to the home page.
+`apps/web/games/<id>/` holds `game.json` (the catalog entry), `index.html`, `assets/`, `styles/`
+(with the game's own `tokens.css`), `src/` and `test/`. Adding a folder with a valid `game.json` adds the game to the home page.

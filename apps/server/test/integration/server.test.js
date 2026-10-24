@@ -63,7 +63,7 @@ describe('static files from apps/web', () => {
 
   it.each([
     ['/src/home/main.js', 'text/javascript; charset=utf-8'],
-    ['/src/design/tokens.css', 'text/css; charset=utf-8'],
+    ['/src/home/tokens.css', 'text/css; charset=utf-8'],
     ['/games/steel-and-dust/assets/icons/icon-192.png', 'image/png'],
     [
       '/games/steel-and-dust/assets/manifest.webmanifest',

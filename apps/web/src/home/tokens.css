@@ -1,0 +1,119 @@
+:root {
+  --color-black: #000000;
+  --color-clear: transparent;
+  --color-white: #ffffff;
+
+  --color-apple-blue-dark: #0a84ff;
+  --color-apple-blue-light: #007aff;
+  --color-apple-gray: #8e8e93;
+  --color-apple-gray-2: #636366;
+  --color-apple-gray-5-dark: #2c2c2e;
+  --color-apple-gray-6-dark: #1c1c1e;
+  --color-apple-gray-5-light: #e5e5ea;
+  --color-apple-gray-6-light: #f2f2f7;
+
+  --color-launcher-background: var(--color-black);
+  --color-launcher-surface: var(--color-apple-gray-6-dark);
+  --color-launcher-surface-raised: var(--color-apple-gray-5-dark);
+  --color-launcher-separator: rgb(84 84 88 / 60%);
+  --color-label: var(--color-white);
+  --color-label-muted: rgb(235 235 245 / 60%);
+  --color-tint: var(--color-apple-blue-dark);
+  --color-on-tint: var(--color-white);
+  --color-icon-edge: rgb(255 255 255 / 14%);
+  --color-icon-blank: var(--color-apple-gray-5-dark);
+  --color-icon-monogram-top: var(--color-apple-gray);
+  --color-icon-monogram-bottom: var(--color-apple-gray-2);
+  --color-icon-monogram-letter: var(--color-white);
+  --color-focus-ring: var(--color-tint);
+  --color-splash: var(--color-launcher-background);
+
+  --font-system: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', sans-serif;
+  --font-system-apple: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  --font-size-apple-large-title: 2.125rem;
+  --font-size-apple-body: 1.0625rem;
+  --font-size-apple-subheadline: 0.9375rem;
+  --font-size-apple-footnote: 0.8125rem;
+  --font-size-apple-caption: 0.75rem;
+  --font-size-apple-caption-2: 0.6875rem;
+  --font-size-monogram: 46cqi;
+
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --leading-none: 1;
+  --leading-apple-large-title: 1.206;
+  --leading-apple-body: 1.294;
+  --leading-apple-subheadline: 1.333;
+  --leading-apple-footnote: 1.385;
+  --leading-apple-caption: 1.333;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  --layout-launcher-max-width: 68rem;
+
+  --size-app-icon-xs: 3.25rem;
+  --size-app-icon-sm: 3.75rem;
+  --size-app-icon-md: 4.75rem;
+  --size-app-icon-lg: 5.75rem;
+  --size-spinner: 1.25rem;
+  --size-keycap: 1.375rem;
+  --size-spinner-petal-gap: 44%;
+
+  --border-width-hairline: 0.5px;
+  --border-width-ring: 3px;
+
+  --radius-lg: 6px;
+  --radius-app-icon: 22.4%;
+  --radius-sheet: 1.5rem;
+  --radius-pill: 999px;
+
+  --shadow-app-icon:
+    0 1px 3px color-mix(in srgb, var(--color-black) 30%, transparent),
+    0 10px 22px -8px color-mix(in srgb, var(--color-black) 55%, transparent);
+  --shadow-app-icon-lifted:
+    0 4px 10px color-mix(in srgb, var(--color-black) 35%, transparent),
+    0 24px 40px -10px color-mix(in srgb, var(--color-black) 65%, transparent);
+  --shadow-icon-edge: inset 0 0 0 0.5px var(--color-icon-edge);
+
+  --duration-fast: 120ms;
+  --duration-normal: 200ms;
+  --duration-pulse: 800ms;
+  --duration-launch: 500ms;
+  --duration-enter: 600ms;
+  --duration-loading-delay: 400ms;
+
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --easing-launch: cubic-bezier(0.32, 0.72, 0, 1);
+  --easing-pop: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --easing-step-8: steps(8);
+
+  --layer-launch: 200;
+}
+
+/* Apple's light appearance of the launcher's system colors; the dark one is the default above. */
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-launcher-background: var(--color-white);
+    --color-launcher-surface: var(--color-apple-gray-6-light);
+    --color-launcher-surface-raised: var(--color-white);
+    --color-launcher-separator: rgb(60 60 67 / 29%);
+    --color-label: var(--color-black);
+    --color-label-muted: rgb(60 60 67 / 60%);
+    --color-tint: var(--color-apple-blue-light);
+    --color-icon-edge: rgb(0 0 0 / 10%);
+    --color-icon-blank: var(--color-apple-gray-5-light);
+    --shadow-app-icon: 0 1px 2px rgb(0 0 0 / 8%), 0 8px 16px -8px rgb(0 0 0 / 22%);
+    --shadow-app-icon-lifted: 0 4px 10px rgb(0 0 0 / 12%), 0 18px 32px -12px rgb(0 0 0 / 30%);
+  }
+}
