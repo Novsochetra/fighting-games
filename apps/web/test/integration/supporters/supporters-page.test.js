@@ -86,6 +86,20 @@ describe('the supporters page', () => {
     expect(byId('donate').tagName).toBe('BUTTON');
   });
 
+  it('shows the tier of each supporter beside the name, on the podium and the list', async () => {
+    await bootPage(async () => jsonReply(samplePayload()));
+    expect(texts('.podium .tier-chip')).toEqual(['Diamond', 'Diamond', 'Diamond']);
+    expect(texts('.roll__row .tier-chip')).toEqual([
+      'Diamond',
+      'Diamond',
+      'Diamond',
+      'Diamond',
+      'Silver',
+    ]);
+    const gems = [...document.querySelectorAll('.roll__row .tier-gem')];
+    expect(gems.map((gem) => gem.dataset.tier).at(-1)).toBe('silver');
+  });
+
   it('writes names as text, never as markup', async () => {
     const payload = { supporters: [{ name: '<img src=x onerror=alert(1)>', amount: 1 }] };
     await bootPage(async () => jsonReply(payload));

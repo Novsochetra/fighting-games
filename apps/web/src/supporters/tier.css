@@ -103,6 +103,22 @@
   font-size: var(--font-size-apple-callout);
 }
 
+/* On the list a tier is a small pill beside the name: the gem and the tier's name. */
+.tier-chip {
+  display: inline-flex;
+  flex: none;
+  gap: var(--space-1);
+  align-items: center;
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-1);
+  font-size: var(--font-size-apple-caption);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-none);
+  color: var(--color-label-secondary);
+  white-space: nowrap;
+  background: var(--color-fill-quiet);
+  border-radius: var(--radius-pill);
+}
+
 @keyframes tier-pop {
   from {
     scale: 0.4;

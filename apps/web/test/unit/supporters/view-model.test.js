@@ -54,6 +54,16 @@ describe('supportersPage', () => {
     ]);
   });
 
+  it('names the tier of each gift by its amount', () => {
+    const tiers = page().rows.map(({ amount, tier, tierName }) => [amount, tier, tierName]);
+    expect(tiers).toEqual([
+      [120.5, 'diamond', 'Diamond'],
+      [25, 'diamond', 'Diamond'],
+      [10, 'gold', 'Gold'],
+      [10, 'gold', 'Gold'],
+    ]);
+  });
+
   it('says when there is no one yet', () => {
     const empty = supportersPage({ ...data, supporters: [] }, { order: 'top', locale: 'en-US' });
     expect(empty).toMatchObject({ isEmpty: true, totalLabel: '$0', podium: [], rows: [] });

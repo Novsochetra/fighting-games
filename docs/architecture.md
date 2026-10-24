@@ -235,7 +235,9 @@ sorts by day for Recent; `view-model.js` turns the list into labels (money and d
 whole amounts without cents), and the view only writes them out. The top three stand on a podium with
 gold, silver and bronze, second, first and third from the left, and everyone follows in a grouped list
 under a Top and Recent switch that clicks like the home page's. Each supporter gets a round monogram,
-colored by their name (`paletteOf` in `format.js`); anonymous ones stay gray. With no one on the list
+colored by their name (`paletteOf` in `format.js`); anonymous ones stay gray. Beside each name, on
+the podium and the list, a chip shows the gift's tier: its gem and name (`renderTier`), kept apart
+from the place medals so a Gold gift in second place reads plainly. With no one on the list
 yet the page says so and invites the first.
 
 ## Game: Steel & Dust

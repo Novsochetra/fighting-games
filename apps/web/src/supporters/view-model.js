@@ -1,5 +1,6 @@
 import { formatCount, formatDay, formatMoney, initialsOf, paletteOf } from './format.js';
 import { podiumOf, rankByAmount, sortSupporters, totalOf } from './ranking.js';
+import { tierOf } from './tiers.js';
 
 const MEDALS = ['gold', 'silver', 'bronze'];
 
@@ -13,6 +14,8 @@ export function supportersPage(data, { order, locale }) {
     initials: initialsOf(supporter.name),
     palette: paletteOf(supporter),
     medal: MEDALS[supporter.rank - 1] ?? '',
+    tier: tierOf(supporter.amount).id,
+    tierName: tierOf(supporter.amount).name,
   });
   return {
     order,

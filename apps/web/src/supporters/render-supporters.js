@@ -11,6 +11,10 @@ export function renderAvatar({ initials, palette }, size = '') {
 const renderMessage = (className, message) =>
   message ? `<span class="${className}">${escapeHtml(message)}</span>` : '';
 
+// The tier rides beside the name as a gem and a word, so it never reads as the place medal.
+export const renderTier = ({ tier, tierName }) =>
+  `<span class="tier-chip"><span class="tier-gem tier-gem--small" data-tier="${escapeHtml(tier)}" aria-hidden="true"></span>${escapeHtml(tierName)}</span>`;
+
 const renderDay = ({ date, dateLabel }) =>
   date
     ? `<time class="roll__date" datetime="${escapeHtml(date)}">${escapeHtml(dateLabel)}</time>`
@@ -24,6 +28,7 @@ export function renderPodiumPlace(supporter) {
   </span>
   <span class="podium__name">${escapeHtml(supporter.name)}</span>
   <span class="podium__amount">${escapeHtml(supporter.amountLabel)}</span>
+  ${renderTier(supporter)}
   ${renderMessage('podium__message', supporter.message)}
 </li>`;
 }
@@ -34,7 +39,10 @@ export function renderRow(supporter, order) {
   <span class="roll__rank" aria-hidden="true">${Number(supporter.rank)}</span>
   ${renderAvatar(supporter)}
   <span class="roll__text">
-    <span class="roll__name">${escapeHtml(supporter.name)}</span>
+    <span class="roll__title">
+      <span class="roll__name">${escapeHtml(supporter.name)}</span>
+      ${renderTier(supporter)}
+    </span>
     ${renderMessage('roll__message', supporter.message)}
   </span>
   <span class="roll__end">
