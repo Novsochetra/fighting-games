@@ -33,12 +33,22 @@ function fill(elements, card) {
   elements.play.setAttribute('aria-label', `Play ${card.title}`);
 }
 
+// A modal dialog leaves the page behind it scrollable: a finger on the dimmed backdrop in iOS Safari,
+// or a mouse wheel, scrolled the arcade under the sheet. It holds still while the sheet is up, as
+// under a native sheet.
+function holdPage(dialog, isHeld) {
+  dialog.ownerDocument.documentElement.classList.toggle('has-open-sheet', isHeld);
+}
+
 function showDialog(dialog) {
   if (typeof dialog.showModal === 'function') {
     dialog.showModal();
   } else {
     dialog.setAttribute('open', '');
   }
+  holdPage(dialog, true);
+  // The sheet takes the focus itself; Safari otherwise ringed the close button on a tap.
+  dialog.focus({ preventScroll: true });
 }
 
 function hideDialog(dialog) {
@@ -47,6 +57,7 @@ function hideDialog(dialog) {
   } else {
     dialog.removeAttribute('open');
   }
+  holdPage(dialog, false);
 }
 
 const isOutside = (rect, { clientX, clientY }) =>
@@ -55,6 +66,7 @@ const isOutside = (rect, { clientX, clientY }) =>
 // Escape and a click on the dimmed page close the sheet with its animation, like the close button.
 function wireClosing({ dialog, close: closeButton }, { close, signal }) {
   closeButton.addEventListener('click', close, { signal });
+  dialog.addEventListener('close', () => holdPage(dialog, false), { signal });
   dialog.addEventListener(
     'cancel',
     (event) => {

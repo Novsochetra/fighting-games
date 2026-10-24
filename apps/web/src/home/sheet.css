@@ -1,3 +1,10 @@
+/* The page behind holds still while the sheet is up (details-sheet.js sets the class). */
+:root.has-open-sheet,
+:root.has-open-sheet body {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 /* A form sheet like iPadOS's: centered on wide screens, rising from the bottom edge on phones. */
 .sheet {
   --sheet-enter: 0 var(--space-6);

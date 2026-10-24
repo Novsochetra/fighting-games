@@ -76,7 +76,9 @@ frosted glass ones (`buttons.css`).
   switch are kept in `localStorage` (`preferences.js`); a browser that refuses storage just starts
   fresh. The arcade opens on the game played last.
 - **Details** (`details-sheet.js`, `sheet.css`): a `<dialog>` form sheet with the whole description
-  and the controls, centered on wide screens and rising from the bottom on phones.
+  and the controls, centered on wide screens and rising from the bottom on phones. While it is up
+  the page behind holds still (`has-open-sheet` on the root), since a modal dialog alone lets iOS
+  Safari and a mouse wheel scroll the arcade under it, and the sheet itself takes the focus.
 
 Opening a game plays an app-launch animation before the page changes (`src/home/launcher.js`): the
 card's art grows into a screen-sized panel in the colors of its edges (sampled from its corners,
