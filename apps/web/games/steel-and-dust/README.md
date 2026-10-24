@@ -34,7 +34,7 @@ Saved in the browser: music and sound volume, difficulty (Easy, Normal, Hard), a
 
 ## What's in it
 
-- **4 weapons:** Fists (unbreakable), Sword, Spear, Axe, each drawn in the hero's hands with its own smear colour (gold, green, ice, ember). Weapons drop from crates and break after a set number of hits, with a warning when they start to crack.
+- **4 weapons:** Fists, Sword, Spear, Axe, each drawn in the hero's hands with its own smear colour (gold, green, ice, ember). Every Shade fights with its own sword, and Bokator and the Angkor Warrior with their fists; a hero's own weapon never breaks. A weapon picked up breaks after a set number of hits, with a warning when it starts to crack, and leaves the hero their own again.
 - **Combo chains**, each with the same structure:
   - `J J J J` ground string, and a fifth `J` that rushes after the knocked-back enemy and launches them
   - `J J K` launcher branch

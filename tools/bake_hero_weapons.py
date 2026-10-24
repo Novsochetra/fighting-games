@@ -50,6 +50,9 @@ GILDED=VARIANT in ('bokator','angkor')
 # the Firefly and Blue Shades' blades burn white at the core, edged in cyan or blue
 PALE=VARIANT in ('firefly','blue')
 WHITE_CORE=190
+# the Antler Spirit Shade's blade burns white at the core too, but is found by its teal edge alone, so
+# only where it is taken away does its white core go with it; left behind, it took the fists' gold
+WHITE_CORED=VARIANT=='antler'
 # and their glowing edge reaches this far either side of the blade's line
 PALE_EDGE=3.2
 PALE_TIP=4.5
@@ -523,7 +526,9 @@ ATTACKS={'slash1','slash2','spin_slash','thrust','rising_dragon','cleave','air_s
 # the blade lay along, which nothing beside it can mend), clear = pixels [x,y] taken away there (a
 # speck of the blade's dark edge left at his hand) and tint = boxes recoloured whole with the swing, its
 # dark edges as well as its glow; the
-# Blue Shade's: a blade wider than its found line, a flailing blade whose motion arcs are taken for it, a grip and
+# Blue Shade's: a blade wider than its found line, a flailing blade whose motion arcs are taken for
+# it (as he flinches, the straight blade flung up beside them is cut away too, and the cape, back
+# and shin it lay across are painted back, which its cut would otherwise leave sliced open), a grip and
 # tip found the wrong way round, the glowing pommel hanging under his fist as he raises it (in a
 # 'hide' frame its g/t mark only that stub, so it is erased), and the
 # spin's end, where the blade is found along its own hooked smear, with the Moss Shade's paint and
@@ -839,7 +844,11 @@ OWN_OVERRIDES={
     },
     # his run trails the blade behind him: detection follows its lit edge and the erase takes only its
     # glow and the pixels by open air, so the line runs through its middle and its dark core and edge
-    # are cleared; in the last frame the cloak's flames are big enough to pass for a smear, so kept
+    # are cleared; in the last frame the cloak's flames are big enough to pass for a smear, so kept;
+    # out of the run detection takes his foot (a walk), his cloak's flames (a dash) or a stub of the
+    # blade (getting up) for it; in that walk the blade lies along his shin, which is painted back, and
+    # as he raises it to win its crossguard is left on his fist; in his swings the blade shows beside
+    # the smear, so it is taken away there too ('hide' with its line)
     'ember':{'slash1':{'3':{'g':[65,50],'t':[87,69]}},
              'run':{'0':{'g':[48.5,53],'t':[30,66.5],'clear':[[37,61],[38,60],[39,61],[40,59],[41,58],
                            [42,59],[43,54],[43,55],[43,57],[44,58],[45,55],[46,55],[47,52],[47,54],[47,56],
@@ -864,7 +873,30 @@ OWN_OVERRIDES={
                     '7':{'g':[48.6,49.4],'t':[30.6,62.6],'keep':[[29,39,48,47],[33,48,44,50]],'clear':[
                            [38,57],[39,56],[40,57],[41,55],[42,52],[42,54],[43,51],[43,55],[44,50],[44,53],
                            [45,49],[45,50],[45,54],[45,55],[46,49],[46,52],[47,48],[47,51],[47,53],[48,49],
-                           [48,50],[48,52],[49,50],[49,51],[49,52]]}}},
+                           [48,50],[48,52],[49,50],[49,51],[49,52]]}},
+             'walk':{'2':{'g':[69.5,62.5],'t':[88.5,72],'paint':[[76,60,'#070605'],[76,61,'#070605'],
+                           [76,62,'#3f3d40'],[77,62,'#232225'],[77,63,'#2f2f34'],[78,63,'#232225'],
+                           [74,64,'#070605'],[76,64,'#290704'],[78,64,'#2f2f34'],[70,65,'#070605'],
+                           [71,65,'#070605'],[72,65,'#290704'],[77,65,'#070605'],[69,66,'#070605'],
+                           [70,66,'#070605'],[78,66,'#290704'],[69,67,'#12100f'],[70,67,'#12100f'],
+                           [76,67,'#707077'],[70,68,'#070605'],[79,70,'#070605'],[79,72,'#070605']]}},
+             'dash':{'1':{'g':[67.5,49.5],'t':[49,65.2]}},
+             'getup':{'4':{'g':[78,49],'t':[100.5,59]}},
+             'win':{'3':{'g':[90,28.8],'t':[84.2,1.7],'clear':[[89,29],[90,33],[91,33]]}},
+             'slash2':{'2':{'g':[77,47],'t':[76.5,74],'hide':True}},
+             'spin_slash':{'1':{'g':[49,46.5],'t':[32,57],'hide':True},'2':{'g':[76,27],'t':[86,5],'hide':True},
+                           '4':{'g':[68,55],'t':[90,70.5],'hide':True}},
+             'thrust':{'3':{'g':[91.5,45],'t':[123,45],'hide':True},'4':{'g':[81.5,51.5],'t':[111.5,55.5]}},
+             'rising_dragon':{'3':{'g':[63,16],'t':[37,15.5],'hide':True},
+                              '4':{'g':[59,15],'t':[32,16],'hide':True}},
+             'cleave':{'3':{'g':[75.5,51],'t':[89,67],'hide':True},'4':{'g':[70,47],'t':[91,71.5],'hide':True},
+                       '5':{'g':[67.5,47],'t':[92,72.5],'hide':True,'cut':[[61,58.5,80.5,69.5]]},
+                       '6':{'g':[69,57.5],'t':[91.5,72]}},
+             'air_slash':{'2':{'g':[88,55],'t':[109,56],'hide':True},'3':{'g':[88.5,55],'t':[108,56],'hide':True}},
+             'air_rising_cut':{'1':{'g':[84,31],'t':[99,30],'hide':True},'2':{'g':[57,21.5],'t':[25,22.5],'hide':True},
+                               '3':{'g':[58,28],'t':[24,44.5],'hide':True}},
+             'meteor_slash':{'3':{'g':[76.5,50],'t':[102,73],'hide':True}},
+             'plunge':{'3':{'g':[87,48.5],'t':[101.5,74],'hide':True}}},
     'bokator':{
         'thrust':{'0':{'g':[66,81],'t':[85.5,88]},'1':{'g':[64,75.5],'t':[89,79.5]},
                   '3':{'g':[93,66.1],'t':[121,65.4],'cut':[[117,63,127,61]]},
@@ -1013,8 +1045,62 @@ OWN_OVERRIDES={
                '3':{'g':[72.7,42.6],'t':[85.1,28.1],'keep':[[67,35,72,39]],'clear':[[79,29],[80,29]]}},
     },
     # his run's blade hangs back across his trailing leg: the line the bake finds misses its top
-    # and its erase leaves the white core, so each frame gives the line and paints the leg back
+    # and its erase leaves the white core, so each frame gives the line and paints the leg back;
+    # flinching he draws the blade twice and the hooked tip curls off its line, and the ring of spirit
+    # fire his hit throws off is his own, no swing, so every row keeps it as drawn; where the blade is
+    # flung out of the drawing the ring was taken for it, so the line is a stub before his fist;
+    # landing it bends and lies across his hood and hand, where the glow it leaves would take the
+    # fists' gold, and across his chest, which is painted back under it; in his swings detection
+    # misses the blade or the smear hides it ('hide' with its line), so it took the gold
     'antler':{
+        'slash1':{'1':{'g':[59,51.5],'t':[48,68],'paint':[[58,49,'#083530'],[58,50,'#083530'],
+                       [59,50,'#083530'],[60,51,'#083530'],[59,52,'#123530'],[60,52,'#24352d'],
+                       [61,52,'#31261e'],[62,52,'#1c261e'],[55,53,'#083530'],[56,53,'#083530'],
+                       [57,53,'#083530'],[59,53,'#343931'],[60,53,'#26342a'],[61,53,'#2e3224'],
+                       [54,54,'#083530'],[55,54,'#083027'],[56,54,'#082b1e'],[59,54,'#123027'],
+                       [53,55,'#334834'],[54,55,'#1d352b'],[55,55,'#101a11'],[53,56,'#3a5139'],
+                       [54,56,'#203021'],[52,57,'#3a5139'],[53,57,'#3a5139'],[54,57,'#1d2b1e'],
+                       [52,58,'#3a5139'],[53,58,'#202c1f'],[58,58,'#1d3525'],[51,59,'#3a5139'],
+                       [52,59,'#3a5139'],[51,60,'#3a5139'],[52,60,'#3a5139'],[50,61,'#2c3f2b'],
+                       [51,61,'#2c3f2b'],[50,62,'#2c3f2b'],[51,62,'#2c3f2b'],[49,63,'#1d3525'],
+                       [49,64,'#164237'],[51,64,'#0f5a50'],[48,65,'#122b1e'],[49,65,'#0f2b1e'],
+                       [48,66,'#071912'],[50,69,'#070706']]},
+                  '3':{'g':[53.5,53.5],'t':[36,64.5],'hide':True},
+                  '4':{'g':[52.5,51.5],'t':[36,63],'hide':True}},
+        'slash2':{'2':{'g':[82,38.5],'t':[101,37.5]},'3':{'g':[82,35],'t':[84.5,15],'hide':True},
+                  '4':{'g':[82,35],'t':[84,14.5],'hide':True}},
+        'spin_slash':{'3':{'g':[45,45.5],'t':[30,36]}},
+        'rising_dragon':{'2':{'g':[53.5,29],'t':[36,40],'hide':True},'3':{'g':[58.5,32.5],'t':[40,41],'hide':True},
+                         '4':{'g':[57.5,32],'t':[40,41.5],'hide':True}},
+        'cleave':{'1':{'g':[63,20],'t':[43.5,20]},'2':{'g':[58.5,21],'t':[35.5,26],'hide':True},
+                  '5':{'g':[66,60],'t':[80,75.5],'smear':[[73,55,89,68]]},
+                  '6':{'g':[66,60],'t':[80,75.5],'smear':[[73,55,89,68]]},
+                  '7':{'g':[65.8,59.2],'t':[80.4,74.6],'paint':[[65,61,'#03160f'],[67,63,'#030201'],
+                       [68,64,'#050201'],[69,65,'#050201'],[70,66,'#030201'],[71,67,'#000000']]}},
+        'air_slash':{'3':{'g':[44.5,33.5],'t':[33,24.5],'hide':True}},
+        'air_rising_cut':{'0':{'g':[71,53],'t':[86,61]}},
+        'meteor_slash':{'0':{'g':[67,41.5],'t':[87,38]},'1':{'g':[67,41.5],'t':[87,38]}},
+        'hurt':{'0':{'g':[79.6,37.6],'t':[84.6,20.9],'clear':[[87,24],[87,25],[88,25]]},
+                '1':{'g':[80,38],'t':[86,32],'grip':[76,41],'aim':[92.4,29.5],'len':18,'keep':[[35,21,53,38]]},
+                '2':{'g':[69.8,47.8],'t':[81.2,51.2],'cut':[[71,41.5,80.5,36.5]],'keep':[[36,24,55,44]]}},
+        'land':{'1':{'g':[67,55.9],'t':[87,54.3],'clear':[[69,54],[70,54],[71,54]],
+                     'paint':[[68,54,'#030403'],[67,56,'#111710'],[69,58,'#1d2b1e']]},
+                '2':{'g':[62.5,56],'t':[78.5,49.5],'cut':[[78.5,49.5,84.5,40]],
+                     'clear':[[77,48],[75,49]],
+                     'paint':[[78,46,'#060403'],[76,48,'#0b100b'],[73,50,'#101710'],[68,51,'#070706'],
+                              [62,57,'#050403'],[63,57,'#070706'],
+                              [74,50,'#030403'],[75,50,'#050403'],[76,50,'#0d140e'],[77,50,'#101811'],
+                              [71,51,'#121912'],[72,51,'#101710'],[73,51,'#050504'],[74,51,'#060f0b'],
+                              [75,51,'#050504'],[76,51,'#070706'],[77,51,'#1f2218'],[68,52,'#070706'],
+                              [69,52,'#070706'],[70,52,'#070706'],[71,52,'#0b2117'],[72,52,'#070f0b'],
+                              [73,52,'#050403'],[74,52,'#050201'],[75,52,'#060403'],[66,53,'#181612'],
+                              [67,53,'#070706'],[68,53,'#070706'],[69,53,'#070706'],[70,53,'#070706'],
+                              [71,53,'#072f2b'],[72,53,'#050403'],[64,54,'#070706'],[65,54,'#070706'],
+                              [66,54,'#0b100b'],[67,54,'#0b100b'],[68,54,'#0b100b'],[69,54,'#070706'],
+                              [70,54,'#070706'],[71,54,'#050403'],[62,55,'#070706'],[63,55,'#070706'],
+                              [64,55,'#070706'],[65,55,'#070706'],[66,55,'#0b100b'],[67,55,'#101a11'],
+                              [68,55,'#090f0a'],[62,56,'#050403'],[63,56,'#070706'],[64,56,'#070706'],
+                              [65,56,'#101a11']]}},
         'run':{'0':{'g':[58.2,51.3],'t':[46.4,71],
                     'paint':[[60,52,'#695d48'],[60,53,'#000000'],[56,55,'#000000'],[57,55,'#070706'],
                              [54,56,'#000000'],[55,56,'#211812'],[56,56,'#3f3329'],[57,56,'#85b383'],
@@ -1157,10 +1243,42 @@ OWN_OVERRIDES={
                      [58,66,58,66.5],[55,70,55,70.5]],'paint':[[60,51,'#000000'],[60,52,'#000000'],
                      [61,53,'#000000'],[62,53,'#000000'],[63,53,'#000000'],[65,55,'#000000'],
                      [64,57,'#000000'],[64,58,'#000000']]}},
-        'hurt':{'1':{'g':[54.5,49.5],'t':[44,69.5],'paint':[[47,69,'#000000']],
-                     'clear':[[48,47],[49,47],[50,47],[51,47],[48,48],[49,48],[49,53]]},
+        'hurt':{'1':{'g':[54.5,49.5],'t':[44,69.5],
+                     'paint':[[47,69,'#000000'],[52,50,'#000000'],[53,50,'#000000'],[51,51,'#000000'],[52,51,'#000000'],
+                      [53,51,'#000000'],[54,51,'#000000'],[50,52,'#000000'],[51,52,'#000000'],
+                      [52,52,'#000000'],[53,52,'#000000'],[54,52,'#000000'],[49,53,'#000000'],
+                      [50,53,'#000000'],[51,53,'#000000'],[52,53,'#000000'],[53,53,'#000000'],
+                      [54,53,'#000000'],[49,54,'#000000'],[50,54,'#000000'],[51,54,'#000000'],
+                      [52,54,'#000000'],[53,54,'#000000'],[54,54,'#000000'],[49,55,'#000000'],
+                      [50,55,'#000000'],[51,55,'#000000'],[52,55,'#000000'],[53,55,'#000000'],
+                      [49,56,'#000000'],[50,56,'#000000'],[51,56,'#000000'],[52,56,'#000000'],
+                      [53,56,'#000000'],[49,57,'#000000'],[50,57,'#000000'],[51,57,'#000000'],
+                      [52,57,'#000000'],[53,57,'#000000'],[51,58,'#000000'],[52,58,'#000000']],
+                     'cut':[[51.9,45.1,40.1,28.3],[53.1,44.2,41.3,27.4],[50.7,46,38.9,29.2]],
+                     'clear':[[48,47],[49,47],[50,47],[51,47],[48,48],[49,48]]},
                 '2':{'g':[62.5,50],'t':[62.5,70.5],'tint':[[58,47,59,48]],
-                     'paint':[[57,50,'#000000'],[58,50,'#000000'],[59,50,'#000000'],[60,50,'#000000']]},
+                     'cut':[[59.5,46.7,47.6,29.4],[60.7,45.8,48.8,28.5],[58.2,47.5,46.3,30.2]],
+                     'paint':[[57,50,'#000000'],[58,50,'#000000'],[59,50,'#000000'],[60,50,'#000000'],
+                      [55,36,'#160e12'],[56,36,'#000000'],[55,37,'#160e12'],[56,37,'#000000'],
+                      [57,37,'#000000'],[55,38,'#000000'],[56,38,'#242123'],[57,38,'#000000'],
+                      [55,39,'#000000'],[56,39,'#000000'],[57,39,'#000000'],[58,39,'#000000'],
+                      [55,40,'#000000'],[56,40,'#000000'],[57,40,'#000000'],[58,40,'#000000'],
+                      [59,40,'#000000'],[54,41,'#000000'],[55,41,'#000000'],[56,41,'#000000'],
+                      [57,41,'#000000'],[58,41,'#000000'],[59,41,'#000000'],[54,42,'#000000'],
+                      [55,42,'#000000'],[56,42,'#000000'],[57,42,'#000000'],[58,42,'#2d2f3c'],
+                      [59,42,'#000000'],[60,42,'#000000'],[53,43,'#000000'],[54,43,'#000000'],
+                      [55,43,'#000000'],[56,43,'#000000'],[57,43,'#000000'],[58,43,'#000000'],
+                      [59,43,'#000000'],[60,43,'#000000'],[61,43,'#1d2b53'],[54,44,'#000000'],
+                      [55,44,'#000000'],[56,44,'#160e12'],[57,44,'#000000'],[58,44,'#000000'],
+                      [59,44,'#000000'],[60,44,'#000000'],[61,44,'#131931'],[55,45,'#000000'],
+                      [56,45,'#000000'],[57,45,'#000000'],[58,45,'#000000'],[59,45,'#000000'],
+                      [60,45,'#160e12'],[61,45,'#131931'],[62,45,'#5f574f'],[55,46,'#000000'],
+                      [56,46,'#000000'],[57,46,'#000000'],[58,46,'#000000'],[59,46,'#000000'],
+                      [60,46,'#000000'],[61,46,'#000000'],[62,46,'#000000'],[56,47,'#000000'],
+                      [57,47,'#000000'],[58,47,'#000000'],[59,47,'#000000'],[60,47,'#000000'],
+                      [57,48,'#000000'],[58,48,'#000000'],[59,48,'#000000'],[57,49,'#000000'],
+                      [64,66,'#000000'],[61,67,'#000000'],[61,68,'#000000'],[62,69,'#000000'],
+                      [62,70,'#000000'],[65,72,'#000000'],[62,75,'#000000'],[63,75,'#383436']]},
                 '3':{'g':[70.1,52.4],'t':[84.7,63],'paint':[[70,55,'#000000']]}},
         'down':{'2':{'g':[85.7,64.3],'t':[92.4,50.2],'clear':[[85,64]]},
                 '3':{'g':[80,71.5],'t':[81,59.5],'grip':[80,73.5],'aim':[104,74],'under':[[56,56,79,79]],
@@ -1348,10 +1466,31 @@ def fill_poly(L,pts,c):
                 j=i
             if inside: put(L,x,y,c)
 
+# the Ember Shade's blade is five or six pixels wide and its line is found along its lit edge, so the
+# erase took that edge and left its dark core and far edge in his hand: what is left beside the line
+# and its hilt, too thin to be his body and joined to what was taken, goes as well, and so does a
+# hilt left hanging in the air where the blade flies loose of his hand as he falls
+EMBER_REACH=6
+EMBER_HILT=4
+EMBER_LOOSE_HILT=10
+LOOSE_MOST=64
+def unlit_rest(A,kill,near,hilt):
+    body=nd.binary_opening(A&~kill,structure=np.ones((3,3)),iterations=2)
+    rest=A&~kill&near&~body
+    lab,n=nd.label(rest|kill,structure=np.ones((3,3)))
+    joined=np.unique(lab[kill]); joined=joined[joined>0]
+    gone=rest&np.isin(lab,joined)
+    lab,n=nd.label(A&~kill&~gone,structure=np.ones((3,3)))
+    sizes=np.bincount(lab.ravel(),minlength=n+1); sizes[0]=0
+    loose=(sizes<=LOOSE_MOST)&(np.arange(n+1)!=sizes.argmax()); loose[0]=False
+    near_hilt=np.isin(np.arange(n+1),np.unique(lab[hilt]))
+    return gone|(loose&near_hilt)[lab]
+
 def erase_blade(fr,g,t):
     out=fr.copy(); A,Gp,F=masks(fr)
     gg,r=glow_and_base(fr)
     greenish=(gg-r>=30)&(gg>=60)
+    if WHITE_CORED: greenish|=fr[...,:3].min(-1)>=WHITE_CORE
     tr=nd.uniform_filter((~A).astype(float),size=5,mode='constant',cval=1.0)
     g=np.array(g,float);t=np.array(t,float);u=(t-g)/max(1e-6,np.linalg.norm(t-g));L=np.linalg.norm(t-g)
     ys,xs=np.mgrid[0:FH,0:FW]
@@ -1359,6 +1498,9 @@ def erase_blade(fr,g,t):
     seg=(along>=-0.5)&(along<=L+(PALE_TIP if PALE else 2.5))
     edge=PALE_EDGE if PALE else MOSS_EDGE if MOSS else None
     kill=seg&A&(((perp<=(edge or 1.5))&greenish)|((perp<=(edge or 2.3))&(tr>=0.3)))
+    if WARM:
+        reach=(along<=L+2.5)&(perp<=EMBER_REACH)
+        kill|=unlit_rest(A,kill,reach&(along>=-EMBER_HILT),reach&(along>=-EMBER_LOOSE_HILT))
     if GILDED:
         kill|=gilded_rails(fr,A,Gp,tr,seg&(along>=2)&(perp<=3.4))
         kill|=gilded_shaft(A,g,u,along,perp,L)
@@ -1379,7 +1521,10 @@ def erase_blade(fr,g,t):
                 if 0<=x<FW and 0<=y<FH and Gp[y,x] and abs(-(x-g[0])*u[1]+(y-g[1])*u[0])<=1.3:
                     hit=True
                     nb=[fr[yy,xx] for yy in range(y-2,y+3) for xx in range(x-2,x+3)
-                        if 0<=xx<FW and 0<=yy<FH and fr[yy,xx,3]>0 and not Gp[yy,xx] and not greenish[yy,xx]]
+                        if 0<=xx<FW and 0<=yy<FH and fr[yy,xx,3]>0 and not Gp[yy,xx] and not greenish[yy,xx]
+                        and (out[yy,xx,3]>0 or not WARM)]
+                    # with nothing of the Ember Shade's body left round it his hilt lay out in the air, so it goes
+                    if WARM and not nb: out[y,x]=0; continue
                     out[y,x]=(np.median(np.array(nb),0).astype(np.uint8) if nb else np.array([28,28,28,255],np.uint8))
                     out[y,x,3]=255
         if hit: grip=p.copy();miss=0
@@ -1466,9 +1611,9 @@ def draw_spear(G,u,L):
     if n[1]<0: n=-n                      # n points "down"
     # a spear that would run out of its frame is held shorter, so its head still shows
     while L>4 and not (2<=(G+u*(L+9))[0]<=FW-3 and 2<=(G+u*(L+9))[1]<=FH-3): L-=1
-    # and the Moss, Firefly and Blue Shades' butt ends short of the frame's edge, never cut off by it
+    # and a Shade's butt ends short of the frame's edge, never cut off by it
     butt=11
-    while BRIDGED and butt>2 and not (2<=(G-u*butt)[0]<=FW-3 and 2<=(G-u*butt)[1]<=FH-3): butt-=1
+    while not GILDED and butt>2 and not (2<=(G-u*butt)[0]<=FW-3 and 2<=(G-u*butt)[1]<=FH-3): butt-=1
     a=G-u*butt; tip=G+u*(L+9)
     hb=tip-u*7                           # head base
     line(Ly,a,hb,WOOD); line(Ly,a+n*0.9,hb+n*0.9,WOODD); line(Ly,a-n*0.6,hb-n*0.6,WOODH)

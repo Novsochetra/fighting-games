@@ -60,7 +60,9 @@ function playRun() {
   Math.random = seededRandom(31);
   const game = useTerrain(createScenarioGame('moss', MISSION), raggedTerrain(MISSIONS[MISSION]));
   const driver = createGameDriver(game);
-  const bot = createBot(driver, { 900: ['fill'], 2400: ['fill'], 3900: ['fill'] });
+  // the hero takes up his fists (w1, a training key): the raiders live long enough under them to
+  // hop and drop more than once, which a sword cuts short
+  const bot = createBot(driver, { 0: ['w1'], 900: ['fill'], 2400: ['fill'], 3900: ['fill'] });
   const run = { belowGround: [], changes: new Map(), hops: 0, perchedTicks: 0 };
   const before = new Map();
   driver.act('play');

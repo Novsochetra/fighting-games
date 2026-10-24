@@ -29,12 +29,14 @@ describe("the Shades' packed strips", () => {
     }
   });
 
-  // a strip changed or baked again without running tools/pack_hero_strips.py fails here
-  it('hold every frame of the grid strips pixel for pixel, with only empty space cut away', () => {
-    for (const hero of HEROES) {
+  // a strip changed or baked again without running tools/pack_hero_strips.py fails here; a hero
+  // at a time, as every strip in one test took most of its time limit
+  it.each(HEROES.map((hero) => [hero.id, hero]))(
+    "hold every frame of %s's grid strips pixel for pixel, with only empty space cut away",
+    (_, hero) => {
       for (const name of stripsOf(hero)) {
-        expect(stripMismatches(hero, name), `${hero.id} ${name}`).toEqual([]);
+        expect(stripMismatches(hero, name), name).toEqual([]);
       }
-    }
-  });
+    },
+  );
 });

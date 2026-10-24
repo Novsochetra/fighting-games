@@ -1,5 +1,6 @@
 import { HINTS } from '../data/hints.js';
 import { ultReady } from './combat/ult-bar.js';
+import { holdsOwnWeapon } from './fighters/loadout.js';
 
 const MIN_SHOWN = 150;
 const SHOWN_FOR = 240;
@@ -23,7 +24,7 @@ function dueHints(game) {
   return [
     ['move', playTime > 30],
     ['crate', playTime > 300 && !arena && zone === 0],
-    ['weapon', game.player.weapon.id !== 'fists'],
+    ['weapon', !holdsOwnWeapon(game.player)],
     ['ult', ultReady(game)],
     ['launch', arena && stage.waveIndex >= 1 && zone === 0],
     ['dash', arena && zone === 1],

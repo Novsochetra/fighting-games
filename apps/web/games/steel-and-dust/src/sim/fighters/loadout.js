@@ -1,4 +1,5 @@
 import { ENEMY_MOVES } from '../../data/enemies/enemy-moves.js';
+import { heroById } from '../../data/heroes.js';
 import { heroMoves } from '../../data/styles/index.js';
 import { WEAPONS } from '../../data/weapons/index.js';
 
@@ -20,4 +21,15 @@ export function setWeapon(game, fighter, id) {
   if (isPlayer(fighter)) {
     game.durabilityWarned = false;
   }
+}
+
+// the picked hero's own weapon never breaks, so a Shade never loses its sword: only a weapon
+// picked up does
+export function takeOwnWeapon(game, player) {
+  player.weapon = { id: heroById(game.settings.hero).weapon, durability: Infinity };
+  game.durabilityWarned = false;
+}
+
+export function holdsOwnWeapon(player) {
+  return player.weapon.durability === Infinity;
 }
