@@ -10,6 +10,8 @@ apps/
     test/{unit,integration}
   web/                    everything the browser loads
     index.html            home page: a game hub with a card per game
+    sw.js                 service worker, so browsers offer to install the arcade
+    assets/               the arcade's icons and manifest (tools/arcade_icons.py draws the icons)
     src/home/             home page modules and styles; tokens.css holds its colors, type and motion
     games/
       <game-id>/          one self-contained app: it loads nothing from outside its folder
@@ -116,6 +118,20 @@ noise on Play, a pop for the heart, and airy sweeps for the sheet and for coming
 (`sound-synth.js`), so the home page ships no audio files; `sound-player.js` makes the audio context
 on the first cue, which always follows a tap, click or key press as browsers require, and plays
 everything through one master gain and a limiter. The speaker button in the top bar turns them off.
+
+The arcade installs as an app (`assets/manifest.webmanifest`, standalone, its scope the whole arcade
+with every game in it). Its logo is a white joystick on an orange to pink gradient, in front of the
+title in the top bar and on every icon; `tools/arcade_icons.py` draws all sizes, run it again after
+changing the design. An install banner floats at the bottom (`install-banner.js`, `install.css`):
+where the browser hands over its install prompt (`beforeinstallprompt`, Chrome and Edge) it offers
+Install, and on an iPhone or iPad, where Safari installs only from its Share menu, it says where to
+tap. It never shows inside the installed app, and Not now (or turning down the browser's dialog)
+holds it back for two weeks (`install-offer.js`, the time kept by `preferences.js`). While it is up
+on a short screen, the hero's buttons rise above it. Chrome prompts only for a page with a service
+worker that has a fetch handler, so `sw.js` is the smallest one that does: it caches nothing, loads
+pages from the network and answers a failed page load with a short offline page, and its static
+route sends every file under `games/` straight to the network, so a game never waits on it. Only a
+browser with an install prompt registers it (`install-platform.js`).
 
 ## Game: Steel & Dust
 

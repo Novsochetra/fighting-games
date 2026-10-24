@@ -45,6 +45,14 @@ describe('createPreferences', () => {
     expect(storage.read(STORAGE_KEYS.favorites)).toEqual(['a']);
   });
 
+  it('remembers when the install banner was turned down', () => {
+    const storage = createMemoryStorage();
+    expect(createPreferences(storage).installDismissedAt()).toBeNull();
+    createPreferences(storage).dismissInstall(1234);
+    expect(createPreferences(storage).installDismissedAt()).toBe(1234);
+    expect(storage.read(STORAGE_KEYS.installDismissedAt)).toBe(1234);
+  });
+
   it('ignores stored values of the wrong shape', () => {
     const storage = createMemoryStorage();
     storage.write(STORAGE_KEYS.favorites, 'a');

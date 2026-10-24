@@ -1,0 +1,127 @@
+/* A floating card like Safari's app banner: the arcade's icon, a line on how to install it, and
+   Install or, on iOS, where to tap in the Share menu. It rises in once the hero has settled. */
+.install {
+  position: fixed;
+  inset-inline: max(var(--space-3), env(safe-area-inset-left))
+    max(var(--space-3), env(safe-area-inset-right));
+  inset-block-end: max(var(--space-3), env(safe-area-inset-bottom));
+  z-index: var(--layer-install);
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  max-inline-size: var(--size-install);
+  margin-inline: auto;
+  padding: var(--space-3);
+  color: var(--color-label);
+  background: var(--color-material);
+  border-radius: var(--radius-banner);
+  box-shadow: var(--shadow-banner);
+  -webkit-backdrop-filter: var(--blur-glass);
+  backdrop-filter: var(--blur-glass);
+  animation: install-rise var(--duration-sheet) var(--easing-spring) var(--duration-install-delay)
+    both;
+}
+
+.install__icon {
+  flex: none;
+  inline-size: var(--size-install-icon);
+  block-size: var(--size-install-icon);
+}
+
+.install__text {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.install__title,
+.install__hint {
+  margin: 0;
+}
+
+.install__title {
+  font-size: var(--font-size-apple-subheadline);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-apple-subheadline);
+}
+
+.install__hint {
+  font-size: var(--font-size-apple-footnote);
+  line-height: var(--leading-apple-footnote);
+  color: var(--color-label-tertiary);
+}
+
+.install__share {
+  display: inline;
+  inline-size: var(--size-icon-inline);
+  block-size: var(--size-icon-inline);
+  color: var(--color-tint);
+  vertical-align: text-bottom;
+}
+
+.install[data-offer='prompt'] .install__hint--ios,
+.install[data-offer='ios'] .install__hint--prompt,
+.install[data-offer='ios'] .install__add {
+  display: none;
+}
+
+.install__add {
+  flex: none;
+  block-size: var(--size-install-button);
+  padding-inline: var(--space-4);
+  font-size: var(--font-size-apple-subheadline);
+}
+
+.install__close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--size-install-close);
+  block-size: var(--size-install-close);
+  padding: 0;
+  color: var(--color-label-tertiary);
+  cursor: pointer;
+  background: var(--color-fill-quiet);
+  border: 0;
+  border-radius: var(--radius-pill);
+}
+
+.install__close .icon {
+  inline-size: var(--size-icon-small);
+  block-size: var(--size-icon-small);
+}
+
+.install__close:focus-visible {
+  outline: var(--border-width-ring) solid var(--color-focus-ring);
+  outline-offset: var(--border-width-ring);
+}
+
+/* The banner floats over the bottom of the screen, which on a short screen is where the hero keeps
+   Play, so the hero's buttons rise above it while it is up. */
+.spotlight {
+  transition: padding-block-end var(--duration-sheet) var(--easing-spring);
+}
+
+@media (max-height: 58rem) {
+  :root.has-install-banner .spotlight {
+    padding-block-end: calc(
+      max(var(--space-3), env(safe-area-inset-bottom)) + var(--size-install-clearance)
+    );
+  }
+}
+
+@keyframes install-rise {
+  from {
+    opacity: 0;
+    translate: 0 var(--offset-banner);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .install {
+    animation: none;
+  }
+
+  .spotlight {
+    transition: none;
+  }
+}
