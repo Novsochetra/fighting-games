@@ -51,6 +51,10 @@
 }
 
 .donate__amount {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
   block-size: var(--size-field);
   font: inherit;
   font-size: var(--font-size-apple-body);
@@ -114,6 +118,38 @@
   flex-wrap: wrap;
   gap: var(--space-3);
   margin-block-start: var(--space-2);
+}
+
+/* I sent it counts down while the supporter pays (pay-wait.js). */
+.donate__sent {
+  font-variant-numeric: tabular-nums;
+}
+
+.donate__sent.is-waiting {
+  cursor: default;
+  opacity: 0.45;
+}
+
+/* The paper falls without catching a tap: over the whole screen once confetti-view.js raises it
+   into the top layer, or over the sheet in a browser without popovers. */
+.donate__confetti {
+  position: absolute;
+  inset: 0;
+  z-index: var(--layer-arrows);
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
+}
+
+.donate__confetti:popover-open {
+  position: fixed;
+  max-inline-size: none;
+  max-block-size: none;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  background: none;
+  border: 0;
 }
 
 /* The sheet is the color of the surface button, which would vanish into it. */

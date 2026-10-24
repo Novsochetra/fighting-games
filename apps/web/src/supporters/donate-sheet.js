@@ -1,30 +1,13 @@
 import { createSheet } from '../home/sheet.js';
+import { playConfetti } from './confetti-view.js';
 import { postDonation } from './donate-client.js';
-import { readDonationForm } from './donate-form.js';
+import { findDonateElements, showTier } from './donate-elements.js';
+import { readAmount, readDonationForm } from './donate-form.js';
 import { formatMoney } from './format.js';
+import { createPayWait } from './pay-wait.js';
+import { presentTier } from './tiers.js';
 
 export const DONATE_CURRENCY = 'USD';
-
-function findElements(document) {
-  const byId = (id) => document.getElementById(id);
-  return {
-    dialog: byId('donate-sheet'),
-    close: byId('donate-close'),
-    form: byId('donate-form'),
-    amounts: byId('donate-amounts'),
-    amount: byId('donate-amount'),
-    name: byId('donate-name'),
-    message: byId('donate-message'),
-    formError: byId('donate-form-error'),
-    payTitle: byId('donate-pay-title'),
-    payAmount: byId('donate-pay-amount'),
-    sent: byId('donate-sent'),
-    back: byId('donate-back'),
-    payError: byId('donate-pay-error'),
-    thanksTitle: byId('donate-thanks-title'),
-    done: byId('donate-done'),
-  };
-}
 
 function showStep(dialog, step) {
   dialog.dataset.step = step;
@@ -39,11 +22,16 @@ function showError(element, message) {
   element.hidden = message === '';
 }
 
-function markQuickAmount({ amounts, amount }) {
-  for (const button of amounts.querySelectorAll('[data-amount]')) {
-    const isPicked = amount.value !== '' && Number(button.dataset.amount) === Number(amount.value);
+const tierFor = (amount, locale) => presentTier(amount, { currency: DONATE_CURRENCY, locale });
+
+// The quick amount that matches the field lights up, and the tier follows the amount as it is typed.
+function refreshAmount({ elements, locale }) {
+  const amount = readAmount(elements.amount.value);
+  for (const button of elements.amounts.querySelectorAll('[data-amount]')) {
+    const isPicked = amount !== null && Number(button.dataset.amount) === amount;
     button.setAttribute('aria-pressed', String(isPicked));
   }
+  showTier(elements.tier, amount === null ? null : tierFor(amount, locale));
 }
 
 function presentPay(elements, donation, locale) {
@@ -55,84 +43,95 @@ function presentPay(elements, donation, locale) {
 
 const thanksFor = (supporter) => (supporter.name ? `Thank you, ${supporter.name}!` : 'Thank you!');
 
-function wireAmounts({ elements, sound, listen }) {
+function celebrate(steps, supporter) {
+  const { elements, locale, sound, document } = steps;
+  elements.thanksTitle.textContent = thanksFor(supporter);
+  showTier(elements.thanksTier, tierFor(supporter.amount, locale));
+  showStep(elements.dialog, 'thanks');
+  sound.play('cheer');
+  steps.stopConfetti();
+  const heart = elements.thanks.querySelector('.heart-badge');
+  steps.stopConfetti = playConfetti({ document, canvas: elements.confetti, from: heart });
+}
+
+function toPay(steps, event) {
+  event.preventDefault();
+  const { elements } = steps;
+  const { donation, field, error } = readDonationForm({
+    name: elements.name.value,
+    amount: elements.amount.value,
+    message: elements.message.value,
+  });
+  showError(elements.formError, error ?? '');
+  if (error) {
+    elements[field].focus();
+    return;
+  }
+  steps.donation = donation;
+  presentPay(elements, donation, steps.locale);
+  showStep(elements.dialog, 'pay');
+  steps.wait.start();
+}
+
+async function send(steps) {
+  const { elements } = steps;
+  if (steps.sending || steps.wait.isWaiting()) {
+    return;
+  }
+  steps.sending = true;
+  elements.sent.disabled = true;
+  try {
+    const supporter = await postDonation(steps.fetch, steps.donation);
+    elements.form.reset();
+    refreshAmount(steps);
+    celebrate(steps, supporter);
+    steps.onGiven(supporter);
+  } catch (error) {
+    showError(elements.payError, error.message);
+  } finally {
+    steps.sending = false;
+    elements.sent.disabled = false;
+  }
+}
+
+function backToForm(steps) {
+  steps.wait.stop();
+  steps.stopConfetti();
+  showStep(steps.elements.dialog, 'form');
+}
+
+function wire(steps, { listen, sheet }) {
+  const { elements, sound } = steps;
   listen(elements.amounts, 'click', (event) => {
     const button = event.target.closest('[data-amount]');
     if (button) {
       elements.amount.value = button.dataset.amount;
-      markQuickAmount(elements);
+      refreshAmount(steps);
       sound.play('switch');
     }
   });
-  listen(elements.amount, 'input', () => markQuickAmount(elements));
-}
-
-function createSteps({ elements, fetch, locale, onGiven }) {
-  const state = { donation: null, sending: false };
-
-  function toPay(event) {
-    event.preventDefault();
-    const { donation, field, error } = readDonationForm({
-      name: elements.name.value,
-      amount: elements.amount.value,
-      message: elements.message.value,
-    });
-    showError(elements.formError, error ?? '');
-    if (error) {
-      elements[field].focus();
-      return;
-    }
-    state.donation = donation;
-    presentPay(elements, donation, locale);
-    showStep(elements.dialog, 'pay');
-  }
-
-  async function send() {
-    if (state.sending) {
-      return;
-    }
-    state.sending = true;
-    elements.sent.disabled = true;
-    try {
-      const supporter = await postDonation(fetch, state.donation);
-      elements.thanksTitle.textContent = thanksFor(supporter);
-      elements.form.reset();
-      markQuickAmount(elements);
-      showStep(elements.dialog, 'thanks');
-      onGiven(supporter);
-    } catch (error) {
-      showError(elements.payError, error.message);
-    } finally {
-      state.sending = false;
-      elements.sent.disabled = false;
-    }
-  }
-
-  return { toPay, send };
+  listen(elements.amount, 'input', () => refreshAmount(steps));
+  listen(elements.form, 'submit', (event) => toPay(steps, event));
+  listen(elements.sent, 'click', () => send(steps));
+  listen(elements.back, 'click', () => backToForm(steps));
+  listen(elements.done, 'click', sheet.close);
 }
 
 export function createDonateSheet({ document, fetch, sound, signal, locale, onGiven }) {
-  const elements = findElements(document);
-  const sheet = createSheet({
-    dialog: elements.dialog,
-    closeButton: elements.close,
-    document,
-    sound,
-    signal,
-  });
+  const elements = findDonateElements(document);
+  const { dialog, close: closeButton } = elements;
+  const sheet = createSheet({ dialog, closeButton, document, sound, signal });
+  const wait = createPayWait({ button: elements.sent });
+  const steps = { elements, document, fetch, sound, locale, onGiven, wait, stopConfetti: () => {} };
   const listen = (target, type, handler) => target.addEventListener(type, handler, { signal });
-  const steps = createSteps({ elements, fetch, locale, onGiven });
+  signal.addEventListener('abort', () => backToForm(steps));
+  wire(steps, { listen, sheet });
 
   function open() {
     showError(elements.formError, '');
-    showStep(elements.dialog, 'form');
+    backToForm(steps);
     sheet.open();
   }
 
-  wireAmounts({ elements, sound, listen });
-  listen(elements.form, 'submit', steps.toPay);
-  listen(elements.sent, 'click', steps.send);
-  listen(elements.back, 'click', () => showStep(elements.dialog, 'form'));
-  listen(elements.done, 'click', sheet.close);
   return { ...sheet, open, elements };
 }

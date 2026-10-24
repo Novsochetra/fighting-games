@@ -11,6 +11,7 @@ describe('CUES', () => {
     expect(cueNames().sort()).toEqual(
       [
         'appearance',
+        'cheer',
         'favoriteOff',
         'favoriteOn',
         'land',

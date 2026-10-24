@@ -1,0 +1,133 @@
+/* A supporter's tier, from the amount: a cut gem in its metal, then its name. tiers.js sets the tier. */
+.tier-gem {
+  --tier-top: var(--color-tier-bronze-top);
+  --tier-bottom: var(--color-tier-bronze-bottom);
+
+  position: relative;
+  display: inline-block;
+  flex: none;
+  inline-size: var(--size-tier-gem);
+  block-size: var(--size-tier-gem);
+  background: linear-gradient(to bottom, var(--tier-top), var(--tier-bottom));
+  clip-path: polygon(22% 4%, 78% 4%, 100% 34%, 50% 100%, 0 34%);
+}
+
+/* The crown catches the light and the left pavilion falls into shade, so the gem reads as cut. */
+.tier-gem::before,
+.tier-gem::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+}
+
+.tier-gem::before {
+  background: var(--color-tier-facet);
+  clip-path: polygon(22% 4%, 78% 4%, 100% 34%, 0 34%);
+}
+
+.tier-gem::after {
+  background: var(--color-tier-shade);
+  clip-path: polygon(0 34%, 36% 34%, 50% 100%);
+}
+
+.tier-gem[data-tier='silver'] {
+  --tier-top: var(--color-tier-silver-top);
+  --tier-bottom: var(--color-tier-silver-bottom);
+}
+
+.tier-gem[data-tier='gold'] {
+  --tier-top: var(--color-tier-gold-top);
+  --tier-bottom: var(--color-tier-gold-bottom);
+}
+
+/* Diamond, the top tier, has a glint that sweeps across it now and then. */
+.tier-gem[data-tier='diamond'] {
+  --tier-top: var(--color-tier-diamond-top);
+  --tier-bottom: var(--color-tier-diamond-bottom);
+
+  background:
+    linear-gradient(
+      115deg,
+      var(--color-clear) 40%,
+      var(--color-tier-sparkle) 50%,
+      var(--color-clear) 60%
+    ),
+    linear-gradient(to bottom, var(--tier-top), var(--tier-bottom));
+  background-size:
+    300% 100%,
+    100% 100%;
+  animation: tier-glint var(--duration-sheen) var(--easing-gentle) infinite;
+}
+
+.tier-gem--small {
+  inline-size: var(--size-tier-gem-small);
+  block-size: var(--size-tier-gem-small);
+}
+
+.tier-gem--large {
+  inline-size: var(--size-tier-gem-large);
+  block-size: var(--size-tier-gem-large);
+}
+
+.tier-gem.is-popping {
+  animation: tier-pop var(--duration-tile) var(--easing-pop);
+}
+
+.tier-gem[data-tier='diamond'].is-popping {
+  animation:
+    tier-pop var(--duration-tile) var(--easing-pop),
+    tier-glint var(--duration-sheen) var(--easing-gentle) infinite;
+}
+
+.tier {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+  align-items: center;
+  margin: 0;
+  font-size: var(--font-size-apple-footnote);
+  line-height: var(--leading-apple-footnote);
+}
+
+.tier__label {
+  font-weight: var(--font-weight-semibold);
+}
+
+.tier__nudge {
+  color: var(--color-label-muted);
+}
+
+.tier--large {
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--font-size-apple-callout);
+}
+
+@keyframes tier-pop {
+  from {
+    scale: 0.4;
+  }
+}
+
+@keyframes tier-glint {
+  from {
+    background-position:
+      100% 0,
+      0 0;
+  }
+
+  to {
+    background-position:
+      0 0,
+      0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tier-gem,
+  .tier-gem.is-popping,
+  .tier-gem[data-tier='diamond'],
+  .tier-gem[data-tier='diamond'].is-popping {
+    animation: none;
+  }
+}

@@ -1,6 +1,9 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { CUES } from '../../../src/home/sound-cues.js';
 import { SEND_FAILED } from '../../../src/supporters/donate-client.js';
+import { PAY_WAIT_SECONDS } from '../../../src/supporters/pay-wait.js';
+import { createFakeAudioContext } from '../../support/fake-audio.js';
 import {
   bootPage,
   byId,
@@ -25,19 +28,36 @@ const type = (id, value) => {
 const submitForm = () =>
   byId('donate-form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
 
-async function openSheet(api = fakeApi()) {
-  await bootPage(api.fetchFn);
+async function openSheet(api = fakeApi(), options = {}) {
+  await bootPage(api.fetchFn, options);
   click(byId('donate'));
   return api;
 }
 
+const waitOut = (seconds = PAY_WAIT_SECONDS) => vi.advanceTimersByTime(seconds * 1000);
+
+const sendAfterWait = () => {
+  waitOut();
+  click(byId('donate-sent'));
+};
+
+const tierLine = (id) => ({
+  hidden: byId(id).hidden,
+  tier: byId(id).querySelector('.tier-gem').dataset.tier,
+  label: byId(id).querySelector('.tier__label').textContent,
+  nudge: byId(id).querySelector('.tier__nudge')?.textContent,
+});
+
+// Only the countdown's interval is faked: the fetches and the sheet's closing timer stay real.
 beforeEach(async () => {
+  vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
   document.body.innerHTML = '';
   await loadSupportersMarkup();
 });
 
 afterEach(() => {
   stopPages();
+  vi.useRealTimers();
   vi.restoreAllMocks();
 });
 
@@ -85,7 +105,7 @@ describe('the donate sheet', () => {
     type('donate-name', '  Nov   Sochetra ');
     type('donate-message', 'For the next boss');
     submitForm();
-    click(byId('donate-sent'));
+    sendAfterWait();
 
     await vi.waitFor(() => expect(visibleStep()).toEqual(['thanks']));
     expect(api.posts).toEqual([
@@ -107,7 +127,7 @@ describe('the donate sheet', () => {
     await openSheet();
     type('donate-amount', '1');
     submitForm();
-    click(byId('donate-sent'));
+    sendAfterWait();
     await vi.waitFor(() => expect(visibleStep()).toEqual(['thanks']));
     expect(byId('donate-thanks-title').textContent).toBe('Thank you!');
   });
@@ -117,7 +137,7 @@ describe('the donate sheet', () => {
     await openSheet(fakeApi({ postReply: () => jsonReply({ error: message }, 429) }));
     type('donate-amount', '5');
     submitForm();
-    click(byId('donate-sent'));
+    sendAfterWait();
     await vi.waitFor(() => expect(byId('donate-pay-error').hidden).toBe(false));
     expect(byId('donate-pay-error').textContent).toBe(message);
     expect(visibleStep()).toEqual(['pay']);
@@ -134,7 +154,73 @@ describe('the donate sheet', () => {
     );
     type('donate-amount', '5');
     submitForm();
-    click(byId('donate-sent'));
+    sendAfterWait();
     await vi.waitFor(() => expect(byId('donate-pay-error').textContent).toBe(SEND_FAILED));
+  });
+
+  it('holds back I sent it while the supporter pays, counting down', async () => {
+    const api = await openSheet();
+    type('donate-amount', '5');
+    submitForm();
+    expect(byId('donate-sent').disabled).toBe(true);
+    expect(byId('donate-sent').textContent).toBe(`I sent it (${PAY_WAIT_SECONDS})`);
+    click(byId('donate-sent'));
+    expect(api.posts).toEqual([]);
+
+    waitOut(3);
+    expect(byId('donate-sent').textContent).toBe(`I sent it (${PAY_WAIT_SECONDS - 3})`);
+    waitOut(PAY_WAIT_SECONDS - 3);
+    expect(byId('donate-sent').disabled).toBe(false);
+    expect(byId('donate-sent').textContent).toBe('I sent it');
+    expect(byId('donate-sent').classList.contains('is-waiting')).toBe(false);
+  });
+
+  it('starts the wait again when the supporter goes back and returns', async () => {
+    await openSheet();
+    type('donate-amount', '5');
+    submitForm();
+    waitOut();
+    click(byId('donate-back'));
+    submitForm();
+    expect(byId('donate-sent').disabled).toBe(true);
+  });
+
+  it('shows the tier the amount reaches, and how far the next one is', async () => {
+    await openSheet();
+    expect(byId('donate-tier').hidden).toBe(true);
+    type('donate-amount', '3');
+    expect(tierLine('donate-tier')).toEqual({
+      hidden: false,
+      tier: 'bronze',
+      label: 'Bronze supporter',
+      nudge: '$2 more for Silver',
+    });
+    click(document.querySelector('[data-amount="10"]'));
+    expect(tierLine('donate-tier')).toMatchObject({ tier: 'gold', nudge: '$15 more for Diamond' });
+    click(document.querySelector('[data-amount="25"]'));
+    expect(tierLine('donate-tier')).toMatchObject({
+      tier: 'diamond',
+      label: 'Diamond supporter',
+      nudge: 'The top tier',
+    });
+    type('donate-amount', '0.50');
+    expect(byId('donate-tier').hidden).toBe(true);
+  });
+
+  it('cheers and names the tier once the gift is in', async () => {
+    const context = createFakeAudioContext();
+    await openSheet(fakeApi(), { createAudioContext: vi.fn(() => context) });
+    type('donate-amount', '12');
+    submitForm();
+    waitOut();
+    const before = context.started.length;
+    click(byId('donate-sent'));
+    await vi.waitFor(() => expect(visibleStep()).toEqual(['thanks']));
+    expect(tierLine('donate-thanks-tier')).toMatchObject({
+      hidden: false,
+      tier: 'gold',
+      label: 'Gold supporter',
+    });
+    expect(context.started.length - before).toBe(CUES.cheer.length);
   });
 });

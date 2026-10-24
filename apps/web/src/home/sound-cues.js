@@ -24,6 +24,9 @@ const noise = (filter, frequency, { start = 0, duration, gain, attack = 0.01, re
 // A C major arpeggio on the way out, so opening a game always resolves upward.
 const LAUNCH_CHIME = [523.25, 659.25, 783.99, 1046.5];
 
+// A rising G major arpeggio with a sparkle on top, for a gift that went through.
+const CHEER = [392, 493.88, 587.33, 783.99, 987.77];
+
 export const CUES = {
   launch: [
     noise('bandpass', [500, 4200], { duration: 0.5, gain: 0.07, attack: 0.18, resonance: 0.9 }),
@@ -61,6 +64,16 @@ export const CUES = {
   appearance: [
     tone('sine', [1568, 1568], { duration: 0.18, gain: 0.05 }),
     tone('sine', [2093, 2093], { start: 0.03, duration: 0.2, gain: 0.03 }),
+  ],
+  cheer: [
+    ...CHEER.map((pitch, i) =>
+      tone('triangle', [pitch, pitch], {
+        start: i * 0.07,
+        duration: 0.35 + i * 0.05,
+        gain: 0.06,
+      }),
+    ),
+    noise('highpass', [5000, 9000], { start: 0.3, duration: 0.5, gain: 0.03, attack: 0.05 }),
   ],
   soundOn: [
     tone('sine', [660, 660], { duration: 0.12, gain: 0.07 }),

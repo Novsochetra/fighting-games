@@ -196,11 +196,21 @@ three steps (`donate-sheet.js`, `donate.css`, the dialog and its closing animati
 
 1. An amount (four quick ones, or any from $1 to $10,000 in dollars and cents), a name (empty gives
    anonymously) and a message. `donate-form.js` checks them, with the server's limits; a test keeps
-   the two equal.
+   the two equal. As the amount changes, its tier shows under it (`tiers.js`): Bronze from $1,
+   Silver from $5, Gold from $10 and Diamond from $25, one for each quick amount, with how much more
+   reaches the next. A tier is a cut gem drawn in CSS (`tier.css`), in the podium's metals and a
+   diamond blue with a glint; it pops when the tier changes. The server keeps no tier: it follows
+   from the amount.
 2. The KHQR code (`assets/donate/khqr.jpg`, Wing Bank, NOV SOCHETRA) and the amount to send with any
    bank app that scans KHQR. A phone can't scan its own screen, so Save the code downloads it for
-   the bank app's scan-from-photo. No one can see whether money arrived, so I sent it is the gift.
-3. Thanks; the list loads again with the new name.
+   the bank app's scan-from-photo. No one can see whether money arrived, so I sent it is the gift;
+   it counts down for 10 seconds first (`pay-wait.js`), time to open a bank app and pay, so it is
+   not a tap straight through. Back and Continue start the count again.
+3. Thanks, with the gift's tier, a cheer (a rising arpeggio, `cheer` in `sound-cues.js`) and confetti
+   bursting from the heart (`confetti.js` moves the paper, `confetti-view.js` draws it on a canvas
+   for `--duration-confetti`). The canvas is a popover, so while it plays it sits in the top layer
+   over the whole screen, above the sheet; with reduced motion there is none. The list loads again
+   with the new name.
 
 The server reads the gift again (`read-donation.js`): it squeezes spaces, drops control characters,
 counts a name's characters as Postgres does (by code point, as a Khmer name needs), and holds the
