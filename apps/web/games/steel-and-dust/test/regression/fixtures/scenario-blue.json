@@ -9067,71 +9067,71 @@
   {
    "tick": 0,
    "frame": {
-    "calls": 1874,
-    "digest": "87423d00019d497d"
+    "calls": 1351,
+    "digest": "1d42704bcec19b7e"
    }
   },
   {
    "tick": 240,
    "frame": {
-    "calls": 2968,
-    "digest": "8f5bda7f784d1fb3"
+    "calls": 1558,
+    "digest": "f9296ce1142f28d9"
    }
   },
   {
    "tick": 480,
    "frame": {
-    "calls": 2842,
-    "digest": "6fee62e489f0afc3"
+    "calls": 1762,
+    "digest": "6b727ded7bd6a632"
    }
   },
   {
    "tick": 720,
    "frame": {
-    "calls": 3298,
-    "digest": "51e0fe209ad0f0cb"
+    "calls": 1618,
+    "digest": "8e13ba3f319643a5"
    }
   },
   {
    "tick": 960,
    "frame": {
-    "calls": 3337,
-    "digest": "3515c55f6e6d6227"
+    "calls": 1623,
+    "digest": "2ec8a4e242d12018"
    }
   },
   {
    "tick": 1200,
    "frame": {
-    "calls": 3551,
-    "digest": "ebe25e1ebbdae63d"
+    "calls": 1643,
+    "digest": "317a709371879839"
    }
   },
   {
    "tick": 1440,
    "frame": {
-    "calls": 3047,
-    "digest": "0e4aa9f9aab65879"
+    "calls": 1499,
+    "digest": "04e3624c6e1a4445"
    }
   },
   {
    "tick": 1680,
    "frame": {
-    "calls": 2740,
-    "digest": "885bd037c7c8458e"
+    "calls": 1584,
+    "digest": "95ae5f189849a053"
    }
   },
   {
    "tick": 1920,
    "frame": {
-    "calls": 3293,
-    "digest": "ee90857b14411c11"
+    "calls": 1609,
+    "digest": "f020f6b5d250ec4a"
    }
   },
   {
    "tick": 2160,
    "frame": {
-    "calls": 2669,
-    "digest": "cd127486154eaf98"
+    "calls": 1503,
+    "digest": "853bb1fe3fe7bb5a"
    }
   }
  ]

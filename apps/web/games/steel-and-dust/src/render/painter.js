@@ -1,7 +1,10 @@
+import { createStamps } from './stamps.js';
+
 // pixel-art drawing on a 2D context; `use(color)` picks the color for the next shape
-export function createPainter(context) {
+export function createPainter(context, createCanvas) {
   const painter = {
     context,
+    stamps: createCanvas ? createStamps(createCanvas) : null,
     color: null,
     use(color) {
       painter.color = color;

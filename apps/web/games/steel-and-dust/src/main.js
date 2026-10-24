@@ -56,6 +56,12 @@ function runTicks(count) {
   audio.setTickOffset(0);
 }
 
+// the menus' painting is opaque, so the game screen under it is not drawn at all; drawing it there
+// kept the phone's GPU busy for nothing on the title and the hero select
+function screenCovered() {
+  return elements.menus.dataset.scene === 'on';
+}
+
 // nothing moves behind the loading screen; the clock still keeps time there, so play does not
 // rush to catch up once the road and the Shade are in
 function frame(now) {
@@ -63,8 +69,11 @@ function frame(now) {
   if (sceneLoaded(view, game)) {
     runTicks(due);
   }
-  renderFrame(game, view);
+  // the menus follow this frame's ticks first, so the frame play starts on is drawn
   syncDom();
+  if (!screenCovered()) {
+    renderFrame(game, view);
+  }
   bootLoading.loader.update(now, missionWait(view, game));
   titleScene.frame(now);
   requestAnimationFrame(frame);

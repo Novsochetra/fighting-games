@@ -1,4 +1,5 @@
 import { COLORS } from '../../art/colors.js';
+import { drawStamped } from '../stamps.js';
 import { GLYPHS } from './glyphs.js';
 
 export function textWidth(text, scale) {
@@ -24,6 +25,18 @@ function drawGlyphs(context, { text, x, y, color, scale }) {
   }
 }
 
+// the shadow and the letters stay two stamps, so a faded string blends exactly as two passes did
+function drawRun(painter, { text, x, y, color, scale }) {
+  drawStamped(painter, {
+    key: `text|${scale}|${color}|${text}`,
+    x,
+    y,
+    width: textWidth(text, scale),
+    height: 5 * scale,
+    draw: (context, left, top) => drawGlyphs(context, { text, x: left, y: top, color, scale }),
+  });
+}
+
 function alignedX(x, width, align) {
   if (align === 'center') {
     return x - Math.floor(width / 2);
@@ -37,7 +50,7 @@ export function drawText(painter, value, { x, y, color, scale = 1, align, shadow
   const left = Math.round(alignedX(x, textWidth(text, scale), align));
   const top = Math.round(y);
   if (shadow !== null) {
-    drawGlyphs(painter.context, {
+    drawRun(painter, {
       text,
       x: left + scale,
       y: top + scale,
@@ -45,5 +58,5 @@ export function drawText(painter, value, { x, y, color, scale = 1, align, shadow
       scale,
     });
   }
-  drawGlyphs(painter.context, { text, x: left, y: top, color, scale });
+  drawRun(painter, { text, x: left, y: top, color, scale });
 }

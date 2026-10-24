@@ -2,6 +2,7 @@ import { COLORS } from '../../art/colors.js';
 import { RENDER_SCALE } from '../../config.js';
 import { HUD_FRAMES } from '../../data/hud-frames.js';
 import { drawNineSlice } from '../nine-slice.js';
+import { drawStamped } from '../stamps.js';
 
 const DIRECTORY = 'assets/ui/hud/';
 
@@ -23,10 +24,20 @@ export function drawHudFrame(painter, sheets, kind, rect) {
   if (!sheets.ready[kind]) {
     return;
   }
-  drawNineSlice(painter.context, sheets.images[kind], {
-    slice: HUD_FRAMES[kind].slice,
-    rect,
-    scale: RENDER_SCALE,
+  const { width, height } = rect;
+  drawStamped(painter, {
+    key: `frame|${kind}|${width}|${height}`,
+    x: rect.x,
+    y: rect.y,
+    width,
+    height,
+    resolution: RENDER_SCALE,
+    draw: (context, x, y) =>
+      drawNineSlice(context, sheets.images[kind], {
+        slice: HUD_FRAMES[kind].slice,
+        rect: { x, y, width, height },
+        scale: RENDER_SCALE,
+      }),
   });
 }
 

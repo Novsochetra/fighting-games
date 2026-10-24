@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { TITLE_SCENE_COLORS } from '../../../../src/art/title-scene.js';
 import { drawSunGlow, sunBreath } from '../../../../src/render/title/sun-glow.js';
 import { drawSunRays, rayLight } from '../../../../src/render/title/sun-rays.js';
+import { createPainter } from '../../../../src/render/painter.js';
+import { createRecordingContext, RecordingCanvas } from '../../../support/recording-canvas.js';
 import { drawnRects, record, ticksUpTo } from './title-recorder.js';
 
 const SUN = { x: 120, y: 60, radius: 12 };
@@ -46,6 +48,25 @@ describe('the sun breathing', () => {
     expect(context.globalCompositeOperation).toBe('source-over');
     expect(context.globalAlpha).toBe(1);
     expect(alphas(log).every((alpha) => alpha > 0 && alpha <= 1)).toBe(true);
+  });
+});
+
+describe('the sun glow on stamps', () => {
+  it('lays each halo down as one disc, cut once for every size and color it breathes through', () => {
+    const { context, log } = createRecordingContext(null);
+    const made = [];
+    const painter = createPainter(context, () => {
+      made.push(new RecordingCanvas());
+      return made.at(-1);
+    });
+    const ticks = ticksUpTo(1200, 1);
+    for (const tick of ticks) {
+      drawSunGlow(painter, { effect: GLOW, tick, colors });
+    }
+    // five halos, each at the three sizes of a breath
+    expect(made.length).toBeLessThanOrEqual(15);
+    expect(log.some((call) => call.startsWith('fillRect('))).toBe(false);
+    expect(log.filter((call) => call.startsWith('drawImage('))).toHaveLength(5 * ticks.length);
   });
 });
 

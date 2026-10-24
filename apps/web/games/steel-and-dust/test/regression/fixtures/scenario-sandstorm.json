@@ -18910,141 +18910,141 @@
   {
    "tick": 0,
    "frame": {
-    "calls": 2161,
-    "digest": "f0d8fa74a423c5f9"
+    "calls": 1638,
+    "digest": "603eecd1f0697de5"
    }
   },
   {
    "tick": 240,
    "frame": {
-    "calls": 3323,
-    "digest": "48ddceada4012207"
+    "calls": 1979,
+    "digest": "63ada68595cd1fad"
    }
   },
   {
    "tick": 480,
    "frame": {
-    "calls": 5459,
-    "digest": "6678583da89184b8"
+    "calls": 3423,
+    "digest": "8f720766655d7213"
    }
   },
   {
    "tick": 720,
    "frame": {
-    "calls": 3291,
-    "digest": "92cfbd8311835616"
+    "calls": 1995,
+    "digest": "b39045052d359957"
    }
   },
   {
    "tick": 960,
    "frame": {
-    "calls": 3329,
-    "digest": "8b1821a7990f06ff"
+    "calls": 1883,
+    "digest": "8d88b58f4f0214f4"
    }
   },
   {
    "tick": 1200,
    "frame": {
-    "calls": 3190,
-    "digest": "0f79d3c95c23aa6a"
+    "calls": 1670,
+    "digest": "f5d7fb23318e9809"
    }
   },
   {
    "tick": 1440,
    "frame": {
-    "calls": 2879,
-    "digest": "8b2581dbf46ae37c"
+    "calls": 1475,
+    "digest": "dcd898ae4f972a51"
    }
   },
   {
    "tick": 1680,
    "frame": {
-    "calls": 3236,
-    "digest": "a2d3af3860b38548"
+    "calls": 2046,
+    "digest": "8bb12816d2228fcd"
    }
   },
   {
    "tick": 1920,
    "frame": {
-    "calls": 2595,
-    "digest": "17ab1f362e03f8f8"
+    "calls": 1473,
+    "digest": "91634d2c4ba5e826"
    }
   },
   {
    "tick": 2160,
    "frame": {
-    "calls": 2639,
-    "digest": "75c1ab366caf2c13"
+    "calls": 1805,
+    "digest": "6c5cba221609ae10"
    }
   },
   {
    "tick": 2400,
    "frame": {
-    "calls": 3201,
-    "digest": "df9119f3dfbbf01d"
+    "calls": 1913,
+    "digest": "48fcdbc59c765a32"
    }
   },
   {
    "tick": 2640,
    "frame": {
-    "calls": 2824,
-    "digest": "0dd6e1c0101b5cf3"
+    "calls": 1984,
+    "digest": "7ca8e7534e2ceffb"
    }
   },
   {
    "tick": 2880,
    "frame": {
-    "calls": 3824,
-    "digest": "e8c1c07b2b33583f"
+    "calls": 2302,
+    "digest": "1d8e5cd1382eed6c"
    }
   },
   {
    "tick": 3120,
    "frame": {
-    "calls": 2783,
-    "digest": "bb839e806f5582c7"
+    "calls": 2008,
+    "digest": "a712ac5e8617726e"
    }
   },
   {
    "tick": 3360,
    "frame": {
-    "calls": 2502,
-    "digest": "06534c12ad9a7648"
+    "calls": 1765,
+    "digest": "34beb2c26a7dca6f"
    }
   },
   {
    "tick": 3600,
    "frame": {
-    "calls": 2215,
-    "digest": "6da3a202e61add7d"
+    "calls": 1301,
+    "digest": "54f34eb5ce3c31c4"
    }
   },
   {
    "tick": 3840,
    "frame": {
-    "calls": 2539,
-    "digest": "12a82e5f2a70300d"
+    "calls": 1451,
+    "digest": "1feb558c58ffba64"
    }
   },
   {
    "tick": 4080,
    "frame": {
-    "calls": 3208,
-    "digest": "ac97fde22a71225e"
+    "calls": 1552,
+    "digest": "fd3beb13cee4c644"
    }
   },
   {
    "tick": 4320,
    "frame": {
-    "calls": 2462,
-    "digest": "841473cd1c577a27"
+    "calls": 1620,
+    "digest": "3e8d1cc4d8c0a8b3"
    }
   },
   {
    "tick": 4560,
    "frame": {
-    "calls": 2906,
-    "digest": "6c93137469cd49b6"
+    "calls": 1728,
+    "digest": "6bc92f74ca299940"
    }
   }
  ]

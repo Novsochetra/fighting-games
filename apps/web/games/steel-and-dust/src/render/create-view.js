@@ -10,7 +10,7 @@ import { loadPropSprites } from './scene/props/prop-sprites.js';
 export function createView({ context, createCanvas, createImage, baseUrl }) {
   context.imageSmoothingEnabled = false;
   const view = {
-    painter: createPainter(context),
+    painter: createPainter(context, createCanvas),
     backdrops: {},
     loaders: { createImage, createCanvas, baseUrl },
     enemySheets: loadEnemySprites({ createImage, createCanvas, baseUrl }),
