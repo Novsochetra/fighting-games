@@ -9,7 +9,7 @@ apps/
     src/
     test/{unit,integration}
   web/                    everything the browser loads
-    index.html            home page: pick a game
+    index.html            home page: a launcher with an icon per game
     src/
       design/tokens.css   every UI color, font, size, radius, shadow and motion value
       home/               home page modules
@@ -31,7 +31,7 @@ docs/                     this file
 
 1. `GET /` serves `apps/web/index.html`. The home page fetches `api/games`.
 2. `GET /api/games` reads every `apps/web/games/*/game.json` and returns `{ games: [...] }`.
-3. A card links to `games/<id>/`, which serves that game's `index.html`.
+3. An icon links to `games/<id>/`, which serves that game's `index.html`.
 
 Every URL in the pages is relative, so the same files work under the GitHub Pages sub path.
 `npm run build` writes the static site to `dist/`, including `dist/api/games`, because Pages has no server.
@@ -41,6 +41,18 @@ lets a browser keep any file for ten minutes, so without it a deploy could link 
 old cached one that lacks an export, and the game would never start (the loading screen waited at 97%).
 If a module still fails to load, the game page reloads itself once under a fresh address
 (`src/boot/boot-recovery.js`). `npm run dev` serves the files as they are.
+
+## Home page
+
+The home page is a launcher, like a tablet's home screen: a wallpaper and a grid of game icons, each
+the game's `cover` with its title under it. Arrows, WASD, a gamepad, a click or a tap pick a game.
+
+Opening a game plays an app-launch animation before the page changes (`src/home/launcher.js`): the
+icon grows into a screen-sized panel tinted with the icon's own colors, and the home zooms away
+behind it. The keyframes are plain functions of the icon's box and the screen
+(`launch-geometry.js`), and their timing comes from `--duration-launch` and `--easing-launch` in
+`tokens.css`. When the browser brings the page back from its back/forward cache, the panel shrinks
+back into the icon. With reduced motion the game opens at once.
 
 ## Game: Steel & Dust
 

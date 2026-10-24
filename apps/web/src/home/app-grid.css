@@ -1,0 +1,53 @@
+.app-grid {
+  --icon-size: var(--size-app-icon-sm);
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-content: start;
+  gap: var(--space-6) var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-slot {
+  display: flex;
+  justify-content: center;
+  min-inline-size: 0;
+}
+
+.app-grid.is-entering {
+  transform-origin: 50% 40vh;
+  animation: grid-enter var(--duration-enter) var(--easing-launch) backwards;
+}
+
+@keyframes grid-enter {
+  from {
+    opacity: 0;
+    transform: scale(1.14);
+  }
+}
+
+@media (min-width: 40rem) {
+  .app-grid {
+    --icon-size: var(--size-app-icon-md);
+
+    grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+    row-gap: var(--space-10);
+  }
+}
+
+@media (min-width: 64rem) {
+  .app-grid {
+    --icon-size: var(--size-app-icon-lg);
+
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    row-gap: var(--space-12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-grid.is-entering {
+    animation: none;
+  }
+}

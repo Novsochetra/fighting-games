@@ -1,7 +1,7 @@
 # Retro Arcade
 
 A small arcade of browser games. A Node server lists the games through an API, the home page shows
-them like a console's game-select screen, and each game lives in its own folder.
+them as app icons, like a tablet's home screen, and each game lives in its own folder.
 
 Play it online at **https://novsochetra.github.io/fighting-games/**.
 
@@ -23,7 +23,8 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:8765/. Pick a game with the arrow keys and Enter, a gamepad, or a tap.
+Then open http://localhost:8765/. Open a game with a click or a tap, the arrow keys and Enter, or a
+gamepad.
 
 ## Project layout
 
@@ -53,7 +54,8 @@ banners, no `/** */` blocks, no `TODO` comments, and no raw colors outside the d
 ## Add a game
 
 Create `apps/web/games/<id>/` with a `game.json` (id, title, tagline, description, genre, players,
-cover), an `index.html` and the game's files. The server finds it and the home page lists it.
+cover), an `index.html` and the game's files. The server finds it and the home page shows its cover
+as the game's icon, so make the cover a square image.
 
 ## Deploy
 

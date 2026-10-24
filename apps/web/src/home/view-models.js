@@ -1,5 +1,3 @@
-export const MIN_SHELF_SLOTS = 4;
-
 // Only plain relative paths: the catalog is data, and a "javascript:" or "//host" href must never
 // become a link on the page.
 const RELATIVE_URL_PATTERN = /^[\w-][\w.-]*(?:\/[\w-][\w.-]*)*\/?$/;
@@ -14,25 +12,23 @@ export function isPlayableGame(game) {
   return Boolean(game) && isRelativeUrl(game.path) && asText(game.title).trim() !== '';
 }
 
+export function monogramOf(title) {
+  const [first = ''] = Array.from(asText(title).trim());
+  return first.toLocaleUpperCase('en');
+}
+
 export function toGameCard(game) {
   return {
     id: asText(game.id),
     title: asText(game.title),
-    tagline: asText(game.tagline),
-    description: asText(game.description),
-    genre: asText(game.genre),
-    players: asText(game.players),
+    monogram: monogramOf(game.title),
     href: game.path,
     coverSrc: isRelativeUrl(game.cover) ? game.cover : '',
-    controls: Array.isArray(game.controls)
-      ? game.controls.filter((control) => typeof control === 'string' && control !== '')
-      : [],
   };
 }
 
-export function buildShelf(games, minSlots = MIN_SHELF_SLOTS) {
-  const cards = games.filter(isPlayableGame).map(toGameCard);
-  return { cards, emptySlotCount: Math.max(0, minSlots - cards.length) };
+export function toGameCards(games) {
+  return games.filter(isPlayableGame).map(toGameCard);
 }
 
 export function formatGameCount(count) {

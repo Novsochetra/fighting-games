@@ -32,7 +32,7 @@ describe('npm run build', () => {
   it.each([
     'index.html',
     'src/home/main.js',
-    'src/home/home.css',
+    'src/home/page.css',
     'src/design/tokens.css',
     'games/steel-and-dust/game.json',
     'games/steel-and-dust/assets/icons/icon-512.png',

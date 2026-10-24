@@ -88,8 +88,25 @@
   --color-loader-sky-warm: var(--color-dusk-wine);
   --color-loader-water: var(--color-night);
 
+  --color-wallpaper-top: var(--color-night-deep);
+  --color-wallpaper-mid: var(--color-dusk-navy);
+  --color-wallpaper-low: var(--color-dusk-violet);
+  --color-wallpaper-warm: var(--color-dusk-wine);
+  --color-wallpaper-glow: color-mix(in srgb, var(--color-amber) 42%, transparent);
+  --color-wallpaper-haze: color-mix(in srgb, var(--color-teal) 16%, transparent);
+  --color-label: var(--color-white);
+  --color-label-muted: color-mix(in srgb, var(--color-white) 64%, transparent);
+  --color-glass: color-mix(in srgb, var(--color-white) 11%, transparent);
+  --color-glass-strong: color-mix(in srgb, var(--color-white) 20%, transparent);
+  --color-glass-edge: color-mix(in srgb, var(--color-white) 16%, transparent);
+  --color-icon-edge: color-mix(in srgb, var(--color-white) 14%, transparent);
+  --color-icon-blank: var(--color-panel-raised);
+  --color-focus-ring: color-mix(in srgb, var(--color-white) 92%, transparent);
+  --color-splash: var(--color-night);
+
   --font-display: 'Silkscreen', 'Courier New', monospace;
   --font-body: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-system: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   --font-size-2xs: 0.6875rem;
   --font-size-xs: 0.75rem;
@@ -108,6 +125,9 @@
   --font-size-game-title: clamp(26px, 6vmin, 52px);
   --font-size-game-button: clamp(14px, 2.4vmin, 19px);
   --font-size-game-stats: clamp(13px, 2.2vmin, 17px);
+  --font-size-app-label: 0.75rem;
+  --font-size-app-label-lg: 0.8125rem;
+  --font-size-monogram: 46cqi;
 
   --font-weight-regular: 400;
   --font-weight-medium: 500;
@@ -143,9 +163,17 @@
   --layout-gutter-wide: 2rem;
   --layout-content-max-width: 72rem;
   --layout-text-max-width: 60ch;
+  --layout-launcher-max-width: 68rem;
+
+  --size-app-icon-sm: 3.75rem;
+  --size-app-icon-md: 4.75rem;
+  --size-app-icon-lg: 5.75rem;
+  --size-spinner: 1.25rem;
+  --blur-glass: 24px;
 
   --border-width-thin: 1px;
   --border-width-pixel: 2px;
+  --border-width-ring: 3px;
   --border-width-thick: 4px;
 
   --radius-none: 0;
@@ -154,6 +182,10 @@
   --radius-lg: 6px;
   --radius-xl: 8px;
   --radius-round: 50%;
+  --radius-app-icon: 22.4%;
+  --radius-app-icon-squircle: 30%;
+  --radius-sheet: 1.5rem;
+  --radius-pill: 999px;
 
   --shadow-pixel-sm: 2px 2px 0 var(--color-shadow);
   --shadow-pixel-md: 4px 4px 0 var(--color-shadow);
@@ -168,11 +200,22 @@
   --shadow-touch-button: inset 0 -4px 0 color-mix(in srgb, var(--color-black) 25%, transparent);
   --shadow-ult-ready: 0 0 0 6px color-mix(in srgb, var(--color-gold) 45%, transparent);
   --shadow-ult-ready-still: 0 0 0 4px color-mix(in srgb, var(--color-gold) 45%, transparent);
+  --shadow-app-icon:
+    0 1px 3px color-mix(in srgb, var(--color-black) 30%, transparent),
+    0 10px 22px -8px color-mix(in srgb, var(--color-black) 55%, transparent);
+  --shadow-app-icon-lifted:
+    0 4px 10px color-mix(in srgb, var(--color-black) 35%, transparent),
+    0 24px 40px -10px color-mix(in srgb, var(--color-black) 65%, transparent);
+  --shadow-icon-edge: inset 0 0 0 1px var(--color-icon-edge);
+  --shadow-glass:
+    0 10px 30px color-mix(in srgb, var(--color-black) 30%, transparent),
+    inset 0 0 0 1px var(--color-glass-edge);
 
   --text-shadow-pixel-xs: 1px 1px 0 var(--color-shadow);
   --text-shadow-pixel-sm: 2px 2px 0 var(--color-shadow);
   --text-shadow-pixel-md: 3px 3px 0 var(--color-shadow);
   --text-shadow-logo: 3px 3px 0 var(--color-accent-shadow), 6px 6px 0 var(--color-shadow);
+  --text-shadow-app-label: 0 1px 3px color-mix(in srgb, var(--color-black) 60%, transparent);
 
   --size-scanline-line: 1px;
   --size-scanline-period: 3px;
@@ -191,8 +234,13 @@
   --duration-loader-follow: 700ms;
   --duration-sprite-run: 640ms;
   --duration-dust: 320ms;
+  --duration-launch: 500ms;
+  --duration-enter: 600ms;
+  --duration-loading-delay: 400ms;
 
   --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --easing-launch: cubic-bezier(0.32, 0.72, 0, 1);
+  --easing-pop: cubic-bezier(0.34, 1.4, 0.64, 1);
   --easing-overshoot: cubic-bezier(0.2, 1.6, 0.4, 1);
   --easing-linear: linear;
   --easing-step: steps(1, end);
@@ -204,4 +252,5 @@
   --easing-out: ease-out;
 
   --layer-overlay: 100;
+  --layer-launch: 200;
 }

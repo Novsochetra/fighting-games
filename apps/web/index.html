@@ -4,36 +4,31 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Retro Arcade</title>
-    <meta name="description" content="Pick a game from the shelf and play it in your browser." />
+    <meta name="description" content="Pick a game and play it in your browser." />
+    <meta name="theme-color" content="#08060b" />
     <link rel="icon" href="data:," />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Barlow:wght@400;500;600;700&display=swap"
-    />
     <link rel="stylesheet" href="src/design/tokens.css" />
-    <link rel="stylesheet" href="src/home/home.css" />
-    <link rel="stylesheet" href="src/home/panels.css" />
-    <link rel="stylesheet" href="src/home/cart.css" />
-    <link rel="stylesheet" href="src/home/cart-details.css" />
-    <link rel="stylesheet" href="src/home/legend.css" />
-    <link rel="stylesheet" href="src/home/crt.css" />
+    <link rel="stylesheet" href="src/home/page.css" />
+    <link rel="stylesheet" href="src/home/wallpaper.css" />
+    <link rel="stylesheet" href="src/home/app-grid.css" />
+    <link rel="stylesheet" href="src/home/app-icon.css" />
+    <link rel="stylesheet" href="src/home/notice.css" />
+    <link rel="stylesheet" href="src/home/hints.css" />
+    <link rel="stylesheet" href="src/home/launch.css" />
+    <script type="speculationrules">
+      { "prefetch": [{ "where": { "href_matches": "games/*" }, "eagerness": "moderate" }] }
+    </script>
     <script type="module" src="src/home/main.js"></script>
   </head>
   <body>
-    <div class="screen">
-      <header class="marquee">
-        <h1 class="marquee__logo">Retro Arcade</h1>
-        <p class="marquee__credit">Free play</p>
+    <div class="wallpaper" aria-hidden="true"></div>
+    <div class="home" id="home">
+      <header class="topbar">
+        <h1 class="topbar__title" id="home-title">Retro Arcade</h1>
+        <p class="topbar__count" id="game-count"></p>
       </header>
 
-      <main class="menu" aria-labelledby="menu-title">
-        <div class="menu__bar">
-          <h2 class="menu__title" id="menu-title">Select game</h2>
-          <p class="menu__count" id="game-count"></p>
-        </div>
-
+      <main class="springboard">
         <div class="notice" id="notice" data-tone="loading">
           <p class="notice__message" id="status" role="status">Loading games…</p>
           <button class="button" id="retry" type="button" hidden>Try again</button>
@@ -42,26 +37,15 @@
           <p class="notice notice__message">Turn on JavaScript to see the games.</p>
         </noscript>
 
-        <ul class="shelf" id="shelf" aria-labelledby="menu-title" hidden></ul>
-
-        <section class="readout" id="readout" aria-label="Selected game" hidden>
-          <p class="readout__title" id="readout-title"></p>
-          <p class="readout__text" id="readout-text"></p>
-          <p class="readout__prompt">
-            <span class="readout__prompt-keys">Press start</span>
-            <span class="readout__prompt-touch">Tap a cartridge to play</span>
-          </p>
-        </section>
+        <ul class="app-grid" id="app-grid" aria-labelledby="home-title" hidden></ul>
       </main>
-
-      <footer class="legend" aria-label="Controls">
-        <p class="legend__item">
-          <kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> or <kbd>WASD</kbd> Move
-        </p>
-        <p class="legend__item"><kbd>Enter</kbd> or <kbd>Space</kbd> Start</p>
-        <p class="legend__item">Gamepad: <kbd>D-pad</kbd> Move <kbd>A</kbd> Start</p>
-      </footer>
     </div>
-    <div class="crt" aria-hidden="true"></div>
+    <footer class="hints" aria-label="Controls">
+      <p class="hints__pill">
+        <span class="hints__item"><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> Move</span>
+        <span class="hints__item"><kbd>Enter</kbd> Open</span>
+        <span class="hints__item">Gamepad <kbd>D-pad</kbd><kbd>A</kbd></span>
+      </p>
+    </footer>
   </body>
 </html>
