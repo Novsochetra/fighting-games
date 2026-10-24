@@ -562,5 +562,63 @@
    "length": 4410,
    "digest": "2fc8c8b9e14ac7f7"
   }
+ ],
+ "coin": [
+  {
+   "length": 17640,
+   "digest": "868b2be9cf669f23"
+  }
+ ],
+ "clink": [
+  {
+   "length": 4410,
+   "digest": "5f920dfdd94d9bda"
+  },
+  {
+   "length": 4410,
+   "digest": "3db2861201b10ee8"
+  },
+  {
+   "length": 4410,
+   "digest": "8e4705e7b81451d7"
+  }
+ ],
+ "gem": [
+  {
+   "length": 30870,
+   "digest": "a84b507bc1f94078"
+  },
+  {
+   "length": 30870,
+   "digest": "31dabc83534b837f"
+  }
+ ],
+ "appleBite": [
+  {
+   "length": 6175,
+   "digest": "1c50f1c421848d54"
+  },
+  {
+   "length": 6175,
+   "digest": "1eca07645a396e3d"
+  }
+ ],
+ "chestLand": [
+  {
+   "length": 19845,
+   "digest": "0d3e15619bc77446"
+  }
+ ],
+ "chestRattle": [
+  {
+   "length": 14112,
+   "digest": "628a95c27b604fad"
+  }
+ ],
+ "chestOpen": [
+  {
+   "length": 50715,
+   "digest": "c305433efeb31b7b"
+  }
  ]
 }

@@ -6068,7 +6068,7 @@
     300,
     684
    ],
-   "score": 5136,
+   "score": 5146,
    "combo": [
     0,
     0,
@@ -6211,7 +6211,7 @@
     300,
     684
    ],
-   "score": 5198,
+   "score": 5208,
    "combo": [
     1,
     6,
@@ -6354,7 +6354,7 @@
     300,
     684
    ],
-   "score": 5446,
+   "score": 5456,
    "combo": [
     4,
     28,
@@ -6497,7 +6497,7 @@
     300,
     684
    ],
-   "score": 5446,
+   "score": 5456,
    "combo": [
     0,
     0,
@@ -6640,7 +6640,7 @@
     300,
     684
    ],
-   "score": 5446,
+   "score": 5456,
    "combo": [
     0,
     0,
@@ -6783,7 +6783,7 @@
     300,
     684
    ],
-   "score": 5446,
+   "score": 5456,
    "combo": [
     0,
     0,
@@ -6926,7 +6926,7 @@
     300,
     684
    ],
-   "score": 5446,
+   "score": 5456,
    "combo": [
     0,
     0,
@@ -7069,7 +7069,7 @@
     300,
     684
    ],
-   "score": 5446,
+   "score": 5456,
    "combo": [
     0,
     0,
@@ -7212,7 +7212,7 @@
     300,
     684
    ],
-   "score": 5446,
+   "score": 5456,
    "combo": [
     0,
     0,
@@ -7355,7 +7355,7 @@
     300,
     684
    ],
-   "score": 5446,
+   "score": 5456,
    "combo": [
     0,
     0,
@@ -7498,7 +7498,7 @@
     300,
     684
    ],
-   "score": 5446,
+   "score": 5456,
    "combo": [
     0,
     0,
@@ -7641,7 +7641,7 @@
     300,
     684
    ],
-   "score": 6021,
+   "score": 6031,
    "combo": [
     2,
     26,
@@ -7784,7 +7784,7 @@
     300,
     684
    ],
-   "score": 6021,
+   "score": 6071,
    "combo": [
     2,
     26,
@@ -7927,7 +7927,7 @@
     300,
     684
    ],
-   "score": 6167,
+   "score": 6217,
    "combo": [
     3,
     39,
@@ -8092,7 +8092,7 @@
     300,
     684
    ],
-   "score": 11774,
+   "score": 11944,
    "combo": [
     5,
     65,
@@ -8240,7 +8240,7 @@
    "world": {
     "particles": "a16bb895bc99ee91",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "afcd0faa1dcb9880",
+    "floaters": "897a1cd3a4c0d06e",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "b8aa191528b25296",
@@ -8257,7 +8257,7 @@
     300,
     684
    ],
-   "score": 11774,
+   "score": 11944,
    "combo": [
     5,
     65,
@@ -8381,9 +8381,9 @@
     }
    ],
    "world": {
-    "particles": "8f05d3666e152eb5",
+    "particles": "3bc6e58cb677dc07",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "dbc4cd292c1b5406",
+    "floaters": "bf397f79f85123f0",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "21ef152ed393d164",
@@ -8400,7 +8400,7 @@
     300,
     684
    ],
-   "score": 11774,
+   "score": 11944,
    "combo": [
     5,
     65,
@@ -8543,7 +8543,7 @@
     300,
     684
    ],
-   "score": 11774,
+   "score": 11984,
    "combo": [
     0,
     0,
@@ -8686,7 +8686,7 @@
     300,
     684
    ],
-   "score": 11774,
+   "score": 12084,
    "combo": [
     0,
     0,
@@ -8768,7 +8768,7 @@
    "world": {
     "particles": "8cee6ef80066524e",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "da39a3ee5e6b4b0d",
+    "floaters": "f5fddbd67b2aedb4",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -8785,7 +8785,7 @@
     300,
     684
    ],
-   "score": 11909,
+   "score": 12219,
    "combo": [
     1,
     13,
@@ -8867,7 +8867,7 @@
    "world": {
     "particles": "f0b492ea1917e955",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "3db122451978103d",
+    "floaters": "f6d3293087a4bcaf",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -8884,7 +8884,7 @@
     300,
     684
    ],
-   "score": 12049,
+   "score": 12359,
    "combo": [
     2,
     26,
@@ -8983,7 +8983,7 @@
     300,
     684
    ],
-   "score": 12049,
+   "score": 12359,
    "combo": [
     2,
     26,
@@ -9082,7 +9082,7 @@
     300,
     684
    ],
-   "score": 12049,
+   "score": 12359,
    "combo": [
     2,
     26,
@@ -9181,7 +9181,7 @@
     300,
     684
    ],
-   "score": 12049,
+   "score": 12359,
    "combo": [
     0,
     0,
@@ -9280,7 +9280,7 @@
     300,
     684
    ],
-   "score": 12411,
+   "score": 12721,
    "combo": [
     1,
     6,
@@ -9379,7 +9379,7 @@
     300,
     684
    ],
-   "score": 12411,
+   "score": 12741,
    "combo": [
     1,
     6,
@@ -9478,7 +9478,7 @@
     300,
     684
    ],
-   "score": 12411,
+   "score": 12761,
    "combo": [
     1,
     6,
@@ -9577,7 +9577,7 @@
     300,
     684
    ],
-   "score": 12411,
+   "score": 12761,
    "combo": [
     1,
     6,
@@ -9698,7 +9698,7 @@
     300,
     684
    ],
-   "score": 12411,
+   "score": 12761,
    "combo": [
     1,
     6,
@@ -9841,7 +9841,7 @@
     300,
     684
    ],
-   "score": 12484,
+   "score": 12834,
    "combo": [
     1,
     7,
@@ -9984,7 +9984,7 @@
     300,
     684
    ],
-   "score": 12661,
+   "score": 13011,
    "combo": [
     3,
     23,
@@ -10127,7 +10127,7 @@
     300,
     684
    ],
-   "score": 12777,
+   "score": 13127,
    "combo": [
     4,
     33,
@@ -10270,7 +10270,7 @@
     300,
     684
    ],
-   "score": 12777,
+   "score": 13127,
    "combo": [
     4,
     33,
@@ -10413,7 +10413,7 @@
     300,
     684
    ],
-   "score": 12777,
+   "score": 13127,
    "combo": [
     4,
     33,
@@ -10556,7 +10556,7 @@
     300,
     684
    ],
-   "score": 12777,
+   "score": 13127,
    "combo": [
     4,
     33,
@@ -10699,7 +10699,7 @@
     300,
     684
    ],
-   "score": 12850,
+   "score": 13200,
    "combo": [
     1,
     7,
@@ -10842,7 +10842,7 @@
     300,
     684
    ],
-   "score": 13226,
+   "score": 13576,
    "combo": [
     2,
     14,
@@ -10985,7 +10985,7 @@
     300,
     684
    ],
-   "score": 13226,
+   "score": 13576,
    "combo": [
     2,
     14,
@@ -11128,7 +11128,7 @@
     300,
     684
    ],
-   "score": 13226,
+   "score": 13576,
    "combo": [
     2,
     14,
@@ -11271,7 +11271,7 @@
     300,
     684
    ],
-   "score": 13481,
+   "score": 13831,
    "combo": [
     5,
     36,
@@ -11414,7 +11414,7 @@
     300,
     684
    ],
-   "score": 13828,
+   "score": 14178,
    "combo": [
     8,
     63,
@@ -11535,7 +11535,7 @@
     300,
     684
    ],
-   "score": 14348,
+   "score": 14698,
    "combo": [
     10,
     79,
@@ -11656,7 +11656,7 @@
     300,
     684
    ],
-   "score": 14492,
+   "score": 14852,
    "combo": [
     11,
     89,
@@ -11777,7 +11777,7 @@
     300,
     684
    ],
-   "score": 14492,
+   "score": 14852,
    "combo": [
     11,
     89,
@@ -11898,7 +11898,7 @@
     300,
     684
    ],
-   "score": 14492,
+   "score": 14852,
    "combo": [
     11,
     89,
@@ -12019,7 +12019,7 @@
     300,
     684
    ],
-   "score": 14896,
+   "score": 15256,
    "combo": [
     12,
     96,
@@ -12118,7 +12118,7 @@
     300,
     684
    ],
-   "score": 14896,
+   "score": 15256,
    "combo": [
     12,
     96,
@@ -12217,7 +12217,7 @@
     300,
     684
    ],
-   "score": 14896,
+   "score": 15276,
    "combo": [
     12,
     96,
@@ -12313,7 +12313,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15276,
    "combo": [
     12,
     96,
@@ -12409,7 +12409,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     12,
     96,
@@ -12505,7 +12505,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -12578,7 +12578,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -12651,7 +12651,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -12724,7 +12724,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -12797,7 +12797,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -12870,7 +12870,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -12943,7 +12943,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -13016,7 +13016,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -13089,7 +13089,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -13162,7 +13162,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -13235,7 +13235,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -13308,7 +13308,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -13381,7 +13381,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -13454,7 +13454,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -13527,7 +13527,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -13600,7 +13600,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -13673,7 +13673,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -13749,7 +13749,7 @@
     984,
     1752
    ],
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -13825,7 +13825,7 @@
     984,
     1752
    ],
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -13924,7 +13924,7 @@
     984,
     1752
    ],
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -14045,7 +14045,7 @@
     984,
     1752
    ],
-   "score": 14896,
+   "score": 15316,
    "combo": [
     0,
     0,
@@ -14166,7 +14166,7 @@
     984,
     1752
    ],
-   "score": 15045,
+   "score": 15465,
    "combo": [
     2,
     14,
@@ -14287,7 +14287,7 @@
     984,
     1752
    ],
-   "score": 15146,
+   "score": 15566,
    "combo": [
     3,
     23,
@@ -14408,7 +14408,7 @@
     984,
     1752
    ],
-   "score": 15562,
+   "score": 15992,
    "combo": [
     4,
     33,
@@ -14529,7 +14529,7 @@
     984,
     1752
    ],
-   "score": 15562,
+   "score": 16022,
    "combo": [
     4,
     33,
@@ -14650,7 +14650,7 @@
     984,
     1752
    ],
-   "score": 15562,
+   "score": 16022,
    "combo": [
     4,
     33,
@@ -14771,7 +14771,7 @@
     984,
     1752
    ],
-   "score": 15562,
+   "score": 16022,
    "combo": [
     4,
     33,
@@ -14892,7 +14892,7 @@
     984,
     1752
    ],
-   "score": 15635,
+   "score": 16095,
    "combo": [
     1,
     7,
@@ -14991,7 +14991,7 @@
     984,
     1752
    ],
-   "score": 15904,
+   "score": 16364,
    "combo": [
     4,
     31,
@@ -15090,7 +15090,7 @@
     984,
     1752
    ],
-   "score": 16288,
+   "score": 16748,
    "combo": [
     5,
     38,
@@ -15189,7 +15189,7 @@
     984,
     1752
    ],
-   "score": 16288,
+   "score": 16758,
    "combo": [
     5,
     38,
@@ -15284,141 +15284,141 @@
   {
    "tick": 0,
    "frame": {
-    "calls": 1381,
-    "digest": "aacafb0e6a97ab9f"
+    "calls": 1389,
+    "digest": "cb2209026619e911"
    }
   },
   {
    "tick": 200,
    "frame": {
-    "calls": 1478,
-    "digest": "c3a3d91a58de2bb3"
+    "calls": 1486,
+    "digest": "b0c16f3d115d0743"
    }
   },
   {
    "tick": 400,
    "frame": {
-    "calls": 1486,
-    "digest": "2dd823c93732244d"
+    "calls": 1494,
+    "digest": "6ca43b684ffbcc90"
    }
   },
   {
    "tick": 600,
    "frame": {
-    "calls": 1564,
-    "digest": "69fe87985dae7d5c"
+    "calls": 1572,
+    "digest": "71669402a14ae971"
    }
   },
   {
    "tick": 800,
    "frame": {
-    "calls": 1394,
-    "digest": "bacf8ab77950c00d"
+    "calls": 1402,
+    "digest": "3ee333a9abc25f1e"
    }
   },
   {
    "tick": 1000,
    "frame": {
-    "calls": 1456,
-    "digest": "dbad18b5d6e05d88"
+    "calls": 1464,
+    "digest": "1d4af7bbe2b28b7d"
    }
   },
   {
    "tick": 1200,
    "frame": {
-    "calls": 1721,
-    "digest": "ab2ccc571c55ddb0"
+    "calls": 1729,
+    "digest": "f4766fb7d3a70f50"
    }
   },
   {
    "tick": 1400,
    "frame": {
-    "calls": 1650,
-    "digest": "88812b8883718e74"
+    "calls": 1658,
+    "digest": "b06b9b57bb3f0573"
    }
   },
   {
    "tick": 1600,
    "frame": {
-    "calls": 1502,
-    "digest": "5a397772773a8130"
+    "calls": 1511,
+    "digest": "23adb032cf6e6bde"
    }
   },
   {
    "tick": 1800,
    "frame": {
-    "calls": 1463,
-    "digest": "bc545eeb21afd05f"
+    "calls": 1472,
+    "digest": "50ee1d02cdb54eb4"
    }
   },
   {
    "tick": 2000,
    "frame": {
-    "calls": 2493,
-    "digest": "4a9f2fc94386f18f"
+    "calls": 2516,
+    "digest": "f03f81f518519dd3"
    }
   },
   {
    "tick": 2200,
    "frame": {
-    "calls": 1555,
-    "digest": "6367beea942fe8bd"
+    "calls": 1587,
+    "digest": "47e3f7b3965156b8"
    }
   },
   {
    "tick": 2400,
    "frame": {
-    "calls": 1516,
-    "digest": "86764277b5ec0701"
+    "calls": 1548,
+    "digest": "4e72f3b1cc0a98b3"
    }
   },
   {
    "tick": 2600,
    "frame": {
-    "calls": 1536,
-    "digest": "e453de52ffb84b40"
+    "calls": 1552,
+    "digest": "79c25a4303758d6e"
    }
   },
   {
    "tick": 2800,
    "frame": {
-    "calls": 1792,
-    "digest": "fcf567bcdfe9813c"
+    "calls": 1800,
+    "digest": "174b827060001e9f"
    }
   },
   {
    "tick": 3000,
    "frame": {
-    "calls": 1555,
-    "digest": "74d9b0652960fcd8"
+    "calls": 1571,
+    "digest": "09ed0183b625b988"
    }
   },
   {
    "tick": 3200,
    "frame": {
-    "calls": 1503,
-    "digest": "d4881eb25a9023ca"
+    "calls": 1511,
+    "digest": "fbde1febcd839276"
    }
   },
   {
    "tick": 3400,
    "frame": {
-    "calls": 1511,
-    "digest": "e58ef85ebfae473c"
+    "calls": 1519,
+    "digest": "a27ea89fbaa64a7d"
    }
   },
   {
    "tick": 3600,
    "frame": {
-    "calls": 1435,
-    "digest": "456ae7591ae59ab3"
+    "calls": 1443,
+    "digest": "912730019023a709"
    }
   },
   {
    "tick": 3800,
    "frame": {
-    "calls": 1499,
-    "digest": "f70ece6f168990b4"
+    "calls": 1510,
+    "digest": "461cd59cbab055da"
    }
   }
  ]

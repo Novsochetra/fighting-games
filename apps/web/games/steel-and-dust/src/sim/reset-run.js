@@ -10,6 +10,9 @@ import { groundAt } from './stage/terrain.js';
 
 const START_X = 70;
 
+// each road scatters its loot its own way, the same way every time it is played
+const lootSeedFor = (missionIndex) => (0x9e3779b9 + missionIndex * 0x85ebca6b) >>> 0;
+
 function freshPlayer(terrain) {
   const player = createFighter('player', 'player', START_X, groundAt(terrain, START_X));
   player.facing = 1;
@@ -30,6 +33,10 @@ function resetWorld(game, player, missionIndex) {
     projectiles: [],
     summons: [],
     pickups: [],
+    loot: [],
+    chests: [],
+    lootFx: [],
+    lootSeed: lootSeedFor(missionIndex),
     crates: createCrates(mission.crates),
     terrain: mission.terrain,
     arena: null,
@@ -63,6 +70,9 @@ function resetScore(game) {
     lives: START_LIVES,
     combo: { count: 0, timer: 0, damage: 0, bump: 0 },
     score: 0,
+    coins: 0,
+    coinStreak: { count: 0, timer: 0 },
+    purseBump: 0,
     playTime: 0,
     attackTokens: difficultyOf(game.settings).tokens,
     newBestScore: false,
