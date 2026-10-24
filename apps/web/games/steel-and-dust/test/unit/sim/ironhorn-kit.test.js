@@ -6,7 +6,7 @@ import { createPlayingGame } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
 
-function ironhornAt(distance, { missionIndex = 2, hp } = {}) {
+function ironhornAt(distance, { missionIndex = 2, share = 1 } = {}) {
   const game = createPlayingGame();
   game.missionIndex = missionIndex;
   game.player.x = 120;
@@ -14,7 +14,7 @@ function ironhornAt(distance, { missionIndex = 2, hp } = {}) {
   const ironhorn = game.fighters.find((fighter) => fighter.kind === 'ironhorn');
   Object.assign(ironhorn, { entering: false, x: 120 + distance, facing: -1 });
   ironhorn.ai.cooldown = 0;
-  ironhorn.hp = hp ?? ironhorn.maxHp;
+  ironhorn.hp = share * ironhorn.maxHp;
   return { game, ironhorn };
 }
 
@@ -56,10 +56,10 @@ describe("Ironhorn's kit", () => {
   });
 
   it('stampedes below 40% on his own road, and not as a mid-boss', () => {
-    const own = ironhornAt(150, { hp: 90 });
+    const own = ironhornAt(150, { share: 0.36 });
     think(own.game, own.ironhorn);
     expect(own.ironhorn.move.id).toBe('stampede');
-    const mid = ironhornAt(150, { missionIndex: 9, hp: 90 });
+    const mid = ironhornAt(150, { missionIndex: 9, share: 0.36 });
     think(mid.game, mid.ironhorn);
     expect(mid.ironhorn.move.id).toBe('hornRush');
   });

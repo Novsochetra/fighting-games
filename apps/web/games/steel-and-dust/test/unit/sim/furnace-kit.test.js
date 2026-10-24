@@ -6,7 +6,7 @@ import { createPlayingGame } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
 
-function knightAt(distance, { missionIndex = 7, hp } = {}) {
+function knightAt(distance, { missionIndex = 7, share = 1 } = {}) {
   const game = createPlayingGame();
   game.missionIndex = missionIndex;
   game.player.x = 120;
@@ -14,7 +14,7 @@ function knightAt(distance, { missionIndex = 7, hp } = {}) {
   const knight = game.fighters.find((fighter) => fighter.kind === 'furnace');
   Object.assign(knight, { entering: false, x: 120 + distance, facing: -1 });
   knight.ai.cooldown = 0;
-  knight.hp = hp ?? knight.maxHp;
+  knight.hp = share * knight.maxHp;
   return { game, knight };
 }
 
@@ -51,17 +51,17 @@ describe("the Furnace Knight's kit", () => {
   });
 
   it('leaves the ground burning longer below half health', () => {
-    const { game, knight } = knightAt(70, { hp: 140 });
+    const { game, knight } = knightAt(70, { share: 0.47 });
     think(game, knight);
     expect(knight.move.id).toBe('fireFlailHot');
     expect(knight.move.blaze.life).toBeGreaterThan(knight.def.boss ? 240 : 0);
   });
 
   it('opens the Meltdown below 40% on his own road, and not on another', () => {
-    const own = knightAt(150, { hp: 110 });
+    const own = knightAt(150, { share: 0.37 });
     think(own.game, own.knight);
     expect(own.knight.move.id).toBe('meltdown');
-    const other = knightAt(150, { missionIndex: 0, hp: 110 });
+    const other = knightAt(150, { missionIndex: 0, share: 0.37 });
     think(other.game, other.knight);
     expect(other.knight.move.id).not.toBe('meltdown');
   });

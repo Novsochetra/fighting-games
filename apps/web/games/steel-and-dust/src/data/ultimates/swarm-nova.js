@@ -8,6 +8,9 @@ export const SWARM_NOVA = {
   hover: 30,
   swarm: 18,
   stings: 3,
+  // the swarm's stings are shared out for this many raiders; fewer get fewer stings from each fly,
+  // or a boss standing alone took all 18 flies' three stings, near his whole health in one ultimate
+  crowd: 3,
   recallAt: 124,
   novaAt: 140,
   end: 176,

@@ -6,7 +6,7 @@ import { createPlayingGame } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
 
-function nagaAt(distance, { missionIndex = 10, hp } = {}) {
+function nagaAt(distance, { missionIndex = 10, share = 1 } = {}) {
   const game = createPlayingGame();
   game.missionIndex = missionIndex;
   game.arena = { left: 0, right: 384 };
@@ -15,7 +15,7 @@ function nagaAt(distance, { missionIndex = 10, hp } = {}) {
   const naga = game.fighters.find((fighter) => fighter.kind === 'naga');
   Object.assign(naga, { entering: false, x: 120 + distance, facing: -1 });
   naga.ai.cooldown = 0;
-  naga.hp = hp ?? naga.maxHp;
+  naga.hp = share * naga.maxHp;
   return { game, naga };
 }
 
@@ -60,7 +60,7 @@ describe("the Naga Raja's kit", () => {
     think(calm.game, calm.naga);
     expect(calm.naga.move.id).toBe('tidalCoil');
     expect(calm.naga.move.tides).toHaveLength(1);
-    const hurt = nagaAt(200, { hp: 140 });
+    const hurt = nagaAt(200, { share: 0.45 });
     think(hurt.game, hurt.naga);
     expect(hurt.naga.move.id).toBe('tidalCoils');
     expect(hurt.naga.move.tides).toHaveLength(2);
@@ -75,10 +75,10 @@ describe("the Naga Raja's kit", () => {
   });
 
   it('calls the Rainbow Naga below 40% on her own road, and not on another', () => {
-    const own = nagaAt(150, { hp: 120 });
+    const own = nagaAt(150, { share: 0.39 });
     think(own.game, own.naga);
     expect(own.naga.move.id).toBe('rainbowNaga');
-    const other = nagaAt(150, { missionIndex: 11, hp: 120 });
+    const other = nagaAt(150, { missionIndex: 11, share: 0.39 });
     think(other.game, other.naga);
     expect(other.naga.move.id).not.toBe('rainbowNaga');
   });

@@ -1,4 +1,5 @@
 import { COLORS } from '../../art/colors.js';
+import { bossHpOn } from '../../data/boss-toughness.js';
 import { createFighter } from '../fighters/create-fighter.js';
 import { screenEdges } from '../fighters/arena-bounds.js';
 import { shake } from '../fx/camera-fx.js';
@@ -14,6 +15,11 @@ function bossTitle(game, boss) {
   return isMissionBoss(game, boss) ? 'Boss' : 'Mid-boss';
 }
 
+function growBossHp(game, boss) {
+  const hp = bossHpOn(game.missionIndex, boss.def.hp);
+  Object.assign(boss, { hp, maxHp: hp, hpLag: hp });
+}
+
 export function spawnEnemy(game, kind, side) {
   const { left, right } = screenEdges(game);
   const x = side < 0 ? left - 18 : right + 18;
@@ -24,6 +30,7 @@ export function spawnEnemy(game, kind, side) {
   refreshPose(enemy);
   game.fighters.push(enemy);
   if (enemy.def.boss) {
+    growBossHp(game, enemy);
     game.boss = enemy;
     showBanner(game, {
       text: enemy.def.name,

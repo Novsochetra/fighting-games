@@ -9,7 +9,7 @@ import { createPlayingGame } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
 
-function cobraAt(distance, { missionIndex = 3, hp } = {}) {
+function cobraAt(distance, { missionIndex = 3, share = 1 } = {}) {
   const game = createPlayingGame();
   game.missionIndex = missionIndex;
   game.player.x = 120;
@@ -17,7 +17,7 @@ function cobraAt(distance, { missionIndex = 3, hp } = {}) {
   const cobra = game.fighters.find((fighter) => fighter.kind === 'cobra');
   Object.assign(cobra, { entering: false, x: 120 + distance, facing: -1 });
   cobra.ai.cooldown = 0;
-  cobra.hp = hp ?? cobra.maxHp;
+  cobra.hp = share * cobra.maxHp;
   return { game, cobra };
 }
 
@@ -49,17 +49,17 @@ describe("the Cobra Matriarch's kit", () => {
   });
 
   it('spits five globs below half health', () => {
-    const { game, cobra } = cobraAt(200, { hp: 110 });
+    const { game, cobra } = cobraAt(200, { share: 0.44 });
     think(game, cobra);
     expect(cobra.move.id).toBe('venomSpray');
     expect(cobra.move.globs.count).toBe(5);
   });
 
   it('turns her gaze on the hero below 40% on her own road, and not as a mid-boss', () => {
-    const own = cobraAt(150, { hp: 90 });
+    const own = cobraAt(150, { share: 0.36 });
     think(own.game, own.cobra);
     expect(own.cobra.move.id).toBe('hypnoticGaze');
-    const mid = cobraAt(150, { missionIndex: 8, hp: 90 });
+    const mid = cobraAt(150, { missionIndex: 8, share: 0.36 });
     think(mid.game, mid.cobra);
     expect(mid.cobra.move.id).not.toBe('hypnoticGaze');
   });

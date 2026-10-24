@@ -17,6 +17,7 @@ const TIPS = [
   'The <b>Brass Juggernaut</b> shrugs off small hits. Launch it or use heavy and charged attacks.',
   '<b>Bulwarks</b> block light hits from the front. Break the guard with a heavy, charged or launching attack, or get behind them.',
   'Bosses you have beaten come back to guard later roads, and the Bayon Guardian waits at the very end. Every boss marks the ground in <b>red</b> before a slam or a charge. Get out of the red.',
+  'Bosses grow tougher on every road, and an ultimate does only <b>half</b> its damage to a boss. Save it for the raiders, or to finish him off.',
   'Too hard or too easy? Change the <b>difficulty</b> in Settings at any time.',
 ];
 

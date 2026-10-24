@@ -30,7 +30,7 @@ function drawLiveCombo(painter, { combo, tickCount }) {
   if (rank) {
     drawText(painter, rank, { x: RIGHT, y: below + 11, color, align: 'right' });
   }
-  drawText(painter, `${combo.damage} DMG`, {
+  drawText(painter, `${Math.round(combo.damage)} DMG`, {
     x: RIGHT,
     y: below + 19,
     color: COLORS.lilac,
@@ -64,7 +64,12 @@ function drawComboResult(painter, { comboResult: result, tickCount }) {
     const color = result.count >= 20 ? COLORS.salmon : COLORS.amber;
     drawText(painter, result.rank, { x, y: 52, color, scale: 2, align: 'right' });
   }
-  drawText(painter, `${result.damage} DMG`, { x, y: 66, color: COLORS.lilac, align: 'right' });
+  drawText(painter, `${Math.round(result.damage)} DMG`, {
+    x,
+    y: 66,
+    color: COLORS.lilac,
+    align: 'right',
+  });
   if (result.best && (tickCount >> 3) & 1) {
     drawText(painter, 'NEW BEST!', { x, y: 74, color: COLORS.mint, align: 'right' });
   }

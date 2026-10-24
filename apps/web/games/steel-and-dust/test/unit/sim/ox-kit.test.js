@@ -6,7 +6,7 @@ import { createPlayingGame } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
 
-function oxAt(distance, { missionIndex = 9, hp } = {}) {
+function oxAt(distance, { missionIndex = 9, share = 1 } = {}) {
   const game = createPlayingGame();
   game.missionIndex = missionIndex;
   game.player.x = 120;
@@ -14,7 +14,7 @@ function oxAt(distance, { missionIndex = 9, hp } = {}) {
   const ox = game.fighters.find((fighter) => fighter.kind === 'brute');
   Object.assign(ox, { entering: false, x: 120 + distance, facing: -1 });
   ox.ai.cooldown = 0;
-  ox.hp = hp ?? ox.maxHp;
+  ox.hp = share * ox.maxHp;
   return { game, ox };
 }
 
@@ -53,17 +53,17 @@ describe("the Warden Ox's kit", () => {
   });
 
   it('chops twice below half health', () => {
-    const { game, ox } = oxAt(160, { hp: 160 });
+    const { game, ox } = oxAt(160, { share: 0.47 });
     think(game, ox);
     expect(ox.move.id).toBe('chainHookTwice');
     expect(ox.move.hook.chop).toBe('hookChopTwice');
   });
 
   it("swings into the Executioner's Round below 40% on his own road, and not on another", () => {
-    const own = oxAt(160, { hp: 120 });
+    const own = oxAt(160, { share: 0.35 });
     think(own.game, own.ox);
     expect(own.ox.move.id).toBe('executionersRound');
-    const other = oxAt(160, { missionIndex: 0, hp: 120 });
+    const other = oxAt(160, { missionIndex: 0, share: 0.35 });
     think(other.game, other.ox);
     expect(other.ox.move.id).not.toBe('executionersRound');
   });

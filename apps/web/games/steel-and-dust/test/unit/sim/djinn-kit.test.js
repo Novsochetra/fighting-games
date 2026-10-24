@@ -6,7 +6,7 @@ import { createPlayingGame } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
 
-function djinnAt(distance, { missionIndex = 6, hp } = {}) {
+function djinnAt(distance, { missionIndex = 6, share = 1 } = {}) {
   const game = createPlayingGame();
   game.missionIndex = missionIndex;
   game.arena = { left: 0, right: 384 };
@@ -15,7 +15,7 @@ function djinnAt(distance, { missionIndex = 6, hp } = {}) {
   const djinn = game.fighters.find((fighter) => fighter.kind === 'djinn');
   Object.assign(djinn, { entering: false, x: 120 + distance, facing: -1 });
   djinn.ai.cooldown = 0;
-  djinn.hp = hp ?? djinn.maxHp;
+  djinn.hp = share * djinn.maxHp;
   return { game, djinn };
 }
 
@@ -62,17 +62,17 @@ describe("the Storm Djinn's kit", () => {
   });
 
   it('raises two dust devils at once below half health', () => {
-    const { game, djinn } = djinnAt(350, { hp: 130 });
+    const { game, djinn } = djinnAt(350, { share: 0.46 });
     think(game, djinn);
     expect(djinn.move.id).toBe('dustDevils');
     expect(djinn.move.devils).toBe(2);
   });
 
   it('raises the Eye of the Storm below 40% on his own road, and not on another', () => {
-    const own = djinnAt(150, { hp: 100 });
+    const own = djinnAt(150, { share: 0.36 });
     think(own.game, own.djinn);
     expect(own.djinn.move.id).toBe('eyeOfStorm');
-    const other = djinnAt(150, { missionIndex: 0, hp: 100 });
+    const other = djinnAt(150, { missionIndex: 0, share: 0.36 });
     think(other.game, other.djinn);
     expect(other.djinn.move.id).not.toBe('eyeOfStorm');
   });

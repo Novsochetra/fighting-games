@@ -1,5 +1,4 @@
 import { COLORS } from '../../art/colors.js';
-import { difficultyOf } from '../../data/difficulty.js';
 import { isPlayer } from '../fighters/loadout.js';
 import { addFloatText } from '../fx/effects.js';
 import { isFightOver } from '../stage/loot-time.js';
@@ -9,18 +8,13 @@ import { afflictTarget } from './afflict.js';
 import { blockHit } from './block-hit.js';
 import { endCombo } from './combo.js';
 import { blocksHit, canBeHit, isFacing, isGuarding } from './guard.js';
+import { damageOf } from './hit-damage.js';
 import { feelHit, showBigHit, showDamageNumber, showImpact } from './hit-feedback.js';
 import { absorbsHit, reactToHit } from './hit-reaction.js';
 import { playHitSound } from './hit-sound.js';
 import { knockOut } from './knock-out.js';
 import { shout } from './sounds.js';
 import { addUltMeter, meterForHit } from './ult-bar.js';
-
-function damageOf(game, target, move) {
-  return isPlayer(target)
-    ? Math.max(1, Math.round(move.damage * difficultyOf(game.settings).damage))
-    : move.damage * (target.move?.exposed ? 2 : 1);
-}
 
 function hitDirection({ attacker, target, move }) {
   if (move.knockAway) {
