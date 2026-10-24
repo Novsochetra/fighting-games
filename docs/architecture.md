@@ -140,7 +140,9 @@ flies from the carousel card, or from the library tile when the carousel has scr
 (`launch-source.js`). The keyframes are plain functions of the art's box and the screen
 (`launch-geometry.js`), and their timing comes from `--duration-launch` and `--easing-launch` in
 `src/home/tokens.css`. When the browser brings the page back from its back/forward cache, the panel
-shrinks back into the card and the Recent list catches up. With reduced motion the game opens at
+shrinks back into the card and the Recent list catches up. A game's own way back should go back in
+the tab's history when the arcade opened it, as Steel & Dust's Back to arcade does
+(`src/ui/menus/arcade-exit.js`); loading the arcade again would start it over. With reduced motion the game opens at
 once, and the zoom, the slides and the rises are off.
 
 Every interaction has a short sound (`sound-cues.js`): one crisp click, `switch`, both as a card

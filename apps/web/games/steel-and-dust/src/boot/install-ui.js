@@ -3,6 +3,7 @@ import { installCarouselEvents } from '../ui/heroes/carousel-events.js';
 import { createHeroPanel } from '../ui/heroes/hero-panel.js';
 import { createLayoutEditor } from '../ui/layout/layout-editor.js';
 import { createLeaderboardPanel } from '../ui/leaderboard/leaderboard-panel.js';
+import { createArcadeExit } from '../ui/menus/arcade-exit.js';
 import { createMenuActions } from '../ui/menus/menu-actions.js';
 import { MenuController } from '../ui/menus/menu-controller.js';
 import { installMenuEvents } from '../ui/menus/menu-events.js';
@@ -50,7 +51,12 @@ export function installUi({ window, elements, game, audio, ui, pad }) {
     padConnected: pad.connected,
   });
   const menus = new MenuController({ document, game, audio, ui, context, panels });
-  const act = createMenuActions({ game, audio, ui, fullscreen, menus, location: window.location });
+  const leaveForArcade = createArcadeExit({
+    location: window.location,
+    history: window.history,
+    referrer: document.referrer,
+  });
+  const act = createMenuActions({ game, audio, ui, fullscreen, menus, leaveForArcade });
   const navigate = createNavigator({ menus, audio, act });
   menus.navigate = navigate;
   menus.handleKey = (event) => handleMenuKey(event, { menus, navigate, ui });
