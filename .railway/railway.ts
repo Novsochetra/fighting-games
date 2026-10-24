@@ -8,9 +8,14 @@ export default defineRailway(() => {
   // Railway named the service after the server's workspace package when it first saw the repo.
   const arcade = service('@arcade/server', {
     source: github('Novsochetra/fighting-games', { branch: 'main', checkSuites: false }),
-    // The server runs the source as it is, so the only build step drops the test and lint tools.
-    // Railpack sets NPM_CONFIG_PRODUCTION=false, which would make npm keep them.
-    build: 'NPM_CONFIG_PRODUCTION= npm prune --omit=dev',
+    build: {
+      // The server runs the source as it is, so the only build step drops the test and lint tools.
+      // Railpack sets NPM_CONFIG_PRODUCTION=false, which would make npm keep them.
+      buildCommand: 'NPM_CONFIG_PRODUCTION= npm prune --omit=dev',
+      // Railway first watched only apps/server/, but the server also sends the pages and games, so
+      // a change anywhere deploys. Leaving the patterns out keeps Railway's narrower ones.
+      watchPatterns: ['/**'],
+    },
     preDeploy: 'node apps/server/src/db/migrate-cli.js',
     start: 'node apps/server/src/main.js',
     healthcheck: '/api/health',
