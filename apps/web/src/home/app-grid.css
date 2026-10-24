@@ -1,39 +1,47 @@
+/* Columns as wide as an icon, spread edge to edge, so the first and last icons line up with the
+   masthead; labels may run wider than their icon, into the gap. */
 .app-grid {
   --icon-size: var(--size-app-icon-sm);
+  --label-bleed: var(--space-3);
 
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, var(--icon-size));
+  justify-content: space-between;
   align-content: start;
-  gap: var(--space-6) var(--space-2);
+  gap: var(--space-6) var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
+  transform-origin: 50% 30vh;
+  animation: grid-enter var(--duration-enter) var(--easing-launch) backwards;
 }
 
 .app-slot {
   display: flex;
   justify-content: center;
-  min-inline-size: 0;
-}
-
-.app-grid.is-entering {
-  transform-origin: 50% 40vh;
-  animation: grid-enter var(--duration-enter) var(--easing-launch) backwards;
 }
 
 @keyframes grid-enter {
   from {
     opacity: 0;
-    transform: scale(1.14);
+    transform: scale(1.04);
+  }
+}
+
+@media (max-width: 22rem) {
+  .app-grid {
+    --icon-size: var(--size-app-icon-xs);
+    --label-bleed: var(--space-2);
   }
 }
 
 @media (min-width: 40rem) {
   .app-grid {
     --icon-size: var(--size-app-icon-md);
+    --label-bleed: var(--space-4);
 
-    grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
-    row-gap: var(--space-10);
+    grid-template-columns: repeat(auto-fill, var(--icon-size));
+    gap: var(--space-10) var(--space-12);
   }
 }
 
@@ -41,13 +49,12 @@
   .app-grid {
     --icon-size: var(--size-app-icon-lg);
 
-    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
     row-gap: var(--space-12);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .app-grid.is-entering {
+  .app-grid {
     animation: none;
   }
 }

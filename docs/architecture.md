@@ -44,10 +44,11 @@ If a module still fails to load, the game page reloads itself once under a fresh
 
 ## Home page
 
-The home page is a launcher, like a tablet's home screen: a wallpaper and a grid of game icons, each
-the game's `cover` with its title under it. Icons, their focus ring, their shadow and the launch
-panel share one corner radius (`--radius-app-icon`), so every outline stays concentric. Arrows,
-WASD, a gamepad, a click or a tap pick a game.
+The home page is a launcher, like a tablet's home screen: a title and a grid of game icons on a
+plain dark background, each the game's `cover` with its title under it. The columns are as wide as
+an icon and spread edge to edge, so the icons line up with the title. Icons, their focus ring, their
+shadow and the launch panel share one corner radius (`--radius-app-icon`), so every outline stays
+concentric. Arrows, WASD, a gamepad, a click or a tap pick a game.
 
 Opening a game plays an app-launch animation before the page changes (`src/home/launcher.js`): the
 icon grows into a screen-sized panel in the colors of the icon's background (sampled from its

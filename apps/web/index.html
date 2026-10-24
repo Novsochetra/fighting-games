@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Retro Arcade</title>
     <meta name="description" content="Pick a game and play it in your browser." />
-    <meta name="theme-color" content="#1b1d24" />
+    <meta name="theme-color" content="#0e0e10" />
     <link rel="icon" href="data:," />
     <link rel="stylesheet" href="src/design/tokens.css" />
     <link rel="stylesheet" href="src/home/page.css" />
-    <link rel="stylesheet" href="src/home/wallpaper.css" />
     <link rel="stylesheet" href="src/home/app-grid.css" />
     <link rel="stylesheet" href="src/home/app-icon.css" />
     <link rel="stylesheet" href="src/home/notice.css" />
@@ -21,11 +20,10 @@
     <script type="module" src="src/home/main.js"></script>
   </head>
   <body>
-    <div class="wallpaper" aria-hidden="true"></div>
     <div class="home" id="home">
-      <header class="topbar">
-        <h1 class="topbar__title" id="home-title">Retro Arcade</h1>
-        <p class="topbar__count" id="game-count"></p>
+      <header class="masthead">
+        <h1 class="masthead__title" id="home-title">Retro Arcade</h1>
+        <p class="masthead__meta" id="game-count"></p>
       </header>
 
       <main class="springboard">
@@ -39,13 +37,12 @@
 
         <ul class="app-grid" id="app-grid" aria-labelledby="home-title" hidden></ul>
       </main>
+
+      <footer class="hints" aria-label="Controls">
+        <p class="hints__item"><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> Move</p>
+        <p class="hints__item"><kbd>Enter</kbd> Open</p>
+        <p class="hints__item"><kbd>D-pad</kbd><kbd>A</kbd> Gamepad</p>
+      </footer>
     </div>
-    <footer class="hints" aria-label="Controls">
-      <p class="hints__pill">
-        <span class="hints__item"><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> Move</span>
-        <span class="hints__item"><kbd>Enter</kbd> Open</span>
-        <span class="hints__item">Gamepad <kbd>D-pad</kbd><kbd>A</kbd></span>
-      </p>
-    </footer>
   </body>
 </html>

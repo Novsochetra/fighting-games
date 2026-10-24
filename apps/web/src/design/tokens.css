@@ -88,28 +88,22 @@
   --color-loader-sky-warm: var(--color-dusk-wine);
   --color-loader-water: var(--color-night);
 
-  --color-graphite-200: #3b3e48;
-  --color-graphite-400: #262931;
-  --color-graphite-600: #1b1d24;
-  --color-graphite-800: #111318;
-  --color-graphite-950: #08090c;
+  --color-graphite-200: #3a3a40;
+  --color-graphite-400: #232327;
+  --color-graphite-600: #18181b;
+  --color-graphite-900: #0e0e10;
 
-  --color-wallpaper-top: var(--color-graphite-600);
-  --color-wallpaper-mid: var(--color-graphite-800);
-  --color-wallpaper-low: var(--color-graphite-950);
-  --color-wallpaper-light: color-mix(in srgb, var(--color-white) 7%, transparent);
-  --color-wallpaper-shade: color-mix(in srgb, var(--color-black) 45%, transparent);
+  --color-launcher-background: var(--color-graphite-900);
+  --color-launcher-surface: var(--color-graphite-600);
+  --color-launcher-hairline: color-mix(in srgb, var(--color-white) 9%, transparent);
   --color-label: var(--color-white);
-  --color-label-muted: color-mix(in srgb, var(--color-white) 64%, transparent);
-  --color-glass: color-mix(in srgb, var(--color-white) 11%, transparent);
-  --color-glass-strong: color-mix(in srgb, var(--color-white) 20%, transparent);
-  --color-glass-edge: color-mix(in srgb, var(--color-white) 16%, transparent);
-  --color-icon-edge: color-mix(in srgb, var(--color-white) 12%, transparent);
+  --color-label-muted: color-mix(in srgb, var(--color-white) 58%, transparent);
+  --color-icon-edge: color-mix(in srgb, var(--color-white) 15%, transparent);
   --color-icon-blank: var(--color-graphite-400);
   --color-icon-monogram-top: var(--color-graphite-200);
   --color-icon-monogram-bottom: var(--color-graphite-400);
   --color-focus-ring: color-mix(in srgb, var(--color-white) 92%, transparent);
-  --color-splash: var(--color-graphite-950);
+  --color-splash: var(--color-graphite-900);
 
   --font-display: 'Silkscreen', 'Courier New', monospace;
   --font-body: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -132,6 +126,7 @@
   --font-size-game-title: clamp(26px, 6vmin, 52px);
   --font-size-game-button: clamp(14px, 2.4vmin, 19px);
   --font-size-game-stats: clamp(13px, 2.2vmin, 17px);
+  --font-size-launcher-title: clamp(1.75rem, 1.45rem + 1.2vw, 2.25rem);
   --font-size-app-label: 0.75rem;
   --font-size-app-label-lg: 0.8125rem;
   --font-size-monogram: 46cqi;
@@ -172,11 +167,12 @@
   --layout-text-max-width: 60ch;
   --layout-launcher-max-width: 68rem;
 
+  --size-app-icon-xs: 3.25rem;
   --size-app-icon-sm: 3.75rem;
   --size-app-icon-md: 4.75rem;
   --size-app-icon-lg: 5.75rem;
   --size-spinner: 1.25rem;
-  --blur-glass: 24px;
+  --size-keycap: 1.375rem;
 
   --border-width-thin: 1px;
   --border-width-pixel: 2px;
@@ -213,15 +209,11 @@
     0 4px 10px color-mix(in srgb, var(--color-black) 35%, transparent),
     0 24px 40px -10px color-mix(in srgb, var(--color-black) 65%, transparent);
   --shadow-icon-edge: inset 0 0 0 0.5px var(--color-icon-edge);
-  --shadow-glass:
-    0 10px 30px color-mix(in srgb, var(--color-black) 30%, transparent),
-    inset 0 0 0 1px var(--color-glass-edge);
 
   --text-shadow-pixel-xs: 1px 1px 0 var(--color-shadow);
   --text-shadow-pixel-sm: 2px 2px 0 var(--color-shadow);
   --text-shadow-pixel-md: 3px 3px 0 var(--color-shadow);
   --text-shadow-logo: 3px 3px 0 var(--color-accent-shadow), 6px 6px 0 var(--color-shadow);
-  --text-shadow-app-label: 0 1px 3px color-mix(in srgb, var(--color-black) 60%, transparent);
 
   --size-scanline-line: 1px;
   --size-scanline-period: 3px;

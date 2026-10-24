@@ -1,45 +1,39 @@
 .hints {
-  position: fixed;
-  inset-inline: 0;
-  inset-block-end: max(var(--space-5), env(safe-area-inset-bottom));
-  display: flex;
-  justify-content: center;
-  padding-inline: var(--space-4);
-  pointer-events: none;
-}
-
-.hints__pill {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-2) var(--space-5);
-  margin: 0;
-  padding: var(--space-2) var(--space-4);
+  gap: var(--space-2) var(--space-6);
+  margin-block-start: var(--space-12);
+  padding-block-start: var(--space-5);
   font-size: var(--font-size-caption);
   line-height: var(--leading-snug);
   color: var(--color-label-muted);
-  background: var(--color-glass);
-  border-radius: var(--radius-pill);
-  box-shadow: var(--shadow-glass);
-  backdrop-filter: blur(var(--blur-glass)) saturate(1.6);
+  border-block-start: var(--border-width-thin) solid var(--color-launcher-hairline);
 }
 
 .hints__item {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
+  margin: 0;
+}
+
+.hints__item kbd:last-of-type {
+  margin-inline-end: var(--space-1);
 }
 
 kbd {
-  min-inline-size: 1.5em;
-  padding: var(--space-1) var(--space-2);
+  display: inline-grid;
+  place-items: center;
+  min-inline-size: var(--size-keycap);
+  block-size: var(--size-keycap);
+  padding-inline: var(--space-1);
   font-family: inherit;
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-semibold);
   line-height: var(--leading-none);
-  text-align: center;
   color: var(--color-label);
-  background: var(--color-glass-strong);
+  background: var(--color-launcher-surface);
+  border: var(--border-width-thin) solid var(--color-launcher-hairline);
   border-radius: var(--radius-lg);
 }
 
