@@ -21,10 +21,12 @@ describe('the packed enemy sheets', () => {
     expect(Object.keys(ENEMY_ATLAS).sort()).toEqual(Object.keys(ENEMY_SPRITES).sort());
   });
 
-  // a grid sheet changed without running tools/pack_enemy_sheets.py again fails here
-  it('hold every frame of the grid sheets pixel for pixel, with only empty space cut away', () => {
-    for (const id of Object.keys(ENEMY_SPRITES)) {
-      expect(sheetMismatches(id), id).toEqual([]);
-    }
-  });
+  // a grid sheet changed without running tools/pack_enemy_sheets.py again fails here; a sheet at
+  // a time, as every sheet in one test took most of its time limit
+  it.each(Object.keys(ENEMY_SPRITES))(
+    'hold every frame of the %s grid sheet pixel for pixel, with only empty space cut away',
+    (id) => {
+      expect(sheetMismatches(id)).toEqual([]);
+    },
+  );
 });
