@@ -2,6 +2,7 @@ export const STORAGE_KEYS = {
   favorites: 'arcade.favorites',
   recent: 'arcade.recent',
   sound: 'arcade.sound',
+  installDismissedAt: 'arcade.install-dismissed',
 };
 export const RECENT_LIMIT = 12;
 
@@ -50,6 +51,7 @@ export function createPreferences(storage) {
     favorites: readIds(STORAGE_KEYS.favorites),
     recent: readIds(STORAGE_KEYS.recent),
     sound: storage.read(STORAGE_KEYS.sound) !== false,
+    installDismissedAt: storage.read(STORAGE_KEYS.installDismissedAt),
   };
   const save = (name, value) => {
     state[name] = value;
@@ -63,5 +65,7 @@ export function createPreferences(storage) {
     recordPlay: (id) => save('recent', pushRecent(state.recent, id)),
     isSoundOn: () => state.sound,
     setSound: (isOn) => save('sound', Boolean(isOn)),
+    installDismissedAt: () => state.installDismissedAt,
+    dismissInstall: (time) => save('installDismissedAt', time),
   };
 }

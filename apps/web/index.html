@@ -8,7 +8,14 @@
     <meta name="theme-color" content="#000000" />
     <meta name="color-scheme" content="dark light" />
     <script src="src/home/appearance-early.js"></script>
-    <link rel="icon" href="data:," />
+    <link rel="manifest" href="assets/manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Retro Arcade" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -27,6 +34,7 @@
     <link rel="stylesheet" href="src/home/notice.css" />
     <link rel="stylesheet" href="src/home/hints.css" />
     <link rel="stylesheet" href="src/home/launch.css" />
+    <link rel="stylesheet" href="src/home/install.css" />
     <script type="speculationrules">
       { "prefetch": [{ "where": { "href_matches": "games/*" }, "eagerness": "moderate" }] }
     </script>
@@ -41,7 +49,16 @@
 
         <div class="hero__content">
           <header class="topbar">
-            <h1 class="topbar__title" id="home-title">Retro Arcade</h1>
+            <h1 class="topbar__title" id="home-title">
+              <img
+                class="topbar__logo"
+                src="assets/icons/icon-192.png"
+                alt=""
+                width="28"
+                height="28"
+              />
+              Retro Arcade
+            </h1>
             <div class="topbar__actions">
               <button
                 class="glass-button appearance-toggle"
@@ -206,6 +223,29 @@
         </footer>
       </section>
     </div>
+
+    <aside class="install" id="install" aria-labelledby="install-title" hidden>
+      <img class="install__icon" src="assets/icons/icon-192.png" alt="" width="48" height="48" />
+      <div class="install__text">
+        <p class="install__title" id="install-title">Retro Arcade</p>
+        <p class="install__hint install__hint--prompt">Install it and open it like any app.</p>
+        <p class="install__hint install__hint--ios">
+          Tap
+          <svg class="icon install__share" viewBox="0 0 24 24" aria-label="Share" role="img">
+            <path d="M12 3.5v11M8.5 7 12 3.5 15.5 7M8.5 10.5h-2v10h11v-10h-2" />
+          </svg>
+          then Add to Home Screen.
+        </p>
+      </div>
+      <button class="pill-button pill-button--primary install__add" id="install-add" type="button">
+        Install
+      </button>
+      <button class="install__close" id="install-close" type="button" aria-label="Not now">
+        <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 7l10 10M17 7 7 17" />
+        </svg>
+      </button>
+    </aside>
 
     <dialog class="sheet" id="details" aria-labelledby="details-title" tabindex="-1">
       <div class="sheet__media">

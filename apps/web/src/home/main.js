@@ -1,4 +1,5 @@
 import { bootHome } from './boot.js';
+import { browserInstaller } from './install-platform.js';
 import { createBrowserStorage } from './preferences.js';
 import { browserAudioContext } from './sound-player.js';
 
@@ -13,4 +14,5 @@ bootHome({
   },
   storage: createBrowserStorage(window),
   createAudioContext: () => browserAudioContext(window),
+  installer: browserInstaller(window),
 });

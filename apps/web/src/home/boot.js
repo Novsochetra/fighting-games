@@ -3,6 +3,7 @@ import { fetchCatalog } from './catalog-client.js';
 import { createDetailsSheet } from './details-sheet.js';
 import { createHomeController } from './home-controller.js';
 import { createHomeView } from './home-view.js';
+import { wireInstallBanner } from './install-banner.js';
 import { createLauncher } from './launcher.js';
 import { createMemoryStorage, createPreferences } from './preferences.js';
 import { createSoundPlayer } from './sound-player.js';
@@ -23,7 +24,15 @@ function watchReturns({ document, launcher, controller, sound, signal }) {
   document.defaultView.addEventListener('pageshow', onPageShow, { signal });
 }
 
-export function bootHome({ document, fetch, navigate, gamepads, storage, createAudioContext }) {
+export function bootHome({
+  document,
+  fetch,
+  navigate,
+  gamepads,
+  storage,
+  createAudioContext,
+  installer,
+}) {
   const lifetime = new AbortController();
   const { signal } = lifetime;
   const store = storage ?? createMemoryStorage();
@@ -42,6 +51,9 @@ export function bootHome({ document, fetch, navigate, gamepads, storage, createA
   const settings = { preferences, sound, appearance };
   wireInputs({ document, view, controller, sheet, gamepads, settings, signal });
   watchReturns({ document, launcher, controller, sound, signal });
+  if (installer) {
+    wireInstallBanner({ document, installer, preferences, sound, signal });
+  }
   return {
     controller,
     launcher,
