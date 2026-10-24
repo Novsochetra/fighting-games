@@ -66,6 +66,44 @@
   --color-material-edge: rgb(255 255 255 / 12%);
   --color-fill-quiet: rgb(118 118 128 / 24%);
 
+  --color-apple-pink: #ff375f;
+  --color-apple-red: #ff453a;
+  --color-apple-orange: #ff9f0a;
+  --color-apple-green: #30d158;
+  --color-apple-mint: #00c7be;
+  --color-apple-teal: #40c8e0;
+  --color-apple-cyan: #64d2ff;
+  --color-apple-indigo: #5e5ce6;
+  --color-apple-purple: #bf5af2;
+  --color-apple-pink-light: #ff2d55;
+  --color-heart: var(--color-apple-pink);
+  --color-heart-badge-top: var(--color-apple-orange);
+  --color-heart-badge-bottom: var(--color-apple-pink);
+  --color-supporters-glow: rgb(255 55 95 / 20%);
+  --color-medal-gold-top: #ffe17a;
+  --color-medal-gold-bottom: #d9a30f;
+  --color-medal-silver-top: #f2f2f7;
+  --color-medal-silver-bottom: #a3a3ab;
+  --color-medal-bronze-top: #f2b682;
+  --color-medal-bronze-bottom: #b36b36;
+  --color-on-medal: rgb(0 0 0 / 78%);
+  --color-podium-glow: rgb(255 214 10 / 14%);
+  --color-on-avatar: var(--color-white);
+  --color-avatar-0-top: var(--color-apple-gray);
+  --color-avatar-0-bottom: var(--color-apple-gray-2);
+  --color-avatar-1-top: var(--color-apple-teal);
+  --color-avatar-1-bottom: var(--color-apple-blue);
+  --color-avatar-2-top: var(--color-apple-purple);
+  --color-avatar-2-bottom: var(--color-apple-indigo);
+  --color-avatar-3-top: var(--color-apple-orange);
+  --color-avatar-3-bottom: var(--color-apple-red);
+  --color-avatar-4-top: var(--color-apple-green);
+  --color-avatar-4-bottom: var(--color-apple-mint);
+  --color-avatar-5-top: var(--color-apple-pink);
+  --color-avatar-5-bottom: var(--color-apple-purple);
+  --color-avatar-6-top: var(--color-apple-cyan);
+  --color-avatar-6-bottom: var(--color-apple-indigo);
+
   --font-system: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', sans-serif;
   --font-system-apple: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
 
@@ -81,6 +119,7 @@
   --font-size-segment: 0.875rem;
   --font-size-monogram: 30cqi;
   --font-size-soon: 6.5cqi;
+  --font-size-avatar-large: 1.5rem;
 
   --font-weight-regular: 400;
   --font-weight-medium: 500;
@@ -117,6 +156,7 @@
   --layout-spotlight-max-width: 35rem;
   --layout-hero-max-height: 52rem;
   --layout-hero-min-height: 40rem;
+  --layout-supporters-max-width: 52rem;
 
   --size-card: clamp(16.25rem, 30vw, 27.5rem);
   --size-card-gap: clamp(1.625rem, 2.6vw, 2.25rem);
@@ -129,6 +169,7 @@
   --size-pill-button: 3.25rem;
   --size-segment-height: 2.75rem;
   --size-segment-width: 23.75rem;
+  --size-segment-width-two: 13rem;
   --size-segment-inset: 3px;
   --size-separator-height: 1.125rem;
   --size-dot: 6px;
@@ -149,6 +190,11 @@
   --size-spinner-petal-gap: 44%;
   --size-keycap: 1.375rem;
   --size-sheet: 36rem;
+  --size-heart-badge: 4.5rem;
+  --size-avatar: 2.75rem;
+  --size-avatar-medium: 3.5rem;
+  --size-avatar-large: 4.5rem;
+  --size-medal: 1.75rem;
   --size-stroke-icon: 2.2;
   --size-stroke-bold: 2.6;
 
@@ -173,6 +219,9 @@
   --shadow-segment-thumb: 0 3px 8px rgb(0 0 0 / 28%);
   --shadow-sheet: 0 30px 80px rgb(0 0 0 / 60%);
   --shadow-banner: 0 12px 36px rgb(0 0 0 / 45%), inset 0 0 0 0.5px var(--color-material-edge);
+  --shadow-heart-badge: 0 14px 36px rgb(255 55 95 / 36%);
+  --shadow-medal: 0 0 0 3px var(--color-launcher-surface);
+  --text-shadow-avatar: 0 1px 2px rgb(0 0 0 / 25%);
 
   --blur-glass: blur(24px) saturate(180%);
   --blur-sheet-backdrop: blur(12px);
@@ -273,6 +322,10 @@
   --color-material: rgb(255 255 255 / 80%);
   --color-material-edge: rgb(0 0 0 / 6%);
   --color-fill-quiet: rgb(118 118 128 / 12%);
+  --color-heart: var(--color-apple-pink-light);
+  --color-heart-badge-bottom: var(--color-apple-pink-light);
+  --color-supporters-glow: rgb(255 45 85 / 12%);
+  --color-podium-glow: rgb(255 204 0 / 16%);
 
   --shadow-card: 0 18px 44px rgb(0 0 0 / 22%);
   /* White glass on a white teaser backdrop showed only its label, so the pill fell away before its
@@ -283,6 +336,7 @@
   --shadow-segment-thumb: 0 3px 8px rgb(0 0 0 / 12%), 0 0 0 0.5px rgb(0 0 0 / 4%);
   --shadow-sheet: 0 24px 64px rgb(0 0 0 / 22%);
   --shadow-banner: 0 10px 30px rgb(0 0 0 / 14%), inset 0 0 0 0.5px var(--color-material-edge);
+  --shadow-heart-badge: 0 12px 28px rgb(255 45 85 / 28%);
 
   --dim-strength: 0.4;
   --blur-hero-floor: blur(14px) saturate(140%);

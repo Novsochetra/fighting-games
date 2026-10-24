@@ -1,0 +1,167 @@
+.podium-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* The places stand like a podium: second, first (raised), third. */
+.podium {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  align-items: end;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.podium__place {
+  --medal-top: var(--color-medal-bronze-top);
+  --medal-bottom: var(--color-medal-bronze-bottom);
+
+  display: flex;
+  flex-direction: column;
+  grid-row: 1;
+  gap: var(--space-1);
+  align-items: center;
+  min-inline-size: 0;
+  padding: var(--space-5) var(--space-2) var(--space-4);
+  text-align: center;
+  background: var(--color-launcher-surface);
+  border: var(--border-width-hairline) solid var(--color-launcher-separator);
+  border-radius: var(--radius-card);
+  animation: place-rise var(--duration-rise) var(--easing-spring) backwards;
+}
+
+.podium__place:nth-child(1) {
+  grid-column: 2;
+  padding-block: var(--space-8) var(--space-6);
+}
+
+.podium__place:nth-child(2) {
+  grid-column: 1;
+  animation-delay: var(--duration-stagger);
+}
+
+.podium__place:nth-child(3) {
+  grid-column: 3;
+  animation-delay: calc(2 * var(--duration-stagger));
+}
+
+.podium__place[data-medal='gold'] {
+  --medal-top: var(--color-medal-gold-top);
+  --medal-bottom: var(--color-medal-gold-bottom);
+
+  background:
+    linear-gradient(to bottom, var(--color-podium-glow), var(--color-clear) 70%),
+    var(--color-launcher-surface);
+}
+
+.podium__place[data-medal='silver'] {
+  --medal-top: var(--color-medal-silver-top);
+  --medal-bottom: var(--color-medal-silver-bottom);
+}
+
+.podium__portrait {
+  position: relative;
+  margin-block-end: var(--space-3);
+}
+
+.podium__portrait .avatar {
+  outline: var(--border-width-ring) solid var(--medal-bottom);
+  outline-offset: var(--border-width-ring);
+}
+
+.podium__medal {
+  position: absolute;
+  inset-block-end: calc(-1 * var(--space-2));
+  inset-inline-end: calc(-1 * var(--space-2));
+  display: grid;
+  place-items: center;
+  inline-size: var(--size-medal);
+  block-size: var(--size-medal);
+  font-size: var(--font-size-apple-footnote);
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-none);
+  color: var(--color-on-medal);
+  background: linear-gradient(to bottom, var(--medal-top), var(--medal-bottom));
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-medal);
+}
+
+.podium__name {
+  max-inline-size: 100%;
+  overflow: hidden;
+  font-size: var(--font-size-apple-body);
+  font-weight: var(--font-weight-semibold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.podium__amount {
+  font-size: var(--font-size-apple-title-3);
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-apple-title);
+  letter-spacing: var(--tracking-tight);
+}
+
+.podium__message {
+  display: -webkit-box;
+  margin-block-start: var(--space-2);
+  overflow: hidden;
+  font-size: var(--font-size-apple-subheadline);
+  line-height: var(--leading-apple-subheadline);
+  color: var(--color-label-muted);
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* A phone fits the three places side by side only with smaller portraits and no messages. */
+@media (max-width: 39.99rem) {
+  .podium .avatar--large {
+    inline-size: var(--size-avatar-medium);
+    block-size: var(--size-avatar-medium);
+    font-size: var(--font-size-apple-title-3);
+  }
+
+  .podium__name {
+    font-size: var(--font-size-apple-subheadline);
+  }
+
+  .podium__amount {
+    font-size: var(--font-size-apple-body);
+  }
+
+  .podium__message {
+    display: none;
+  }
+}
+
+@media (min-width: 40rem) {
+  .podium {
+    gap: var(--space-4);
+  }
+
+  .podium__place {
+    padding: var(--space-7) var(--space-5) var(--space-6);
+  }
+
+  .podium__place:nth-child(1) {
+    padding-block: var(--space-10) var(--space-8);
+  }
+}
+
+@keyframes place-rise {
+  from {
+    opacity: 0;
+    translate: 0 var(--offset-rise);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .podium__place {
+    animation: none;
+  }
+}

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Supporters · Retro Arcade</title>
+    <meta name="description" content="The people who keep every game in the arcade free to play." />
+    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="dark light" />
+    <script src="../src/home/appearance-early.js"></script>
+    <link rel="manifest" href="../assets/manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/icon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap"
+    />
+    <link rel="stylesheet" href="../src/home/tokens.css" />
+    <link rel="stylesheet" href="../src/home/page.css" />
+    <link rel="stylesheet" href="../src/home/buttons.css" />
+    <link rel="stylesheet" href="../src/home/segmented.css" />
+    <link rel="stylesheet" href="../src/home/notice.css" />
+    <link rel="stylesheet" href="../src/supporters/supporters.css" />
+    <link rel="stylesheet" href="../src/supporters/avatar.css" />
+    <link rel="stylesheet" href="../src/supporters/podium.css" />
+    <link rel="stylesheet" href="../src/supporters/roll.css" />
+    <script type="module" src="../src/supporters/main.js"></script>
+  </head>
+  <body>
+    <div class="supporters-page">
+      <header class="supporters-bar">
+        <a class="glass-button glass-button--labeled" id="back" href="../">
+          <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 5l-7 7 7 7" />
+          </svg>
+          <span class="glass-button__label">Arcade</span>
+        </a>
+      </header>
+
+      <main class="supporters">
+        <section class="supporters-hero" aria-labelledby="supporters-title">
+          <span class="heart-badge" aria-hidden="true">
+            <svg class="icon icon--solid" viewBox="0 0 24 24">
+              <path
+                d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
+              />
+            </svg>
+          </span>
+          <h1 class="supporters-hero__title" id="supporters-title">Supporters</h1>
+          <p class="supporters-hero__lead">
+            Every game in the arcade is free to play. These people help keep it that way.
+          </p>
+          <dl class="stats" id="stats" hidden>
+            <div class="stats__item">
+              <dt class="stats__label">Raised</dt>
+              <dd class="stats__value" id="total"></dd>
+            </div>
+            <div class="stats__item">
+              <dt class="stats__label">Supporters</dt>
+              <dd class="stats__value" id="count"></dd>
+            </div>
+          </dl>
+          <a
+            class="pill-button pill-button--primary supporters-hero__donate"
+            id="donate"
+            href="#"
+            target="_blank"
+            rel="noopener"
+            hidden
+          >
+            <svg class="icon icon--solid" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
+              />
+            </svg>
+            Become a supporter
+          </a>
+        </section>
+
+        <div class="notice" id="notice" data-tone="loading">
+          <p class="notice__message" id="status" role="status">Loading supporters…</p>
+          <button class="pill-button pill-button--surface" id="retry" type="button" hidden>
+            Try again
+          </button>
+        </div>
+        <noscript>
+          <p class="notice notice__message">Turn on JavaScript to see the supporters.</p>
+        </noscript>
+
+        <section class="empty" id="empty" aria-labelledby="empty-title" hidden>
+          <h2 class="empty__title" id="empty-title">No supporters yet</h2>
+          <p class="empty__body">Be the first to help keep every game free.</p>
+        </section>
+
+        <section class="podium-section" id="podium-section" aria-labelledby="podium-title" hidden>
+          <h2 class="section-title" id="podium-title">Top supporters</h2>
+          <ol class="podium" id="podium"></ol>
+        </section>
+
+        <section class="roll" id="roll" aria-labelledby="roll-title" hidden>
+          <header class="roll__header">
+            <h2 class="section-title" id="roll-title">Everyone</h2>
+            <div
+              class="segmented segmented--two"
+              id="sort"
+              role="group"
+              aria-label="Sort supporters"
+            >
+              <span class="segmented__thumb" aria-hidden="true"></span>
+              <button class="segmented__option" type="button" data-sort="top" aria-pressed="true">
+                Top
+              </button>
+              <button class="segmented__option" type="button" data-sort="recent">Recent</button>
+            </div>
+          </header>
+          <ol class="roll__list" id="roll-list" aria-labelledby="roll-title"></ol>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

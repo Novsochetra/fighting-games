@@ -43,6 +43,14 @@
   block-size: var(--size-icon-large);
 }
 
+/* A round glass button that also says what it is: an icon, then a short label. */
+.glass-button--labeled {
+  gap: var(--space-2);
+  inline-size: auto;
+  padding-inline: var(--space-3) var(--space-5);
+  font-size: var(--font-size-apple-subheadline);
+}
+
 .pill-button {
   gap: var(--space-2);
   block-size: var(--size-pill-button);

@@ -13,6 +13,8 @@ apps/
     sw.js                 service worker, so browsers offer to install the arcade
     assets/               the arcade's icons and manifest (tools/arcade_icons.py draws the icons)
     src/home/             home page modules and styles; tokens.css holds its colors, type and motion
+    supporters/           the supporters page and supporters.json, the list it shows
+    src/supporters/       supporters page modules and styles
     games/
       <game-id>/          one self-contained app: it loads nothing from outside its folder
         game.json         catalog entry, read by the server
@@ -35,7 +37,7 @@ look without touching the arcade or another game. The home page knows a game onl
 `game.json` and the art it names (`cover`, `banner`, `poster`, `screenshot`); a game links back to the
 arcade only by address (`../../`).
 `test/integration/independence.test.js` fails if a game loads a file from outside its folder or the
-home page loads a file from a game.
+home page (or the supporters page, part of the arcade) loads a file from a game.
 
 ## Request flow
 
@@ -132,6 +134,38 @@ worker that has a fetch handler, so `sw.js` is the smallest one that does: it ca
 pages from the network and answers a failed page load with a short offline page, and its static
 route sends every file under `games/` straight to the network, so a game never waits on it. Only a
 browser with an install prompt registers it (`install-platform.js`).
+
+## Supporters page
+
+Every game is free, so the arcade thanks the people who chip in on its own page, `supporters/`
+(`supporters/index.html`, modules and styles in `src/supporters/`). It is part of the arcade, not a
+game, so it shares the home page's tokens, buttons, segmented control and notice, and follows the same
+light or dark choice (`appearance-early.js`, `appearance.js`). Two links lead there from the home page:
+a heart in the top bar (the heart alone on a phone, `support.css`) and a card under the library.
+
+The list is a hand-kept file, `supporters/supporters.json`, since the arcade has no payment backend;
+the build copies it to Pages like any other file. Add a gift by adding an entry:
+
+```json
+{
+  "currency": "USD",
+  "donateUrl": "https://…",
+  "supporters": [
+    { "name": "Sok Dara", "amount": 25, "date": "2026-10-20", "message": "Keep it free!" }
+  ]
+}
+```
+
+`readSupporters` (`read-supporters.js`) checks the file: an entry needs an amount above zero, an empty
+name shows as Anonymous, a date must be `YYYY-MM-DD`, and the Become a supporter button shows only for
+an `https:` `donateUrl`. Everything in the file is public, so a supporter who wants no name gets an
+empty one, not a hidden one. `ranking.js` ranks by amount (equal amounts share a place: 1, 2, 2, 4) and
+sorts by day for Recent; `view-model.js` turns the list into labels (money and dates through `Intl`,
+whole amounts without cents), and the view only writes them out. The top three stand on a podium with
+gold, silver and bronze, second, first and third from the left, and everyone follows in a grouped list
+under a Top and Recent switch that clicks like the home page's. Each supporter gets a round monogram,
+colored by their name (`paletteOf` in `format.js`); anonymous ones stay gray. With no one on the list
+yet the page says so and invites the first.
 
 ## Game: Steel & Dust
 

@@ -1,0 +1,55 @@
+/* A round monogram, colored by the supporter's name (paletteOf in format.js). */
+.avatar {
+  --avatar-top: var(--color-avatar-0-top);
+  --avatar-bottom: var(--color-avatar-0-bottom);
+
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--size-avatar);
+  block-size: var(--size-avatar);
+  font-size: var(--font-size-apple-subheadline);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-none);
+  color: var(--color-on-avatar);
+  text-shadow: var(--text-shadow-avatar);
+  background: linear-gradient(to bottom, var(--avatar-top), var(--avatar-bottom));
+  border-radius: var(--radius-pill);
+  user-select: none;
+}
+
+.avatar--large {
+  inline-size: var(--size-avatar-large);
+  block-size: var(--size-avatar-large);
+  font-size: var(--font-size-avatar-large);
+}
+
+.avatar[data-palette='1'] {
+  --avatar-top: var(--color-avatar-1-top);
+  --avatar-bottom: var(--color-avatar-1-bottom);
+}
+
+.avatar[data-palette='2'] {
+  --avatar-top: var(--color-avatar-2-top);
+  --avatar-bottom: var(--color-avatar-2-bottom);
+}
+
+.avatar[data-palette='3'] {
+  --avatar-top: var(--color-avatar-3-top);
+  --avatar-bottom: var(--color-avatar-3-bottom);
+}
+
+.avatar[data-palette='4'] {
+  --avatar-top: var(--color-avatar-4-top);
+  --avatar-bottom: var(--color-avatar-4-bottom);
+}
+
+.avatar[data-palette='5'] {
+  --avatar-top: var(--color-avatar-5-top);
+  --avatar-bottom: var(--color-avatar-5-bottom);
+}
+
+.avatar[data-palette='6'] {
+  --avatar-top: var(--color-avatar-6-top);
+  --avatar-bottom: var(--color-avatar-6-bottom);
+}

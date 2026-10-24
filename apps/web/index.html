@@ -33,6 +33,7 @@
     <link rel="stylesheet" href="src/home/sheet.css" />
     <link rel="stylesheet" href="src/home/notice.css" />
     <link rel="stylesheet" href="src/home/hints.css" />
+    <link rel="stylesheet" href="src/home/support.css" />
     <link rel="stylesheet" href="src/home/launch.css" />
     <link rel="stylesheet" href="src/home/install.css" />
     <script type="speculationrules">
@@ -60,6 +61,19 @@
               Retro Arcade
             </h1>
             <div class="topbar__actions">
+              <a
+                class="glass-button glass-button--labeled support-link"
+                id="supporters-link"
+                href="supporters/"
+                aria-label="Supporters"
+              >
+                <svg class="icon icon--solid" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
+                  />
+                </svg>
+                <span class="glass-button__label">Supporters</span>
+              </a>
               <button
                 class="glass-button appearance-toggle"
                 id="appearance-toggle"
@@ -215,6 +229,27 @@
           </button>
           <p class="library__end" id="library-end" hidden>You have seen every game</p>
         </div>
+
+        <aside class="support-callout" aria-labelledby="support-callout-title">
+          <span class="support-callout__badge" aria-hidden="true">
+            <svg class="icon icon--solid" viewBox="0 0 24 24">
+              <path
+                d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
+              />
+            </svg>
+          </span>
+          <div class="support-callout__text">
+            <h2 class="support-callout__title" id="support-callout-title">
+              Free to play, thanks to our supporters
+            </h2>
+            <p class="support-callout__body">
+              Every game here is free. The people who chip in keep the arcade running.
+            </p>
+          </div>
+          <a class="pill-button pill-button--primary support-callout__link" href="supporters/">
+            See supporters
+          </a>
+        </aside>
 
         <footer class="hints" aria-label="Controls">
           <p class="hints__item"><kbd>←</kbd><kbd>→</kbd> Browse</p>
