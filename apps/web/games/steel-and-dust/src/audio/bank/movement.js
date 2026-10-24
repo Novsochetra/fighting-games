@@ -1,7 +1,6 @@
 import { glide } from '../synth/curves.js';
 import { layer } from '../synth/layer.js';
 import { whoosh } from '../synth/air.js';
-import { crackle } from '../synth/texture.js';
 
 function buildJump(track, pitch) {
   const rise = glide(450 * pitch, 0.08, 1600 * pitch);
@@ -18,27 +17,27 @@ function buildJump(track, pitch) {
   return { drive: 1.2 };
 }
 
-function buildLand(track, pitch) {
-  const thud = glide(120 * pitch, 0.07, 55);
-  layer(track, { wave: 'sine', frequency: thud, attack: 0.001, decay: 0.08, level: 1 });
-  const dust = glide(1000, 0.07, 250);
-  layer(track, { filter: 'lowpass', cutoff: dust, attack: 0.001, decay: 0.07, level: 3 });
+// weight coming down on the ground: a thud, the dust it raises and a knock; `fall` is how long the
+// thud and the dust take to settle
+function footfall(track, pitch, { fall, thudDecay, dustDecay }) {
+  const thud = glide(120 * pitch, fall, 55);
+  layer(track, { wave: 'sine', frequency: thud, attack: 0.001, decay: thudDecay, level: 1 });
+  const dust = glide(1000, fall, 250);
+  layer(track, { filter: 'lowpass', cutoff: dust, attack: 0.001, decay: dustDecay, level: 3 });
   const knock = glide(260 * pitch, 0.04, 130);
   layer(track, { wave: 'triangle', frequency: knock, attack: 0.001, decay: 0.04, level: 0.3 });
+}
+
+function buildLand(track, pitch) {
+  footfall(track, pitch, { fall: 0.07, thudDecay: 0.08, dustDecay: 0.07 });
   return { drive: 1.6 };
 }
 
-// a foot striking the road at a run: the body's weight as a soft thump, a knock a phone speaker can
-// play, and the grit and gravel it scuffs; short and quiet, as one comes about four times a second
+// a foot at a run comes down like a landing, only lighter: the same thud, dust and knock settling
+// in two thirds of the time, so one is gone before the next, about four a second
 function buildStep(track, pitch) {
-  const thump = glide(120 * pitch, 0.045, 60);
-  layer(track, { wave: 'sine', frequency: thump, attack: 0.002, decay: 0.045, level: 0.45 });
-  const knock = glide(240 * pitch, 0.035, 150);
-  layer(track, { wave: 'triangle', frequency: knock, attack: 0.001, decay: 0.035, level: 0.55 });
-  const scuff = glide(2200 * pitch, 0.04, 500);
-  layer(track, { filter: 'lowpass', cutoff: scuff, attack: 0.001, decay: 0.035, level: 2.2 });
-  crackle(track, { start: 0.004, length: 0.035, count: 4, cutoff: 2400, level: 0.35 });
-  return { drive: 1.4 };
+  footfall(track, pitch, { fall: 0.045, thudDecay: 0.05, dustDecay: 0.045 });
+  return { drive: 1.6 };
 }
 
 function buildWarp(track, pitch) {
@@ -69,7 +68,7 @@ export const MOVEMENT_SOUNDS = {
   land: { group: 'movement', level: 0.32, takes: 3, seconds: 0.16, priority: 1, build: buildLand },
   warp: { group: 'movement', level: 0.32, takes: 2, seconds: 0.13, priority: 1, build: buildWarp },
   // the lowest priority of all: a footstep never takes a voice from another sound
-  step: { group: 'movement', level: 0.2, takes: 4, seconds: 0.09, priority: 0, build: buildStep },
+  step: { group: 'movement', level: 0.22, takes: 4, seconds: 0.1, priority: 0, build: buildStep },
   release: {
     group: 'movement',
     level: 0.45,
