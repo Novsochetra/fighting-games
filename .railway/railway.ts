@@ -5,7 +5,8 @@ import { defineRailway, github, project, service } from 'railway/iac';
 export const partial = 'retro-arcade';
 
 export default defineRailway(() => {
-  const arcade = service('retro-arcade', {
+  // Railway named the service after the server's workspace package when it first saw the repo.
+  const arcade = service('@arcade/server', {
     source: github('Novsochetra/fighting-games', { branch: 'main', checkSuites: false }),
     // The server runs the source as it is, so the only build step drops the test and lint tools.
     // Railpack sets NPM_CONFIG_PRODUCTION=false, which would make npm keep them.
