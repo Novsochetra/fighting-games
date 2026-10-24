@@ -34,6 +34,8 @@ describe('live sounds', () => {
         'stamp',
         'wipe',
         'reveal',
+        'tallyOpen',
+        'tallyTotal',
         'ui',
         'uiOk',
         'uiBack',

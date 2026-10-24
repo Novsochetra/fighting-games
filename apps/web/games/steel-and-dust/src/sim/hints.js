@@ -1,6 +1,7 @@
 import { HINTS } from '../data/hints.js';
 import { ultReady } from './combat/ult-bar.js';
 import { holdsOwnWeapon } from './fighters/loadout.js';
+import { isFightOver } from './stage/loot-time.js';
 
 const MIN_SHOWN = 150;
 const SHOWN_FOR = 240;
@@ -37,6 +38,9 @@ export function updateHints(game) {
   }
   if (game.hint && ++game.hint.time > SHOWN_FOR) {
     game.hint = null;
+  }
+  if (isFightOver(game)) {
+    return;
   }
   for (const [id, due] of dueHints(game)) {
     if (due) {

@@ -36,6 +36,10 @@ function idleBetweenFights(game, player) {
 
 function tryUltimate(game, player) {
   consumeBuffer(game);
+  // with the boss down no one is left to strike, and the bar carries into the next mission
+  if (game.lootTime > 0) {
+    return false;
+  }
   if (game.ultMeter >= ULT_FULL && ULT_START_STATES.has(player.state)) {
     startUlt(game, player);
     return true;

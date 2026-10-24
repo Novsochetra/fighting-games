@@ -9,6 +9,7 @@ import { createView } from './render/create-view.js';
 import { drawChangedFrame } from './render/draw-changed-frame.js';
 import { missionWait, sceneLoaded } from './render/scene-loaded.js';
 import { canAffordHeavy, ultReady } from './sim/combat/ult-bar.js';
+import { isFightOver } from './sim/stage/loot-time.js';
 import { beginTick, runTick } from './sim/tick.js';
 import { installTitleScene } from './ui/screen/title-scene.js';
 import { createUiState } from './ui/ui-state.js';
@@ -39,7 +40,7 @@ function syncDom() {
     }
   }
   const playing = game.mode === 'play';
-  elements.ultButton.classList.toggle('ready', ultReady(game) && playing);
+  elements.ultButton.classList.toggle('ready', ultReady(game) && playing && !isFightOver(game));
   elements.heavyButton.classList.toggle('empty', !canAffordHeavy(game) && playing);
 }
 

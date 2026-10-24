@@ -6,7 +6,7 @@ import { punch } from '../fx/camera-fx.js';
 import { addRing } from '../fx/effects.js';
 import { floorBelow } from '../stage/terrain.js';
 import { lootBurst } from './loot-fx.js';
-import { spillPieces } from './loot-pieces.js';
+import { scatterPieces } from './loot-pieces.js';
 
 const EDGE_MARGIN = 18;
 
@@ -75,7 +75,7 @@ function playTimeline(game, chest) {
   }
   if (age === TIMING.spillAt) {
     chest.spilled = true;
-    spillPieces(game, { kinds: chest.contents, x: chest.x, y: chest.y - 18, spread: 2.4 });
+    scatterPieces(game, { kinds: chest.contents, x: chest.x, y: chest.y - 18 });
   }
 }
 

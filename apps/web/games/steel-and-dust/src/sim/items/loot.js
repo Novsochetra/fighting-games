@@ -1,40 +1,24 @@
 import { LOOT_BLINK, LOOT_LIFETIME, LOOT_MOTION as MOTION } from '../../data/loot.js';
+import { hurtBox } from '../combat/boxes.js';
 import { collectPiece } from './loot-collect.js';
 import { updateChests } from './loot-chest.js';
 import { updateLootFx } from './loot-fx.js';
-import { fallAndBounce, flyToward } from './loot-motion.js';
+import { fallAndBounce } from './loot-motion.js';
 
-// coins fly to the hero's middle, not their feet
-const MIDDLE_HEIGHT = 14;
-
-function isInReach(player, piece) {
+// a piece's y is its foot, so its box stands on it
+function touches(body, piece) {
+  const half = MOTION.pieceWidth / 2;
   return (
-    Math.abs(player.x - piece.x) < MOTION.magnetReach &&
-    Math.abs(player.y - piece.y) < MOTION.magnetHeight
+    piece.x + half > body.x &&
+    piece.x - half < body.x + body.width &&
+    piece.y > body.y &&
+    piece.y - MOTION.pieceHeight < body.y + body.height
   );
 }
 
-// at a stage clear everything left comes in from anywhere, so no reward is lost to the wipe
-function startsPull(game, piece) {
-  if (game.clearTime > 0) {
-    return piece.time >= MOTION.clearPullDelay;
-  }
-  return piece.time >= MOTION.pullDelay && isInReach(game.player, piece);
-}
-
-// a knocked-out hero lets go of what was flying in, and it drops where it is
-function letGo(piece) {
-  if (piece.pulled) {
-    piece.pulled = false;
-    piece.landed = false;
-  }
-}
-
-function flyIn(game, piece) {
-  const target = { x: game.player.x, y: game.player.y - MIDDLE_HEIGHT };
-  if (flyToward(piece, target)) {
-    collectPiece(game, piece);
-  }
+// the hero takes a piece only by touching it, never from afar: a jump clear over one leaves it
+function isTaken(body, piece) {
+  return Boolean(body) && piece.time >= MOTION.pickupDelay && touches(body, piece);
 }
 
 function bounceAbout(game, piece) {
@@ -44,26 +28,21 @@ function bounceAbout(game, piece) {
   }
 }
 
-function updatePiece(game, piece) {
+function updatePiece(game, piece, body) {
   piece.time++;
-  if (game.player.state === 'ko') {
-    letGo(piece);
-  } else if (!piece.pulled && startsPull(game, piece)) {
-    piece.pulled = true;
-  }
-  if (piece.pulled) {
-    flyIn(game, piece);
-  } else {
-    bounceAbout(game, piece);
+  bounceAbout(game, piece);
+  if (isTaken(body, piece)) {
+    collectPiece(game, piece);
   }
 }
 
-export function isExpired(game, piece) {
-  return !piece.pulled && !game.clearTime && piece.time >= LOOT_LIFETIME;
+export function isExpired(piece) {
+  return piece.time >= LOOT_LIFETIME;
 }
 
-export function isBlinking(game, piece) {
-  return !piece.pulled && !game.clearTime && piece.time >= LOOT_LIFETIME - LOOT_BLINK;
+// every piece blinks through the last two seconds of its life
+export function isBlinking(piece) {
+  return piece.time >= LOOT_LIFETIME - LOOT_BLINK;
 }
 
 function countDown(game) {
@@ -77,10 +56,12 @@ function countDown(game) {
 
 export function updateLoot(game) {
   updateChests(game);
+  // a knocked-out hero has no body to take anything with
+  const body = hurtBox(game.player);
   for (const piece of game.loot) {
-    updatePiece(game, piece);
+    updatePiece(game, piece, body);
   }
-  game.loot = game.loot.filter((piece) => !piece.taken && !isExpired(game, piece));
+  game.loot = game.loot.filter((piece) => !piece.taken && !isExpired(piece));
   updateLootFx(game);
   countDown(game);
 }

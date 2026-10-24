@@ -273,14 +273,20 @@ length.
   card (a `stamp` banner: "Mission 2" as it starts, "Mission complete" or "All clear" as its boss
   falls) stamps in a letter at a time (`src/render/hud/title-card.js`, the letters in
   `src/render/text/card-letter.js`, colors in `src/art/title-card.js`): each falls, strikes its
-  place, bounces and cools from white to gold, then a band of light runs over the card. The walk on
-  to the next mission is never seen: over the end of the clear screen a wave of diamonds burning at
+  place, bounces and cools from white to gold, then a band of light runs over the card. Under the
+  clear card a pane of dark glass with a gold rim sums up the road's loot
+  (`src/render/hud/mission-summary.js`, `summary-panel.js`, colors in `src/art/mission-summary.js`):
+  each kind comes in with the sound of taking it and its count rolling up a climbing scale, then the
+  purse's take rolls up in coins and lands on a chord (`src/sim/stage/summary-cues.js`, live sounds in
+  `src/audio/live/summary-sounds.js`); its ticks are in `src/data/mission-summary.js`, and the clear
+  (`CLEAR_TICKS`) is the card, the summary and the wipe. The walk on to the next mission is never
+  seen: over the end of the clear screen a wave of diamonds burning at
   their edges sweeps night over the cleared road while the road breaks up into ever bigger blocks
   (`src/render/overlays/mission-wipe.js`, `mosaic.js`, timed by `wipe-timing.js`), and the next
   mission opens out of that night the same way over `REVEAL_FRAMES` drawn frames; the last mission
   stays lit behind the All clear. The ticks it all keeps to are in `src/data/mission-handoff.js`,
   and `src/sim/stage/handoff-cues.js` sends out the sounds on the same ticks: the announcer's call
-  ("Mission one! Complete!" while the boss falls, "Mission two! Start!" as its card starts to
+  ("Mission one! Complete!" as the clear starts, "Mission two! Start!" as its card starts to
   fall), a `stamp` as each letter strikes, the `wipe` rushing in and the `reveal` as the next road
   opens. The calls are the game's one set of recorded sounds, since oscillators cannot say words:
   `assets/audio/announcer/`, two MP3s a mission, voiced by `tools/announcer_voice.py` (Kokoro's
@@ -611,19 +617,27 @@ Long sessions must not grow:
 
 ### Loot
 
-Every raider knocked down spills a few gold coins where it falls, now and then a gem or an apple, and
-every boss leaves a chest (`dropLoot` in `src/sim/items/loot-drops.js`, called from `knockOutEnemy`;
-the table, values and timings in `src/data/loot.js`). The pieces live in `game.loot`, the chests in
-`game.chests`: a piece fountains up, bounces lower each time on the floor under it, off a sheer rise
-and off the screen's edges, and settles (`loot-motion.js`); once it has been out a moment the hero
-pulls in any piece close by on their own level, and it flies to their middle, quicker every tick
-(`loot.js`). A coin is one coin in the purse and 10 points, a gem ten coins and 100, an apple a bite
-of health (`loot-collect.js`); coins taken in a quick run climb a major scale through the coin
-sound's playback rate. A chest pops up out of the boss, lands, rattles, bursts open in a column of
-gold light and spills (`loot-chest.js`), all well inside a stage clear, and over a stage clear the
-hero pulls in everything on the road from anywhere. Whatever is still lying about when the clear
-screen ends is paid into the purse (`bankLeftovers`) and the score committed again, so no reward is
-lost to the wipe. The purse (`game.coins`) carries into the next mission with the score, is saved
+Only some raiders pay: one knocked down now and then spills a few gold coins where it falls, at times
+with a gem among them, and on its own odds an apple; every boss leaves a chest (`dropLoot` in
+`src/sim/items/loot-drops.js`, called from `knockOutEnemy`; the table, values and timings in
+`src/data/loot.js`). The pieces live in `game.loot`, the chests in `game.chests`: a piece fountains
+up, bounces lower each time on the floor under it, off a sheer rise and off the screen's edges, then
+rolls on along the floor, slowing until it rests, and drops off the end of a deck it rolls over
+(`loot-motion.js`). The hero takes a piece only by touching it with their body (their hurt
+box), once it has been out a moment: nothing is pulled in from afar, so a piece jumped clear over
+stays where it lies (`loot.js`); one no one takes, a raider's or the boss's, blinks out after five
+seconds. A coin is one
+coin in the purse and 10 points, a gem ten coins and 100, an apple a bite of health
+(`loot-collect.js`); coins taken in a quick run climb a major scale through the coin sound's playback
+rate. A chest pops up out of the boss, lands, rattles, bursts open in a column of gold light and
+flings its loot out to both sides, fast and slow (`scatterPieces`, `CHEST_SCATTER`), so it bounces and
+rolls all over the arena (`loot-chest.js`). When the mission's own boss falls, the loot time starts
+(`src/sim/stage/loot-time.js`, `game.lootTime`): every raider left falls with it, none come after,
+the clock stops, the music goes quiet, nothing left on the road can hurt the hero (`applyHit`) and
+no ultimate starts, and the hero walks about fetching the loot. It ends a short beat after the last
+piece on screen is taken or has blinked out, and never runs past `LOOT_TIME.limit`. Only then does the clear start (`stageClear`). What the
+hero took on the road is counted in `game.missionLoot` (`addToPurse`) for the clear's summary. The
+purse (`game.coins`) carries into the next mission with the score, is saved
 with the run as each mission starts (`saveCheckpoint`; a save from before the purse loads with an
 empty one), and hangs under the score on the HUD (`src/render/hud/purse.js`). The road holds at most `MAX_LOOT` pieces; a
 crowd felled at once pays the rest straight into the purse.
@@ -634,7 +648,7 @@ fight the same whether the hero gathers it or not: coins and gems never change a
 apple only through the hero's health (`test/regression/loot-leaves-the-fight.test.js`). The art is
 in `assets/sprites/loot/` (`src/data/loot-sprites.js`): coins, gems, apples and sparkles at the
 fighters' density, the chest at the crates'. Pieces on the road are drawn over the fallen and under
-everyone standing; pieces flying in, and the sparkle where each is taken, over everything. The
+everyone standing; the sparkle where each is taken, over everything. The
 sounds are bank sounds of their own `loot` group (`src/audio/bank/loot-pieces.js`, `loot-chest.js`)
 that never outrank a blow landing when every voice is busy.
 

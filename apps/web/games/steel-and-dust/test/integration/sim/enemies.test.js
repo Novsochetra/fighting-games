@@ -78,11 +78,11 @@ describe('every enemy type, fighting the hero', () => {
   it("only ends the mission when the mission's own boss falls", () => {
     const { game, enemy } = arenaWith('colossus');
     knockOut(game, enemy, 1);
-    expect(game.clearTime).toBe(0);
+    expect(game.lootTime).toBe(0);
     expect(game.banner.text).toBe('Rust Colossus down');
     spawnEnemy(game, 'khan', 1);
     knockOut(game, game.boss, 1);
-    expect(game.clearTime).toBeGreaterThan(0);
-    expect(game.banner.text).toBe('Mission complete');
+    expect(game.lootTime).toBeGreaterThan(0);
+    expect(game.banner.text).toBe('Gravel Khan down');
   });
 });

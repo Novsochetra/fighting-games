@@ -72,6 +72,7 @@ function timers(game) {
     game.slashBandTime,
     game.slowMotion,
     game.goArrowTime,
+    game.lootTime,
     game.clearTime,
     game.playTime,
     camera.zoom.time,

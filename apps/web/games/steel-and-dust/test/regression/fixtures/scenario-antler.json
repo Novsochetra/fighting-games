@@ -22,6 +22,7 @@
     0,
     0,
     0,
+    0,
     1,
     0,
     0,
@@ -89,6 +90,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -168,6 +170,7 @@
     0,
     0,
     0,
+    0,
     61,
     0,
     0,
@@ -241,6 +244,7 @@
     0,
     0,
     0,
+    0,
     91,
     0,
     0,
@@ -308,6 +312,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -390,6 +395,7 @@
     0,
     0,
     0,
+    0,
     151,
     0,
     0,
@@ -460,6 +466,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -581,6 +588,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -730,6 +738,7 @@
     0,
     0,
     0,
+    0,
     241,
     0,
     4,
@@ -867,6 +876,7 @@
    "meter": 29.200000000000003,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -1016,6 +1026,7 @@
     0,
     0,
     0,
+    0,
     301,
     0,
     0,
@@ -1153,6 +1164,7 @@
    "meter": 29.200000000000003,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -1302,6 +1314,7 @@
     0,
     0,
     0,
+    0,
     361,
     0,
     0,
@@ -1445,6 +1458,7 @@
     0,
     0,
     0,
+    0,
     391,
     0,
     0,
@@ -1566,6 +1580,7 @@
     0,
     0,
     0,
+    0,
     421,
     0,
     0,
@@ -1671,7 +1686,7 @@
     300,
     684
    ],
-   "score": 1677,
+   "score": 1547,
    "combo": [
     1,
     19,
@@ -1681,6 +1696,7 @@
    "meter": 9.200000000000003,
    "tokens": 1,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -1775,7 +1791,7 @@
    "world": {
     "particles": "8a4f2c8897607959",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "19ee395385f00e17",
+    "floaters": "74c48c8febc41e14",
     "shockwaves": "8ba8a4ba3b99344a",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -1792,7 +1808,7 @@
     300,
     684
    ],
-   "score": 1687,
+   "score": 1557,
    "combo": [
     1,
     19,
@@ -1802,6 +1818,7 @@
    "meter": 9.200000000000003,
    "tokens": 1,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -1896,7 +1913,7 @@
    "world": {
     "particles": "433767317589321f",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "cc314689fcc93af8",
+    "floaters": "3494a3acb9b28b64",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -1913,7 +1930,7 @@
     300,
     684
    ],
-   "score": 1687,
+   "score": 1557,
    "combo": [
     1,
     19,
@@ -1924,6 +1941,7 @@
    "tokens": 1,
    "timers": [
     37,
+    0,
     0,
     0,
     0,
@@ -2017,7 +2035,7 @@
    "world": {
     "particles": "a6118d8d2e9e5714",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "7b012517163f53bf",
+    "floaters": "48e86184ecbb2ff9",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -2034,7 +2052,7 @@
     300,
     684
    ],
-   "score": 1687,
+   "score": 1557,
    "combo": [
     1,
     19,
@@ -2045,6 +2063,7 @@
    "tokens": 1,
    "timers": [
     7,
+    0,
     0,
     0,
     0,
@@ -2155,7 +2174,7 @@
     300,
     684
    ],
-   "score": 1763,
+   "score": 1633,
    "combo": [
     2,
     26,
@@ -2165,6 +2184,7 @@
    "meter": 100,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -2276,7 +2296,7 @@
     300,
     684
    ],
-   "score": 1922,
+   "score": 1792,
    "combo": [
     4,
     40,
@@ -2286,6 +2306,7 @@
    "meter": 100,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -2375,7 +2396,7 @@
     300,
     684
    ],
-   "score": 2093,
+   "score": 1963,
    "combo": [
     6,
     54,
@@ -2385,6 +2406,7 @@
    "meter": 100,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -2474,7 +2496,7 @@
     300,
     684
    ],
-   "score": 2483,
+   "score": 2353,
    "combo": [
     7,
     61,
@@ -2488,6 +2510,7 @@
     0,
     0,
     13,
+    0,
     0,
     0,
     595,
@@ -2573,7 +2596,7 @@
     300,
     684
    ],
-   "score": 2483,
+   "score": 2353,
    "combo": [
     7,
     61,
@@ -2583,6 +2606,7 @@
    "meter": 100,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -2672,7 +2696,7 @@
     300,
     684
    ],
-   "score": 2483,
+   "score": 2353,
    "combo": [
     7,
     61,
@@ -2683,6 +2707,7 @@
    "tokens": 2,
    "timers": [
     31,
+    0,
     0,
     0,
     0,
@@ -2771,7 +2796,7 @@
     300,
     684
    ],
-   "score": 2483,
+   "score": 2353,
    "combo": [
     7,
     61,
@@ -2782,6 +2807,7 @@
    "tokens": 2,
    "timers": [
     1,
+    0,
     0,
     0,
     0,
@@ -2870,7 +2896,7 @@
     300,
     684
    ],
-   "score": 2483,
+   "score": 2353,
    "combo": [
     7,
     61,
@@ -2880,6 +2906,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -2969,7 +2996,7 @@
     300,
     684
    ],
-   "score": 2483,
+   "score": 2353,
    "combo": [
     7,
     61,
@@ -2979,6 +3006,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -3068,7 +3096,7 @@
     300,
     684
    ],
-   "score": 2483,
+   "score": 2353,
    "combo": [
     0,
     0,
@@ -3078,6 +3106,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -3144,7 +3173,7 @@
     300,
     684
    ],
-   "score": 2483,
+   "score": 2353,
    "combo": [
     0,
     0,
@@ -3154,6 +3183,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -3220,7 +3250,7 @@
     300,
     684
    ],
-   "score": 2483,
+   "score": 2353,
    "combo": [
     0,
     0,
@@ -3230,6 +3260,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -3296,7 +3327,7 @@
     300,
     684
    ],
-   "score": 2493,
+   "score": 2353,
    "combo": [
     0,
     0,
@@ -3306,6 +3337,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -3372,7 +3404,7 @@
     300,
     684
    ],
-   "score": 2503,
+   "score": 2353,
    "combo": [
     0,
     0,
@@ -3382,6 +3414,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -3471,7 +3504,7 @@
     300,
     684
    ],
-   "score": 2503,
+   "score": 2353,
    "combo": [
     0,
     0,
@@ -3481,6 +3514,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -3592,7 +3626,7 @@
     300,
     684
    ],
-   "score": 2503,
+   "score": 2353,
    "combo": [
     0,
     0,
@@ -3602,6 +3636,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -3735,7 +3770,7 @@
     300,
     684
    ],
-   "score": 2503,
+   "score": 2353,
    "combo": [
     0,
     0,
@@ -3745,6 +3780,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -3878,7 +3914,7 @@
     300,
     684
    ],
-   "score": 2638,
+   "score": 2488,
    "combo": [
     1,
     13,
@@ -3888,6 +3924,7 @@
    "meter": 10.4,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -4021,7 +4058,7 @@
     300,
     684
    ],
-   "score": 3291,
+   "score": 3141,
    "combo": [
     3,
     45,
@@ -4031,6 +4068,7 @@
    "meter": 36,
    "tokens": 0,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -4164,7 +4202,7 @@
     300,
     684
    ],
-   "score": 3321,
+   "score": 3141,
    "combo": [
     3,
     45,
@@ -4174,6 +4212,7 @@
    "meter": 26,
    "tokens": 0,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -4307,7 +4346,7 @@
     300,
     684
    ],
-   "score": 3321,
+   "score": 3141,
    "combo": [
     3,
     45,
@@ -4317,6 +4356,7 @@
    "meter": 26,
    "tokens": 0,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -4450,7 +4490,7 @@
     300,
     684
    ],
-   "score": 3321,
+   "score": 3141,
    "combo": [
     3,
     45,
@@ -4460,6 +4500,7 @@
    "meter": 26,
    "tokens": 0,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -4593,7 +4634,7 @@
     300,
     684
    ],
-   "score": 3321,
+   "score": 3141,
    "combo": [
     0,
     0,
@@ -4603,6 +4644,7 @@
    "meter": 16,
    "tokens": 0,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -4736,7 +4778,7 @@
     300,
     684
    ],
-   "score": 3477,
+   "score": 3297,
    "combo": [
     1,
     15,
@@ -4746,6 +4788,7 @@
    "meter": 16,
    "tokens": 1,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -4857,7 +4900,7 @@
     300,
     684
    ],
-   "score": 3901,
+   "score": 3721,
    "combo": [
     2,
     40,
@@ -4867,6 +4910,7 @@
    "meter": 12,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -4978,7 +5022,7 @@
     300,
     684
    ],
-   "score": 3901,
+   "score": 3721,
    "combo": [
     2,
     40,
@@ -4988,6 +5032,7 @@
    "meter": 2,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -5099,7 +5144,7 @@
     300,
     684
    ],
-   "score": 3901,
+   "score": 3721,
    "combo": [
     2,
     40,
@@ -5109,6 +5154,7 @@
    "meter": 2,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -5220,7 +5266,7 @@
     300,
     684
    ],
-   "score": 3901,
+   "score": 3721,
    "combo": [
     2,
     40,
@@ -5230,6 +5276,7 @@
    "meter": 2,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -5341,7 +5388,7 @@
     300,
     684
    ],
-   "score": 4498,
+   "score": 4318,
    "combo": [
     2,
     28,
@@ -5351,6 +5398,7 @@
    "meter": 24.400000000000002,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -5462,7 +5510,7 @@
     300,
     684
    ],
-   "score": 4985,
+   "score": 4775,
    "combo": [
     3,
     42,
@@ -5476,6 +5524,7 @@
     0,
     0,
     27,
+    0,
     0,
     0,
     1311,
@@ -5583,7 +5632,7 @@
     300,
     684
    ],
-   "score": 4985,
+   "score": 4775,
    "combo": [
     3,
     42,
@@ -5593,6 +5642,7 @@
    "meter": 35.6,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -5701,7 +5751,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4785,
    "combo": [
     3,
     42,
@@ -5716,6 +5766,7 @@
     0,
     0,
     198,
+    0,
     0,
     1353,
     0,
@@ -5741,7 +5792,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -5805,7 +5856,7 @@
    "world": {
     "particles": "cc620d14583914e5",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "91b27c1ea6ffb77a",
+    "floaters": "7d8559f7d7270be2",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -5819,7 +5870,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     3,
     42,
@@ -5834,6 +5885,7 @@
     0,
     0,
     168,
+    0,
     0,
     1383,
     0,
@@ -5859,7 +5911,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -5923,7 +5975,7 @@
    "world": {
     "particles": "da1ee386e03e573e",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "b0135f634b5249d0",
+    "floaters": "8724f41e5c8ec1d8",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -5937,7 +5989,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     3,
     42,
@@ -5952,6 +6004,7 @@
     0,
     0,
     138,
+    0,
     0,
     1413,
     0,
@@ -5977,7 +6030,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -6033,7 +6086,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -6048,6 +6101,7 @@
     0,
     0,
     108,
+    0,
     0,
     1443,
     0,
@@ -6073,7 +6127,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -6106,7 +6160,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -6121,6 +6175,7 @@
     0,
     0,
     78,
+    0,
     0,
     1473,
     0,
@@ -6146,7 +6201,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -6179,7 +6234,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -6194,6 +6249,7 @@
     0,
     0,
     48,
+    0,
     0,
     1503,
     0,
@@ -6219,7 +6275,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -6252,7 +6308,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -6267,6 +6323,7 @@
     0,
     0,
     18,
+    0,
     0,
     1533,
     0,
@@ -6292,7 +6349,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -6325,7 +6382,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -6336,6 +6393,7 @@
    "tokens": 2,
    "timers": [
     37,
+    0,
     0,
     0,
     0,
@@ -6365,7 +6423,7 @@
     "vy": 0,
     "state": "ult",
     "stateTime": 10,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -6398,7 +6456,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -6409,6 +6467,7 @@
    "tokens": 2,
    "timers": [
     7,
+    0,
     0,
     0,
     0,
@@ -6438,7 +6497,7 @@
     "vy": 0,
     "state": "ult",
     "stateTime": 40,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -6471,7 +6530,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -6481,6 +6540,7 @@
    "meter": 100,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -6511,7 +6571,7 @@
     "vy": 0,
     "state": "ult",
     "stateTime": 70,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -6544,7 +6604,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -6554,6 +6614,7 @@
    "meter": 100,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -6584,7 +6645,7 @@
     "vy": 0,
     "state": "ult",
     "stateTime": 100,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -6617,7 +6678,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -6627,6 +6688,7 @@
    "meter": 100,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -6657,7 +6719,7 @@
     "vy": 0,
     "state": "ult",
     "stateTime": 130,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -6690,7 +6752,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -6700,6 +6762,7 @@
    "meter": 100,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -6730,7 +6793,7 @@
     "vy": 0,
     "state": "ult",
     "stateTime": 160,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -6763,7 +6826,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -6774,6 +6837,7 @@
    "tokens": 2,
    "timers": [
     33,
+    0,
     0,
     0,
     0,
@@ -6803,7 +6867,7 @@
     "vy": 0,
     "state": "ult",
     "stateTime": 14,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -6836,7 +6900,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -6847,6 +6911,7 @@
    "tokens": 2,
    "timers": [
     3,
+    0,
     0,
     0,
     0,
@@ -6876,7 +6941,7 @@
     "vy": 0,
     "state": "ult",
     "stateTime": 44,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -6909,7 +6974,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -6919,6 +6984,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -6949,7 +7015,7 @@
     "vy": 0,
     "state": "ult",
     "stateTime": 74,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -6982,7 +7048,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -6992,6 +7058,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -7022,7 +7089,7 @@
     "vy": 0,
     "state": "ult",
     "stateTime": 104,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -7055,7 +7122,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -7065,6 +7132,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -7095,7 +7163,7 @@
     "vy": 0,
     "state": "ult",
     "stateTime": 134,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -7128,7 +7196,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -7138,6 +7206,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -7168,7 +7237,7 @@
     "vy": 0,
     "state": "ult",
     "stateTime": 164,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -7201,7 +7270,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -7211,6 +7280,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -7241,7 +7311,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -7274,7 +7344,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -7284,6 +7354,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -7314,7 +7385,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -7350,7 +7421,7 @@
     984,
     1752
    ],
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -7360,6 +7431,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -7390,7 +7462,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 40,
@@ -7426,7 +7498,7 @@
     984,
     1752
    ],
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -7436,6 +7508,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -7466,7 +7539,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": -1,
     "weapon": "sword",
     "durability": 40,
@@ -7525,7 +7598,7 @@
     984,
     1752
    ],
-   "score": 5035,
+   "score": 4805,
    "combo": [
     0,
     0,
@@ -7535,6 +7608,7 @@
    "meter": 0,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -7565,7 +7639,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": -1,
     "weapon": "sword",
     "durability": 40,
@@ -7646,7 +7720,7 @@
     984,
     1752
    ],
-   "score": 5226,
+   "score": 4996,
    "combo": [
     2,
     18,
@@ -7656,6 +7730,7 @@
    "meter": 14.4,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -7686,7 +7761,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": -1,
     "weapon": "sword",
     "durability": 38,
@@ -7767,7 +7842,7 @@
     984,
     1752
    ],
-   "score": 5742,
+   "score": 5512,
    "combo": [
     4,
     37,
@@ -7777,6 +7852,7 @@
    "meter": 29.599999999999998,
    "tokens": 2,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -7807,7 +7883,7 @@
     "vy": -2.3000000000000016,
     "state": "attack",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": -1,
     "weapon": "sword",
     "durability": 36,
@@ -7888,7 +7964,7 @@
     984,
     1752
    ],
-   "score": 5752,
+   "score": 5512,
    "combo": [
     4,
     37,
@@ -7898,6 +7974,7 @@
    "meter": 19.599999999999998,
    "tokens": 1,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -7928,7 +8005,7 @@
     "vy": 0,
     "state": "idle",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": -1,
     "weapon": "sword",
     "durability": 36,
@@ -8009,7 +8086,7 @@
     984,
     1752
    ],
-   "score": 5782,
+   "score": 5512,
    "combo": [
     4,
     37,
@@ -8019,6 +8096,7 @@
    "meter": 19.599999999999998,
    "tokens": 1,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -8049,7 +8127,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 36,
@@ -8130,7 +8208,7 @@
     984,
     1752
    ],
-   "score": 5782,
+   "score": 5512,
    "combo": [
     4,
     37,
@@ -8140,6 +8218,7 @@
    "meter": 19.599999999999998,
    "tokens": 1,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -8170,7 +8249,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 36,
@@ -8251,7 +8330,7 @@
     984,
     1752
    ],
-   "score": 5782,
+   "score": 5512,
    "combo": [
     0,
     0,
@@ -8261,6 +8340,7 @@
    "meter": 9.599999999999998,
    "tokens": 1,
    "timers": [
+    0,
     0,
     0,
     0,
@@ -8291,7 +8371,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 0,
-    "hp": 99,
+    "hp": 94,
     "facing": 1,
     "weapon": "sword",
     "durability": 36,
@@ -8382,57 +8462,57 @@
   {
    "tick": 480,
    "frame": {
-    "calls": 1658,
-    "digest": "6c39536a94b0d52a"
+    "calls": 1657,
+    "digest": "edfd208ed23b9aca"
    }
   },
   {
    "tick": 720,
    "frame": {
-    "calls": 1438,
-    "digest": "9d95a29953a94c42"
+    "calls": 1432,
+    "digest": "e67c4cd8fbc94771"
    }
   },
   {
    "tick": 960,
    "frame": {
-    "calls": 1358,
-    "digest": "9961517289c0285f"
+    "calls": 1357,
+    "digest": "de1df2d10d4ca2d6"
    }
   },
   {
    "tick": 1200,
    "frame": {
     "calls": 1383,
-    "digest": "8ced7d075bc49ca3"
+    "digest": "fb4762deea49c94e"
    }
   },
   {
    "tick": 1440,
    "frame": {
-    "calls": 1609,
-    "digest": "a142f2a9830d5689"
+    "calls": 1597,
+    "digest": "48171d05036adcd6"
    }
   },
   {
    "tick": 1680,
    "frame": {
     "calls": 1378,
-    "digest": "5b2326cf7fccebc9"
+    "digest": "b5b1fe3a8f8dde9d"
    }
   },
   {
    "tick": 1920,
    "frame": {
     "calls": 1456,
-    "digest": "2c7d51dd14e1511e"
+    "digest": "68d427998098bf7b"
    }
   },
   {
    "tick": 2160,
    "frame": {
     "calls": 1369,
-    "digest": "941ff3146e3d5fa2"
+    "digest": "c56361bb4af0b9a6"
    }
   }
  ]

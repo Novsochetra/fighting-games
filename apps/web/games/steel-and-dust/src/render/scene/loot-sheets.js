@@ -21,12 +21,13 @@ function snap(value, pixelsPerUnit) {
   return Math.round(value * pixelsPerUnit) / pixelsPerUnit;
 }
 
-// one frame with the middle of its bottom edge on (x, y)
-export function drawLootFrame(painter, sheets, { name, frame, x, y }) {
+// one frame with the middle of its bottom edge on (x, y); `zoom` grows it by whole strip pixels
+export function drawLootFrame(painter, sheets, { name, frame, x, y, zoom = 1 }) {
   if (!sheets.ready[name]) {
     return;
   }
-  const { frameWidth, frameHeight, scale } = LOOT_SPRITES[name];
+  const { frameWidth, frameHeight } = LOOT_SPRITES[name];
+  const scale = LOOT_SPRITES[name].scale * zoom;
   const width = frameWidth * scale;
   const height = frameHeight * scale;
   const unit = 1 / scale;

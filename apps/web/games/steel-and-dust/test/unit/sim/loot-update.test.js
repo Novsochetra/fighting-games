@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { GROUND_Y } from '../../../src/config.js';
 import { LOOT_BLINK, LOOT_LIFETIME, LOOT_MOTION } from '../../../src/data/loot.js';
-import { isBlinking, updateLoot } from '../../../src/sim/items/loot.js';
+import { isBlinking, isExpired, updateLoot } from '../../../src/sim/items/loot.js';
 import { countRandomDraws, createLootGame, piece, soundKeys } from '../../support/loot-game.js';
+
+const READY = LOOT_MOTION.pickupDelay;
 
 function lootGame(pieces) {
   const { game, sounds } = createLootGame();
@@ -18,70 +20,83 @@ function run(game, ticks) {
   }
 }
 
-describe('the hero gathering loot', () => {
-  it('pulls in a piece close by once it has been out a moment, and takes it', () => {
-    const { game, sounds } = lootGame([{ x: 120, time: LOOT_MOTION.pullDelay }]);
+function inTheAir(game, y) {
+  Object.assign(game.player, { state: 'air', airborne: true, y });
+}
+
+describe('the hero taking loot', () => {
+  it('takes a piece the hero walks onto, and counts it for the summary', () => {
+    const { game, sounds } = lootGame([{ x: 104, time: READY }]);
     updateLoot(game);
-    expect(game.loot[0].pulled).toBe(true);
-    run(game, 20);
     expect(game.loot).toEqual([]);
     expect(game.coins).toBe(1);
+    expect(game.missionLoot).toEqual({ coin: 1, gem: 0, apple: 0 });
     expect(soundKeys(sounds)).toContain('coin');
   });
 
-  it('lets a fresh spill fly before pulling any of it in', () => {
-    const { game } = lootGame([{ x: 105, time: 0 }]);
-    run(game, LOOT_MOTION.pullDelay - 1);
-    expect(game.loot[0].pulled).toBe(false);
-  });
-
-  it('leaves pieces out of reach, and pieces on a deck far above', () => {
-    const { game } = lootGame([
-      { x: 100 + LOOT_MOTION.magnetReach + 5, time: 60 },
-      { x: 100, y: GROUND_Y - LOOT_MOTION.magnetHeight - 5, time: 60 },
-    ]);
-    run(game, 10);
-    expect(game.loot.every((each) => !each.pulled)).toBe(true);
-  });
-
-  it('a knocked-out hero lets go, and the piece drops where it was', () => {
-    const { game } = lootGame([{ x: 125, time: 60 }]);
-    updateLoot(game);
-    game.player.state = 'ko';
-    updateLoot(game);
-    expect(game.loot[0]).toMatchObject({ pulled: false, landed: false });
+  it('leaves a piece a step away lying where it is, however long the hero waits', () => {
+    const { game } = lootGame([{ x: 125, time: READY }]);
+    run(game, 120);
+    expect(game.loot).toHaveLength(1);
+    expect(game.loot[0]).toMatchObject({ x: 125, y: GROUND_Y });
     expect(game.coins).toBe(0);
   });
 
-  it('at a stage clear pulls in every piece on the road, however far', () => {
-    const { game } = lootGame([
-      { x: 360, time: 0 },
-      { kind: 'gem', x: 10, time: 0 },
-    ]);
-    game.clearTime = 1;
-    run(game, LOOT_MOTION.clearPullDelay + 90);
+  it('leaves a piece the hero jumps clear over', () => {
+    const { game } = lootGame([{ x: 100, time: READY }]);
+    inTheAir(game, GROUND_Y - 30);
+    run(game, 5);
+    expect(game.loot).toHaveLength(1);
+  });
+
+  it('takes a piece the hero lands on', () => {
+    const { game } = lootGame([{ x: 100, time: READY }]);
+    inTheAir(game, GROUND_Y - 4);
+    updateLoot(game);
     expect(game.loot).toEqual([]);
-    expect(game.coins).toBe(11);
+  });
+
+  it('leaves a piece on a deck far above the hero', () => {
+    const { game } = lootGame([{ x: 100, y: GROUND_Y - 50, time: READY }]);
+    run(game, 5);
+    expect(game.loot).toHaveLength(1);
+  });
+
+  it('lets a fresh spill be seen to fly before any of it can be taken', () => {
+    const { game } = lootGame([{ x: 100, time: 0 }]);
+    run(game, READY - 1);
+    expect(game.loot).toHaveLength(1);
+    updateLoot(game);
+    expect(game.loot).toEqual([]);
+  });
+
+  it('a knocked-out hero takes nothing', () => {
+    const { game } = lootGame([{ x: 100, time: READY }]);
+    game.player.state = 'ko';
+    run(game, 5);
+    expect(game.loot).toHaveLength(1);
+    expect(game.coins).toBe(0);
   });
 });
 
 describe('loot left lying', () => {
-  it('blinks for its last two seconds, then is gone', () => {
+  it('blinks for its last two seconds, then is gone, five seconds after it came out', () => {
+    expect(LOOT_LIFETIME).toBe(5 * 60);
     const { game } = lootGame([{ x: 300, time: LOOT_LIFETIME - LOOT_BLINK - 1 }]);
-    expect(isBlinking(game, game.loot[0])).toBe(false);
+    expect(isBlinking(game.loot[0])).toBe(false);
     updateLoot(game);
-    expect(isBlinking(game, game.loot[0])).toBe(true);
+    expect(isBlinking(game.loot[0])).toBe(true);
     run(game, LOOT_BLINK);
     expect(game.loot).toEqual([]);
     expect(game.coins).toBe(0);
   });
 
-  it('never blinks out over a stage clear', () => {
-    const { game } = lootGame([{ x: 300, time: LOOT_LIFETIME + 5 }]);
-    game.clearTime = 1;
-    expect(isBlinking(game, game.loot[0])).toBe(false);
+  it("keeps its own five seconds in the loot time after the boss's fall", () => {
+    const { game } = lootGame([{ x: 300, time: LOOT_LIFETIME - 1 }]);
+    game.lootTime = 1;
+    expect(isExpired(game.loot[0])).toBe(false);
     updateLoot(game);
-    expect(game.loot.length + game.coins).toBeGreaterThan(0);
+    expect(game.loot).toEqual([]);
   });
 });
 
@@ -95,13 +110,14 @@ describe('the purse and the coin run count down', () => {
     expect(game.coinStreak.timer).toBe(0);
   });
 
-  it('moves, pulls and takes loot without a draw from Math.random', () => {
+  it('moves and takes loot without a draw from Math.random', () => {
     const { game } = lootGame([
-      { x: 110, time: 60 },
+      { x: 102, time: 60 },
       { x: 300, time: 0, landed: false, vy: -3, vx: 1 },
       { kind: 'gem', x: 95, time: 60 },
-      { kind: 'apple', x: 90, time: 60 },
+      { kind: 'apple', x: 98, time: 60 },
     ]);
     expect(countRandomDraws(() => run(game, 120))).toBe(0);
+    expect(game.missionLoot).toEqual({ coin: 1, gem: 1, apple: 1 });
   });
 });

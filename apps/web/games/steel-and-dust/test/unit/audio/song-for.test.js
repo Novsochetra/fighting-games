@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { songFor } from '../../../src/audio/music/song-for.js';
 
-const gameIn = (fields) => ({ mode: 'play', clearTime: 0, boss: null, ...fields });
+const gameIn = (fields) => ({ mode: 'play', lootTime: 0, clearTime: 0, boss: null, ...fields });
 
 describe('songFor', () => {
   it('plays the title song on the title screen', () => {
@@ -20,8 +20,12 @@ describe('songFor', () => {
     expect(songFor(gameIn({ boss: { entering: false, state: 'ko' } }))).toBe('battle');
   });
 
-  it('goes silent once the stage is cleared, and in other modes', () => {
+  it('goes silent from the mission boss falling, through the loot time and the clear', () => {
+    expect(songFor(gameIn({ lootTime: 30, boss: { entering: false, state: 'ko' } }))).toBeNull();
     expect(songFor(gameIn({ clearTime: 12 }))).toBeNull();
+  });
+
+  it('stays silent in the other modes', () => {
     expect(songFor(gameIn({ mode: 'clear' }))).toBeNull();
   });
 });

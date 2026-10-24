@@ -32,8 +32,8 @@ function drawShadow(painter, { piece, terrain }) {
   painter.use(LOOT_COLORS.shadow).rect(piece.x - width / 2, floor - 1, width, 1);
 }
 
-function drawPiece(painter, { piece, sheets, game }) {
-  if (isBlinking(game, piece) && (piece.time >> 2) & 1) {
+function drawPiece(painter, { piece, sheets }) {
+  if (isBlinking(piece) && (piece.time >> 2) & 1) {
     return;
   }
   const bob = piece.landed && piece.kind === 'apple' ? Math.round(Math.sin(piece.time * 0.08)) : 0;
@@ -49,22 +49,17 @@ function drawPiece(painter, { piece, sheets, game }) {
 // would sit under its own bottom row, so it is not drawn: a full road costs half the canvas calls
 export function drawGroundLoot(painter, { game, sheets, cameraX }) {
   for (const piece of game.loot) {
-    if (!piece.pulled && isOnScreen(piece.x, cameraX)) {
+    if (isOnScreen(piece.x, cameraX)) {
       if (!piece.landed) {
         drawShadow(painter, { piece, terrain: game.terrain });
       }
-      drawPiece(painter, { piece, sheets, game });
+      drawPiece(painter, { piece, sheets });
     }
   }
 }
 
-// pieces flying to the hero go over everyone, and a sparkle marks each one taken
-export function drawFlyingLoot(painter, { game, sheets }) {
-  for (const piece of game.loot) {
-    if (piece.pulled) {
-      drawPiece(painter, { piece, sheets, game });
-    }
-  }
+// a sparkle marks each piece taken, over everyone
+export function drawLootSparkles(painter, { game, sheets }) {
   const { ticks, frames } = LOOT_SPRITES.sparkle;
   for (const sparkle of game.lootFx) {
     const frame = Math.min(frames - 1, Math.floor(sparkle.time / ticks));

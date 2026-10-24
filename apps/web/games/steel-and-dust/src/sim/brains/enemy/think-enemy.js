@@ -1,5 +1,6 @@
 import { screenEdges } from '../../fighters/arena-bounds.js';
 import { takeToken } from '../../fighters/tokens.js';
+import { isFightOver } from '../../stage/loot-time.js';
 import { tryBlink } from './blink.js';
 import { thinkBoss } from './boss.js';
 import { tryClimb } from './climb.js';
@@ -18,7 +19,7 @@ function walkIntoArena(game, fighter) {
 }
 
 function fightIsOff(game) {
-  return game.player.state === 'ko' || game.mode !== 'play' || game.clearTime > 0;
+  return game.player.state === 'ko' || game.mode !== 'play' || isFightOver(game);
 }
 
 function isPlayerDown(player) {

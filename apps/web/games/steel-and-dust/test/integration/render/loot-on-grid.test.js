@@ -4,7 +4,7 @@ import { CHEST_TIMING } from '../../../src/data/loot.js';
 import { createView } from '../../../src/render/create-view.js';
 import { drawPurse, easePurse } from '../../../src/render/hud/purse.js';
 import { drawChests } from '../../../src/render/scene/loot-chest.js';
-import { drawFlyingLoot, drawGroundLoot } from '../../../src/render/scene/loot.js';
+import { drawGroundLoot, drawLootSparkles } from '../../../src/render/scene/loot.js';
 import { knockOut } from '../../../src/sim/combat/knock-out.js';
 import { updateLoot } from '../../../src/sim/items/loot.js';
 import { FakeImage } from '../../support/fake-image.js';
@@ -29,11 +29,11 @@ function drawLoot(painter, { game, view }) {
   const sheets = view.lootSheets;
   drawChests(painter, { game, sheets });
   drawGroundLoot(painter, { game, sheets, cameraX: game.camera.x });
-  drawFlyingLoot(painter, { game, sheets });
+  drawLootSparkles(painter, { game, sheets });
   drawPurse(painter, game, view);
 }
 
-// a road with raiders and a boss just felled, the hero close enough to pull some pieces in
+// a road with raiders and a boss just felled, the hero standing where some of it lands
 function lootyGame() {
   const { game } = createLootGame();
   for (let i = 0; i < 6; i++) {
@@ -78,7 +78,7 @@ describe('loot on the pixel grid', () => {
     view.lootSheets.ready = {};
     const before = counts.draws;
     drawGroundLoot(painter, { game, sheets: view.lootSheets, cameraX: 0 });
-    drawFlyingLoot(painter, { game, sheets: view.lootSheets });
+    drawLootSparkles(painter, { game, sheets: view.lootSheets });
     expect(counts.draws - before).toBeLessThanOrEqual(1);
   });
 });

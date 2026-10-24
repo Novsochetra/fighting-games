@@ -20,8 +20,8 @@ function describeState(audio) {
   };
 }
 
-// game is only read: camera.x, muted, settings.music, settings.sfx, mode, clearTime, boss,
-// missionIndex
+// game is only read: camera.x, muted, settings.music, settings.sfx, mode, lootTime, clearTime,
+// boss, missionIndex
 export function createAudio(game) {
   const audio = {
     context: null,

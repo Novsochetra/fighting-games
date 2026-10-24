@@ -47,7 +47,7 @@ export function piece(overrides) {
     vy: 0,
     time: 0,
     landed: false,
-    pulled: false,
+    rolling: false,
     taken: false,
     phase: 0,
     ...overrides,

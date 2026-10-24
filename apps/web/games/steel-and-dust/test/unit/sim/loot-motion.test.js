@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GROUND_Y, VIEW_WIDTH } from '../../../src/config.js';
-import { LOOT_MOTION } from '../../../src/data/loot.js';
-import { fallAndBounce, flyToward } from '../../../src/sim/items/loot-motion.js';
+import { fallAndBounce } from '../../../src/sim/items/loot-motion.js';
 import { createLootGame, piece } from '../../support/loot-game.js';
 import { buildTerrain } from '../../support/terrain-game.js';
 
@@ -76,24 +75,29 @@ describe('a loot piece falling', () => {
     expect(coin.x).toBeLessThan(200);
     expect(coin.y).toBe(GROUND_Y);
   });
-});
 
-describe('a loot piece flying to the hero', () => {
-  it('speeds up toward the target, never past top speed, and arrives', () => {
-    const coin = piece({ x: 0, y: 0 });
-    const target = { x: 120, y: 40 };
-    let arrived = false;
-    let lastSpeed = 0;
-    for (let tick = 0; tick < 60 && !arrived; tick++) {
-      arrived = flyToward(coin, target);
-      const speed = Math.hypot(coin.vx, coin.vy);
-      expect(speed).toBeGreaterThanOrEqual(lastSpeed - 1e-9);
-      expect(speed).toBeLessThanOrEqual(LOOT_MOTION.magnetTopSpeed + 1e-9);
-      lastSpeed = speed;
+  it('rolls on along the floor after its last bounce, slowing until it rests', () => {
+    const { game } = createLootGame();
+    const coin = piece({ x: 100, y: GROUND_Y - 6, vx: 2, vy: 0 });
+    const rolled = [];
+    for (let tick = 0; tick < 300 && !coin.landed; tick++) {
+      fallAndBounce(coin, game);
+      if (coin.rolling) {
+        rolled.push(coin.x);
+      }
     }
-    expect(arrived).toBe(true);
-    expect(Math.hypot(coin.x - target.x, coin.y - target.y)).toBeLessThan(
-      LOOT_MOTION.magnetTopSpeed,
-    );
+    expect(rolled.length).toBeGreaterThan(5);
+    expect(rolled.at(-1) - rolled[0]).toBeGreaterThan(5);
+    expect(coin).toMatchObject({ landed: true, rolling: false, vx: 0, y: GROUND_Y });
+  });
+
+  it('rolls off the end of a deck and drops to the ground below', () => {
+    const { game } = createLootGame();
+    game.terrain = buildTerrain({ platforms: [{ at: 100, width: 40, rise: 30, kind: 'planks' }] });
+    const deck = game.terrain.platforms[0];
+    const coin = piece({ x: deck.x + deck.width - 6, y: deck.y, vx: 1.5, rolling: true });
+    settle(game, coin);
+    expect(coin.x).toBeGreaterThan(deck.x + deck.width);
+    expect(coin.y).toBe(GROUND_Y);
   });
 });

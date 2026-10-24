@@ -16,15 +16,16 @@ import { updateShockwaves } from './hazards/shockwaves.js';
 import { updateHints } from './hints.js';
 import { expireBuffer } from './input/read-input.js';
 import { updateLoot } from './items/loot.js';
-import { bankLeftovers } from './items/loot-drops.js';
 import { updatePickups } from './items/pickups.js';
 import { updateCamera } from './stage/camera.js';
 import { enterNextMission } from './stage/flow.js';
 import { cueHandoff } from './stage/handoff-cues.js';
+import { isFightOver, updateLootTime } from './stage/loot-time.js';
 import { missionOf } from './stage/mission.js';
 import { endRun } from './stage/run-end.js';
 import { updateSummons } from './summons/update-summons.js';
 import { BANNER_FOREVER, CLEAR_TICKS } from './stage/stage-clear.js';
+import { cueSummary } from './stage/summary-cues.js';
 import { updateZones } from './stage/zones.js';
 
 function updateWorld(game) {
@@ -61,8 +62,7 @@ function advanceClearScreen(game) {
   if (game.clearTime <= CLEAR_TICKS || game.mode !== 'play') {
     return;
   }
-  // coins taken over the clear screen came after the boss's fall committed the score
-  bankLeftovers(game);
+  // coins taken over the loot time came after the boss's fall committed the score
   commitScore(game);
   if (isLastMission(game.missionIndex)) {
     game.mode = 'clear';
@@ -84,9 +84,11 @@ function countDown(game) {
   if (game.goArrowTime > 0) {
     game.goArrowTime--;
   }
+  updateLootTime(game);
   ageBanner(game);
   advanceClearScreen(game);
   cueHandoff(game);
+  cueSummary(game);
 }
 
 function ageBanner(game) {
@@ -136,7 +138,7 @@ export function simulateStep(game) {
     updateEffects(game);
     return;
   }
-  if (game.mode === 'play' && !game.clearTime) {
+  if (game.mode === 'play' && !isFightOver(game)) {
     game.playTime++;
   }
   updateZones(game);

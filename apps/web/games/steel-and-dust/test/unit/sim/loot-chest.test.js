@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { GROUND_Y, VIEW_WIDTH } from '../../../src/config.js';
 import { CHEST_FRAMES } from '../../../src/data/loot-sprites.js';
-import { CHEST_TIMING } from '../../../src/data/loot.js';
+import { CHEST_SCATTER, CHEST_TIMING } from '../../../src/data/loot.js';
 import { chestAge, dropChest, updateChests } from '../../../src/sim/items/loot-chest.js';
 import { countRandomDraws, createLootGame, soundKeys } from '../../support/loot-game.js';
 
@@ -60,6 +60,20 @@ describe('a boss chest', () => {
     runUntil(game, () => game.chests.length === 0);
     expect(game.chests).toEqual([]);
     expect(game.loot.length).toBe(spilled);
+  });
+
+  it('flings its loot out to both sides, some far and some near', () => {
+    const { game, chest } = chestGame();
+    chest.contents = Array.from({ length: 20 }, () => 'coin');
+    runUntil(game, () => chest.spilled);
+    const speeds = game.loot.map((piece) => piece.vx);
+    expect(speeds.filter((vx) => vx < 0)).toHaveLength(10);
+    expect(speeds.filter((vx) => vx > 0)).toHaveLength(10);
+    const sizes = speeds.map(Math.abs);
+    expect(Math.min(...sizes)).toBeGreaterThanOrEqual(CHEST_SCATTER.speed[0]);
+    expect(Math.max(...sizes)).toBeLessThanOrEqual(CHEST_SCATTER.speed[1]);
+    expect(Math.max(...sizes) - Math.min(...sizes)).toBeGreaterThan(2);
+    expect(game.loot.every((piece) => piece.vy < 0)).toBe(true);
   });
 
   it('opens on screen even when the boss fell against its edge', () => {

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { ULT_MAX } from '../../../src/config.js';
-import { CHEST_DROP, LOOT_VALUES } from '../../../src/data/loot.js';
+import { LOOT_TIME } from '../../../src/data/loot.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { heroMoves } from '../../../src/data/styles/index.js';
 import { movesetOf, setWeapon } from '../../../src/sim/fighters/loadout.js';
@@ -14,11 +14,14 @@ import {
   startPlay,
 } from '../../../src/sim/stage/flow.js';
 import { spawnEnemy } from '../../../src/sim/stage/spawn-enemy.js';
+import { CLEAR_TICKS } from '../../../src/sim/stage/stage-clear.js';
 import { seededRandom } from '../../support/seeded-random.js';
 import { placeCrate } from '../../support/terrain-game.js';
 import { createPlayingGame, press, release, runTicks, tap } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
+// the loot time at its longest, then the clear, with the boss's fall in slow motion before them
+const TO_NEXT_MISSION = LOOT_TIME.limit + CLEAR_TICKS + 60;
 const enemies = (game) => game.fighters.filter((fighter) => fighter.side === 'enemy');
 
 function walkInto(game, x) {
@@ -210,15 +213,15 @@ describe('a fight, with every system running', () => {
     const game = createPlayingGame();
     const boss = felledBoss(game, 'khan');
     expect(boss.state).toBe('ko');
-    expect(game.clearTime).toBeGreaterThan(0);
-    // the boss's chest opens over the clear screen, and all it holds is paid in before the next road
-    const { coins, gems } = CHEST_DROP.missionBoss;
-    const score = game.score + coins * LOOT_VALUES.coin.score + gems * LOOT_VALUES.gem.score;
-    runTicks(game, 600);
+    // the hero first has the loot time to fetch the chest's loot, then the clear sums it up
+    expect(game.lootTime).toBeGreaterThan(0);
+    expect(game.banner.text).toBe('Gravel Khan down');
+    const score = game.score;
+    runTicks(game, TO_NEXT_MISSION);
     expect(game.mode).toBe('play');
     expect(game.missionIndex).toBe(1);
-    expect(game.score).toBe(score);
-    expect(game.records).toMatchObject({ bestScore: score });
+    expect(game.score).toBeGreaterThanOrEqual(score);
+    expect(game.records).toMatchObject({ bestScore: game.score });
   });
 
   it('walks on from the fallen Warden Ox into Angkor Wat instead of ending the game', () => {
@@ -227,8 +230,8 @@ describe('a fight, with every system running', () => {
     startPlay(game);
     const boss = felledBoss(game, 'brute');
     expect(boss.state).toBe('ko');
-    expect(game.banner.text).toBe('Mission complete');
-    runTicks(game, 600);
+    expect(game.lootTime).toBeGreaterThan(0);
+    runTicks(game, TO_NEXT_MISSION);
     expect(game.mode).toBe('play');
     expect(MISSIONS[game.missionIndex].name).toBe('Angkor Wat');
     expect(game.terrain).toBe(MISSIONS[10].terrain);
@@ -240,8 +243,9 @@ describe('a fight, with every system running', () => {
     startPlay(game);
     const boss = felledBoss(game, 'guardian');
     expect(boss.state).toBe('ko');
+    expect(game.lootTime).toBeGreaterThan(0);
+    runTicks(game, TO_NEXT_MISSION);
     expect(game.banner.text).toBe('All clear');
-    runTicks(game, 600);
     expect(game.mode).toBe('clear');
     expect(game.missionIndex).toBe(11);
     expect(game.records).toMatchObject({ bestScore: game.score });

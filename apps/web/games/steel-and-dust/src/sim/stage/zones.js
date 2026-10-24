@@ -2,6 +2,7 @@ import { COLORS } from '../../art/colors.js';
 import { VIEW_WIDTH } from '../../config.js';
 import { showBanner } from '../fx/effects.js';
 import { cameraTarget } from './camera.js';
+import { isFightOver } from './loot-time.js';
 import { currentZone } from './mission.js';
 import { callReinforcements } from './reinforcements.js';
 import { spawnEnemy } from './spawn-enemy.js';
@@ -100,7 +101,7 @@ export function updateZones(game) {
     return;
   }
   spawnFromQueue(game);
-  if (game.clearTime) {
+  if (isFightOver(game)) {
     return;
   }
   advanceWaves(game, currentZone(game));

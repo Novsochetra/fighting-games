@@ -2,6 +2,7 @@ import { COLORS } from '../../art/colors.js';
 import { difficultyOf } from '../../data/difficulty.js';
 import { isPlayer } from '../fighters/loadout.js';
 import { addFloatText } from '../fx/effects.js';
+import { isFightOver } from '../stage/loot-time.js';
 import { burstMaterial } from '../fx/material-bursts.js';
 import { scatterFeathers } from '../fx/phoenix-feathers.js';
 import { afflictTarget } from './afflict.js';
@@ -107,10 +108,16 @@ function landHit(game, hit, damage, direction) {
   return { big, knockdown, knockback };
 }
 
+// once the mission's boss is down, a shot still in flight or a pool still burning on the road
+// must not knock out the hero gathering its loot or standing over the clear
+function sparesHero(game, target) {
+  return isPlayer(target) && isFightOver(game);
+}
+
 // hit = { attacker, target, move, x, y }; returns whether the hit connected (blocks count)
 export function applyHit(game, hit) {
   const { target, move } = hit;
-  if (!canBeHit(target, move)) {
+  if (!canBeHit(target, move) || sparesHero(game, target)) {
     return false;
   }
   if (blocksHit(hit.attacker, target, move)) {

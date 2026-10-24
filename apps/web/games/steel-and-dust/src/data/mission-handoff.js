@@ -5,13 +5,13 @@ export const CARD_DROP_TICKS = 9;
 // a letter's fall overshoots its place and bounces back: this is the tick it first strikes it
 export const CARD_HIT_TICK = 4;
 export const CARD_HOT_TICKS = 4;
-// the clear card waits out the slow motion of the boss's fall, a mission's own card the wipe
+// the clear card waits for the announcer to reach its "Complete!", a mission's own card the wipe
 // opening past the middle of the screen
-const CLEAR_CARD_DELAY = 19;
+const CLEAR_CARD_DELAY = 40;
 const OPEN_CARD_DELAY = 12;
 export const WIPE_TICKS = 44;
-// the clear's call starts while the boss still falls in slow motion, so its "Complete!" is said as
-// the letters stamp in and is over before the wipe comes; a mission's own call starts with its card
+// the clear's call starts with the clear's fanfare, so its "Complete!" is said as the letters stamp
+// in and is over before the summary opens; a mission's own call starts with its card
 export const CLEAR_CALL_TICK = 8;
 
 export function cardLetterCount(text) {

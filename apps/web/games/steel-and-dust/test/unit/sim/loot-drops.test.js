@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { CHEST_DROP, MAX_LOOT, RAIDER_DROP } from '../../../src/data/loot.js';
-import { bankLeftovers, chestContents, dropLoot } from '../../../src/sim/items/loot-drops.js';
-import { countRandomDraws, createLootGame, spawnEnemy } from '../../support/loot-game.js';
+import { CHEST_DROP, LOOT_VALUES, MAX_LOOT, RAIDER_DROP } from '../../../src/data/loot.js';
+import { chestContents, dropLoot } from '../../../src/sim/items/loot-drops.js';
+import { spawnPiece } from '../../../src/sim/items/loot-pieces.js';
+import {
+  countRandomDraws,
+  createLootGame,
+  piece as lootPiece,
+  spawnEnemy,
+} from '../../support/loot-game.js';
 
 function kindsOf(game) {
   return game.loot.map((piece) => piece.kind);
@@ -11,12 +17,20 @@ function count(kinds, kind) {
   return kinds.filter((each) => each === kind).length;
 }
 
+// a raider that pays, found by knocking down raiders until one does
+function payingDrop(game, raider) {
+  for (let i = 0; i < 100 && !game.loot.some((piece) => piece.kind === 'coin'); i++) {
+    game.loot = [];
+    dropLoot(game, raider);
+  }
+  return kindsOf(game);
+}
+
 describe('loot a fallen raider drops', () => {
-  it('spills two to four coins from its middle, flying up and out', () => {
+  it('spills one to three coins from its middle when it pays, flying up and out', () => {
     const { game } = createLootGame();
     const raider = spawnEnemy(game, 'grunt', 160);
-    dropLoot(game, raider);
-    const coins = count(kindsOf(game), 'coin');
+    const coins = count(payingDrop(game, raider), 'coin');
     expect(coins).toBeGreaterThanOrEqual(RAIDER_DROP.coins[0]);
     expect(coins).toBeLessThanOrEqual(RAIDER_DROP.coins[1]);
     for (const piece of game.loot) {
@@ -26,20 +40,34 @@ describe('loot a fallen raider drops', () => {
     }
   });
 
-  it('drops gems and apples now and then, about as often as the table says', () => {
+  it('pays only now and then, with gems and apples about as often as the table says', () => {
     const { game } = createLootGame();
     const raider = spawnEnemy(game, 'grunt', 160);
-    const drops = 2000;
-    let gems = 0;
-    let apples = 0;
+    const drops = 4000;
+    const tally = { paid: 0, gems: 0, apples: 0 };
     for (let i = 0; i < drops; i++) {
       game.loot = [];
       dropLoot(game, raider);
-      gems += count(kindsOf(game), 'gem');
-      apples += count(kindsOf(game), 'apple');
+      const kinds = kindsOf(game);
+      tally.paid += kinds.includes('coin') ? 1 : 0;
+      tally.gems += count(kinds, 'gem');
+      tally.apples += count(kinds, 'apple');
     }
-    expect(gems / drops).toBeCloseTo(RAIDER_DROP.gemChance, 1);
-    expect(apples / drops).toBeCloseTo(RAIDER_DROP.appleChance, 1);
+    expect(tally.paid / drops).toBeCloseTo(RAIDER_DROP.chance, 1);
+    expect(tally.gems / drops).toBeCloseTo(RAIDER_DROP.chance * RAIDER_DROP.gemChance, 1);
+    expect(tally.apples / drops).toBeCloseTo(RAIDER_DROP.appleChance, 1);
+  });
+
+  it('leaves most raiders with nothing to drop', () => {
+    const { game } = createLootGame();
+    const raider = spawnEnemy(game, 'grunt', 160);
+    let empty = 0;
+    for (let i = 0; i < 200; i++) {
+      game.loot = [];
+      dropLoot(game, raider);
+      empty += game.loot.length === 0 ? 1 : 0;
+    }
+    expect(empty).toBeGreaterThan(80);
   });
 
   it('scatters the same loot on the same road every time it is played', () => {
@@ -58,19 +86,29 @@ describe('loot a fallen raider drops', () => {
     const raider = spawnEnemy(game, 'grunt', 160);
     expect(countRandomDraws(() => dropLoot(game, raider))).toBe(0);
   });
+});
 
-  it('pays straight into the purse once the road holds as many pieces as it may', () => {
+describe('a road full of loot', () => {
+  function fullRoad() {
     const { game } = createLootGame();
-    const raider = spawnEnemy(game, 'grunt', 160);
-    while (game.loot.length < MAX_LOOT) {
-      dropLoot(game, raider);
-    }
-    game.loot.length = MAX_LOOT;
-    const before = { coins: game.coins, score: game.score };
-    dropLoot(game, raider);
+    game.loot = Array.from({ length: MAX_LOOT }, () => lootPiece({}));
+    return game;
+  }
+
+  it('pays a coin or gem past the limit straight into the purse, and counts it', () => {
+    const game = fullRoad();
+    spawnPiece(game, { kind: 'gem', x: 100, y: 100, vx: 0, vy: 0 });
     expect(game.loot).toHaveLength(MAX_LOOT);
-    expect(game.coins).toBeGreaterThan(before.coins);
-    expect(game.score).toBeGreaterThan(before.score);
+    expect(game.coins).toBe(LOOT_VALUES.gem.coins);
+    expect(game.score).toBe(LOOT_VALUES.gem.score);
+    expect(game.missionLoot.gem).toBe(1);
+  });
+
+  it('drops an apple past the limit, uneaten and uncounted', () => {
+    const game = fullRoad();
+    spawnPiece(game, { kind: 'apple', x: 100, y: 100, vx: 0, vy: 0 });
+    expect(game.loot).toHaveLength(MAX_LOOT);
+    expect(game.missionLoot.apple).toBe(0);
   });
 });
 
@@ -97,32 +135,5 @@ describe('loot a fallen boss drops', () => {
       'gem',
       'apple',
     ]);
-  });
-});
-
-describe('banking what is left when a road ends', () => {
-  it('pays for loose coins, gems and an unopened chest, but not apples, and clears the road', () => {
-    const { game } = createLootGame();
-    dropLoot(game, spawnEnemy(game, 'khan', 200));
-    game.loot = [
-      { kind: 'coin', taken: false },
-      { kind: 'gem', taken: false },
-      { kind: 'apple', taken: false },
-      { kind: 'coin', taken: true },
-    ];
-    const { coins, gems } = CHEST_DROP.missionBoss;
-    bankLeftovers(game);
-    expect(game.coins).toBe(1 + 10 + coins + gems * 10);
-    expect(game.score).toBe(10 + 100 + coins * 10 + gems * 100);
-    expect(game.loot).toEqual([]);
-    expect(game.chests).toEqual([]);
-  });
-
-  it('does not pay twice for a chest that has already spilled', () => {
-    const { game } = createLootGame();
-    dropLoot(game, spawnEnemy(game, 'khan', 200));
-    game.chests[0].spilled = true;
-    bankLeftovers(game);
-    expect(game.coins).toBe(0);
   });
 });

@@ -3,7 +3,6 @@ import { HERO_THEMES } from '../../art/hero-themes.js';
 import { heroById } from '../../data/heroes.js';
 import { WEAPON_IDS, WEAPONS } from '../../data/weapons/index.js';
 import { holdsOwnWeapon, setWeapon, takeOwnWeapon } from '../fighters/loadout.js';
-import { bankLeftovers } from '../items/loot-drops.js';
 import { floorUnder, placeOnGround } from '../fighters/terrain-motion.js';
 import { releaseToken } from '../fighters/tokens.js';
 import { shake } from '../fx/camera-fx.js';
@@ -41,7 +40,6 @@ export function startPlay(game) {
 // the score, the purse, the clock, the continues, the lives and the ULT bar carry over; the hero
 // starts fresh
 export function enterNextMission(game) {
-  bankLeftovers(game);
   const { score, coins, playTime, continues, lives, ultMeter } = game;
   resetRun(game, game.missionIndex + 1);
   Object.assign(game, { score, coins, playTime, continues, lives, ultMeter });

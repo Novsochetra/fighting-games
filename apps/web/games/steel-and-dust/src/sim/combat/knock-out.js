@@ -6,7 +6,7 @@ import { addSparks } from '../fx/particles.js';
 import { releaseToken } from '../fighters/tokens.js';
 import { dropLoot } from '../items/loot-drops.js';
 import { isMissionBoss } from '../stage/mission.js';
-import { stageClear } from '../stage/stage-clear.js';
+import { isFightOver, startLootTime } from '../stage/loot-time.js';
 import { endCombo } from './combo.js';
 import { shout } from './sounds.js';
 
@@ -48,8 +48,8 @@ function knockOutEnemy(game, enemy, direction) {
 // only the mission's own boss ends it; a mid-boss going down just opens the road
 function bossDown(game, boss) {
   const endsMission = isMissionBoss(game, boss);
-  if (boss === game.boss && endsMission && !game.clearTime) {
-    stageClear(game);
+  if (boss === game.boss && endsMission && !isFightOver(game)) {
+    startLootTime(game, boss);
   } else if (!endsMission) {
     showBanner(game, { text: `${boss.def.name} down`, color: COLORS.gold, time: 90 });
   }
