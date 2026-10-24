@@ -28,14 +28,17 @@ function wireDonateButtons({ document, donate, signal }) {
   }
 }
 
-export function bootSupporters({ document, fetch, storage, createAudioContext, locale }) {
+// The home page's Support banner links here with #give, so the donate sheet opens at once.
+export function bootSupporters({ document, fetch, storage, createAudioContext, locale, visit }) {
   const lifetime = new AbortController();
   const { signal } = lifetime;
   const store = storage ?? createMemoryStorage();
+  const preferences = createPreferences(store);
+  const { openDonate = false, now = () => Date.now() } = visit ?? {};
   createAppearance({ document, storage: store, signal });
   const sound = createSoundPlayer({
     createContext: createAudioContext ?? (() => null),
-    isEnabled: createPreferences(store).isSoundOn,
+    isEnabled: preferences.isSoundOn,
   });
   const view = createSupportersView(document);
   const state = { data: null, order: SORTS[0] };
@@ -51,8 +54,16 @@ export function bootSupporters({ document, fetch, storage, createAudioContext, l
     }
   }
 
-  const donate = createDonateSheet({ document, fetch, sound, signal, locale, onGiven: load });
+  // A gift from this device stops the home page asking for one.
+  const onGiven = () => {
+    preferences.recordGift(now());
+    load();
+  };
+  const donate = createDonateSheet({ document, fetch, sound, signal, locale, onGiven });
   wireDonateButtons({ document, donate, signal });
+  if (openDonate) {
+    donate.open();
+  }
   wireSort({ view, state, sound, signal });
   view.elements.retry.addEventListener('click', () => load(), { signal });
   return { ready: load(), donate, stop: () => lifetime.abort() };

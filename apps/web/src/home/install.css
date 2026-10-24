@@ -102,7 +102,8 @@
 }
 
 @media (max-height: 58rem) {
-  :root.has-install-banner .spotlight {
+  :root.has-install-banner .spotlight,
+  :root.has-support-banner .spotlight {
     padding-block-end: calc(
       max(var(--space-3), env(safe-area-inset-bottom)) + var(--size-install-clearance)
     );

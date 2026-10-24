@@ -7,6 +7,7 @@ import { wireInstallBanner } from './install-banner.js';
 import { createLauncher } from './launcher.js';
 import { createMemoryStorage, createPreferences } from './preferences.js';
 import { createSoundPlayer } from './sound-player.js';
+import { wireSupportBanner } from './support-banner.js';
 import { wireInputs } from './wire-inputs.js';
 
 // Back from a game through the back/forward cache: the card takes the screen back, then the Recent
@@ -24,6 +25,15 @@ function watchReturns({ document, launcher, controller, sound, signal }) {
   document.defaultView.addEventListener('pageshow', onPageShow, { signal });
 }
 
+// Install goes first: while its banner is up, the support banner waits for another visit.
+function wireBanners({ document, installer, preferences, sound, signal, visit }) {
+  if (installer) {
+    wireInstallBanner({ document, installer, preferences, sound, signal });
+  }
+  const support = wireSupportBanner({ document, preferences, sound, signal, now: visit.now });
+  support.offer(visit.cameFromGame);
+}
+
 export function bootHome({
   document,
   fetch,
@@ -32,6 +42,7 @@ export function bootHome({
   storage,
   createAudioContext,
   installer,
+  visit = { cameFromGame: false, now: () => Date.now() },
 }) {
   const lifetime = new AbortController();
   const { signal } = lifetime;
@@ -51,9 +62,7 @@ export function bootHome({
   const settings = { preferences, sound, appearance };
   wireInputs({ document, view, controller, sheet, gamepads, settings, signal });
   watchReturns({ document, launcher, controller, sound, signal });
-  if (installer) {
-    wireInstallBanner({ document, installer, preferences, sound, signal });
-  }
+  wireBanners({ document, installer, preferences, sound, signal, visit });
   return {
     controller,
     launcher,

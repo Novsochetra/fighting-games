@@ -76,3 +76,29 @@
   flex: none;
   padding-inline: var(--space-6);
 }
+
+/* The support banner floats where the install banner does (install.css), with the heart in place of
+   the app icon. While the install banner is up it waits, so only one asks at a time. */
+.support-badge {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--size-install-icon);
+  block-size: var(--size-install-icon);
+  color: var(--color-white);
+  background: linear-gradient(
+    to bottom,
+    var(--color-heart-badge-top),
+    var(--color-heart-badge-bottom)
+  );
+  border-radius: var(--radius-pill);
+}
+
+.support-badge .icon {
+  inline-size: 50%;
+  block-size: 50%;
+}
+
+:root.has-install-banner .install--support {
+  display: none;
+}

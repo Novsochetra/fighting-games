@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { createMemoryStorage, STORAGE_KEYS } from '../../../src/home/preferences.js';
 import { CUES } from '../../../src/home/sound-cues.js';
 import { SEND_FAILED } from '../../../src/supporters/donate-client.js';
 import { PAY_WAIT_SECONDS } from '../../../src/supporters/pay-wait.js';
@@ -222,5 +223,21 @@ describe('the donate sheet', () => {
       label: 'Gold supporter',
     });
     expect(context.started.length - before).toBe(CUES.cheer.length);
+  });
+
+  it('opens at once for a visitor sent by the home page Support banner', async () => {
+    await bootPage(fakeApi().fetchFn, { visit: { openDonate: true } });
+    expect(byId('donate-sheet').open).toBe(true);
+    expect(visibleStep()).toEqual(['form']);
+  });
+
+  it('remembers a gift on this device, so the home page stops asking', async () => {
+    const storage = createMemoryStorage();
+    await openSheet(fakeApi(), { storage, visit: { now: () => 4242 } });
+    type('donate-amount', '5');
+    submitForm();
+    sendAfterWait();
+    await vi.waitFor(() => expect(visibleStep()).toEqual(['thanks']));
+    expect(storage.read(STORAGE_KEYS.gaveAt)).toBe(4242);
   });
 });

@@ -164,6 +164,15 @@ pages from the network and answers a failed page load with a short offline page,
 route sends every file under `games/` straight to the network, so a game never waits on it. Only a
 browser with an install prompt registers it (`install-platform.js`).
 
+A support banner floats in the same place (`support-banner.js`, the install banner's styles with a
+heart for the icon, `support.css`) and asks a regular to chip in, with Support opening the donate
+sheet (`supporters/#give`). It asks only someone back from a game, by a page load whose referrer is
+under `games/` or a return through the back/forward cache, who has opened 3 games or more
+(`support-offer.js`; `preferences.js` counts plays, and a player from before the count was kept has
+their Recent list). It never asks after a gift from this device (the supporters page records it),
+nor while the install banner is up, so only one asks at a time. A banner left alone comes back in a
+week, and Not now holds it back for 30 days.
+
 ## Supporters page
 
 Every game is free, so the arcade thanks the people who chip in on its own page, `supporters/`

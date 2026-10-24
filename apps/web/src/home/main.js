@@ -1,6 +1,7 @@
 import { bootHome } from './boot.js';
 import { browserInstaller } from './install-platform.js';
 import { createBrowserStorage } from './preferences.js';
+import { isGameReferrer } from './support-offer.js';
 import { browserAudioContext } from './sound-player.js';
 
 bootHome({
@@ -15,4 +16,5 @@ bootHome({
   storage: createBrowserStorage(window),
   createAudioContext: () => browserAudioContext(window),
   installer: browserInstaller(window),
+  visit: { cameFromGame: isGameReferrer(document.referrer, document.URL), now: () => Date.now() },
 });
