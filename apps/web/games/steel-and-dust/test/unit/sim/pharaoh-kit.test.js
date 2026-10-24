@@ -6,7 +6,7 @@ import { createPlayingGame } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
 
-function pharaohAt(distance, { missionIndex = 8, hp } = {}) {
+function pharaohAt(distance, { missionIndex = 8, share = 1 } = {}) {
   const game = createPlayingGame();
   game.missionIndex = missionIndex;
   game.arena = { left: 0, right: 384 };
@@ -15,7 +15,7 @@ function pharaohAt(distance, { missionIndex = 8, hp } = {}) {
   const pharaoh = game.fighters.find((fighter) => fighter.kind === 'pharaoh');
   Object.assign(pharaoh, { entering: false, x: 120 + distance, facing: -1 });
   pharaoh.ai.cooldown = 0;
-  pharaoh.hp = hp ?? pharaoh.maxHp;
+  pharaoh.hp = share * pharaoh.maxHp;
   return { game, pharaoh };
 }
 
@@ -64,17 +64,17 @@ describe("the Sand Pharaoh's kit", () => {
   });
 
   it('casts copies that fire below half health', () => {
-    const { game, pharaoh } = pharaohAt(150, { hp: 140 });
+    const { game, pharaoh } = pharaohAt(150, { share: 0.48 });
     think(game, pharaoh);
     expect(pharaoh.move.id).toBe('mirageVolley');
     expect(pharaoh.move.mirages.firing).toBe(true);
   });
 
   it('calls the Curse of the Sun below 40% on his own road, and not on another', () => {
-    const own = pharaohAt(150, { hp: 110 });
+    const own = pharaohAt(150, { share: 0.38 });
     think(own.game, own.pharaoh);
     expect(own.pharaoh.move.id).toBe('curseOfSun');
-    const other = pharaohAt(150, { missionIndex: 11, hp: 110 });
+    const other = pharaohAt(150, { missionIndex: 11, share: 0.38 });
     think(other.game, other.pharaoh);
     expect(other.pharaoh.move.id).not.toBe('curseOfSun');
   });

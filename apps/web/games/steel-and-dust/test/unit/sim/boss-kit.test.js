@@ -6,7 +6,7 @@ import { createPlayingGame } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
 
-function khanAt(distance, { missionIndex = 0, hp } = {}) {
+function khanAt(distance, { missionIndex = 0, share = 1 } = {}) {
   const game = createPlayingGame();
   game.missionIndex = missionIndex;
   game.player.x = 160;
@@ -14,7 +14,7 @@ function khanAt(distance, { missionIndex = 0, hp } = {}) {
   const khan = game.fighters.find((fighter) => fighter.kind === 'khan');
   Object.assign(khan, { entering: false, x: 160 + distance, facing: -1 });
   khan.ai.cooldown = 0;
-  khan.hp = hp ?? khan.maxHp;
+  khan.hp = share * khan.maxHp;
   return { game, khan };
 }
 
@@ -70,7 +70,7 @@ describe("Gravel Khan's kit", () => {
   });
 
   it("looses Khan's Tempest below 40% health on his own road, and not again for a while", () => {
-    const { game, khan } = khanAt(120, { hp: 70 });
+    const { game, khan } = khanAt(120, { share: 0.35 });
     think(game, khan);
     expect(khan.move.id).toBe('tempest');
     Object.assign(khan, { state: 'idle', move: null });
@@ -79,13 +79,13 @@ describe("Gravel Khan's kit", () => {
   });
 
   it('keeps his ultimate for his own road when he comes back as a mid-boss', () => {
-    const { game, khan } = khanAt(120, { missionIndex: 5, hp: 50 });
+    const { game, khan } = khanAt(120, { missionIndex: 5, share: 0.25 });
     think(game, khan);
     expect(khan.move.id).toBe('crescentDash');
   });
 
   it('dashes twice in a row below half health', () => {
-    const { game, khan } = khanAt(120, { hp: 90 });
+    const { game, khan } = khanAt(120, { share: 0.45 });
     think(game, khan);
     expect(khan.move.id).toBe('crescentDash');
     Object.assign(khan, { state: 'idle', move: null });

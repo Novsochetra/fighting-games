@@ -17,9 +17,15 @@ function heightAt(time) {
   return hover * (1 - Math.min(1, (time - novaAt) / (end - novaAt - 6)));
 }
 
+export function stingsEach(targetCount) {
+  const { stings, crowd } = SWARM_NOVA;
+  return Math.max(1, Math.min(stings, Math.floor((stings * targetCount) / crowd)));
+}
+
 function releaseSwarm(game, player) {
   const targets = ultTargets(game);
-  const { swarm, sting, stings, recallAt, intro } = SWARM_NOVA;
+  const { swarm, sting, recallAt, intro } = SWARM_NOVA;
+  const stings = stingsEach(targets.length);
   for (let i = 0; i < swarm; i++) {
     const angle = (i / swarm) * Math.PI * 2;
     releaseFirefly(game, {

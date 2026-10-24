@@ -10,7 +10,7 @@ import { createPlayingGame } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
 
-function queenAt(distance, { missionIndex = 4, hp } = {}) {
+function queenAt(distance, { missionIndex = 4, share = 1 } = {}) {
   const game = createPlayingGame();
   game.missionIndex = missionIndex;
   game.player.x = 120;
@@ -18,7 +18,7 @@ function queenAt(distance, { missionIndex = 4, hp } = {}) {
   const queen = game.fighters.find((fighter) => fighter.kind === 'queen');
   Object.assign(queen, { entering: false, x: 120 + distance, facing: -1 });
   queen.ai.cooldown = 0;
-  queen.hp = hp ?? queen.maxHp;
+  queen.hp = share * queen.maxHp;
   return { game, queen };
 }
 
@@ -54,17 +54,17 @@ describe("the Scorpion Queen's kit", () => {
   });
 
   it('goes under twice before surfacing below half health', () => {
-    const { game, queen } = queenAt(220, { hp: 120 });
+    const { game, queen } = queenAt(220, { share: 0.46 });
     think(game, queen);
     expect(queen.move.id).toBe('burrowTwice');
     expect(queen.move.tunnel).toHaveLength(2);
   });
 
   it('calls up her swarm below 40% on her own road, and not as a mid-boss', () => {
-    const own = queenAt(150, { hp: 100 });
+    const own = queenAt(150, { share: 0.38 });
     think(own.game, own.queen);
     expect(own.queen.move.id).toBe('hiveSwarm');
-    const mid = queenAt(150, { missionIndex: 9, hp: 100 });
+    const mid = queenAt(150, { missionIndex: 9, share: 0.38 });
     think(mid.game, mid.queen);
     expect(mid.queen.move.id).not.toBe('hiveSwarm');
   });

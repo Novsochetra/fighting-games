@@ -71,7 +71,7 @@ export function showDamageNumber(game, hit, { direction, damage }) {
   game.floaters.push({
     x: hit.x + randomBetween(-3, 3),
     y: hit.y - 6,
-    text: String(damage),
+    text: String(Math.round(damage)),
     color: damageNumberColor(hit.attacker, damage),
     time: 0,
     size: playerHit && damage >= 14 ? 2 : 1,

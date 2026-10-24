@@ -6,7 +6,7 @@ import { createPlayingGame } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
 
-function guardianAt(distance, { missionIndex = 11, hp } = {}) {
+function guardianAt(distance, { missionIndex = 11, share = 1 } = {}) {
   const game = createPlayingGame();
   game.missionIndex = missionIndex;
   game.arena = { left: 0, right: 384 };
@@ -15,7 +15,7 @@ function guardianAt(distance, { missionIndex = 11, hp } = {}) {
   const guardian = game.boss;
   Object.assign(guardian, { entering: false, x: 120 + distance, facing: -1 });
   guardian.ai.cooldown = 0;
-  guardian.hp = hp ?? guardian.maxHp;
+  guardian.hp = share * guardian.maxHp;
   return { game, guardian };
 }
 
@@ -62,24 +62,24 @@ describe("the Bayon Guardian's kit", () => {
   });
 
   it('crumbles and reforms once as he falls below half health, then glares and grows thickets', () => {
-    const { game, guardian } = guardianAt(260, { hp: 170 });
+    const { game, guardian } = guardianAt(260, { share: 0.47 });
     think(game, guardian);
     expect(guardian.move.id).toBe('crumble');
     Object.assign(guardian, { state: 'idle', move: null });
     think(game, guardian);
     expect(guardian.move.id).toBe('stoneGlare');
-    const near = guardianAt(60, { hp: 170 });
+    const near = guardianAt(60, { share: 0.47 });
     near.guardian.ai.kit = { readyAt: {}, ultReadyAt: 0, chain: null, opened: true };
     think(near.game, near.guardian);
     expect(near.guardian.move.id).toBe('figThicket');
   });
 
   it('raises the four faces below 40%, on his own road only', () => {
-    const own = guardianAt(150, { hp: 140 });
+    const own = guardianAt(150, { share: 0.39 });
     own.guardian.ai.kit = { readyAt: {}, ultReadyAt: 0, chain: null, opened: true };
     think(own.game, own.guardian);
     expect(own.guardian.move.id).toBe('fourFaces');
-    const elsewhere = guardianAt(150, { hp: 140, missionIndex: 4 });
+    const elsewhere = guardianAt(150, { share: 0.39, missionIndex: 4 });
     elsewhere.guardian.ai.kit = { readyAt: {}, ultReadyAt: 0, chain: null, opened: true };
     think(elsewhere.game, elsewhere.guardian);
     expect(elsewhere.guardian.move.id).not.toBe('fourFaces');

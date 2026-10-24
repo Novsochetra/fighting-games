@@ -6,7 +6,7 @@ import { createPlayingGame } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
 
-function colossusAt(distance, { missionIndex = 1, hp } = {}) {
+function colossusAt(distance, { missionIndex = 1, share = 1 } = {}) {
   const game = createPlayingGame();
   game.missionIndex = missionIndex;
   game.player.x = 120;
@@ -14,7 +14,7 @@ function colossusAt(distance, { missionIndex = 1, hp } = {}) {
   const colossus = game.fighters.find((fighter) => fighter.kind === 'colossus');
   Object.assign(colossus, { entering: false, x: 120 + distance, facing: -1 });
   colossus.ai.cooldown = 0;
-  colossus.hp = hp ?? colossus.maxHp;
+  colossus.hp = share * colossus.maxHp;
   return { game, colossus };
 }
 
@@ -55,16 +55,16 @@ describe("the Rust Colossus's kit", () => {
   });
 
   it('stomps spikes both ways below half health', () => {
-    const { game, colossus } = colossusAt(100, { hp: 110 });
+    const { game, colossus } = colossusAt(100, { share: 0.46 });
     think(game, colossus);
     expect(colossus.move.id).toBe('spikeCross');
   });
 
   it('calls the Landslide below 40% on his own road, and not as a mid-boss', () => {
-    const own = colossusAt(100, { hp: 90 });
+    const own = colossusAt(100, { share: 0.38 });
     think(own.game, own.colossus);
     expect(own.colossus.move.id).toBe('landslide');
-    const mid = colossusAt(100, { missionIndex: 7, hp: 90 });
+    const mid = colossusAt(100, { missionIndex: 7, share: 0.38 });
     think(mid.game, mid.colossus);
     expect(mid.colossus.move.id).toBe('spikeCross');
   });

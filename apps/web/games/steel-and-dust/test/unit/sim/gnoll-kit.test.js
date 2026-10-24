@@ -6,7 +6,7 @@ import { createPlayingGame } from '../../support/test-game.js';
 
 const originalRandom = Math.random;
 
-function gnollAt(distance, { missionIndex = 5, hp } = {}) {
+function gnollAt(distance, { missionIndex = 5, share = 1 } = {}) {
   const game = createPlayingGame();
   game.missionIndex = missionIndex;
   game.player.x = 120;
@@ -14,7 +14,7 @@ function gnollAt(distance, { missionIndex = 5, hp } = {}) {
   const gnoll = game.fighters.find((fighter) => fighter.kind === 'gnoll');
   Object.assign(gnoll, { entering: false, x: 120 + distance, facing: -1 });
   gnoll.ai.cooldown = 0;
-  gnoll.hp = hp ?? gnoll.maxHp;
+  gnoll.hp = share * gnoll.maxHp;
   return { game, gnoll };
 }
 
@@ -57,17 +57,17 @@ describe("the Gnoll Packlord's kit", () => {
   });
 
   it('calls three hounds below half health', () => {
-    const { game, gnoll } = gnollAt(300, { hp: 130 });
+    const { game, gnoll } = gnollAt(300, { share: 0.48 });
     think(game, gnoll);
     expect(gnoll.move.id).toBe('packCallThree');
     expect(gnoll.move.pack).toBe(3);
   });
 
   it('goes into his frenzy below 40% on his own road, and not on another', () => {
-    const own = gnollAt(150, { hp: 100 });
+    const own = gnollAt(150, { share: 0.37 });
     think(own.game, own.gnoll);
     expect(own.gnoll.move.id).toBe('bloodFrenzy');
-    const other = gnollAt(150, { missionIndex: 0, hp: 100 });
+    const other = gnollAt(150, { missionIndex: 0, share: 0.37 });
     think(other.game, other.gnoll);
     expect(other.gnoll.move.id).not.toBe('bloodFrenzy');
   });

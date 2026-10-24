@@ -58,7 +58,7 @@ function continueSavedAction(game, menus) {
   };
 }
 
-export function createMenuActions({ game, audio, ui, fullscreen, menus, location }) {
+export function createMenuActions({ game, audio, ui, fullscreen, menus, leaveForArcade }) {
   const begin = () => {
     if (ui.isTouchOn() && fullscreen.supported && !fullscreen.isActive()) {
       fullscreen.enter();
@@ -84,7 +84,7 @@ export function createMenuActions({ game, audio, ui, fullscreen, menus, location
       cycleWeapon(game);
       menus.refresh();
     },
-    arcade: () => location.assign('../../'),
+    arcade: leaveForArcade,
   };
   return function act(name) {
     const action = actions[name];
