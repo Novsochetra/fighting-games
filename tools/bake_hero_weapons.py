@@ -1045,9 +1045,12 @@ OWN_OVERRIDES={
     },
     # his run's blade hangs back across his trailing leg: the line the bake finds misses its top
     # and its erase leaves the white core, so each frame gives the line and paints the leg back;
-    # flinching he draws the blade twice and the hooked tip curls off its line, and landing it bends
-    # and lies across his hood and hand, where the glow it leaves would take the fists' gold; in his
-    # swings detection misses the blade or the smear hides it ('hide' with its line), so it took the gold
+    # flinching he draws the blade twice and the hooked tip curls off its line, and the ring of spirit
+    # fire his hit throws off is his own, no swing, so every row keeps it as drawn; where the blade is
+    # flung out of the drawing the ring was taken for it, so the line is a stub before his fist;
+    # landing it bends and lies across his hood and hand, where the glow it leaves would take the
+    # fists' gold; in his swings detection misses the blade or the smear hides it ('hide' with its
+    # line), so it took the gold
     'antler':{
         'slash1':{'1':{'g':[59,51.5],'t':[48,68],'paint':[[58,49,'#083530'],[58,50,'#083530'],
                        [59,50,'#083530'],[60,51,'#083530'],[59,52,'#123530'],[60,52,'#24352d'],
@@ -1077,7 +1080,8 @@ OWN_OVERRIDES={
         'air_rising_cut':{'0':{'g':[71,53],'t':[86,61]}},
         'meteor_slash':{'0':{'g':[67,41.5],'t':[87,38]},'1':{'g':[67,41.5],'t':[87,38]}},
         'hurt':{'0':{'g':[79.6,37.6],'t':[84.6,20.9],'clear':[[87,24],[87,25],[88,25]]},
-                '2':{'g':[69.8,47.8],'t':[81.2,51.2],'cut':[[71,41.5,80.5,36.5]]}},
+                '1':{'g':[80,38],'t':[86,32],'grip':[76,41],'aim':[92.4,29.5],'len':18,'keep':[[35,21,53,38]]},
+                '2':{'g':[69.8,47.8],'t':[81.2,51.2],'cut':[[71,41.5,80.5,36.5]],'keep':[[36,24,55,44]]}},
         'land':{'1':{'g':[67,55.9],'t':[87,54.3],'clear':[[69,54],[70,54],[71,54]],
                      'paint':[[68,54,'#030403'],[67,56,'#111710'],[69,58,'#1d2b1e']]},
                 '2':{'g':[62.5,56],'t':[78.5,49.5],'cut':[[78.5,49.5,84.5,40]],
