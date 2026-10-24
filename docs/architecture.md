@@ -148,6 +148,9 @@ The HUD sits along the top (`src/render/hud/top-bar.js`): the weapon box (icon, 
 with the lives in a small box under it, health over the ULT gauge beside it, the clock in the middle
 (with the wave under it while the camera is locked on a zone), and the score and best combo flush
 with the top right corner.
+The boxes that change only now and then (the weapon, the lives, the score and the purse) are each
+drawn once into a stamp of what they show (`src/render/hud/box-stamp.js`) and laid down with one
+`drawImage` a frame; drawn part by part they took most of the HUD's time.
 
 The touch buttons and the stick can be moved and resized (Settings, Button layout). The editor is its
 own menu, `layout`, in `src/ui/layout/` with `styles/layout-editor.css`: it drags a copy of the touch
