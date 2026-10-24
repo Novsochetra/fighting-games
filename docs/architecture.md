@@ -52,11 +52,19 @@ If a module still fails to load, the game page reloads itself once under a fresh
 
 ## Home page
 
-The home page is a game hub in Apple's dark appearance, like the Apple TV app: the selected game's
-key art fills the top of the screen behind a carousel of 16:9 cards, and a library of every game sits
-below. Type follows Apple's text styles (Large Title, Title, Body, Subheadline, Footnote) in SF Pro
-on Apple devices, with Inter standing in for it elsewhere; buttons are Apple's white Play pill and
-frosted glass ones (`buttons.css`).
+The home page is a game hub like the Apple TV app: the selected game's key art fills the top of the
+screen behind a carousel of 16:9 cards, and a library of every game sits below. Type follows Apple's
+text styles (Large Title, Title, Body, Subheadline, Footnote) in SF Pro on Apple devices, with Inter
+standing in for it elsewhere; buttons are Apple's Play pill and frosted glass ones (`buttons.css`).
+
+It comes in Apple's dark and light appearances. Dark is the default set of tokens in `tokens.css`;
+`:root[data-appearance='light']` swaps in the light colors, a lighter shadow, side cards that dim
+less, and a softened, white-washed painting behind the crisp card. The root's `data-appearance`
+follows the device, and the sun and moon button in the top bar flips it (`appearance.js`, which
+cross-fades the page through a view transition). The choice is kept with the device's appearance at
+the time, so when the device next changes (at sunset, say) the arcade follows it again.
+`appearance-early.js`, a classic script in the head, sets the attribute before the first paint, so a
+light screen never shows dark first; a test holds it to the same choice as `resolveAppearance`.
 
 - **Hero** (`hero.css`, `spotlight-view.js`): the game's `banner` (its `poster`, a tall crop, on
   narrow screens) cross-fades in behind a dim, under one slow Ken Burns zoom on the whole stack. Its

@@ -10,6 +10,7 @@ describe('CUES', () => {
   it('names a cue for every moment the home page makes a sound', () => {
     expect(cueNames().sort()).toEqual(
       [
+        'appearance',
         'favoriteOff',
         'favoriteOn',
         'land',

@@ -41,6 +41,21 @@ function wireLibrary({ elements, controller, signal }) {
   listen(elements.showMore, 'click', () => controller.showMore(), signal);
 }
 
+export function wireAppearanceToggle({ button, appearance, sound, signal }) {
+  const show = () => button.setAttribute('aria-pressed', String(appearance.current() === 'dark'));
+  show();
+  listen(
+    button,
+    'click',
+    () => {
+      appearance.toggle();
+      show();
+      sound.play('appearance');
+    },
+    signal,
+  );
+}
+
 export function wireSoundToggle({ button, preferences, sound, signal }) {
   const show = () => button.setAttribute('aria-pressed', String(preferences.isSoundOn()));
   show();

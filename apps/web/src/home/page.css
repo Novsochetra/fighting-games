@@ -55,6 +55,17 @@ body {
   stroke: none;
 }
 
+html[data-appearance='light'] {
+  color-scheme: light;
+}
+
+/* The switch cross-fades the whole page from one appearance to the other. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-crossfade);
+  animation-timing-function: var(--easing-gentle);
+}
+
 /* Safari and every browser on iOS have SF Pro, Apple's own face, which Inter stands in for elsewhere;
    only WebKit knows the -apple-system-body font. */
 @supports (font: -apple-system-body) {

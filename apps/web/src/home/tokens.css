@@ -1,5 +1,5 @@
-/* The arcade keeps Apple's dark appearance in every setting: the game art fills the screen behind
-   the cards, and white type over a dimmed painting reads the same in light and dark mode. */
+/* Apple's dark appearance is the default; the light one below replaces its colors when the root
+   carries data-appearance="light" (appearance-early.js sets it before the first paint). */
 :root {
   --color-black: #000000;
   --color-clear: transparent;
@@ -10,6 +10,11 @@
   --color-apple-gray-2: #636366;
   --color-apple-gray-5: #2c2c2e;
   --color-apple-gray-6: #1c1c1e;
+  --color-apple-blue-light: #007aff;
+  --color-apple-gray-light: #6d6d72;
+  --color-apple-gray-4-light: #d1d1d6;
+  --color-apple-gray-5-light: #e5e5ea;
+  --color-apple-gray-6-light: #f2f2f7;
 
   --color-launcher-background: var(--color-black);
   --color-launcher-surface: var(--color-apple-gray-6);
@@ -154,6 +159,9 @@
   --blur-sheet-backdrop: blur(12px);
 
   --dim-pressed: 0.85;
+  --dim-strength: 1;
+  --filter-backdrop: none;
+  --scale-backdrop: 1;
   --dimming-hover-lift: 0.18;
   --scale-pressed: 0.96;
   --scale-tile-hover: 1.03;
@@ -197,4 +205,54 @@
   --layer-content: 1;
   --layer-arrows: 30;
   --layer-launch: 200;
+}
+
+/* Apple's light appearance. The painting behind the cards is softened and washed with white, so
+   dark type reads over it and the crisp card in front stands out; side cards dim less, since dark
+   cards look heavy on white. */
+:root[data-appearance='light'] {
+  --color-launcher-background: var(--color-white);
+  --color-launcher-surface: var(--color-apple-gray-6-light);
+  --color-launcher-surface-raised: var(--color-white);
+  --color-launcher-separator: rgb(60 60 67 / 29%);
+  --color-label: var(--color-black);
+  --color-label-secondary: rgb(0 0 0 / 82%);
+  --color-label-tertiary: rgb(0 0 0 / 66%);
+  --color-label-muted: var(--color-apple-gray-light);
+  --color-tint: var(--color-apple-blue-light);
+
+  --color-glass: rgb(255 255 255 / 58%);
+  --color-glass-hover: rgb(255 255 255 / 76%);
+  --color-glass-edge: rgb(0 0 0 / 8%);
+  --color-glass-highlight: rgb(255 255 255 / 80%);
+  --color-button-primary: var(--color-black);
+  --color-on-button-primary: var(--color-white);
+  --color-button-surface: var(--color-apple-gray-6-light);
+  --color-scrim: rgb(255 255 255 / 48%);
+  --color-card-blank: var(--color-apple-gray-5-light);
+  --color-card-edge: rgb(0 0 0 / 8%);
+  --color-card-monogram-top: var(--color-apple-gray-4-light);
+  --color-card-monogram-bottom: var(--color-apple-gray);
+  --color-dot: rgb(0 0 0 / 22%);
+  --color-dot-active: var(--color-black);
+  --color-segment-track: rgb(118 118 128 / 12%);
+  --color-segment-thumb: var(--color-white);
+  --color-segment-separator: rgb(60 60 67 / 22%);
+  --color-sheet: var(--color-white);
+  --color-sheet-backdrop: rgb(0 0 0 / 28%);
+  --color-chip: var(--color-apple-gray-6-light);
+  --color-soon-top: var(--color-apple-gray-6-light);
+  --color-soon-bottom: var(--color-apple-gray-4-light);
+  --color-soon-glyph: rgb(0 0 0 / 32%);
+  --color-soon-label: rgb(0 0 0 / 62%);
+  --color-soon-sheen: rgb(255 255 255 / 70%);
+  --color-soon-glow: rgb(0 0 0 / 5%);
+
+  --shadow-card: 0 18px 44px rgb(0 0 0 / 22%);
+  --shadow-segment-thumb: 0 3px 8px rgb(0 0 0 / 12%), 0 0 0 0.5px rgb(0 0 0 / 4%);
+  --shadow-sheet: 0 24px 64px rgb(0 0 0 / 22%);
+
+  --dim-strength: 0.4;
+  --filter-backdrop: blur(10px) saturate(140%);
+  --scale-backdrop: 1.12;
 }

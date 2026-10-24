@@ -1,3 +1,4 @@
+import { createAppearance } from './appearance.js';
 import { fetchCatalog } from './catalog-client.js';
 import { createDetailsSheet } from './details-sheet.js';
 import { createHomeController } from './home-controller.js';
@@ -25,7 +26,9 @@ function watchReturns({ document, launcher, controller, sound, signal }) {
 export function bootHome({ document, fetch, navigate, gamepads, storage, createAudioContext }) {
   const lifetime = new AbortController();
   const { signal } = lifetime;
-  const preferences = createPreferences(storage ?? createMemoryStorage());
+  const store = storage ?? createMemoryStorage();
+  const preferences = createPreferences(store);
+  const appearance = createAppearance({ document, storage: store, signal });
   const sound = createSoundPlayer({
     createContext: createAudioContext ?? (() => null),
     isEnabled: preferences.isSoundOn,
@@ -36,7 +39,7 @@ export function bootHome({ document, fetch, navigate, gamepads, storage, createA
   const loadGames = () => fetchCatalog(fetch);
   const controller = createHomeController({ view, loadGames, launcher, preferences, sound });
   const sheet = createDetailsSheet({ document, sound, signal });
-  const settings = { preferences, sound };
+  const settings = { preferences, sound, appearance };
   wireInputs({ document, view, controller, sheet, gamepads, settings, signal });
   watchReturns({ document, launcher, controller, sound, signal });
   return {
@@ -44,6 +47,7 @@ export function bootHome({ document, fetch, navigate, gamepads, storage, createA
     launcher,
     sheet,
     preferences,
+    appearance,
     ready: controller.load(),
     stop: () => lifetime.abort(),
   };

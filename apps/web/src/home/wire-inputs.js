@@ -1,6 +1,6 @@
 import { createGamepadPoller } from './gamepad-poller.js';
 import { wireCarousel } from './wire-carousel.js';
-import { wireControls, wireSoundToggle } from './wire-controls.js';
+import { wireAppearanceToggle, wireControls, wireSoundToggle } from './wire-controls.js';
 import { wireKeys } from './wire-keys.js';
 
 function wireGamepads({ gamepads, controller, isBlocked, signal }) {
@@ -23,6 +23,11 @@ export function wireInputs({ document, view, controller, sheet, gamepads, settin
   wireCarousel({ elements: view.elements, controller, signal });
   wireControls({ view, controller, sheet, signal });
   wireSoundToggle({ button: document.getElementById('sound-toggle'), ...settings, signal });
+  wireAppearanceToggle({
+    button: document.getElementById('appearance-toggle'),
+    ...settings,
+    signal,
+  });
   // iOS Safari shows :active, the pressed look of a card, only where something listens for touches.
   document.addEventListener('touchstart', () => {}, { signal, passive: true });
   if (gamepads) {

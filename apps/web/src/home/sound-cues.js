@@ -62,6 +62,10 @@ export const CUES = {
     tone('sine', [220, 180], { duration: 0.09, gain: 0.08, attack: 0.003 }),
     tone('sine', [196, 150], { start: 0.1, duration: 0.12, gain: 0.07, attack: 0.003 }),
   ],
+  appearance: [
+    tone('sine', [1568, 1568], { duration: 0.18, gain: 0.05 }),
+    tone('sine', [2093, 2093], { start: 0.03, duration: 0.2, gain: 0.03 }),
+  ],
   soundOn: [
     tone('sine', [660, 660], { duration: 0.12, gain: 0.07 }),
     tone('sine', [990, 990], { start: 0.07, duration: 0.18, gain: 0.06 }),
