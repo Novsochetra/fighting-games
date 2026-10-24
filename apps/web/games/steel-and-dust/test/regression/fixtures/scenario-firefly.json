@@ -8544,28 +8544,28 @@
    "tick": 1440,
    "frame": {
     "calls": 3066,
-    "digest": "18fba67690bb4369"
+    "digest": "62690910dec6f0b2"
    }
   },
   {
    "tick": 1680,
    "frame": {
     "calls": 2704,
-    "digest": "e47c5d691c34ea35"
+    "digest": "3071477bc2d31a1f"
    }
   },
   {
    "tick": 1920,
    "frame": {
     "calls": 2812,
-    "digest": "2cf5749607a01017"
+    "digest": "147b063cbbb9a931"
    }
   },
   {
    "tick": 2160,
    "frame": {
     "calls": 2228,
-    "digest": "c843194ee3f8fc72"
+    "digest": "7734f62eca2b7553"
    }
   }
  ]

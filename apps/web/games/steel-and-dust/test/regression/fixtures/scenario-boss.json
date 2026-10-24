@@ -15383,42 +15383,42 @@
    "tick": 2800,
    "frame": {
     "calls": 3010,
-    "digest": "744b180750a5905e"
+    "digest": "49140b2994b3ec47"
    }
   },
   {
    "tick": 3000,
    "frame": {
     "calls": 2773,
-    "digest": "3dcdeaf86bc4c146"
+    "digest": "ac16e8d88d606c1f"
    }
   },
   {
    "tick": 3200,
    "frame": {
     "calls": 2414,
-    "digest": "9f3033e511d17513"
+    "digest": "19c7da04e45f68a5"
    }
   },
   {
    "tick": 3400,
    "frame": {
     "calls": 2834,
-    "digest": "b7913d3b7069c26d"
+    "digest": "ed3a95828bf847ef"
    }
   },
   {
    "tick": 3600,
    "frame": {
     "calls": 2969,
-    "digest": "ebc063970c2f64d0"
+    "digest": "11ae27bdcc3da3ae"
    }
   },
   {
    "tick": 3800,
    "frame": {
     "calls": 3163,
-    "digest": "8f82a0b49df03c26"
+    "digest": "3ceb24a968a176de"
    }
   }
  ]

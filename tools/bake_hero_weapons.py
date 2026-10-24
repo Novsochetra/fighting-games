@@ -1564,9 +1564,9 @@ def draw_spear(G,u,L):
     if n[1]<0: n=-n                      # n points "down"
     # a spear that would run out of its frame is held shorter, so its head still shows
     while L>4 and not (2<=(G+u*(L+9))[0]<=FW-3 and 2<=(G+u*(L+9))[1]<=FH-3): L-=1
-    # and the Moss, Firefly and Blue Shades' butt ends short of the frame's edge, never cut off by it
+    # and a Shade's butt ends short of the frame's edge, never cut off by it
     butt=11
-    while BRIDGED and butt>2 and not (2<=(G-u*butt)[0]<=FW-3 and 2<=(G-u*butt)[1]<=FH-3): butt-=1
+    while not GILDED and butt>2 and not (2<=(G-u*butt)[0]<=FW-3 and 2<=(G-u*butt)[1]<=FH-3): butt-=1
     a=G-u*butt; tip=G+u*(L+9)
     hb=tip-u*7                           # head base
     line(Ly,a,hb,WOOD); line(Ly,a+n*0.9,hb+n*0.9,WOODD); line(Ly,a-n*0.6,hb-n*0.6,WOODH)
