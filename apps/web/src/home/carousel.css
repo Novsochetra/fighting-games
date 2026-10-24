@@ -111,10 +111,6 @@
   transition-duration: var(--duration-fast);
 }
 
-.card:focus-visible .card__ring {
-  border-color: var(--color-tint);
-}
-
 .art {
   display: block;
   inline-size: 100%;

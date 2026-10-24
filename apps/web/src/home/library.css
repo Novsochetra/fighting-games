@@ -108,7 +108,6 @@
 }
 
 .tile:focus-visible .tile__ring {
-  border-color: var(--color-tint);
   opacity: 1;
 }
 

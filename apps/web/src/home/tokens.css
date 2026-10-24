@@ -20,7 +20,7 @@
   --color-label-tertiary: rgb(255 255 255 / 72%);
   --color-label-muted: var(--color-apple-gray);
   --color-tint: var(--color-apple-blue);
-  --color-focus-ring: var(--color-white);
+  --color-focus-ring: var(--color-tint);
   --color-splash: var(--color-launcher-background);
 
   --color-glass: rgb(255 255 255 / 14%);
@@ -34,7 +34,7 @@
   --color-scrim-floor: var(--color-launcher-background);
   --color-card-blank: var(--color-apple-gray-6);
   --color-card-edge: rgb(255 255 255 / 16%);
-  --color-card-ring: var(--color-white);
+  --color-card-ring: var(--color-tint);
   --color-card-monogram-top: var(--color-apple-gray);
   --color-card-monogram-bottom: var(--color-apple-gray-2);
   --color-dot: rgb(255 255 255 / 40%);

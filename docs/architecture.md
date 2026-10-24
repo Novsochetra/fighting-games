@@ -67,8 +67,8 @@ frosted glass ones (`buttons.css`).
   Coming Soon in place of Play. They move like games but open nothing (the card shakes and a low
   knock plays), and they stay out of the library and the favorites. The cards loop. A card's
   slot is a plain function of its distance from the selected one: the center card is full size and
-  ringed, the next ones shrink, dim and sit edge to edge, and from the third on they are hidden. The
-  view only writes each slot as custom properties (`--side`, `--shift`, `--scale`, ...); the CSS
+  ringed in Apple's system blue (the selected tile below wears the same ring), the next ones shrink,
+  dim and sit edge to edge, and from the third on they are hidden. The view only writes each slot as custom properties (`--side`, `--shift`, `--scale`, ...); the CSS
   turns them into one transform, so every move is a compositor transition on the spring easing. A
   card that crosses to the other side of the loop jumps and fades in instead of sliding over the
   center. Arrows and A/D, the round arrow buttons, a click on a side card, a swipe
