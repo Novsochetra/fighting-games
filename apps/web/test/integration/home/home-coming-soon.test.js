@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CUES } from '../../../src/home/sound-cues.js';
 import { createFakeAudioContext } from '../../support/fake-audio.js';
 import {
-  bootWithRealCatalog,
+  bootWithSteelAndDust,
   byId,
   cards,
   centerCard,
@@ -26,7 +26,7 @@ afterEach(stopHomes);
 
 describe('the Coming Soon teasers', () => {
   it('follow the games in the carousel and stay out of the library', async () => {
-    await bootWithRealCatalog();
+    await bootWithSteelAndDust();
     expect(teasers()).toHaveLength(2);
     expect(cards().slice(-2)).toEqual(teasers());
     expect(teasers()[0].getAttribute('aria-label')).toBe('Coming Soon');
@@ -35,7 +35,7 @@ describe('the Coming Soon teasers', () => {
   });
 
   it('turn Play into a quiet Coming Soon and hide Details and the heart', async () => {
-    await bootWithRealCatalog();
+    await bootWithSteelAndDust();
     press('ArrowRight');
     expect(spotlightTitle()).toBe('Coming Soon');
     expect(byId('spotlight-meta').textContent).toBe('New game · In development');
@@ -60,7 +60,7 @@ describe('the Coming Soon teasers', () => {
 
   it('open nothing from Enter, Play or a click, and knock instead of chiming', async () => {
     const context = createFakeAudioContext();
-    const { navigate } = await bootWithRealCatalog({ createAudioContext: vi.fn(() => context) });
+    const { navigate } = await bootWithSteelAndDust({ createAudioContext: vi.fn(() => context) });
     press('ArrowRight');
     const afterMove = context.started.length;
     press('Enter');

@@ -47,6 +47,14 @@ export async function bootWithGames(ids, options) {
   return boot(async () => jsonReply(JSON.stringify({ games: copies })), options);
 }
 
+// Steel & Dust alone, as the real catalog serves it, for tests that check one game's own details
+// whatever place the other games take.
+export async function bootWithSteelAndDust(options) {
+  const { games } = JSON.parse(await realCatalogJson());
+  const body = JSON.stringify({ games: games.filter((game) => game.id === 'steel-and-dust') });
+  return boot(async () => jsonReply(body), options);
+}
+
 export const bootWithRealCatalog = async (options) => {
   const body = await realCatalogJson();
   return { body, ...(await boot(async () => jsonReply(body), options)) };

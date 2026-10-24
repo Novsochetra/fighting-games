@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
-  bootWithRealCatalog,
+  bootWithSteelAndDust,
   byId,
   click,
   loadHomeMarkup,
@@ -20,7 +20,7 @@ afterEach(stopHomes);
 
 describe('the details sheet', () => {
   it('opens on Details with the whole description, the controls and a Play link', async () => {
-    await bootWithRealCatalog();
+    await bootWithSteelAndDust();
     click(byId('details-open'));
     expect(dialog().open).toBe(true);
     expect(byId('details-title').textContent).toBe('Steel & Dust');
@@ -34,7 +34,7 @@ describe('the details sheet', () => {
   });
 
   it('closes with its button, with Escape and with a click on the dimmed page', async () => {
-    await bootWithRealCatalog();
+    await bootWithSteelAndDust();
     click(byId('details-open'));
     click(byId('details-close'));
     expect(dialog().open).toBe(false);
@@ -49,7 +49,7 @@ describe('the details sheet', () => {
   });
 
   it('holds the carousel still while it is open', async () => {
-    const { navigate } = await bootWithRealCatalog();
+    const { navigate } = await bootWithSteelAndDust();
     click(byId('details-open'));
     expect(press('ArrowRight').defaultPrevented).toBe(false);
     expect(press('Enter').defaultPrevented).toBe(false);
@@ -57,7 +57,7 @@ describe('the details sheet', () => {
   });
 
   it('closes and opens the game from its Play link', async () => {
-    const { navigate } = await bootWithRealCatalog();
+    const { navigate } = await bootWithSteelAndDust();
     click(byId('details-open'));
     expect(click(byId('details-play')).defaultPrevented).toBe(true);
     expect(dialog().open).toBe(false);

@@ -61,3 +61,4 @@ themselves. Read `docs/architecture.md` before changing structure.
 
 `apps/web/games/<id>/` holds `game.json` (the catalog entry), `index.html`, `assets/`, `styles/`
 (with the game's own `tokens.css`), `src/` and `test/`. Adding a folder with a valid `game.json` adds the game to the home page.
+A game hosted on its own site keeps only `game.json` (with an `https:` `url`) and `assets/` here.

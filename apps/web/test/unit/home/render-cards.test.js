@@ -53,6 +53,16 @@ describe('renderArt', () => {
   });
 });
 
+describe('rendered art', () => {
+  it('stays smooth where pixel art scales block by block', () => {
+    const smooth = card({ smoothArt: true });
+    expect(renderArt(smooth)).toContain('<img class="art is-smooth" src=');
+    expect(renderTile(smooth, 0, 0)).toContain('<img class="art is-smooth" src=');
+    expect(renderBackdrop(smooth, 0)).toContain('<img class="backdrop__img is-smooth" src=');
+    expect(renderBackdrop(card(), 0)).toContain('<img class="backdrop__img" src=');
+  });
+});
+
 describe('renderCard', () => {
   it('is a button named after the game, out of the tab order until it is the center card', () => {
     const html = renderCard(card(), 0);

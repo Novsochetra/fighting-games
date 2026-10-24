@@ -47,6 +47,10 @@
   image-rendering: pixelated;
 }
 
+.backdrop__img.is-smooth {
+  image-rendering: auto;
+}
+
 /* A blur that fades in toward the bottom, like iOS's progressive blur: the painting stays sharp at
    the top and frosts behind the title and buttons. The mask fades the blur itself, not the art. */
 .hero__frost {

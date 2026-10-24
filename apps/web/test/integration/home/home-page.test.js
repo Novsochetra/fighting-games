@@ -5,6 +5,7 @@ import { EMPTY_MESSAGE, ERROR_MESSAGE } from '../../../src/home/home-view.js';
 import {
   boot,
   bootWithRealCatalog,
+  bootWithSteelAndDust,
   byId,
   cards,
   centerCard,
@@ -36,15 +37,14 @@ describe('home page with the real catalog', () => {
     const { games } = JSON.parse(body);
     expect(cards()).toHaveLength(games.length + COMING_SOON_COUNT);
     expect(tiles()).toHaveLength(games.length);
-    expect(cards()[0].getAttribute('aria-label')).toBe('Steel & Dust');
-    expect(cards()[0].querySelector('img').getAttribute('src')).toBe(
-      'games/steel-and-dust/assets/screenshots/angkor-wat.png',
-    );
-    expect(tiles()[0].textContent).toContain("Beat 'em up");
+    const [first] = games;
+    expect(cards()[0].getAttribute('aria-label')).toBe(first.title);
+    expect(cards()[0].querySelector('img').getAttribute('src')).toBe(first.screenshot);
+    expect(tiles()[0].textContent).toContain(first.genre);
   });
 
   it('puts the first game in the spotlight, with its art behind the carousel', async () => {
-    await bootWithRealCatalog();
+    await bootWithSteelAndDust();
     expect(spotlightTitle()).toBe('Steel & Dust');
     expect(byId('spotlight-meta').textContent).toBe("Beat 'em up · 1 player · 2026");
     expect(byId('spotlight-summary').textContent).toBe('A side-scrolling pixel-art brawler.');
@@ -57,7 +57,7 @@ describe('home page with the real catalog', () => {
   });
 
   it('rings the selected card and tile and keeps only that card in the tab order', async () => {
-    await bootWithRealCatalog();
+    await bootWithSteelAndDust();
     expect(centerCard()).toBe(cards()[0]);
     expect(centerCard().getAttribute('aria-current')).toBe('true');
     expect(cards().filter((card) => card.tabIndex === 0)).toEqual([centerCard()]);
@@ -84,7 +84,7 @@ describe('home page with the real catalog', () => {
   });
 
   it('opens the selected game with Enter or Space, and with a click on its card', async () => {
-    const { navigate } = await bootWithRealCatalog();
+    const { navigate } = await bootWithSteelAndDust();
     expect(press('Enter').defaultPrevented).toBe(true);
     expect(navigate).toHaveBeenLastCalledWith('games/steel-and-dust/');
     press(' ');
@@ -99,7 +99,7 @@ describe('home page with the real catalog', () => {
   });
 
   it('opens a game from Play in place of following the link', async () => {
-    const { navigate } = await bootWithRealCatalog();
+    const { navigate } = await bootWithSteelAndDust();
     const event = click(byId('play'));
     expect(event.defaultPrevented).toBe(true);
     expect(navigate).toHaveBeenCalledWith('games/steel-and-dust/');
@@ -110,6 +110,21 @@ describe('home page with the real catalog', () => {
     const event = click(byId('play'), { metaKey: true });
     expect(event.defaultPrevented).toBe(false);
     expect(navigate).not.toHaveBeenCalled();
+  });
+});
+
+describe('a game hosted on its own site', () => {
+  it('lists Morodok Angkor, keeps its rendered art smooth and opens its own site', async () => {
+    const { navigate } = await bootWithRealCatalog();
+    const tile = tiles().find((candidate) => candidate.textContent.includes('Morodok Angkor'));
+    click(tile);
+    expect(spotlightTitle()).toBe('Morodok Angkor');
+    expect(centerCard().querySelector('img').classList.contains('is-smooth')).toBe(true);
+    const backdrop = byId('backdrops').querySelector('.backdrop.is-active img');
+    expect(backdrop.classList.contains('is-smooth')).toBe(true);
+    expect(byId('play').getAttribute('href')).toBe('https://morodokangkor.com/');
+    click(byId('play'));
+    await vi.waitFor(() => expect(navigate).toHaveBeenCalledWith('https://morodokangkor.com/'));
   });
 });
 

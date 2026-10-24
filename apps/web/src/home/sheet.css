@@ -57,6 +57,10 @@
   image-rendering: pixelated;
 }
 
+.sheet__art.is-smooth {
+  image-rendering: auto;
+}
+
 .sheet__close {
   position: absolute;
   inset-block-start: var(--space-4);

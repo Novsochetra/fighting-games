@@ -44,12 +44,20 @@ arcade only by address (`../../`).
 `test/integration/independence.test.js` fails if a game loads a file from outside its folder or the
 home page (or the supporters page, part of the arcade) loads a file from a game.
 
+A game hosted on its own site, such as Morodok Angkor (`games/morodok-angkor/`, at
+`https://morodokangkor.com/`), keeps only its `game.json` and art here. Its `url` must be an `https:`
+address (checked by the server, `game-entry.js`, and again by the home page, `view-models.js`), and
+Play opens it there instead of `games/<id>/`. The arcade draws art pixelated, block by block; a game
+whose art is rendered, like a 3D world, sets `"pixelArt": false` and its card, tile, backdrop and
+details art stay smooth (`is-smooth`).
+
 ## Request flow
 
 1. `GET /` serves `apps/web/index.html`. The home page fetches `api/games`.
 2. `GET /api/games` reads every `apps/web/games/*/game.json` and returns `{ games: [...] }`. The
    list needs no database: adding a game folder adds it.
-3. Play links to `games/<id>/`, which serves that game's `index.html`.
+3. Play links to `games/<id>/`, which serves that game's `index.html`, or to the `url` of a game
+   hosted on its own site.
 4. `supporters/` fetches `GET /api/supporters`; its donate sheet sends `POST /api/supporters`.
 5. `GET /api/health` answers `{"ok":true}` once the supporters table answers (Railway's health check).
 

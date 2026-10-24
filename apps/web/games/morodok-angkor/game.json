@@ -1,0 +1,16 @@
+{
+  "id": "morodok-angkor",
+  "title": "Morodok Angkor",
+  "tagline": "Angkor Heritage",
+  "description": "Explore Angkor in a voxel world: glide, ride a hot air balloon and walk to Angkor Wat, Bayon, Ta Prohm, Preah Khan and Phnom Kulen. In Khmer and English.",
+  "genre": "Exploration",
+  "players": "1 player",
+  "year": 2026,
+  "controls": ["Keyboard", "Gamepad", "Touch"],
+  "url": "https://morodokangkor.com/",
+  "pixelArt": false,
+  "cover": "assets/icons/icon-512.jpg",
+  "banner": "assets/key-art/banner.jpg",
+  "poster": "assets/key-art/poster.jpg",
+  "screenshot": "assets/screenshots/kite-flying.jpg"
+}

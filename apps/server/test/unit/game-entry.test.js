@@ -93,6 +93,32 @@ describe('validateGameEntry', () => {
     ]);
   });
 
+  it('accepts a game hosted on its own secure site, with smooth art', () => {
+    const entry = { ...validEntry(), url: 'https://morodokangkor.com/', pixelArt: false };
+    expect(validateGameEntry(entry, 'demo-game')).toEqual([]);
+  });
+
+  it.each([
+    'http://morodokangkor.com/',
+    'javascript:alert(1)',
+    '//morodokangkor.com/',
+    'games/demo-game/',
+    'https://user:secret@morodokangkor.com/',
+    'https://morodok angkor.com/',
+    '',
+    42,
+  ])('rejects the url %j', (url) => {
+    expect(validateGameEntry({ ...validEntry(), url }, 'demo-game')).toEqual([
+      '"url" must be an https:// address',
+    ]);
+  });
+
+  it.each(['false', 0, null])('rejects pixelArt %j', (pixelArt) => {
+    expect(validateGameEntry({ ...validEntry(), pixelArt }, 'demo-game')).toEqual([
+      '"pixelArt" must be true or false',
+    ]);
+  });
+
   it('reports every problem at once', () => {
     const entry = { id: 'demo-game', cover: '../x.png' };
     expect(validateGameEntry(entry, 'demo-game')).toHaveLength(6);
@@ -114,6 +140,12 @@ describe('toCatalogGame', () => {
     expect(toCatalogGame(validEntry())).not.toHaveProperty('poster');
     const shot = toCatalogGame({ ...validEntry(), screenshot: 'shots/a.png' });
     expect(shot.screenshot).toBe('games/demo-game/shots/a.png');
+  });
+
+  it('keeps the folder path of a game hosted elsewhere, next to its url', () => {
+    const game = toCatalogGame({ ...validEntry(), url: 'https://morodokangkor.com/' });
+    expect(game.path).toBe('games/demo-game/');
+    expect(game.url).toBe('https://morodokangkor.com/');
   });
 
   it('keeps the other catalog fields as they are', () => {

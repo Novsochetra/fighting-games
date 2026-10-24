@@ -127,6 +127,10 @@
   image-rendering: pixelated;
 }
 
+.art.is-smooth {
+  image-rendering: auto;
+}
+
 .art--monogram {
   display: grid;
   place-items: center;
