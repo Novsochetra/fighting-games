@@ -10,6 +10,7 @@ import { addFloatText, showBanner } from '../fx/effects.js';
 import { addSparks } from '../fx/particles.js';
 import { refreshPose } from '../pose/refresh-pose.js';
 import { resetRun } from '../reset-run.js';
+import { saveCheckpoint } from './checkpoint.js';
 import { hasLivesLeft } from './lives.js';
 import { missionOf } from './mission.js';
 import { REVEAL_FRAMES } from './stage-clear.js';
@@ -25,6 +26,7 @@ function announceMission(game) {
     stamp: true,
   });
   game.io.sfx('reveal');
+  saveCheckpoint(game);
 }
 
 export function startPlay(game) {
@@ -73,6 +75,13 @@ export function placeOnTitle(game) {
 export function selectMission(game, index) {
   resetRun(game, index);
   placeOnTitle(game);
+}
+
+// a saved run picks up at the start of the mission it was on, with what it carried into it
+export function resumeCheckpoint(game) {
+  const { mission, score, playTime, continues, lives, ultMeter } = game.checkpoint;
+  selectMission(game, mission);
+  Object.assign(game, { score, playTime, continues, lives, ultMeter });
 }
 
 export function quitToTitle(game) {

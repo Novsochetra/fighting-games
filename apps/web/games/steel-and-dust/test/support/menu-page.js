@@ -10,11 +10,19 @@ import { createTestGame } from './test-game.js';
 // happy-dom swaps the global URL for one that ignores file: bases, so the path is joined by hand
 const PAGE = readFileSync(join(import.meta.dirname, '../../index.html'), 'utf8');
 
-export function openPage(records) {
+// a run saved on an earlier visit and the board kept so far come in as `checkpoint` and `leaderboard`
+export function openPage({ records, checkpoint, leaderboard } = {}) {
   document.body.innerHTML = PAGE.match(/<body>([\s\S]*)<\/body>/)[1];
   document.body.className = '';
   const saveSettings = vi.fn();
-  const game = createTestGame({ io: { saveSettings }, records });
+  const saveRun = vi.fn();
+  const saveLeaderboard = vi.fn();
+  const game = createTestGame({
+    io: { saveSettings, saveRun, saveLeaderboard },
+    records,
+    checkpoint,
+    leaderboard,
+  });
   const audio = { sfx: vi.fn(), unlock: vi.fn(), syncVolumes: vi.fn() };
   const ui = createUiState(game);
   const elements = findElements(document);
@@ -31,7 +39,7 @@ export function openPage(records) {
   installKeyboard(keys, { game, audio, menus, ui });
   menus.sync();
   const key = (code) => keys.dispatchEvent(new KeyboardEvent('keydown', { code }));
-  return { game, menus, act, layout, saveSettings, key, ui, audio };
+  return { game, menus, act, layout, saveSettings, saveRun, saveLeaderboard, key, ui, audio };
 }
 
 export const openMenu = () => document.querySelector('#menus .menu.open');

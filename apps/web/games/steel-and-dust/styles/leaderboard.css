@@ -1,0 +1,133 @@
+.board {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.board th {
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-2xs);
+  letter-spacing: var(--tracking-medium);
+  color: var(--color-text-muted);
+  text-align: left;
+  padding: 5px 8px;
+  background: color-mix(in srgb, var(--color-night-deep) 70%, transparent);
+}
+
+.board td {
+  padding: 5px 8px;
+  border-top: 1px solid color-mix(in srgb, var(--color-gold) 22%, transparent);
+  white-space: nowrap;
+}
+
+.board th:nth-child(-n + 2),
+.board td:nth-child(-n + 2) {
+  text-align: right;
+}
+
+.board td:first-child {
+  color: var(--color-text-muted);
+}
+
+.board td:nth-child(2) {
+  color: var(--color-gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.board-row:first-child td:first-child {
+  color: var(--color-gold);
+}
+
+/* the run that just ended glows jade, and so does the row a gamepad or the arrow keys are on */
+.board-row.latest {
+  background: color-mix(in srgb, var(--color-green) 12%, transparent);
+}
+
+.board-row.sel {
+  background: color-mix(in srgb, var(--color-green) 24%, transparent);
+}
+
+.board-row.latest td:nth-child(2),
+.board-row.sel td:nth-child(2) {
+  color: var(--color-mint-light);
+}
+
+.board-hero[data-hero='moss'] {
+  color: var(--color-hero-moss);
+}
+
+.board-hero[data-hero='firefly'] {
+  color: var(--color-hero-firefly);
+}
+
+.board-hero[data-hero='antler'] {
+  color: var(--color-hero-antler);
+}
+
+.board-hero[data-hero='blue'] {
+  color: var(--color-hero-blue);
+}
+
+.board-hero[data-hero='ember'] {
+  color: var(--color-hero-ember);
+}
+
+.board-hero[data-hero='bokator'] {
+  color: var(--color-hero-bokator);
+}
+
+.board-hero[data-hero='angkor'] {
+  color: var(--color-hero-angkor);
+}
+
+.board-empty,
+.board-note {
+  margin: 10px 0 0;
+  text-align: center;
+  color: var(--color-text-muted);
+  text-wrap: balance;
+}
+
+.board-empty {
+  font-size: var(--font-size-sm);
+}
+
+.board-note {
+  font-size: var(--font-size-2xs);
+}
+
+/* a phone held upright has no room for seven columns: each run takes two lines, its place, score
+   and hero, then how far it got and its time under the hero; the difficulty and the date give way */
+@media (max-width: 560px) {
+  .board thead,
+  .board .wide {
+    display: none;
+  }
+
+  .board tr {
+    display: grid;
+    grid-template-columns: 1.6em 5em auto 1fr;
+    column-gap: 10px;
+    padding: 6px 4px;
+    border-top: 1px solid color-mix(in srgb, var(--color-gold) 22%, transparent);
+  }
+
+  .board td {
+    padding: 0;
+    border: 0;
+  }
+
+  .board td:nth-child(3) {
+    grid-column: 3 / -1;
+    white-space: normal;
+  }
+
+  .board td:nth-child(4) {
+    grid-column: 3;
+  }
+
+  .board td:nth-child(n + 4) {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-2xs);
+  }
+}

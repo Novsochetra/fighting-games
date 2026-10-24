@@ -8,7 +8,10 @@ const SILENT_IO = {
   saveRecords() {},
   saveHints() {},
   saveSettings() {},
+  saveRun() {},
+  saveLeaderboard() {},
   setMuted() {},
+  now: () => 0,
 };
 
 function createCamera() {
@@ -22,7 +25,7 @@ function createCamera() {
   };
 }
 
-export function createGame({ settings, device, records, hintsSeen, io }) {
+export function createGame({ settings, device, records, hintsSeen, checkpoint, leaderboard, io }) {
   const game = {
     mode: 'title',
     tickCount: 0,
@@ -30,6 +33,9 @@ export function createGame({ settings, device, records, hintsSeen, io }) {
     device,
     records,
     hintsSeen,
+    checkpoint: checkpoint ?? null,
+    leaderboard: leaderboard ?? [],
+    lastRun: null,
     io: { ...SILENT_IO, ...io },
     muted: false,
     newBestScore: false,

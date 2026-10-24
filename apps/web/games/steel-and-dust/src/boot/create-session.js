@@ -24,6 +24,7 @@ export function createSession({ window }) {
       announce: (call) => ports.audio.announce(call),
       setMuted: () => ports.audio.syncVolumes(),
       vibrate: (pattern) => vibrate(window.navigator, pattern),
+      now: () => Date.now(),
     },
   });
   ports.audio = createAudio(game);
