@@ -12,9 +12,10 @@ export default defineRailway(() => {
       // The server runs the source as it is, so the only build step drops the test and lint tools.
       // Railpack sets NPM_CONFIG_PRODUCTION=false, which would make npm keep them.
       buildCommand: 'NPM_CONFIG_PRODUCTION= npm prune --omit=dev',
-      // Railway first watched only apps/server/, but the server also sends the pages and games, so
-      // a change anywhere deploys. Leaving the patterns out keeps Railway's narrower ones.
-      watchPatterns: ['/**'],
+      // No watch list, so a change to any file deploys: the server also sends the pages and games.
+      // Railway first watched only apps/server/; applying [] once cleared that, and Railway keeps an
+      // empty list as null. '/**' still skipped a push that changed only apps/web/.
+      watchPatterns: null,
     },
     preDeploy: 'node apps/server/src/db/migrate-cli.js',
     start: 'node apps/server/src/main.js',
