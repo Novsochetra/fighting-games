@@ -1,57 +1,31 @@
 import { fetchCatalog } from './catalog-client.js';
-import { createGamepadPoller } from './gamepad-poller.js';
 import { createHomeController } from './home-controller.js';
 import { createHomeView } from './home-view.js';
-import { actionForKey, isFormControl } from './input-actions.js';
-
-function wireKeyboard(document, controller, signal) {
-  const onKeyDown = (event) => {
-    const action = actionForKey(event);
-    if (!action || isFormControl(event.target)) {
-      return;
-    }
-    if (controller.handleAction(action)) {
-      event.preventDefault();
-    }
-  };
-  document.addEventListener('keydown', onKeyDown, { signal });
-}
-
-function wirePointer(shelf, controller, signal) {
-  const selectFromEvent = (event) => {
-    const link = event.target.closest?.('[data-game-index]');
-    if (link) {
-      controller.select(Number(link.dataset.gameIndex));
-    }
-  };
-  shelf.addEventListener('pointerover', selectFromEvent, { signal });
-  shelf.addEventListener('focusin', selectFromEvent, { signal });
-}
-
-function wireGamepads({ events, getGamepads, requestFrame }, controller, signal) {
-  const poller = createGamepadPoller({
-    getGamepads,
-    requestFrame,
-    onAction: (action) => controller.handleAction(action),
-  });
-  events.addEventListener('gamepadconnected', () => poller.start(), { signal });
-  poller.start();
-}
+import { createLauncher } from './launcher.js';
+import { wireInputs } from './wire-inputs.js';
 
 export function bootHome({ document, fetch, navigate, gamepads }) {
   const lifetime = new AbortController();
   const { signal } = lifetime;
   const view = createHomeView(document);
+  const launcher = createLauncher({
+    document,
+    home: view.elements.home,
+    findLink: view.findLink,
+    navigate,
+  });
   const controller = createHomeController({
     view,
-    navigate,
+    launch: launcher.launch,
     loadGames: () => fetchCatalog(fetch),
   });
-  wireKeyboard(document, controller, signal);
-  wirePointer(view.elements.shelf, controller, signal);
+  wireInputs({ document, grid: view.elements.grid, controller, gamepads, signal });
   view.elements.retry.addEventListener('click', () => controller.load(), { signal });
-  if (gamepads) {
-    wireGamepads(gamepads, controller, signal);
-  }
-  return { controller, ready: controller.load(), stop: () => lifetime.abort() };
+  const onPageShow = (event) => {
+    if (event.persisted) {
+      launcher.land();
+    }
+  };
+  document.defaultView.addEventListener('pageshow', onPageShow, { signal });
+  return { controller, launcher, ready: controller.load(), stop: () => lifetime.abort() };
 }

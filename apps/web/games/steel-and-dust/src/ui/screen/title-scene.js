@@ -58,11 +58,18 @@ function isDrawn({ drawn }, { orientation, still }, tick) {
 // the title's living painting: its clock runs only while the painting is up and it draws only
 // when the painting or its tick has changed, so play costs it nothing; until a frame is drawn the
 // canvas stays blank and the painting under it shows
-export function createTitleScene({ canvas, menus, matchMedia, createImage, baseUrl = '' }) {
+export function createTitleScene({
+  canvas,
+  menus,
+  matchMedia,
+  createImage,
+  createCanvas,
+  baseUrl = '',
+}) {
   const context = canvas.getContext('2d');
   const view = {
     canvas,
-    painter: context && createPainter(context),
+    painter: context && createPainter(context, createCanvas),
     paintings: loadPaintings(createImage, baseUrl),
     drawn: {},
   };
@@ -91,5 +98,7 @@ export function installTitleScene(window) {
     menus: document.getElementById('menus'),
     matchMedia: (query) => window.matchMedia(query),
     createImage: () => new window.Image(),
+    createCanvas: (width, height) =>
+      Object.assign(document.createElement('canvas'), { width, height }),
   });
 }

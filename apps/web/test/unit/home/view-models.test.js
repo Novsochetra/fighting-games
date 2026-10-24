@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
-  MIN_SHELF_SLOTS,
-  buildShelf,
   formatGameCount,
   isRelativeUrl,
+  monogramOf,
   toGameCard,
+  toGameCards,
 } from '../../../src/home/view-models.js';
 
 const apiGame = (overrides = {}) => ({
@@ -21,33 +21,35 @@ const apiGame = (overrides = {}) => ({
 });
 
 describe('toGameCard', () => {
-  it('maps an API game to what a card shows', () => {
+  it('maps an API game to what its icon shows', () => {
     expect(toGameCard(apiGame())).toEqual({
       id: 'steel-and-dust',
       title: 'Steel & Dust',
-      tagline: 'Pixel brawler',
-      description: 'A side-scrolling pixel-art brawler.',
-      genre: "Beat 'em up",
-      players: '1 player',
+      monogram: 'S',
       href: 'games/steel-and-dust/',
       coverSrc: 'games/steel-and-dust/assets/icons/icon-512.png',
-      controls: ['Keyboard', 'Gamepad', 'Touch'],
     });
   });
 
-  it('fills missing optional fields with empty values', () => {
-    const card = toGameCard({ title: 'Bare', path: 'games/bare/' });
-    expect(card).toMatchObject({ tagline: '', genre: '', players: '', coverSrc: '', controls: [] });
+  it('leaves the cover empty when the game has none', () => {
+    expect(toGameCard({ title: 'Bare', path: 'games/bare/' }).coverSrc).toBe('');
   });
 
   it('drops a cover that is not a plain relative URL', () => {
     expect(toGameCard(apiGame({ cover: 'javascript:alert(1)' })).coverSrc).toBe('');
   });
+});
 
-  it('keeps only text controls', () => {
-    expect(toGameCard(apiGame({ controls: ['Keyboard', 3, '', null] })).controls).toEqual([
-      'Keyboard',
-    ]);
+describe('monogramOf', () => {
+  it.each([
+    ['Steel & Dust', 'S'],
+    ['  neon drift', 'N'],
+    ['ångström', 'Å'],
+    ['👾 Invaders', '👾'],
+    ['', ''],
+    [undefined, ''],
+  ])('takes %j as %j', (title, expected) => {
+    expect(monogramOf(title)).toBe(expected);
   });
 });
 
@@ -71,22 +73,10 @@ describe('isRelativeUrl', () => {
   });
 });
 
-describe('buildShelf', () => {
-  it('pads a short shelf with coming soon slots', () => {
-    const shelf = buildShelf([apiGame()]);
-    expect(shelf.cards).toHaveLength(1);
-    expect(shelf.emptySlotCount).toBe(MIN_SHELF_SLOTS - 1);
-  });
-
-  it('adds no empty slots once the shelf is full', () => {
-    const games = Array.from({ length: 5 }, (_, i) =>
-      apiGame({ id: `g${i}`, path: `games/g${i}/` }),
-    );
-    expect(buildShelf(games).emptySlotCount).toBe(0);
-  });
-
-  it('shows only empty slots when there are no games', () => {
-    expect(buildShelf([])).toEqual({ cards: [], emptySlotCount: MIN_SHELF_SLOTS });
+describe('toGameCards', () => {
+  it('keeps the catalog order', () => {
+    const games = ['a', 'b', 'c'].map((id) => apiGame({ id, title: id, path: `games/${id}/` }));
+    expect(toGameCards(games).map((card) => card.id)).toEqual(['a', 'b', 'c']);
   });
 
   it('leaves out games that cannot be linked to', () => {
@@ -96,7 +86,11 @@ describe('buildShelf', () => {
       null,
       apiGame(),
     ];
-    expect(buildShelf(games).cards.map((card) => card.id)).toEqual(['steel-and-dust']);
+    expect(toGameCards(games).map((card) => card.id)).toEqual(['steel-and-dust']);
+  });
+
+  it('has no cards for no games', () => {
+    expect(toGameCards([])).toEqual([]);
   });
 });
 

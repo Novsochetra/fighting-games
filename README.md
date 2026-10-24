@@ -1,7 +1,7 @@
 # Retro Arcade
 
 A small arcade of browser games. A Node server lists the games through an API, the home page shows
-them like a console's game-select screen, and each game lives in its own folder.
+them as app icons, like a tablet's home screen, and each game lives in its own folder.
 
 Play it online at **https://novsochetra.github.io/fighting-games/**.
 
@@ -23,13 +23,14 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:8765/. Pick a game with the arrow keys and Enter, a gamepad, or a tap.
+Then open http://localhost:8765/. Open a game with a click or a tap, the arrow keys and Enter, or a
+gamepad.
 
 ## Project layout
 
 ```
 apps/server/   Node HTTP server: GET /api/games and the static files
-apps/web/      everything the browser loads: the home page, design tokens and the games
+apps/web/      everything the browser loads: the home page and the games, each with its own tokens
 scripts/       the static site build for GitHub Pages
 tools/         the project's own ESLint rules
 docs/          architecture notes
@@ -47,13 +48,17 @@ docs/          architecture notes
 | `npm test`             | all tests; also `npm run test:unit`, `test:integration`, `test:regression`     |
 
 The lint rules enforce small files (150 lines) and functions (40 lines), complexity 10, no section
-banners, no `/** */` blocks, no `TODO` comments, and no raw colors outside the design tokens
-(`apps/web/src/design/tokens.css`) and a game's art palette.
+banners, no `/** */` blocks, no `TODO` comments, and no raw colors outside the design tokens (the
+home page's `apps/web/src/home/tokens.css`, each game's `styles/tokens.css`) and a game's art palette.
+
+The home page and each game are independent apps: none loads a file from another.
 
 ## Add a game
 
 Create `apps/web/games/<id>/` with a `game.json` (id, title, tagline, description, genre, players,
-cover), an `index.html` and the game's files. The server finds it and the home page lists it.
+cover), an `index.html` and the game's files, including its own `styles/tokens.css`. A game loads
+nothing from outside its folder. The server finds it and the home page shows its cover as the game's
+icon, so make the cover a square image.
 
 ## Deploy
 

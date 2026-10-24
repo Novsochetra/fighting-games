@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createPainter } from '../../../src/render/painter.js';
 import { drawText, textWidth } from '../../../src/render/text/draw-text.js';
-import { createRecordingContext } from '../../support/recording-canvas.js';
+import { createRecordingContext, RecordingCanvas } from '../../support/recording-canvas.js';
 
 function draw(value, options) {
   const { context, log } = createRecordingContext(null);
@@ -35,5 +35,26 @@ describe('bitmap text', () => {
     expect(left(draw('AB', { shadow: null }))).toBe(50);
     expect(left(draw('AB', { shadow: null, align: 'right' }))).toBe(43);
     expect(left(draw('AB', { shadow: null, align: 'center' }))).toBe(47);
+  });
+
+  it('lays a string down as two stamps, its shadow and its letters, cut once', () => {
+    const { context, log } = createRecordingContext(null);
+    const made = [];
+    const createCanvas = () => {
+      made.push(new RecordingCanvas());
+      return made.at(-1);
+    };
+    const painter = createPainter(context, createCanvas);
+    drawText(painter, 'AB', { x: 50, y: 10, color: 'gold', scale: 2 });
+    drawText(painter, 'AB', { x: 50, y: 10, color: 'gold', scale: 2 });
+    expect(made).toHaveLength(2);
+    expect(log.some((call) => call.startsWith('fillRect('))).toBe(false);
+    const laid = log.filter((call) => call.startsWith('drawImage('));
+    expect(laid.map((call) => call.split(',').slice(-4).join(','))).toEqual([
+      '52,12,14,10)',
+      '50,10,14,10)',
+      '52,12,14,10)',
+      '50,10,14,10)',
+    ]);
   });
 });

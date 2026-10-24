@@ -6,7 +6,7 @@ import { installInput } from './boot/install-input.js';
 import { installUi } from './boot/install-ui.js';
 import { TICK_MS } from './config.js';
 import { createView } from './render/create-view.js';
-import { renderFrame } from './render/render-frame.js';
+import { drawChangedFrame } from './render/draw-changed-frame.js';
 import { missionWait, sceneLoaded } from './render/scene-loaded.js';
 import { canAffordHeavy, ultReady } from './sim/combat/ult-bar.js';
 import { beginTick, runTick } from './sim/tick.js';
@@ -56,6 +56,12 @@ function runTicks(count) {
   audio.setTickOffset(0);
 }
 
+// the menus' painting is opaque, so the game screen under it is not drawn at all; drawing it there
+// kept the phone's GPU busy for nothing on the title and the hero select
+function screenCovered() {
+  return elements.menus.dataset.scene === 'on';
+}
+
 // nothing moves behind the loading screen; the clock still keeps time there, so play does not
 // rush to catch up once the road and the Shade are in
 function frame(now) {
@@ -63,8 +69,11 @@ function frame(now) {
   if (sceneLoaded(view, game)) {
     runTicks(due);
   }
-  renderFrame(game, view);
+  // the menus follow this frame's ticks first, so the frame play starts on is drawn
   syncDom();
+  if (!screenCovered()) {
+    drawChangedFrame(game, view);
+  }
   bootLoading.loader.update(now, missionWait(view, game));
   titleScene.frame(now);
   requestAnimationFrame(frame);

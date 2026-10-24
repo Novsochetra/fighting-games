@@ -1,0 +1,28 @@
+.launch {
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-launch);
+  overflow: hidden;
+  contain: strict;
+}
+
+.launch__panel {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--splash-top, var(--color-splash)),
+    var(--splash-bottom, var(--color-splash))
+  );
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.launch__icon {
+  position: absolute;
+  overflow: hidden;
+  border-radius: var(--radius-app-icon);
+  transform-origin: 0 0;
+  container-type: inline-size;
+  will-change: transform, opacity;
+}

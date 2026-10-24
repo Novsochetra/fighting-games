@@ -53,7 +53,7 @@ export function createFakeBuffer(channels, length, sampleRate) {
   };
 }
 
-// records every node it creates; resume() moves it to `resumeTo`
+// records every node it creates; resume() moves it to `resumeTo`, suspend() back to 'suspended'
 export function createFakeAudioContext({ state = 'suspended', resumeTo = 'running' } = {}) {
   const context = {
     state,
@@ -62,10 +62,16 @@ export function createFakeAudioContext({ state = 'suspended', resumeTo = 'runnin
     nodes: [],
     buffers: [],
     resumeCalls: 0,
+    suspendCalls: 0,
     destination: { kind: 'destination', connections: [] },
     resume() {
       context.resumeCalls++;
       context.state = resumeTo;
+      return Promise.resolve();
+    },
+    suspend() {
+      context.suspendCalls++;
+      context.state = 'suspended';
       return Promise.resolve();
     },
     createBuffer(channels, length, sampleRate) {

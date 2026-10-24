@@ -9,29 +9,36 @@ apps/
     src/
     test/{unit,integration}
   web/                    everything the browser loads
-    index.html            home page: pick a game
-    src/
-      design/tokens.css   every UI color, font, size, radius, shadow and motion value
-      home/               home page modules
+    index.html            home page: a launcher with an icon per game
+    src/home/             home page modules and styles; tokens.css holds its colors, type and motion
     games/
-      <game-id>/
+      <game-id>/          one self-contained app: it loads nothing from outside its folder
         game.json         catalog entry, read by the server
         index.html        the game page
         assets/           sprites, icons, manifest
-        styles/           the game page CSS (tokens only)
+        styles/           the game page CSS; tokens.css holds the game's own design tokens
         src/              game modules
         test/{unit,integration,regression,support}
-    test/{unit,integration}  home page tests
+    test/{unit,integration,regression}  home page tests
 scripts/                  thin CLIs (the static site build lives in apps/server/src/static-site/)
 tools/eslint-rules/       the project's own lint rules
 docs/                     this file
 ```
 
+## Independent games
+
+The home page and every game are separate apps that share no file. Each has its own design tokens
+(`src/home/tokens.css`, `games/<id>/styles/tokens.css`), styles and modules, so a game can change its
+look without touching the arcade or another game. The home page knows a game only through its
+`game.json` and its cover; a game links back to the arcade only by address (`../../`).
+`test/integration/independence.test.js` fails if a game loads a file from outside its folder or the
+home page loads a file from a game.
+
 ## Request flow
 
 1. `GET /` serves `apps/web/index.html`. The home page fetches `api/games`.
 2. `GET /api/games` reads every `apps/web/games/*/game.json` and returns `{ games: [...] }`.
-3. A card links to `games/<id>/`, which serves that game's `index.html`.
+3. An icon links to `games/<id>/`, which serves that game's `index.html`.
 
 Every URL in the pages is relative, so the same files work under the GitHub Pages sub path.
 `npm run build` writes the static site to `dist/`, including `dist/api/games`, because Pages has no server.
@@ -41,6 +48,25 @@ lets a browser keep any file for ten minutes, so without it a deploy could link 
 old cached one that lacks an export, and the game would never start (the loading screen waited at 97%).
 If a module still fails to load, the game page reloads itself once under a fresh address
 (`src/boot/boot-recovery.js`). `npm run dev` serves the files as they are.
+
+## Home page
+
+The home page is a launcher, like a tablet's home screen: a title and a grid of game icons on a
+plain background, each the game's `cover` with its title under it. It follows Apple's interface
+guidelines: their system colors in light and dark appearance, their text styles (Large Title, Body,
+Footnote, Caption), and SF Pro on Apple devices with Inter standing in for it elsewhere. The columns
+are as wide as an icon and spread edge to edge, so the icons line up with the title. Icons, their
+focus ring, their shadow and the launch panel share one corner radius (`--radius-app-icon`), so
+every outline stays concentric. Arrows, WASD, a gamepad, a click or a tap pick a game.
+
+Opening a game plays an app-launch animation before the page changes (`src/home/launcher.js`): the
+icon grows into a screen-sized panel in the colors of the icon's background (sampled from its
+corners, `launch-splash.js`), so every game opens into its own colors, and the home zooms away
+behind it. The launcher itself stays neutral graphite, so no one game's palette colors the arcade.
+The keyframes are plain functions of the icon's box and the screen (`launch-geometry.js`), and their
+timing comes from `--duration-launch` and `--easing-launch` in `src/home/tokens.css`. When the browser brings
+the page back from its back/forward cache, the panel shrinks back into the icon. With reduced motion
+the game opens at once.
 
 ## Game: Steel & Dust
 

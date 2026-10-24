@@ -7,26 +7,26 @@ const game = (id) => ({ id, title: `Game ${id}`, path: `games/${id}/` });
 const fakeView = (columns = 2) => ({
   showLoading: vi.fn(),
   showError: vi.fn(),
-  showShelf: vi.fn(),
+  showGrid: vi.fn(),
   select: vi.fn(),
   countColumns: () => columns,
 });
 
 const setup = ({ games = [game('a'), game('b'), game('c')], columns } = {}) => {
   const view = fakeView(columns);
-  const navigate = vi.fn();
+  const launch = vi.fn();
   const loadGames = vi.fn(async () => games);
-  const controller = createHomeController({ view, loadGames, navigate });
-  return { view, navigate, loadGames, controller };
+  const controller = createHomeController({ view, loadGames, launch });
+  return { view, launch, loadGames, controller };
 };
 
 describe('createHomeController', () => {
-  it('shows loading, then the shelf, then selects the first game', async () => {
+  it('shows loading, then the grid, then selects the first game', async () => {
     const { view, controller } = setup();
     await controller.load();
     expect(view.showLoading).toHaveBeenCalledOnce();
-    expect(view.showShelf.mock.calls[0][0].cards).toHaveLength(3);
-    expect(view.select).toHaveBeenCalledWith(0, expect.objectContaining({ id: 'a' }), {});
+    expect(view.showGrid.mock.calls[0][0].map((card) => card.id)).toEqual(['a', 'b', 'c']);
+    expect(view.select).toHaveBeenCalledWith(0, {});
     expect(controller.selectedIndex()).toBe(0);
   });
 
@@ -37,7 +37,7 @@ describe('createHomeController', () => {
     expect(view.showError).toHaveBeenCalledOnce();
     expect(controller.handleAction('start')).toBe(false);
     await controller.load();
-    expect(view.showShelf).toHaveBeenCalledOnce();
+    expect(view.showGrid).toHaveBeenCalledOnce();
   });
 
   it('moves the selection with the grid width and focuses the new card', async () => {
@@ -45,19 +45,37 @@ describe('createHomeController', () => {
     await controller.load();
     expect(controller.handleAction('down')).toBe(true);
     expect(controller.selectedIndex()).toBe(2);
-    expect(view.select).toHaveBeenLastCalledWith(2, expect.objectContaining({ id: 'c' }), {
-      focus: true,
-    });
+    expect(view.select).toHaveBeenLastCalledWith(2, { focus: true });
     controller.handleAction('right');
     expect(controller.selectedIndex()).toBe(0);
   });
 
-  it('starts the selected game', async () => {
-    const { navigate, controller } = setup();
+  it('launches the selected game', async () => {
+    const { launch, controller } = setup();
     await controller.load();
     controller.select(1);
-    controller.handleAction('start');
-    expect(navigate).toHaveBeenCalledWith('games/b/');
+    expect(controller.handleAction('start')).toBe(true);
+    expect(launch).toHaveBeenCalledWith({
+      index: 1,
+      card: expect.objectContaining({ href: 'games/b/' }),
+    });
+  });
+
+  it('opens a game by its index, selecting it first', async () => {
+    const { view, launch, controller } = setup();
+    await controller.load();
+    expect(controller.open(2)).toBe(true);
+    expect(controller.selectedIndex()).toBe(2);
+    expect(view.select).toHaveBeenLastCalledWith(2, {});
+    expect(launch).toHaveBeenCalledWith({ index: 2, card: expect.objectContaining({ id: 'c' }) });
+  });
+
+  it('opens nothing outside the list', async () => {
+    const { launch, controller } = setup();
+    await controller.load();
+    expect(controller.open(3)).toBe(false);
+    expect(controller.open(-1)).toBe(false);
+    expect(launch).not.toHaveBeenCalled();
   });
 
   it('ignores selections outside the list', async () => {
@@ -69,10 +87,12 @@ describe('createHomeController', () => {
   });
 
   it('does nothing on input when the catalog is empty', async () => {
-    const { navigate, controller } = setup({ games: [] });
+    const { view, launch, controller } = setup({ games: [] });
     await controller.load();
+    expect(view.showGrid).toHaveBeenCalledWith([]);
     expect(controller.handleAction('start')).toBe(false);
-    expect(navigate).not.toHaveBeenCalled();
+    expect(controller.handleAction('right')).toBe(false);
+    expect(launch).not.toHaveBeenCalled();
   });
 });
 

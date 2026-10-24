@@ -1,7 +1,7 @@
 import { createAnnouncer, playCall, preloadCalls } from './announcer.js';
 import { SOUND_DEFINITIONS } from './bank/definitions.js';
 import { applyVolumes } from './context/volumes.js';
-import { resumeAudio, unlockAudio } from './context/unlock.js';
+import { resumeAudio, suspendAudio, unlockAudio } from './context/unlock.js';
 import { createMusicState, updateMusic } from './music/music-player.js';
 import { playSound } from './play-sound.js';
 
@@ -41,6 +41,7 @@ export function createAudio(game) {
       preloadCalls(audio, announcer, game);
     },
     resume: () => resumeAudio(audio),
+    suspend: () => suspendAudio(audio),
     sfx: (key, big, options) => playSound(audio, game, { key, big, options }),
     announce: (call) => playCall(audio, announcer, { game, call }),
     setTickOffset: (seconds) => {

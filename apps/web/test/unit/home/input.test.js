@@ -6,7 +6,8 @@ import {
   readGamepadActions,
 } from '../../../src/home/gamepad.js';
 import { createGamepadPoller } from '../../../src/home/gamepad-poller.js';
-import { actionForKey, isFormControl } from '../../../src/home/input-actions.js';
+import { actionForKey, isFormControl, isPlainClick } from '../../../src/home/input-actions.js';
+import { hasPointerMoved } from '../../../src/home/input-modality.js';
 
 const pad = ({ pressed = [], axes = [0, 0] } = {}) => ({
   buttons: Array.from({ length: 17 }, (_, i) => ({
@@ -48,6 +49,35 @@ describe('isFormControl', () => {
     expect(isFormControl({ tagName: 'INPUT' })).toBe(true);
     expect(isFormControl({ tagName: 'A' })).toBe(false);
     expect(isFormControl(null)).toBe(false);
+  });
+});
+
+describe('isPlainClick', () => {
+  const click = (overrides = {}) => ({ button: 0, ...overrides });
+
+  it('takes a plain primary click', () => {
+    expect(isPlainClick(click())).toBe(true);
+  });
+
+  it.each([
+    { button: 1 },
+    { metaKey: true },
+    { ctrlKey: true },
+    { shiftKey: true },
+    { altKey: true },
+  ])('leaves %j to the browser, which opens a tab or window', (overrides) => {
+    expect(isPlainClick(click(overrides))).toBe(false);
+  });
+});
+
+describe('hasPointerMoved', () => {
+  it('counts the first event and any change of position as a move', () => {
+    expect(hasPointerMoved(null, { clientX: 5, clientY: 5 })).toBe(true);
+    expect(hasPointerMoved({ x: 5, y: 5 }, { clientX: 6, clientY: 5 })).toBe(true);
+  });
+
+  it('ignores an event at the same spot, which the browser sends when the page scrolls', () => {
+    expect(hasPointerMoved({ x: 5, y: 5 }, { clientX: 5, clientY: 5 })).toBe(false);
   });
 });
 

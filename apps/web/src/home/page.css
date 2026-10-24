@@ -1,0 +1,98 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  color-scheme: light dark;
+  background: var(--color-launcher-background);
+  scroll-padding-block: var(--space-12);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-block-size: 100dvh;
+  font-family: var(--font-system);
+  font-size: var(--font-size-apple-body);
+  line-height: var(--leading-apple-body);
+  color: var(--color-label);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: var(--color-clear);
+}
+
+.home {
+  --gutter: var(--space-5);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  max-inline-size: var(--layout-launcher-max-width);
+  min-block-size: 100dvh;
+  margin-inline: auto;
+  padding-block: env(safe-area-inset-top) max(var(--space-8), env(safe-area-inset-bottom));
+  padding-inline: max(var(--gutter), env(safe-area-inset-left))
+    max(var(--gutter), env(safe-area-inset-right));
+}
+
+.masthead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-block: var(--space-6) var(--space-8);
+}
+
+.masthead__title,
+.masthead__meta {
+  margin: 0;
+}
+
+.masthead__title {
+  font-size: var(--font-size-apple-large-title);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-apple-large-title);
+}
+
+.masthead__meta {
+  font-size: var(--font-size-apple-subheadline);
+  line-height: var(--leading-apple-subheadline);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-label-muted);
+}
+
+.springboard {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+@media (min-width: 40rem) {
+  .home {
+    --gutter: var(--space-12);
+  }
+
+  .masthead {
+    padding-block: var(--space-12) var(--space-10);
+  }
+}
+
+/* Safari and every browser on iOS have SF Pro, Apple's own face, which Inter stands in for elsewhere;
+   only WebKit knows the -apple-system-body font. */
+@supports (font: -apple-system-body) {
+  body {
+    font-family: var(--font-system-apple);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

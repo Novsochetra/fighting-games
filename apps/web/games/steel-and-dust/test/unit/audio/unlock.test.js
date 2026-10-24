@@ -113,4 +113,31 @@ describe('installAudioUnlock', () => {
     target.fireDocument('visibilitychange');
     expect(contexts[0].resumeCalls).toBe(2);
   });
+
+  // iOS keeps a 'playback' audio session going while Safari is in the background
+  it('suspends the running context while the page is hidden and resumes it on return', () => {
+    const contexts = stubAudioContext();
+    const target = fakeWindow();
+    const audio = createAudio(gameState());
+    installAudioUnlock(target, audio);
+    target.fire('pointerup');
+    const [context] = contexts;
+    expect(context.state).toBe('running');
+    target.document.hidden = true;
+    target.fireDocument('visibilitychange');
+    expect(context.suspendCalls).toBe(1);
+    expect(audio.debugState().state).toBe('suspended');
+    target.document.hidden = false;
+    target.fireDocument('visibilitychange');
+    expect(audio.debugState().state).toBe('running');
+  });
+
+  it('has nothing to suspend before the first tap', () => {
+    const target = fakeWindow();
+    const audio = createAudio(gameState());
+    installAudioUnlock(target, audio);
+    target.document.hidden = true;
+    expect(() => target.fireDocument('visibilitychange')).not.toThrow();
+    expect(audio.debugState().state).toBe('none');
+  });
 });

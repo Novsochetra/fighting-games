@@ -27,3 +27,8 @@ export function actionForKey({ key, altKey, ctrlKey, metaKey }) {
 export function isFormControl(target) {
   return Boolean(target) && FORM_CONTROL_TAGS.has(target.tagName);
 }
+
+// A click with a modifier or another button keeps its browser meaning: a new tab or window.
+export function isPlainClick({ button, altKey, ctrlKey, metaKey, shiftKey }) {
+  return button === 0 && !(altKey || ctrlKey || metaKey || shiftKey);
+}

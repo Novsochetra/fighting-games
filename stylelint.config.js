@@ -20,7 +20,7 @@ export default {
   },
   overrides: [
     {
-      files: ['**/design/tokens.css'],
+      files: ['**/tokens.css'],
       rules: {
         'color-no-hex': null,
         'function-disallowed-list': null,

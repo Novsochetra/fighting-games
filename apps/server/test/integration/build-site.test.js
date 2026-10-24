@@ -32,8 +32,9 @@ describe('npm run build', () => {
   it.each([
     'index.html',
     'src/home/main.js',
-    'src/home/home.css',
-    'src/design/tokens.css',
+    'src/home/page.css',
+    'src/home/tokens.css',
+    'games/steel-and-dust/styles/tokens.css',
     'games/steel-and-dust/game.json',
     'games/steel-and-dust/assets/icons/icon-512.png',
     'api/games',

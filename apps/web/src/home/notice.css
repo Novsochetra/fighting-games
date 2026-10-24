@@ -1,0 +1,100 @@
+.notice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  margin: auto;
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+}
+
+.notice__message {
+  margin: 0;
+  max-inline-size: 32ch;
+  font-size: var(--font-size-apple-body);
+  line-height: var(--leading-apple-body);
+  color: var(--color-label-muted);
+}
+
+.notice[data-tone='loading'] {
+  animation: notice-reveal var(--duration-normal) var(--easing-standard)
+    var(--duration-loading-delay) backwards;
+}
+
+/* Apple's activity indicator: eight petals fading around a circle, turning a petal at a time. */
+.notice[data-tone='loading']::before {
+  content: '';
+  inline-size: var(--size-spinner);
+  block-size: var(--size-spinner);
+  background: conic-gradient(var(--color-label-muted), var(--color-clear));
+  mask:
+    radial-gradient(
+      circle,
+      var(--color-clear) var(--size-spinner-petal-gap),
+      var(--color-black) calc(var(--size-spinner-petal-gap) + 1%)
+    ),
+    repeating-conic-gradient(
+      from -7deg,
+      var(--color-black) 0deg 14deg,
+      var(--color-clear) 14deg 45deg
+    );
+  mask-composite: intersect;
+  animation: spin var(--duration-pulse) var(--easing-step-8) infinite;
+}
+
+.notice[data-tone='error'] {
+  padding: var(--space-8) var(--space-6) var(--space-6);
+  background: var(--color-launcher-surface);
+  border: var(--border-width-hairline) solid var(--color-launcher-separator);
+  border-radius: var(--radius-sheet);
+}
+
+.notice[data-tone='error'] .notice__message {
+  color: var(--color-label);
+}
+
+.button {
+  padding: var(--space-2) var(--space-5);
+  font-family: inherit;
+  font-size: var(--font-size-apple-body);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-apple-body);
+  color: var(--color-on-tint);
+  cursor: pointer;
+  background: var(--color-tint);
+  border: 0;
+  border-radius: var(--radius-pill);
+  transition:
+    scale var(--duration-fast) var(--easing-standard),
+    opacity var(--duration-fast) var(--easing-standard);
+}
+
+.button:active {
+  scale: 0.96;
+  opacity: 0.8;
+}
+
+.button:focus-visible {
+  outline: var(--border-width-ring) solid var(--color-focus-ring);
+  outline-offset: var(--border-width-ring);
+}
+
+@keyframes notice-reveal {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notice[data-tone='loading'],
+  .button {
+    animation: none;
+    transition: none;
+  }
+}
