@@ -156,6 +156,9 @@ The HUD sits along the top (`src/render/hud/top-bar.js`): the weapon box (icon, 
 with the lives in a small box under it, health over the ULT gauge beside it, the clock in the middle
 (with the wave under it while the camera is locked on a zone), and the score and best combo flush
 with the top right corner.
+The boxes that change only now and then (the weapon, the lives, the score and the purse) are each
+drawn once into a stamp of what they show (`src/render/hud/box-stamp.js`) and laid down with one
+`drawImage` a frame; drawn part by part they took most of the HUD's time.
 
 The touch buttons and the stick can be moved and resized (Settings, Button layout). The editor is its
 own menu, `layout`, in `src/ui/layout/` with `styles/layout-editor.css`: it drags a copy of the touch
@@ -551,6 +554,35 @@ Long sessions must not grow:
 - `test/regression/bugs/audio-node-leak.test.js`, `tint-memory.test.js`,
   `test/integration/sim/long-run.test.js` (every Shade, zone after zone) and `boss-long-run.test.js`
   (every road's boss, kept in phase two so its ultimate and hazards keep coming) hold these lines.
+
+### Loot
+
+Every raider knocked down spills a few gold coins where it falls, now and then a gem or an apple, and
+every boss leaves a chest (`dropLoot` in `src/sim/items/loot-drops.js`, called from `knockOutEnemy`;
+the table, values and timings in `src/data/loot.js`). The pieces live in `game.loot`, the chests in
+`game.chests`: a piece fountains up, bounces lower each time on the floor under it, off a sheer rise
+and off the screen's edges, and settles (`loot-motion.js`); once it has been out a moment the hero
+pulls in any piece close by on their own level, and it flies to their middle, quicker every tick
+(`loot.js`). A coin is one coin in the purse and 10 points, a gem ten coins and 100, an apple a bite
+of health (`loot-collect.js`); coins taken in a quick run climb a major scale through the coin
+sound's playback rate. A chest pops up out of the boss, lands, rattles, bursts open in a column of
+gold light and spills (`loot-chest.js`), all well inside a stage clear, and over a stage clear the
+hero pulls in everything on the road from anywhere. Whatever is still lying about when the clear
+screen ends is paid into the purse (`bankLeftovers`) and the score committed again, so no reward is
+lost to the wipe. The purse (`game.coins`) carries into the next mission with the score, is saved
+with the run as each mission starts (`saveCheckpoint`; a save from before the purse loads with an
+empty one), and hangs under the score on the HUD (`src/render/hud/purse.js`). The road holds at most `MAX_LOOT` pieces; a
+crowd felled at once pays the rest straight into the purse.
+
+Loot draws from a seeded stream of its own (`loot-random.js`), never `Math.random`, and moves the
+camera only with a kick, never a shake (whose offsets are random draws), so the raiders and bosses
+fight the same whether the hero gathers it or not: coins and gems never change a fight, and an
+apple only through the hero's health (`test/regression/loot-leaves-the-fight.test.js`). The art is
+in `assets/sprites/loot/` (`src/data/loot-sprites.js`): coins, gems, apples and sparkles at the
+fighters' density, the chest at the crates'. Pieces on the road are drawn over the fallen and under
+everyone standing; pieces flying in, and the sparkle where each is taken, over everything. The
+sounds are bank sounds of their own `loot` group (`src/audio/bank/loot-pieces.js`, `loot-chest.js`)
+that never outrank a blow landing when every voice is busy.
 
 ### Behavior lock
 

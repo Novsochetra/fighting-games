@@ -1,6 +1,7 @@
 import { COLORS } from '../../art/colors.js';
 import { VIEW_WIDTH } from '../../config.js';
 import { drawText } from '../text/draw-text.js';
+import { drawBoxStamped } from './box-stamp.js';
 import { drawPlaque } from './hud-frames.js';
 import { ROW_ONE, ROW_TWO, TOP_BAR_HEIGHT } from './top-bar.js';
 
@@ -41,7 +42,14 @@ function drawRow(painter, { label, value, color }, y) {
 }
 
 export function drawScore(painter, game, view) {
-  drawPlaque(painter, view.hudFrames, 'score', SCORE_BOX);
   const rows = scoreRows(game, easeScore(view, game.score));
-  rows.forEach((row, i) => drawRow(painter, row, [ROW_ONE, ROW_TWO][i]));
+  drawBoxStamped(painter, {
+    key: `score|${rows.map((row) => `${row.label}:${row.value}`).join('|')}`,
+    box: SCORE_BOX,
+    ready: Boolean(view.hudFrames.ready.score),
+    draw: (inner) => {
+      drawPlaque(inner, view.hudFrames, 'score', SCORE_BOX);
+      rows.forEach((row, i) => drawRow(inner, row, [ROW_ONE, ROW_TWO][i]));
+    },
+  });
 }

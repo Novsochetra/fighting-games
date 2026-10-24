@@ -2,7 +2,7 @@ import { COLORS } from '../art/colors.js';
 import { VIEW_WIDTH } from '../config.js';
 import { isLastMission } from '../data/missions/index.js';
 import { clamp, randomBetween } from '../lib/math.js';
-import { endCombo } from './combat/combo.js';
+import { commitScore, endCombo } from './combat/combo.js';
 import { updateMirages } from './bosses/mirage-run.js';
 import { resolveHits } from './combat/resolve-hits.js';
 import { arenaBounds } from './fighters/arena-bounds.js';
@@ -15,6 +15,8 @@ import { updateProjectiles } from './hazards/projectiles.js';
 import { updateShockwaves } from './hazards/shockwaves.js';
 import { updateHints } from './hints.js';
 import { expireBuffer } from './input/read-input.js';
+import { updateLoot } from './items/loot.js';
+import { bankLeftovers } from './items/loot-drops.js';
 import { updatePickups } from './items/pickups.js';
 import { updateCamera } from './stage/camera.js';
 import { enterNextMission } from './stage/flow.js';
@@ -36,6 +38,7 @@ function updateWorld(game) {
   updateMirages(game);
   updateSummons(game);
   updatePickups(game);
+  updateLoot(game);
   updateEffects(game);
   for (const fighter of game.fighters) {
     const bounds = arenaBounds(game, fighter);
@@ -58,6 +61,9 @@ function advanceClearScreen(game) {
   if (game.clearTime <= CLEAR_TICKS || game.mode !== 'play') {
     return;
   }
+  // coins taken over the clear screen came after the boss's fall committed the score
+  bankLeftovers(game);
+  commitScore(game);
   if (isLastMission(game.missionIndex)) {
     game.mode = 'clear';
     game.io.sfx('clear');

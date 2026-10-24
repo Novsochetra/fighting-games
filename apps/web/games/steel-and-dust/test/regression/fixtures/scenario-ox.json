@@ -5542,7 +5542,7 @@
     300,
     1068
    ],
-   "score": 5466,
+   "score": 5506,
    "combo": [
     12,
     98,
@@ -5663,7 +5663,7 @@
     300,
     1068
    ],
-   "score": 5557,
+   "score": 5597,
    "combo": [
     13,
     104,
@@ -5784,7 +5784,7 @@
     300,
     1068
    ],
-   "score": 5760,
+   "score": 5800,
    "combo": [
     14,
     117,
@@ -5905,7 +5905,7 @@
     300,
     1068
    ],
-   "score": 6002,
+   "score": 6042,
    "combo": [
     16,
     132,
@@ -6026,7 +6026,7 @@
     300,
     1068
    ],
-   "score": 6002,
+   "score": 6042,
    "combo": [
     16,
     132,
@@ -6147,7 +6147,7 @@
     300,
     1068
    ],
-   "score": 6002,
+   "score": 6042,
    "combo": [
     0,
     0,
@@ -6268,7 +6268,7 @@
     300,
     1068
    ],
-   "score": 6002,
+   "score": 6042,
    "combo": [
     0,
     0,
@@ -6389,7 +6389,7 @@
     300,
     1068
    ],
-   "score": 6129,
+   "score": 6169,
    "combo": [
     2,
     12,
@@ -6532,7 +6532,7 @@
     300,
     1068
    ],
-   "score": 6196,
+   "score": 6236,
    "combo": [
     3,
     18,
@@ -6675,7 +6675,7 @@
     300,
     1068
    ],
-   "score": 6266,
+   "score": 6306,
    "combo": [
     0,
     0,
@@ -6818,7 +6818,7 @@
     300,
     1068
    ],
-   "score": 6266,
+   "score": 6306,
    "combo": [
     0,
     0,
@@ -6961,7 +6961,7 @@
     300,
     1068
    ],
-   "score": 6266,
+   "score": 6306,
    "combo": [
     0,
     0,
@@ -7104,7 +7104,7 @@
     300,
     1068
    ],
-   "score": 6328,
+   "score": 6368,
    "combo": [
     1,
     6,
@@ -7247,7 +7247,7 @@
     300,
     1068
    ],
-   "score": 6494,
+   "score": 6534,
    "combo": [
     3,
     21,
@@ -7390,7 +7390,7 @@
     300,
     1068
    ],
-   "score": 6494,
+   "score": 6534,
    "combo": [
     3,
     21,
@@ -7533,7 +7533,7 @@
     300,
     1068
    ],
-   "score": 6787,
+   "score": 6827,
    "combo": [
     7,
     45,
@@ -7676,7 +7676,7 @@
     300,
     1068
    ],
-   "score": 7002,
+   "score": 7042,
    "combo": [
     9,
     61,
@@ -7819,7 +7819,7 @@
     300,
     1068
    ],
-   "score": 7652,
+   "score": 7692,
    "combo": [
     13,
     85,
@@ -7962,7 +7962,7 @@
     300,
     1068
    ],
-   "score": 7792,
+   "score": 7842,
    "combo": [
     14,
     94,
@@ -8105,7 +8105,7 @@
     300,
     1068
    ],
-   "score": 7792,
+   "score": 7842,
    "combo": [
     14,
     94,
@@ -8248,7 +8248,7 @@
     300,
     1068
    ],
-   "score": 7792,
+   "score": 7842,
    "combo": [
     0,
     0,
@@ -8391,7 +8391,7 @@
     300,
     1068
    ],
-   "score": 7792,
+   "score": 7842,
    "combo": [
     0,
     0,
@@ -8534,7 +8534,7 @@
     300,
     1068
    ],
-   "score": 7792,
+   "score": 7842,
    "combo": [
     0,
     0,
@@ -8677,7 +8677,7 @@
     300,
     1068
    ],
-   "score": 7792,
+   "score": 7842,
    "combo": [
     0,
     0,
@@ -8820,7 +8820,7 @@
     300,
     1068
    ],
-   "score": 7792,
+   "score": 7842,
    "combo": [
     0,
     0,
@@ -8963,7 +8963,7 @@
     300,
     1068
    ],
-   "score": 7792,
+   "score": 7842,
    "combo": [
     0,
     0,
@@ -9106,7 +9106,7 @@
     300,
     1068
    ],
-   "score": 7792,
+   "score": 7842,
    "combo": [
     0,
     0,
@@ -9249,7 +9249,7 @@
     300,
     1068
    ],
-   "score": 8453,
+   "score": 8503,
    "combo": [
     2,
     34,
@@ -9392,7 +9392,7 @@
     300,
     1068
    ],
-   "score": 8453,
+   "score": 8623,
    "combo": [
     2,
     34,
@@ -9518,7 +9518,7 @@
    "world": {
     "particles": "d81509d9796ba5d8",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "8abde1cc30abec12",
+    "floaters": "6cf8f83496cd923d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -9535,7 +9535,7 @@
     300,
     1068
    ],
-   "score": 8453,
+   "score": 8633,
    "combo": [
     2,
     34,
@@ -9661,7 +9661,7 @@
    "world": {
     "particles": "50a582a75f773f79",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "43fc30a40941a5ab",
+    "floaters": "a1811da5c08269f1",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -9678,7 +9678,7 @@
     300,
     1068
    ],
-   "score": 8599,
+   "score": 8779,
    "combo": [
     3,
     47,
@@ -9821,7 +9821,7 @@
     300,
     1068
    ],
-   "score": 14161,
+   "score": 14341,
    "combo": [
     0,
     0,
@@ -9964,7 +9964,7 @@
     300,
     1068
    ],
-   "score": 14161,
+   "score": 14341,
    "combo": [
     0,
     0,
@@ -10107,7 +10107,7 @@
     300,
     1068
    ],
-   "score": 14161,
+   "score": 14341,
    "combo": [
     0,
     0,
@@ -10124,7 +10124,7 @@
     0,
     40,
     2093,
-    0,
+    3,
     0,
     0,
     0,
@@ -10132,7 +10132,7 @@
    ],
    "camera": [
     0,
-    0,
+    0.84375,
     0
    ],
    "continues": 0,
@@ -10209,7 +10209,7 @@
     }
    ],
    "world": {
-    "particles": "97618a1d949a34e1",
+    "particles": "2f16db5ea47f3691",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "af03e49e2ae97d0f",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -10228,7 +10228,7 @@
     300,
     1068
    ],
-   "score": 14161,
+   "score": 14371,
    "combo": [
     0,
     0,
@@ -10330,8 +10330,8 @@
     }
    ],
    "world": {
-    "particles": "20663c5cc53e1a7d",
-    "effects": "da39a3ee5e6b4b0d",
+    "particles": "795414ad427794c1",
+    "effects": "58ee8d6ae6a1f585",
     "floaters": "dc372320fa3c48a6",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
@@ -10349,7 +10349,7 @@
     300,
     1068
    ],
-   "score": 14161,
+   "score": 14471,
    "combo": [
     0,
     0,
@@ -10453,7 +10453,7 @@
    "world": {
     "particles": "8a8918b6fb2bcca1",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "da39a3ee5e6b4b0d",
+    "floaters": "5c30f014f1cf5b4f",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -10470,7 +10470,7 @@
     300,
     1068
    ],
-   "score": 14161,
+   "score": 14931,
    "combo": [
     0,
     0,
@@ -10510,7 +10510,7 @@
     "vy": 0,
     "state": "win",
     "stateTime": 2,
-    "hp": 17,
+    "hp": 22,
     "facing": -1,
     "weapon": "sword",
     "durability": 40,
@@ -10529,7 +10529,7 @@
    "world": {
     "particles": "b6c9a91a6afa77df",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "b752c769125ec510",
+    "floaters": "6b1af13fc26d51c6",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -10546,7 +10546,7 @@
     300,
     1068
    ],
-   "score": 14161,
+   "score": 14931,
    "combo": [
     0,
     0,
@@ -10586,7 +10586,7 @@
     "vy": 0,
     "state": "win",
     "stateTime": 2,
-    "hp": 17,
+    "hp": 22,
     "facing": -1,
     "weapon": "sword",
     "durability": 40,
@@ -10605,7 +10605,7 @@
    "world": {
     "particles": "f4c1596152fff45b",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "038b269e2a65b414",
+    "floaters": "8dd25ab606d873ef",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -10619,7 +10619,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 14161,
+   "score": 14931,
    "combo": [
     0,
     0,
@@ -10692,7 +10692,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 14161,
+   "score": 14931,
    "combo": [
     0,
     0,
@@ -10765,7 +10765,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 14161,
+   "score": 14931,
    "combo": [
     0,
     0,
@@ -10838,7 +10838,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 14161,
+   "score": 14931,
    "combo": [
     0,
     0,
@@ -10911,7 +10911,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 14161,
+   "score": 14931,
    "combo": [
     0,
     0,
@@ -10987,7 +10987,7 @@
     300,
     1068
    ],
-   "score": 14161,
+   "score": 14931,
    "combo": [
     0,
     0,
@@ -11086,7 +11086,7 @@
     300,
     1068
    ],
-   "score": 14161,
+   "score": 14931,
    "combo": [
     0,
     0,
@@ -11207,7 +11207,7 @@
     300,
     1068
    ],
-   "score": 14317,
+   "score": 15087,
    "combo": [
     1,
     15,
@@ -11350,7 +11350,7 @@
     300,
     1068
    ],
-   "score": 14479,
+   "score": 15249,
    "combo": [
     2,
     30,
@@ -11493,7 +11493,7 @@
     300,
     1068
    ],
-   "score": 14756,
+   "score": 15526,
    "combo": [
     5,
     54,
@@ -11636,7 +11636,7 @@
     300,
     1068
    ],
-   "score": 15434,
+   "score": 16204,
    "combo": [
     7,
     84,
@@ -11779,7 +11779,7 @@
     300,
     1068
    ],
-   "score": 15434,
+   "score": 16234,
    "combo": [
     7,
     84,
@@ -11922,7 +11922,7 @@
     300,
     1068
    ],
-   "score": 15434,
+   "score": 16234,
    "combo": [
     7,
     84,
@@ -12065,7 +12065,7 @@
     300,
     1068
    ],
-   "score": 15434,
+   "score": 16234,
    "combo": [
     7,
     84,
@@ -12208,7 +12208,7 @@
     300,
     1068
    ],
-   "score": 15434,
+   "score": 16234,
    "combo": [
     0,
     0,
@@ -12329,7 +12329,7 @@
     300,
     1068
    ],
-   "score": 15434,
+   "score": 16234,
    "combo": [
     0,
     0,
@@ -12450,7 +12450,7 @@
     300,
     1068
    ],
-   "score": 15434,
+   "score": 16234,
    "combo": [
     0,
     0,
@@ -12571,7 +12571,7 @@
     300,
     1068
    ],
-   "score": 15880,
+   "score": 16680,
    "combo": [
     1,
     14,
@@ -12692,7 +12692,7 @@
     300,
     1068
    ],
-   "score": 15880,
+   "score": 16800,
    "combo": [
     1,
     14,
@@ -12796,7 +12796,7 @@
    "world": {
     "particles": "a2d10132fccec2b6",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "2372871696ebad67",
+    "floaters": "0e930957acf19f83",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "b81c5ff984567054",
     "summons": "da39a3ee5e6b4b0d",
@@ -12813,7 +12813,7 @@
     300,
     1068
    ],
-   "score": 15880,
+   "score": 16800,
    "combo": [
     0,
     0,
@@ -12917,7 +12917,7 @@
    "world": {
     "particles": "c21e63b458ff68bf",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "3a3991c9abbe7095",
+    "floaters": "3877b142da1622cd",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -12934,7 +12934,7 @@
     300,
     1068
    ],
-   "score": 15880,
+   "score": 16800,
    "combo": [
     0,
     0,
@@ -13055,7 +13055,7 @@
     300,
     1068
    ],
-   "score": 15880,
+   "score": 16800,
    "combo": [
     0,
     0,
@@ -13154,7 +13154,7 @@
     300,
     1068
    ],
-   "score": 15880,
+   "score": 16800,
    "combo": [
     0,
     0,
@@ -13253,7 +13253,7 @@
     300,
     1068
    ],
-   "score": 15880,
+   "score": 16800,
    "combo": [
     0,
     0,
@@ -13352,7 +13352,7 @@
     300,
     1068
    ],
-   "score": 15880,
+   "score": 16800,
    "combo": [
     0,
     0,
@@ -13451,7 +13451,7 @@
     300,
     1068
    ],
-   "score": 15953,
+   "score": 16873,
    "combo": [
     1,
     7,
@@ -13550,7 +13550,7 @@
     300,
     1068
    ],
-   "score": 16130,
+   "score": 17050,
    "combo": [
     3,
     23,
@@ -13649,7 +13649,7 @@
     300,
     1068
    ],
-   "score": 16223,
+   "score": 17143,
    "combo": [
     4,
     31,
@@ -13748,7 +13748,7 @@
     300,
     1068
    ],
-   "score": 16607,
+   "score": 17527,
    "combo": [
     5,
     38,
@@ -13847,7 +13847,7 @@
     300,
     1068
    ],
-   "score": 16607,
+   "score": 17537,
    "combo": [
     5,
     38,
@@ -13946,7 +13946,7 @@
     300,
     1068
    ],
-   "score": 16607,
+   "score": 17567,
    "combo": [
     5,
     38,
@@ -14045,7 +14045,7 @@
     300,
     1068
    ],
-   "score": 16607,
+   "score": 17567,
    "combo": [
     5,
     38,
@@ -14144,7 +14144,7 @@
     300,
     1068
    ],
-   "score": 16607,
+   "score": 17567,
    "combo": [
     0,
     0,
@@ -14265,7 +14265,7 @@
     300,
     1068
    ],
-   "score": 16607,
+   "score": 17567,
    "combo": [
     0,
     0,
@@ -14386,7 +14386,7 @@
     300,
     1068
    ],
-   "score": 16701,
+   "score": 17661,
    "combo": [
     1,
     9,
@@ -14551,7 +14551,7 @@
     300,
     1068
    ],
-   "score": 16701,
+   "score": 17661,
    "combo": [
     1,
     9,
@@ -14716,7 +14716,7 @@
     300,
     1068
    ],
-   "score": 16701,
+   "score": 17661,
    "combo": [
     1,
     9,
@@ -14881,7 +14881,7 @@
     300,
     1068
    ],
-   "score": 16876,
+   "score": 17836,
    "combo": [
     3,
     25,
@@ -15046,7 +15046,7 @@
     300,
     1068
    ],
-   "score": 17065,
+   "score": 18025,
    "combo": [
     5,
     41,
@@ -15211,7 +15211,7 @@
     300,
     1068
    ],
-   "score": 17065,
+   "score": 18025,
    "combo": [
     5,
     41,
@@ -15376,7 +15376,7 @@
     300,
     1068
    ],
-   "score": 17164,
+   "score": 18124,
    "combo": [
     6,
     49,
@@ -15541,7 +15541,7 @@
     300,
     1068
    ],
-   "score": 17481,
+   "score": 18441,
    "combo": [
     9,
     73,
@@ -15706,7 +15706,7 @@
     300,
     1068
    ],
-   "score": 17481,
+   "score": 18441,
    "combo": [
     9,
     73,
@@ -15871,7 +15871,7 @@
     300,
     1068
    ],
-   "score": 19483,
+   "score": 20443,
    "combo": [
     13,
     169,
@@ -16036,7 +16036,7 @@
     300,
     1068
    ],
-   "score": 19483,
+   "score": 20473,
    "combo": [
     13,
     169,
@@ -16201,7 +16201,7 @@
     300,
     1068
    ],
-   "score": 19483,
+   "score": 20473,
    "combo": [
     13,
     169,
@@ -16366,7 +16366,7 @@
     300,
     1068
    ],
-   "score": 19483,
+   "score": 20473,
    "combo": [
     13,
     169,
@@ -16531,7 +16531,7 @@
     300,
     1068
    ],
-   "score": 20467,
+   "score": 21457,
    "combo": [
     16,
     193,
@@ -16696,7 +16696,7 @@
     300,
     1068
    ],
-   "score": 20467,
+   "score": 21457,
    "combo": [
     16,
     193,
@@ -16861,7 +16861,7 @@
     300,
     1068
    ],
-   "score": 20467,
+   "score": 21457,
    "combo": [
     16,
     193,
@@ -17026,7 +17026,7 @@
     300,
     1068
    ],
-   "score": 20467,
+   "score": 21457,
    "combo": [
     16,
     193,
@@ -17169,7 +17169,7 @@
     300,
     1068
    ],
-   "score": 20467,
+   "score": 21457,
    "combo": [
     16,
     193,
@@ -17290,7 +17290,7 @@
     300,
     1068
    ],
-   "score": 20467,
+   "score": 21457,
    "combo": [
     16,
     193,
@@ -17411,7 +17411,7 @@
     300,
     1068
    ],
-   "score": 20467,
+   "score": 21467,
    "combo": [
     0,
     0,
@@ -17487,7 +17487,7 @@
     300,
     1068
    ],
-   "score": 20467,
+   "score": 21497,
    "combo": [
     0,
     0,
@@ -17563,7 +17563,7 @@
     300,
     1068
    ],
-   "score": 20467,
+   "score": 21527,
    "combo": [
     0,
     0,
@@ -17639,7 +17639,7 @@
     300,
     1068
    ],
-   "score": 20467,
+   "score": 21527,
    "combo": [
     0,
     0,
@@ -17715,7 +17715,7 @@
     684,
     1068
    ],
-   "score": 20467,
+   "score": 21527,
    "combo": [
     0,
     0,
@@ -17814,7 +17814,7 @@
     684,
     1068
    ],
-   "score": 20467,
+   "score": 21527,
    "combo": [
     0,
     0,
@@ -17935,7 +17935,7 @@
     684,
     1068
    ],
-   "score": 20467,
+   "score": 21527,
    "combo": [
     0,
     0,
@@ -18078,7 +18078,7 @@
     684,
     1068
    ],
-   "score": 20561,
+   "score": 21621,
    "combo": [
     1,
     9,
@@ -18243,7 +18243,7 @@
     684,
     1068
    ],
-   "score": 20561,
+   "score": 21621,
    "combo": [
     1,
     9,
@@ -18408,7 +18408,7 @@
     684,
     1068
    ],
-   "score": 20738,
+   "score": 21798,
    "combo": [
     3,
     25,
@@ -18573,7 +18573,7 @@
     684,
     1068
    ],
-   "score": 20854,
+   "score": 21914,
    "combo": [
     4,
     35,
@@ -18738,7 +18738,7 @@
     684,
     1068
    ],
-   "score": 20854,
+   "score": 21914,
    "combo": [
     4,
     35,
@@ -18903,7 +18903,7 @@
     684,
     1068
    ],
-   "score": 20938,
+   "score": 21998,
    "combo": [
     5,
     42,
@@ -19068,7 +19068,7 @@
     684,
     1068
    ],
-   "score": 20938,
+   "score": 21998,
    "combo": [
     5,
     42,
@@ -19233,7 +19233,7 @@
     684,
     1068
    ],
-   "score": 20938,
+   "score": 21998,
    "combo": [
     5,
     42,
@@ -19398,7 +19398,7 @@
     684,
     1068
    ],
-   "score": 20938,
+   "score": 21998,
    "combo": [
     0,
     0,
@@ -19563,7 +19563,7 @@
     684,
     1068
    ],
-   "score": 21087,
+   "score": 22147,
    "combo": [
     2,
     14,
@@ -19728,7 +19728,7 @@
     684,
     1068
    ],
-   "score": 21246,
+   "score": 22306,
    "combo": [
     0,
     0,
@@ -19893,7 +19893,7 @@
     684,
     1068
    ],
-   "score": 21246,
+   "score": 22306,
    "combo": [
     0,
     0,
@@ -20058,7 +20058,7 @@
     684,
     1068
    ],
-   "score": 21246,
+   "score": 22306,
    "combo": [
     0,
     0,
@@ -20223,7 +20223,7 @@
     684,
     1068
    ],
-   "score": 21246,
+   "score": 22306,
    "combo": [
     0,
     0,
@@ -20388,7 +20388,7 @@
     684,
     1068
    ],
-   "score": 21640,
+   "score": 22700,
    "combo": [
     1,
     9,
@@ -20553,7 +20553,7 @@
     684,
     1068
    ],
-   "score": 21640,
+   "score": 22730,
    "combo": [
     1,
     9,
@@ -20718,7 +20718,7 @@
     684,
     1068
    ],
-   "score": 21640,
+   "score": 22730,
    "combo": [
     0,
     0,
@@ -20883,7 +20883,7 @@
     684,
     1068
    ],
-   "score": 21640,
+   "score": 22730,
    "combo": [
     0,
     0,
@@ -21044,281 +21044,281 @@
   {
    "tick": 0,
    "frame": {
-    "calls": 1385,
-    "digest": "a0c4ab4233a9153d"
+    "calls": 1188,
+    "digest": "a5e97c9a8354dbaf"
    }
   },
   {
    "tick": 120,
    "frame": {
-    "calls": 1685,
-    "digest": "12c81494d66f72c0"
+    "calls": 1488,
+    "digest": "4897e8b5ec93c072"
    }
   },
   {
    "tick": 240,
    "frame": {
-    "calls": 1589,
-    "digest": "0d3373faa0c9203b"
+    "calls": 1388,
+    "digest": "1c017c184ca5a481"
    }
   },
   {
    "tick": 360,
    "frame": {
-    "calls": 1534,
-    "digest": "05dd721183f93d42"
+    "calls": 1333,
+    "digest": "329f2c17ee9b36cd"
    }
   },
   {
    "tick": 480,
    "frame": {
-    "calls": 1565,
-    "digest": "c6abb8c1f9a68f9b"
+    "calls": 1364,
+    "digest": "c378cbcbad1d844b"
    }
   },
   {
    "tick": 600,
    "frame": {
-    "calls": 2139,
-    "digest": "8f0f5c9c4c87f62c"
+    "calls": 1938,
+    "digest": "14004702bac2ab6e"
    }
   },
   {
    "tick": 720,
    "frame": {
-    "calls": 1929,
-    "digest": "a5b27d3df020f502"
+    "calls": 1728,
+    "digest": "7b467914c90398a8"
    }
   },
   {
    "tick": 840,
    "frame": {
-    "calls": 1892,
-    "digest": "3604aaa672bf09bd"
+    "calls": 1695,
+    "digest": "04e68fa342af9462"
    }
   },
   {
    "tick": 960,
    "frame": {
-    "calls": 1860,
-    "digest": "bbfa8ec048e94787"
+    "calls": 1662,
+    "digest": "1e4d8ff6298ce9b1"
    }
   },
   {
    "tick": 1080,
    "frame": {
-    "calls": 2358,
-    "digest": "eb58d446afea7d0a"
+    "calls": 2168,
+    "digest": "cdfb2dd6a8f3874a"
    }
   },
   {
    "tick": 1200,
    "frame": {
-    "calls": 1657,
-    "digest": "a02dce5d9f43e2ff"
+    "calls": 1574,
+    "digest": "82591bdf9d570092"
    }
   },
   {
    "tick": 1320,
    "frame": {
-    "calls": 1860,
-    "digest": "010703dfdd8c5717"
+    "calls": 1726,
+    "digest": "5892125fb8763b64"
    }
   },
   {
    "tick": 1440,
    "frame": {
-    "calls": 1633,
-    "digest": "004275763db810f9"
+    "calls": 1494,
+    "digest": "684e41c8b5db2b62"
    }
   },
   {
    "tick": 1560,
    "frame": {
-    "calls": 1839,
-    "digest": "62a43cd2107439ce"
+    "calls": 1696,
+    "digest": "99bda9293dfa0d3d"
    }
   },
   {
    "tick": 1680,
    "frame": {
-    "calls": 1747,
-    "digest": "0792f9c836d03847"
+    "calls": 1604,
+    "digest": "4604a178d3aa20a7"
    }
   },
   {
    "tick": 1800,
    "frame": {
-    "calls": 2599,
-    "digest": "8559db2e8e80aea1"
+    "calls": 2456,
+    "digest": "678eca237d4de574"
    }
   },
   {
    "tick": 1920,
    "frame": {
-    "calls": 2056,
-    "digest": "eeaf718dd301230d"
+    "calls": 1914,
+    "digest": "d8057b6aae0da38d"
    }
   },
   {
    "tick": 2040,
    "frame": {
-    "calls": 2053,
-    "digest": "316096ab52e6b14e"
+    "calls": 1911,
+    "digest": "24ff3dbbc815decc"
    }
   },
   {
    "tick": 2160,
    "frame": {
-    "calls": 1746,
-    "digest": "e06642bd02b597f7"
+    "calls": 1609,
+    "digest": "c59c2087ae96dc2d"
    }
   },
   {
    "tick": 2280,
    "frame": {
-    "calls": 1568,
-    "digest": "0c2202592fd56364"
+    "calls": 1436,
+    "digest": "5f85d296e7ba21cb"
    }
   },
   {
    "tick": 2400,
    "frame": {
-    "calls": 2016,
-    "digest": "78978c7d0cf1bb6b"
+    "calls": 1947,
+    "digest": "fb1645e8fd890d75"
    }
   },
   {
    "tick": 2520,
    "frame": {
-    "calls": 1806,
-    "digest": "9b831d3f49e21cd3"
+    "calls": 1605,
+    "digest": "6f44c79dca2f5e3f"
    }
   },
   {
    "tick": 2640,
    "frame": {
-    "calls": 1600,
-    "digest": "9cbe3816f0fac565"
+    "calls": 1399,
+    "digest": "30e03e2ffe88d8c7"
    }
   },
   {
    "tick": 2760,
    "frame": {
-    "calls": 2499,
-    "digest": "c42f375dce470033"
+    "calls": 2307,
+    "digest": "0366a6cdad91fc69"
    }
   },
   {
    "tick": 2880,
    "frame": {
-    "calls": 1612,
-    "digest": "083947e3208ce4da"
+    "calls": 1411,
+    "digest": "5a7e5e424be3ff79"
    }
   },
   {
    "tick": 3000,
    "frame": {
-    "calls": 1773,
-    "digest": "745c094712460360"
+    "calls": 1574,
+    "digest": "193a22b0fe40d614"
    }
   },
   {
    "tick": 3120,
    "frame": {
-    "calls": 1972,
-    "digest": "54d6af2376bff3a3"
+    "calls": 1771,
+    "digest": "76e03777c6c94f47"
    }
   },
   {
    "tick": 3240,
    "frame": {
-    "calls": 1731,
-    "digest": "20cc3d80bd4519b4"
+    "calls": 1530,
+    "digest": "6054c8e5388a641f"
    }
   },
   {
    "tick": 3360,
    "frame": {
-    "calls": 1688,
-    "digest": "9012e107bbebbf5e"
+    "calls": 1487,
+    "digest": "6dd0be1b2b64a120"
    }
   },
   {
    "tick": 3480,
    "frame": {
-    "calls": 2270,
-    "digest": "79f904130c989236"
+    "calls": 2069,
+    "digest": "d868b649fe0ebcaa"
    }
   },
   {
    "tick": 3600,
    "frame": {
-    "calls": 2815,
-    "digest": "302cfbb203a80124"
+    "calls": 2614,
+    "digest": "651cfb8a7084b712"
    }
   },
   {
    "tick": 3720,
    "frame": {
-    "calls": 1908,
-    "digest": "772ad19c43b773d7"
+    "calls": 1707,
+    "digest": "ebfdf0dec207bf25"
    }
   },
   {
    "tick": 3840,
    "frame": {
-    "calls": 1857,
-    "digest": "7c1c1784198f9bcc"
+    "calls": 1660,
+    "digest": "8166ef84cd88170b"
    }
   },
   {
    "tick": 3960,
    "frame": {
-    "calls": 1804,
-    "digest": "a8c1b27a5903b164"
+    "calls": 1614,
+    "digest": "280239a87cdacb0c"
    }
   },
   {
    "tick": 4080,
    "frame": {
-    "calls": 1574,
-    "digest": "28a6ce423a66d29e"
+    "calls": 1379,
+    "digest": "106fc02f8692d8ae"
    }
   },
   {
    "tick": 4200,
    "frame": {
-    "calls": 1627,
-    "digest": "2169cab8070b8c5c"
+    "calls": 1426,
+    "digest": "f931ca3f80d3df3b"
    }
   },
   {
    "tick": 4320,
    "frame": {
-    "calls": 1769,
-    "digest": "e99f47f47a82f172"
+    "calls": 1568,
+    "digest": "25522bf57789d0ed"
    }
   },
   {
    "tick": 4440,
    "frame": {
-    "calls": 1586,
-    "digest": "fb3a90cb0e7e9db6"
+    "calls": 1385,
+    "digest": "ea35f784751ef36e"
    }
   },
   {
    "tick": 4560,
    "frame": {
-    "calls": 1950,
-    "digest": "d1e2cf5916a83eea"
+    "calls": 1749,
+    "digest": "622adbc2f2704e7d"
    }
   },
   {
    "tick": 4680,
    "frame": {
-    "calls": 2507,
-    "digest": "2b249f7cd339f73e"
+    "calls": 2318,
+    "digest": "b02e268f961828c5"
    }
   }
  ]

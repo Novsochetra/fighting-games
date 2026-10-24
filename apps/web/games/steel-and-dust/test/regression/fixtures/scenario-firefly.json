@@ -1429,7 +1429,7 @@
     300,
     684
    ],
-   "score": 1222,
+   "score": 1242,
    "combo": [
     12,
     72,
@@ -1572,7 +1572,7 @@
     300,
     684
    ],
-   "score": 1222,
+   "score": 1242,
    "combo": [
     12,
     72,
@@ -1715,7 +1715,7 @@
     300,
     684
    ],
-   "score": 1222,
+   "score": 1242,
    "combo": [
     12,
     72,
@@ -1858,7 +1858,7 @@
     300,
     684
    ],
-   "score": 1222,
+   "score": 1242,
    "combo": [
     0,
     0,
@@ -1979,7 +1979,7 @@
     300,
     684
    ],
-   "score": 1222,
+   "score": 1242,
    "combo": [
     0,
     0,
@@ -2100,7 +2100,7 @@
     300,
     684
    ],
-   "score": 1222,
+   "score": 1242,
    "combo": [
     0,
     0,
@@ -2221,7 +2221,7 @@
     300,
     684
    ],
-   "score": 1222,
+   "score": 1242,
    "combo": [
     0,
     0,
@@ -2342,7 +2342,7 @@
     300,
     684
    ],
-   "score": 1975,
+   "score": 1995,
    "combo": [
     12,
     36,
@@ -2463,7 +2463,7 @@
     300,
     684
    ],
-   "score": 1975,
+   "score": 1995,
    "combo": [
     12,
     36,
@@ -2584,7 +2584,7 @@
     300,
     684
    ],
-   "score": 1975,
+   "score": 1995,
    "combo": [
     12,
     36,
@@ -2705,7 +2705,7 @@
     300,
     684
    ],
-   "score": 1975,
+   "score": 1995,
    "combo": [
     12,
     36,
@@ -2826,7 +2826,7 @@
     300,
     684
    ],
-   "score": 1975,
+   "score": 1995,
    "combo": [
     12,
     36,
@@ -2947,7 +2947,7 @@
     300,
     684
    ],
-   "score": 1975,
+   "score": 1995,
    "combo": [
     12,
     36,
@@ -3068,7 +3068,7 @@
     300,
     684
    ],
-   "score": 2321,
+   "score": 2341,
    "combo": [
     13,
     39,
@@ -3189,7 +3189,7 @@
     300,
     684
    ],
-   "score": 2321,
+   "score": 2341,
    "combo": [
     13,
     39,
@@ -3288,7 +3288,7 @@
     300,
     684
    ],
-   "score": 2321,
+   "score": 2351,
    "combo": [
     13,
     39,
@@ -3387,7 +3387,7 @@
     300,
     684
    ],
-   "score": 2321,
+   "score": 2351,
    "combo": [
     13,
     39,
@@ -3486,7 +3486,7 @@
     300,
     684
    ],
-   "score": 2321,
+   "score": 2351,
    "combo": [
     13,
     39,
@@ -3585,7 +3585,7 @@
     300,
     684
    ],
-   "score": 2321,
+   "score": 2351,
    "combo": [
     13,
     39,
@@ -3684,7 +3684,7 @@
     300,
     684
    ],
-   "score": 2321,
+   "score": 2361,
    "combo": [
     0,
     0,
@@ -3760,7 +3760,7 @@
     300,
     684
    ],
-   "score": 2321,
+   "score": 2491,
    "combo": [
     0,
     0,
@@ -3819,7 +3819,7 @@
    "world": {
     "particles": "d4fc7bc11a2444ef",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "da39a3ee5e6b4b0d",
+    "floaters": "191d7a7dfc3715b5",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -3836,7 +3836,7 @@
     300,
     684
    ],
-   "score": 2321,
+   "score": 2501,
    "combo": [
     0,
     0,
@@ -3895,7 +3895,7 @@
    "world": {
     "particles": "3800604af2f33552",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "da39a3ee5e6b4b0d",
+    "floaters": "10265add690bca22",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -3912,7 +3912,7 @@
     300,
     684
    ],
-   "score": 2321,
+   "score": 2501,
    "combo": [
     0,
     0,
@@ -4011,7 +4011,7 @@
     300,
     684
    ],
-   "score": 2321,
+   "score": 2501,
    "combo": [
     0,
     0,
@@ -4132,7 +4132,7 @@
     300,
     684
    ],
-   "score": 2321,
+   "score": 2501,
    "combo": [
     0,
     0,
@@ -4275,7 +4275,7 @@
     300,
     684
    ],
-   "score": 2383,
+   "score": 2563,
    "combo": [
     1,
     6,
@@ -4418,7 +4418,7 @@
     300,
     684
    ],
-   "score": 2493,
+   "score": 2673,
    "combo": [
     3,
     16,
@@ -4561,7 +4561,7 @@
     300,
     684
    ],
-   "score": 2493,
+   "score": 2673,
    "combo": [
     3,
     16,
@@ -4704,7 +4704,7 @@
     300,
     684
    ],
-   "score": 2493,
+   "score": 2673,
    "combo": [
     3,
     16,
@@ -4847,7 +4847,7 @@
     300,
     684
    ],
-   "score": 2493,
+   "score": 2673,
    "combo": [
     3,
     16,
@@ -4990,7 +4990,7 @@
     300,
     684
    ],
-   "score": 2637,
+   "score": 2817,
    "combo": [
     6,
     28,
@@ -5133,7 +5133,7 @@
     300,
     684
    ],
-   "score": 3172,
+   "score": 3352,
    "combo": [
     9,
     46,
@@ -5276,7 +5276,7 @@
     300,
     684
    ],
-   "score": 3172,
+   "score": 3352,
    "combo": [
     9,
     46,
@@ -5419,7 +5419,7 @@
     300,
     684
    ],
-   "score": 4033,
+   "score": 4213,
    "combo": [
     18,
     83,
@@ -5562,7 +5562,7 @@
     300,
     684
    ],
-   "score": 4139,
+   "score": 4359,
    "combo": [
     19,
     89,
@@ -5705,7 +5705,7 @@
     300,
     684
    ],
-   "score": 4247,
+   "score": 4467,
    "combo": [
     20,
     95,
@@ -5826,7 +5826,7 @@
     300,
     684
    ],
-   "score": 4357,
+   "score": 4577,
    "combo": [
     21,
     101,
@@ -5947,7 +5947,7 @@
     300,
     684
    ],
-   "score": 4547,
+   "score": 4767,
    "combo": [
     23,
     111,
@@ -6046,7 +6046,7 @@
     300,
     684
    ],
-   "score": 5005,
+   "score": 5225,
    "combo": [
     25,
     119,
@@ -6145,7 +6145,7 @@
     300,
     684
    ],
-   "score": 5005,
+   "score": 5225,
    "combo": [
     25,
     119,
@@ -6241,7 +6241,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5265,
    "combo": [
     25,
     119,
@@ -6323,7 +6323,7 @@
    "world": {
     "particles": "59e994f4b79b9a45",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "358145cc16a9887e",
+    "floaters": "8e0ac351867c0849",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -6337,7 +6337,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5285,
    "combo": [
     25,
     119,
@@ -6419,7 +6419,7 @@
    "world": {
     "particles": "359e1a1f86a05bec",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "da39a3ee5e6b4b0d",
+    "floaters": "f356e3eac90bd99e",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -6433,7 +6433,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     25,
     119,
@@ -6529,7 +6529,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -6602,7 +6602,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -6675,7 +6675,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -6748,7 +6748,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -6821,7 +6821,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -6894,7 +6894,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -6967,7 +6967,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -7040,7 +7040,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -7113,7 +7113,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -7186,7 +7186,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -7259,7 +7259,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -7332,7 +7332,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -7405,7 +7405,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -7478,7 +7478,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -7551,7 +7551,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -7624,7 +7624,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -7697,7 +7697,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -7770,7 +7770,7 @@
    "zone": 1,
    "wave": 1,
    "arena": null,
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -7846,7 +7846,7 @@
     984,
     1752
    ],
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -7922,7 +7922,7 @@
     984,
     1752
    ],
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -8021,7 +8021,7 @@
     984,
     1752
    ],
-   "score": 5005,
+   "score": 5295,
    "combo": [
     0,
     0,
@@ -8142,7 +8142,7 @@
     984,
     1752
    ],
-   "score": 5111,
+   "score": 5401,
    "combo": [
     2,
     10,
@@ -8263,7 +8263,7 @@
     984,
     1752
    ],
-   "score": 5202,
+   "score": 5492,
    "combo": [
     4,
     18,
@@ -8384,7 +8384,7 @@
     984,
     1752
    ],
-   "score": 5706,
+   "score": 5996,
    "combo": [
     9,
     34,
@@ -8501,71 +8501,71 @@
   {
    "tick": 0,
    "frame": {
-    "calls": 1377,
-    "digest": "f7d64e98b2a9f96f"
+    "calls": 1180,
+    "digest": "5df7b8fb870d2674"
    }
   },
   {
    "tick": 240,
    "frame": {
-    "calls": 1698,
-    "digest": "404f7039c0ead62d"
+    "calls": 1501,
+    "digest": "fe0d2ff25eec3999"
    }
   },
   {
    "tick": 480,
    "frame": {
-    "calls": 1743,
-    "digest": "2de9696bdb5b2895"
+    "calls": 1542,
+    "digest": "8b942785fe9dccd6"
    }
   },
   {
    "tick": 720,
    "frame": {
-    "calls": 1592,
-    "digest": "670af55022e345c5"
+    "calls": 1396,
+    "digest": "b60fef182948bfe4"
    }
   },
   {
    "tick": 960,
    "frame": {
-    "calls": 1454,
-    "digest": "125a2c9136482771"
+    "calls": 1317,
+    "digest": "d9bc12a74c34ca37"
    }
   },
   {
    "tick": 1200,
    "frame": {
-    "calls": 1591,
-    "digest": "97a87bf51304a21e"
+    "calls": 1448,
+    "digest": "b6c618282b5ebce6"
    }
   },
   {
    "tick": 1440,
    "frame": {
-    "calls": 1882,
-    "digest": "8b36c71e4e7b8a28"
+    "calls": 1742,
+    "digest": "e3cde6a14c108bbd"
    }
   },
   {
    "tick": 1680,
    "frame": {
-    "calls": 1535,
-    "digest": "5ccdc0618061e0db"
+    "calls": 1392,
+    "digest": "8962c2a6c80f411c"
    }
   },
   {
    "tick": 1920,
    "frame": {
-    "calls": 1563,
-    "digest": "93b274b59558f54f"
+    "calls": 1420,
+    "digest": "01325184a651ef73"
    }
   },
   {
    "tick": 2160,
    "frame": {
-    "calls": 1521,
-    "digest": "31e150273cf79db5"
+    "calls": 1378,
+    "digest": "6b0bceea73a76dfd"
    }
   }
  ]

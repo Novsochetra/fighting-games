@@ -1,5 +1,6 @@
 import { COLORS } from '../../art/colors.js';
 import { drawBar } from './bar.js';
+import { drawBoxStamped } from './box-stamp.js';
 import { drawPlaque } from './hud-frames.js';
 import { drawLives, LIVES_WIDTH } from './lives.js';
 import { LIVES_BOX, ROW_ONE, ROW_TWO, VITALS_BOX } from './top-bar.js';
@@ -34,11 +35,18 @@ function drawHealth(painter, player, tickCount) {
 }
 
 function drawLivesBox(painter, game, view) {
-  drawPlaque(painter, view.hudFrames, 'panel', LIVES_BOX);
-  drawLives(painter, {
-    lives: game.lives,
-    x: LIVES_BOX.x + Math.floor((LIVES_BOX.width - LIVES_WIDTH) / 2),
-    y: LIVES_BOX.y + 5,
+  drawBoxStamped(painter, {
+    key: `lives|${game.lives}`,
+    box: LIVES_BOX,
+    ready: Boolean(view.hudFrames.ready.panel),
+    draw: (inner) => {
+      drawPlaque(inner, view.hudFrames, 'panel', LIVES_BOX);
+      drawLives(inner, {
+        lives: game.lives,
+        x: LIVES_BOX.x + Math.floor((LIVES_BOX.width - LIVES_WIDTH) / 2),
+        y: LIVES_BOX.y + 5,
+      });
+    },
   });
 }
 

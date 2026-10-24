@@ -4,6 +4,7 @@ import { addFloatText, addRing, showBanner } from '../fx/effects.js';
 import { buzz } from '../fx/haptics.js';
 import { addSparks } from '../fx/particles.js';
 import { releaseToken } from '../fighters/tokens.js';
+import { dropLoot } from '../items/loot-drops.js';
 import { isMissionBoss } from '../stage/mission.js';
 import { stageClear } from '../stage/stage-clear.js';
 import { endCombo } from './combo.js';
@@ -32,6 +33,7 @@ function knockOutEnemy(game, enemy, direction) {
     kickY: 0,
   });
   buzz(game, boss ? [60, 40, 90] : 22);
+  dropLoot(game, enemy);
   const standing = game.fighters.filter(
     (fighter) => fighter.side === 'enemy' && fighter.state !== 'ko',
   );

@@ -13,11 +13,20 @@ function hasCarriedAmounts({ score, playTime, continues, ultMeter }) {
   return [score, playTime, continues, ultMeter].every(isAmount) && ultMeter <= ULT_MAX;
 }
 
-// a save from an older game, or edited by hand, loads as no save at all rather than a broken run
+// a save from before the purse carries no coins, and keeps its run with an empty purse
+function coinsOf({ coins }) {
+  return coins === undefined ? 0 : coins;
+}
+
+// a save edited by hand, or broken, loads as no save at all rather than a broken run
 export function sanitizeSavedRun(stored) {
   if (!stored || typeof stored !== 'object' || !isPlayable(stored) || !hasCarriedAmounts(stored)) {
     return null;
   }
+  const coins = coinsOf(stored);
+  if (!Number.isInteger(coins) || coins < 0) {
+    return null;
+  }
   const { mission, score, playTime, continues, lives, ultMeter } = stored;
-  return { mission, score, playTime, continues, lives, ultMeter };
+  return { mission, score, coins, playTime, continues, lives, ultMeter };
 }

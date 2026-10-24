@@ -5,6 +5,8 @@ import { BLADE_SOUNDS } from './hits-blade.js';
 import { BLUNT_SOUNDS } from './hits-blunt.js';
 import { HEAVY_SOUNDS } from './hits-heavy.js';
 import { PIERCE_SOUNDS } from './hits-pierce.js';
+import { LOOT_CHEST_SOUNDS } from './loot-chest.js';
+import { LOOT_PIECE_SOUNDS } from './loot-pieces.js';
 import { MOVEMENT_SOUNDS } from './movement.js';
 import { SWING_SOUNDS } from './swings.js';
 import { ULTIMATE_SOUNDS } from './ultimate.js';
@@ -31,6 +33,8 @@ export const SOUND_DEFINITIONS = {
   ...VOICE_SOUNDS,
   ...ULTIMATE_SOUNDS,
   step,
+  ...LOOT_PIECE_SOUNDS,
+  ...LOOT_CHEST_SOUNDS,
 };
 
 export const SOUND_TAKES = Object.fromEntries(

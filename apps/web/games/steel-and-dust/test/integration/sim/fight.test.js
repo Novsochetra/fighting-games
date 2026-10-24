@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { ULT_MAX } from '../../../src/config.js';
+import { CHEST_DROP, LOOT_VALUES } from '../../../src/data/loot.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { heroMoves } from '../../../src/data/styles/index.js';
 import { movesetOf, setWeapon } from '../../../src/sim/fighters/loadout.js';
@@ -210,7 +211,9 @@ describe('a fight, with every system running', () => {
     const boss = felledBoss(game, 'khan');
     expect(boss.state).toBe('ko');
     expect(game.clearTime).toBeGreaterThan(0);
-    const score = game.score;
+    // the boss's chest opens over the clear screen, and all it holds is paid in before the next road
+    const { coins, gems } = CHEST_DROP.missionBoss;
+    const score = game.score + coins * LOOT_VALUES.coin.score + gems * LOOT_VALUES.gem.score;
     runTicks(game, 600);
     expect(game.mode).toBe('play');
     expect(game.missionIndex).toBe(1);

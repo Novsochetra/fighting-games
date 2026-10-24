@@ -4259,7 +4259,7 @@
     300,
     684
    ],
-   "score": 9113,
+   "score": 9253,
    "combo": [
     0,
     0,
@@ -4284,7 +4284,7 @@
    ],
    "camera": [
     0,
-    0,
+    0.11262702941894531,
     0
    ],
    "continues": 0,
@@ -4405,9 +4405,9 @@
     }
    ],
    "world": {
-    "particles": "f315570fcb8d1294",
+    "particles": "b989b13bb7f9a0e7",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "ecbe50d794dfe9f8",
+    "floaters": "ef1356d3fc506083",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -4424,7 +4424,7 @@
     300,
     684
    ],
-   "score": 9113,
+   "score": 9293,
    "combo": [
     0,
     0,
@@ -4570,9 +4570,9 @@
     }
    ],
    "world": {
-    "particles": "e0de7e97779b33ec",
-    "effects": "da39a3ee5e6b4b0d",
-    "floaters": "da39a3ee5e6b4b0d",
+    "particles": "bff9cf88939a901b",
+    "effects": "90d99dded5950e53",
+    "floaters": "f4d2a0a5b65c7155",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -4589,7 +4589,7 @@
     300,
     684
    ],
-   "score": 9113,
+   "score": 9293,
    "combo": [
     0,
     0,
@@ -4737,7 +4737,7 @@
    "world": {
     "particles": "506ae421307a8fd5",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "da39a3ee5e6b4b0d",
+    "floaters": "2cc645b6889c440a",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -4754,7 +4754,7 @@
     300,
     684
    ],
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -4794,7 +4794,7 @@
     "vy": 0,
     "state": "win",
     "stateTime": 160,
-    "hp": 66,
+    "hp": 71,
     "facing": 1,
     "weapon": "sword",
     "durability": null,
@@ -4813,7 +4813,7 @@
    "world": {
     "particles": "21c9aa6a5b622a05",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "da39a3ee5e6b4b0d",
+    "floaters": "0c90878cbd9ee5c2",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -4830,7 +4830,7 @@
     300,
     684
    ],
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -4870,7 +4870,7 @@
     "vy": 0,
     "state": "win",
     "stateTime": 160,
-    "hp": 66,
+    "hp": 71,
     "facing": 1,
     "weapon": "sword",
     "durability": null,
@@ -4889,7 +4889,7 @@
    "world": {
     "particles": "61ce0b61acc6e636",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "da39a3ee5e6b4b0d",
+    "floaters": "409f9ef693790299",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -4903,7 +4903,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -4976,7 +4976,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -5049,7 +5049,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -5122,7 +5122,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -5195,7 +5195,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -5268,7 +5268,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -5341,7 +5341,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -5414,7 +5414,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -5487,7 +5487,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -5560,7 +5560,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -5636,7 +5636,7 @@
     300,
     1068
    ],
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -5712,7 +5712,7 @@
     300,
     1068
    ],
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -5811,7 +5811,7 @@
     300,
     1068
    ],
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -5932,7 +5932,7 @@
     300,
     1068
    ],
-   "score": 9113,
+   "score": 9853,
    "combo": [
     0,
     0,
@@ -6075,7 +6075,7 @@
     300,
     1068
    ],
-   "score": 9207,
+   "score": 9947,
    "combo": [
     1,
     9,
@@ -6218,7 +6218,7 @@
     300,
     1068
    ],
-   "score": 9361,
+   "score": 10101,
    "combo": [
     3,
     23,
@@ -6361,7 +6361,7 @@
     300,
     1068
    ],
-   "score": 9477,
+   "score": 10217,
    "combo": [
     4,
     33,
@@ -6504,7 +6504,7 @@
     300,
     1068
    ],
-   "score": 9477,
+   "score": 10217,
    "combo": [
     4,
     33,
@@ -6647,7 +6647,7 @@
     300,
     1068
    ],
-   "score": 9561,
+   "score": 10301,
    "combo": [
     5,
     40,
@@ -6790,7 +6790,7 @@
     300,
     1068
    ],
-   "score": 9561,
+   "score": 10301,
    "combo": [
     5,
     40,
@@ -6933,7 +6933,7 @@
     300,
     1068
    ],
-   "score": 9561,
+   "score": 10301,
    "combo": [
     5,
     40,
@@ -7076,7 +7076,7 @@
     300,
     1068
    ],
-   "score": 9673,
+   "score": 10413,
    "combo": [
     6,
     49,
@@ -7219,7 +7219,7 @@
     300,
     1068
    ],
-   "score": 10152,
+   "score": 10932,
    "combo": [
     7,
     63,
@@ -7362,7 +7362,7 @@
     300,
     1068
    ],
-   "score": 10350,
+   "score": 11130,
    "combo": [
     8,
     78,
@@ -7505,7 +7505,7 @@
     300,
     1068
    ],
-   "score": 10459,
+   "score": 11239,
    "combo": [
     9,
     86,
@@ -7648,7 +7648,7 @@
     300,
     1068
    ],
-   "score": 11015,
+   "score": 11795,
    "combo": [
     11,
     104,
@@ -7769,7 +7769,7 @@
     300,
     1068
    ],
-   "score": 11015,
+   "score": 11835,
    "combo": [
     11,
     104,
@@ -7890,7 +7890,7 @@
     300,
     1068
    ],
-   "score": 11015,
+   "score": 11835,
    "combo": [
     11,
     104,
@@ -8011,7 +8011,7 @@
     300,
     1068
    ],
-   "score": 11178,
+   "score": 11998,
    "combo": [
     12,
     115,
@@ -8132,7 +8132,7 @@
     300,
     1068
    ],
-   "score": 11178,
+   "score": 11998,
    "combo": [
     12,
     115,
@@ -8253,7 +8253,7 @@
     300,
     1068
    ],
-   "score": 11284,
+   "score": 12104,
    "combo": [
     13,
     122,
@@ -8352,7 +8352,7 @@
     300,
     1068
    ],
-   "score": 11393,
+   "score": 12213,
    "combo": [
     14,
     129,
@@ -8451,7 +8451,7 @@
     300,
     1068
    ],
-   "score": 11968,
+   "score": 12788,
    "combo": [
     16,
     146,
@@ -8550,7 +8550,7 @@
     300,
     1068
    ],
-   "score": 11968,
+   "score": 12788,
    "combo": [
     16,
     146,
@@ -8649,7 +8649,7 @@
     300,
     1068
    ],
-   "score": 11968,
+   "score": 12808,
    "combo": [
     16,
     146,
@@ -8748,7 +8748,7 @@
     300,
     1068
    ],
-   "score": 11968,
+   "score": 12808,
    "combo": [
     16,
     146,
@@ -8847,7 +8847,7 @@
     300,
     1068
    ],
-   "score": 11968,
+   "score": 12808,
    "combo": [
     16,
     146,
@@ -8946,7 +8946,7 @@
     300,
     1068
    ],
-   "score": 11968,
+   "score": 12808,
    "combo": [
     0,
     0,
@@ -9022,7 +9022,7 @@
     300,
     1068
    ],
-   "score": 11968,
+   "score": 12808,
    "combo": [
     0,
     0,
@@ -9098,7 +9098,7 @@
     300,
     1068
    ],
-   "score": 11968,
+   "score": 12808,
    "combo": [
     0,
     0,
@@ -9174,7 +9174,7 @@
     300,
     1068
    ],
-   "score": 11968,
+   "score": 12808,
    "combo": [
     0,
     0,
@@ -9273,7 +9273,7 @@
     300,
     1068
    ],
-   "score": 11968,
+   "score": 12808,
    "combo": [
     0,
     0,
@@ -9394,7 +9394,7 @@
     300,
     1068
    ],
-   "score": 11968,
+   "score": 12808,
    "combo": [
     0,
     0,
@@ -9515,7 +9515,7 @@
     300,
     1068
    ],
-   "score": 12062,
+   "score": 12902,
    "combo": [
     1,
     9,
@@ -9636,7 +9636,7 @@
     300,
     1068
    ],
-   "score": 12148,
+   "score": 12988,
    "combo": [
     2,
     17,
@@ -9757,7 +9757,7 @@
     300,
     1068
    ],
-   "score": 12148,
+   "score": 12988,
    "combo": [
     2,
     17,
@@ -9878,7 +9878,7 @@
     300,
     1068
    ],
-   "score": 12148,
+   "score": 12988,
    "combo": [
     2,
     17,
@@ -9999,7 +9999,7 @@
     300,
     1068
    ],
-   "score": 12148,
+   "score": 12988,
    "combo": [
     2,
     17,
@@ -10120,7 +10120,7 @@
     300,
     1068
    ],
-   "score": 12608,
+   "score": 13448,
    "combo": [
     4,
     31,
@@ -10241,7 +10241,7 @@
     300,
     1068
    ],
-   "score": 12608,
+   "score": 13478,
    "combo": [
     4,
     31,
@@ -10362,7 +10362,7 @@
     300,
     1068
    ],
-   "score": 12608,
+   "score": 13478,
    "combo": [
     4,
     31,
@@ -10483,7 +10483,7 @@
     300,
     1068
    ],
-   "score": 12608,
+   "score": 13478,
    "combo": [
     4,
     31,
@@ -10604,7 +10604,7 @@
     300,
     1068
    ],
-   "score": 12735,
+   "score": 13605,
    "combo": [
     2,
     12,
@@ -10725,7 +10725,7 @@
     300,
     1068
    ],
-   "score": 12836,
+   "score": 13706,
    "combo": [
     3,
     21,
@@ -10824,7 +10824,7 @@
     300,
     1068
    ],
-   "score": 12836,
+   "score": 13706,
    "combo": [
     3,
     21,
@@ -10923,7 +10923,7 @@
     300,
     1068
    ],
-   "score": 12836,
+   "score": 13706,
    "combo": [
     3,
     21,
@@ -11022,7 +11022,7 @@
     300,
     1068
    ],
-   "score": 12836,
+   "score": 13706,
    "combo": [
     3,
     21,
@@ -11121,7 +11121,7 @@
     300,
     1068
    ],
-   "score": 12942,
+   "score": 13812,
    "combo": [
     2,
     10,
@@ -11220,7 +11220,7 @@
     300,
     1068
    ],
-   "score": 13354,
+   "score": 14224,
    "combo": [
     3,
     20,
@@ -11319,7 +11319,7 @@
     300,
     1068
    ],
-   "score": 13354,
+   "score": 14234,
    "combo": [
     3,
     20,
@@ -11418,7 +11418,7 @@
     300,
     1068
    ],
-   "score": 13354,
+   "score": 14244,
    "combo": [
     3,
     20,
@@ -11517,7 +11517,7 @@
     300,
     1068
    ],
-   "score": 13354,
+   "score": 14244,
    "combo": [
     3,
     20,
@@ -11616,7 +11616,7 @@
     684,
     1068
    ],
-   "score": 13354,
+   "score": 14244,
    "combo": [
     0,
     0,
@@ -11715,7 +11715,7 @@
     684,
     1068
    ],
-   "score": 13354,
+   "score": 14244,
    "combo": [
     0,
     0,
@@ -11814,7 +11814,7 @@
     684,
     1068
    ],
-   "score": 13354,
+   "score": 14244,
    "combo": [
     0,
     0,
@@ -11957,7 +11957,7 @@
     684,
     1068
    ],
-   "score": 13416,
+   "score": 14306,
    "combo": [
     1,
     6,
@@ -12122,7 +12122,7 @@
     684,
     1068
    ],
-   "score": 13760,
+   "score": 14650,
    "combo": [
     5,
     36,
@@ -12287,7 +12287,7 @@
     684,
     1068
    ],
-   "score": 13760,
+   "score": 14650,
    "combo": [
     5,
     36,
@@ -12452,7 +12452,7 @@
     684,
     1068
    ],
-   "score": 13961,
+   "score": 14851,
    "combo": [
     7,
     52,
@@ -12617,7 +12617,7 @@
     684,
     1068
    ],
-   "score": 14327,
+   "score": 15247,
    "combo": [
     8,
     57,
@@ -12782,7 +12782,7 @@
     684,
     1068
    ],
-   "score": 14327,
+   "score": 15247,
    "combo": [
     8,
     57,
@@ -12947,7 +12947,7 @@
     684,
     1068
    ],
-   "score": 14327,
+   "score": 15247,
    "combo": [
     8,
     57,
@@ -13112,7 +13112,7 @@
     684,
     1068
    ],
-   "score": 14721,
+   "score": 15641,
    "combo": [
     1,
     9,
@@ -13277,7 +13277,7 @@
     684,
     1068
    ],
-   "score": 14721,
+   "score": 15681,
    "combo": [
     1,
     9,
@@ -13420,7 +13420,7 @@
     684,
     1068
    ],
-   "score": 14721,
+   "score": 15681,
    "combo": [
     1,
     9,
@@ -13563,7 +13563,7 @@
     684,
     1068
    ],
-   "score": 14721,
+   "score": 15681,
    "combo": [
     1,
     9,
@@ -13706,7 +13706,7 @@
     684,
     1068
    ],
-   "score": 14848,
+   "score": 15808,
    "combo": [
     2,
     12,
@@ -13827,7 +13827,7 @@
     684,
     1068
    ],
-   "score": 15031,
+   "score": 15991,
    "combo": [
     4,
     28,
@@ -13948,7 +13948,7 @@
     684,
     1068
    ],
-   "score": 15495,
+   "score": 16455,
    "combo": [
     9,
     64,
@@ -14069,7 +14069,7 @@
     684,
     1068
    ],
-   "score": 15495,
+   "score": 16455,
    "combo": [
     9,
     64,
@@ -14190,7 +14190,7 @@
     684,
     1068
    ],
-   "score": 15495,
+   "score": 16455,
    "combo": [
     9,
     64,
@@ -14311,7 +14311,7 @@
     684,
     1068
    ],
-   "score": 15495,
+   "score": 16455,
    "combo": [
     9,
     64,
@@ -14432,7 +14432,7 @@
     684,
     1068
    ],
-   "score": 15922,
+   "score": 16882,
    "combo": [
     2,
     12,
@@ -14553,7 +14553,7 @@
     684,
     1068
    ],
-   "score": 15989,
+   "score": 16979,
    "combo": [
     3,
     18,
@@ -14674,7 +14674,7 @@
     684,
     1068
    ],
-   "score": 16359,
+   "score": 17349,
    "combo": [
     4,
     24,
@@ -14795,7 +14795,7 @@
     684,
     1068
    ],
-   "score": 16359,
+   "score": 17349,
    "combo": [
     4,
     24,
@@ -14916,7 +14916,7 @@
     684,
     1068
    ],
-   "score": 16359,
+   "score": 17349,
    "combo": [
     4,
     24,
@@ -15037,7 +15037,7 @@
     684,
     1068
    ],
-   "score": 16359,
+   "score": 17359,
    "combo": [
     4,
     24,
@@ -15155,7 +15155,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17359,
    "combo": [
     4,
     24,
@@ -15273,7 +15273,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17359,
    "combo": [
     4,
     24,
@@ -15369,7 +15369,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17359,
    "combo": [
     4,
     24,
@@ -15465,7 +15465,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17359,
    "combo": [
     0,
     0,
@@ -15538,7 +15538,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17359,
    "combo": [
     0,
     0,
@@ -15611,7 +15611,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17359,
    "combo": [
     0,
     0,
@@ -15684,7 +15684,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17359,
    "combo": [
     0,
     0,
@@ -15757,7 +15757,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17359,
    "combo": [
     0,
     0,
@@ -15830,7 +15830,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17359,
    "combo": [
     0,
     0,
@@ -15903,7 +15903,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17359,
    "combo": [
     0,
     0,
@@ -15976,7 +15976,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17389,
    "combo": [
     0,
     0,
@@ -16049,7 +16049,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17389,
    "combo": [
     0,
     0,
@@ -16122,7 +16122,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17389,
    "combo": [
     0,
     0,
@@ -16195,7 +16195,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17389,
    "combo": [
     0,
     0,
@@ -16268,7 +16268,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17389,
    "combo": [
     0,
     0,
@@ -16341,7 +16341,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17389,
    "combo": [
     0,
     0,
@@ -16414,7 +16414,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 16359,
+   "score": 17389,
    "combo": [
     0,
     0,
@@ -16490,7 +16490,7 @@
     1368,
     2136
    ],
-   "score": 16359,
+   "score": 17389,
    "combo": [
     0,
     0,
@@ -16566,7 +16566,7 @@
     1368,
     2136
    ],
-   "score": 16359,
+   "score": 17389,
    "combo": [
     0,
     0,
@@ -16665,7 +16665,7 @@
     1368,
     2136
    ],
-   "score": 16359,
+   "score": 17389,
    "combo": [
     0,
     0,
@@ -16786,7 +16786,7 @@
     1368,
     2136
    ],
-   "score": 16486,
+   "score": 17516,
    "combo": [
     2,
     12,
@@ -16929,7 +16929,7 @@
     1368,
     2136
    ],
-   "score": 16719,
+   "score": 17749,
    "combo": [
     5,
     32,
@@ -17072,7 +17072,7 @@
     1368,
     2136
    ],
-   "score": 16781,
+   "score": 17811,
    "combo": [
     6,
     37,
@@ -17215,7 +17215,7 @@
     1368,
     2136
    ],
-   "score": 16781,
+   "score": 17811,
    "combo": [
     6,
     37,
@@ -17358,7 +17358,7 @@
     1368,
     2136
    ],
-   "score": 16781,
+   "score": 17811,
    "combo": [
     6,
     37,
@@ -17501,7 +17501,7 @@
     1368,
     2136
    ],
-   "score": 17211,
+   "score": 18241,
    "combo": [
     8,
     47,
@@ -17644,7 +17644,7 @@
     1368,
     2136
    ],
-   "score": 17421,
+   "score": 18481,
    "combo": [
     11,
     62,
@@ -17787,7 +17787,7 @@
     1368,
     2136
    ],
-   "score": 17854,
+   "score": 18914,
    "combo": [
     12,
     71,
@@ -17930,7 +17930,7 @@
     1368,
     2136
    ],
-   "score": 17854,
+   "score": 18934,
    "combo": [
     12,
     71,
@@ -18073,7 +18073,7 @@
     1368,
     2136
    ],
-   "score": 17854,
+   "score": 18934,
    "combo": [
     12,
     71,
@@ -18194,7 +18194,7 @@
     1368,
     2136
    ],
-   "score": 17991,
+   "score": 19071,
    "combo": [
     13,
     80,
@@ -18315,7 +18315,7 @@
     1368,
     2136
    ],
-   "score": 17991,
+   "score": 19071,
    "combo": [
     13,
     80,
@@ -18414,7 +18414,7 @@
     1368,
     2136
    ],
-   "score": 17991,
+   "score": 19071,
    "combo": [
     13,
     80,
@@ -18513,7 +18513,7 @@
     1368,
     2136
    ],
-   "score": 17991,
+   "score": 19071,
    "combo": [
     13,
     80,
@@ -18612,7 +18612,7 @@
     1368,
     2136
    ],
-   "score": 17991,
+   "score": 19071,
    "combo": [
     0,
     0,
@@ -18707,281 +18707,281 @@
   {
    "tick": 0,
    "frame": {
-    "calls": 1377,
-    "digest": "a482b36009dbbc0b"
+    "calls": 1180,
+    "digest": "f9abab2ce53fe7ba"
    }
   },
   {
    "tick": 120,
    "frame": {
-    "calls": 1639,
-    "digest": "2b3f1d32ef024f1d"
+    "calls": 1442,
+    "digest": "85dad8578086b46a"
    }
   },
   {
    "tick": 240,
    "frame": {
-    "calls": 1572,
-    "digest": "054ffe85bfd80505"
+    "calls": 1371,
+    "digest": "f9efbe47e8079ec6"
    }
   },
   {
    "tick": 360,
    "frame": {
-    "calls": 2727,
-    "digest": "bfefcd3374f5b3bd"
+    "calls": 2526,
+    "digest": "c0a9a687d92bb0f3"
    }
   },
   {
    "tick": 480,
    "frame": {
-    "calls": 1864,
-    "digest": "f49c95f1bc528da8"
+    "calls": 1663,
+    "digest": "9718c98bb5ff116d"
    }
   },
   {
    "tick": 600,
    "frame": {
-    "calls": 2012,
-    "digest": "0e983c03bce441b9"
+    "calls": 1811,
+    "digest": "da1e2bcf6cfe5b12"
    }
   },
   {
    "tick": 720,
    "frame": {
-    "calls": 1699,
-    "digest": "8aa13bc0de5dae79"
+    "calls": 1498,
+    "digest": "78843ec60e46a72e"
    }
   },
   {
    "tick": 840,
    "frame": {
-    "calls": 1904,
-    "digest": "aee5f1302546c1b1"
+    "calls": 1703,
+    "digest": "dc76feb7a86471f7"
    }
   },
   {
    "tick": 960,
    "frame": {
-    "calls": 2129,
-    "digest": "b818bcc59043f83d"
+    "calls": 2041,
+    "digest": "1e8550eda96faa9e"
    }
   },
   {
    "tick": 1080,
    "frame": {
-    "calls": 2009,
-    "digest": "fbfc29a4069eb51f"
+    "calls": 1834,
+    "digest": "f5ab74e03ae33918"
    }
   },
   {
    "tick": 1200,
    "frame": {
-    "calls": 1914,
-    "digest": "52a798b2ddbfb42f"
+    "calls": 1819,
+    "digest": "cd5c4b6394531104"
    }
   },
   {
    "tick": 1320,
    "frame": {
-    "calls": 1599,
-    "digest": "9d141767d6fc5b2d"
+    "calls": 1456,
+    "digest": "67d0ac20d8fcecba"
    }
   },
   {
    "tick": 1440,
    "frame": {
-    "calls": 1701,
-    "digest": "0efcf522f2073f14"
+    "calls": 1558,
+    "digest": "bc5aac96d72e3e0a"
    }
   },
   {
    "tick": 1560,
    "frame": {
-    "calls": 1846,
-    "digest": "6cf423669d3147de"
+    "calls": 1703,
+    "digest": "bcc1ebedd63e8905"
    }
   },
   {
    "tick": 1680,
    "frame": {
-    "calls": 1982,
-    "digest": "0baf6943d850f28e"
+    "calls": 1839,
+    "digest": "f0ffc087db678723"
    }
   },
   {
    "tick": 1800,
    "frame": {
-    "calls": 2939,
-    "digest": "a67a438de964bcaa"
+    "calls": 2796,
+    "digest": "9b36776ca881e44b"
    }
   },
   {
    "tick": 1920,
    "frame": {
-    "calls": 1791,
-    "digest": "56152c36d9ef2c05"
+    "calls": 1648,
+    "digest": "69f63f5ba8453549"
    }
   },
   {
    "tick": 2040,
    "frame": {
-    "calls": 1649,
-    "digest": "9cdee6a7afc6adfa"
+    "calls": 1506,
+    "digest": "a899294526c2f06f"
    }
   },
   {
    "tick": 2160,
    "frame": {
-    "calls": 1674,
-    "digest": "4fad99c8cc98fa31"
+    "calls": 1531,
+    "digest": "ad47cd09add1f20c"
    }
   },
   {
    "tick": 2280,
    "frame": {
-    "calls": 1654,
-    "digest": "5a1cfd2b2cc2af6a"
+    "calls": 1511,
+    "digest": "22bf5da9bd1aa1eb"
    }
   },
   {
    "tick": 2400,
    "frame": {
-    "calls": 1753,
-    "digest": "8fc45bf3e50d5886"
+    "calls": 1658,
+    "digest": "5d11ef3e49fa9ff4"
    }
   },
   {
    "tick": 2520,
    "frame": {
-    "calls": 1676,
-    "digest": "6e8f50954327a4a1"
+    "calls": 1533,
+    "digest": "bb84597d032efc75"
    }
   },
   {
    "tick": 2640,
    "frame": {
-    "calls": 1712,
-    "digest": "b90369fc24978d8a"
+    "calls": 1569,
+    "digest": "b2182b08fe3e8490"
    }
   },
   {
    "tick": 2760,
    "frame": {
-    "calls": 1644,
-    "digest": "58a7583ef282bd07"
+    "calls": 1501,
+    "digest": "e74452c7e9ace965"
    }
   },
   {
    "tick": 2880,
    "frame": {
-    "calls": 1608,
-    "digest": "e3bf3861edd81fdb"
+    "calls": 1469,
+    "digest": "6a15916e948258ba"
    }
   },
   {
    "tick": 3000,
    "frame": {
-    "calls": 1614,
-    "digest": "07bbc353e383d2f6"
+    "calls": 1471,
+    "digest": "a07e207256457646"
    }
   },
   {
    "tick": 3120,
    "frame": {
-    "calls": 1676,
-    "digest": "f66393db33a668dd"
+    "calls": 1533,
+    "digest": "e2973b75a22b8caa"
    }
   },
   {
    "tick": 3240,
    "frame": {
-    "calls": 1660,
-    "digest": "5dde3d63e845df34"
+    "calls": 1517,
+    "digest": "58fb28ddce5a34b7"
    }
   },
   {
    "tick": 3360,
    "frame": {
-    "calls": 1605,
-    "digest": "71735801d709972b"
+    "calls": 1462,
+    "digest": "92f866f1d2245acc"
    }
   },
   {
    "tick": 3480,
    "frame": {
-    "calls": 1687,
-    "digest": "b2c8a4c08976fc17"
+    "calls": 1544,
+    "digest": "cdd67fb15043b436"
    }
   },
   {
    "tick": 3600,
    "frame": {
-    "calls": 1668,
-    "digest": "46c02c7a94c0d8dc"
+    "calls": 1528,
+    "digest": "214699fdc8edc904"
    }
   },
   {
    "tick": 3720,
    "frame": {
-    "calls": 1970,
-    "digest": "68bc07c0af2b1f34"
+    "calls": 1835,
+    "digest": "13fa9f207e8dd1fa"
    }
   },
   {
    "tick": 3840,
    "frame": {
-    "calls": 1498,
-    "digest": "a68f96f95456e4ad"
+    "calls": 1358,
+    "digest": "e4ab063d4be07ebf"
    }
   },
   {
    "tick": 3960,
    "frame": {
-    "calls": 1568,
-    "digest": "8824dc9e08708135"
+    "calls": 1428,
+    "digest": "2e3ba3d38ec553f5"
    }
   },
   {
    "tick": 4080,
    "frame": {
-    "calls": 1378,
-    "digest": "1c0deba0fda46eb0"
+    "calls": 1235,
+    "digest": "5133069df02d4fdd"
    }
   },
   {
    "tick": 4200,
    "frame": {
-    "calls": 1362,
-    "digest": "986fca9e5616abe0"
+    "calls": 1219,
+    "digest": "acdd86cdda76d9f2"
    }
   },
   {
    "tick": 4320,
    "frame": {
-    "calls": 1339,
-    "digest": "e978ac46aa94d8a6"
+    "calls": 1196,
+    "digest": "4a5b38283dabd57c"
    }
   },
   {
    "tick": 4440,
    "frame": {
-    "calls": 1562,
-    "digest": "65b5ff5fce3d52ce"
+    "calls": 1419,
+    "digest": "2bb60f53b2ba3356"
    }
   },
   {
    "tick": 4560,
    "frame": {
-    "calls": 2566,
-    "digest": "2afefaf2b65fc5a6"
+    "calls": 2432,
+    "digest": "bec44e30c14c83d9"
    }
   },
   {
    "tick": 4680,
    "frame": {
-    "calls": 1200,
-    "digest": "15d37fe1cbff932d"
+    "calls": 1058,
+    "digest": "b9b386f0f1af0031"
    }
   }
  ]

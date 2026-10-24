@@ -3385,7 +3385,7 @@
     300,
     1068
    ],
-   "score": 7521,
+   "score": 7661,
    "combo": [
     32,
     377,
@@ -3533,7 +3533,7 @@
    "world": {
     "particles": "f1524fe681b99eca",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "bd8fc38d621a596d",
+    "floaters": "f6e9977024c65510",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "f028e3fa36df4e39",
@@ -3550,7 +3550,7 @@
     300,
     1068
    ],
-   "score": 7521,
+   "score": 7661,
    "combo": [
     32,
     377,
@@ -3698,7 +3698,7 @@
    "world": {
     "particles": "da39a3ee5e6b4b0d",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "88c193c81bbf0a92",
+    "floaters": "0698e609468cf452",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -3715,7 +3715,7 @@
     300,
     1068
    ],
-   "score": 7707,
+   "score": 7847,
    "combo": [
     33,
     385,
@@ -3880,7 +3880,7 @@
     300,
     1068
    ],
-   "score": 8196,
+   "score": 8336,
    "combo": [
     34,
     393,
@@ -4067,7 +4067,7 @@
     300,
     1068
    ],
-   "score": 8196,
+   "score": 8336,
    "combo": [
     34,
     393,
@@ -4254,7 +4254,7 @@
     300,
     1068
    ],
-   "score": 9358,
+   "score": 9498,
    "combo": [
     36,
     441,
@@ -4441,7 +4441,7 @@
     300,
     1068
    ],
-   "score": 9358,
+   "score": 9498,
    "combo": [
     36,
     441,
@@ -4584,7 +4584,7 @@
     300,
     1068
    ],
-   "score": 9532,
+   "score": 9672,
    "combo": [
     37,
     448,
@@ -4727,7 +4727,7 @@
     300,
     1068
    ],
-   "score": 9532,
+   "score": 9672,
    "combo": [
     37,
     448,
@@ -4848,7 +4848,7 @@
     300,
     1068
    ],
-   "score": 9532,
+   "score": 9672,
    "combo": [
     37,
     448,
@@ -4969,7 +4969,7 @@
     300,
     1068
    ],
-   "score": 9887,
+   "score": 10027,
    "combo": [
     39,
     462,
@@ -5090,7 +5090,7 @@
     300,
     1068
    ],
-   "score": 10173,
+   "score": 10313,
    "combo": [
     40,
     473,
@@ -5211,7 +5211,7 @@
     300,
     1068
    ],
-   "score": 15631,
+   "score": 15771,
    "combo": [
     0,
     0,
@@ -5332,7 +5332,7 @@
     300,
     1068
    ],
-   "score": 15631,
+   "score": 15771,
    "combo": [
     0,
     0,
@@ -5453,7 +5453,7 @@
     300,
     1068
    ],
-   "score": 15631,
+   "score": 15821,
    "combo": [
     0,
     0,
@@ -5555,7 +5555,7 @@
     }
    ],
    "world": {
-    "particles": "81ce7ae0258f686e",
+    "particles": "616d7d9617e5bbc5",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "3d2aec810c777fc0",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -5574,7 +5574,7 @@
     300,
     1068
    ],
-   "score": 15631,
+   "score": 15851,
    "combo": [
     0,
     0,
@@ -5695,7 +5695,7 @@
     300,
     1068
    ],
-   "score": 15631,
+   "score": 16091,
    "combo": [
     0,
     0,
@@ -5799,7 +5799,7 @@
    "world": {
     "particles": "26e0c630b5a9c3b9",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "baf5f4e3abcdf868",
+    "floaters": "e2414f917fd34f84",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -5816,7 +5816,7 @@
     300,
     1068
    ],
-   "score": 15631,
+   "score": 16411,
    "combo": [
     0,
     0,
@@ -5856,7 +5856,7 @@
     "vy": 0,
     "state": "win",
     "stateTime": 3,
-    "hp": 89,
+    "hp": 94,
     "facing": 1,
     "weapon": "spear",
     "durability": 40,
@@ -5875,7 +5875,7 @@
    "world": {
     "particles": "b8775459801d2b11",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "da39a3ee5e6b4b0d",
+    "floaters": "20bd2cbedff370a9",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -5892,7 +5892,7 @@
     300,
     1068
    ],
-   "score": 15631,
+   "score": 16411,
    "combo": [
     0,
     0,
@@ -5932,7 +5932,7 @@
     "vy": 0,
     "state": "win",
     "stateTime": 3,
-    "hp": 89,
+    "hp": 94,
     "facing": 1,
     "weapon": "spear",
     "durability": 40,
@@ -5951,7 +5951,7 @@
    "world": {
     "particles": "6ea28cf1e8098caa",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "da39a3ee5e6b4b0d",
+    "floaters": "711291043bfd4231",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -5965,7 +5965,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 15631,
+   "score": 16411,
    "combo": [
     0,
     0,
@@ -6038,7 +6038,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 15631,
+   "score": 16411,
    "combo": [
     0,
     0,
@@ -6111,7 +6111,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 15631,
+   "score": 16411,
    "combo": [
     0,
     0,
@@ -6184,7 +6184,7 @@
    "zone": 0,
    "wave": -1,
    "arena": null,
-   "score": 15631,
+   "score": 16411,
    "combo": [
     0,
     0,
@@ -6260,7 +6260,7 @@
     300,
     1068
    ],
-   "score": 15631,
+   "score": 16411,
    "combo": [
     0,
     0,
@@ -6336,7 +6336,7 @@
     300,
     1068
    ],
-   "score": 15631,
+   "score": 16411,
    "combo": [
     0,
     0,
@@ -6435,7 +6435,7 @@
     300,
     1068
    ],
-   "score": 15631,
+   "score": 16411,
    "combo": [
     0,
     0,
@@ -6556,7 +6556,7 @@
     300,
     1068
    ],
-   "score": 15780,
+   "score": 16560,
    "combo": [
     2,
     14,
@@ -6699,7 +6699,7 @@
     300,
     1068
    ],
-   "score": 16070,
+   "score": 16850,
    "combo": [
     5,
     39,
@@ -6864,7 +6864,7 @@
     300,
     1068
    ],
-   "score": 16194,
+   "score": 16974,
    "combo": [
     6,
     49,
@@ -7029,7 +7029,7 @@
     300,
     1068
    ],
-   "score": 16386,
+   "score": 17166,
    "combo": [
     7,
     64,
@@ -7194,7 +7194,7 @@
     300,
     1068
    ],
-   "score": 17039,
+   "score": 17819,
    "combo": [
     10,
     90,
@@ -7359,7 +7359,7 @@
     300,
     1068
    ],
-   "score": 17097,
+   "score": 17917,
    "combo": [
     11,
     94,
@@ -7524,7 +7524,7 @@
     300,
     1068
    ],
-   "score": 17456,
+   "score": 18276,
    "combo": [
     12,
     98,
@@ -7689,7 +7689,7 @@
     300,
     1068
    ],
-   "score": 17456,
+   "score": 18276,
    "combo": [
     12,
     98,
@@ -7854,7 +7854,7 @@
     300,
     1068
    ],
-   "score": 17456,
+   "score": 18276,
    "combo": [
     12,
     98,
@@ -7997,7 +7997,7 @@
     300,
     1068
    ],
-   "score": 17647,
+   "score": 18467,
    "combo": [
     2,
     18,
@@ -8140,7 +8140,7 @@
     300,
     1068
    ],
-   "score": 17647,
+   "score": 18467,
    "combo": [
     2,
     18,
@@ -8261,7 +8261,7 @@
     300,
     1068
    ],
-   "score": 17806,
+   "score": 18626,
    "combo": [
     4,
     32,
@@ -8382,7 +8382,7 @@
     300,
     1068
    ],
-   "score": 17977,
+   "score": 18797,
    "combo": [
     6,
     46,
@@ -8503,7 +8503,7 @@
     300,
     1068
    ],
-   "score": 18159,
+   "score": 18979,
    "combo": [
     8,
     60,
@@ -8624,7 +8624,7 @@
     300,
     1068
    ],
-   "score": 18159,
+   "score": 18979,
    "combo": [
     8,
     60,
@@ -8745,7 +8745,7 @@
     300,
     1068
    ],
-   "score": 18159,
+   "score": 18979,
    "combo": [
     8,
     60,
@@ -8866,7 +8866,7 @@
     300,
     1068
    ],
-   "score": 18159,
+   "score": 18979,
    "combo": [
     0,
     0,
@@ -8987,7 +8987,7 @@
     300,
     1068
    ],
-   "score": 18159,
+   "score": 18979,
    "combo": [
     0,
     0,
@@ -9108,7 +9108,7 @@
     300,
     1068
    ],
-   "score": 18159,
+   "score": 18979,
    "combo": [
     0,
     0,
@@ -9229,7 +9229,7 @@
     300,
     1068
    ],
-   "score": 18336,
+   "score": 19156,
    "combo": [
     1,
     17,
@@ -9350,7 +9350,7 @@
     300,
     1068
    ],
-   "score": 18336,
+   "score": 19156,
    "combo": [
     1,
     17,
@@ -9471,7 +9471,7 @@
     300,
     1068
    ],
-   "score": 18336,
+   "score": 19156,
    "combo": [
     1,
     17,
@@ -9592,7 +9592,7 @@
     300,
     1068
    ],
-   "score": 18336,
+   "score": 19156,
    "combo": [
     0,
     0,
@@ -9713,7 +9713,7 @@
     300,
     1068
    ],
-   "score": 18336,
+   "score": 19156,
    "combo": [
     0,
     0,
@@ -9834,7 +9834,7 @@
     300,
     1068
    ],
-   "score": 18480,
+   "score": 19300,
    "combo": [
     1,
     9,
@@ -9955,7 +9955,7 @@
     300,
     1068
    ],
-   "score": 18964,
+   "score": 19784,
    "combo": [
     2,
     26,
@@ -10076,7 +10076,7 @@
     300,
     1068
    ],
-   "score": 18964,
+   "score": 19824,
    "combo": [
     2,
     26,
@@ -10197,7 +10197,7 @@
     300,
     1068
    ],
-   "score": 18964,
+   "score": 19824,
    "combo": [
     2,
     26,
@@ -10318,7 +10318,7 @@
     300,
     1068
    ],
-   "score": 18964,
+   "score": 19824,
    "combo": [
     2,
     26,
@@ -10483,7 +10483,7 @@
     300,
     1068
    ],
-   "score": 19432,
+   "score": 20292,
    "combo": [
     3,
     41,
@@ -10648,7 +10648,7 @@
     300,
     1068
    ],
-   "score": 19608,
+   "score": 20488,
    "combo": [
     5,
     56,
@@ -10835,7 +10835,7 @@
     300,
     1068
    ],
-   "score": 19794,
+   "score": 20674,
    "combo": [
     6,
     71,
@@ -11022,7 +11022,7 @@
     300,
     1068
    ],
-   "score": 19794,
+   "score": 20674,
    "combo": [
     6,
     71,
@@ -11209,7 +11209,7 @@
     300,
     1068
    ],
-   "score": 19794,
+   "score": 20674,
    "combo": [
     0,
     0,
@@ -11374,7 +11374,7 @@
     300,
     1068
    ],
-   "score": 19794,
+   "score": 20674,
    "combo": [
     0,
     0,
@@ -11539,7 +11539,7 @@
     300,
     1068
    ],
-   "score": 20250,
+   "score": 21130,
    "combo": [
     1,
     15,
@@ -11704,7 +11704,7 @@
     300,
     1068
    ],
-   "score": 20250,
+   "score": 21170,
    "combo": [
     1,
     15,
@@ -11869,7 +11869,7 @@
     300,
     1068
    ],
-   "score": 20404,
+   "score": 21324,
    "combo": [
     3,
     29,
@@ -12034,7 +12034,7 @@
     300,
     1068
    ],
-   "score": 20508,
+   "score": 21428,
    "combo": [
     0,
     0,
@@ -12199,7 +12199,7 @@
     300,
     1068
    ],
-   "score": 20508,
+   "score": 21428,
    "combo": [
     0,
     0,
@@ -12342,7 +12342,7 @@
     300,
     1068
    ],
-   "score": 20667,
+   "score": 21587,
    "combo": [
     2,
     15,
@@ -12485,7 +12485,7 @@
     300,
     1068
    ],
-   "score": 20745,
+   "score": 21665,
    "combo": [
     3,
     22,
@@ -12628,7 +12628,7 @@
     300,
     1068
    ],
-   "score": 21187,
+   "score": 22107,
    "combo": [
     5,
     34,
@@ -12771,7 +12771,7 @@
     300,
     1068
    ],
-   "score": 21187,
+   "score": 22127,
    "combo": [
     5,
     34,
@@ -12914,7 +12914,7 @@
     300,
     1068
    ],
-   "score": 21187,
+   "score": 22127,
    "combo": [
     5,
     34,
@@ -13057,7 +13057,7 @@
     300,
     1068
    ],
-   "score": 21364,
+   "score": 22304,
    "combo": [
     7,
     48,
@@ -13200,7 +13200,7 @@
     300,
     1068
    ],
-   "score": 21364,
+   "score": 22314,
    "combo": [
     0,
     0,
@@ -13321,7 +13321,7 @@
     300,
     1068
    ],
-   "score": 21364,
+   "score": 22324,
    "combo": [
     0,
     0,
@@ -13442,7 +13442,7 @@
     300,
     1068
    ],
-   "score": 21820,
+   "score": 22780,
    "combo": [
     1,
     15,
@@ -13563,7 +13563,7 @@
     300,
     1068
    ],
-   "score": 21820,
+   "score": 22810,
    "combo": [
     1,
     15,
@@ -13684,7 +13684,7 @@
     300,
     1068
    ],
-   "score": 21820,
+   "score": 22810,
    "combo": [
     0,
     0,
@@ -13805,7 +13805,7 @@
     300,
     1068
    ],
-   "score": 21820,
+   "score": 22810,
    "combo": [
     0,
     0,
@@ -13926,7 +13926,7 @@
     300,
     1068
    ],
-   "score": 21820,
+   "score": 22810,
    "combo": [
     0,
     0,
@@ -14025,7 +14025,7 @@
     300,
     1068
    ],
-   "score": 21820,
+   "score": 22810,
    "combo": [
     0,
     0,
@@ -14124,7 +14124,7 @@
     300,
     1068
    ],
-   "score": 21820,
+   "score": 22810,
    "combo": [
     0,
     0,
@@ -14223,7 +14223,7 @@
     684,
     1068
    ],
-   "score": 21893,
+   "score": 22883,
    "combo": [
     1,
     7,
@@ -14344,7 +14344,7 @@
     684,
     1068
    ],
-   "score": 22081,
+   "score": 23071,
    "combo": [
     3,
     24,
@@ -14487,7 +14487,7 @@
     684,
     1068
    ],
-   "score": 22081,
+   "score": 23071,
    "combo": [
     3,
     24,
@@ -14652,7 +14652,7 @@
     684,
     1068
    ],
-   "score": 22081,
+   "score": 23071,
    "combo": [
     3,
     24,
@@ -14839,7 +14839,7 @@
     684,
     1068
    ],
-   "score": 22081,
+   "score": 23071,
    "combo": [
     3,
     24,
@@ -15026,7 +15026,7 @@
     684,
     1068
    ],
-   "score": 22081,
+   "score": 23071,
    "combo": [
     0,
     0,
@@ -15213,7 +15213,7 @@
     684,
     1068
    ],
-   "score": 22258,
+   "score": 23248,
    "combo": [
     1,
     17,
@@ -15400,7 +15400,7 @@
     684,
     1068
    ],
-   "score": 22258,
+   "score": 23248,
    "combo": [
     1,
     17,
@@ -15587,7 +15587,7 @@
     684,
     1068
    ],
-   "score": 22258,
+   "score": 23248,
    "combo": [
     1,
     17,
@@ -15774,7 +15774,7 @@
     684,
     1068
    ],
-   "score": 22422,
+   "score": 23412,
    "combo": [
     3,
     32,
@@ -15961,7 +15961,7 @@
     684,
     1068
    ],
-   "score": 22422,
+   "score": 23412,
    "combo": [
     0,
     0,
@@ -16148,7 +16148,7 @@
     684,
     1068
    ],
-   "score": 22422,
+   "score": 23412,
    "combo": [
     0,
     0,
@@ -16335,7 +16335,7 @@
     684,
     1068
    ],
-   "score": 22649,
+   "score": 23639,
    "combo": [
     3,
     21,
@@ -16522,7 +16522,7 @@
     684,
     1068
    ],
-   "score": 23226,
+   "score": 24216,
    "combo": [
     6,
     44,
@@ -16709,7 +16709,7 @@
     684,
     1068
    ],
-   "score": 23226,
+   "score": 24236,
    "combo": [
     6,
     44,
@@ -16896,7 +16896,7 @@
     684,
     1068
    ],
-   "score": 23226,
+   "score": 24236,
    "combo": [
     6,
     44,
@@ -17083,7 +17083,7 @@
     684,
     1068
    ],
-   "score": 24370,
+   "score": 25380,
    "combo": [
     11,
     84,
@@ -17270,7 +17270,7 @@
     684,
     1068
    ],
-   "score": 24370,
+   "score": 25400,
    "combo": [
     11,
     84,
@@ -17457,7 +17457,7 @@
     684,
     1068
    ],
-   "score": 26148,
+   "score": 27178,
    "combo": [
     15,
     180,
@@ -17644,7 +17644,7 @@
     684,
     1068
    ],
-   "score": 26148,
+   "score": 27178,
    "combo": [
     15,
     180,
@@ -17809,7 +17809,7 @@
     684,
     1068
    ],
-   "score": 26148,
+   "score": 27178,
    "combo": [
     15,
     180,
@@ -17974,7 +17974,7 @@
     684,
     1068
    ],
-   "score": 26148,
+   "score": 27218,
    "combo": [
     15,
     180,
@@ -18014,7 +18014,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 0,
-    "hp": 52,
+    "hp": 57,
     "facing": -1,
     "weapon": "sword",
     "durability": 19,
@@ -18078,7 +18078,7 @@
    "world": {
     "particles": "c7d5f362bde5d025",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "da39a3ee5e6b4b0d",
+    "floaters": "43995e6faee2eb2b",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -18095,7 +18095,7 @@
     684,
     1068
    ],
-   "score": 26148,
+   "score": 27218,
    "combo": [
     15,
     180,
@@ -18135,7 +18135,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 0,
-    "hp": 52,
+    "hp": 57,
     "facing": -1,
     "weapon": "sword",
     "durability": 19,
@@ -18199,7 +18199,7 @@
    "world": {
     "particles": "1d5f7f664206d946",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "da39a3ee5e6b4b0d",
+    "floaters": "6322773e3bcc96dd",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -18216,7 +18216,7 @@
     684,
     1068
    ],
-   "score": 26242,
+   "score": 27332,
    "combo": [
     1,
     9,
@@ -18256,7 +18256,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 0,
-    "hp": 52,
+    "hp": 57,
     "facing": -1,
     "weapon": "sword",
     "durability": 18,
@@ -18298,7 +18298,7 @@
    "world": {
     "particles": "7e61c6f4ac923bc5",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "f2a39deb3fda5a08",
+    "floaters": "c282619013b3a465",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -18315,7 +18315,7 @@
     684,
     1068
    ],
-   "score": 26242,
+   "score": 27332,
    "combo": [
     1,
     9,
@@ -18355,7 +18355,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 2,
-    "hp": 52,
+    "hp": 57,
     "facing": 1,
     "weapon": "sword",
     "durability": 18,
@@ -18414,7 +18414,7 @@
     684,
     1068
    ],
-   "score": 26507,
+   "score": 27697,
    "combo": [
     3,
     33,
@@ -18454,7 +18454,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 2,
-    "hp": 52,
+    "hp": 57,
     "facing": 1,
     "weapon": "sword",
     "durability": 16,
@@ -18496,7 +18496,7 @@
    "world": {
     "particles": "85e3b8648818bf7f",
     "effects": "a0f7af68c1f4e5f8",
-    "floaters": "176de0fe058befcd",
+    "floaters": "5af26c22ea4838ff",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "fd7de40fd7d67cb3",
@@ -18513,7 +18513,7 @@
     684,
     1068
    ],
-   "score": 26888,
+   "score": 28078,
    "combo": [
     4,
     40,
@@ -18553,7 +18553,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 2,
-    "hp": 52,
+    "hp": 57,
     "facing": 1,
     "weapon": "sword",
     "durability": 15,
@@ -18595,7 +18595,7 @@
    "world": {
     "particles": "f9a2fecbf0c7ab21",
     "effects": "80c4acbd5326c845",
-    "floaters": "0512e1823a03b4f9",
+    "floaters": "ef13f1e6ce06713a",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -18612,7 +18612,7 @@
     684,
     1068
    ],
-   "score": 26888,
+   "score": 28078,
    "combo": [
     4,
     40,
@@ -18652,7 +18652,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 2,
-    "hp": 52,
+    "hp": 57,
     "facing": 1,
     "weapon": "sword",
     "durability": 15,
@@ -18694,7 +18694,7 @@
    "world": {
     "particles": "8e9c576614137aba",
     "effects": "c3d1142461556c21",
-    "floaters": "7d876a8524322e78",
+    "floaters": "0ea537973b4d78c7",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -18711,7 +18711,7 @@
     684,
     1068
    ],
-   "score": 26888,
+   "score": 28198,
    "combo": [
     4,
     40,
@@ -18751,7 +18751,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 2,
-    "hp": 52,
+    "hp": 57,
     "facing": 1,
     "weapon": "sword",
     "durability": 15,
@@ -18793,7 +18793,7 @@
    "world": {
     "particles": "fe1447e721cb5163",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "646be9b9d738c593",
+    "floaters": "ffdfdd2ea45be7f8",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -18807,7 +18807,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 26888,
+   "score": 28198,
    "combo": [
     4,
     40,
@@ -18847,7 +18847,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 52,
+    "hp": 57,
     "facing": 1,
     "weapon": "sword",
     "durability": 15,
@@ -18889,7 +18889,7 @@
    "world": {
     "particles": "d5a6a38f8c85debd",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "76c7d81b3181b2c4",
+    "floaters": "1edcb1114f67a954",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "da39a3ee5e6b4b0d",
@@ -18903,7 +18903,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 26888,
+   "score": 28198,
    "combo": [
     4,
     40,
@@ -18943,7 +18943,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 52,
+    "hp": 57,
     "facing": 1,
     "weapon": "sword",
     "durability": 15,
@@ -18999,7 +18999,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 26888,
+   "score": 28198,
    "combo": [
     0,
     0,
@@ -19039,7 +19039,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 52,
+    "hp": 57,
     "facing": 1,
     "weapon": "sword",
     "durability": 15,
@@ -19072,7 +19072,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 26888,
+   "score": 28198,
    "combo": [
     0,
     0,
@@ -19112,7 +19112,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 52,
+    "hp": 57,
     "facing": 1,
     "weapon": "sword",
     "durability": 15,
@@ -19145,7 +19145,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 26888,
+   "score": 28198,
    "combo": [
     0,
     0,
@@ -19185,7 +19185,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 52,
+    "hp": 57,
     "facing": 1,
     "weapon": "sword",
     "durability": 15,
@@ -19218,7 +19218,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 26888,
+   "score": 28198,
    "combo": [
     0,
     0,
@@ -19258,7 +19258,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 52,
+    "hp": 57,
     "facing": 1,
     "weapon": "sword",
     "durability": 15,
@@ -19291,7 +19291,7 @@
    "zone": 1,
    "wave": 2,
    "arena": null,
-   "score": 26888,
+   "score": 28198,
    "combo": [
     0,
     0,
@@ -19331,7 +19331,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 52,
+    "hp": 57,
     "facing": 1,
     "weapon": "sword",
     "durability": 15,
@@ -19367,7 +19367,7 @@
     1368,
     2520
    ],
-   "score": 26888,
+   "score": 28198,
    "combo": [
     0,
     0,
@@ -19407,7 +19407,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 52,
+    "hp": 57,
     "facing": 1,
     "weapon": "sword",
     "durability": 15,
@@ -19443,7 +19443,7 @@
     1368,
     2520
    ],
-   "score": 26888,
+   "score": 28198,
    "combo": [
     0,
     0,
@@ -19483,7 +19483,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 52,
+    "hp": 57,
     "facing": -1,
     "weapon": "sword",
     "durability": 15,
@@ -19542,7 +19542,7 @@
     1368,
     2520
    ],
-   "score": 26888,
+   "score": 28198,
    "combo": [
     0,
     0,
@@ -19582,7 +19582,7 @@
     "vy": 0,
     "state": "run",
     "stateTime": 0,
-    "hp": 52,
+    "hp": 57,
     "facing": -1,
     "weapon": "sword",
     "durability": 15,
@@ -19663,7 +19663,7 @@
     1368,
     2520
    ],
-   "score": 26888,
+   "score": 28198,
    "combo": [
     0,
     0,
@@ -19703,7 +19703,7 @@
     "vy": 0,
     "state": "charge",
     "stateTime": 9,
-    "hp": 52,
+    "hp": 57,
     "facing": -1,
     "weapon": "sword",
     "durability": 14,
@@ -19828,7 +19828,7 @@
     1368,
     2520
    ],
-   "score": 26888,
+   "score": 28198,
    "combo": [
     0,
     0,
@@ -19868,7 +19868,7 @@
     "vy": 0,
     "state": "hurt",
     "stateTime": 20,
-    "hp": 44,
+    "hp": 49,
     "facing": -1,
     "weapon": "sword",
     "durability": 14,
@@ -19993,7 +19993,7 @@
     1368,
     2520
    ],
-   "score": 26888,
+   "score": 28198,
    "combo": [
     0,
     0,
@@ -20033,7 +20033,7 @@
     "vy": 0,
     "state": "idle",
     "stateTime": 0,
-    "hp": 44,
+    "hp": 49,
     "facing": -1,
     "weapon": "sword",
     "durability": 14,
@@ -20158,7 +20158,7 @@
     1368,
     2520
    ],
-   "score": 26888,
+   "score": 28198,
    "combo": [
     0,
     0,
@@ -20198,7 +20198,7 @@
     "vy": 0,
     "state": "charge",
     "stateTime": 28,
-    "hp": 44,
+    "hp": 49,
     "facing": 1,
     "weapon": "sword",
     "durability": 14,
@@ -20323,7 +20323,7 @@
     1368,
     2520
    ],
-   "score": 27065,
+   "score": 28375,
    "combo": [
     1,
     17,
@@ -20363,7 +20363,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 30,
-    "hp": 44,
+    "hp": 49,
     "facing": -1,
     "weapon": "sword",
     "durability": 13,
@@ -20488,7 +20488,7 @@
     1368,
     2520
    ],
-   "score": 27065,
+   "score": 28375,
    "combo": [
     1,
     17,
@@ -20528,7 +20528,7 @@
     "vy": 0,
     "state": "idle",
     "stateTime": 30,
-    "hp": 44,
+    "hp": 49,
     "facing": -1,
     "weapon": "sword",
     "durability": 13,
@@ -20653,7 +20653,7 @@
     1368,
     2520
    ],
-   "score": 27065,
+   "score": 28375,
    "combo": [
     1,
     17,
@@ -20693,7 +20693,7 @@
     "vy": 0,
     "state": "idle",
     "stateTime": 30,
-    "hp": 44,
+    "hp": 49,
     "facing": -1,
     "weapon": "sword",
     "durability": 13,
@@ -20818,7 +20818,7 @@
     1368,
     2520
    ],
-   "score": 27065,
+   "score": 28375,
    "combo": [
     0,
     0,
@@ -20858,7 +20858,7 @@
     "vy": 0,
     "state": "dash",
     "stateTime": 3,
-    "hp": 44,
+    "hp": 49,
     "facing": 1,
     "weapon": "sword",
     "durability": 13,
@@ -20983,7 +20983,7 @@
     1368,
     2520
    ],
-   "score": 27065,
+   "score": 28375,
    "combo": [
     0,
     0,
@@ -21023,7 +21023,7 @@
     "vy": 0,
     "state": "charge",
     "stateTime": 4,
-    "hp": 44,
+    "hp": 49,
     "facing": 1,
     "weapon": "sword",
     "durability": 13,
@@ -21148,7 +21148,7 @@
     1368,
     2520
    ],
-   "score": 27169,
+   "score": 28479,
    "combo": [
     1,
     10,
@@ -21188,7 +21188,7 @@
     "vy": 0,
     "state": "charge",
     "stateTime": 34,
-    "hp": 44,
+    "hp": 49,
     "facing": 1,
     "weapon": "sword",
     "durability": 13,
@@ -21313,7 +21313,7 @@
     1368,
     2520
    ],
-   "score": 27353,
+   "score": 28663,
    "combo": [
     2,
     27,
@@ -21353,7 +21353,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 36,
-    "hp": 44,
+    "hp": 49,
     "facing": -1,
     "weapon": "sword",
     "durability": 12,
@@ -21478,7 +21478,7 @@
     1368,
     2520
    ],
-   "score": 27695,
+   "score": 29005,
    "combo": [
     4,
     57,
@@ -21518,7 +21518,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 1,
-    "hp": 44,
+    "hp": 49,
     "facing": -1,
     "weapon": "sword",
     "durability": 11,
@@ -21643,7 +21643,7 @@
     1368,
     2520
    ],
-   "score": 27695,
+   "score": 29005,
    "combo": [
     4,
     57,
@@ -21683,7 +21683,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 1,
-    "hp": 44,
+    "hp": 49,
     "facing": 1,
     "weapon": "sword",
     "durability": 11,
@@ -21808,7 +21808,7 @@
     1368,
     2520
    ],
-   "score": 27695,
+   "score": 29005,
    "combo": [
     4,
     57,
@@ -21848,7 +21848,7 @@
     "vy": 0,
     "state": "attack",
     "stateTime": 1,
-    "hp": 44,
+    "hp": 49,
     "facing": 1,
     "weapon": "sword",
     "durability": 11,
@@ -21969,281 +21969,281 @@
   {
    "tick": 0,
    "frame": {
-    "calls": 1424,
-    "digest": "55909469991e05aa"
+    "calls": 1227,
+    "digest": "8111dedf18df6d6c"
    }
   },
   {
    "tick": 120,
    "frame": {
-    "calls": 1609,
-    "digest": "b74d0d9a291f487a"
+    "calls": 1412,
+    "digest": "c336c8b82cb3f1b0"
    }
   },
   {
    "tick": 240,
    "frame": {
-    "calls": 2030,
-    "digest": "3cf91686a0d4456a"
+    "calls": 1829,
+    "digest": "d29c3afae666bbe8"
    }
   },
   {
    "tick": 360,
    "frame": {
-    "calls": 1772,
-    "digest": "fb718b21c6849bd7"
+    "calls": 1571,
+    "digest": "bc8a6bbe9a9e54b5"
    }
   },
   {
    "tick": 480,
    "frame": {
-    "calls": 2235,
-    "digest": "731865954fa02ec3"
+    "calls": 2034,
+    "digest": "52cbb9195680e958"
    }
   },
   {
    "tick": 600,
    "frame": {
-    "calls": 1832,
-    "digest": "5f38265b8241570b"
+    "calls": 1631,
+    "digest": "d8b250e6cb608351"
    }
   },
   {
    "tick": 720,
    "frame": {
-    "calls": 2242,
-    "digest": "e76cee44142107a6"
+    "calls": 2041,
+    "digest": "babb4b32f1a038e9"
    }
   },
   {
    "tick": 840,
    "frame": {
-    "calls": 2615,
-    "digest": "f8df246bc41240ab"
+    "calls": 2415,
+    "digest": "dc693f568aab693a"
    }
   },
   {
    "tick": 960,
    "frame": {
-    "calls": 1846,
-    "digest": "4211df0189714899"
+    "calls": 1650,
+    "digest": "ad9b7fa73093ce4c"
    }
   },
   {
    "tick": 1080,
    "frame": {
-    "calls": 1732,
-    "digest": "6116939eadcd96e3"
+    "calls": 1536,
+    "digest": "4c6ae794d4548cc0"
    }
   },
   {
    "tick": 1200,
    "frame": {
-    "calls": 2094,
-    "digest": "7148e9a2b188d570"
+    "calls": 2068,
+    "digest": "bdfdb800860b90b5"
    }
   },
   {
    "tick": 1320,
    "frame": {
-    "calls": 2040,
-    "digest": "bf206b257e903516"
+    "calls": 1921,
+    "digest": "8324fde7930b8052"
    }
   },
   {
    "tick": 1440,
    "frame": {
-    "calls": 2022,
-    "digest": "f4802ff6888a0390"
+    "calls": 1821,
+    "digest": "661ff9b1732f74ec"
    }
   },
   {
    "tick": 1560,
    "frame": {
-    "calls": 1911,
-    "digest": "1d570ca75c857026"
+    "calls": 1710,
+    "digest": "b93658593c20df51"
    }
   },
   {
    "tick": 1680,
    "frame": {
-    "calls": 2086,
-    "digest": "17ba618775996595"
+    "calls": 1897,
+    "digest": "89e494bed03d95f1"
    }
   },
   {
    "tick": 1800,
    "frame": {
-    "calls": 1831,
-    "digest": "a2d10e8630911bba"
+    "calls": 1630,
+    "digest": "3b811af5637f1c6b"
    }
   },
   {
    "tick": 1920,
    "frame": {
-    "calls": 1741,
-    "digest": "caebad84369e0206"
+    "calls": 1540,
+    "digest": "3c361b27ad73a37c"
    }
   },
   {
    "tick": 2040,
    "frame": {
-    "calls": 1711,
-    "digest": "8c8f419b85d12b1f"
+    "calls": 1510,
+    "digest": "61dde5fbea7058c0"
    }
   },
   {
    "tick": 2160,
    "frame": {
-    "calls": 1768,
-    "digest": "7ba83e601ac7bd5c"
+    "calls": 1567,
+    "digest": "e7f0c664d7725d83"
    }
   },
   {
    "tick": 2280,
    "frame": {
-    "calls": 1920,
-    "digest": "8829fac3d2e1704a"
+    "calls": 1719,
+    "digest": "9eec97d0eb1f8288"
    }
   },
   {
    "tick": 2400,
    "frame": {
-    "calls": 2099,
-    "digest": "5d198c8c7c23c37e"
+    "calls": 2004,
+    "digest": "bac406b5fd5a4650"
    }
   },
   {
    "tick": 2520,
    "frame": {
-    "calls": 1732,
-    "digest": "407d110f6a2621d6"
+    "calls": 1589,
+    "digest": "367fd9cc61debf7c"
    }
   },
   {
    "tick": 2640,
    "frame": {
-    "calls": 1876,
-    "digest": "4dd514c1bedfe304"
+    "calls": 1733,
+    "digest": "3642c50c59206c01"
    }
   },
   {
    "tick": 2760,
    "frame": {
-    "calls": 1777,
-    "digest": "3e8f9ae8e22c044f"
+    "calls": 1634,
+    "digest": "42d0e9873ab26d26"
    }
   },
   {
    "tick": 2880,
    "frame": {
-    "calls": 1654,
-    "digest": "d45c7530e89b90dc"
+    "calls": 1513,
+    "digest": "14e495a9a5b22300"
    }
   },
   {
    "tick": 3000,
    "frame": {
-    "calls": 2999,
-    "digest": "adbae6e19f37c2c4"
+    "calls": 2865,
+    "digest": "09109272a658c3be"
    }
   },
   {
    "tick": 3120,
    "frame": {
-    "calls": 1820,
-    "digest": "5d83252c5b905177"
+    "calls": 1677,
+    "digest": "4dbffcfb819b2f64"
    }
   },
   {
    "tick": 3240,
    "frame": {
-    "calls": 2882,
-    "digest": "01ac0de5c7001e88"
+    "calls": 2739,
+    "digest": "b264d0496900599a"
    }
   },
   {
    "tick": 3360,
    "frame": {
-    "calls": 1916,
-    "digest": "ffe41f9fca8d7b8b"
+    "calls": 1773,
+    "digest": "7aaecf7b4dc4e56b"
    }
   },
   {
    "tick": 3480,
    "frame": {
-    "calls": 1798,
-    "digest": "b9400e86fbcb631e"
+    "calls": 1655,
+    "digest": "ac3e751d0374eae9"
    }
   },
   {
    "tick": 3600,
    "frame": {
-    "calls": 1924,
-    "digest": "bd4ad9854c8a7b2c"
+    "calls": 1786,
+    "digest": "c07a5c4c65d2e9c7"
    }
   },
   {
    "tick": 3720,
    "frame": {
-    "calls": 1823,
-    "digest": "ca890b6df0a803cd"
+    "calls": 1693,
+    "digest": "30768a5560c6347c"
    }
   },
   {
    "tick": 3840,
    "frame": {
-    "calls": 1601,
-    "digest": "139dfed929761518"
+    "calls": 1466,
+    "digest": "69ed0c5753031fec"
    }
   },
   {
    "tick": 3960,
    "frame": {
-    "calls": 2694,
-    "digest": "ec40c4fd00e769d4"
+    "calls": 2555,
+    "digest": "df536a58dde6ccfa"
    }
   },
   {
    "tick": 4080,
    "frame": {
-    "calls": 1472,
-    "digest": "efafa11c630e96f3"
+    "calls": 1333,
+    "digest": "bec97dcbbb76bc50"
    }
   },
   {
    "tick": 4200,
    "frame": {
-    "calls": 1503,
-    "digest": "39b3c9c9452af536"
+    "calls": 1360,
+    "digest": "d8d90f429da3c525"
    }
   },
   {
    "tick": 4320,
    "frame": {
-    "calls": 1443,
-    "digest": "7e6351877ec4366a"
+    "calls": 1300,
+    "digest": "f0808d2510933f23"
    }
   },
   {
    "tick": 4440,
    "frame": {
-    "calls": 1454,
-    "digest": "a2de8a36816f489a"
+    "calls": 1311,
+    "digest": "8dcf2836947e33c0"
    }
   },
   {
    "tick": 4560,
    "frame": {
-    "calls": 1446,
-    "digest": "51a9603fdc69e3a2"
+    "calls": 1303,
+    "digest": "13d286ff92da6fd9"
    }
   },
   {
    "tick": 4680,
    "frame": {
-    "calls": 1618,
-    "digest": "b195796dbd89ff72"
+    "calls": 1475,
+    "digest": "b46f79d50d7bd2df"
    }
   }
  ]

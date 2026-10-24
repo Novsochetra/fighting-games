@@ -17,6 +17,8 @@ import { drawBehindBursts, drawSummons } from './fx/summons.js';
 import { drawCrates } from './scene/crate.js';
 import { drawGround } from './scene/ground.js';
 import { drawPlatforms } from './scene/platforms.js';
+import { drawFlyingLoot, drawGroundLoot } from './scene/loot.js';
+import { drawChests } from './scene/loot-chest.js';
 import { drawPickups } from './scene/pickups.js';
 import { drawProps } from './scene/props/index.js';
 import { scenePalette } from './scene/scene-palette.js';
@@ -52,6 +54,26 @@ function drawBehindFighters(painter, { game, view }) {
   drawBehindBursts(painter, game.summons, view.fxSheets);
 }
 
+function drawOne(painter, { game, view, fighter, sheet, cameraX }) {
+  if (isBossUltimate(fighter)) {
+    dimForBossUltimate(painter, fighter, cameraX);
+  }
+  drawFighter(painter, {
+    fighter,
+    sheet,
+    enemySheets: view.enemySheets,
+    tickCount: game.tickCount,
+    floor: floorBelow(game.terrain, fighter.x, fighter.y),
+  });
+  drawTrail(painter, { fighter, sheet });
+}
+
+// loot lies on the road over the fallen but under everyone still standing
+function drawLootOnRoad(painter, { game, view, cameraX }) {
+  drawChests(painter, { game, sheets: view.lootSheets });
+  drawGroundLoot(painter, { game, sheets: view.lootSheets, cameraX });
+}
+
 // what stands behind the fighters stands there, but in the ultimate it stands in the hero's light,
 // over the dimmed world
 function drawFighters(painter, { game, view, cameraX }) {
@@ -60,22 +82,20 @@ function drawFighters(painter, { game, view, cameraX }) {
   if (!ultimate) {
     drawBehindFighters(painter, { game, view });
   }
+  let lootDrawn = false;
   for (const fighter of drawOrder(game.fighters)) {
+    if (!lootDrawn && fighter.state !== 'ko') {
+      drawLootOnRoad(painter, { game, view, cameraX });
+      lootDrawn = true;
+    }
     if (fighter === game.player && ultimate) {
       dimForUltimate(painter, game, cameraX);
       drawBehindFighters(painter, { game, view });
     }
-    if (isBossUltimate(fighter)) {
-      dimForBossUltimate(painter, fighter, cameraX);
-    }
-    drawFighter(painter, {
-      fighter,
-      sheet,
-      enemySheets: view.enemySheets,
-      tickCount: game.tickCount,
-      floor: floorBelow(game.terrain, fighter.x, fighter.y),
-    });
-    drawTrail(painter, { fighter, sheet });
+    drawOne(painter, { game, view, fighter, sheet, cameraX });
+  }
+  if (!lootDrawn) {
+    drawLootOnRoad(painter, { game, view, cameraX });
   }
 }
 
@@ -96,6 +116,7 @@ export function drawWorld(painter, { game, view, cameraX }) {
   drawProjectiles(painter, game.projectiles, view.fxSheets);
   drawParticles(painter, game.particles);
   drawEffects(painter, game.effects);
+  drawFlyingLoot(painter, { game, sheets: view.lootSheets });
   drawFloaters(painter, game.floaters);
   if (game.settings.hitboxes) {
     drawDebugBoxes(painter, game);

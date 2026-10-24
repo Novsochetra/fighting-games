@@ -3,6 +3,7 @@ import { HUD_COLORS } from '../../art/hud-colors.js';
 import { WEAPONS } from '../../data/weapons/index.js';
 import { drawItemIcon } from '../scene/item-icons.js';
 import { drawText, textWidth } from '../text/draw-text.js';
+import { drawBoxStamped } from './box-stamp.js';
 import { drawPlaque } from './hud-frames.js';
 import { ROW_ONE, ROW_TWO, WEAPON_BOX } from './top-bar.js';
 
@@ -46,15 +47,18 @@ function drawInfinity(painter, x, y) {
   }
 }
 
+const isWorn = (weapon, def) => weapon.durability / def.durability <= 0.25;
+const warningOn = (weapon, def, tickCount) => isWorn(weapon, def) && Boolean((tickCount >> 3) & 1);
+
 function drawDurability(painter, weapon, def, tickCount) {
   if (weapon.durability === Infinity) {
     drawInfinity(painter, COLUMN_X, ROW_TWO);
     return;
   }
   const text = `${weapon.durability}`;
-  const warn = weapon.durability / def.durability <= 0.25;
+  const warn = isWorn(weapon, def);
   drawText(painter, text, { x: COLUMN_X, y: ROW_TWO, color: warn ? COLORS.coral : COLORS.lilac });
-  if (warn && (tickCount >> 3) & 1) {
+  if (warningOn(weapon, def, tickCount)) {
     drawText(painter, '!', { x: COLUMN_X + textWidth(text, 1) + 2, y: ROW_TWO, color: COLORS.red });
   }
 }
@@ -76,7 +80,7 @@ function drawSlot(painter, { weapon, def, popup }) {
 }
 
 // the icon spans both rows, with the weapon's name over the hits it has left
-export function drawWeaponBox(painter, game, view) {
+function drawWeaponParts(painter, game, view) {
   drawPlaque(painter, view.hudFrames, 'panel', WEAPON_BOX);
   const weapon = game.player.weapon;
   const def = WEAPONS[weapon.id];
@@ -87,4 +91,21 @@ export function drawWeaponBox(painter, game, view) {
     color: pop ? def.trailColor : COLORS.sand,
   });
   drawDurability(painter, weapon, def, game.tickCount);
+}
+
+// a weapon just picked up flashes for a moment, a different box every tick, so it is drawn as it is
+// then; the rest of the time the box is one stamp for the weapon, its hits left and the warning's blink
+export function drawWeaponBox(painter, game, view) {
+  if (game.weaponPopup > 0) {
+    drawWeaponParts(painter, game, view);
+    return;
+  }
+  const { weapon } = game.player;
+  const warning = warningOn(weapon, WEAPONS[weapon.id], game.tickCount);
+  drawBoxStamped(painter, {
+    key: `weapon|${weapon.id}|${weapon.durability}|${warning}`,
+    box: WEAPON_BOX,
+    ready: Boolean(view.hudFrames.ready.panel),
+    draw: (inner) => drawWeaponParts(inner, game, view),
+  });
 }
