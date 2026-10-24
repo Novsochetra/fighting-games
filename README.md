@@ -59,8 +59,9 @@ The home page and each game are independent apps: none loads a file from another
 Create `apps/web/games/<id>/` with a `game.json` (id, title, tagline, description, genre, players,
 cover), an `index.html` and the game's files, including its own `styles/tokens.css`. A game loads
 nothing from outside its folder. The server finds it and the home page shows it. Make the cover a
-square icon, and add the optional `banner` (16:9 key art for the game's card and the backdrop
-behind it) and `poster` (a tall crop of it for phones); without them the home page uses the cover.
+square icon, and add the optional `banner` (16:9 key art for the backdrop behind the game's card),
+`poster` (a tall crop of it for phones) and `screenshot` (a 16:9 frame of play for the card itself);
+without them the home page uses the cover.
 
 ## Deploy
 

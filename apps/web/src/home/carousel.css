@@ -137,6 +137,45 @@
   );
 }
 
+/* A teaser: a dark slate with a slow sheen passing over it, waiting for a game. */
+.art--soon {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(to bottom, var(--color-soon-top), var(--color-soon-bottom));
+}
+
+.art--soon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    var(--color-clear) 35%,
+    var(--color-soon-sheen) 50%,
+    var(--color-clear) 65%
+  );
+  translate: -100% 0;
+  animation: sheen var(--duration-sheen) var(--easing-gentle) infinite;
+}
+
+.art__glyph {
+  inline-size: var(--size-soon-glyph);
+  block-size: var(--size-soon-glyph);
+  fill: var(--color-soon-glyph);
+}
+
+.art__label {
+  font-size: var(--font-size-soon);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-soon-label);
+}
+
 .carousel__arrow {
   position: absolute;
   inset-block-start: 50%;
@@ -161,6 +200,13 @@
   }
 }
 
+@keyframes sheen {
+  60%,
+  100% {
+    translate: 100% 0;
+  }
+}
+
 @keyframes card-enter {
   from {
     opacity: 0;
@@ -171,7 +217,8 @@
 @media (prefers-reduced-motion: reduce) {
   .card,
   .card__ring,
-  .card__frame {
+  .card__frame,
+  .art--soon::after {
     transition: none;
     animation: none;
   }

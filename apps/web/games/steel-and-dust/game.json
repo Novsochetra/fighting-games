@@ -9,5 +9,6 @@
   "controls": ["Keyboard", "Gamepad", "Touch"],
   "cover": "assets/icons/icon-512.png",
   "banner": "assets/ui/select/bg-landscape.png",
-  "poster": "assets/ui/select/bg-portrait.png"
+  "poster": "assets/ui/select/bg-portrait.png",
+  "screenshot": "assets/screenshots/angkor-wat.png"
 }

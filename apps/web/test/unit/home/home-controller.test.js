@@ -12,6 +12,7 @@ const fakeView = () => ({
   select: vi.fn(),
   revealHero: vi.fn(),
   spotlight: { setFavorite: vi.fn() },
+  carousel: { nudge: vi.fn() },
   library: { render: vi.fn(), select: vi.fn() },
 });
 
@@ -33,7 +34,13 @@ describe('createHomeController', () => {
     const { view, sound, controller } = setup();
     await controller.load();
     expect(view.showLoading).toHaveBeenCalledOnce();
-    expect(view.showGames.mock.calls[0][0].map((card) => card.id)).toEqual(['a', 'b', 'c']);
+    expect(view.showGames.mock.calls[0][0].map((card) => card.id)).toEqual([
+      'a',
+      'b',
+      'c',
+      'coming-soon-1',
+      'coming-soon-2',
+    ]);
     expect(view.select).toHaveBeenCalledWith(0, expect.objectContaining({ id: 'a' }), {
       animate: false,
       focus: null,
@@ -62,11 +69,12 @@ describe('createHomeController', () => {
     const { view, sound, controller } = setup();
     await controller.load();
     expect(controller.handleAction('left', { focus: 'carousel' })).toBe(true);
-    expect(controller.selectedIndex()).toBe(2);
-    expect(view.select).toHaveBeenLastCalledWith(2, expect.objectContaining({ id: 'c' }), {
-      animate: true,
-      focus: 'carousel',
-    });
+    expect(controller.selectedIndex()).toBe(4);
+    expect(view.select).toHaveBeenLastCalledWith(
+      4,
+      expect.objectContaining({ id: 'coming-soon-2' }),
+      { animate: true, focus: 'carousel' },
+    );
     expect(sound.play).toHaveBeenLastCalledWith('move');
     controller.handleAction('right');
     expect(controller.selectedIndex()).toBe(0);
@@ -96,11 +104,24 @@ describe('createHomeController', () => {
   it('opens nothing outside the list or while a game is already opening', async () => {
     const { launcher, controller } = setup();
     await controller.load();
-    expect(controller.open(3)).toBe(false);
+    expect(controller.open(5)).toBe(false);
     expect(controller.open(-1)).toBe(false);
     launcher.isFlying.mockReturnValue(true);
     expect(controller.open(0)).toBe(false);
     expect(launcher.launch).not.toHaveBeenCalled();
+  });
+
+  it('refuses a teaser with a shake and a low knock, and remembers nothing', async () => {
+    const { view, launcher, sound, preferences, controller } = setup();
+    await controller.load();
+    expect(controller.open(3)).toBe(false);
+    expect(controller.selectedIndex()).toBe(3);
+    expect(view.carousel.nudge).toHaveBeenCalledWith(3);
+    expect(sound.play).toHaveBeenLastCalledWith('locked');
+    expect(launcher.launch).not.toHaveBeenCalled();
+    expect(preferences.recent()).toEqual([]);
+    controller.toggleFavorite();
+    expect(preferences.favorites()).toEqual([]);
   });
 
   it('ignores selections outside the list', async () => {

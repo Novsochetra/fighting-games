@@ -71,13 +71,21 @@ describe('validateGameEntry', () => {
     expect(validateGameEntry(entry, 'demo-game')).toEqual([]);
   });
 
-  it.each(['banner', 'poster'])('rejects a %s outside the game folder or not a path', (field) => {
-    for (const value of ['../banner.png', 'https://example.com/a.png', '', 42]) {
-      expect(validateGameEntry({ ...validEntry(), [field]: value }, 'demo-game')).toEqual([
-        `"${field}" must be a relative file path inside the game folder`,
-      ]);
-    }
+  it('accepts a screenshot inside the game folder', () => {
+    const entry = { ...validEntry(), screenshot: 'assets/screenshots/play.png' };
+    expect(validateGameEntry(entry, 'demo-game')).toEqual([]);
   });
+
+  it.each(['banner', 'poster', 'screenshot'])(
+    'rejects a %s outside the game folder or not a path',
+    (field) => {
+      for (const value of ['../banner.png', 'https://example.com/a.png', '', 42]) {
+        expect(validateGameEntry({ ...validEntry(), [field]: value }, 'demo-game')).toEqual([
+          `"${field}" must be a relative file path inside the game folder`,
+        ]);
+      }
+    },
+  );
 
   it.each([['Keyboard', ''], 'Keyboard', [1]])('rejects controls %j', (controls) => {
     expect(validateGameEntry({ ...validEntry(), controls }, 'demo-game')).toEqual([
@@ -104,6 +112,8 @@ describe('toCatalogGame', () => {
     expect(game.poster).toBe('games/demo-game/art/tall.png');
     expect(toCatalogGame(validEntry())).not.toHaveProperty('banner');
     expect(toCatalogGame(validEntry())).not.toHaveProperty('poster');
+    const shot = toCatalogGame({ ...validEntry(), screenshot: 'shots/a.png' });
+    expect(shot.screenshot).toBe('games/demo-game/shots/a.png');
   });
 
   it('keeps the other catalog fields as they are', () => {

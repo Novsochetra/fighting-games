@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { COMING_SOON_COUNT } from '../../../src/home/coming-soon.js';
 import { EMPTY_MESSAGE, ERROR_MESSAGE } from '../../../src/home/home-view.js';
 import {
   boot,
@@ -33,11 +34,11 @@ describe('home page with the real catalog', () => {
     await boot(fetchFn);
     expect(fetchFn).toHaveBeenCalledWith('api/games', expect.any(Object));
     const { games } = JSON.parse(body);
-    expect(cards()).toHaveLength(games.length);
+    expect(cards()).toHaveLength(games.length + COMING_SOON_COUNT);
     expect(tiles()).toHaveLength(games.length);
     expect(cards()[0].getAttribute('aria-label')).toBe('Steel & Dust');
     expect(cards()[0].querySelector('img').getAttribute('src')).toBe(
-      'games/steel-and-dust/assets/ui/select/bg-landscape.png',
+      'games/steel-and-dust/assets/screenshots/angkor-wat.png',
     );
     expect(tiles()[0].textContent).toContain("Beat 'em up");
   });
@@ -67,11 +68,19 @@ describe('home page with the real catalog', () => {
     expect(byId('library-count').textContent).toBe('1 game');
   });
 
-  it('hides the arrows and the page dots when there is one game to choose', async () => {
+  it('shows a frame of play on the card, not the key art behind it', async () => {
     await bootWithRealCatalog();
-    expect(byId('previous').hidden).toBe(true);
-    expect(byId('next').hidden).toBe(true);
-    expect(byId('pager').hidden).toBe(true);
+    const card = cards()[0].querySelector('img').getAttribute('src');
+    const backdrop = byId('backdrops').querySelector('.backdrop.is-active img').getAttribute('src');
+    expect(card).not.toBe(backdrop);
+  });
+
+  it('gives every card, teasers too, a page dot, with the arrows to move between them', async () => {
+    await bootWithRealCatalog();
+    expect(byId('pager').children).toHaveLength(cards().length);
+    expect(byId('pager').hidden).toBe(false);
+    expect(byId('previous').hidden).toBe(false);
+    expect(byId('next').hidden).toBe(false);
   });
 
   it('opens the selected game with Enter or Space, and with a click on its card', async () => {

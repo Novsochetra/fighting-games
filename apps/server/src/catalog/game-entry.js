@@ -1,7 +1,7 @@
 const REQUIRED_TEXT_FIELDS = ['id', 'title', 'tagline', 'description', 'genre', 'players', 'cover'];
 // The cover is the square icon; banner (16:9) and poster (portrait) are the optional key art the home
-// page shows on its cards and behind them.
-const ART_FIELDS = ['cover', 'banner', 'poster'];
+// page shows behind its cards, and screenshot an optional 16:9 frame of play for the card itself.
+const ART_FIELDS = ['cover', 'banner', 'poster', 'screenshot'];
 const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const RELATIVE_FILE_PATTERN = /^[\w-][\w.-]*(?:\/[\w-][\w.-]*)*$/;
 

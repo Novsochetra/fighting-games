@@ -32,14 +32,19 @@ afterEach(() => {
 });
 
 describe('browsing the carousel', () => {
-  it('moves with the arrows and A and D, looping round both ends', async () => {
+  it('moves with the arrows and A and D, looping round both ends past the teasers', async () => {
     await bootWithGames(['alpha', 'bravo', 'charlie']);
     press('ArrowRight');
     expect(spotlightTitle()).toBe('bravo');
     press('d');
     expect(spotlightTitle()).toBe('charlie');
     press('ArrowRight');
+    press('ArrowRight');
+    expect(spotlightTitle()).toBe('Coming Soon');
+    press('ArrowRight');
     expect(spotlightTitle()).toBe('alpha');
+    press('a');
+    press('a');
     press('a');
     expect(spotlightTitle()).toBe('charlie');
     expect(centerCard()).toBe(cards()[2]);
@@ -51,9 +56,9 @@ describe('browsing the carousel', () => {
   it('lays the cards out by their distance from the center one', async () => {
     await bootWithGames(['a', 'b', 'c', 'd', 'e', 'f', 'g']);
     const distances = cards().map((card) => card.style.getPropertyValue('--distance'));
-    expect(distances).toEqual(['0', '1', '2', '3', '3', '2', '1']);
+    expect(distances).toEqual(['0', '1', '2', '3', '3', '3', '3', '2', '1']);
     const sides = cards().map((card) => card.style.getPropertyValue('--side'));
-    expect(sides.slice(4)).toEqual(['-1', '-1', '-1']);
+    expect(sides.slice(5)).toEqual(['-1', '-1', '-1', '-1']);
     expect(cards()[3].getAttribute('aria-hidden')).toBe('true');
     expect(cards()[3].classList.contains('is-hidden')).toBe(true);
   });
@@ -68,9 +73,9 @@ describe('browsing the carousel', () => {
   it('keeps focus on the center card as the keys move it', async () => {
     await bootWithGames(['alpha', 'bravo', 'charlie']);
     centerCard().focus();
-    press('ArrowLeft', document.activeElement);
-    expect(document.activeElement).toBe(cards()[2]);
-    expect(cards().filter((card) => card.tabIndex === 0)).toEqual([cards()[2]]);
+    press('ArrowRight', document.activeElement);
+    expect(document.activeElement).toBe(cards()[1]);
+    expect(cards().filter((card) => card.tabIndex === 0)).toEqual([cards()[1]]);
   });
 
   it('steps with the previous and next buttons', async () => {
@@ -78,8 +83,9 @@ describe('browsing the carousel', () => {
     click(byId('next'));
     expect(spotlightTitle()).toBe('bravo');
     click(byId('previous'));
+    expect(spotlightTitle()).toBe('alpha');
     click(byId('previous'));
-    expect(spotlightTitle()).toBe('charlie');
+    expect(spotlightTitle()).toBe('Coming Soon');
   });
 
   it('brings a side card to the center on a click, and opens it on the next', async () => {

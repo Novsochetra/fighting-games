@@ -114,6 +114,8 @@ describe('a long library', () => {
   it('keeps the selected game ringed when the grid is drawn again', async () => {
     await bootWithGames(ids);
     press('ArrowLeft');
+    press('ArrowLeft');
+    press('ArrowLeft');
     click(byId('show-more'));
     expect(document.querySelector('.tile.is-selected').dataset.gameIndex).toBe(
       String(ids.length - 1),

@@ -40,6 +40,18 @@ function jumpCard(card, slot) {
   }
 }
 
+const NUDGE_KEYFRAMES = [0, -8, 7, -5, 3, 0].map((x) => ({ transform: `translateX(${x}px)` }));
+
+function nudge(frame) {
+  if (frame) {
+    const timing = readTiming(frame.ownerDocument, {
+      duration: '--duration-nudge',
+      easing: '--easing-standard',
+    });
+    animateWith(frame, NUDGE_KEYFRAMES, timing);
+  }
+}
+
 export function createCarouselView({ track, pager, arrows }) {
   let offsets = [];
   const cards = () => [...track.querySelectorAll('.card')];
@@ -72,10 +84,6 @@ export function createCarouselView({ track, pager, arrows }) {
     }
   }
 
-  return {
-    render,
-    select,
-    cardAt,
-    frameAt: (index) => cardAt(index)?.querySelector('.card__frame'),
-  };
+  const frameAt = (index) => cardAt(index)?.querySelector('.card__frame');
+  return { render, select, cardAt, frameAt, nudge: (index) => nudge(frameAt(index)) };
 }

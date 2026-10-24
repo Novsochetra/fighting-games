@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { comingSoonCard } from '../../../src/home/coming-soon.js';
 import { escapeHtml } from '../../../src/home/escape-html.js';
 import {
   EAGER_CARD_COUNT,
@@ -19,6 +20,7 @@ const card = (overrides = {}) => ({
   coverSrc: 'games/steel-and-dust/assets/icons/icon-512.png',
   bannerSrc: 'games/steel-and-dust/assets/ui/select/bg-landscape.png',
   posterSrc: 'games/steel-and-dust/assets/ui/select/bg-portrait.png',
+  artSrc: 'games/steel-and-dust/assets/screenshots/angkor-wat.png',
   genre: "Beat 'em up",
   ...overrides,
 });
@@ -36,16 +38,16 @@ describe('escapeHtml', () => {
 });
 
 describe('renderArt', () => {
-  it('shows the banner as decorative art that cannot be dragged off', () => {
+  it('shows the frame of play as decorative art that cannot be dragged off', () => {
     const html = renderArt(card());
     expect(html).toContain(
-      '<img class="art" src="games/steel-and-dust/assets/ui/select/bg-landscape.png" alt=""',
+      '<img class="art" src="games/steel-and-dust/assets/screenshots/angkor-wat.png" alt=""',
     );
     expect(html).toContain('draggable="false"');
   });
 
   it('draws the first letter of the title when there is no art', () => {
-    const html = renderArt(card({ bannerSrc: '' }));
+    const html = renderArt(card({ artSrc: '' }));
     expect(html).not.toContain('<img');
     expect(html).toBe('<span class="art art--monogram" aria-hidden="true">S</span>');
   });
@@ -76,6 +78,24 @@ describe('renderTile', () => {
   });
 });
 
+describe('a Coming Soon teaser', () => {
+  const teaser = comingSoonCard(1);
+
+  it('draws a slate with sparkles and its label instead of art', () => {
+    const html = renderArt(teaser);
+    expect(html).toContain('<span class="art art--soon" aria-hidden="true">');
+    expect(html).toContain('<svg class="art__glyph"');
+    expect(html).toContain('<span class="art__label">Coming Soon</span>');
+    expect(html).not.toContain('<img');
+  });
+
+  it('has a backdrop of its own, with no painting', () => {
+    expect(renderBackdrop(teaser, 3)).toBe(
+      '<div class="backdrop backdrop--soon" data-game-index="3"></div>',
+    );
+  });
+});
+
 describe('renderBackdrop', () => {
   it('uses the poster on narrow screens and the banner elsewhere', () => {
     const html = renderBackdrop(card(), 1);
@@ -100,6 +120,7 @@ describe('every renderer', () => {
     monogram: hostile,
     genre: hostile,
     bannerSrc: 'x.png" onerror="alert(1)',
+    artSrc: 'z.png" onerror="alert(1)',
     posterSrc: 'y.png" onerror="alert(1)',
   });
 
@@ -107,7 +128,8 @@ describe('every renderer', () => {
     ['renderCard', () => renderCard(bad, 0)],
     ['renderTile', () => renderTile(bad, 0, 0)],
     ['renderBackdrop', () => renderBackdrop(bad, 0)],
-    ['renderArt', () => renderArt({ ...bad, bannerSrc: '' })],
+    ['renderArt', () => renderArt({ ...bad, artSrc: '' })],
+    ['renderArt for a teaser', () => renderArt({ ...bad, isComingSoon: true })],
   ])('%s escapes every catalog value', (_name, render) => {
     const html = render();
     expect(html).not.toContain('<img src=x');

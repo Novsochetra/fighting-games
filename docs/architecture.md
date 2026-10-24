@@ -30,8 +30,8 @@ docs/                     this file
 The home page and every game are separate apps that share no file. Each has its own design tokens
 (`src/home/tokens.css`, `games/<id>/styles/tokens.css`), styles and modules, so a game can change its
 look without touching the arcade or another game. The home page knows a game only through its
-`game.json` and the art it names (`cover`, `banner`, `poster`); a game links back to the arcade only
-by address (`../../`).
+`game.json` and the art it names (`cover`, `banner`, `poster`, `screenshot`); a game links back to the
+arcade only by address (`../../`).
 `test/integration/independence.test.js` fails if a game loads a file from outside its folder or the
 home page loads a file from a game.
 
@@ -61,7 +61,11 @@ frosted glass ones (`buttons.css`).
 - **Hero** (`hero.css`, `spotlight-view.js`): the game's `banner` (its `poster`, a tall crop, on
   narrow screens) cross-fades in behind a dim, under one slow Ken Burns zoom on the whole stack. Its
   title, genre line and first sentence rise in under the carousel, over Play, Details and a heart.
-- **Carousel** (`carousel-layout.js`, `carousel-view.js`, `carousel.css`): the cards loop. A card's
+- **Carousel** (`carousel-layout.js`, `carousel-view.js`, `carousel.css`): each card shows its game's
+  `screenshot`, a frame of play, so it never repeats the key art behind it. Two Coming Soon teasers
+  (`coming-soon.js`) follow the games: a dark slate with a slow sheen, a dark backdrop, and a quiet
+  Coming Soon in place of Play. They move like games but open nothing (the card shakes and a low
+  knock plays), and they stay out of the library and the favorites. The cards loop. A card's
   slot is a plain function of its distance from the selected one: the center card is full size and
   ringed, the next ones shrink, dim and sit edge to edge, and from the third on they are hidden. The
   view only writes each slot as custom properties (`--side`, `--shift`, `--scale`, ...); the CSS

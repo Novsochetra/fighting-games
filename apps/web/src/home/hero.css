@@ -30,6 +30,14 @@
   opacity: 1;
 }
 
+.backdrop--soon {
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    var(--color-soon-glow),
+    var(--color-launcher-background) 70%
+  );
+}
+
 .backdrop__img {
   display: block;
   inline-size: 100%;

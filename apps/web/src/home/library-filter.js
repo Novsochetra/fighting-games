@@ -1,3 +1,4 @@
+import { isPlayable } from './coming-soon.js';
 import { formatGameCount } from './view-models.js';
 
 export const LIBRARY_PAGE_SIZE = 8;
@@ -18,12 +19,15 @@ export function isFilter(value) {
 const byId = (cards) => new Map(cards.map((card, index) => [card.id, { card, index }]));
 
 // Recent keeps the order games were last played in, newest first; the others keep the catalog's.
+// The library lists only games there are to play, never the carousel's teasers.
 export function filterEntries(cards, { filter, favorites, recent }) {
   if (filter === 'recent') {
     const entries = byId(cards);
     return recent.map((id) => entries.get(id)).filter(Boolean);
   }
-  const entries = cards.map((card, index) => ({ card, index }));
+  const entries = cards
+    .map((card, index) => ({ card, index }))
+    .filter(({ card }) => isPlayable(card));
   return filter === 'favorites'
     ? entries.filter(({ card }) => favorites.includes(card.id))
     : entries;

@@ -21,6 +21,7 @@ const apiGame = (overrides = {}) => ({
   cover: 'games/steel-and-dust/assets/icons/icon-512.png',
   banner: 'games/steel-and-dust/assets/banner.png',
   poster: 'games/steel-and-dust/assets/poster.png',
+  screenshot: 'games/steel-and-dust/assets/screenshot.png',
   path: 'games/steel-and-dust/',
   ...overrides,
 });
@@ -35,6 +36,7 @@ describe('toGameCard', () => {
       coverSrc: 'games/steel-and-dust/assets/icons/icon-512.png',
       bannerSrc: 'games/steel-and-dust/assets/banner.png',
       posterSrc: 'games/steel-and-dust/assets/poster.png',
+      artSrc: 'games/steel-and-dust/assets/screenshot.png',
       genre: "Beat 'em up",
       meta: "Beat 'em up · 1 player · 2026",
       summary: 'A side-scrolling pixel-art brawler.',
@@ -43,17 +45,22 @@ describe('toGameCard', () => {
     });
   });
 
-  it('falls back from the poster to the banner to the cover', () => {
+  it('falls back from the screenshot or the poster to the banner, then to the cover', () => {
+    const noShot = toGameCard(apiGame({ screenshot: undefined }));
+    expect(noShot.artSrc).toBe('games/steel-and-dust/assets/banner.png');
     const noPoster = toGameCard(apiGame({ poster: undefined }));
     expect(noPoster.posterSrc).toBe('games/steel-and-dust/assets/banner.png');
-    const coverOnly = toGameCard(apiGame({ banner: undefined, poster: undefined }));
+    const coverOnly = toGameCard(
+      apiGame({ banner: undefined, poster: undefined, screenshot: undefined }),
+    );
+    expect(coverOnly.artSrc).toBe('games/steel-and-dust/assets/icons/icon-512.png');
     expect(coverOnly.bannerSrc).toBe('games/steel-and-dust/assets/icons/icon-512.png');
     expect(coverOnly.posterSrc).toBe(coverOnly.bannerSrc);
   });
 
   it('leaves the art empty when the game has none', () => {
     const bare = toGameCard({ title: 'Bare', path: 'games/bare/' });
-    expect([bare.coverSrc, bare.bannerSrc, bare.posterSrc]).toEqual(['', '', '']);
+    expect([bare.coverSrc, bare.bannerSrc, bare.posterSrc, bare.artSrc]).toEqual(['', '', '', '']);
     expect(bare.controls).toEqual([]);
     expect(bare.meta).toBe('');
   });

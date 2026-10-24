@@ -45,6 +45,8 @@ export function toGameCard(game) {
     coverSrc,
     bannerSrc,
     posterSrc: asUrl(game.poster) || bannerSrc,
+    // A frame of play on the card, so it shows the game rather than the key art behind it.
+    artSrc: asUrl(game.screenshot) || bannerSrc,
     genre: asText(game.genre),
     meta: metaLine(game),
     summary: firstSentence(game.description),

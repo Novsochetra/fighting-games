@@ -17,9 +17,9 @@ function findElements(document) {
 }
 
 function fill(elements, card) {
-  elements.art.parentElement.hidden = card.bannerSrc === '';
-  if (card.bannerSrc !== '') {
-    elements.art.setAttribute('src', card.bannerSrc);
+  elements.art.parentElement.hidden = card.artSrc === '';
+  if (card.artSrc !== '') {
+    elements.art.setAttribute('src', card.artSrc);
   }
   elements.title.textContent = card.title;
   elements.meta.textContent = card.meta;

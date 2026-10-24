@@ -28,7 +28,7 @@ describe('the details sheet', () => {
     const chips = [...byId('details-controls').children].map((chip) => chip.textContent);
     expect(chips).toEqual(['Keyboard', 'Gamepad', 'Touch']);
     expect(byId('details-art').getAttribute('src')).toBe(
-      'games/steel-and-dust/assets/ui/select/bg-landscape.png',
+      'games/steel-and-dust/assets/screenshots/angkor-wat.png',
     );
     expect(byId('details-play').getAttribute('href')).toBe('games/steel-and-dust/');
   });

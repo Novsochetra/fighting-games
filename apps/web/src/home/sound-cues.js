@@ -58,6 +58,10 @@ export const CUES = {
     noise('bandpass', [3000, 500], { duration: 0.4, gain: 0.05, attack: 0.03 }),
     tone('sine', [784, 523], { duration: 0.3, gain: 0.04, attack: 0.02 }),
   ],
+  locked: [
+    tone('sine', [220, 180], { duration: 0.09, gain: 0.08, attack: 0.003 }),
+    tone('sine', [196, 150], { start: 0.1, duration: 0.12, gain: 0.07, attack: 0.003 }),
+  ],
   soundOn: [
     tone('sine', [660, 660], { duration: 0.12, gain: 0.07 }),
     tone('sine', [990, 990], { start: 0.07, duration: 0.18, gain: 0.06 }),

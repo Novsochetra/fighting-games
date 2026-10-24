@@ -73,13 +73,27 @@
   background: var(--color-button-surface);
 }
 
+/* A teaser's Play: frosted and still, since there is nothing to open yet. */
+.pill-button.is-unavailable {
+  color: var(--color-label-secondary);
+  cursor: default;
+  background: var(--color-glass);
+  box-shadow: var(--shadow-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  backdrop-filter: var(--blur-glass);
+}
+
+.pill-button.is-unavailable .icon {
+  display: none;
+}
+
 @media (hover: hover) {
   .glass-button:hover,
   .pill-button--glass:hover {
     background: var(--color-glass-hover);
   }
 
-  .pill-button--primary:hover,
+  .pill-button--primary:not(.is-unavailable):hover,
   .pill-button--surface:hover {
     filter: brightness(var(--dim-pressed));
   }

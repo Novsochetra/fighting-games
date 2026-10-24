@@ -1,3 +1,4 @@
+import { isPlayable, withComingSoon } from './coming-soon.js';
 import { createLibraryController } from './library-controller.js';
 import { toGameCards } from './view-models.js';
 
@@ -35,7 +36,7 @@ async function load(context) {
   state.selected = -1;
   view.showLoading();
   try {
-    state.cards = toGameCards(await loadGames());
+    state.cards = withComingSoon(toGameCards(await loadGames()));
   } catch {
     view.showError();
     return;
@@ -56,6 +57,13 @@ function step(context, delta, options = {}) {
   return select(context, index, { cue: true, ...options });
 }
 
+// A teaser shakes its head, like a locked app on a phone, and opens nothing.
+function refuse({ view, sound }, index) {
+  sound.play('locked');
+  view.carousel.nudge(index);
+  return false;
+}
+
 function open(context, index) {
   const { state, launcher, preferences, sound } = context;
   if (!isInRange(context, index) || launcher.isFlying()) {
@@ -63,6 +71,9 @@ function open(context, index) {
   }
   select(context, index);
   const card = state.cards[index];
+  if (!isPlayable(card)) {
+    return refuse(context, index);
+  }
   preferences.recordPlay(card.id);
   sound.play('launch');
   launcher.launch({ index, card });
@@ -82,7 +93,7 @@ function handleAction(context, action, { focus = null } = {}) {
 function toggleFavorite(context) {
   const { view, preferences, sound, library } = context;
   const card = selectedCard(context);
-  if (!card) {
+  if (!card || !isPlayable(card)) {
     return;
   }
   preferences.toggleFavorite(card.id);

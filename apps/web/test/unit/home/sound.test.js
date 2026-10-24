@@ -14,6 +14,7 @@ describe('CUES', () => {
         'favoriteOn',
         'land',
         'launch',
+        'locked',
         'move',
         'segment',
         'sheetClose',

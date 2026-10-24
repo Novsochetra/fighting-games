@@ -10,11 +10,21 @@ const attributes = (pairs) =>
     .map(([name, value]) => `${name}="${escapeHtml(value)}"`)
     .join(' ');
 
-export function renderArt({ bannerSrc, monogram }, { loading = 'eager' } = {}) {
-  if (bannerSrc === '') {
-    return `<span class="art art--monogram" aria-hidden="true">${escapeHtml(monogram)}</span>`;
+const SPARKLES =
+  '<svg class="art__glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3.5l1.6 4.9 4.9 1.6-4.9 1.6L10 16.5l-1.6-4.9L3.5 10l4.9-1.6zM18 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" /></svg>';
+
+function renderComingSoon({ title }) {
+  return `<span class="art art--soon" aria-hidden="true">${SPARKLES}<span class="art__label">${escapeHtml(title)}</span></span>`;
+}
+
+export function renderArt(card, { loading = 'eager' } = {}) {
+  if (card.isComingSoon) {
+    return renderComingSoon(card);
   }
-  const image = { class: 'art', src: bannerSrc, alt: '', loading, decoding: 'async' };
+  if (card.artSrc === '') {
+    return `<span class="art art--monogram" aria-hidden="true">${escapeHtml(card.monogram)}</span>`;
+  }
+  const image = { class: 'art', src: card.artSrc, alt: '', loading, decoding: 'async' };
   return `<img ${attributes(image)} draggable="false" />`;
 }
 
@@ -45,7 +55,8 @@ export function renderTile(card, index, order) {
 
 export function renderBackdrop(card, index) {
   if (card.bannerSrc === '') {
-    return `<div class="backdrop" data-game-index="${escapeHtml(index)}"></div>`;
+    const className = card.isComingSoon ? 'backdrop backdrop--soon' : 'backdrop';
+    return `<div class="${className}" data-game-index="${escapeHtml(index)}"></div>`;
   }
   const source = { media: NARROW_MEDIA, srcset: card.posterSrc };
   const image = { class: 'backdrop__img', src: card.bannerSrc, alt: '', decoding: 'async' };
