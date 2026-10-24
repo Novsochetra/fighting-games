@@ -7,5 +7,7 @@
   "players": "1 player",
   "year": 2026,
   "controls": ["Keyboard", "Gamepad", "Touch"],
-  "cover": "assets/icons/icon-512.png"
+  "cover": "assets/icons/icon-512.png",
+  "banner": "assets/ui/select/bg-landscape.png",
+  "poster": "assets/ui/select/bg-portrait.png"
 }

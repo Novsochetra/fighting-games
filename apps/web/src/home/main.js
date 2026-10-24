@@ -1,4 +1,6 @@
 import { bootHome } from './boot.js';
+import { createBrowserStorage } from './preferences.js';
+import { browserAudioContext } from './sound-player.js';
 
 bootHome({
   document,
@@ -9,4 +11,6 @@ bootHome({
     getGamepads: () => (navigator.getGamepads ? navigator.getGamepads() : []),
     requestFrame: (callback) => window.requestAnimationFrame(callback),
   },
+  storage: createBrowserStorage(window),
+  createAudioContext: () => browserAudioContext(window),
 });

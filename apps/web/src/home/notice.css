@@ -53,32 +53,6 @@
   color: var(--color-label);
 }
 
-.button {
-  padding: var(--space-2) var(--space-5);
-  font-family: inherit;
-  font-size: var(--font-size-apple-body);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--leading-apple-body);
-  color: var(--color-on-tint);
-  cursor: pointer;
-  background: var(--color-tint);
-  border: 0;
-  border-radius: var(--radius-pill);
-  transition:
-    scale var(--duration-fast) var(--easing-standard),
-    opacity var(--duration-fast) var(--easing-standard);
-}
-
-.button:active {
-  scale: 0.96;
-  opacity: 0.8;
-}
-
-.button:focus-visible {
-  outline: var(--border-width-ring) solid var(--color-focus-ring);
-  outline-offset: var(--border-width-ring);
-}
-
 @keyframes notice-reveal {
   from {
     opacity: 0;
@@ -92,9 +66,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .notice[data-tone='loading'],
-  .button {
+  .notice[data-tone='loading'] {
     animation: none;
-    transition: none;
   }
 }

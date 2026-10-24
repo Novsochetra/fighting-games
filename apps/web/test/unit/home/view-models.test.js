@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
+  firstSentence,
   formatGameCount,
+  metaLine,
   isRelativeUrl,
   monogramOf,
   toGameCard,
@@ -11,32 +13,74 @@ const apiGame = (overrides = {}) => ({
   id: 'steel-and-dust',
   title: 'Steel & Dust',
   tagline: 'Pixel brawler',
-  description: 'A side-scrolling pixel-art brawler.',
+  description: 'A side-scrolling pixel-art brawler. Pick a hero and fight.',
   genre: "Beat 'em up",
   players: '1 player',
+  year: 2026,
   controls: ['Keyboard', 'Gamepad', 'Touch'],
   cover: 'games/steel-and-dust/assets/icons/icon-512.png',
+  banner: 'games/steel-and-dust/assets/banner.png',
+  poster: 'games/steel-and-dust/assets/poster.png',
   path: 'games/steel-and-dust/',
   ...overrides,
 });
 
 describe('toGameCard', () => {
-  it('maps an API game to what its icon shows', () => {
+  it('maps an API game to what its card, tile and details show', () => {
     expect(toGameCard(apiGame())).toEqual({
       id: 'steel-and-dust',
       title: 'Steel & Dust',
       monogram: 'S',
       href: 'games/steel-and-dust/',
       coverSrc: 'games/steel-and-dust/assets/icons/icon-512.png',
+      bannerSrc: 'games/steel-and-dust/assets/banner.png',
+      posterSrc: 'games/steel-and-dust/assets/poster.png',
+      genre: "Beat 'em up",
+      meta: "Beat 'em up · 1 player · 2026",
+      summary: 'A side-scrolling pixel-art brawler.',
+      description: 'A side-scrolling pixel-art brawler. Pick a hero and fight.',
+      controls: ['Keyboard', 'Gamepad', 'Touch'],
     });
   });
 
-  it('leaves the cover empty when the game has none', () => {
-    expect(toGameCard({ title: 'Bare', path: 'games/bare/' }).coverSrc).toBe('');
+  it('falls back from the poster to the banner to the cover', () => {
+    const noPoster = toGameCard(apiGame({ poster: undefined }));
+    expect(noPoster.posterSrc).toBe('games/steel-and-dust/assets/banner.png');
+    const coverOnly = toGameCard(apiGame({ banner: undefined, poster: undefined }));
+    expect(coverOnly.bannerSrc).toBe('games/steel-and-dust/assets/icons/icon-512.png');
+    expect(coverOnly.posterSrc).toBe(coverOnly.bannerSrc);
   });
 
-  it('drops a cover that is not a plain relative URL', () => {
-    expect(toGameCard(apiGame({ cover: 'javascript:alert(1)' })).coverSrc).toBe('');
+  it('leaves the art empty when the game has none', () => {
+    const bare = toGameCard({ title: 'Bare', path: 'games/bare/' });
+    expect([bare.coverSrc, bare.bannerSrc, bare.posterSrc]).toEqual(['', '', '']);
+    expect(bare.controls).toEqual([]);
+    expect(bare.meta).toBe('');
+  });
+
+  it('drops art that is not a plain relative URL', () => {
+    const card = toGameCard(apiGame({ cover: 'javascript:alert(1)', banner: '//evil/x.png' }));
+    expect(card.coverSrc).toBe('');
+    expect(card.bannerSrc).toBe('');
+  });
+});
+
+describe('firstSentence and metaLine', () => {
+  it.each([
+    ['One. Two.', 'One.'],
+    ['Wait! More.', 'Wait!'],
+    ['Version 1.5 is out. Yes.', 'Version 1.5 is out.'],
+    ['  no stop at all ', 'no stop at all'],
+    [undefined, ''],
+  ])('takes the first sentence of %j', (text, expected) => {
+    expect(firstSentence(text)).toBe(expected);
+  });
+
+  it('joins genre, players and year, skipping what is missing', () => {
+    expect(metaLine({ genre: 'Puzzle', players: '2 players', year: 1991 })).toBe(
+      'Puzzle · 2 players · 1991',
+    );
+    expect(metaLine({ genre: 'Puzzle', year: '1991' })).toBe('Puzzle');
   });
 });
 

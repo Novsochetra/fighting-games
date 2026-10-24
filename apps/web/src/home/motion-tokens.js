@@ -9,16 +9,34 @@ export function parseDuration(value) {
   return match[2] === 's' ? amount * 1000 : amount;
 }
 
-// The launch reads its timing from the home page's tokens like the CSS does; without them it does not
-// animate.
-export function readLaunchTiming(document) {
+export function readToken(document, name) {
   const style = document.defaultView.getComputedStyle(document.documentElement);
+  return style.getPropertyValue(name).trim();
+}
+
+export const readDuration = (document, name) => parseDuration(readToken(document, name));
+
+// Script-driven motion reads its timing from the home page's tokens like the CSS does; without them it
+// does not animate.
+export function readTiming(document, { duration, easing }) {
   return {
-    duration: parseDuration(style.getPropertyValue('--duration-launch')),
-    easing: style.getPropertyValue('--easing-launch').trim() || 'linear',
+    duration: readDuration(document, duration),
+    easing: readToken(document, easing) || 'linear',
   };
 }
 
+export const readLaunchTiming = (document) =>
+  readTiming(document, { duration: '--duration-launch', easing: '--easing-launch' });
+
 export function prefersReducedMotion(window) {
   return Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
+}
+
+// Plays keyframes when the visitor allows motion and the tokens give them a length.
+export function animateWith(element, keyframes, timing) {
+  const window = element.ownerDocument.defaultView;
+  if (timing.duration <= 0 || prefersReducedMotion(window) || !element.animate) {
+    return null;
+  }
+  return element.animate(keyframes, timing);
 }

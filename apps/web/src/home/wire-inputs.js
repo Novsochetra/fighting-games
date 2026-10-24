@@ -1,66 +1,31 @@
 import { createGamepadPoller } from './gamepad-poller.js';
-import { actionForKey, isFormControl, isPlainClick } from './input-actions.js';
-import { trackInputModality } from './input-modality.js';
+import { wireCarousel } from './wire-carousel.js';
+import { wireControls, wireSoundToggle } from './wire-controls.js';
+import { wireKeys } from './wire-keys.js';
 
-function gameIndexOf(target) {
-  const link = target?.closest?.('[data-game-index]');
-  return link ? Number(link.dataset.gameIndex) : -1;
-}
-
-function wireKeyboard({ document, controller, modality, signal }) {
-  const onKeyDown = (event) => {
-    const action = actionForKey(event);
-    if (!action || isFormControl(event.target)) {
-      return;
-    }
-    modality.useKeys();
-    if (controller.handleAction(action)) {
-      event.preventDefault();
-    }
-  };
-  document.addEventListener('keydown', onKeyDown, { signal });
-}
-
-function wirePointer({ grid, controller, modality, signal }) {
-  const selectHovered = (event) => {
-    if (!modality.isKeys()) {
-      controller.select(gameIndexOf(event.target));
-    }
-  };
-  const openClicked = (event) => {
-    const index = gameIndexOf(event.target);
-    if (index >= 0 && isPlainClick(event)) {
-      event.preventDefault();
-      controller.open(index);
-    }
-  };
-  grid.addEventListener('pointerover', selectHovered, { signal });
-  grid.addEventListener('focusin', (event) => controller.select(gameIndexOf(event.target)), {
-    signal,
-  });
-  grid.addEventListener('click', openClicked, { signal });
-  // iOS Safari shows :active, the pressed look of an icon, only where something listens for touches.
-  grid.addEventListener('touchstart', () => {}, { signal, passive: true });
-}
-
-function wireGamepads({ gamepads, controller, modality, signal }) {
+function wireGamepads({ gamepads, controller, isBlocked, signal }) {
   const poller = createGamepadPoller({
     getGamepads: gamepads.getGamepads,
     requestFrame: gamepads.requestFrame,
     onAction: (action) => {
-      modality.useKeys();
-      controller.handleAction(action);
+      if (!isBlocked()) {
+        controller.handleAction(action);
+      }
     },
   });
   gamepads.events.addEventListener('gamepadconnected', () => poller.start(), { signal });
   poller.start();
 }
 
-export function wireInputs({ document, grid, controller, gamepads, signal }) {
-  const modality = trackInputModality({ document, signal });
-  wireKeyboard({ document, controller, modality, signal });
-  wirePointer({ grid, controller, modality, signal });
+export function wireInputs({ document, view, controller, sheet, gamepads, settings, signal }) {
+  const isBlocked = sheet.isOpen;
+  wireKeys({ document, controller, isBlocked, signal });
+  wireCarousel({ elements: view.elements, controller, signal });
+  wireControls({ view, controller, sheet, signal });
+  wireSoundToggle({ button: document.getElementById('sound-toggle'), ...settings, signal });
+  // iOS Safari shows :active, the pressed look of a card, only where something listens for touches.
+  document.addEventListener('touchstart', () => {}, { signal, passive: true });
   if (gamepads) {
-    wireGamepads({ gamepads, controller, modality, signal });
+    wireGamepads({ gamepads, controller, isBlocked, signal });
   }
 }

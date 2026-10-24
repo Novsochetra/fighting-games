@@ -9,9 +9,8 @@
 }
 
 html {
-  color-scheme: light dark;
+  color-scheme: dark;
   background: var(--color-launcher-background);
-  scroll-padding-block: var(--space-12);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -23,64 +22,37 @@ body {
   font-size: var(--font-size-apple-body);
   line-height: var(--leading-apple-body);
   color: var(--color-label);
+  background: var(--color-launcher-background);
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: var(--color-clear);
 }
 
 .home {
-  --gutter: var(--space-5);
-
   position: relative;
   display: flex;
   flex-direction: column;
-  inline-size: 100%;
-  max-inline-size: var(--layout-launcher-max-width);
   min-block-size: 100dvh;
-  margin-inline: auto;
-  padding-block: env(safe-area-inset-top) max(var(--space-8), env(safe-area-inset-bottom));
-  padding-inline: max(var(--gutter), env(safe-area-inset-left))
-    max(var(--gutter), env(safe-area-inset-right));
 }
 
-.masthead {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  padding-block: var(--space-6) var(--space-8);
+.icon {
+  display: block;
+  inline-size: var(--size-icon);
+  block-size: var(--size-icon);
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: var(--size-stroke-icon);
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.masthead__title,
-.masthead__meta {
-  margin: 0;
+.icon--bold {
+  stroke-width: var(--size-stroke-bold);
 }
 
-.masthead__title {
-  font-size: var(--font-size-apple-large-title);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--leading-apple-large-title);
-}
-
-.masthead__meta {
-  font-size: var(--font-size-apple-subheadline);
-  line-height: var(--leading-apple-subheadline);
-  font-variant-numeric: tabular-nums;
-  color: var(--color-label-muted);
-}
-
-.springboard {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-}
-
-@media (min-width: 40rem) {
-  .home {
-    --gutter: var(--space-12);
-  }
-
-  .masthead {
-    padding-block: var(--space-12) var(--space-10);
-  }
+.icon--solid,
+.icon__fill {
+  fill: currentcolor;
+  stroke: none;
 }
 
 /* Safari and every browser on iOS have SF Pro, Apple's own face, which Inter stands in for elsewhere;

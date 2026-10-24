@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Retro Arcade</title>
     <meta name="description" content="Pick a game and play it in your browser." />
-    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="dark" />
     <link rel="icon" href="data:," />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,8 +16,13 @@
     />
     <link rel="stylesheet" href="src/home/tokens.css" />
     <link rel="stylesheet" href="src/home/page.css" />
-    <link rel="stylesheet" href="src/home/app-grid.css" />
-    <link rel="stylesheet" href="src/home/app-icon.css" />
+    <link rel="stylesheet" href="src/home/buttons.css" />
+    <link rel="stylesheet" href="src/home/hero.css" />
+    <link rel="stylesheet" href="src/home/carousel.css" />
+    <link rel="stylesheet" href="src/home/spotlight.css" />
+    <link rel="stylesheet" href="src/home/library.css" />
+    <link rel="stylesheet" href="src/home/segmented.css" />
+    <link rel="stylesheet" href="src/home/sheet.css" />
     <link rel="stylesheet" href="src/home/notice.css" />
     <link rel="stylesheet" href="src/home/hints.css" />
     <link rel="stylesheet" href="src/home/launch.css" />
@@ -28,28 +33,182 @@
   </head>
   <body>
     <div class="home" id="home">
-      <header class="masthead">
-        <h1 class="masthead__title" id="home-title">Retro Arcade</h1>
-        <p class="masthead__meta" id="game-count"></p>
-      </header>
+      <section class="hero" id="hero" aria-labelledby="home-title">
+        <div class="hero__backdrops" id="backdrops" aria-hidden="true"></div>
+        <div class="hero__scrim" aria-hidden="true"></div>
 
-      <main class="springboard">
-        <div class="notice" id="notice" data-tone="loading">
-          <p class="notice__message" id="status" role="status">Loading games…</p>
-          <button class="button" id="retry" type="button" hidden>Try again</button>
+        <div class="hero__content">
+          <header class="topbar">
+            <h1 class="topbar__title" id="home-title">Retro Arcade</h1>
+            <button
+              class="glass-button"
+              id="sound-toggle"
+              type="button"
+              aria-pressed="true"
+              aria-label="Sound effects"
+            >
+              <svg class="icon sound-on" viewBox="0 0 24 24" aria-hidden="true">
+                <path class="icon__fill" d="M2.5 9h3.8L11.5 4.8v14.4L6.3 15H2.5z" />
+                <path d="M15.2 8.6a5 5 0 0 1 0 6.8M18.4 5.6a9.2 9.2 0 0 1 0 12.8" />
+              </svg>
+              <svg class="icon sound-off" viewBox="0 0 24 24" aria-hidden="true">
+                <path class="icon__fill" d="M2.5 9h3.8L11.5 4.8v14.4L6.3 15H2.5z" />
+                <path d="M15.5 9.2l5.6 5.6M21.1 9.2l-5.6 5.6" />
+              </svg>
+            </button>
+          </header>
+
+          <div class="notice" id="notice" data-tone="loading">
+            <p class="notice__message" id="status" role="status">Loading games…</p>
+            <button class="pill-button pill-button--glass" id="retry" type="button" hidden>
+              Try again
+            </button>
+          </div>
+          <noscript>
+            <p class="notice notice__message">Turn on JavaScript to see the games.</p>
+          </noscript>
+
+          <div class="stage" id="stage" hidden>
+            <div class="stage__heading">
+              <p class="stage__prompt">Choose your game</p>
+              <div class="pager" id="pager" aria-hidden="true"></div>
+            </div>
+
+            <div
+              class="carousel"
+              id="carousel"
+              role="group"
+              aria-roledescription="carousel"
+              aria-label="Games"
+            >
+              <div class="carousel__track" id="carousel-track"></div>
+              <button
+                class="glass-button carousel__arrow carousel__arrow--previous"
+                id="previous"
+                type="button"
+                aria-label="Previous game"
+              >
+                <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M15 5l-7 7 7 7" />
+                </svg>
+              </button>
+              <button
+                class="glass-button carousel__arrow carousel__arrow--next"
+                id="next"
+                type="button"
+                aria-label="Next game"
+              >
+                <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="spotlight">
+              <div class="spotlight__text" id="spotlight-text" aria-live="polite">
+                <h2 class="spotlight__title" id="spotlight-title"></h2>
+                <p class="spotlight__meta" id="spotlight-meta"></p>
+                <p class="spotlight__summary" id="spotlight-summary"></p>
+              </div>
+              <div class="spotlight__actions">
+                <a class="pill-button pill-button--primary" id="play" href="./">
+                  <svg class="icon icon--solid" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M7 3.8c0-.9 1-1.5 1.8-1l12 7.4c.8.5.8 1.6 0 2l-12 7.5c-.8.5-1.8-.1-1.8-1z"
+                    />
+                  </svg>
+                  Play
+                </a>
+                <button
+                  class="pill-button pill-button--glass"
+                  id="details-open"
+                  type="button"
+                  aria-haspopup="dialog"
+                >
+                  Details
+                </button>
+                <button
+                  class="glass-button glass-button--large favorite"
+                  id="favorite"
+                  type="button"
+                  aria-pressed="false"
+                  aria-label="Favorite"
+                >
+                  <svg class="icon favorite__heart" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <noscript>
-          <p class="notice notice__message">Turn on JavaScript to see the games.</p>
-        </noscript>
+      </section>
 
-        <ul class="app-grid" id="app-grid" aria-labelledby="home-title" hidden></ul>
-      </main>
+      <section class="library" id="library" aria-labelledby="library-title" hidden>
+        <header class="library__header">
+          <div class="library__heading">
+            <h2 class="library__title" id="library-title">All Games</h2>
+            <p class="library__count" id="library-count"></p>
+          </div>
+          <div class="segmented" id="filters" role="group" aria-label="Filter games">
+            <span class="segmented__thumb" aria-hidden="true"></span>
+            <span class="segmented__separator" aria-hidden="true"></span>
+            <span class="segmented__separator" aria-hidden="true"></span>
+            <button class="segmented__option" type="button" data-filter="all" aria-pressed="true">
+              All
+            </button>
+            <button class="segmented__option" type="button" data-filter="recent">Recent</button>
+            <button class="segmented__option" type="button" data-filter="favorites">
+              Favorites
+            </button>
+          </div>
+        </header>
 
-      <footer class="hints" aria-label="Controls">
-        <p class="hints__item"><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> Move</p>
-        <p class="hints__item"><kbd>Enter</kbd> Open</p>
-        <p class="hints__item"><kbd>D-pad</kbd><kbd>A</kbd> Gamepad</p>
-      </footer>
+        <ul class="library__grid" id="library-grid" aria-labelledby="library-title"></ul>
+        <p class="library__empty" id="library-empty" hidden></p>
+        <div class="library__more">
+          <button class="pill-button pill-button--surface" id="show-more" type="button" hidden>
+            Show more games
+          </button>
+          <p class="library__end" id="library-end" hidden>You have seen every game</p>
+        </div>
+
+        <footer class="hints" aria-label="Controls">
+          <p class="hints__item"><kbd>←</kbd><kbd>→</kbd> Browse</p>
+          <p class="hints__item"><kbd>Enter</kbd> Play</p>
+          <p class="hints__item"><kbd>D-pad</kbd><kbd>A</kbd> Gamepad</p>
+        </footer>
+      </section>
     </div>
+
+    <dialog class="sheet" id="details" aria-labelledby="details-title">
+      <div class="sheet__media">
+        <img class="sheet__art" id="details-art" alt="" />
+      </div>
+      <button class="glass-button sheet__close" id="details-close" type="button" aria-label="Close">
+        <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6.5 6.5l11 11M17.5 6.5l-11 11" />
+        </svg>
+      </button>
+      <div class="sheet__body">
+        <h2 class="sheet__title" id="details-title"></h2>
+        <p class="sheet__meta" id="details-meta"></p>
+        <p class="sheet__description" id="details-description"></p>
+        <h3 class="sheet__label" id="details-controls-label">Controls</h3>
+        <ul
+          class="sheet__chips"
+          id="details-controls"
+          aria-labelledby="details-controls-label"
+        ></ul>
+        <a class="pill-button pill-button--primary sheet__play" id="details-play" href="./">
+          <svg class="icon icon--solid" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 3.8c0-.9 1-1.5 1.8-1l12 7.4c.8.5.8 1.6 0 2l-12 7.5c-.8.5-1.8-.1-1.8-1z" />
+          </svg>
+          Play
+        </a>
+      </div>
+    </dialog>
   </body>
 </html>

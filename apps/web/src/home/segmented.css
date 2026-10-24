@@ -1,0 +1,86 @@
+/* iOS's segmented control: a thumb slides under the chosen option, and the hairlines beside it hide. */
+.segmented {
+  --segment: 0;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  inline-size: min(var(--size-segment-width), 100%);
+  block-size: var(--size-segment-height);
+  padding: var(--size-segment-inset);
+  background: var(--color-segment-track);
+  border-radius: var(--radius-segment);
+}
+
+.segmented__thumb {
+  position: absolute;
+  inset-block: var(--size-segment-inset);
+  inset-inline-start: var(--size-segment-inset);
+  inline-size: calc((100% - 2 * var(--size-segment-inset)) / 3);
+  background: var(--color-segment-thumb);
+  border-radius: var(--radius-segment-thumb);
+  box-shadow: var(--shadow-segment-thumb);
+  transform: translateX(calc(var(--segment) * 100%));
+  transition: transform var(--duration-segment) var(--easing-segment);
+}
+
+.segmented__separator {
+  position: absolute;
+  inset-block-start: calc(50% - var(--size-separator-height) / 2);
+  inline-size: var(--border-width-hairline);
+  block-size: var(--size-separator-height);
+  background: var(--color-segment-separator);
+  transition: opacity var(--duration-normal) var(--easing-standard);
+}
+
+.segmented__separator:nth-of-type(2) {
+  inset-inline-start: calc(var(--size-segment-inset) + (100% - 2 * var(--size-segment-inset)) / 3);
+}
+
+.segmented__separator:nth-of-type(3) {
+  inset-inline-start: calc(
+    var(--size-segment-inset) + (100% - 2 * var(--size-segment-inset)) * 2 / 3
+  );
+}
+
+.segmented[data-segment='0'] .segmented__separator:nth-of-type(2),
+.segmented[data-segment='1'] .segmented__separator,
+.segmented[data-segment='2'] .segmented__separator:nth-of-type(3) {
+  opacity: 0;
+}
+
+.segmented__option {
+  position: relative;
+  padding: 0;
+  font-family: inherit;
+  font-size: var(--font-size-segment);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-label);
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-segment-thumb);
+  outline: none;
+  transition: opacity var(--duration-fast) var(--easing-standard);
+}
+
+.segmented__option[aria-pressed='true'] {
+  font-weight: var(--font-weight-semibold);
+}
+
+.segmented__option:active {
+  opacity: var(--dim-pressed);
+}
+
+.segmented__option:focus-visible {
+  outline: var(--border-width-ring) solid var(--color-focus-ring);
+  outline-offset: calc(-1 * var(--border-width-ring));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segmented__thumb,
+  .segmented__separator {
+    transition: none;
+  }
+}

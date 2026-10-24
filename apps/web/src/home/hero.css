@@ -1,0 +1,149 @@
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-block-size: clamp(var(--layout-hero-min-height), 100svh, var(--layout-hero-max-height));
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero__backdrops,
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: var(--layer-backdrop);
+}
+
+/* One slow zoom on the whole stack, so a new painting fades in mid-zoom instead of jumping back. */
+.hero__backdrops {
+  animation: ken-burns var(--duration-ken-burns) var(--easing-gentle) infinite alternate;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--duration-crossfade) var(--easing-gentle);
+}
+
+.backdrop.is-active {
+  opacity: 1;
+}
+
+.backdrop__img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+
+.hero__scrim {
+  background: linear-gradient(
+    to bottom,
+    var(--color-scrim) 0%,
+    var(--color-scrim) 72%,
+    var(--color-scrim-floor) 100%
+  );
+}
+
+.hero__content {
+  position: relative;
+  z-index: var(--layer-content);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-block: env(safe-area-inset-top) 0;
+}
+
+.topbar {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) max(var(--space-gutter), env(safe-area-inset-right)) var(--space-4)
+    max(var(--space-gutter), env(safe-area-inset-left));
+}
+
+.topbar__title {
+  margin: 0;
+  font-size: var(--font-size-apple-title-3);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-apple-title);
+  letter-spacing: var(--tracking-brand);
+}
+
+#sound-toggle[aria-pressed='true'] .sound-off,
+#sound-toggle[aria-pressed='false'] .sound-on {
+  display: none;
+}
+
+.stage {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  animation: stage-enter var(--duration-enter) var(--easing-spring) backwards;
+}
+
+.stage__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: center;
+  padding-block-start: var(--space-1);
+}
+
+.stage__prompt {
+  margin: 0;
+  font-size: var(--font-size-apple-subheadline);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-label-secondary);
+}
+
+.pager {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  block-size: var(--size-dot);
+}
+
+.pager__dot {
+  display: block;
+  inline-size: var(--size-dot);
+  block-size: var(--size-dot);
+  background: var(--color-dot);
+  border-radius: var(--radius-pill);
+  transition:
+    inline-size var(--duration-dot) var(--easing-spring),
+    background-color var(--duration-dot) var(--easing-standard);
+}
+
+.pager__dot.is-active {
+  inline-size: var(--size-dot-active);
+  background: var(--color-dot-active);
+}
+
+@keyframes ken-burns {
+  to {
+    scale: var(--scale-ken-burns);
+  }
+}
+
+@keyframes stage-enter {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__backdrops,
+  .stage {
+    animation: none;
+  }
+
+  .backdrop,
+  .pager__dot {
+    transition: none;
+  }
+}
