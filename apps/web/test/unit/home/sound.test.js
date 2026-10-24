@@ -16,8 +16,7 @@ describe('CUES', () => {
         'land',
         'launch',
         'locked',
-        'move',
-        'segment',
+        'switch',
         'sheetClose',
         'sheetOpen',
         'soundOn',
@@ -35,8 +34,8 @@ describe('CUES', () => {
     }
   });
 
-  it('keeps the moving tick under a fifth of a second, so holding an arrow stays crisp', () => {
-    const longest = Math.max(...CUES.move.map((voice) => voice.start + voice.duration));
+  it('keeps the switch click under a fifth of a second, so holding an arrow stays crisp', () => {
+    const longest = Math.max(...CUES.switch.map((voice) => voice.start + voice.duration));
     expect(longest).toBeLessThan(0.2);
   });
 });
@@ -74,8 +73,8 @@ describe('createSoundPlayer', () => {
   it('makes no audio context until the first cue', () => {
     const { createContext, player } = setup();
     expect(createContext).not.toHaveBeenCalled();
-    expect(player.play('move')).toBe(true);
-    player.play('move');
+    expect(player.play('switch')).toBe(true);
+    player.play('switch');
     expect(createContext).toHaveBeenCalledOnce();
   });
 
@@ -88,19 +87,19 @@ describe('createSoundPlayer', () => {
 
   it('stays silent when sound is off or the cue is unknown', () => {
     const muted = setup({ enabled: false });
-    expect(muted.player.play('move')).toBe(false);
+    expect(muted.player.play('switch')).toBe(false);
     expect(muted.createContext).not.toHaveBeenCalled();
     expect(setup().player.play('nope')).toBe(false);
   });
 
   it('wakes a context the browser suspended', () => {
     const { context, player } = setup({ state: 'suspended' });
-    player.play('move');
+    player.play('switch');
     expect(context.resume).toHaveBeenCalled();
   });
 
   it('does nothing in a browser without Web Audio', () => {
     const player = createSoundPlayer({ createContext: () => null, isEnabled: () => true });
-    expect(player.play('move')).toBe(false);
+    expect(player.play('switch')).toBe(false);
   });
 });

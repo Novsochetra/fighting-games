@@ -75,7 +75,7 @@ describe('createHomeController', () => {
       expect.objectContaining({ id: 'coming-soon-2' }),
       { animate: true, focus: 'carousel' },
     );
-    expect(sound.play).toHaveBeenLastCalledWith('move');
+    expect(sound.play).toHaveBeenLastCalledWith('switch');
     controller.handleAction('right');
     expect(controller.selectedIndex()).toBe(0);
   });
@@ -161,7 +161,7 @@ describe('createHomeController', () => {
     expect(lastRender(view)[1]).toBe('all');
     expect(controller.setFilter('favorites')).toBe(true);
     expect(lastRender(view)).toEqual([expect.objectContaining({ entries: [] }), 'favorites']);
-    expect(sound.play).toHaveBeenLastCalledWith('segment');
+    expect(sound.play).toHaveBeenLastCalledWith('switch');
     expect(controller.setFilter('favorites')).toBe(false);
     expect(controller.setFilter('playable')).toBe(false);
   });
@@ -180,7 +180,7 @@ describe('createHomeController', () => {
     controller.pickTile(2);
     expect(controller.selectedIndex()).toBe(2);
     expect(view.revealHero).toHaveBeenCalledOnce();
-    expect(sound.play).toHaveBeenLastCalledWith('move');
+    expect(sound.play).toHaveBeenLastCalledWith('switch');
   });
 });
 

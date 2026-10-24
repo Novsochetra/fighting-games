@@ -25,11 +25,6 @@ const noise = (filter, frequency, { start = 0, duration, gain, attack = 0.01, re
 const LAUNCH_CHIME = [523.25, 659.25, 783.99, 1046.5];
 
 export const CUES = {
-  move: [
-    tone('triangle', [2200, 1400], { duration: 0.045, gain: 0.1, attack: 0.001 }),
-    tone('sine', [880, 660], { duration: 0.07, gain: 0.05, attack: 0.002 }),
-    noise('bandpass', [1800, 900], { duration: 0.16, gain: 0.03, resonance: 1.2 }),
-  ],
   launch: [
     noise('bandpass', [500, 4200], { duration: 0.5, gain: 0.07, attack: 0.18, resonance: 0.9 }),
     ...LAUNCH_CHIME.map((pitch, i) =>
@@ -45,7 +40,8 @@ export const CUES = {
     tone('sine', [1480, 1480], { start: 0.06, duration: 0.2, gain: 0.04 }),
   ],
   favoriteOff: [tone('sine', [880, 520], { duration: 0.12, gain: 0.07 })],
-  segment: [
+  // One crisp click for every switch: a card moving into the center, or a segment of the filter.
+  switch: [
     tone('triangle', [1500, 1100], { duration: 0.035, gain: 0.07, attack: 0.001 }),
     tone('sine', [600, 600], { duration: 0.04, gain: 0.03 }),
   ],

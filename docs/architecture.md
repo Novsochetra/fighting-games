@@ -108,9 +108,9 @@ flies from the carousel card, or from the library tile when the carousel has scr
 shrinks back into the card and the Recent list catches up. With reduced motion the game opens at
 once, and the zoom, the slides and the rises are off.
 
-Every interaction has a short sound (`sound-cues.js`): a soft tick as the carousel moves, a rising C
-major chime and a breath of noise on Play, a pop for the heart, a click for the segmented control,
-and airy sweeps for the sheet and for coming back. They are synthesized with Web Audio
+Every interaction has a short sound (`sound-cues.js`): one crisp click, `switch`, both as a card
+moves into the center and as the segmented control changes, a rising C major chime and a breath of
+noise on Play, a pop for the heart, and airy sweeps for the sheet and for coming back. They are synthesized with Web Audio
 (`sound-synth.js`), so the home page ships no audio files; `sound-player.js` makes the audio context
 on the first cue, which always follows a tap, click or key press as browsers require, and plays
 everything through one master gain and a limiter. The speaker button in the top bar turns them off.

@@ -23,7 +23,7 @@ export function createLibraryController({ view, preferences, sound, selectedInde
     if (!isFilter(filter) || filter === state.filter) {
       return false;
     }
-    sound.play('segment');
+    sound.play('switch');
     update({ filter, expanded: false });
     return true;
   }

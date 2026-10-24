@@ -39,9 +39,9 @@ describe('sound effects', () => {
   it('ticks as the carousel moves, and plays the launch chime on Play', async () => {
     const { context } = await setup();
     press('ArrowRight');
-    expect(context.started).toHaveLength(CUES.move.length);
+    expect(context.started).toHaveLength(CUES.switch.length);
     click(byId('play'));
-    expect(context.started).toHaveLength(CUES.move.length + CUES.launch.length);
+    expect(context.started).toHaveLength(CUES.switch.length + CUES.launch.length);
   });
 
   it('plays a cue for the heart, the segmented control and the details sheet', async () => {
@@ -50,7 +50,7 @@ describe('sound effects', () => {
     click(document.querySelector('[data-filter="recent"]'));
     click(byId('details-open'));
     click(byId('details-close'));
-    const expected = ['favoriteOn', 'segment', 'sheetOpen', 'sheetClose'];
+    const expected = ['favoriteOn', 'switch', 'sheetOpen', 'sheetClose'];
     const voices = expected.reduce((sum, name) => sum + CUES[name].length, 0);
     expect(context.started).toHaveLength(voices);
   });

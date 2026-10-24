@@ -19,7 +19,7 @@ function select(context, index, { cue = false, focus = null } = {}) {
   view.select(index, state.cards[index], { animate: isChange && !isFirst, focus });
   view.spotlight.setFavorite(preferences.isFavorite(state.cards[index].id));
   if (isChange && cue) {
-    sound.play('move');
+    sound.play('switch');
   }
   return true;
 }
