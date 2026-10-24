@@ -3,6 +3,7 @@ import { SCORE_BOX } from '../../../src/render/hud/score.js';
 import { WEAPON_BOX } from '../../../src/render/hud/top-bar.js';
 import { renderFrame } from '../../../src/render/render-frame.js';
 import { createLateView } from '../../support/late-images.js';
+import { stampCalls } from '../../support/stamp-calls.js';
 import { createPlayingGame, runTicks } from '../../support/test-game.js';
 
 const framesDrawn = (log) =>
@@ -22,7 +23,7 @@ function fightFrame({ hudFrames }) {
   images.loadWhere((src) => hudFrames === 'loaded' || !isHudFrame(src));
   log.length = 0;
   renderFrame(game, view);
-  return log;
+  return [...log, ...stampCalls(view)];
 }
 
 describe('the carved frames on the HUD', () => {
