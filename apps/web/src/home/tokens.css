@@ -160,8 +160,6 @@
 
   --dim-pressed: 0.85;
   --dim-strength: 1;
-  --filter-backdrop: none;
-  --scale-backdrop: 1;
   --dimming-hover-lift: 0.18;
   --scale-pressed: 0.96;
   --scale-tile-hover: 1.03;
@@ -207,9 +205,8 @@
   --layer-launch: 200;
 }
 
-/* Apple's light appearance. The painting behind the cards is softened and washed with white, so
-   dark type reads over it and the crisp card in front stands out; side cards dim less, since dark
-   cards look heavy on white. */
+/* Apple's light appearance. The painting behind the cards stays sharp under a light wash of white,
+   so dark type reads over it; side cards dim less, since dark cards look heavy on white. */
 :root[data-appearance='light'] {
   --color-launcher-background: var(--color-white);
   --color-launcher-surface: var(--color-apple-gray-6-light);
@@ -228,7 +225,7 @@
   --color-button-primary: var(--color-black);
   --color-on-button-primary: var(--color-white);
   --color-button-surface: var(--color-apple-gray-6-light);
-  --color-scrim: rgb(255 255 255 / 48%);
+  --color-scrim: rgb(255 255 255 / 38%);
   --color-card-blank: var(--color-apple-gray-5-light);
   --color-card-edge: rgb(0 0 0 / 8%);
   --color-card-monogram-top: var(--color-apple-gray-4-light);
@@ -253,6 +250,4 @@
   --shadow-sheet: 0 24px 64px rgb(0 0 0 / 22%);
 
   --dim-strength: 0.4;
-  --filter-backdrop: blur(10px) saturate(140%);
-  --scale-backdrop: 1.12;
 }

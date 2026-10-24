@@ -44,9 +44,6 @@
   block-size: 100%;
   object-fit: cover;
   image-rendering: pixelated;
-  filter: var(--filter-backdrop);
-  /* A blur pulls the edge in; the softened painting is drawn larger so that edge stays off screen. */
-  scale: var(--scale-backdrop);
 }
 
 .hero__scrim {
