@@ -61,3 +61,9 @@ export function resumeAudio(audio) {
     audio.context.resume().catch(() => {});
   }
 }
+
+export function suspendAudio(audio) {
+  if (audio.context && audio.context.state === 'running') {
+    audio.context.suspend().catch(() => {});
+  }
+}

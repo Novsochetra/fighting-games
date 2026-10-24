@@ -44,7 +44,7 @@ describe('a frame on a phone', () => {
     expect(scene).toMatch(/\.menu-scene \{[^}]*background: url\([^)]*\)[^;]*var\(--color-night\);/);
     expect(scene).toMatch(/#menus\[data-scene='on'\] \.menu-scene \{\s*opacity: 1;/);
     expect(source('src/main.js')).toMatch(
-      /if \(!screenCovered\(\)\) \{\s*renderFrame\(game, view\);/,
+      /if \(!screenCovered\(\)\) \{\s*drawChangedFrame\(game, view\);/,
     );
   });
 });

@@ -20,6 +20,7 @@ export function createView({ context, createCanvas, createImage, baseUrl }) {
     hudFrames: loadHudFrames({ createImage, baseUrl }),
     shownScore: 0,
     loadingFrames: 0,
+    drawnTick: null,
     vignette: null,
     diamonds: new Map(),
     mosaic: null,

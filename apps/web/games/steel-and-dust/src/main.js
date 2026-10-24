@@ -6,7 +6,7 @@ import { installInput } from './boot/install-input.js';
 import { installUi } from './boot/install-ui.js';
 import { TICK_MS } from './config.js';
 import { createView } from './render/create-view.js';
-import { renderFrame } from './render/render-frame.js';
+import { drawChangedFrame } from './render/draw-changed-frame.js';
 import { missionWait, sceneLoaded } from './render/scene-loaded.js';
 import { canAffordHeavy, ultReady } from './sim/combat/ult-bar.js';
 import { beginTick, runTick } from './sim/tick.js';
@@ -72,7 +72,7 @@ function frame(now) {
   // the menus follow this frame's ticks first, so the frame play starts on is drawn
   syncDom();
   if (!screenCovered()) {
-    renderFrame(game, view);
+    drawChangedFrame(game, view);
   }
   bootLoading.loader.update(now, missionWait(view, game));
   titleScene.frame(now);
