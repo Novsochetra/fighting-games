@@ -23,10 +23,12 @@
     <link rel="stylesheet" href="../src/home/buttons.css" />
     <link rel="stylesheet" href="../src/home/segmented.css" />
     <link rel="stylesheet" href="../src/home/notice.css" />
+    <link rel="stylesheet" href="../src/home/sheet.css" />
     <link rel="stylesheet" href="../src/supporters/supporters.css" />
     <link rel="stylesheet" href="../src/supporters/avatar.css" />
     <link rel="stylesheet" href="../src/supporters/podium.css" />
     <link rel="stylesheet" href="../src/supporters/roll.css" />
+    <link rel="stylesheet" href="../src/supporters/donate.css" />
     <script type="module" src="../src/supporters/main.js"></script>
   </head>
   <body>
@@ -63,12 +65,11 @@
               <dd class="stats__value" id="count"></dd>
             </div>
           </dl>
-          <a
+          <button
             class="pill-button pill-button--primary supporters-hero__donate"
             id="donate"
-            href="#"
-            target="_blank"
-            rel="noopener"
+            type="button"
+            data-donate
             hidden
           >
             <svg class="icon icon--solid" viewBox="0 0 24 24" aria-hidden="true">
@@ -77,7 +78,7 @@
               />
             </svg>
             Become a supporter
-          </a>
+          </button>
         </section>
 
         <div class="notice" id="notice" data-tone="loading">
@@ -93,6 +94,15 @@
         <section class="empty" id="empty" aria-labelledby="empty-title" hidden>
           <h2 class="empty__title" id="empty-title">No supporters yet</h2>
           <p class="empty__body">Be the first to help keep every game free.</p>
+          <button
+            class="pill-button pill-button--surface empty__donate"
+            id="donate-first"
+            type="button"
+            data-donate
+            hidden
+          >
+            Be the first supporter
+          </button>
         </section>
 
         <section class="podium-section" id="podium-section" aria-labelledby="podium-title" hidden>
@@ -120,5 +130,127 @@
         </section>
       </main>
     </div>
+
+    <dialog
+      class="sheet donate-sheet"
+      id="donate-sheet"
+      aria-labelledby="donate-title"
+      tabindex="-1"
+    >
+      <button class="glass-button sheet__close" id="donate-close" type="button" aria-label="Close">
+        <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6.5 6.5l11 11M17.5 6.5l-11 11" />
+        </svg>
+      </button>
+
+      <form class="sheet__body donate" id="donate-form" data-step-panel="form" novalidate>
+        <h2 class="sheet__title" id="donate-title" tabindex="-1">Become a supporter</h2>
+        <p class="sheet__description">
+          Every game stays free. Pick an amount, then send it with any bank app that scans KHQR.
+        </p>
+        <div class="donate__field">
+          <label class="donate__label" for="donate-amount">Amount in US dollars</label>
+          <div class="donate__amounts" id="donate-amounts" role="group" aria-label="Quick amounts">
+            <button class="donate__amount" type="button" data-amount="1" aria-pressed="false">
+              $1
+            </button>
+            <button class="donate__amount" type="button" data-amount="5" aria-pressed="false">
+              $5
+            </button>
+            <button class="donate__amount" type="button" data-amount="10" aria-pressed="false">
+              $10
+            </button>
+            <button class="donate__amount" type="button" data-amount="25" aria-pressed="false">
+              $25
+            </button>
+          </div>
+          <input
+            class="donate__input"
+            id="donate-amount"
+            name="amount"
+            inputmode="decimal"
+            autocomplete="off"
+            placeholder="Other amount, from $1"
+            required
+          />
+        </div>
+        <div class="donate__field">
+          <label class="donate__label" for="donate-name">Name on the list</label>
+          <input
+            class="donate__input"
+            id="donate-name"
+            name="name"
+            maxlength="40"
+            autocomplete="name"
+            aria-describedby="donate-name-hint"
+          />
+          <p class="donate__hint" id="donate-name-hint">Leave it empty to give anonymously.</p>
+        </div>
+        <div class="donate__field">
+          <label class="donate__label" for="donate-message">Message (optional)</label>
+          <input class="donate__input" id="donate-message" name="message" maxlength="140" />
+        </div>
+        <p class="donate__error" id="donate-form-error" role="alert" hidden></p>
+        <button class="pill-button pill-button--primary donate__next" type="submit">
+          Continue
+        </button>
+      </form>
+
+      <section
+        class="sheet__body donate"
+        data-step-panel="pay"
+        aria-labelledby="donate-pay-title"
+        hidden
+      >
+        <h2 class="sheet__title" id="donate-pay-title" tabindex="-1">Send</h2>
+        <p class="sheet__description">
+          Scan the code with your bank app and send <strong id="donate-pay-amount"></strong>. Then
+          tap I sent it to put your name on the list.
+        </p>
+        <img
+          class="donate__qr"
+          src="../assets/donate/khqr.jpg"
+          width="1012"
+          height="1416"
+          alt="KHQR code to pay NOV SOCHETRA at Wing Bank"
+          loading="lazy"
+        />
+        <a class="donate__save" href="../assets/donate/khqr.jpg" download="retro-arcade-khqr.jpg">
+          Save the code
+        </a>
+        <p class="donate__hint">
+          On a phone, save the code, then open it from your bank app's scan screen.
+        </p>
+        <p class="donate__error" id="donate-pay-error" role="alert" hidden></p>
+        <div class="donate__actions">
+          <button class="pill-button pill-button--primary" id="donate-sent" type="button">
+            I sent it
+          </button>
+          <button class="pill-button pill-button--surface" id="donate-back" type="button">
+            Back
+          </button>
+        </div>
+      </section>
+
+      <section
+        class="sheet__body donate donate--thanks"
+        data-step-panel="thanks"
+        aria-labelledby="donate-thanks-title"
+        hidden
+      >
+        <span class="heart-badge" aria-hidden="true">
+          <svg class="icon icon--solid" viewBox="0 0 24 24">
+            <path
+              d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
+            />
+          </svg>
+        </span>
+        <h2 class="sheet__title" id="donate-thanks-title" tabindex="-1">Thank you!</h2>
+        <p class="sheet__description">Your name is on the list. You help keep every game free.</p>
+        <button class="pill-button pill-button--primary" id="donate-done" type="button">
+          Done
+        </button>
+      </section>
+    </dialog>
   </body>
 </html>

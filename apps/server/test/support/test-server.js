@@ -36,3 +36,21 @@ export function rawRequest(port, rawPath, method = 'GET') {
     request.end();
   });
 }
+
+export function sendRequest(port, { method = 'GET', path: rawPath, headers = {}, body } = {}) {
+  return new Promise((resolve, reject) => {
+    const request = http.request(
+      { host: '127.0.0.1', port, path: rawPath, method, headers },
+      (response) => {
+        const chunks = [];
+        response.on('data', (chunk) => chunks.push(chunk));
+        response.on('end', () => {
+          const text = Buffer.concat(chunks).toString('utf8');
+          resolve({ status: response.statusCode, headers: response.headers, text });
+        });
+      },
+    );
+    request.on('error', reject);
+    request.end(body);
+  });
+}

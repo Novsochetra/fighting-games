@@ -19,7 +19,6 @@ export function supportersPage(data, { order, locale }) {
     isEmpty: ranked.length === 0,
     totalLabel: money(totalOf(ranked)),
     countLabel: formatCount(ranked.length, locale),
-    donateUrl: data.donateUrl,
     podium: podiumOf(ranked).map(present),
     rows: sortSupporters(ranked, order).map(present),
   };

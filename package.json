@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "node --watch apps/server/src/main.js",
     "start": "node apps/server/src/main.js",
+    "db:migrate": "node apps/server/src/db/migrate-cli.js",
     "build": "node scripts/build-site.js",
     "lint": "eslint . && stylelint \"apps/**/*.css\"",
     "format": "prettier --write .",
@@ -23,12 +24,14 @@
     "prepare": "git config core.hooksPath .githooks || true"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.11",
     "@eslint/js": "^10.0.1",
     "eslint": "^10.13.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.13.0",
     "happy-dom": "^21.0.3",
     "prettier": "^3.9.10",
+    "railway": "^3.16.0",
     "stylelint": "^17.16.0",
     "vitest": "^5.0.5"
   }

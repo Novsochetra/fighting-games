@@ -3,7 +3,6 @@ import { supportersPage } from '../../../src/supporters/view-model.js';
 
 const data = {
   currency: 'USD',
-  donateUrl: 'https://ko-fi.com/arcade',
   supporters: [
     { name: 'Mey', isAnonymous: false, amount: 10, date: '2026-10-20', message: '' },
     { name: 'Sok Dara', isAnonymous: false, amount: 120.5, date: '2026-09-01', message: 'Hi' },

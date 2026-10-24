@@ -13,7 +13,6 @@ function findElements(document) {
     stats: byId('stats'),
     total: byId('total'),
     count: byId('count'),
-    donate: byId('donate'),
     empty: byId('empty'),
     podiumSection: byId('podium-section'),
     podium: byId('podium'),
@@ -56,8 +55,6 @@ export function createSupportersView(document) {
     elements.notice.hidden = true;
     elements.total.textContent = page.totalLabel;
     elements.count.textContent = page.countLabel;
-    elements.donate.hidden = page.donateUrl === '';
-    elements.donate.href = page.donateUrl || '#';
     elements.stats.hidden = page.isEmpty;
     elements.empty.hidden = !page.isEmpty;
     elements.podiumSection.hidden = page.isEmpty;

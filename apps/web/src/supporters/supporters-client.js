@@ -1,6 +1,6 @@
 import { readSupporters } from './read-supporters.js';
 
-export const SUPPORTERS_URL = 'supporters.json';
+export const SUPPORTERS_URL = '../api/supporters';
 
 export async function fetchSupporters(fetchFn, url = SUPPORTERS_URL) {
   const response = await fetchFn(url, { headers: { Accept: 'application/json' } });

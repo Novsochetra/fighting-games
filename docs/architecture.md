@@ -5,15 +5,19 @@ There is no bundler. The browser loads native ES modules, and the same files run
 
 ```
 apps/
-  server/                 Node HTTP server: the games API and the static files
+  server/                 Node HTTP server: the API (games, supporters, health) and the static files
     src/
-    test/{unit,integration}
+      db/                 the Postgres pool, the migrations and their runner (migrate-cli.js)
+      security/           the same-site check and the rate limit for the API
+      supporters/         reading a gift, the Postgres and in-memory stores, the JSON they send
+    test/{unit,integration,regression}
   web/                    everything the browser loads
     index.html            home page: a game hub with a card per game
     sw.js                 service worker, so browsers offer to install the arcade
-    assets/               the arcade's icons and manifest (tools/arcade_icons.py draws the icons)
+    assets/               the arcade's icons and manifest (tools/arcade_icons.py draws the icons),
+                          and donate/khqr.jpg, the KHQR code the donate sheet shows
     src/home/             home page modules and styles; tokens.css holds its colors, type and motion
-    supporters/           the supporters page and supporters.json, the list it shows
+    supporters/           the supporters page
     src/supporters/       supporters page modules and styles
     games/
       <game-id>/          one self-contained app: it loads nothing from outside its folder
@@ -24,9 +28,10 @@ apps/
         src/              game modules
         test/{unit,integration,regression,support}
     test/{unit,integration,regression}  home page tests
+.railway/railway.ts       the Railway service's settings (docs/deploy-railway.md)
 scripts/                  thin CLIs (the static site build lives in apps/server/src/static-site/)
 tools/eslint-rules/       the project's own lint rules
-docs/                     this file
+docs/                     this file and deploy-railway.md
 ```
 
 ## Independent games
@@ -42,11 +47,27 @@ home page (or the supporters page, part of the arcade) loads a file from a game.
 ## Request flow
 
 1. `GET /` serves `apps/web/index.html`. The home page fetches `api/games`.
-2. `GET /api/games` reads every `apps/web/games/*/game.json` and returns `{ games: [...] }`.
+2. `GET /api/games` reads every `apps/web/games/*/game.json` and returns `{ games: [...] }`. The
+   list needs no database: adding a game folder adds it.
 3. Play links to `games/<id>/`, which serves that game's `index.html`.
+4. `supporters/` fetches `GET /api/supporters`; its donate sheet sends `POST /api/supporters`.
+5. `GET /api/health` answers `{"ok":true}` once the supporters table answers (Railway's health check).
 
-Every URL in the pages is relative, so the same files work under the GitHub Pages sub path.
-`npm run build` writes the static site to `dist/`, including `dist/api/games`, because Pages has no server.
+The arcade runs on Railway as one service: the same server sends the pages and the API, from one
+address (`docs/deploy-railway.md`). `router.js` matches an API path and its method (`HEAD` goes to
+`GET`, another method gets 405 with `Allow`); every other path is a static file, for `GET` and
+`HEAD` only.
+
+**Only the arcade's own pages call the API.** The server sends no CORS headers, so another site's
+script can't read an answer, and a CORS preflight (`OPTIONS`) gets 405. Every API request whose
+`Sec-Fetch-Site` is `same-site` or `cross-site`, or whose `Origin` names another host than `Host`,
+gets 403 (`security/request-origin.js`), and a `POST` must carry an `Origin` of its own host, which
+every browser sends. A script outside a browser can write any header, so the gifts also rest on the
+rate limit and the checks below.
+
+Every URL in the pages is relative, so the same files work under any path. `npm run build` still
+writes a static copy to `dist/` (with `dist/api/games` as a file), but GitHub Pages no longer
+deploys it: a static host can't save a gift.
 The build also versions every module URL (`./x.js?v=<hash>`, and the pages' module scripts) from the
 module's content and its imports' versions (`apps/server/src/static-site/version-modules.js`). Pages
 lets a browser keep any file for ten minutes, so without it a deploy could link a new module against an
@@ -143,23 +164,46 @@ game, so it shares the home page's tokens, buttons, segmented control and notice
 light or dark choice (`appearance-early.js`, `appearance.js`). Two links lead there from the home page:
 a heart in the top bar (the heart alone on a phone, `support.css`) and a card under the library.
 
-The list is a hand-kept file, `supporters/supporters.json`, since the arcade has no payment backend;
-the build copies it to Pages like any other file. Add a gift by adding an entry:
+The list comes from the server, `GET /api/supporters`:
 
 ```json
 {
   "currency": "USD",
-  "donateUrl": "https://…",
   "supporters": [
     { "name": "Sok Dara", "amount": 25, "date": "2026-10-20", "message": "Keep it free!" }
   ]
 }
 ```
 
-`readSupporters` (`read-supporters.js`) checks the file: an entry needs an amount above zero, an empty
-name shows as Anonymous, a date must be `YYYY-MM-DD`, and the Become a supporter button shows only for
-an `https:` `donateUrl`. Everything in the file is public, so a supporter who wants no name gets an
-empty one, not a hidden one. `ranking.js` ranks by amount (equal amounts share a place: 1, 2, 2, 4) and
+The gifts live in Postgres, in one `supporters` table (`apps/server/src/db/migrations.js`): amounts
+in whole cents, a `created_at`, and a `hidden` flag. The date sent is the day in Phnom Penh. Without
+`DATABASE_URL` (a laptop, the tests) the server keeps them in memory until it stops; on Railway it
+refuses to start without Postgres, since a deploy would wipe them (`railway.js`). Railway's
+pre-deploy runs `migrate-cli.js`, which applies each new migration in its own transaction and
+records it in `schema_migrations`; `npm run db:migrate` does the same against any `DATABASE_URL`.
+
+**Giving.** Become a supporter (and Be the first supporter, under an empty list) opens a sheet in
+three steps (`donate-sheet.js`, `donate.css`, the dialog and its closing animation from
+`src/home/sheet.js`, which the home page's Details sheet uses too):
+
+1. An amount (four quick ones, or any from $1 to $10,000 in dollars and cents), a name (empty gives
+   anonymously) and a message. `donate-form.js` checks them, with the server's limits; a test keeps
+   the two equal.
+2. The KHQR code (`assets/donate/khqr.jpg`, Wing Bank, NOV SOCHETRA) and the amount to send with any
+   bank app that scans KHQR. A phone can't scan its own screen, so Save the code downloads it for
+   the bank app's scan-from-photo. No one can see whether money arrived, so I sent it is the gift.
+3. Thanks; the list loads again with the new name.
+
+The server reads the gift again (`read-donation.js`): it squeezes spaces, drops control characters,
+counts a name's characters as Postgres does (by code point, as a Khmer name needs), and holds the
+table's own checks. It takes 5 gifts per visitor in 10 minutes (`security/rate-limit.js`; behind
+Railway's proxy, the visitor is the last `X-Forwarded-For` entry), bodies of at most 2 KB, and JSON
+only. A fake gift is hidden, not deleted, with
+`UPDATE supporters SET hidden = true WHERE id = …` (`docs/deploy-railway.md`).
+
+`readSupporters` (`read-supporters.js`) checks the list: an entry needs an amount above zero, an empty
+name shows as Anonymous, and a date must be `YYYY-MM-DD`. Everything on the list is public, so a
+supporter who wants no name gets an empty one, not a hidden one. `ranking.js` ranks by amount (equal amounts share a place: 1, 2, 2, 4) and
 sorts by day for Recent; `view-model.js` turns the list into labels (money and dates through `Intl`,
 whole amounts without cents), and the view only writes them out. The top three stand on a podium with
 gold, silver and bronze, second, first and third from the left, and everyone follows in a grouped list

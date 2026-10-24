@@ -26,11 +26,25 @@ export function sendNotFound(response) {
   sendText(response, { status: 404, text: 'Not found\n' });
 }
 
-export function sendMethodNotAllowed(response) {
+export function sendJsonError(response, { status, message, headers }) {
+  const json = JSON.stringify({ error: message });
+  sendBody(response, {
+    status,
+    contentType: 'application/json; charset=utf-8',
+    body: json,
+    headers,
+  });
+}
+
+export function sendForbidden(response) {
+  sendJsonError(response, { status: 403, message: 'Only the arcade itself may call this.' });
+}
+
+export function sendMethodNotAllowed(response, allow = ['GET', 'HEAD']) {
   sendText(response, {
     status: 405,
     text: 'Method not allowed\n',
-    headers: { Allow: 'GET, HEAD' },
+    headers: { Allow: allow.join(', ') },
   });
 }
 

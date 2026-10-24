@@ -4,7 +4,7 @@ A small arcade of browser games. A Node server lists the games through an API, t
 them as a game hub, like the Apple TV app (a carousel of game cards over the selected game's art,
 with sound), and each game lives in its own folder.
 
-Play it online at **https://novsochetra.github.io/fighting-games/**.
+It runs on Railway, with Postgres for the supporters list (`docs/deploy-railway.md`).
 
 ## Games
 
@@ -30,9 +30,9 @@ gamepad.
 ## Project layout
 
 ```
-apps/server/   Node HTTP server: GET /api/games and the static files
+apps/server/   Node HTTP server: the games, supporters and health API, and the static files
 apps/web/      everything the browser loads: the home page and the games, each with its own tokens
-scripts/       the static site build for GitHub Pages
+scripts/       the static site build
 tools/         the project's own ESLint rules
 docs/          architecture notes
 ```
@@ -65,6 +65,9 @@ without them the home page uses the cover.
 
 ## Deploy
 
-Every push to `main` runs `npm run build`, which writes the static site to `dist/` (including
-`dist/api/games`, the API response as a file), and publishes it to GitHub Pages
-(`.github/workflows/pages.yml`). `.github/workflows/ci.yml` runs `npm run check` on every push and pull request.
+The arcade runs on Railway as one service, the pages and the API from one address, next to a
+Railway Postgres database. Every push to `main` deploys; `docs/deploy-railway.md` has the setup steps.
+`.github/workflows/ci.yml` runs `npm run check` on every push and pull request.
+
+`npm run dev` needs no database: without `DATABASE_URL` the server keeps gifts in memory until it
+stops.

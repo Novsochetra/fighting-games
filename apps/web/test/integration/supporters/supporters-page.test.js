@@ -1,12 +1,9 @@
 // @vitest-environment happy-dom
-import { readFile } from 'node:fs/promises';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CUES } from '../../../src/home/sound-cues.js';
-import { readSupporters } from '../../../src/supporters/read-supporters.js';
 import { ERROR_MESSAGE } from '../../../src/supporters/supporters-view.js';
 import { createFakeAudioContext } from '../../support/fake-audio.js';
 import {
-  SUPPORTERS_DATA,
   bootPage,
   byId,
   click,
@@ -80,18 +77,13 @@ describe('the supporters page', () => {
     expect(context.started).toHaveLength(CUES.switch.length);
   });
 
-  it('opens the donate link in a new tab, and hides the button without one', async () => {
-    await bootPage(async () => jsonReply(samplePayload()));
-    const donate = byId('donate');
-    expect(donate.hidden).toBe(false);
-    expect(donate.getAttribute('href')).toBe('https://ko-fi.com/retro-arcade');
-    expect(donate.target).toBe('_blank');
-    expect(donate.rel).toContain('noopener');
-
-    stopPages();
-    await loadSupportersMarkup();
-    await bootPage(async () => jsonReply({ ...samplePayload(), donateUrl: '' }));
+  it('loads the list from the server, and offers the donate sheet once the script runs', async () => {
     expect(byId('donate').hidden).toBe(true);
+    const fetchFn = vi.fn(async () => jsonReply(samplePayload()));
+    await bootPage(fetchFn);
+    expect(fetchFn).toHaveBeenCalledWith('../api/supporters', expect.anything());
+    expect(byId('donate').hidden).toBe(false);
+    expect(byId('donate').tagName).toBe('BUTTON');
   });
 
   it('writes names as text, never as markup', async () => {
@@ -117,19 +109,11 @@ describe('the supporters page', () => {
   });
 });
 
-describe('the shipped supporter list', () => {
-  it('is valid: the page shows every entry the file holds', async () => {
-    const payload = JSON.parse(await readFile(SUPPORTERS_DATA, 'utf8'));
-    expect(readSupporters(payload).supporters).toHaveLength(payload.supporters.length);
-    await bootPage(async () => jsonReply(payload));
-    expect(byId('notice').hidden).toBe(true);
-    expect(document.querySelectorAll('.roll__row')).toHaveLength(payload.supporters.length);
-    expect(byId('empty').hidden).toBe(payload.supporters.length > 0);
-  });
-
-  it('shows a friendly empty state when no one is listed', async () => {
+describe('an empty list', () => {
+  it('shows a friendly empty state that invites the first supporter', async () => {
     await bootPage(async () => jsonReply({ supporters: [] }));
     expect(byId('empty').hidden).toBe(false);
+    expect(byId('donate-first').hidden).toBe(false);
     expect(byId('stats').hidden).toBe(true);
     expect(byId('podium-section').hidden).toBe(true);
     expect(byId('roll').hidden).toBe(true);

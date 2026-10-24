@@ -65,6 +65,8 @@
   --color-material: rgb(30 30 32 / 78%);
   --color-material-edge: rgb(255 255 255 / 12%);
   --color-fill-quiet: rgb(118 118 128 / 24%);
+  --color-field: var(--color-fill-quiet);
+  --color-error: var(--color-apple-red);
 
   --color-apple-pink: #ff375f;
   --color-apple-red: #ff453a;
@@ -76,6 +78,7 @@
   --color-apple-indigo: #5e5ce6;
   --color-apple-purple: #bf5af2;
   --color-apple-pink-light: #ff2d55;
+  --color-apple-red-light: #ff3b30;
   --color-heart: var(--color-apple-pink);
   --color-heart-badge-top: var(--color-apple-orange);
   --color-heart-badge-bottom: var(--color-apple-pink);
@@ -190,6 +193,8 @@
   --size-spinner-petal-gap: 44%;
   --size-keycap: 1.375rem;
   --size-sheet: 36rem;
+  --size-field: 3rem;
+  --size-qr: 20rem;
   --size-heart-badge: 4.5rem;
   --size-avatar: 2.75rem;
   --size-avatar-medium: 3.5rem;
@@ -322,6 +327,7 @@
   --color-material: rgb(255 255 255 / 80%);
   --color-material-edge: rgb(0 0 0 / 6%);
   --color-fill-quiet: rgb(118 118 128 / 12%);
+  --color-error: var(--color-apple-red-light);
   --color-heart: var(--color-apple-pink-light);
   --color-heart-badge-bottom: var(--color-apple-pink-light);
   --color-supporters-glow: rgb(255 45 85 / 12%);

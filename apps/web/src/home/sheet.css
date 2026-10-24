@@ -1,4 +1,4 @@
-/* The page behind holds still while the sheet is up (details-sheet.js sets the class). */
+/* The page behind holds still while the sheet is up (sheet.js sets the class). */
 :root.has-open-sheet,
 :root.has-open-sheet body {
   overflow: hidden;

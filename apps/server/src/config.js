@@ -4,7 +4,12 @@ export const DEFAULT_HOST = '127.0.0.1';
 const LOOPBACK_AND_ANY_HOSTS = new Set(['127.0.0.1', '0.0.0.0', '::', '::1']);
 
 export function readServerConfig(env) {
-  return { port: readPort(env.PORT), host: env.HOST || DEFAULT_HOST };
+  return {
+    port: readPort(env.PORT),
+    host: env.HOST || DEFAULT_HOST,
+    databaseUrl: env.DATABASE_URL?.trim() ?? '',
+    trustProxy: env.TRUST_PROXY === '1',
+  };
 }
 
 function readPort(value) {

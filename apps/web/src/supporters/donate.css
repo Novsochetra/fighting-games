@@ -1,0 +1,139 @@
+/* The donate sheet: an amount and a name, then the KHQR code, then thanks. */
+.donate {
+  gap: var(--space-4);
+}
+
+/* Each step's title takes the focus so a screen reader starts there; it is not a control, so it
+   gets no ring. */
+.donate .sheet__title:focus {
+  outline: none;
+}
+
+.donate__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-self: stretch;
+}
+
+.donate__label {
+  font-size: var(--font-size-apple-footnote);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-label-muted);
+}
+
+.donate__input {
+  block-size: var(--size-field);
+  padding-inline: var(--space-4);
+  font: inherit;
+  font-size: var(--font-size-apple-body);
+  color: var(--color-label);
+  background: var(--color-field);
+  border: 0;
+  border-radius: var(--radius-segment);
+}
+
+.donate__input::placeholder {
+  color: var(--color-label-muted);
+}
+
+.donate__input:focus-visible,
+.donate__amount:focus-visible,
+.donate__save:focus-visible {
+  outline: var(--border-width-ring) solid var(--color-focus-ring);
+  outline-offset: var(--border-width-ring);
+}
+
+.donate__amounts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.donate__amount {
+  block-size: var(--size-field);
+  font: inherit;
+  font-size: var(--font-size-apple-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-label);
+  cursor: pointer;
+  background: var(--color-field);
+  border: 0;
+  border-radius: var(--radius-segment);
+  transition: scale var(--duration-press) var(--easing-spring);
+}
+
+.donate__amount[aria-pressed='true'] {
+  color: var(--color-on-button-primary);
+  background: var(--color-button-primary);
+}
+
+.donate__amount:active {
+  scale: var(--scale-pressed);
+}
+
+.donate__hint,
+.donate__error {
+  margin: 0;
+  font-size: var(--font-size-apple-footnote);
+  line-height: var(--leading-apple-footnote);
+}
+
+.donate__hint {
+  color: var(--color-label-muted);
+}
+
+.donate__error {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-error);
+}
+
+.donate__next {
+  margin-block-start: var(--space-2);
+}
+
+.donate__qr {
+  display: block;
+  align-self: center;
+  inline-size: min(var(--size-qr), 100%);
+  block-size: auto;
+  border-radius: var(--radius-tile);
+  box-shadow: var(--shadow-card-edge);
+}
+
+.donate__save {
+  align-self: center;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-tint);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+.donate__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-block-start: var(--space-2);
+}
+
+/* The sheet is the color of the surface button, which would vanish into it. */
+.donate .pill-button--surface {
+  background: var(--color-field);
+}
+
+.donate--thanks {
+  align-items: center;
+  text-align: center;
+}
+
+/* Raised off the empty card, which is the color of the surface button. */
+.empty__donate {
+  margin-block-start: var(--space-3);
+  background: var(--color-launcher-surface-raised);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .donate__amount {
+    transition: none;
+  }
+}

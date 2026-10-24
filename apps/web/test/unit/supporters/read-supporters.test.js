@@ -46,14 +46,6 @@ describe('readSupporters', () => {
     expect(readSupporters({ supporters: [] }).currency).toBe(DEFAULT_CURRENCY);
   });
 
-  it('only takes a secure web address as the donate link', () => {
-    const link = (donateUrl) => readSupporters({ donateUrl, supporters: [] }).donateUrl;
-    expect(link('https://ko-fi.com/arcade')).toBe('https://ko-fi.com/arcade');
-    expect(link('http://ko-fi.com/arcade')).toBe('');
-    expect(link('javascript:alert(1)')).toBe('');
-    expect(link(undefined)).toBe('');
-  });
-
   it('reads a missing list as no supporters', () => {
     expect(readSupporters({}).supporters).toEqual([]);
   });

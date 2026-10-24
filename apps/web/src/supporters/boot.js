@@ -1,6 +1,7 @@
 import { createAppearance } from '../home/appearance.js';
 import { createMemoryStorage, createPreferences } from '../home/preferences.js';
 import { createSoundPlayer } from '../home/sound-player.js';
+import { createDonateSheet } from './donate-sheet.js';
 import { SORTS } from './ranking.js';
 import { fetchSupporters } from './supporters-client.js';
 import { createSupportersView } from './supporters-view.js';
@@ -17,6 +18,14 @@ function wireSort({ view, state, sound, signal }) {
     view.renderRoll(state.page());
   };
   view.elements.sort.addEventListener('click', onClick, { signal });
+}
+
+// The buttons wait hidden in the markup, so a page whose script never ran offers no dead button.
+function wireDonateButtons({ document, donate, signal }) {
+  for (const button of document.querySelectorAll('[data-donate]')) {
+    button.hidden = false;
+    button.addEventListener('click', () => donate.open(), { signal });
+  }
 }
 
 export function bootSupporters({ document, fetch, storage, createAudioContext, locale }) {
@@ -42,7 +51,9 @@ export function bootSupporters({ document, fetch, storage, createAudioContext, l
     }
   }
 
+  const donate = createDonateSheet({ document, fetch, sound, signal, locale, onGiven: load });
+  wireDonateButtons({ document, donate, signal });
   wireSort({ view, state, sound, signal });
   view.elements.retry.addEventListener('click', () => load(), { signal });
-  return { ready: load(), stop: () => lifetime.abort() };
+  return { ready: load(), donate, stop: () => lifetime.abort() };
 }
