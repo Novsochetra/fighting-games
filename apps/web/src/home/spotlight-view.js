@@ -5,6 +5,7 @@ import { renderAll, renderBackdrop } from './render-cards.js';
 function findElements(document) {
   const byId = (id) => document.getElementById(id);
   return {
+    hero: byId('hero'),
     backdrops: byId('backdrops'),
     text: byId('spotlight-text'),
     title: byId('spotlight-title'),
@@ -85,6 +86,7 @@ export function createSpotlightView(document) {
     elements.meta.textContent = card.meta;
     elements.summary.textContent = card.summary;
     swapActions(card, { animate });
+    elements.hero.dataset.backdrop = card.bannerSrc === '' ? 'plain' : 'art';
     for (const backdrop of elements.backdrops.querySelectorAll('.backdrop')) {
       backdrop.classList.toggle('is-active', Number(backdrop.dataset.gameIndex) === index);
     }

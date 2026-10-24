@@ -52,15 +52,15 @@
 .hero__frost {
   -webkit-backdrop-filter: var(--blur-hero-floor);
   backdrop-filter: var(--blur-hero-floor);
-  mask-image: linear-gradient(to bottom, var(--color-clear) 46%, var(--color-black) 78%);
+  mask-image: linear-gradient(to bottom, var(--color-clear) 55%, var(--color-black) 80%);
 }
 
 .hero__scrim {
   background: linear-gradient(
     to bottom,
     var(--color-scrim-top) 0%,
-    var(--color-scrim-middle) 45%,
-    var(--color-scrim-low) 75%,
+    var(--color-scrim-middle) 55%,
+    var(--color-scrim-low) 78%,
     var(--color-scrim-floor) 100%
   );
 }
@@ -94,6 +94,9 @@
   font-weight: var(--font-weight-bold);
   line-height: var(--leading-apple-title);
   letter-spacing: var(--tracking-brand);
+  color: var(--color-on-art);
+  text-shadow: var(--text-shadow-on-art);
+  transition: color var(--duration-crossfade) var(--easing-gentle);
 }
 
 #sound-toggle[aria-pressed='true'] .sound-off,
@@ -148,7 +151,9 @@
   font-size: var(--font-size-apple-subheadline);
   font-weight: var(--font-weight-semibold);
   letter-spacing: var(--tracking-tight);
-  color: var(--color-label-secondary);
+  color: var(--color-on-art-secondary);
+  text-shadow: var(--text-shadow-on-art);
+  transition: color var(--duration-crossfade) var(--easing-gentle);
 }
 
 .pager {

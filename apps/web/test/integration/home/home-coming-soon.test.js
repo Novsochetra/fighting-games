@@ -48,7 +48,10 @@ describe('the Coming Soon teasers', () => {
       true,
     );
 
+    expect(byId('hero').dataset.backdrop).toBe('plain');
+
     press('ArrowLeft');
+    expect(byId('hero').dataset.backdrop).toBe('art');
     expect(byId('play-label').textContent).toBe('Play');
     expect(byId('play').getAttribute('href')).toBe('games/steel-and-dust/');
     expect(byId('details-open').hidden).toBe(false);
