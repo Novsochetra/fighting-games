@@ -1,4 +1,9 @@
-import { shouldOfferSupport, SUPPORT_RESHOW_MS, SUPPORT_SNOOZE_MS } from './support-offer.js';
+import {
+  isBackFromGame,
+  shouldOfferSupport,
+  SUPPORT_RESHOW_MS,
+  SUPPORT_SNOOZE_MS,
+} from './support-offer.js';
 
 function findElements(document) {
   const byId = (id) => document.getElementById(id);
@@ -14,13 +19,19 @@ function showBanner(banner, isShown) {
 // The install banner takes the same place, so the arcade asks for one thing at a time.
 const isInstallUp = (document) => document.documentElement.classList.contains('has-install-banner');
 
+function lookForReturn(preferences) {
+  const playCount = preferences.playCount();
+  const isReturn = isBackFromGame({ playCount, seenPlays: preferences.supportSeenPlays() });
+  preferences.markSupportSeen(playCount);
+  return { isReturn, playCount };
+}
+
 export function wireSupportBanner({ document, preferences, sound, signal, now }) {
   const elements = findElements(document);
 
-  function offer(isReturn) {
+  function offer() {
     const isWanted = shouldOfferSupport({
-      isReturn,
-      playCount: preferences.playCount(),
+      ...lookForReturn(preferences),
       hasGiven: preferences.hasGiven(),
       snoozedUntil: preferences.supportSnoozedUntil(),
       now: now(),
@@ -38,8 +49,8 @@ export function wireSupportBanner({ document, preferences, sound, signal, now })
     sound.play('sheetClose');
   };
   elements.close.addEventListener('click', notNow, { signal });
-  // Back from a game through the back/forward cache, where no new page load sees the referrer.
-  const onPageShow = (event) => event.persisted && offer(true);
+  // The back/forward cache brings this page back without loading it again, so it looks again then.
+  const onPageShow = (event) => event.persisted && offer();
   document.defaultView.addEventListener('pageshow', onPageShow, { signal });
   return { offer, elements };
 }

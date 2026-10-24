@@ -31,7 +31,7 @@ function wireBanners({ document, installer, preferences, sound, signal, visit })
     wireInstallBanner({ document, installer, preferences, sound, signal });
   }
   const support = wireSupportBanner({ document, preferences, sound, signal, now: visit.now });
-  support.offer(visit.cameFromGame);
+  support.offer();
 }
 
 export function bootHome({
@@ -42,7 +42,7 @@ export function bootHome({
   storage,
   createAudioContext,
   installer,
-  visit = { cameFromGame: false, now: () => Date.now() },
+  visit = { now: () => Date.now() },
 }) {
   const lifetime = new AbortController();
   const { signal } = lifetime;

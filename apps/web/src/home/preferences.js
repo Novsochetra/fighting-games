@@ -5,6 +5,7 @@ export const STORAGE_KEYS = {
   installDismissedAt: 'arcade.install-dismissed',
   plays: 'arcade.plays',
   supportSnoozedUntil: 'arcade.support-snoozed-until',
+  supportSeenPlays: 'arcade.support-seen-plays',
   gaveAt: 'arcade.gave-at',
 };
 export const RECENT_LIMIT = 12;
@@ -46,6 +47,22 @@ export const createMemoryStorage = () => {
   return { read: (key) => values.get(key) ?? null, write: (key, value) => values.set(key, value) };
 };
 
+const readSupportState = (storage) => ({
+  supportSnoozedUntil: numberOr(storage.read(STORAGE_KEYS.supportSnoozedUntil), null),
+  supportSeenPlays: numberOr(storage.read(STORAGE_KEYS.supportSeenPlays), null),
+  gaveAt: numberOr(storage.read(STORAGE_KEYS.gaveAt), null),
+});
+
+// What the support banner keeps: when it may ask again, the plays it last saw, and a gift.
+const supportPreferences = (state, save) => ({
+  supportSnoozedUntil: () => state.supportSnoozedUntil,
+  snoozeSupport: (until) => save('supportSnoozedUntil', until),
+  supportSeenPlays: () => state.supportSeenPlays,
+  markSupportSeen: (count) => save('supportSeenPlays', count),
+  hasGiven: () => state.gaveAt !== null,
+  recordGift: (time) => save('gaveAt', time),
+});
+
 export function createPreferences(storage) {
   const readIds = (key) => {
     const value = storage.read(key);
@@ -57,8 +74,7 @@ export function createPreferences(storage) {
     sound: storage.read(STORAGE_KEYS.sound) !== false,
     installDismissedAt: storage.read(STORAGE_KEYS.installDismissedAt),
     plays: numberOr(storage.read(STORAGE_KEYS.plays), 0),
-    supportSnoozedUntil: numberOr(storage.read(STORAGE_KEYS.supportSnoozedUntil), null),
-    gaveAt: numberOr(storage.read(STORAGE_KEYS.gaveAt), null),
+    ...readSupportState(storage),
   };
   const save = (name, value) => {
     state[name] = value;
@@ -79,9 +95,6 @@ export function createPreferences(storage) {
     setSound: (isOn) => save('sound', Boolean(isOn)),
     installDismissedAt: () => state.installDismissedAt,
     dismissInstall: (time) => save('installDismissedAt', time),
-    supportSnoozedUntil: () => state.supportSnoozedUntil,
-    snoozeSupport: (until) => save('supportSnoozedUntil', until),
-    hasGiven: () => state.gaveAt !== null,
-    recordGift: (time) => save('gaveAt', time),
+    ...supportPreferences(state, save),
   };
 }

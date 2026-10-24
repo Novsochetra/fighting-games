@@ -168,10 +168,12 @@ browser with an install prompt registers it (`install-platform.js`).
 
 A support banner floats in the same place (`support-banner.js`, the install banner's styles with a
 heart for the icon, `support.css`) and asks a regular to chip in, with Support opening the donate
-sheet (`supporters/#give`). It asks only someone back from a game, by a page load whose referrer is
-under `games/` or a return through the back/forward cache, who has opened 3 games or more
+sheet (`supporters/#give`). It asks only someone back from a game who has opened 3 games or more
 (`support-offer.js`; `preferences.js` counts plays, and a player from before the count was kept has
-their Recent list). It never asks after a gift from this device (the supporters page records it),
+their Recent list). Back from a game means a game was opened since the banner last looked, so it
+sees every way back: the Back button (the back/forward cache), Steel & Dust's own step back, a
+reload, or a game on another site. Its very first look only takes the count, so no one is asked on
+arrival. It never asks after a gift from this device (the supporters page records it),
 nor while the install banner is up, so only one asks at a time. A banner left alone comes back in a
 week, and Not now holds it back for 30 days.
 

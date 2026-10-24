@@ -5,7 +5,7 @@ import {
   STORAGE_KEYS,
 } from '../../../src/home/preferences.js';
 import {
-  isGameReferrer,
+  isBackFromGame,
   shouldOfferSupport,
   SUPPORT_AFTER_PLAYS,
   SUPPORT_RESHOW_MS,
@@ -41,16 +41,14 @@ describe('shouldOfferSupport', () => {
   });
 });
 
-describe('isGameReferrer', () => {
-  it.each([
-    ['https://arcade.app/games/steel-and-dust/', 'https://arcade.app/', true],
-    ['https://arcade.app/games/steel-and-dust/index.html?x=1', 'https://arcade.app/?a=b', true],
-    ['https://example.com/fighting-games/games/x/', 'https://example.com/fighting-games/', true],
-    ['https://arcade.app/supporters/', 'https://arcade.app/', false],
-    ['https://other.site/games/x/', 'https://arcade.app/', false],
-    ['', 'https://arcade.app/', false],
-  ])('reads %j from %s as %s', (referrer, pageUrl, expected) => {
-    expect(isGameReferrer(referrer, pageUrl)).toBe(expected);
+describe('isBackFromGame', () => {
+  it('sees a game opened since the banner last looked', () => {
+    expect(isBackFromGame({ playCount: 4, seenPlays: 3 })).toBe(true);
+    expect(isBackFromGame({ playCount: 3, seenPlays: 3 })).toBe(false);
+  });
+
+  it('only takes the count on its very first look', () => {
+    expect(isBackFromGame({ playCount: 9, seenPlays: null })).toBe(false);
   });
 });
 
@@ -75,8 +73,10 @@ describe('the preferences behind the banner', () => {
     const preferences = createPreferences(storage);
     preferences.recordGift(5);
     preferences.snoozeSupport(9);
+    preferences.markSupportSeen(3);
     expect(createPreferences(storage).hasGiven()).toBe(true);
     expect(createPreferences(storage).supportSnoozedUntil()).toBe(9);
+    expect(createPreferences(storage).supportSeenPlays()).toBe(3);
 
     const junk = createMemoryStorage();
     junk.write(STORAGE_KEYS.gaveAt, 'yes');
