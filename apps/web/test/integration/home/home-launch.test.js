@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   bootWithGames,
   bootWithRealCatalog,
+  bootWithSteelAndDust,
   byId,
   cards,
   loadHomeMarkup,
@@ -61,7 +62,7 @@ describe('launching a game', () => {
   beforeEach(() => stubLayout());
 
   it('grows the card into a screen-sized panel, then opens the game', async () => {
-    const { navigate } = await bootWithRealCatalog();
+    const { navigate } = await bootWithSteelAndDust();
     press('Enter');
     expect(layer()).not.toBeNull();
     expect(layer().getAttribute('aria-hidden')).toBe('true');
@@ -104,7 +105,7 @@ describe('launching a game', () => {
 
   it('opens at once, with no panel, when the visitor asks for less motion', async () => {
     vi.spyOn(window, 'matchMedia').mockReturnValue({ matches: true });
-    const { navigate } = await bootWithRealCatalog();
+    const { navigate } = await bootWithSteelAndDust();
     press('Enter');
     expect(navigate).toHaveBeenCalledWith('games/steel-and-dust/');
     expect(layer()).toBeNull();

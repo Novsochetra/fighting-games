@@ -21,6 +21,7 @@ function fill(elements, card) {
   if (card.artSrc !== '') {
     elements.art.setAttribute('src', card.artSrc);
   }
+  elements.art.classList.toggle('is-smooth', Boolean(card.smoothArt));
   elements.title.textContent = card.title;
   elements.meta.textContent = card.meta;
   elements.description.textContent = card.description;

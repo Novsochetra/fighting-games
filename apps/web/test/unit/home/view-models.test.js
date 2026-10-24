@@ -33,6 +33,7 @@ describe('toGameCard', () => {
       title: 'Steel & Dust',
       monogram: 'S',
       href: 'games/steel-and-dust/',
+      smoothArt: false,
       coverSrc: 'games/steel-and-dust/assets/icons/icon-512.png',
       bannerSrc: 'games/steel-and-dust/assets/banner.png',
       posterSrc: 'games/steel-and-dust/assets/poster.png',
@@ -63,6 +64,23 @@ describe('toGameCard', () => {
     expect([bare.coverSrc, bare.bannerSrc, bare.posterSrc, bare.artSrc]).toEqual(['', '', '', '']);
     expect(bare.controls).toEqual([]);
     expect(bare.meta).toBe('');
+  });
+
+  it('opens a game hosted on its own site at its url, and keeps its rendered art smooth', () => {
+    const card = toGameCard(apiGame({ url: 'https://morodokangkor.com/', pixelArt: false }));
+    expect(card.href).toBe('https://morodokangkor.com/');
+    expect(card.smoothArt).toBe(true);
+  });
+
+  it.each([
+    'http://morodokangkor.com/',
+    'javascript:alert(1)',
+    '//evil.example/',
+    'https://user:secret@morodokangkor.com/',
+    'https://morodok angkor.com/',
+    42,
+  ])('opens the game folder rather than the url %j', (url) => {
+    expect(toGameCard(apiGame({ url })).href).toBe('games/steel-and-dust/');
   });
 
   it('drops art that is not a plain relative URL', () => {

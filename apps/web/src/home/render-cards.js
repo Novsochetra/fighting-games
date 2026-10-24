@@ -10,6 +10,8 @@ const attributes = (pairs) =>
     .map(([name, value]) => `${name}="${escapeHtml(value)}"`)
     .join(' ');
 
+const artClass = (base, card) => (card.smoothArt ? `${base} is-smooth` : base);
+
 const SPARKLES =
   '<svg class="art__glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3.5l1.6 4.9 4.9 1.6-4.9 1.6L10 16.5l-1.6-4.9L3.5 10l4.9-1.6zM18 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" /></svg>';
 
@@ -24,7 +26,13 @@ export function renderArt(card, { loading = 'eager' } = {}) {
   if (card.artSrc === '') {
     return `<span class="art art--monogram" aria-hidden="true">${escapeHtml(card.monogram)}</span>`;
   }
-  const image = { class: 'art', src: card.artSrc, alt: '', loading, decoding: 'async' };
+  const image = {
+    class: artClass('art', card),
+    src: card.artSrc,
+    alt: '',
+    loading,
+    decoding: 'async',
+  };
   return `<img ${attributes(image)} draggable="false" />`;
 }
 
@@ -59,7 +67,12 @@ export function renderBackdrop(card, index) {
     return `<div class="${className}" data-game-index="${escapeHtml(index)}"></div>`;
   }
   const source = { media: NARROW_MEDIA, srcset: card.posterSrc };
-  const image = { class: 'backdrop__img', src: card.bannerSrc, alt: '', decoding: 'async' };
+  const image = {
+    class: artClass('backdrop__img', card),
+    src: card.bannerSrc,
+    alt: '',
+    decoding: 'async',
+  };
   return `<picture class="backdrop" data-game-index="${escapeHtml(index)}">
   <source ${attributes(source)} />
   <img ${attributes(image)} />

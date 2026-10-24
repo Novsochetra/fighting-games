@@ -46,7 +46,34 @@ function checkControls(entry) {
   return isTextList ? [] : ['"controls" must be a list of non-empty strings'];
 }
 
-const CHECKS = [checkRequiredFields, checkId, checkArt, checkControls];
+// A game hosted on its own site keeps only its game.json and art here; Play opens its url instead.
+export function isSecureGameUrl(value) {
+  if (typeof value !== 'string' || /\s/.test(value)) {
+    return false;
+  }
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' && url.username === '' && url.password === '';
+  } catch {
+    return false;
+  }
+}
+
+function checkUrl(entry) {
+  if (entry.url === undefined || isSecureGameUrl(entry.url)) {
+    return [];
+  }
+  return ['"url" must be an https:// address'];
+}
+
+function checkPixelArt(entry) {
+  if (entry.pixelArt === undefined || typeof entry.pixelArt === 'boolean') {
+    return [];
+  }
+  return ['"pixelArt" must be true or false'];
+}
+
+const CHECKS = [checkRequiredFields, checkId, checkArt, checkControls, checkUrl, checkPixelArt];
 
 export function validateGameEntry(entry, folderName) {
   if (!isPlainObject(entry)) {

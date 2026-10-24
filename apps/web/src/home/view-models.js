@@ -14,6 +14,21 @@ export function isPlayableGame(game) {
   return Boolean(game) && isRelativeUrl(game.path) && asText(game.title) !== '';
 }
 
+// A game hosted on its own site opens its url, but only a secure web address: the catalog is data.
+export function isSecureGameUrl(value) {
+  if (typeof value !== 'string' || /\s/.test(value)) {
+    return false;
+  }
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' && url.username === '' && url.password === '';
+  } catch {
+    return false;
+  }
+}
+
+const playHrefOf = (game) => (isSecureGameUrl(game.url) ? game.url : game.path);
+
 export function monogramOf(title) {
   const [first = ''] = Array.from(asText(title));
   return first.toLocaleUpperCase('en');
@@ -41,7 +56,9 @@ export function toGameCard(game) {
     id: asText(game.id),
     title: asText(game.title),
     monogram: monogramOf(game.title),
-    href: game.path,
+    href: playHrefOf(game),
+    // Pixel art scales up block by block; rendered art such as a 3D world must stay smooth.
+    smoothArt: game.pixelArt === false,
     coverSrc,
     bannerSrc,
     posterSrc: asUrl(game.poster) || bannerSrc,
