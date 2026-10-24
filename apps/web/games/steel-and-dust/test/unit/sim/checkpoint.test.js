@@ -6,6 +6,7 @@ function gameAt(more = {}) {
   return {
     missionIndex: 4,
     score: 6200,
+    coins: 120,
     playTime: 14400,
     continues: 1,
     lives: 3,
@@ -26,6 +27,7 @@ describe('the saved run', () => {
     const saved = {
       mission: 4,
       score: 6200,
+      coins: 120,
       playTime: 14400,
       continues: 1,
       lives: 3,
@@ -38,9 +40,9 @@ describe('the saved run', () => {
   it('loses the life of a fall, but keeps the score it was saved with', () => {
     const game = gameAt();
     saveCheckpoint(game);
-    Object.assign(game, { lives: 2, score: 9100 });
+    Object.assign(game, { lives: 2, score: 9100, coins: 300 });
     saveFall(game);
-    expect(game.checkpoint).toMatchObject({ lives: 2, score: 6200 });
+    expect(game.checkpoint).toMatchObject({ lives: 2, score: 6200, coins: 120 });
     expect(game.io.saveRun).toHaveBeenLastCalledWith(game.checkpoint);
     expect(game.io.saveLeaderboard).not.toHaveBeenCalled();
   });

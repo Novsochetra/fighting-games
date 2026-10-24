@@ -4,7 +4,15 @@ import { CLEAR_TICKS } from '../../../src/sim/stage/stage-clear.js';
 import { tick } from '../../../src/sim/tick.js';
 import { openMenu, openPage, selected } from '../../support/menu-page.js';
 
-const SAVED = { mission: 4, score: 6200, playTime: 14400, continues: 1, lives: 3, ultMeter: 40 };
+const SAVED = {
+  mission: 4,
+  score: 6200,
+  coins: 57,
+  playTime: 14400,
+  continues: 1,
+  lives: 3,
+  ultMeter: 40,
+};
 
 const visibleButtons = () =>
   [...openMenu().querySelectorAll('.mbtn')]
@@ -50,6 +58,7 @@ describe('a run saved on an earlier visit', () => {
       mode: 'play',
       missionIndex: 4,
       score: 6200,
+      coins: 57,
       playTime: 14400,
       continues: 1,
       lives: 3,

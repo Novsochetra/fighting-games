@@ -84,9 +84,9 @@ export function selectMission(game, index) {
 
 // a saved run picks up at the start of the mission it was on, with what it carried into it
 export function resumeCheckpoint(game) {
-  const { mission, score, playTime, continues, lives, ultMeter } = game.checkpoint;
+  const { mission, score, coins, playTime, continues, lives, ultMeter } = game.checkpoint;
   selectMission(game, mission);
-  Object.assign(game, { score, playTime, continues, lives, ultMeter });
+  Object.assign(game, { score, coins, playTime, continues, lives, ultMeter });
 }
 
 export function quitToTitle(game) {

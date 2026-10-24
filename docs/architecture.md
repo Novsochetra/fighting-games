@@ -558,8 +558,9 @@ sound's playback rate. A chest pops up out of the boss, lands, rattles, bursts o
 gold light and spills (`loot-chest.js`), all well inside a stage clear, and over a stage clear the
 hero pulls in everything on the road from anywhere. Whatever is still lying about when the clear
 screen ends is paid into the purse (`bankLeftovers`) and the score committed again, so no reward is
-lost to the wipe. The purse (`game.coins`) carries into the next mission with the score, and hangs
-under the score on the HUD (`src/render/hud/purse.js`). The road holds at most `MAX_LOOT` pieces; a
+lost to the wipe. The purse (`game.coins`) carries into the next mission with the score, is saved
+with the run as each mission starts (`saveCheckpoint`; a save from before the purse loads with an
+empty one), and hangs under the score on the HUD (`src/render/hud/purse.js`). The road holds at most `MAX_LOOT` pieces; a
 crowd felled at once pays the rest straight into the purse.
 
 Loot draws from a seeded stream of its own (`loot-random.js`), never `Math.random`, and moves the
