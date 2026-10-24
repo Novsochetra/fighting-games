@@ -164,6 +164,7 @@
   --offset-card-enter: 2.5rem;
 
   --duration-fast: 120ms;
+  --duration-swap-out: 140ms;
   --duration-press: 180ms;
   --duration-normal: 200ms;
   --duration-dot: 300ms;

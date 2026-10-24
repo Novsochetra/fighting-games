@@ -49,19 +49,16 @@
   justify-content: center;
 }
 
-.favorite[aria-pressed='true'] .favorite__heart {
-  fill: currentcolor;
-  animation: heart-pop var(--duration-ring) var(--easing-pop);
+.favorite__heart {
+  transition: fill var(--duration-normal) var(--easing-standard);
 }
 
-@keyframes heart-pop {
-  40% {
-    scale: var(--scale-heart-pop);
-  }
+.favorite[aria-pressed='true'] .favorite__heart {
+  fill: currentcolor;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .favorite[aria-pressed='true'] .favorite__heart {
-    animation: none;
+  .favorite__heart {
+    transition: none;
   }
 }

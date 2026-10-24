@@ -1,3 +1,4 @@
+import { createActionSwap } from './action-swap.js';
 import { animateWith, readTiming, readToken } from './motion-tokens.js';
 import { renderAll, renderBackdrop } from './render-cards.js';
 
@@ -13,21 +14,36 @@ function findElements(document) {
     playLabel: byId('play-label'),
     details: byId('details-open'),
     favorite: byId('favorite'),
+    heart: document.querySelector('#favorite .favorite__heart'),
+    actions: document.querySelector('.spotlight__actions'),
   };
 }
 
-function rise(element) {
+// A swipe that lands mid-rise carries on from how far the text has risen; starting over from
+// nothing made quick swipes blink.
+function rise(element, previous) {
   const document = element.ownerDocument;
-  const offset = readToken(document, '--offset-rise') || '0px';
+  const isRising = previous?.playState === 'running';
+  const shown = isRising ? Number(document.defaultView.getComputedStyle(element).opacity) : 0;
+  previous?.cancel();
+  const offset = Number.parseFloat(readToken(document, '--offset-rise')) || 0;
   const timing = readTiming(document, { duration: '--duration-rise', easing: '--easing-spring' });
-  animateWith(
+  return animateWith(
     element,
     [
-      { opacity: 0, transform: `translateY(${offset})` },
+      { opacity: shown, transform: `translateY(${offset * (1 - shown)}px)` },
       { opacity: 1, transform: 'none' },
     ],
     timing,
   );
+}
+
+// The heart pops only when it is tapped, never when a swipe brings back a game kept as a favorite.
+function popHeart(heart) {
+  const document = heart.ownerDocument;
+  const scale = readToken(document, '--scale-heart-pop') || '1';
+  const timing = readTiming(document, { duration: '--duration-ring', easing: '--easing-pop' });
+  animateWith(heart, [{ scale: '1' }, { scale, offset: 0.4 }, { scale: '1' }], timing);
 }
 
 // A teaser's Play turns into a quiet Coming Soon, like a film not out yet, and there is nothing to
@@ -48,19 +64,32 @@ function showActions(elements, card) {
   elements.favorite.hidden = isSoon;
 }
 
+function setFavorite({ favorite, heart }, isFavorite, { pop = false } = {}) {
+  favorite.setAttribute('aria-pressed', String(isFavorite));
+  if (pop && isFavorite) {
+    popHeart(heart);
+  }
+}
+
 export function createSpotlightView(document) {
   const elements = findElements(document);
+  const swapActions = createActionSwap({
+    row: elements.actions,
+    apply: (card) => showActions(elements, card),
+    modeOf: (card) => (card.isComingSoon ? 'soon' : 'game'),
+  });
+  let rising = null;
 
   function show(card, index, { animate = false } = {}) {
     elements.title.textContent = card.title;
     elements.meta.textContent = card.meta;
     elements.summary.textContent = card.summary;
-    showActions(elements, card);
+    swapActions(card, { animate });
     for (const backdrop of elements.backdrops.querySelectorAll('.backdrop')) {
       backdrop.classList.toggle('is-active', Number(backdrop.dataset.gameIndex) === index);
     }
     if (animate) {
-      rise(elements.text);
+      rising = rise(elements.text, rising);
     }
   }
 
@@ -70,6 +99,6 @@ export function createSpotlightView(document) {
       elements.backdrops.innerHTML = renderAll(cards, renderBackdrop);
     },
     show,
-    setFavorite: (isFavorite) => elements.favorite.setAttribute('aria-pressed', String(isFavorite)),
+    setFavorite: (isFavorite, options) => setFavorite(elements, isFavorite, options),
   };
 }

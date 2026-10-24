@@ -98,7 +98,7 @@ function toggleFavorite(context) {
   }
   preferences.toggleFavorite(card.id);
   const isFavorite = preferences.isFavorite(card.id);
-  view.spotlight.setFavorite(isFavorite);
+  view.spotlight.setFavorite(isFavorite, { pop: true });
   sound.play(isFavorite ? 'favoriteOn' : 'favoriteOff');
   library.refreshIf('favorites');
 }

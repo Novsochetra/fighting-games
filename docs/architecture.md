@@ -60,7 +60,11 @@ frosted glass ones (`buttons.css`).
 
 - **Hero** (`hero.css`, `spotlight-view.js`): the game's `banner` (its `poster`, a tall crop, on
   narrow screens) cross-fades in behind a dim, under one slow Ken Burns zoom on the whole stack. Its
-  title, genre line and first sentence rise in under the carousel, over Play, Details and a heart.
+  title, genre line and first sentence rise in under the carousel, over Play, Details and a heart; a
+  swipe that lands mid-rise carries on from where the text is, so quick swipes never blink. Between
+  a game and a teaser the buttons change, so they fade out, change unseen and rise back in turn
+  (`action-swap.js`), each on its own, since an opacity on their row would cut the glass buttons'
+  blur off from the art. The heart pops only when tapped.
 - **Carousel** (`carousel-layout.js`, `carousel-view.js`, `carousel.css`): each card shows its game's
   `screenshot`, a frame of play, so it never repeats the key art behind it. Two Coming Soon teasers
   (`coming-soon.js`) follow the games: a dark slate with a slow sheen, a dark backdrop, and a quiet

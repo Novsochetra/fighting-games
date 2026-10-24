@@ -148,10 +148,10 @@ describe('createHomeController', () => {
     await controller.load();
     controller.toggleFavorite();
     expect(preferences.isFavorite('a')).toBe(true);
-    expect(view.spotlight.setFavorite).toHaveBeenLastCalledWith(true);
+    expect(view.spotlight.setFavorite).toHaveBeenLastCalledWith(true, { pop: true });
     expect(sound.play).toHaveBeenLastCalledWith('favoriteOn');
     controller.toggleFavorite();
-    expect(view.spotlight.setFavorite).toHaveBeenLastCalledWith(false);
+    expect(view.spotlight.setFavorite).toHaveBeenLastCalledWith(false, { pop: true });
     expect(sound.play).toHaveBeenLastCalledWith('favoriteOff');
   });
 
