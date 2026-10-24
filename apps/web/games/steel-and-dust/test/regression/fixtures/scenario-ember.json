@@ -9058,28 +9058,28 @@
    "tick": 1440,
    "frame": {
     "calls": 3819,
-    "digest": "8c3bc51f217070a2"
+    "digest": "456ebb47196051fc"
    }
   },
   {
    "tick": 1680,
    "frame": {
     "calls": 3521,
-    "digest": "2a887c9302a16cf3"
+    "digest": "1090959a90712245"
    }
   },
   {
    "tick": 1920,
    "frame": {
     "calls": 2602,
-    "digest": "7b77bc278b9ad141"
+    "digest": "db0660f34c3f2401"
    }
   },
   {
    "tick": 2160,
    "frame": {
     "calls": 2969,
-    "digest": "c452028b59154379"
+    "digest": "1a7f9bb8b531a572"
    }
   }
  ]
