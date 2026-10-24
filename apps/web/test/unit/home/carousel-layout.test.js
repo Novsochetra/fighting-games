@@ -3,7 +3,7 @@ import {
   SLOT_SCALES,
   centerShift,
   circularOffset,
-  isJump,
+  planTurn,
   slotFor,
 } from '../../../src/home/carousel-layout.js';
 
@@ -70,15 +70,41 @@ describe('slotFor', () => {
   });
 });
 
-describe('isJump', () => {
-  it('spots a card that crosses to the other side of the loop', () => {
-    expect(isJump(-1, 1)).toBe(true);
-    expect(isJump(5, -4)).toBe(true);
+describe('planTurn', () => {
+  const stay = (offset) => ({ offset, enterFrom: null, leaveTo: null });
+  const firstLayout = (count) =>
+    Array.from({ length: count }, (_, i) => circularOffset(i, 0, count));
+
+  it('slides each card one place on a step, and brings the card from the far left in from the right', () => {
+    expect(planTurn(firstLayout(3), 1, 3)).toEqual([
+      stay(-1),
+      stay(0),
+      { offset: 1, enterFrom: 2, leaveTo: -2 },
+    ]);
   });
 
-  it('lets a card slide one place, and has no jump on the first layout', () => {
-    expect(isJump(1, 0)).toBe(false);
-    expect(isJump(0, -1)).toBe(false);
-    expect(isJump(undefined, 3)).toBe(false);
+  it('brings the card from the far right in from the left on a step back', () => {
+    expect(planTurn(firstLayout(3), 2, 3)).toEqual([
+      stay(1),
+      { offset: -1, enterFrom: -2, leaveTo: 2 },
+      stay(0),
+    ]);
+  });
+
+  it('turns two cards round the loop when the carousel turns two places at once', () => {
+    const moves = planTurn(firstLayout(5), 3, 5);
+    expect(moves.map(({ offset }) => offset)).toEqual([2, -2, -1, 0, 1]);
+    expect(moves[1]).toEqual({ offset: -2, enterFrom: -4, leaveTo: 3 });
+    expect(moves[2]).toEqual({ offset: -1, enterFrom: -3, leaveTo: 4 });
+  });
+
+  it('leaves no copy behind a card that was already out of sight', () => {
+    const moves = planTurn(firstLayout(7), 1, 7);
+    expect(moves[4]).toEqual({ offset: 3, enterFrom: 4, leaveTo: null });
+  });
+
+  it('turns nothing round on the first layout or when the selection stays', () => {
+    expect(planTurn([], 0, 3)).toEqual([stay(0), stay(1), stay(-1)]);
+    expect(planTurn(firstLayout(3), 0, 3)).toEqual([stay(0), stay(1), stay(-1)]);
   });
 });

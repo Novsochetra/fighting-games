@@ -1,44 +1,7 @@
-import { setAriaFlag } from './aria.js';
-import { circularOffset, isJump, slotFor } from './carousel-layout.js';
+import { moveCard } from './card-motion.js';
+import { planTurn } from './carousel-layout.js';
 import { animateWith, readTiming } from './motion-tokens.js';
 import { renderAll, renderCard, renderDot } from './render-cards.js';
-
-const SLOT_PROPERTIES = [
-  ['side', '--side'],
-  ['shift', '--shift'],
-  ['distance', '--distance'],
-  ['scale', '--scale'],
-  ['dimming', '--dimming'],
-  ['opacity', '--card-opacity'],
-  ['depth', '--depth'],
-];
-
-function placeCard(card, slot) {
-  for (const [key, property] of SLOT_PROPERTIES) {
-    card.style.setProperty(property, String(slot[key]));
-  }
-  card.classList.toggle('is-center', slot.isCenter);
-  card.classList.toggle('is-hidden', slot.isHidden);
-  card.tabIndex = slot.isCenter ? 0 : -1;
-  setAriaFlag(card, 'aria-current', slot.isCenter);
-  setAriaFlag(card, 'aria-hidden', slot.isHidden);
-}
-
-// A card that crosses to the other side goes there at once and fades in, instead of sliding over the
-// center card. Reading its box makes the browser apply the jump before the transition is back on.
-function jumpCard(card, slot) {
-  card.style.transition = 'none';
-  placeCard(card, slot);
-  card.getBoundingClientRect();
-  card.style.removeProperty('transition');
-  if (!slot.isHidden) {
-    const timing = readTiming(card.ownerDocument, {
-      duration: '--duration-fade',
-      easing: '--easing-standard',
-    });
-    animateWith(card, [{ opacity: 0 }, { opacity: slot.opacity }], timing);
-  }
-}
 
 const NUDGE_KEYFRAMES = [0, -8, 7, -5, 3, 0].map((x) => ({ transform: `translateX(${x}px)` }));
 
@@ -54,7 +17,7 @@ function nudge(frame) {
 
 export function createCarouselView({ track, pager, arrows }) {
   let offsets = [];
-  const cards = () => [...track.querySelectorAll('.card')];
+  const cards = () => [...track.querySelectorAll('.card:not(.is-leaving)')];
   const cardAt = (index) => track.querySelector(`.card[data-game-index="${Number(index)}"]`);
 
   function render(gameCards) {
@@ -70,12 +33,9 @@ export function createCarouselView({ track, pager, arrows }) {
 
   function select(selected, { focus = false } = {}) {
     const all = cards();
-    all.forEach((card, index) => {
-      const offset = circularOffset(index, selected, all.length);
-      const move = isJump(offsets[index], offset) ? jumpCard : placeCard;
-      move(card, slotFor(offset));
-      offsets[index] = offset;
-    });
+    const moves = planTurn(offsets, selected, all.length);
+    all.forEach((card, index) => moveCard(card, moves[index]));
+    offsets = moves.map(({ offset }) => offset);
     pager.querySelectorAll('.pager__dot').forEach((dot, index) => {
       dot.classList.toggle('is-active', index === selected);
     });

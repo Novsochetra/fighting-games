@@ -38,7 +38,19 @@ export function slotFor(offset) {
   };
 }
 
-// A card that changes side jumps across the carousel; it should not slide over the others.
-export function isJump(previousOffset, offset) {
-  return Number.isFinite(previousOffset) && Math.abs(offset - previousOffset) > 1;
+// Every card slides as far as the carousel turns, except one that comes round the loop: it enters from
+// out of sight beyond its new place, so no card slides across the row, and a copy of it leaves by the
+// side it went out, unless it was out of sight already.
+export function planTurn(previousOffsets, selected, count) {
+  const turn = previousOffsets[selected];
+  return Array.from({ length: count }, (_, index) => {
+    const offset = circularOffset(index, selected, count);
+    const before = previousOffsets[index];
+    const wraps = Number.isFinite(turn) && Number.isFinite(before) && before - offset !== turn;
+    return {
+      offset,
+      enterFrom: wraps ? offset + turn : null,
+      leaveTo: wraps && !slotFor(before).isHidden ? before - turn : null,
+    };
+  });
 }

@@ -29,6 +29,18 @@ function riseIn(row) {
   );
 }
 
+// The buttons change color while unseen; their own color transitions would play as they rise back,
+// and Play would turn from frosted white to black in view.
+function changeUnseen(row, change) {
+  const buttons = [...row.children];
+  buttons.forEach((button) => {
+    button.style.transition = 'none';
+  });
+  change();
+  row.getBoundingClientRect();
+  buttons.forEach((button) => button.style.removeProperty('transition'));
+}
+
 // Moving between a game and a teaser changes which buttons show. Swapped in one frame, Play jumped
 // across the row and the others blinked out, so the row fades out, changes unseen, and rises back.
 // Each button fades on its own: an opacity on their row would cut the glass buttons' blur off from
@@ -39,7 +51,7 @@ export function createActionSwap({ row, apply, modeOf }) {
   function settle() {
     const outs = state.fading;
     state.fading = null;
-    apply(state.latest);
+    changeUnseen(row, () => apply(state.latest));
     riseIn(row);
     outs.forEach((animation) => animation.cancel());
   }

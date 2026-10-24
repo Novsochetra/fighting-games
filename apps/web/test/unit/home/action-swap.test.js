@@ -31,6 +31,12 @@ function setup({ reduced = false } = {}) {
     id,
     hidden: false,
     ownerDocument: document,
+    style: {
+      transition: '',
+      removeProperty(name) {
+        this[name] = '';
+      },
+    },
     animate: vi.fn((keyframes, timing) => {
       const animation = { ...fakeAnimation(), keyframes, timing };
       animations.push(animation);
@@ -38,7 +44,7 @@ function setup({ reduced = false } = {}) {
     }),
   });
   const buttons = [button('play'), button('details'), button('favorite')];
-  const row = { ownerDocument: document, children: buttons };
+  const row = { ownerDocument: document, children: buttons, getBoundingClientRect: vi.fn() };
   const apply = vi.fn((card) => {
     buttons[1].hidden = card.isComingSoon;
     buttons[2].hidden = card.isComingSoon;
@@ -82,6 +88,20 @@ describe('createActionSwap', () => {
     expect(animations[0].keyframes[0]).toEqual({ opacity: 0, transform: 'translateY(12px)' });
     expect(animations[0].timing).toMatchObject({ duration: 500, delay: 0, fill: 'backwards' });
     outs.forEach((animation) => expect(animation.cancel).toHaveBeenCalled());
+  });
+
+  it('changes the buttons unseen with their transitions off, so Play does not fade to black in view', async () => {
+    const { show, apply, buttons, animations } = setup();
+    show(teaser);
+    const transitions = [];
+    apply.mockImplementation(() =>
+      transitions.push(buttons.map((button) => button.style.transition)),
+    );
+    show(game, { animate: true });
+    animations.splice(0).forEach((animation) => animation.finish());
+    await flush();
+    expect(transitions).toEqual([['none', 'none', 'none']]);
+    expect(buttons.map((button) => button.style.transition)).toEqual(['', '', '']);
   });
 
   it('staggers the buttons that come back', async () => {

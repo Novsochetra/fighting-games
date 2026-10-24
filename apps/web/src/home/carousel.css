@@ -50,8 +50,14 @@
   animation-delay: calc(var(--distance) * var(--duration-stagger));
 }
 
-.card.is-hidden {
+.card.is-hidden,
+.card.is-leaving {
   pointer-events: none;
+}
+
+/* The copy of a card leaving by one side starts where the card stood, not with the page's entrance. */
+.card.is-leaving {
+  animation: none;
 }
 
 .card__ring {
