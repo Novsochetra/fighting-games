@@ -1,5 +1,6 @@
 /* A warm light falls from the top of the page, the colors of the arcade's logo. */
 .credits-page {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-block-size: 100dvh;
@@ -12,8 +13,10 @@
     var(--color-launcher-background);
 }
 
+/* The bar floats over the cover photo, as over an artist's photo in Apple Music. */
 .credits-bar {
-  position: relative;
+  position: absolute;
+  inset: 0 0 auto;
   z-index: var(--layer-bar);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -64,11 +67,10 @@
 }
 
 /* As in iOS, the large title hands over to the bar as it scrolls away. Without scroll-driven
-   animations the bar stays put at the top, plain, as the supporters page's does. */
+   animations the bar stays plain and scrolls away with the cover. */
 @supports (animation-timeline: scroll()) {
   .credits-bar {
-    position: sticky;
-    inset-block-start: 0;
+    position: fixed;
   }
 
   .credits-bar::before,

@@ -1,0 +1,83 @@
+/* A photo from the maker's childhood heads the page, as an artist's photo heads their page in Apple
+   Music: it fills the top behind the bar, drifts in one slow zoom like the arcade's key art, and
+   fades into the page, with the profile photo sitting on its lower edge. */
+.cover {
+  position: relative;
+  inline-size: 100%;
+  max-inline-size: var(--layout-cover-max-width);
+  block-size: var(--size-cover);
+  margin: 0 auto;
+  overflow: hidden;
+  animation: cover-in var(--duration-enter) var(--easing-standard) backwards;
+}
+
+.cover__photo {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: 50% 18%;
+  mask-image: linear-gradient(to bottom, var(--color-black) 45%, var(--color-clear));
+  animation: cover-zoom var(--duration-ken-burns) var(--easing-gentle) infinite alternate;
+}
+
+/* The photo is small, so a wide screen shows it no wider than the page and lets its sides fade out
+   too, rather than stretch it soft across the whole screen. */
+@media (min-width: 48rem) {
+  .cover__photo {
+    mask-image:
+      linear-gradient(to bottom, var(--color-black) 45%, var(--color-clear)),
+      linear-gradient(
+        to right,
+        var(--color-clear),
+        var(--color-black) 22%,
+        var(--color-black) 78%,
+        var(--color-clear)
+      );
+    mask-composite: intersect;
+  }
+}
+
+.cover__caption {
+  position: absolute;
+  inset-block-end: calc(var(--size-maker) / 2 + var(--space-5));
+  inset-inline-start: max(var(--space-gutter), env(safe-area-inset-left));
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-apple-footnote);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-apple-footnote);
+  color: var(--color-label);
+  background: var(--color-glass);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  backdrop-filter: var(--blur-glass);
+  animation: credits-rise var(--duration-rise) var(--easing-spring) backwards;
+  animation-delay: var(--duration-fade);
+}
+
+@media (min-width: 48rem) {
+  .cover__caption {
+    inset-inline-start: 22%;
+  }
+}
+
+@keyframes cover-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes cover-zoom {
+  to {
+    scale: var(--scale-ken-burns);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover,
+  .cover__photo,
+  .cover__caption {
+    animation: none;
+  }
+}

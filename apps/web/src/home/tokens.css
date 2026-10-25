@@ -193,6 +193,7 @@
   --layout-hero-min-height: 40rem;
   --layout-supporters-max-width: 52rem;
   --layout-credits-max-width: 40rem;
+  --layout-cover-max-width: 48rem;
 
   --size-card: clamp(16.25rem, 30vw, 27.5rem);
   --size-card-gap: clamp(1.625rem, 2.6vw, 2.25rem);
@@ -238,6 +239,7 @@
   --size-medal: 1.75rem;
   --size-maker: 7.5rem;
   --size-maker-small: 1.75rem;
+  --size-cover: clamp(18rem, 78vw, 26rem);
   --size-tile-icon: 1.875rem;
   --size-row: 3.75rem;
   --size-stroke-icon: 2.2;
@@ -291,8 +293,8 @@
   --offset-card-enter: 2.5rem;
   --offset-banner: 1.5rem;
   --offset-nudge: 3px;
-  --scroll-condense-start: 7rem;
-  --scroll-condense-end: 10rem;
+  --scroll-condense-start: calc(var(--size-cover) + 3.5rem);
+  --scroll-condense-end: calc(var(--size-cover) + 6rem);
 
   --duration-fast: 120ms;
   --duration-swap-out: 140ms;

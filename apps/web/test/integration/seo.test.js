@@ -3,6 +3,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { loadCatalog } from '../../../server/src/catalog/read-catalog.js';
 import { GAMES_ROOT, WEB_ROOT } from '../../../server/src/paths.js';
+import { jpegSize } from '../support/jpeg-size.js';
 
 // Search engines and link previews want whole addresses, so these name the arcade's domain where
 // every other URL in the pages is relative.
@@ -24,19 +25,6 @@ const GAME_PAGES = PAGES.filter((page) => page.startsWith('games/'));
 const metaContent = (html, key) =>
   html.match(new RegExp(`<meta\\s+(?:property|name)="${key}"\\s+content="([^"]*)"`))?.[1];
 const canonicalOf = (html) => html.match(/<link rel="canonical" href="([^"]*)"/)?.[1];
-
-// A JPEG keeps its size in its start-of-frame segment (SOF0 to SOF3), height before width.
-function jpegSize(bytes) {
-  let offset = 2;
-  while (offset + 8 < bytes.length && bytes[offset] === 0xff) {
-    const marker = bytes[offset + 1];
-    if (marker >= 0xc0 && marker <= 0xc3) {
-      return `${bytes.readUInt16BE(offset + 7)}x${bytes.readUInt16BE(offset + 5)}`;
-    }
-    offset += 2 + bytes.readUInt16BE(offset + 2);
-  }
-  return null;
-}
 
 describe('what search engines and link previews see', () => {
   it('lists every page served here in the sitemap, and nothing else', async () => {

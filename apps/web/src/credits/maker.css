@@ -11,7 +11,7 @@
   place-items: center;
   inline-size: var(--size-maker);
   block-size: var(--size-maker);
-  margin-block: var(--space-6) var(--space-8);
+  margin-block: calc(var(--size-maker) / -2) var(--space-8);
   animation: portrait-in var(--duration-enter) var(--easing-spring) backwards;
 }
 
@@ -48,6 +48,16 @@
   border-radius: var(--radius-pill);
   box-shadow: var(--shadow-maker);
   user-select: none;
+}
+
+/* The photo covers the monogram, which shows only until it loads or if it never does. */
+.maker__photo {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-pill);
 }
 
 .maker__eyebrow,

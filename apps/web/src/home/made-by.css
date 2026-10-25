@@ -24,6 +24,7 @@
 }
 
 .made-by__avatar {
+  position: relative;
   display: grid;
   flex: none;
   place-items: center;
@@ -34,6 +35,16 @@
   line-height: var(--leading-none);
   color: var(--color-on-avatar);
   background: linear-gradient(to bottom, var(--color-maker-top), var(--color-maker-bottom));
+  border-radius: var(--radius-pill);
+}
+
+/* The photo covers the monogram, which shows only until it loads or if it never does. */
+.made-by__photo {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
   border-radius: var(--radius-pill);
 }
 

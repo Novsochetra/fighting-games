@@ -17,8 +17,9 @@ apps/
     robots.txt            lets every crawler in and names the sitemap
     sitemap.xml           every page this server sends (see Search and link previews)
     assets/               the arcade's icons and manifest (tools/arcade_icons.py draws the icons),
-                          donate/khqr.jpg, the KHQR code the donate sheet shows, and
-                          social/entry-screen.jpg, the picture a shared link shows
+                          donate/khqr.jpg, the KHQR code the donate sheet shows,
+                          social/entry-screen.jpg, the picture a shared link shows, and
+                          credits/, the maker's photos the credits page shows
     src/home/             home page modules and styles; tokens.css holds its colors, type and motion
     supporters/           the supporters page
     src/supporters/       supporters page modules and styles
@@ -279,14 +280,22 @@ there; it sits after the controls hint, which touch screens hide, so every scree
 It is mostly markup and CSS. Its modules keep the appearance in step with the device and make Back
 go back in history when the page was opened from the arcade (`back-link.js`), so the browser brings
 the arcade back as it was left, from its back/forward cache, where following the link would load it
-fresh at the top. Opened any other way, or with a click that opens a tab, Back stays a plain link. A monogram in the logo's orange to pink stands in a slowly turning glow of system
-colors (`maker.css`), and the name, the lead and each group rise in after one another on the
-arcade's spring. Its links are an inset grouped list like iOS Settings (`rows.css`), each with a
+fresh at the top. Opened any other way, or with a click that opens a tab, Back stays a plain link.
+
+A photo of the maker and their brother as children heads the page, as an artist's photo heads their
+page in Apple Music (`cover.css`, `assets/credits/childhood.jpg`): it fills the top behind the bar,
+drifts in the arcade's slow Ken Burns zoom and fades into the page. The photo is small, so a wide
+screen shows it no wider than `--layout-cover-max-width`, its sides fading out too. The maker's own
+photo (`portrait.jpg`) sits on its lower edge in a slowly turning glow of system colors
+(`maker.css`), over a monogram in the logo's orange to pink that shows until it loads; the home
+page's Made by line shows a small copy (`portrait-small.jpg`). The name, the lead and each group
+rise in after one another on the arcade's spring. Its links are an inset grouped list like iOS Settings (`rows.css`), each with a
 rounded icon in its service's color (`tiles.css`): Find me (Buy Me a Coffee first, then GitHub and
 Facebook), Thanks to (the supporters page) and Made with (Inter, Kokoro). A row lights up while it
-is pressed, and on a mouse its arrow nudges toward where it leads. As the large name scrolls away,
-the bar frosts over and shows it small, as an iOS large title does; that runs on scroll-driven
-animations alone (`credits.css`), and a browser without them keeps a plain bar that scrolls away.
+is pressed, and on a mouse its arrow nudges toward where it leads. The bar floats over the cover; as
+the large name scrolls under it, it frosts over and shows the name small, as an iOS large title
+does. That runs on scroll-driven animations alone (`credits.css`), and a browser without them keeps
+a plain bar that scrolls away with the cover.
 With reduced motion nothing rises, pops or turns.
 
 ## Game: Steel & Dust

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { WEB_ROOT } from '../../../../server/src/paths.js';
 import { CREDITS_PAGE, loadCreditsMarkup } from '../../support/credits-harness.js';
+import { claimedAndRealSize } from '../../support/jpeg-size.js';
 
 const SOCIAL_LINKS = [
   'https://buymeacoffee.com/sochetranov',
@@ -62,6 +63,17 @@ describe('the credits page', () => {
     expect(document.getElementById('supporters-link').getAttribute('href')).toBe('../supporters/');
     const supporters = await stat(path.join(WEB_ROOT, 'supporters', 'index.html'));
     expect(supporters.isFile()).toBe(true);
+  });
+
+  it("sets the maker's photo on the edge of their childhood one, each the size of its file", async () => {
+    const cover = document.querySelector('.cover__photo');
+    const portrait = document.querySelector('.maker__photo');
+    expect(cover.getAttribute('alt')).toMatch(/brother/);
+    expect(textOf(document.querySelector('.cover__caption'))).toBe('Me and my brother');
+    for (const photo of [cover, portrait]) {
+      const { claimed, real } = await claimedAndRealSize(photo, CREDITS_PAGE);
+      expect(real).toBe(claimed);
+    }
   });
 
   it('loads only stylesheets and scripts that are there', async () => {

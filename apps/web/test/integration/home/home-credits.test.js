@@ -9,6 +9,7 @@ import {
   loadHomeMarkup,
   stopHomes,
 } from '../../support/home-harness.js';
+import { claimedAndRealSize } from '../../support/jpeg-size.js';
 
 beforeEach(async () => {
   document.body.innerHTML = '';
@@ -32,6 +33,12 @@ describe('the way to the credits page', () => {
     expect(document.querySelector('.hints').compareDocumentPosition(link)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     );
+  });
+
+  it("shows the maker's photo, the size of its file", async () => {
+    const photo = byId('credits-link').querySelector('.made-by__photo');
+    const { claimed, real } = await claimedAndRealSize(photo, path.join(WEB_ROOT, 'index.html'));
+    expect(real).toBe(claimed);
   });
 
   it('leads to a real page', async () => {
