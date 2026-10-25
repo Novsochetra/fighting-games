@@ -47,10 +47,6 @@
   background: linear-gradient(to bottom, var(--color-avatar-6-top), var(--color-avatar-6-bottom));
 }
 
-.credits-tile--pixel {
-  background: linear-gradient(to bottom, var(--color-avatar-5-top), var(--color-avatar-5-bottom));
-}
-
 .credits-tile--voice {
   background: linear-gradient(to bottom, var(--color-avatar-4-top), var(--color-avatar-4-bottom));
 }

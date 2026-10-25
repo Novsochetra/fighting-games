@@ -280,8 +280,8 @@ It is plain markup and CSS; its one module (`src/credits/main.js`) only keeps th
 with the device. A monogram in the logo's orange to pink stands in a slowly turning glow of system
 colors (`maker.css`), and the name, the lead and each group rise in after one another on the
 arcade's spring. Its links are an inset grouped list like iOS Settings (`rows.css`), each with a
-rounded icon in its service's color (`tiles.css`): Find me (GitHub, Buy Me a Coffee, Facebook),
-Thanks to (the supporters page) and Made with (Inter, PixelLab, Kokoro). A row lights up while it
+rounded icon in its service's color (`tiles.css`): Find me (Buy Me a Coffee first, then GitHub and
+Facebook), Thanks to (the supporters page) and Made with (Inter, Kokoro). A row lights up while it
 is pressed, and on a mouse its arrow nudges toward where it leads. As the large name scrolls away,
 the bar frosts over and shows it small, as an iOS large title does; that runs on scroll-driven
 animations alone (`credits.css`), and a browser without them keeps a plain bar that scrolls away.

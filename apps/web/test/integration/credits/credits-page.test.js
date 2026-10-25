@@ -7,8 +7,8 @@ import { WEB_ROOT } from '../../../../server/src/paths.js';
 const CREDITS_PAGE = path.join(WEB_ROOT, 'credits', 'index.html');
 
 const SOCIAL_LINKS = [
-  'https://github.com/Novsochetra',
   'https://buymeacoffee.com/sochetranov',
+  'https://github.com/Novsochetra',
   'https://www.facebook.com/sochetra.nov.7',
 ];
 
@@ -35,7 +35,7 @@ describe('the credits page', () => {
     expect(textOf(document.getElementById('bar-title'))).toBe('Nov Sochetra');
   });
 
-  it('links to the maker on GitHub, Buy Me a Coffee and Facebook', () => {
+  it('links to the maker on Buy Me a Coffee first, then GitHub and Facebook', () => {
     const hrefs = all('#social-links a').map((link) => link.getAttribute('href'));
     expect(hrefs).toEqual(SOCIAL_LINKS);
   });
@@ -54,7 +54,7 @@ describe('the credits page', () => {
 
   it('names every row by its title, with the icons hidden from screen readers', () => {
     const rows = all('.credits-row');
-    expect(rows).toHaveLength(7);
+    expect(rows).toHaveLength(6);
     for (const row of rows) {
       expect(textOf(row.querySelector('.credits-row__title'))).not.toBe('');
       expect(row.querySelector('.credits-tile').getAttribute('aria-hidden')).toBe('true');
