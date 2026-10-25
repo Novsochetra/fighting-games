@@ -193,13 +193,13 @@ pages name that domain; every other URL stays relative. Each page served here ca
   and a game page can be loaded under a query (`boot-recovery.js`),
 - Open Graph tags and `twitter:card` `summary_large_image`, so a shared link opens into a picture.
 
-The home and supporters pages share `assets/social/entry-screen.jpg`, the arcade's entry screen at
+The home, supporters and credits pages share `assets/social/entry-screen.jpg`, the arcade's entry screen at
 1200x630: the home page in its light appearance with Steel & Dust picked, taken in a 1200x630 window
 at 2x and scaled down. A game shares a picture of its own from its own folder (Steel & Dust's title
 screen, `games/steel-and-dust/assets/social/`). The home page also names the site for search results
 in JSON-LD (`WebSite`). `robots.txt` blocks nothing, as Google renders the home page and its list
-comes from `api/games`, and names `sitemap.xml`, which lists the home page, the supporters page and
-every game served here, but not one on its own site. `test/integration/seo.test.js` fails when a page
+comes from `api/games`, and names `sitemap.xml`, which lists the home, supporters and credits pages
+and every game served here, but not one on its own site. `test/integration/seo.test.js` fails when a page
 is missing from the sitemap or its tags, or its picture is not a 1200x630 JPEG the server sends.
 
 ## Supporters page

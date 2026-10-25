@@ -15,7 +15,7 @@ const readWebText = async (relativePath) => (await readWebFile(relativePath)).to
 async function pagesServedHere() {
   const { games } = await loadCatalog({ gamesRoot: GAMES_ROOT, warn: () => {} });
   const gamePages = games.filter((game) => game.url === undefined).map((game) => game.path);
-  return ['', 'supporters/', ...gamePages];
+  return ['', 'supporters/', 'credits/', ...gamePages];
 }
 
 const PAGES = await pagesServedHere();
