@@ -141,7 +141,11 @@ light screen never shows dark first; a test holds it to the same choice as `reso
 
 Opening a game plays an app-launch animation before the page changes (`src/home/launcher.js`): the
 card's art grows into a screen-sized panel in the colors of its edges (sampled from its corners,
-`launch-splash.js`), so every game opens into its own colors, and the home zooms away behind it. It
+`launch-splash.js`), so every game opens into its own colors, and the home zooms away behind it. As
+the panel fills the screen the game's name rises in on it, under a soft dim, and Apple's activity
+indicator joins it only if the game takes a moment to load (`launch.css`). The banners and the
+coffee button float outside the home, so the root is marked `is-launching` while a game opens and
+they leave with it rather than stay sharp over the launch. It
 flies from the carousel card, or from the library tile when the carousel has scrolled out of sight
 (`launch-source.js`). The keyframes are plain functions of the art's box and the screen
 (`launch-geometry.js`), and their timing comes from `--duration-launch` and `--easing-launch` in

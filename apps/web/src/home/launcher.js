@@ -12,7 +12,8 @@ export function createLauncher({ document, home, findSource, navigate }) {
     }
     const source = findSource(index);
     if (source && !prefersReducedMotion(document.defaultView)) {
-      flight = flyOpen({ document, source, home, timing: readLaunchTiming(document) });
+      const timing = readLaunchTiming(document);
+      flight = flyOpen({ document, source, home, timing, title: card.title });
     }
     if (flight) {
       await flight.done;

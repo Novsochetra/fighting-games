@@ -47,8 +47,11 @@ function restoreFromCache(persisted = true) {
   window.dispatchEvent(event);
 }
 
+const isMarkedLaunching = () => document.documentElement.classList.contains('is-launching');
+
 beforeEach(async () => {
   document.body.innerHTML = '';
+  document.documentElement.classList.remove('is-launching');
   await loadHomeMarkup();
   vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(SCREEN.height);
 });
@@ -76,6 +79,9 @@ describe('launching a game', () => {
     expect(icon.style.height).toBe('180px');
     expect(cardFrame().classList.contains('is-launching')).toBe(true);
     expect(byId('home').style.transformOrigin).toBe('200px 190px');
+    expect(layer().querySelector('.launch__title').textContent).toBe('Steel & Dust');
+    expect(layer().querySelector('.launch__spinner')).not.toBeNull();
+    expect(isMarkedLaunching()).toBe(true);
     expect(navigate).not.toHaveBeenCalled();
 
     await vi.waitFor(() => expect(navigate).toHaveBeenCalledWith('games/steel-and-dust/'));
@@ -132,6 +138,7 @@ describe('coming back from a game', () => {
     expect(home.launcher.isFlying()).toBe(false);
     expect(byId('home').getAnimations()).toEqual([]);
     expect(byId('home').style.transformOrigin).toBe('');
+    expect(isMarkedLaunching()).toBe(false);
   });
 
   it('can open a game again after coming back', async () => {

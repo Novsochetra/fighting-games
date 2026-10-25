@@ -27,6 +27,9 @@
   --color-tint: var(--color-apple-blue);
   --color-focus-ring: var(--color-tint);
   --color-splash: var(--color-launcher-background);
+  --color-launch-label: var(--color-white);
+  --color-launch-scrim: rgb(0 0 0 / 22%);
+  --text-shadow-launch: 0 2px 16px rgb(0 0 0 / 45%);
 
   --color-glass: rgb(255 255 255 / 14%);
   --color-glass-hover: rgb(255 255 255 / 22%);
@@ -335,6 +338,8 @@
   --duration-stagger: 60ms;
   --duration-install-delay: 1.2s;
   --duration-coffee-delay: 1.6s;
+  --duration-launch-caption-delay: calc(var(--duration-launch) * 0.6);
+  --duration-launch-spinner-delay: calc(var(--duration-launch) + var(--duration-loading-delay));
   --duration-halo: 14s;
   --duration-navigation: 500ms;
 

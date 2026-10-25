@@ -18,6 +18,14 @@
   will-change: transform;
 }
 
+/* The corner colors can be light, so a soft dim keeps the game's name readable on any of them. */
+.launch__panel::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: var(--color-launch-scrim);
+}
+
 .launch__icon {
   position: absolute;
   overflow: hidden;
@@ -25,4 +33,69 @@
   transform-origin: 0 0;
   container-type: inline-size;
   will-change: transform, opacity;
+}
+
+/* The game's name rises in as the screen fills, and Apple's activity indicator (as on the loading
+   notice, notice.css) joins it only if the game takes a moment to load. */
+.launch__caption {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  align-items: center;
+  padding-inline: var(--space-gutter);
+  color: var(--color-launch-label);
+  text-align: center;
+  transform: translateY(-50%);
+  animation: launch-caption-in var(--duration-rise) var(--easing-spring)
+    var(--duration-launch-caption-delay) backwards;
+}
+
+.launch__title {
+  font-size: var(--font-size-apple-title-1);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-apple-title);
+  letter-spacing: var(--tracking-title);
+  text-shadow: var(--text-shadow-launch);
+}
+
+.launch__spinner {
+  inline-size: var(--size-spinner);
+  block-size: var(--size-spinner);
+  background: conic-gradient(var(--color-launch-label), var(--color-clear));
+  mask:
+    radial-gradient(
+      circle,
+      var(--color-clear) var(--size-spinner-petal-gap),
+      var(--color-black) calc(var(--size-spinner-petal-gap) + 1%)
+    ),
+    repeating-conic-gradient(
+      from -7deg,
+      var(--color-black) 0deg 14deg,
+      var(--color-clear) 14deg 45deg
+    );
+  mask-composite: intersect;
+  animation:
+    launch-caption-in var(--duration-normal) var(--easing-standard)
+      var(--duration-launch-spinner-delay) backwards,
+    spin var(--duration-pulse) var(--easing-step-8) infinite;
+}
+
+/* The banners and the coffee button float outside the home, which zooms away as a game opens, so they
+   leave with it rather than stay sharp over the launch (launch-flight.js marks the root). */
+:root.is-launching :is(.install, .coffee-fab, .coffee-note) {
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--duration-fast) var(--easing-standard),
+    visibility 0s linear var(--duration-fast);
+}
+
+@keyframes launch-caption-in {
+  from {
+    opacity: 0;
+    translate: 0 var(--offset-rise);
+  }
 }
