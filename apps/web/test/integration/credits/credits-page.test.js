@@ -3,22 +3,13 @@ import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { WEB_ROOT } from '../../../../server/src/paths.js';
-
-const CREDITS_PAGE = path.join(WEB_ROOT, 'credits', 'index.html');
+import { CREDITS_PAGE, loadCreditsMarkup } from '../../support/credits-harness.js';
 
 const SOCIAL_LINKS = [
   'https://buymeacoffee.com/sochetranov',
   'https://github.com/Novsochetra',
   'https://www.facebook.com/sochetra.nov.7',
 ];
-
-// Only the body: the head's stylesheet and module links would make happy-dom try to fetch them.
-async function loadCreditsMarkup() {
-  const html = await readFile(CREDITS_PAGE, 'utf8');
-  const [, bodyMarkup] = /<body[^>]*>([\s\S]*)<\/body>/.exec(html);
-  expect(bodyMarkup).not.toMatch(/<script|<link/);
-  document.body.innerHTML = bodyMarkup;
-}
 
 const all = (selector) => [...document.querySelectorAll(selector)];
 const isOutside = (link) => /^[a-z]+:/i.test(link.getAttribute('href'));

@@ -23,7 +23,7 @@ apps/
     supporters/           the supporters page
     src/supporters/       supporters page modules and styles
     credits/              the credits page: who makes the arcade, and where to find them
-    src/credits/          credits page styles and its one module
+    src/credits/          credits page styles and modules
     games/
       <game-id>/          one self-contained app: it loads nothing from outside its folder
         game.json         catalog entry, read by the server
@@ -276,8 +276,10 @@ of the arcade the way the supporters page is: the home page's tokens, buttons an
 The home page signs off under the library with Made by Nov Sochetra (`made-by.css`), which leads
 there; it sits after the controls hint, which touch screens hide, so every screen shows it.
 
-It is plain markup and CSS; its one module (`src/credits/main.js`) only keeps the appearance in step
-with the device. A monogram in the logo's orange to pink stands in a slowly turning glow of system
+It is mostly markup and CSS. Its modules keep the appearance in step with the device and make Back
+go back in history when the page was opened from the arcade (`back-link.js`), so the browser brings
+the arcade back as it was left, from its back/forward cache, where following the link would load it
+fresh at the top. Opened any other way, or with a click that opens a tab, Back stays a plain link. A monogram in the logo's orange to pink stands in a slowly turning glow of system
 colors (`maker.css`), and the name, the lead and each group rise in after one another on the
 arcade's spring. Its links are an inset grouped list like iOS Settings (`rows.css`), each with a
 rounded icon in its service's color (`tiles.css`): Find me (Buy Me a Coffee first, then GitHub and
