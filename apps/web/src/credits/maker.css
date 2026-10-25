@@ -1,0 +1,99 @@
+.maker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.maker__portrait {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: var(--size-maker);
+  block-size: var(--size-maker);
+  margin-block: var(--space-6) var(--space-8);
+  animation: portrait-in var(--duration-enter) var(--easing-spring) backwards;
+}
+
+/* A soft ring of the system colors turns slowly behind the monogram, like Siri's glow. */
+.maker__halo {
+  position: absolute;
+  inset: calc(-1 * var(--space-3));
+  background: conic-gradient(
+    var(--color-halo-1),
+    var(--color-halo-2),
+    var(--color-halo-3),
+    var(--color-halo-4),
+    var(--color-halo-1)
+  );
+  border-radius: var(--radius-pill);
+  opacity: var(--opacity-halo);
+  filter: var(--blur-halo);
+  animation: halo-turn var(--duration-halo) linear infinite;
+}
+
+.maker__avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  block-size: 100%;
+  font-size: var(--font-size-maker);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-brand);
+  color: var(--color-on-avatar);
+  text-shadow: var(--text-shadow-avatar);
+  background: linear-gradient(to bottom, var(--color-maker-top), var(--color-maker-bottom));
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-maker);
+  user-select: none;
+}
+
+.maker__eyebrow,
+.maker__name,
+.maker__lead {
+  margin: 0;
+}
+
+.maker__eyebrow {
+  font-size: var(--font-size-apple-subheadline);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-apple-subheadline);
+  color: var(--color-label-muted);
+}
+
+.maker__name {
+  margin-block: var(--space-1) var(--space-3);
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+
+.maker__lead {
+  max-inline-size: 30ch;
+  font-size: var(--font-size-apple-body);
+  line-height: var(--leading-apple-body);
+  color: var(--color-label-tertiary);
+}
+
+@keyframes portrait-in {
+  from {
+    opacity: 0;
+    scale: var(--scale-enter);
+  }
+}
+
+@keyframes halo-turn {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .maker__portrait,
+  .maker__halo {
+    animation: none;
+  }
+}

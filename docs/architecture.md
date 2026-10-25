@@ -22,6 +22,8 @@ apps/
     src/home/             home page modules and styles; tokens.css holds its colors, type and motion
     supporters/           the supporters page
     src/supporters/       supporters page modules and styles
+    credits/              the credits page: who makes the arcade, and where to find them
+    src/credits/          credits page styles and its one module
     games/
       <game-id>/          one self-contained app: it loads nothing from outside its folder
         game.json         catalog entry, read by the server
@@ -45,7 +47,7 @@ look without touching the arcade or another game. The home page knows a game onl
 `game.json` and the art it names (`cover`, `banner`, `poster`, `screenshot`); a game links back to the
 arcade only by address (`../../`).
 `test/integration/independence.test.js` fails if a game loads a file from outside its folder or the
-home page (or the supporters page, part of the arcade) loads a file from a game.
+home page (or the supporters or credits page, part of the arcade) loads a file from a game.
 
 A game hosted on its own site, such as Morodok Angkor (`games/morodok-angkor/`, at
 `https://morodokangkor.com/`), keeps only its `game.json` and art here. Its `url` must be an `https:`
@@ -266,6 +268,24 @@ colored by their name (`paletteOf` in `format.js`); anonymous ones stay gray. Be
 the podium and the list, a chip shows the gift's tier: its gem and name (`renderTier`), kept apart
 from the place medals so a Gold gift in second place reads plainly. With no one on the list
 yet the page says so and invites the first.
+
+## Credits page
+
+`credits/` says who makes the arcade, like the profile card at the top of an iOS contact, and is part
+of the arcade the way the supporters page is: the home page's tokens, buttons and light or dark choice.
+The home page signs off under the library with Made by Nov Sochetra (`made-by.css`), which leads
+there; it sits after the controls hint, which touch screens hide, so every screen shows it.
+
+It is plain markup and CSS; its one module (`src/credits/main.js`) only keeps the appearance in step
+with the device. A monogram in the logo's orange to pink stands in a slowly turning glow of system
+colors (`maker.css`), and the name, the lead and each group rise in after one another on the
+arcade's spring. Its links are an inset grouped list like iOS Settings (`rows.css`), each with a
+rounded icon in its service's color (`tiles.css`): Find me (GitHub, Buy Me a Coffee, Facebook),
+Thanks to (the supporters page) and Made with (Inter, PixelLab, Kokoro). A row lights up while it
+is pressed, and on a mouse its arrow nudges toward where it leads. As the large name scrolls away,
+the bar frosts over and shows it small, as an iOS large title does; that runs on scroll-driven
+animations alone (`credits.css`), and a browser without them keeps a plain bar that scrolls away.
+With reduced motion nothing rises, pops or turns.
 
 ## Game: Steel & Dust
 

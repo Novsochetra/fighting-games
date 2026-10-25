@@ -1,0 +1,83 @@
+/* The arcade signs off at the very bottom with who made it, a quiet way to the credits page. */
+.made-by {
+  display: flex;
+  justify-content: center;
+  margin: var(--space-8) 0 0;
+}
+
+.made-by__link {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  min-block-size: var(--size-glass-button);
+  padding: var(--space-2) var(--space-4) var(--space-2) var(--space-2);
+  font-size: var(--font-size-apple-footnote);
+  line-height: var(--leading-apple-footnote);
+  color: var(--color-label-muted);
+  text-decoration: none;
+  border-radius: var(--radius-pill);
+  outline: none;
+  -webkit-touch-callout: none;
+  transition:
+    background-color var(--duration-normal) var(--easing-standard),
+    scale var(--duration-press) var(--easing-standard);
+}
+
+.made-by__avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--size-maker-small);
+  block-size: var(--size-maker-small);
+  font-size: var(--font-size-apple-caption-2);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-none);
+  color: var(--color-on-avatar);
+  background: linear-gradient(to bottom, var(--color-maker-top), var(--color-maker-bottom));
+  border-radius: var(--radius-pill);
+}
+
+.made-by__name {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-label);
+}
+
+.made-by__more {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+  color: var(--color-tint);
+}
+
+.made-by__more .icon {
+  inline-size: var(--size-icon-small);
+  block-size: var(--size-icon-small);
+  transition: translate var(--duration-tile) var(--easing-spring);
+}
+
+@media (hover: hover) {
+  .made-by__link:hover {
+    background-color: var(--color-row-hover);
+  }
+
+  .made-by__link:hover .made-by__more .icon {
+    translate: var(--offset-nudge) 0;
+  }
+}
+
+.made-by__link:active {
+  scale: var(--scale-pressed);
+  transition-duration: var(--duration-fast);
+}
+
+.made-by__link:focus-visible {
+  outline: var(--border-width-ring) solid var(--color-focus-ring);
+  outline-offset: var(--border-width-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .made-by__link,
+  .made-by__more .icon {
+    transition: none;
+  }
+}

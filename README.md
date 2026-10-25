@@ -31,7 +31,8 @@ gamepad.
 
 ```
 apps/server/   Node HTTP server: the games, supporters and health API, and the static files
-apps/web/      everything the browser loads: the home page and the games, each with its own tokens
+apps/web/      everything the browser loads: the home, supporters and credits pages and the games,
+               each game with its own tokens
 scripts/       the static site build
 tools/         the project's own ESLint rules
 docs/          architecture notes

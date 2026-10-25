@@ -1,0 +1,163 @@
+/* A warm light falls from the top of the page, the colors of the arcade's logo. */
+.credits-page {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100dvh;
+  background:
+    radial-gradient(
+      ellipse 60rem 30rem at 50% -6rem,
+      var(--color-credits-glow),
+      var(--color-clear) 70%
+    ),
+    var(--color-launcher-background);
+}
+
+.credits-bar {
+  position: relative;
+  z-index: var(--layer-bar);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  padding: max(var(--space-4), env(safe-area-inset-top))
+    max(var(--space-gutter), env(safe-area-inset-right)) var(--space-4)
+    max(var(--space-gutter), env(safe-area-inset-left));
+}
+
+.credits-bar > .glass-button {
+  justify-self: start;
+}
+
+/* On a phone the back button keeps its chevron alone, so the small title can sit in the middle;
+   its aria-label still names it. */
+@media (max-width: 37.5rem) {
+  .credits-bar > .glass-button {
+    inline-size: var(--size-glass-button);
+    padding: 0;
+  }
+
+  .credits-bar .glass-button__label {
+    display: none;
+  }
+}
+
+/* The bar's material and its small title wait unseen until the large name scrolls under them. */
+.credits-bar::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: '';
+  background: var(--color-material);
+  border-block-end: var(--border-width-hairline) solid var(--color-launcher-separator);
+  opacity: 0;
+  -webkit-backdrop-filter: var(--blur-glass);
+  backdrop-filter: var(--blur-glass);
+}
+
+.credits-bar__title {
+  grid-column: 2;
+  margin: 0;
+  font-size: var(--font-size-apple-body);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  white-space: nowrap;
+  opacity: 0;
+}
+
+/* As in iOS, the large title hands over to the bar as it scrolls away. Without scroll-driven
+   animations the bar stays put at the top, plain, as the supporters page's does. */
+@supports (animation-timeline: scroll()) {
+  .credits-bar {
+    position: sticky;
+    inset-block-start: 0;
+  }
+
+  .credits-bar::before,
+  .credits-bar__title {
+    animation-name: bar-condense;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll();
+    animation-range: var(--scroll-condense-start) var(--scroll-condense-end);
+  }
+}
+
+.credits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  inline-size: 100%;
+  max-inline-size: calc(var(--layout-credits-max-width) + 2 * var(--space-gutter));
+  margin-inline: auto;
+  padding: var(--space-2) max(var(--space-gutter), env(safe-area-inset-right))
+    max(var(--space-16), env(safe-area-inset-bottom))
+    max(var(--space-gutter), env(safe-area-inset-left));
+}
+
+.credits-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.credits-group__title {
+  margin: 0;
+  padding-inline: var(--space-1);
+  font-size: var(--font-size-apple-title-3);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-apple-title);
+  letter-spacing: var(--tracking-tight);
+}
+
+.credits__footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: center;
+  font-size: var(--font-size-apple-footnote);
+  line-height: var(--leading-apple-footnote);
+  color: var(--color-label-muted);
+  text-align: center;
+}
+
+.credits__footer p {
+  margin: 0;
+}
+
+.credits__thanks {
+  font-size: var(--font-size-apple-subheadline);
+  color: var(--color-label-tertiary);
+}
+
+/* Each part rises in after the one above it, on the arcade's spring. */
+.maker__eyebrow,
+.maker__name,
+.maker__lead,
+.credits-group,
+.credits__footer {
+  animation: credits-rise var(--duration-rise) var(--easing-spring) backwards;
+  animation-delay: calc(var(--order, 0) * var(--duration-stagger));
+}
+
+@keyframes credits-rise {
+  from {
+    opacity: 0;
+    translate: 0 var(--offset-rise);
+  }
+}
+
+@keyframes bar-condense {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .maker__eyebrow,
+  .maker__name,
+  .maker__lead,
+  .credits-group,
+  .credits__footer {
+    animation: none;
+  }
+}

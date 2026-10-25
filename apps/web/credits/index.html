@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Credits · Retro Arcade</title>
+    <meta name="description" content="Who makes Retro Arcade, and where to find them." />
+    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="dark light" />
+    <script src="../src/home/appearance-early.js"></script>
+    <link rel="manifest" href="../assets/manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/icon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap"
+    />
+    <link rel="stylesheet" href="../src/home/tokens.css" />
+    <link rel="stylesheet" href="../src/home/page.css" />
+    <link rel="stylesheet" href="../src/home/buttons.css" />
+    <link rel="stylesheet" href="../src/credits/credits.css" />
+    <link rel="stylesheet" href="../src/credits/maker.css" />
+    <link rel="stylesheet" href="../src/credits/rows.css" />
+    <link rel="stylesheet" href="../src/credits/tiles.css" />
+    <script type="module" src="../src/credits/main.js"></script>
+  </head>
+  <body>
+    <div class="credits-page">
+      <header class="credits-bar">
+        <a class="glass-button glass-button--labeled" id="back" href="../" aria-label="Arcade">
+          <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 5l-7 7 7 7" />
+          </svg>
+          <span class="glass-button__label">Arcade</span>
+        </a>
+        <p class="credits-bar__title" id="bar-title" aria-hidden="true">Nov Sochetra</p>
+      </header>
+
+      <main class="credits">
+        <section class="maker" aria-labelledby="maker-name">
+          <div class="maker__portrait" aria-hidden="true">
+            <span class="maker__halo"></span>
+            <span class="maker__avatar">NS</span>
+          </div>
+          <p class="maker__eyebrow" style="--order: 1">Made by</p>
+          <h1 class="maker__name" id="maker-name" style="--order: 2">Nov Sochetra</h1>
+          <p class="maker__lead" style="--order: 3">
+            I build Retro Arcade and keep every game in it free to play.
+          </p>
+        </section>
+
+        <section class="credits-group" aria-labelledby="find-title" style="--order: 4">
+          <h2 class="credits-group__title" id="find-title">Find me</h2>
+          <ul class="credits-list" id="social-links">
+            <li>
+              <a
+                class="credits-row"
+                href="https://github.com/Novsochetra"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="credits-tile credits-tile--github" aria-hidden="true">
+                  <svg class="icon icon--solid" viewBox="0 0 16 16">
+                    <path
+                      d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+                    />
+                  </svg>
+                </span>
+                <span class="credits-row__text">
+                  <span class="credits-row__title">GitHub</span>
+                  <span class="credits-row__detail">@Novsochetra</span>
+                </span>
+                <svg class="icon icon--bold credits-row__go" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7.5 16.5l9-9M9 7.5h7.5V15" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                class="credits-row"
+                href="https://buymeacoffee.com/sochetranov"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="credits-tile credits-tile--coffee" aria-hidden="true">
+                  <svg class="icon icon--bold" viewBox="0 0 24 24">
+                    <path d="M4.5 9.5h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z" />
+                    <path d="M15.5 11h1.25a2.25 2.25 0 0 1 0 4.5H15" />
+                    <path d="M8 3.5c-.7.9-.7 1.8 0 2.7M11.5 3.5c-.7.9-.7 1.8 0 2.7" />
+                  </svg>
+                </span>
+                <span class="credits-row__text">
+                  <span class="credits-row__title">Buy Me a Coffee</span>
+                  <span class="credits-row__detail">sochetranov</span>
+                </span>
+                <svg class="icon icon--bold credits-row__go" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7.5 16.5l9-9M9 7.5h7.5V15" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                class="credits-row"
+                href="https://www.facebook.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="credits-tile credits-tile--facebook" aria-hidden="true">
+                  <svg class="icon icon--solid" viewBox="0 0 24 24">
+                    <path
+                      d="M13.6 21v-7.6h2.6l.4-3h-3V8.5c0-.9.3-1.5 1.5-1.5h1.6V4.3c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H8v3h2.5V21z"
+                    />
+                  </svg>
+                </span>
+                <span class="credits-row__text">
+                  <span class="credits-row__title">Facebook</span>
+                  <span class="credits-row__detail">facebook.com</span>
+                </span>
+                <svg class="icon icon--bold credits-row__go" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7.5 16.5l9-9M9 7.5h7.5V15" />
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section class="credits-group" aria-labelledby="thanks-title" style="--order: 5">
+          <h2 class="credits-group__title" id="thanks-title">Thanks to</h2>
+          <ul class="credits-list">
+            <li>
+              <a class="credits-row" id="supporters-link" href="../supporters/">
+                <span class="credits-tile credits-tile--heart" aria-hidden="true">
+                  <svg class="icon icon--solid" viewBox="0 0 24 24">
+                    <path
+                      d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
+                    />
+                  </svg>
+                </span>
+                <span class="credits-row__text">
+                  <span class="credits-row__title">Supporters</span>
+                  <span class="credits-row__detail">They keep every game free</span>
+                </span>
+                <svg
+                  class="icon icon--bold credits-row__go credits-row__go--inside"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d="M9 5.5l6.5 6.5L9 18.5" />
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section class="credits-group" aria-labelledby="tools-title" style="--order: 6">
+          <h2 class="credits-group__title" id="tools-title">Made with</h2>
+          <ul class="credits-list">
+            <li>
+              <a
+                class="credits-row"
+                href="https://rsms.me/inter/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="credits-tile credits-tile--type" aria-hidden="true">Aa</span>
+                <span class="credits-row__text">
+                  <span class="credits-row__title">Inter</span>
+                  <span class="credits-row__detail">Type, by Rasmus Andersson</span>
+                </span>
+                <svg class="icon icon--bold credits-row__go" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7.5 16.5l9-9M9 7.5h7.5V15" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                class="credits-row"
+                href="https://www.pixellab.ai/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="credits-tile credits-tile--pixel" aria-hidden="true">
+                  <svg class="icon icon--solid" viewBox="0 0 24 24">
+                    <path
+                      d="M5 4h2v2H5zM17 4h2v2h-2zM7 6h2v2H7zM15 6h2v2h-2zM5 8h14v2H5zM3 10h4v2H3zM9 10h6v2H9zM17 10h4v2h-4zM1 12h22v2H1zM1 14h2v2H1zM5 14h14v2H5zM21 14h2v2h-2zM1 16h2v2H1zM5 16h2v2H5zM17 16h2v2h-2zM21 16h2v2h-2zM7 18h4v2H7zM13 18h4v2h-4z"
+                    />
+                  </svg>
+                </span>
+                <span class="credits-row__text">
+                  <span class="credits-row__title">PixelLab</span>
+                  <span class="credits-row__detail">Pixel art</span>
+                </span>
+                <svg class="icon icon--bold credits-row__go" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7.5 16.5l9-9M9 7.5h7.5V15" />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                class="credits-row"
+                href="https://huggingface.co/hexgrad/Kokoro-82M"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="credits-tile credits-tile--voice" aria-hidden="true">
+                  <svg class="icon icon--bold" viewBox="0 0 24 24">
+                    <path d="M4.5 10v4M8.25 7v10M12 4v16M15.75 8v8M19.5 10.5v3" />
+                  </svg>
+                </span>
+                <span class="credits-row__text">
+                  <span class="credits-row__title">Kokoro</span>
+                  <span class="credits-row__detail">The announcer's voice</span>
+                </span>
+                <svg class="icon icon--bold credits-row__go" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7.5 16.5l9-9M9 7.5h7.5V15" />
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <footer class="credits__footer" style="--order: 7">
+          <p class="credits__thanks">And you, for playing.</p>
+          <p>© 2026 Nov Sochetra</p>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>

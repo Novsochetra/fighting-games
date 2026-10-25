@@ -60,10 +60,11 @@ describe('games and the home page stay independent', () => {
     }
   });
 
-  it('keeps the home and supporters pages from loading any file of a game', async () => {
+  it('keeps the home, supporters and credits pages from loading any file of a game', async () => {
     const homeFiles = [
       path.join(WEB_ROOT, 'index.html'),
       path.join(WEB_ROOT, 'supporters', 'index.html'),
+      path.join(WEB_ROOT, 'credits', 'index.html'),
       ...(await listFiles(path.join(WEB_ROOT, 'src'))),
     ];
     const isOutsideGames = (target) => !isWithin(GAMES_ROOT)(target);

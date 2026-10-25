@@ -1,0 +1,62 @@
+/* The rounded square icons of iOS Settings, each in its service's own color. */
+.credits-tile {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--size-tile-icon);
+  block-size: var(--size-tile-icon);
+  font-size: var(--font-size-tile);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-on-tile);
+  background: var(--color-brand-github);
+  border-radius: var(--radius-icon-tile);
+  box-shadow: var(--shadow-tile);
+  transition: scale var(--duration-tile) var(--easing-spring);
+}
+
+.credits-tile .icon {
+  inline-size: 66%;
+  block-size: 66%;
+}
+
+.credits-tile--coffee {
+  color: var(--color-on-brand-coffee);
+  background: var(--color-brand-coffee);
+}
+
+.credits-tile--facebook {
+  background: var(--color-brand-facebook);
+}
+
+.credits-tile--facebook .icon {
+  inline-size: 78%;
+  block-size: 78%;
+}
+
+.credits-tile--heart {
+  background: linear-gradient(
+    to bottom,
+    var(--color-heart-badge-top),
+    var(--color-heart-badge-bottom)
+  );
+}
+
+.credits-tile--type {
+  background: linear-gradient(to bottom, var(--color-avatar-6-top), var(--color-avatar-6-bottom));
+}
+
+.credits-tile--pixel {
+  background: linear-gradient(to bottom, var(--color-avatar-5-top), var(--color-avatar-5-bottom));
+}
+
+.credits-tile--voice {
+  background: linear-gradient(to bottom, var(--color-avatar-4-top), var(--color-avatar-4-bottom));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .credits-tile {
+    transition: none;
+  }
+}
