@@ -308,8 +308,10 @@ of a move opt in to. Its pseudo-elements belong to the page arrived at, so each 
 motion of arriving there: `src/home/page-push.css`, on the pages under the arcade, slides the page in
 from the right over the one left, which slides a little left and dims, and the arcade's
 `page-pop.css` plays that backwards, the page sliding off to the right, on Back as on any way home.
-The games opt in to neither, so a game keeps its own launch; `test/integration/page-motion.test.js`
-holds both. The light
+The games opt in to neither, so a game keeps its own launch. Every new page of the arcade does
+the same as these two (the rule is in `CLAUDE.md`): `test/integration/page-motion.test.js` finds
+every `index.html` under `apps/web/` outside the games, code and art, and fails for one that does not
+load `page-push.css` or whose Back link does not lead to the arcade through `back-link.js`. The light
 and dark switch is a view transition too, so `appearance.js` marks the root (`data-transition`)
 while it cross-fades and the slides leave it out. With reduced motion, page.css's cross-fade stands
 in for the slide, as iOS dissolves. A browser without view transitions across documents changes

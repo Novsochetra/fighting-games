@@ -62,3 +62,18 @@ themselves. Read `docs/architecture.md` before changing structure.
 `apps/web/games/<id>/` holds `game.json` (the catalog entry), `index.html`, `assets/`, `styles/`
 (with the game's own `tokens.css`), `src/` and `test/`. Adding a folder with a valid `game.json` adds the game to the home page.
 A game hosted on its own site keeps only `game.json` (with an `https:` `url`) and `assets/` here.
+
+## Pages of the arcade
+
+A page of the arcade that is not a game (like `credits/` and `supporters/`) lives in
+`apps/web/<name>/index.html` and moves like an iOS screen, without being asked each time:
+
+- it loads `src/home/page-push.css`, so it slides in over the arcade and the arcade's
+  `page-pop.css` slides it off again,
+- its Back is `<a id="back" href="../">` (named with `aria-label` where a phone hides the label),
+  wired with `wireBackLink` from `src/home/back-link.js`, so Back from a page opened from the arcade
+  goes back through history and the arcade comes back as it was left,
+- it shares the home page's tokens, buttons and appearance (`appearance-early.js`, `appearance.js`).
+
+`apps/web/test/integration/page-motion.test.js` finds every such page on disk and fails until it does
+all this. A game never loads these: it keeps its own launch.
