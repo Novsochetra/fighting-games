@@ -28,8 +28,9 @@
   --color-focus-ring: var(--color-tint);
   --color-splash: var(--color-launcher-background);
   --color-launch-label: var(--color-white);
-  --color-launch-scrim: rgb(0 0 0 / 22%);
+  --color-launch-scrim: rgb(0 0 0 / 34%);
   --text-shadow-launch: 0 2px 16px rgb(0 0 0 / 45%);
+  --shadow-launch-art: 0 30px 80px rgb(0 0 0 / 50%);
 
   --color-glass: rgb(255 255 255 / 14%);
   --color-glass-hover: rgb(255 255 255 / 22%);
@@ -291,6 +292,7 @@
   --blur-glass: blur(24px) saturate(180%);
   --blur-sheet-backdrop: blur(12px);
   --blur-hero-floor: none;
+  --blur-launch: blur(48px) saturate(160%) brightness(70%);
   --blur-halo: blur(26px) saturate(150%);
 
   --dim-pressed: 0.85;
@@ -300,6 +302,7 @@
   --scale-pressed: 0.96;
   --scale-tile-hover: 1.03;
   --scale-ken-burns: 1.07;
+  --scale-launch-backdrop: 1.2;
   --scale-ring-rest: 0.94;
   --scale-heart-pop: 1.28;
   --scale-tile-press: 1.08;

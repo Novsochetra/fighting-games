@@ -139,13 +139,16 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   the page behind holds still (`has-open-sheet` on the root), since a modal dialog alone lets iOS
   Safari and a mouse wheel scroll the arcade under it, and the sheet itself takes the focus.
 
-Opening a game plays an app-launch animation before the page changes (`src/home/launcher.js`): the
-card's art grows into a screen-sized panel in the colors of its edges (sampled from its corners,
-`launch-splash.js`), so every game opens into its own colors, and the home zooms away behind it. As
-the panel fills the screen the game's name rises in on it, under a soft dim, and Apple's activity
-indicator joins it only if the game takes a moment to load (`launch.css`). The banners and the
-coffee button float outside the home, so the root is marked `is-launching` while a game opens and
-they leave with it rather than stay sharp over the launch. It
+Opening a game plays an app-launch animation before the page changes (`src/home/launcher.js`), like
+opening a game in Apple Arcade: a panel grows from the card to fill the screen while the home zooms
+away behind it, and the card's art, still sharp, moves to rest in the middle of the screen at the
+size of a large card (`launchArtRect`), a little above center. Behind it the same art fills the
+panel, blurred and dimmed (`.launch__backdrop`), so every game opens into its own colors; the colors
+of the art's corners (`launch-splash.js`) stand in while it cannot be drawn. The game's name rises
+in under the card as the screen fills, and Apple's activity indicator joins it only if the game
+takes a moment to load (`launch.css`). The banners and the coffee button float outside the home, so
+the root is marked `is-launching` while a game opens and they leave with it rather than stay sharp
+over the launch. It
 flies from the carousel card, or from the library tile when the carousel has scrolled out of sight
 (`launch-source.js`). The keyframes are plain functions of the art's box and the screen
 (`launch-geometry.js`), and their timing comes from `--duration-launch` and `--easing-launch` in

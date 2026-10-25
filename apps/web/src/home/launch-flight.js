@@ -1,6 +1,8 @@
 import {
+  captionTop,
   homeKeyframes,
   isMeasurable,
+  launchArtRect,
   launchKeyframes,
   resolveRadius,
   reverseKeyframes,
@@ -25,6 +27,13 @@ function buildCaption(document, title) {
   return caption;
 }
 
+// The same art, blurred and dimmed across the whole panel, so the game opens into its own colors.
+function backdropOf(art) {
+  const backdrop = art.cloneNode(true);
+  backdrop.className = 'launch__backdrop';
+  return backdrop;
+}
+
 function buildLayer(document, source, title) {
   const layer = createPart(document, 'launch');
   layer.setAttribute('aria-hidden', 'true');
@@ -33,6 +42,7 @@ function buildLayer(document, source, title) {
   const art = source.querySelector('.art');
   if (art) {
     icon.append(art.cloneNode(true));
+    panel.append(backdropOf(art));
   }
   const splash = sampleSplash(document, art);
   if (splash) {
@@ -66,6 +76,10 @@ function measureScene({ source, home, layer }) {
   };
 }
 
+function placeCaption(caption, { from, viewport }) {
+  caption.style.top = `${captionTop(launchArtRect(viewport, from))}px`;
+}
+
 function placeIcon(icon, { from: rect, radius }) {
   icon.style.setProperty('--radius-launch-art', `${radius}px`);
   icon.style.left = `${rect.x}px`;
@@ -78,6 +92,7 @@ function play(parts, scene, { timing, order }) {
   const frames = launchKeyframes(scene);
   const options = { duration: timing.duration, easing: timing.easing, fill: 'forwards' };
   placeIcon(parts.icon, scene);
+  placeCaption(parts.caption, scene);
   // Set outside the keyframes, which would otherwise keep the zoom off the compositor.
   parts.home.style.transformOrigin = `${scene.origin.x}px ${scene.origin.y}px`;
   return [

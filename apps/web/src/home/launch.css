@@ -18,7 +18,19 @@
   will-change: transform;
 }
 
-/* The corner colors can be light, so a soft dim keeps the game's name readable on any of them. */
+/* The art blurred across the panel, over the corner colors in case it cannot be drawn; overscaled so
+   the blur's soft edge stays off screen. */
+.launch__backdrop {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  filter: var(--blur-launch);
+  scale: var(--scale-launch-backdrop);
+}
+
+/* A dim over the art keeps the card and the game's name standing out from it. */
 .launch__panel::after {
   position: absolute;
   inset: 0;
@@ -30,16 +42,17 @@
   position: absolute;
   overflow: hidden;
   border-radius: var(--radius-launch-art, var(--radius-card));
+  box-shadow: var(--shadow-launch-art);
   transform-origin: 0 0;
   container-type: inline-size;
   will-change: transform, opacity;
 }
 
-/* The game's name rises in as the screen fills, and Apple's activity indicator (as on the loading
-   notice, notice.css) joins it only if the game takes a moment to load. */
+/* The game's name rises in under the card as the screen fills (launch-flight.js sets its top), and
+   Apple's activity indicator (as on the loading notice, notice.css) joins it only if the game takes
+   a moment to load. */
 .launch__caption {
   position: absolute;
-  inset-block-start: 50%;
   inset-inline: 0;
   display: flex;
   flex-direction: column;
@@ -48,7 +61,6 @@
   padding-inline: var(--space-gutter);
   color: var(--color-launch-label);
   text-align: center;
-  transform: translateY(-50%);
   animation: launch-caption-in var(--duration-rise) var(--easing-spring)
     var(--duration-launch-caption-delay) backwards;
 }

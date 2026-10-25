@@ -1,11 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import {
+  ART_MAX_WIDTH,
+  ART_SIDE_MARGIN,
+  CAPTION_GAP,
+  CAPTION_ROOM,
   HOME_ZOOM,
-  ICON_FADE,
+  captionTop,
   homeKeyframes,
   iconFrame,
-  iconOpacityAt,
   isMeasurable,
+  launchArtRect,
   launchKeyframes,
   panelFrame,
   radiusAt,
@@ -74,36 +78,46 @@ describe('panelFrame', () => {
 });
 
 describe('iconFrame', () => {
-  it('keeps the art square and centered in the growing panel', () => {
-    const [x, y, scale] = parseTransform(iconFrame({ x: 0, y: 0, ...viewport }, icon).transform);
-    expect(scale).toBeCloseTo(400 / 60);
-    expect(x).toBe(-40);
-    expect(y).toBe(200 - 100);
-  });
-
   it('starts exactly on the icon', () => {
     expect(parseTransform(iconFrame(icon, icon).transform)).toEqual([0, 0, 1]);
   });
 
-  it('keeps a wide card in shape, as wide as the panel lets it be', () => {
+  it('moves the art and scales it evenly onto a box of the same shape', () => {
     const card = { x: 50, y: 300, width: 320, height: 180 };
-    expect(parseTransform(iconFrame(card, card).transform)).toEqual([0, 0, 1]);
-    const [x, y, scale] = parseTransform(iconFrame({ x: 0, y: 0, ...viewport }, card).transform);
-    expect(scale).toBeCloseTo(400 / 320);
-    expect(x).toBeCloseTo(-50);
-    expect(y).toBeCloseTo((800 - 180 * scale) / 2 - 300);
+    const larger = { x: 10, y: 20, width: 640, height: 360 };
+    expect(parseTransform(iconFrame(larger, card).transform)).toEqual([-40, -280, 2]);
   });
 });
 
-describe('iconOpacityAt and radiusAt', () => {
-  it('fades the art out between the fade points', () => {
-    expect(iconOpacityAt(0)).toBe(1);
-    expect(iconOpacityAt(ICON_FADE.start)).toBe(1);
-    expect(iconOpacityAt((ICON_FADE.start + ICON_FADE.end) / 2)).toBeCloseTo(0.5);
-    expect(iconOpacityAt(ICON_FADE.end)).toBe(0);
-    expect(iconOpacityAt(1)).toBe(0);
+describe('launchArtRect and captionTop', () => {
+  const card = { x: 50, y: 300, width: 320, height: 180 };
+
+  it('rests a wide card in the middle of a phone, as wide as its margins let it be', () => {
+    const art = launchArtRect({ width: 375, height: 812 }, card);
+    expect(art.width).toBe(375 - 2 * ART_SIDE_MARGIN);
+    expect(art.width / art.height).toBeCloseTo(320 / 180);
+    expect(art.x).toBe(ART_SIDE_MARGIN);
+    expect(art.y).toBeCloseTo((812 - art.height - CAPTION_ROOM) / 2);
   });
 
+  it('stops growing at a large card on a wide screen', () => {
+    const art = launchArtRect({ width: 1440, height: 900 }, card);
+    expect(art.width).toBe(ART_MAX_WIDTH);
+    expect(art.x).toBe((1440 - ART_MAX_WIDTH) / 2);
+  });
+
+  it('keeps clear of the top and bottom of a short, wide window', () => {
+    const art = launchArtRect({ width: 1200, height: 420 }, card);
+    expect(art.height).toBeLessThan(420 / 2);
+    expect(art.y).toBeGreaterThan(0);
+  });
+
+  it('puts the game name just under the art', () => {
+    expect(captionTop({ x: 0, y: 100, width: 320, height: 180 })).toBe(280 + CAPTION_GAP);
+  });
+});
+
+describe('radiusAt', () => {
   it('starts at the icon corner, rounds out mid-flight and ends square', () => {
     expect(radiusAt(0, 10)).toBe(10);
     expect(radiusAt(0.5, 10)).toBeGreaterThan(10);
@@ -131,8 +145,13 @@ describe('launchKeyframes', () => {
     expect(frames.corners[0].borderRadius).toBe(start.borderRadius);
     expect(parseTransform(frames.panel[4].transform)).toEqual([0, 0, 1, 1]);
     expect(frames.corners[4].borderRadius).toBe('0px / 0px');
-    expect(frames.icon[0].opacity).toBe(1);
-    expect(frames.icon[4].opacity).toBe(0);
+  });
+
+  it('keeps the art sharp, from the icon to its resting place in the middle', () => {
+    expect(frames.icon.every((frame) => !('opacity' in frame))).toBe(true);
+    expect(frames.icon[0].transform).toBe(iconFrame(icon, icon).transform);
+    const rest = launchArtRect(viewport, icon);
+    expect(frames.icon[4].transform).toBe(iconFrame(rest, icon).transform);
   });
 });
 

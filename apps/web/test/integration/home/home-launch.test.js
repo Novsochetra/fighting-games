@@ -79,7 +79,13 @@ describe('launching a game', () => {
     expect(icon.style.height).toBe('180px');
     expect(cardFrame().classList.contains('is-launching')).toBe(true);
     expect(byId('home').style.transformOrigin).toBe('200px 190px');
+    expect(layer().querySelector('.launch__backdrop').getAttribute('src')).toBe(
+      cardFrame().querySelector('img').getAttribute('src'),
+    );
     expect(layer().querySelector('.launch__title').textContent).toBe('Steel & Dust');
+    expect(Number.parseFloat(layer().querySelector('.launch__caption').style.top)).toBeGreaterThan(
+      400,
+    );
     expect(layer().querySelector('.launch__spinner')).not.toBeNull();
     expect(isMarkedLaunching()).toBe(true);
     expect(navigate).not.toHaveBeenCalled();

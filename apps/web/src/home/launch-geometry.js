@@ -1,12 +1,17 @@
-// The art fades out over this stretch of the launch, so the splash shows by mid-flight.
-export const ICON_FADE = { start: 0.2, end: 0.75 };
 export const HOME_ZOOM = 1.12;
+
+// The art settles in the middle of the screen at the size of a large card, a little above center to
+// leave room for the game's name under it.
+export const ART_MAX_WIDTH = 640;
+export const ART_SIDE_MARGIN = 24;
+export const ART_MAX_HEIGHT_SHARE = 0.46;
+export const CAPTION_ROOM = 96;
+export const CAPTION_GAP = 24;
 
 // Corners are not linear in the scale, so they get a keyframe every twelfth of the way.
 const KEYFRAME_STEPS = 12;
 
 const lerp = (from, to, progress) => from + (to - from) * progress;
-const clampUnit = (value) => Math.min(1, Math.max(0, value));
 
 export function isMeasurable(rect) {
   return Boolean(rect) && rect.width > 0 && rect.height > 0;
@@ -47,16 +52,26 @@ export function panelFrame(rect, viewport, radius) {
   };
 }
 
-// The art keeps its shape and stays centered in the growing panel, as large as fits inside it.
-export function iconFrame(rect, from) {
-  const scale = Math.min(rect.width / from.width, rect.height / from.height);
-  const x = rect.x + (rect.width - from.width * scale) / 2 - from.x;
-  const y = rect.y + (rect.height - from.height * scale) / 2 - from.y;
-  return { transform: `translate(${x}px, ${y}px) scale(${scale})` };
+export function launchArtRect(viewport, from) {
+  const aspect = from.width / from.height;
+  const width = Math.min(
+    viewport.width - 2 * ART_SIDE_MARGIN,
+    ART_MAX_WIDTH,
+    viewport.height * ART_MAX_HEIGHT_SHARE * aspect,
+  );
+  const height = width / aspect;
+  const x = (viewport.width - width) / 2;
+  const y = (viewport.height - height - CAPTION_ROOM) / 2;
+  return { x, y, width, height };
 }
 
-export function iconOpacityAt(progress) {
-  return clampUnit((ICON_FADE.end - progress) / (ICON_FADE.end - ICON_FADE.start));
+// The game's name sits just under the art's resting place.
+export const captionTop = (art) => art.y + art.height + CAPTION_GAP;
+
+// The art keeps its shape on the way, moved and scaled from where the card was.
+export function iconFrame(rect, from) {
+  const scale = rect.width / from.width;
+  return { transform: `translate(${rect.x - from.x}px, ${rect.y - from.y}px) scale(${scale})` };
 }
 
 // The corners round out like a window's as the panel grows, then square off as it fills the screen.
@@ -66,8 +81,10 @@ export function radiusAt(progress, radius) {
 
 // The corners animate apart from the transform: they cannot run on the compositor, and sharing an
 // animation with them would hold the transform back on the main thread too.
+// The panel grows from the card to the screen while the art, still sharp, moves to its resting place.
 export function launchKeyframes({ from, viewport, radius, steps = KEYFRAME_STEPS }) {
   const screen = { x: 0, y: 0, width: viewport.width, height: viewport.height };
+  const art = launchArtRect(viewport, from);
   const frames = { panel: [], corners: [], icon: [] };
   for (let i = 0; i <= steps; i += 1) {
     const offset = i / steps;
@@ -75,7 +92,7 @@ export function launchKeyframes({ from, viewport, radius, steps = KEYFRAME_STEPS
     const { transform, borderRadius } = panelFrame(rect, viewport, radiusAt(offset, radius));
     frames.panel.push({ offset, transform });
     frames.corners.push({ offset, borderRadius });
-    frames.icon.push({ offset, ...iconFrame(rect, from), opacity: iconOpacityAt(offset) });
+    frames.icon.push({ offset, ...iconFrame(rectAt(from, art, offset), from) });
   }
   return frames;
 }
