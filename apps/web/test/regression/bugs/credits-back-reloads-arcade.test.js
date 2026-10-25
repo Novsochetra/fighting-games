@@ -1,7 +1,8 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { bootCredits } from '../../../src/credits/boot.js';
-import { clickAndSeeIfHeld, loadCreditsMarkup } from '../../support/credits-harness.js';
+import { loadCreditsMarkup } from '../../support/credits-harness.js';
+import { clickAndSeeIfHeld } from '../../support/link-click.js';
 
 // Bug: Arcade on the credits page loaded the arcade as a new page, so it came back at the top and
 // played its whole entrance again. Opened from the arcade, Back now goes back in history, and the

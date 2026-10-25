@@ -1,6 +1,6 @@
 import { createAppearance } from '../home/appearance.js';
+import { wireBackLink } from '../home/back-link.js';
 import { createMemoryStorage } from '../home/preferences.js';
-import { wireBackLink } from './back-link.js';
 
 export function bootCredits({ document, storage, history, referrer }) {
   const lifetime = new AbortController();

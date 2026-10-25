@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { WEB_ROOT } from '../../../../server/src/paths.js';
 import {
   APPEARANCE_KEY,
+  APPEARANCE_TRANSITION,
   createAppearance,
   resolveAppearance,
   systemAppearance,
@@ -118,12 +119,30 @@ describe('createAppearance', () => {
 
   it('cross-fades through a view transition where the browser has one', () => {
     const { appearance, document } = setup();
-    document.startViewTransition = vi.fn((update) => update());
+    document.startViewTransition = vi.fn((update) => {
+      update();
+      return { finished: Promise.resolve() };
+    });
     appearance.toggle();
     expect(document.startViewTransition).toHaveBeenCalledOnce();
     expect(appearance.current()).toBe('light');
     appearance.toggle({ smooth: false });
     expect(document.startViewTransition).toHaveBeenCalledOnce();
+  });
+
+  it('marks the root while it cross-fades, so the slide between pages stays out of it', async () => {
+    const { appearance, document } = setup();
+    const done = Promise.withResolvers();
+    document.startViewTransition = vi.fn((update) => {
+      update();
+      return { finished: done.promise };
+    });
+    appearance.toggle();
+    expect(document.documentElement.dataset.transition).toBe(APPEARANCE_TRANSITION);
+    done.resolve();
+    await done.promise;
+    await Promise.resolve();
+    expect(document.documentElement.dataset.transition).toBeUndefined();
   });
 
   it('lets go of the switch and follows the device once the device changes', () => {

@@ -179,8 +179,9 @@ sheet (`supporters/#give`). It asks only someone back from a game who has opened
 their Recent list). Back from a game means a game was opened since the banner last looked, so it
 sees every way back: the Back button (the back/forward cache), Steel & Dust's own step back, a
 reload, or a game on another site. Its very first look only takes the count, so no one is asked on
-arrival. It never asks after a gift from this device (the supporters page records it),
-nor while the install banner is up, so only one asks at a time. A banner left alone comes back in a
+arrival. It never asks after a gift from this device (the supporters page records it, and the
+arcade reads it afresh, so a banner brought back from the back/forward cache after a gift steps
+aside), nor while the install banner is up, so only one asks at a time. A banner left alone comes back in a
 week, and Not now holds it back for 30 days.
 
 ## Search and link previews
@@ -225,6 +226,9 @@ Every game is free, so the arcade thanks the people who chip in on its own page,
 game, so it shares the home page's tokens, buttons, segmented control and notice, and follows the same
 light or dark choice (`appearance-early.js`, `appearance.js`). Two links lead there from the home page:
 a heart in the top bar (the heart alone on a phone, `support.css`) and a card under the library.
+Like the credits page, it slides in over the arcade (`page-push.css`), and its Back goes back in
+history when it was opened from the arcade (`src/home/back-link.js`), so the arcade comes back as it
+was left.
 
 The list comes from the server, `GET /api/supporters`:
 
@@ -293,7 +297,7 @@ The home page signs off under the library with Made by Nov Sochetra (`made-by.cs
 there; it sits after the controls hint, which touch screens hide, so every screen shows it.
 
 It is mostly markup and CSS. Its modules keep the appearance in step with the device and make Back
-go back in history when the page was opened from the arcade (`back-link.js`), so the browser brings
+go back in history when the page was opened from the arcade (`src/home/back-link.js`), so the browser brings
 the arcade back as it was left, from its back/forward cache, where following the link would load it
 fresh at the top. Opened any other way, or with a click that opens a tab, Back stays a plain link.
 
@@ -312,6 +316,19 @@ the large name scrolls under it, it frosts over and shows the name small, as an 
 does. That runs on scroll-driven animations alone (`credits.css`), and a browser without them keeps
 a plain bar that scrolls away with the cover.
 With reduced motion nothing rises, pops or turns.
+
+The arcade and the pages under it, the credits and supporters pages, change like screens in an iOS
+navigation stack, through a view transition across documents (`@view-transition`), which both pages
+of a move opt in to. Its pseudo-elements belong to the page arrived at, so each page's sheet sets the
+motion of arriving there: `src/home/page-push.css`, on the pages under the arcade, slides the page in
+from the right over the one left, which slides a little left and dims, and the arcade's
+`page-pop.css` plays that backwards, the page sliding off to the right, on Back as on any way home.
+The games opt in to neither, so a game keeps its own launch; `test/integration/page-motion.test.js`
+holds both. The light
+and dark switch is a view transition too, so `appearance.js` marks the root (`data-transition`)
+while it cross-fades and the slides leave it out. With reduced motion, page.css's cross-fade stands
+in for the slide, as iOS dissolves. A browser without view transitions across documents changes
+pages at once.
 
 ## Game: Steel & Dust
 

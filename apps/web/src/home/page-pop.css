@@ -1,0 +1,35 @@
+/* The arcade and the pages under it (credits, supporters) change like screens in an iOS navigation
+   stack, through a view transition across documents. Its pseudo-elements belong to the page arrived
+   at, so this sheet sets every arrival at the arcade: the page left pops off to the right with a
+   shadow on its edge, and the arcade, dimmed a little behind it, slides back in from the left. The
+   pages under it load page-push.css, which plays it forward. A game opts in to neither and keeps its
+   own launch. */
+@view-transition {
+  navigation: auto;
+}
+
+/* With reduced motion, page.css's cross-fade stands in for the slide, as iOS dissolves. */
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-transition='appearance'])::view-transition-old(root) {
+    z-index: 1;
+    box-shadow: var(--shadow-navigation);
+    animation: page-pop-out var(--duration-navigation) var(--easing-navigation) both;
+  }
+
+  :root:not([data-transition='appearance'])::view-transition-new(root) {
+    animation: page-pop-under var(--duration-navigation) var(--easing-navigation) both;
+  }
+}
+
+@keyframes page-pop-out {
+  to {
+    translate: 100% 0;
+  }
+}
+
+@keyframes page-pop-under {
+  from {
+    translate: var(--offset-under) 0;
+    filter: brightness(var(--dim-under));
+  }
+}

@@ -51,17 +51,18 @@ export const createMemoryStorage = () => {
 const readSupportState = (storage) => ({
   supportSnoozedUntil: numberOr(storage.read(STORAGE_KEYS.supportSnoozedUntil), null),
   supportSeenPlays: numberOr(storage.read(STORAGE_KEYS.supportSeenPlays), null),
-  gaveAt: numberOr(storage.read(STORAGE_KEYS.gaveAt), null),
 });
 
-// What the support banner keeps: when it may ask again, the plays it last saw, and a gift.
-const supportPreferences = (state, save) => ({
+// What the support banner keeps: when it may ask again, the plays it last saw, and a gift. The gift
+// is made on the supporters page, another document, so it is read afresh each time: an arcade brought
+// back from the back/forward cache still holds everything else as it read it on its first load.
+const supportPreferences = ({ state, save, storage }) => ({
   supportSnoozedUntil: () => state.supportSnoozedUntil,
   snoozeSupport: (until) => save('supportSnoozedUntil', until),
   supportSeenPlays: () => state.supportSeenPlays,
   markSupportSeen: (count) => save('supportSeenPlays', count),
-  hasGiven: () => state.gaveAt !== null,
-  recordGift: (time) => save('gaveAt', time),
+  hasGiven: () => numberOr(storage.read(STORAGE_KEYS.gaveAt), null) !== null,
+  recordGift: (time) => storage.write(STORAGE_KEYS.gaveAt, time),
 });
 
 export function createPreferences(storage) {
@@ -99,6 +100,6 @@ export function createPreferences(storage) {
     dismissInstall: (time) => save('installDismissedAt', time),
     analyticsConsent: () => state.analyticsConsent,
     setAnalyticsConsent: (choice) => save('analyticsConsent', choice),
-    ...supportPreferences(state, save),
+    ...supportPreferences({ state, save, storage }),
   };
 }
