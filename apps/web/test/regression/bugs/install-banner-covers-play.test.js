@@ -47,10 +47,10 @@ describe('the hero buttons beside the install banner', () => {
     expect(isLifted()).toBe(false);
   });
 
-  it('are lifted by the banner height on a short screen, for install and support alike', async () => {
+  it('are lifted by the banner height on a short screen, for every banner in that place', async () => {
     const css = await readFile(path.join(WEB_ROOT, 'src/home/install.css'), 'utf8');
     expect(css).toMatch(
-      /@media \(max-height: [\d.]+rem\) \{\s*:root\.has-install-banner \.spotlight,\s*:root\.has-support-banner \.spotlight \{\s*padding-block-end: calc\([^;]*var\(--size-install-clearance\)/,
+      /@media \(max-height: [\d.]+rem\) \{\s*:root\.has-install-banner \.spotlight,\s*:root\.has-support-banner \.spotlight,\s*:root\.has-consent-banner \.spotlight \{\s*padding-block-end: calc\([^;]*var\(--size-install-clearance\)/,
     );
   });
 });

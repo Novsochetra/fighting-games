@@ -1,18 +1,21 @@
+import { EVENTS, onOff } from './analytics-events.js';
 import { isPlainClick } from './input-actions.js';
 
 const listen = (element, type, listener, signal) =>
   element.addEventListener(type, listener, { signal });
 
 function wirePlayLinks({ links, controller, sheet, signal }) {
-  const playSelected = (event) => {
+  const playSelected = (source) => (event) => {
     if (!isPlainClick(event)) {
       return;
     }
     event.preventDefault();
     sheet.finish();
-    controller.open(controller.selectedIndex());
+    controller.open(controller.selectedIndex(), source);
   };
-  links.forEach((link) => listen(link, 'click', playSelected, signal));
+  Object.entries(links).forEach(([source, link]) =>
+    listen(link, 'click', playSelected(source), signal),
+  );
 }
 
 function wireLibrary({ elements, controller, signal }) {
@@ -41,7 +44,7 @@ function wireLibrary({ elements, controller, signal }) {
   listen(elements.showMore, 'click', () => controller.showMore(), signal);
 }
 
-export function wireAppearanceToggle({ button, appearance, sound, signal }) {
+export function wireAppearanceToggle({ button, appearance, sound, track, signal }) {
   const show = () => button.setAttribute('aria-pressed', String(appearance.current() === 'dark'));
   show();
   listen(
@@ -51,12 +54,13 @@ export function wireAppearanceToggle({ button, appearance, sound, signal }) {
       appearance.toggle();
       show();
       sound.play('appearance');
+      track(EVENTS.appearance, { appearance: appearance.current() });
     },
     signal,
   );
 }
 
-export function wireSoundToggle({ button, preferences, sound, signal }) {
+export function wireSoundToggle({ button, preferences, sound, track, signal }) {
   const show = () => button.setAttribute('aria-pressed', String(preferences.isSoundOn()));
   show();
   listen(
@@ -66,16 +70,26 @@ export function wireSoundToggle({ button, preferences, sound, signal }) {
       preferences.setSound(!preferences.isSoundOn());
       show();
       sound.play('soundOn');
+      track(EVENTS.sound, { sound: onOff(preferences.isSoundOn()) });
     },
     signal,
   );
 }
 
-export function wireControls({ view, controller, sheet, signal }) {
+function openDetails({ controller, sheet, track }) {
+  const card = controller.selectedCard();
+  sheet.open(card);
+  if (card) {
+    track(EVENTS.details, { game_id: card.id });
+  }
+}
+
+export function wireControls({ view, controller, sheet, track, signal }) {
   const { spotlight, library, elements } = view;
-  const links = [spotlight.elements.play, sheet.elements.play];
+  const links = { play_button: spotlight.elements.play, details: sheet.elements.play };
   wirePlayLinks({ links, controller, sheet, signal });
-  listen(spotlight.elements.details, 'click', () => sheet.open(controller.selectedCard()), signal);
+  const showDetails = () => openDetails({ controller, sheet, track });
+  listen(spotlight.elements.details, 'click', showDetails, signal);
   listen(spotlight.elements.favorite, 'click', () => controller.toggleFavorite(), signal);
   listen(elements.retry, 'click', () => controller.load(), signal);
   wireLibrary({ elements: library.elements, controller, signal });

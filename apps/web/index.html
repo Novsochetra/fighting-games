@@ -70,6 +70,7 @@
     <link rel="stylesheet" href="src/home/made-by.css" />
     <link rel="stylesheet" href="src/home/launch.css" />
     <link rel="stylesheet" href="src/home/install.css" />
+    <link rel="stylesheet" href="src/home/consent.css" />
     <script type="speculationrules">
       { "prefetch": [{ "where": { "href_matches": "games/*" }, "eagerness": "moderate" }] }
     </script>
@@ -315,6 +316,11 @@
             </span>
           </a>
         </p>
+        <p class="privacy-choices" id="privacy-choices" hidden>
+          <button class="privacy-choices__button" id="privacy-open" type="button">
+            Privacy choices
+          </button>
+        </p>
       </section>
     </div>
 
@@ -365,6 +371,32 @@
           <path d="M7 7l10 10M17 7 7 17" />
         </svg>
       </button>
+    </aside>
+
+    <aside class="install install--consent" id="consent" aria-labelledby="consent-title" hidden>
+      <span class="consent-badge" aria-hidden="true">
+        <svg class="icon icon--bold" viewBox="0 0 24 24">
+          <path d="M5 19.5v-6M12 19.5v-15M19 19.5v-10" />
+        </svg>
+      </span>
+      <div class="install__text">
+        <p class="install__title" id="consent-title">Help make the arcade better</p>
+        <p class="install__hint">
+          Can we count visits and taps with Google Analytics? It uses cookies.
+        </p>
+      </div>
+      <div class="consent__actions">
+        <button class="pill-button install__add consent__refuse" id="consent-refuse" type="button">
+          No thanks
+        </button>
+        <button
+          class="pill-button pill-button--primary install__add"
+          id="consent-allow"
+          type="button"
+        >
+          Allow
+        </button>
+      </div>
     </aside>
 
     <dialog class="sheet" id="details" aria-labelledby="details-title" tabindex="-1">

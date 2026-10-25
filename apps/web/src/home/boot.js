@@ -1,5 +1,7 @@
+import { createAnalytics } from './analytics.js';
 import { createAppearance } from './appearance.js';
 import { fetchCatalog } from './catalog-client.js';
+import { wireConsentBanner } from './consent-banner.js';
 import { createDetailsSheet } from './details-sheet.js';
 import { createHomeController } from './home-controller.js';
 import { createHomeView } from './home-view.js';
@@ -25,14 +27,30 @@ function watchReturns({ document, launcher, controller, sound, signal }) {
   document.defaultView.addEventListener('pageshow', onPageShow, { signal });
 }
 
-// Install goes first: while its banner is up, the support banner waits for another visit.
-function wireBanners({ document, installer, preferences, sound, signal, visit }) {
+// The analytics question goes first, then install: while either is up, the support banner waits for
+// another visit.
+function wireBanners({ document, installer, settings, signal, visit }) {
+  const { preferences, sound, analytics, track } = settings;
+  wireConsentBanner({ document, analytics, sound, signal });
   if (installer) {
-    wireInstallBanner({ document, installer, preferences, sound, signal });
+    wireInstallBanner({ document, installer, preferences, sound, signal, track });
   }
-  const support = wireSupportBanner({ document, preferences, sound, signal, now: visit.now });
+  const support = wireSupportBanner({
+    document,
+    preferences,
+    sound,
+    signal,
+    now: visit.now,
+    track,
+  });
   support.offer();
 }
+
+const createHomeSound = ({ createAudioContext, preferences }) =>
+  createSoundPlayer({
+    createContext: createAudioContext ?? (() => null),
+    isEnabled: preferences.isSoundOn,
+  });
 
 export function bootHome({
   document,
@@ -42,33 +60,34 @@ export function bootHome({
   storage,
   createAudioContext,
   installer,
+  analytics: analyticsSetup = {},
   visit = { now: () => Date.now() },
 }) {
   const lifetime = new AbortController();
   const { signal } = lifetime;
   const store = storage ?? createMemoryStorage();
   const preferences = createPreferences(store);
+  const analytics = createAnalytics({ ...analyticsSetup, preferences });
+  const { track } = analytics;
   const appearance = createAppearance({ document, storage: store, signal });
-  const sound = createSoundPlayer({
-    createContext: createAudioContext ?? (() => null),
-    isEnabled: preferences.isSoundOn,
-  });
+  const sound = createHomeSound({ createAudioContext, preferences });
   const view = createHomeView(document);
   const { home } = view.elements;
   const launcher = createLauncher({ document, home, findSource: view.findLaunchSource, navigate });
   const loadGames = () => fetchCatalog(fetch);
-  const controller = createHomeController({ view, loadGames, launcher, preferences, sound });
+  const controller = createHomeController({ view, loadGames, launcher, preferences, sound, track });
   const sheet = createDetailsSheet({ document, sound, signal });
-  const settings = { preferences, sound, appearance };
+  const settings = { preferences, sound, appearance, analytics, track };
   wireInputs({ document, view, controller, sheet, gamepads, settings, signal });
   watchReturns({ document, launcher, controller, sound, signal });
-  wireBanners({ document, installer, preferences, sound, signal, visit });
+  wireBanners({ document, installer, settings, signal, visit });
   return {
     controller,
     launcher,
     sheet,
     preferences,
     appearance,
+    analytics,
     ready: controller.load(),
     stop: () => lifetime.abort(),
   };

@@ -203,6 +203,21 @@ comes from `api/games`, and names `sitemap.xml`, which lists the home, supporter
 and every game served here, but not one on its own site. `test/integration/seo.test.js` fails when a page
 is missing from the sitemap or its tags, or its picture is not a 1200x630 JPEG the server sends.
 
+**Analytics.** Cloudflare Web Analytics counts visits to every page: Cloudflare adds its beacon at the
+edge, so no file in the repo loads it. Google Analytics 4 counts what players do on the home page,
+and only for those who say yes. On the live site (`LIVE_HOSTS` with a `MEASUREMENT_ID`, both in
+`analytics-config.js`) a banner in the install banner's place asks first (`consent-banner.js`,
+`consent.css`), and the install and support banners wait until it is answered. Allow loads Google's
+tag (`google-tag.js`, with ads and Google signals off); No thanks loads nothing. The answer is kept in
+`localStorage` (`preferences.js`), and Privacy choices at the foot of the page asks again; a no after
+a yes turns storage off and clears the `_ga` cookies. `analytics.js` sends an event only while a yes
+stands. The events and their names are in `analytics-events.js`: a play (with the game and its
+source: Play, Details, a card, the keyboard or a gamepad), a tap on a teaser, Details, the heart, the
+library filters and Show more, the sound and appearance switches, each link to the supporters and
+credits pages, and the install and support banners shown, taken and turned down. Each one is sent
+from where it happens, with `track` passed in like `sound`. A copy run anywhere else (a laptop, the
+tests) asks nothing and sends nothing.
+
 ## Supporters page
 
 Every game is free, so the arcade thanks the people who chip in on its own page, `supporters/`

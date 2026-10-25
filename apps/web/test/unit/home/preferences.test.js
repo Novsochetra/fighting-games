@@ -53,6 +53,14 @@ describe('createPreferences', () => {
     expect(storage.read(STORAGE_KEYS.installDismissedAt)).toBe(1234);
   });
 
+  it('remembers the answer to the analytics question', () => {
+    const storage = createMemoryStorage();
+    expect(createPreferences(storage).analyticsConsent()).toBeNull();
+    createPreferences(storage).setAnalyticsConsent('granted');
+    expect(createPreferences(storage).analyticsConsent()).toBe('granted');
+    expect(storage.read(STORAGE_KEYS.analyticsConsent)).toBe('granted');
+  });
+
   it('ignores stored values of the wrong shape', () => {
     const storage = createMemoryStorage();
     storage.write(STORAGE_KEYS.favorites, 'a');

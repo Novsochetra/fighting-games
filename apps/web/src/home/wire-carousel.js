@@ -66,7 +66,7 @@ export function wireCarousel({ elements, controller, signal }) {
         return;
       }
       if (index === controller.selectedIndex()) {
-        controller.open(index);
+        controller.open(index, 'card');
       } else {
         controller.select(index, { cue: true });
       }

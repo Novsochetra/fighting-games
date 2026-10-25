@@ -1,3 +1,4 @@
+import { EVENTS } from './analytics-events.js';
 import { installOffer, isSnoozed } from './install-offer.js';
 
 function findElements(document) {
@@ -14,14 +15,17 @@ function showOffer(banner, offer) {
   }
 }
 
-function wireButtons({ elements, state, sound, snooze, refresh, listen }) {
+function wireButtons({ elements, state, actions, listen }) {
+  const { sound, snooze, refresh, track } = actions;
   listen(elements.add, 'click', () => {
     const { prompt } = state;
     state.prompt = null;
     refresh();
     sound.play('sheetOpen');
+    track(EVENTS.install);
     prompt?.prompt();
     prompt?.userChoice.then(({ outcome }) => {
+      track(EVENTS.installChoice, { outcome });
       if (outcome !== 'accepted') {
         snooze();
       }
@@ -31,23 +35,31 @@ function wireButtons({ elements, state, sound, snooze, refresh, listen }) {
     snooze();
     refresh();
     sound.play('sheetClose');
+    track(EVENTS.installDismiss);
   });
 }
 
-export function wireInstallBanner({ document, installer, preferences, sound, signal }) {
+function currentOffer({ installer, preferences, state }) {
+  return installOffer({
+    isInstalled: installer.isInstalled(),
+    isSnoozed: isSnoozed(preferences.installDismissedAt(), installer.now()),
+    hasPrompt: state.prompt !== null,
+    isIos: installer.isIos,
+  });
+}
+
+export function wireInstallBanner({ document, installer, preferences, sound, signal, track }) {
   const elements = findElements(document);
   const state = { prompt: null };
   const listen = (target, type, listener) => target.addEventListener(type, listener, { signal });
-  const refresh = () =>
-    showOffer(
-      elements.banner,
-      installOffer({
-        isInstalled: installer.isInstalled(),
-        isSnoozed: isSnoozed(preferences.installDismissedAt(), installer.now()),
-        hasPrompt: state.prompt !== null,
-        isIos: installer.isIos,
-      }),
-    );
+  const refresh = () => {
+    const wasHidden = elements.banner.hidden;
+    const offer = currentOffer({ installer, preferences, state });
+    showOffer(elements.banner, offer);
+    if (offer && wasHidden) {
+      track(EVENTS.installShown, { offer });
+    }
+  };
   listen(installer.events, 'beforeinstallprompt', (event) => {
     // Chrome would otherwise put its own install bar on top of the banner.
     event.preventDefault();
@@ -57,15 +69,10 @@ export function wireInstallBanner({ document, installer, preferences, sound, sig
   listen(installer.events, 'appinstalled', () => {
     state.prompt = null;
     refresh();
+    track(EVENTS.installed);
   });
-  wireButtons({
-    elements,
-    state,
-    sound,
-    snooze: () => preferences.dismissInstall(installer.now()),
-    refresh,
-    listen,
-  });
+  const snooze = () => preferences.dismissInstall(installer.now());
+  wireButtons({ elements, state, actions: { sound, snooze, refresh, track }, listen });
   installer.registerWorker();
   refresh();
   return { elements, refresh };

@@ -1,3 +1,4 @@
+import { EVENTS, onOff } from './analytics-events.js';
 import { isPlayable, withComingSoon } from './coming-soon.js';
 import { createLibraryController } from './library-controller.js';
 import { toGameCards } from './view-models.js';
@@ -58,14 +59,16 @@ function step(context, delta, options = {}) {
 }
 
 // A teaser shakes its head, like a locked app on a phone, and opens nothing.
-function refuse({ view, sound }, index) {
+function refuse({ state, view, sound, track }, index) {
   sound.play('locked');
   view.carousel.nudge(index);
+  track(EVENTS.comingSoon, { card_id: state.cards[index].id });
   return false;
 }
 
-function open(context, index) {
-  const { state, launcher, preferences, sound } = context;
+// The source (play_button, details, card, keyboard, gamepad) shows how players start a game.
+function open(context, index, source) {
+  const { state, launcher, preferences, sound, track } = context;
   if (!isInRange(context, index) || launcher.isFlying()) {
     return false;
   }
@@ -77,21 +80,22 @@ function open(context, index) {
   preferences.recordPlay(card.id);
   sound.play('launch');
   launcher.launch({ index, card });
+  track(EVENTS.play, { game_id: card.id, source });
   return true;
 }
 
-function handleAction(context, action, { focus = null } = {}) {
+function handleAction(context, action, { focus = null, source = 'keyboard' } = {}) {
   if (context.state.selected < 0 || context.launcher.isFlying()) {
     return false;
   }
   if (action === 'start') {
-    return open(context, context.state.selected);
+    return open(context, context.state.selected, source);
   }
   return action in STEPS ? step(context, STEPS[action], { focus }) : false;
 }
 
 function toggleFavorite(context) {
-  const { view, preferences, sound, library } = context;
+  const { view, preferences, sound, library, track } = context;
   const card = selectedCard(context);
   if (!card || !isPlayable(card)) {
     return;
@@ -101,6 +105,7 @@ function toggleFavorite(context) {
   view.spotlight.setFavorite(isFavorite, { pop: true });
   sound.play(isFavorite ? 'favoriteOn' : 'favoriteOff');
   library.refreshIf('favorites');
+  track(EVENTS.favorite, { game_id: card.id, favorite: onOff(isFavorite) });
 }
 
 function pickTile(context, index) {
@@ -109,21 +114,29 @@ function pickTile(context, index) {
   }
 }
 
-export function createHomeController({ view, loadGames, launcher, preferences, sound }) {
+export function createHomeController({
+  view,
+  loadGames,
+  launcher,
+  preferences,
+  sound,
+  track = () => {},
+}) {
   const state = { cards: [], selected: -1 };
   const selectedIndex = () => state.selected;
   const library = createLibraryController({
     view: view.library,
     preferences,
     sound,
+    track,
     selectedIndex,
   });
-  const context = { state, view, loadGames, launcher, preferences, sound, library };
+  const context = { state, view, loadGames, launcher, preferences, sound, track, library };
   return {
     load: () => load(context),
     select: (index, options) => select(context, index, options),
     step: (delta, options) => step(context, delta, options),
-    open: (index) => open(context, index),
+    open: (index, source) => open(context, index, source),
     handleAction: (action, options) => handleAction(context, action, options),
     toggleFavorite: () => toggleFavorite(context),
     pickTile: (index) => pickTile(context, index),

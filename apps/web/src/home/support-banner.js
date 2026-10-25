@@ -1,3 +1,4 @@
+import { EVENTS } from './analytics-events.js';
 import {
   isBackFromGame,
   shouldOfferSupport,
@@ -16,8 +17,11 @@ function showBanner(banner, isShown) {
   banner.ownerDocument.documentElement.classList.toggle('has-support-banner', isShown);
 }
 
-// The install banner takes the same place, so the arcade asks for one thing at a time.
-const isInstallUp = (document) => document.documentElement.classList.contains('has-install-banner');
+// The install and analytics banners take the same place, so the arcade asks one thing at a time.
+const isOtherBannerUp = ({ documentElement }) =>
+  ['has-install-banner', 'has-consent-banner'].some((name) =>
+    documentElement.classList.contains(name),
+  );
 
 function lookForReturn(preferences) {
   const playCount = preferences.playCount();
@@ -26,7 +30,7 @@ function lookForReturn(preferences) {
   return { isReturn, playCount };
 }
 
-export function wireSupportBanner({ document, preferences, sound, signal, now }) {
+export function wireSupportBanner({ document, preferences, sound, signal, now, track }) {
   const elements = findElements(document);
 
   function offer() {
@@ -36,17 +40,19 @@ export function wireSupportBanner({ document, preferences, sound, signal, now })
       snoozedUntil: preferences.supportSnoozedUntil(),
       now: now(),
     });
-    if (!isWanted || isInstallUp(document) || !elements.banner.hidden) {
+    if (!isWanted || isOtherBannerUp(document) || !elements.banner.hidden) {
       return;
     }
     preferences.snoozeSupport(now() + SUPPORT_RESHOW_MS);
     showBanner(elements.banner, true);
+    track(EVENTS.supportShown);
   }
 
   const notNow = () => {
     preferences.snoozeSupport(now() + SUPPORT_SNOOZE_MS);
     showBanner(elements.banner, false);
     sound.play('sheetClose');
+    track(EVENTS.supportDismiss);
   };
   elements.close.addEventListener('click', notNow, { signal });
   // The back/forward cache brings this page back without loading it again, so it looks again then.

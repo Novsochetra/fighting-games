@@ -2,6 +2,7 @@ import { createGamepadPoller } from './gamepad-poller.js';
 import { wireCarousel } from './wire-carousel.js';
 import { wireAppearanceToggle, wireControls, wireSoundToggle } from './wire-controls.js';
 import { wireKeys } from './wire-keys.js';
+import { wireLinkEvents } from './wire-link-events.js';
 
 function wireGamepads({ gamepads, controller, isBlocked, signal }) {
   const poller = createGamepadPoller({
@@ -9,7 +10,7 @@ function wireGamepads({ gamepads, controller, isBlocked, signal }) {
     requestFrame: gamepads.requestFrame,
     onAction: (action) => {
       if (!isBlocked()) {
-        controller.handleAction(action);
+        controller.handleAction(action, { source: 'gamepad' });
       }
     },
   });
@@ -21,7 +22,8 @@ export function wireInputs({ document, view, controller, sheet, gamepads, settin
   const isBlocked = sheet.isOpen;
   wireKeys({ document, controller, isBlocked, signal });
   wireCarousel({ elements: view.elements, controller, signal });
-  wireControls({ view, controller, sheet, signal });
+  wireControls({ view, controller, sheet, track: settings.track, signal });
+  wireLinkEvents({ document, track: settings.track, signal });
   wireSoundToggle({ button: document.getElementById('sound-toggle'), ...settings, signal });
   wireAppearanceToggle({
     button: document.getElementById('appearance-toggle'),

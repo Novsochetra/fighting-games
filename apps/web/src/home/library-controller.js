@@ -1,6 +1,7 @@
+import { EVENTS } from './analytics-events.js';
 import { isFilter, libraryPage } from './library-filter.js';
 
-export function createLibraryController({ view, preferences, sound, selectedIndex }) {
+export function createLibraryController({ view, preferences, sound, track, selectedIndex }) {
   const state = { cards: [], filter: 'all', expanded: false };
 
   function refresh() {
@@ -25,13 +26,17 @@ export function createLibraryController({ view, preferences, sound, selectedInde
     }
     sound.play('switch');
     update({ filter, expanded: false });
+    track(EVENTS.filter, { filter });
     return true;
   }
 
   return {
     setCards: (cards) => update({ cards, expanded: false }),
     setFilter,
-    showMore: () => update({ expanded: true }),
+    showMore: () => {
+      update({ expanded: true });
+      track(EVENTS.showMore);
+    },
     refreshIf: (filter) => state.filter === filter && refresh(),
   };
 }
