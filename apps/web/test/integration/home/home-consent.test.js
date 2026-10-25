@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { CONSENT_KEY } from '../../../src/home/analytics.js';
 import { createMemoryStorage, STORAGE_KEYS } from '../../../src/home/preferences.js';
 import {
   clearBannerClasses,
@@ -65,7 +66,7 @@ describe('the analytics question', () => {
     expect(tag.grant).toHaveBeenCalledOnce();
     expect(isAsking()).toBe(false);
     expect(holdsOthersBack()).toBe(false);
-    expect(storage.read(STORAGE_KEYS.analyticsConsent)).toBe('granted');
+    expect(storage.read(CONSENT_KEY)).toBe('granted');
 
     const again = await bootAgain(storage);
     expect(isAsking()).toBe(false);
@@ -76,7 +77,7 @@ describe('the analytics question', () => {
     const { loadTag, storage } = await bootLive();
     click(byId('consent-refuse'));
     expect(isAsking()).toBe(false);
-    expect(storage.read(STORAGE_KEYS.analyticsConsent)).toBe('denied');
+    expect(storage.read(CONSENT_KEY)).toBe('denied');
     click(byId('favorite'));
     expect(loadTag).not.toHaveBeenCalled();
 

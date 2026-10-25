@@ -5,18 +5,23 @@ import {
   MEASUREMENT_ID,
 } from '../../../src/home/analytics-config.js';
 import { EVENTS, onOff } from '../../../src/home/analytics-events.js';
-import { CONSENT, createAnalytics, isConsentChoice } from '../../../src/home/analytics.js';
-import { createMemoryStorage, createPreferences } from '../../../src/home/preferences.js';
+import {
+  CONSENT,
+  CONSENT_KEY,
+  createAnalytics,
+  isConsentChoice,
+} from '../../../src/home/analytics.js';
+import { createMemoryStorage } from '../../../src/home/preferences.js';
 
 function setup({ isEnabled = true, choice = null } = {}) {
-  const preferences = createPreferences(createMemoryStorage());
+  const storage = createMemoryStorage();
   if (choice !== null) {
-    preferences.setAnalyticsConsent(choice);
+    storage.write(CONSENT_KEY, choice);
   }
   const tag = { event: vi.fn(), grant: vi.fn(), deny: vi.fn() };
   const loadTag = vi.fn(() => tag);
-  const analytics = createAnalytics({ isEnabled, loadTag, preferences });
-  return { analytics, preferences, tag, loadTag };
+  const analytics = createAnalytics({ isEnabled, loadTag, storage });
+  return { analytics, storage, tag, loadTag };
 }
 
 describe('createAnalytics', () => {
@@ -28,25 +33,25 @@ describe('createAnalytics', () => {
   });
 
   it('loads the tag on a yes, once, and sends events while the yes stands', () => {
-    const { analytics, preferences, tag, loadTag } = setup();
+    const { analytics, storage, tag, loadTag } = setup();
     analytics.allow();
     analytics.allow();
     analytics.track(EVENTS.play, { game_id: 'a', source: 'card' });
     expect(loadTag).toHaveBeenCalledOnce();
     expect(tag.grant).toHaveBeenCalledTimes(2);
     expect(tag.event).toHaveBeenCalledWith('play_game', { game_id: 'a', source: 'card' });
-    expect(preferences.analyticsConsent()).toBe(CONSENT.granted);
+    expect(storage.read(CONSENT_KEY)).toBe(CONSENT.granted);
     expect(analytics.needsAnswer()).toBe(false);
   });
 
   it('stops every event on a no, even one given after a yes', () => {
-    const { analytics, preferences, tag } = setup();
+    const { analytics, storage, tag } = setup();
     analytics.allow();
     analytics.refuse();
     analytics.track(EVENTS.favorite);
     expect(tag.deny).toHaveBeenCalledOnce();
     expect(tag.event).not.toHaveBeenCalled();
-    expect(preferences.analyticsConsent()).toBe(CONSENT.denied);
+    expect(storage.read(CONSENT_KEY)).toBe(CONSENT.denied);
   });
 
   it('starts the tag at once for a player who said yes on an earlier visit', () => {

@@ -67,7 +67,7 @@ export function bootHome({
   const { signal } = lifetime;
   const store = storage ?? createMemoryStorage();
   const preferences = createPreferences(store);
-  const analytics = createAnalytics({ ...analyticsSetup, preferences });
+  const analytics = createAnalytics({ ...analyticsSetup, storage: store });
   const { track } = analytics;
   const appearance = createAppearance({ document, storage: store, signal });
   const sound = createHomeSound({ createAudioContext, preferences });

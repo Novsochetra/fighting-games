@@ -7,7 +7,6 @@ export const STORAGE_KEYS = {
   supportSnoozedUntil: 'arcade.support-snoozed-until',
   supportSeenPlays: 'arcade.support-seen-plays',
   gaveAt: 'arcade.gave-at',
-  analyticsConsent: 'arcade.analytics-consent',
 };
 export const RECENT_LIMIT = 12;
 
@@ -76,7 +75,6 @@ export function createPreferences(storage) {
     sound: storage.read(STORAGE_KEYS.sound) !== false,
     installDismissedAt: storage.read(STORAGE_KEYS.installDismissedAt),
     plays: numberOr(storage.read(STORAGE_KEYS.plays), 0),
-    analyticsConsent: storage.read(STORAGE_KEYS.analyticsConsent),
     ...readSupportState(storage),
   };
   const save = (name, value) => {
@@ -98,8 +96,6 @@ export function createPreferences(storage) {
     setSound: (isOn) => save('sound', Boolean(isOn)),
     installDismissedAt: () => state.installDismissedAt,
     dismissInstall: (time) => save('installDismissedAt', time),
-    analyticsConsent: () => state.analyticsConsent,
-    setAnalyticsConsent: (choice) => save('analyticsConsent', choice),
     ...supportPreferences({ state, save, storage }),
   };
 }

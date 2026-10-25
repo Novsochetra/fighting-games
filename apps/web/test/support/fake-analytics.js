@@ -1,5 +1,6 @@
 import { vi } from 'vitest';
-import { createMemoryStorage, STORAGE_KEYS } from '../../src/home/preferences.js';
+import { CONSENT_KEY } from '../../src/home/analytics.js';
+import { createMemoryStorage } from '../../src/home/preferences.js';
 
 // The live site's analytics with Google's tag swapped for one that only records what it was given.
 export function createFakeAnalytics() {
@@ -10,7 +11,7 @@ export function createFakeAnalytics() {
 
 export function storageWithConsent(choice) {
   const storage = createMemoryStorage();
-  storage.write(STORAGE_KEYS.analyticsConsent, choice);
+  storage.write(CONSENT_KEY, choice);
   return storage;
 }
 
