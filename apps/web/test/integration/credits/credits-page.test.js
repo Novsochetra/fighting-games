@@ -9,7 +9,7 @@ const CREDITS_PAGE = path.join(WEB_ROOT, 'credits', 'index.html');
 const SOCIAL_LINKS = [
   'https://github.com/Novsochetra',
   'https://buymeacoffee.com/sochetranov',
-  'https://www.facebook.com/',
+  'https://www.facebook.com/sochetra.nov.7',
 ];
 
 // Only the body: the head's stylesheet and module links would make happy-dom try to fetch them.
