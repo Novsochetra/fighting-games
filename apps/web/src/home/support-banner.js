@@ -49,8 +49,18 @@ export function wireSupportBanner({ document, preferences, sound, signal, now })
     sound.play('sheetClose');
   };
   elements.close.addEventListener('click', notNow, { signal });
-  // The back/forward cache brings this page back without loading it again, so it looks again then.
-  const onPageShow = (event) => event.persisted && offer();
+  // The back/forward cache brings this page back as it was left, banner and all, without loading it
+  // again: it looks again then, and steps aside for a gift made meanwhile on the supporters page.
+  const onPageShow = (event) => {
+    if (!event.persisted) {
+      return;
+    }
+    if (preferences.hasGiven()) {
+      showBanner(elements.banner, false);
+      return;
+    }
+    offer();
+  };
   document.defaultView.addEventListener('pageshow', onPageShow, { signal });
   return { offer, elements };
 }

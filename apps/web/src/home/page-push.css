@@ -1,6 +1,7 @@
-/* Arriving here pushes this page on like an iOS screen: it slides in from the right with a shadow on
-   its edge, over the arcade, which slides a little to the left and dims. The pseudo-elements belong
-   to the page arrived at; the arcade's page-pop.css plays it backwards on the way back. */
+/* A page under the arcade (credits, supporters) loads this sheet, so arriving at it pushes it on like
+   an iOS screen: it slides in from the right with a shadow on its edge, over the page left, which
+   slides a little to the left and dims. The pseudo-elements belong to the page arrived at; the
+   arcade's page-pop.css plays it backwards on the way back. */
 @view-transition {
   navigation: auto;
 }

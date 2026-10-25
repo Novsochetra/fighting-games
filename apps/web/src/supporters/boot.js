@@ -1,4 +1,5 @@
 import { createAppearance } from '../home/appearance.js';
+import { wireBackLink } from '../home/back-link.js';
 import { createMemoryStorage, createPreferences } from '../home/preferences.js';
 import { createSoundPlayer } from '../home/sound-player.js';
 import { createDonateSheet } from './donate-sheet.js';
@@ -28,6 +29,14 @@ function wireDonateButtons({ document, donate, signal }) {
   }
 }
 
+// Opened from the arcade, Back goes back to it as it was left (back-link.js).
+function wireBack({ document, visit, signal }) {
+  const { history, referrer = '' } = visit ?? {};
+  if (history) {
+    wireBackLink({ link: document.getElementById('back'), history, referrer, signal });
+  }
+}
+
 // The home page's Support banner links here with #give, so the donate sheet opens at once.
 export function bootSupporters({ document, fetch, storage, createAudioContext, locale, visit }) {
   const lifetime = new AbortController();
@@ -36,6 +45,7 @@ export function bootSupporters({ document, fetch, storage, createAudioContext, l
   const preferences = createPreferences(store);
   const { openDonate = false, now = () => Date.now() } = visit ?? {};
   createAppearance({ document, storage: store, signal });
+  wireBack({ document, visit, signal });
   const sound = createSoundPlayer({
     createContext: createAudioContext ?? (() => null),
     isEnabled: preferences.isSoundOn,

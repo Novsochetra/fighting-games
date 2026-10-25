@@ -1,8 +1,9 @@
-/* The arcade and the credits page change like screens in an iOS navigation stack, through a view
-   transition across the two documents. Its pseudo-elements belong to the page arrived at, so this
-   sheet sets every arrival at the arcade: the page left pops off to the right with a shadow on its
-   edge, and the arcade, dimmed a little behind it, slides back in from the left. The credits page's
-   page-push.css plays it forward. A page that opts in to neither, such as a game, loads as before. */
+/* The arcade and the pages under it (credits, supporters) change like screens in an iOS navigation
+   stack, through a view transition across documents. Its pseudo-elements belong to the page arrived
+   at, so this sheet sets every arrival at the arcade: the page left pops off to the right with a
+   shadow on its edge, and the arcade, dimmed a little behind it, slides back in from the left. The
+   pages under it load page-push.css, which plays it forward. A game opts in to neither and keeps its
+   own launch. */
 @view-transition {
   navigation: auto;
 }

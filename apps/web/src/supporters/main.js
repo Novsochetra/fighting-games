@@ -8,5 +8,10 @@ bootSupporters({
   storage: createBrowserStorage(window),
   createAudioContext: () => browserAudioContext(window),
   locale: navigator.language,
-  visit: { openDonate: window.location.hash === '#give', now: () => Date.now() },
+  visit: {
+    openDonate: window.location.hash === '#give',
+    now: () => Date.now(),
+    history: window.history,
+    referrer: document.referrer,
+  },
 });

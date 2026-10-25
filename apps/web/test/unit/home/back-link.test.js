@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cameFrom } from '../../../src/credits/back-link.js';
+import { cameFrom } from '../../../src/home/back-link.js';
 
 const ARCADE = new URL('https://www.khmerarcade.games/');
 const visit = (referrer, historyLength = 2) => cameFrom(ARCADE, { referrer, historyLength });

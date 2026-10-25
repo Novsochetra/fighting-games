@@ -4,9 +4,9 @@ import { describe, expect, it } from 'vitest';
 import { GAMES_ROOT, WEB_ROOT } from '../../../server/src/paths.js';
 import { APPEARANCE_TRANSITION } from '../../src/home/appearance.js';
 
-// The arcade and the credits page change like screens in an iOS navigation stack, through a view
-// transition across documents that both pages must opt in to. Every other page keeps its own way in:
-// a game its launch, the supporters page a plain load.
+// The arcade and the pages under it change like screens in an iOS navigation stack, through a view
+// transition across documents that both pages of a move must opt in to. A game keeps its own launch.
+// The pseudo-elements belong to the page arrived at, so the arcade's sheet pops and the others push.
 const OPTS_IN = /@view-transition\s*\{\s*navigation:\s*auto;?\s*\}/;
 
 async function stylesheetsOf(page) {
@@ -47,30 +47,35 @@ const ARCADE = path.join(WEB_ROOT, 'index.html');
 const CREDITS = path.join(WEB_ROOT, 'credits', 'index.html');
 const SUPPORTERS = path.join(WEB_ROOT, 'supporters', 'index.html');
 
-describe('the move between the arcade and the credits page', () => {
-  it('opts both pages in to a transition across documents', async () => {
-    expect(await motionSheetOf(ARCADE)).not.toBeNull();
-    expect(await motionSheetOf(CREDITS)).not.toBeNull();
+const UNDER_THE_ARCADE = [CREDITS, SUPPORTERS];
+
+describe('the move between the arcade and the pages under it', () => {
+  it('opts the arcade, the credits and the supporters pages in to a transition across documents', async () => {
+    for (const page of [ARCADE, ...UNDER_THE_ARCADE]) {
+      expect(await motionSheetOf(page)).not.toBeNull();
+    }
   });
 
-  it('pops back to the arcade and pushes on to the credits, each set by the page arrived at', async () => {
+  it('pops back to the arcade and pushes on to a page under it, as set by the page arrived at', async () => {
     expect((await motionSheetOf(ARCADE)).css).toMatch(/@keyframes page-pop-out/);
-    expect((await motionSheetOf(CREDITS)).css).toMatch(/@keyframes page-push-in/);
+    for (const page of UNDER_THE_ARCADE) {
+      expect((await motionSheetOf(page)).css).toMatch(/@keyframes page-push-in/);
+    }
   });
 
   it('leaves the light and dark switch, marked by appearance.js, to its cross-fade', async () => {
     const mark = `:root:not([data-transition='${APPEARANCE_TRANSITION}'])`;
-    for (const page of [ARCADE, CREDITS]) {
+    for (const page of [ARCADE, ...UNDER_THE_ARCADE]) {
       const { css } = await motionSheetOf(page);
       expect(css).toContain(`${mark}::view-transition-old(root)`);
       expect(css).toContain(`${mark}::view-transition-new(root)`);
     }
   });
 
-  it('leaves the supporters page and every game to load as they did', async () => {
+  it('leaves every game to its own launch', async () => {
     const games = await gamePages();
     expect(games.length).toBeGreaterThan(0);
-    for (const page of [SUPPORTERS, ...games]) {
+    for (const page of games) {
       expect(await motionSheetOf(page)).toBeNull();
     }
   });
