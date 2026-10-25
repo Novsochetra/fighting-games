@@ -78,6 +78,9 @@ describe('static files from apps/web', () => {
       '/games/steel-and-dust/assets/manifest.webmanifest',
       'application/manifest+json; charset=utf-8',
     ],
+    ['/robots.txt', 'text/plain; charset=utf-8'],
+    ['/sitemap.xml', 'application/xml; charset=utf-8'],
+    ['/assets/social/entry-screen.jpg', 'image/jpeg'],
   ])('serves %s as %s', async (pathname, contentType) => {
     const response = await get(pathname);
     expect(response.status).toBe(200);

@@ -14,8 +14,11 @@ apps/
   web/                    everything the browser loads
     index.html            home page: a game hub with a card per game
     sw.js                 service worker, so browsers offer to install the arcade
+    robots.txt            lets every crawler in and names the sitemap
+    sitemap.xml           every page this server sends (see Search and link previews)
     assets/               the arcade's icons and manifest (tools/arcade_icons.py draws the icons),
-                          and donate/khqr.jpg, the KHQR code the donate sheet shows
+                          donate/khqr.jpg, the KHQR code the donate sheet shows, and
+                          social/entry-screen.jpg, the picture a shared link shows
     src/home/             home page modules and styles; tokens.css holds its colors, type and motion
     supporters/           the supporters page
     src/supporters/       supporters page modules and styles
@@ -176,6 +179,26 @@ reload, or a game on another site. Its very first look only takes the count, so 
 arrival. It never asks after a gift from this device (the supporters page records it),
 nor while the install banner is up, so only one asks at a time. A banner left alone comes back in a
 week, and Not now holds it back for 30 days.
+
+## Search and link previews
+
+The arcade lives at `https://www.khmerarcade.games/`. Search engines and link previews (Facebook,
+Telegram, X, Discord) want whole addresses, so the few tags written for them are the one place the
+pages name that domain; every other URL stays relative. Each page served here carries:
+
+- a `<title>` and a description with the words people search for (Khmer, Cambodia, Angkor),
+- `<link rel="canonical">`, its one address, since the bare domain and `www.` send the same page
+  and a game page can be loaded under a query (`boot-recovery.js`),
+- Open Graph tags and `twitter:card` `summary_large_image`, so a shared link opens into a picture.
+
+The home and supporters pages share `assets/social/entry-screen.jpg`, the arcade's entry screen at
+1200x630: the home page in its light appearance with Steel & Dust picked, taken in a 1200x630 window
+at 2x and scaled down. A game shares a picture of its own from its own folder (Steel & Dust's title
+screen, `games/steel-and-dust/assets/social/`). The home page also names the site for search results
+in JSON-LD (`WebSite`). `robots.txt` blocks nothing, as Google renders the home page and its list
+comes from `api/games`, and names `sitemap.xml`, which lists the home page, the supporters page and
+every game served here, but not one on its own site. `test/integration/seo.test.js` fails when a page
+is missing from the sitemap or its tags, or its picture is not a 1200x630 JPEG the server sends.
 
 ## Supporters page
 
