@@ -1,0 +1,31 @@
+/* Arriving here pushes this page on like an iOS screen: it slides in from the right with a shadow on
+   its edge, over the arcade, which slides a little to the left and dims. The pseudo-elements belong
+   to the page arrived at; the arcade's page-pop.css plays it backwards on the way back. */
+@view-transition {
+  navigation: auto;
+}
+
+/* With reduced motion, page.css's cross-fade stands in for the slide, as iOS dissolves. */
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-transition='appearance'])::view-transition-old(root) {
+    animation: page-push-under var(--duration-navigation) var(--easing-navigation) both;
+  }
+
+  :root:not([data-transition='appearance'])::view-transition-new(root) {
+    box-shadow: var(--shadow-navigation);
+    animation: page-push-in var(--duration-navigation) var(--easing-navigation) both;
+  }
+}
+
+@keyframes page-push-in {
+  from {
+    translate: 100% 0;
+  }
+}
+
+@keyframes page-push-under {
+  to {
+    translate: var(--offset-under) 0;
+    filter: brightness(var(--dim-under));
+  }
+}

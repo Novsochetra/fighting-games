@@ -8,7 +8,6 @@
   block-size: var(--size-cover);
   margin: 0 auto;
   overflow: hidden;
-  animation: cover-in var(--duration-enter) var(--easing-standard) backwards;
 }
 
 .cover__photo {
@@ -62,12 +61,6 @@
   }
 }
 
-@keyframes cover-in {
-  from {
-    opacity: 0;
-  }
-}
-
 @keyframes cover-zoom {
   to {
     scale: var(--scale-ken-burns);
@@ -75,7 +68,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cover,
   .cover__photo,
   .cover__caption {
     animation: none;

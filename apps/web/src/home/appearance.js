@@ -20,13 +20,20 @@ function apply(document, appearance) {
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', themeColor);
 }
 
-// The whole page cross-fades between the two, where the browser can.
+export const APPEARANCE_TRANSITION = 'appearance';
+
+// The whole page cross-fades between the two, where the browser can. The root is marked while it
+// does, so the slide the arcade's pages play between each other (page-pop.css) stays out of it.
 function applySmoothly(document, appearance, { smooth }) {
-  if (smooth && typeof document.startViewTransition === 'function') {
-    document.startViewTransition(() => apply(document, appearance));
-  } else {
+  if (!smooth || typeof document.startViewTransition !== 'function') {
     apply(document, appearance);
+    return;
   }
+  const root = document.documentElement;
+  root.dataset.transition = APPEARANCE_TRANSITION;
+  const transition = document.startViewTransition(() => apply(document, appearance));
+  const unmark = () => delete root.dataset.transition;
+  transition.finished.then(unmark, unmark);
 }
 
 export function createAppearance({ document, storage, signal }) {

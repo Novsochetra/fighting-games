@@ -298,6 +298,18 @@ does. That runs on scroll-driven animations alone (`credits.css`), and a browser
 a plain bar that scrolls away with the cover.
 With reduced motion nothing rises, pops or turns.
 
+The arcade and the credits page change like screens in an iOS navigation stack, through a view
+transition across the two documents (`@view-transition`), which both opt in to. Its pseudo-elements
+belong to the page arrived at, so each page's sheet sets the motion of arriving there: the credits
+page's `page-push.css` slides it in from the right over the arcade, which slides a little left and
+dims, and the arcade's `page-pop.css` plays that backwards, the credits page sliding off to the
+right, on Back as on any way home. The supporters page and the games opt in to neither and load as
+before, so a game keeps its own launch; `test/integration/page-motion.test.js` holds both. The light
+and dark switch is a view transition too, so `appearance.js` marks the root (`data-transition`)
+while it cross-fades and the slides leave it out. With reduced motion, page.css's cross-fade stands
+in for the slide, as iOS dissolves. A browser without view transitions across documents changes
+pages at once.
+
 ## Game: Steel & Dust
 
 The game keeps a strict split:
