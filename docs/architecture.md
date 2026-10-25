@@ -220,6 +220,17 @@ credits pages, and the install and support banners shown, taken and turned down.
 from where it happens, with `track` passed in like `sound`. A copy run anywhere else (a laptop, the
 tests) asks nothing and sends nothing.
 
+A coffee button floats at the bottom right (`coffee.js`, `coffee.css`), round and in the orange the
+maker picked for Buy Me a Coffee's own widget, which it replaced so no script of theirs loads. It
+pops in a moment after the arcade opens, and a note pops out of it with the maker's photo and a
+thank-you in Khmer (`lang="km"`, with the taller line Khmer needs), then steps back into it after
+nine seconds; tapping the note opens the sheet too, and its own button puts it away. The sheet
+(`coffee-sheet.css`, the dialog from `sheet.js`) offers both ways to give: Pay with KHQR, which
+leads to the donate sheet on the supporters page (`supporters/#give`), and Buy me a coffee in their
+yellow, which takes a card from anywhere in a new tab. Gifts on Buy Me a Coffee do not reach the
+supporters list. On a phone the hero's buttons rise above the coffee button, the note floats above
+them so Play stays in reach, and the button and note wait while a banner is up across the bottom.
+
 ## Supporters page
 
 Every game is free, so the arcade thanks the people who chip in on its own page, `supporters/`

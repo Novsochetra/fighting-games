@@ -1,6 +1,7 @@
 import { createAnalytics } from './analytics.js';
 import { createAppearance } from './appearance.js';
 import { fetchCatalog } from './catalog-client.js';
+import { wireCoffee } from './coffee.js';
 import { wireConsentBanner } from './consent-banner.js';
 import { createDetailsSheet } from './details-sheet.js';
 import { createHomeController } from './home-controller.js';
@@ -28,10 +29,11 @@ function watchReturns({ document, launcher, controller, sound, signal }) {
 }
 
 // The analytics question goes first, then install: while either is up, the support banner waits for
-// another visit.
+// another visit. The coffee button floats beside them and steps aside on a phone while one is up.
 function wireBanners({ document, installer, settings, signal, visit }) {
   const { preferences, sound, analytics, track } = settings;
   wireConsentBanner({ document, analytics, sound, signal });
+  wireCoffee({ document, sound, signal });
   if (installer) {
     wireInstallBanner({ document, installer, preferences, sound, signal, track });
   }

@@ -81,6 +81,12 @@
   background: var(--color-button-surface);
 }
 
+/* Buy Me a Coffee's own yellow, so the way to give by card reads as theirs at a glance. */
+.pill-button--coffee {
+  color: var(--color-on-brand-coffee);
+  background: var(--color-brand-coffee);
+}
+
 /* A teaser's Play: frosted and still, since there is nothing to open yet. */
 .pill-button.is-unavailable {
   color: var(--color-label-secondary);
@@ -102,7 +108,8 @@
   }
 
   .pill-button--primary:not(.is-unavailable):hover,
-  .pill-button--surface:hover {
+  .pill-button--surface:hover,
+  .pill-button--coffee:hover {
     filter: brightness(var(--dim-pressed));
   }
 }

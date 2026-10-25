@@ -109,6 +109,20 @@ describe('the home page events', () => {
     ]);
   });
 
+  it('count the coffee button, its note and each way to give from its sheet', async () => {
+    const { tag } = await bootCounted();
+    click(byId('coffee-open'));
+    click(byId('coffee-khqr'));
+    click(byId('coffee-note-open'));
+    click(byId('coffee-bmc'));
+    expect(sentEvents(tag)).toEqual([
+      ['open_coffee_sheet', { placement: 'button' }],
+      ['open_supporters', { placement: 'coffee_sheet' }],
+      ['open_coffee_sheet', { placement: 'note' }],
+      ['open_buy_me_a_coffee', {}],
+    ]);
+  });
+
   it('count the install banner from offer to install', async () => {
     const installer = createFakeInstaller();
     const { tag } = await bootCounted(bootWithRealCatalog, { installer });

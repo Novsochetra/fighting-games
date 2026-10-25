@@ -16,6 +16,8 @@ export const EVENTS = {
   supportDismiss: 'support_dismiss',
   supporters: 'open_supporters',
   credits: 'open_credits',
+  coffee: 'open_coffee_sheet',
+  buyMeACoffee: 'open_buy_me_a_coffee',
   sound: 'toggle_sound',
   appearance: 'toggle_appearance',
 };

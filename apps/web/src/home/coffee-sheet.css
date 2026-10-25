@@ -1,0 +1,55 @@
+/* The coffee button's sheet: both ways to give, one above the other. KHQR leads to the donate sheet
+   on the supporters page; Buy Me a Coffee takes a card from anywhere. */
+.coffee-sheet {
+  inline-size: min(var(--size-sheet-compact), calc(100% - 2 * var(--space-gutter)));
+}
+
+.coffee {
+  align-items: center;
+  padding-block-start: var(--space-8);
+  text-align: center;
+}
+
+.coffee__badge {
+  display: grid;
+  place-items: center;
+  inline-size: var(--size-heart-badge);
+  block-size: var(--size-heart-badge);
+  margin-block-end: var(--space-2);
+  color: var(--color-on-coffee);
+  background: var(--color-coffee);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-coffee);
+}
+
+.coffee__badge .icon {
+  inline-size: 46%;
+  block-size: 46%;
+}
+
+.coffee__choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  inline-size: 100%;
+  margin-block-start: var(--space-3);
+}
+
+.coffee__choice .icon {
+  inline-size: var(--size-icon);
+  block-size: var(--size-icon);
+}
+
+.coffee__hint {
+  margin: 0;
+  font-size: var(--font-size-apple-footnote);
+  line-height: var(--leading-apple-footnote);
+  color: var(--color-label-muted);
+}
+
+/* On a phone the sheet rises from the bottom edge across the whole width, as every sheet does there. */
+@media (max-width: 40rem) {
+  .coffee-sheet {
+    inline-size: 100%;
+  }
+}

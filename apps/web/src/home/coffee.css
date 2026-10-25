@@ -1,0 +1,194 @@
+/* A round coffee button floats at the bottom right, in the color the maker picked for Buy Me a
+   Coffee's own widget, and opens the arcade's sheet with both ways to give (coffee-sheet.css). */
+.coffee-fab {
+  position: fixed;
+  inset-block-end: max(var(--offset-coffee-fab), env(safe-area-inset-bottom));
+  inset-inline-end: max(var(--offset-coffee-fab), env(safe-area-inset-right));
+  z-index: var(--layer-install);
+  display: grid;
+  place-items: center;
+  inline-size: var(--size-coffee-fab);
+  block-size: var(--size-coffee-fab);
+  padding: 0;
+  color: var(--color-on-coffee);
+  cursor: pointer;
+  background: var(--color-coffee);
+  border: 0;
+  border-radius: var(--radius-pill);
+  outline: none;
+  box-shadow: var(--shadow-coffee);
+  -webkit-tap-highlight-color: var(--color-clear);
+  transition:
+    scale var(--duration-press) var(--easing-spring),
+    opacity var(--duration-normal) var(--easing-standard),
+    visibility var(--duration-normal) var(--easing-standard);
+  animation: coffee-pop var(--duration-enter) var(--easing-pop) var(--duration-coffee-delay)
+    backwards;
+}
+
+.coffee-fab .icon {
+  inline-size: 46%;
+  block-size: 46%;
+}
+
+@media (hover: hover) {
+  .coffee-fab:hover {
+    scale: var(--scale-tile-press);
+  }
+}
+
+.coffee-fab:active {
+  scale: var(--scale-pressed);
+  transition-duration: var(--duration-fast);
+}
+
+.coffee-fab:focus-visible {
+  outline: var(--border-width-ring) solid var(--color-focus-ring);
+  outline-offset: var(--border-width-ring);
+}
+
+/* The note pops out of the button with a thank-you in Khmer, then steps back into it (coffee.js). */
+.coffee-note {
+  position: fixed;
+  inset-block-end: calc(
+    max(var(--offset-coffee-fab), env(safe-area-inset-bottom)) + var(--size-coffee-fab) +
+      var(--space-3)
+  );
+  inset-inline-end: max(var(--offset-coffee-fab), env(safe-area-inset-right));
+  z-index: var(--layer-install);
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  inline-size: min(var(--size-coffee-note), calc(100vw - 2 * var(--offset-coffee-fab)));
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  color: var(--color-label);
+  background: var(--color-material);
+  border-radius: var(--radius-banner);
+  box-shadow: var(--shadow-banner);
+  transform-origin: 100% 100%;
+  -webkit-backdrop-filter: var(--blur-glass);
+  backdrop-filter: var(--blur-glass);
+  transition:
+    opacity var(--duration-normal) var(--easing-standard),
+    visibility var(--duration-normal) var(--easing-standard);
+  animation: coffee-pop var(--duration-sheet) var(--easing-spring);
+}
+
+.coffee-note.is-hiding {
+  animation: coffee-tuck var(--duration-fade) var(--easing-standard) forwards;
+}
+
+.coffee-note__open {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-inline-size: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+  outline: none;
+}
+
+.coffee-note__open:focus-visible,
+.coffee-note__close:focus-visible {
+  outline: var(--border-width-ring) solid var(--color-focus-ring);
+  outline-offset: var(--border-width-ring);
+}
+
+.coffee-note__from {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  font-size: var(--font-size-apple-footnote);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-apple-footnote);
+}
+
+.coffee-note__avatar {
+  flex: none;
+  inline-size: var(--size-coffee-avatar);
+  block-size: var(--size-coffee-avatar);
+  object-fit: cover;
+  border-radius: var(--radius-pill);
+}
+
+/* Khmer stacks vowels and subscripts above and below the line, so it needs more room than Latin. */
+.coffee-note__message {
+  font-size: var(--font-size-apple-subheadline);
+  line-height: var(--leading-khmer);
+  color: var(--color-label-secondary);
+}
+
+.coffee-note__close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--size-install-close);
+  block-size: var(--size-install-close);
+  padding: 0;
+  color: var(--color-label-tertiary);
+  cursor: pointer;
+  background: var(--color-fill-quiet);
+  border: 0;
+  border-radius: var(--radius-pill);
+  outline: none;
+}
+
+.coffee-note__close .icon {
+  inline-size: var(--size-icon-small);
+  block-size: var(--size-icon-small);
+}
+
+/* On a phone the button sits where the hero keeps Play, so the hero's buttons rise above it, and the
+   note floats above them, so Play stays in reach while it shows. A banner across the bottom asks
+   first, so the button and its note wait while one is up. */
+@media (max-width: 40rem) {
+  .spotlight {
+    padding-block-end: calc(
+      max(var(--space-3), env(safe-area-inset-bottom)) + var(--size-coffee-clearance)
+    );
+  }
+
+  .coffee-note {
+    inset-block-end: calc(
+      max(var(--space-3), env(safe-area-inset-bottom)) + var(--size-coffee-clearance) +
+        var(--size-pill-button) + var(--space-3)
+    );
+  }
+
+  :root.has-install-banner :is(.coffee-fab, .coffee-note),
+  :root.has-support-banner :is(.coffee-fab, .coffee-note),
+  :root.has-consent-banner :is(.coffee-fab, .coffee-note) {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+@keyframes coffee-pop {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+}
+
+@keyframes coffee-tuck {
+  to {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coffee-fab,
+  .coffee-note,
+  .coffee-note.is-hiding {
+    transition: none;
+    animation: none;
+  }
+}
