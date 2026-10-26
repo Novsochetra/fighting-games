@@ -8,9 +8,9 @@ export const ERROR_MESSAGE = 'The supporters did not load. Check your connection
 function findElements(document) {
   const byId = (id) => document.getElementById(id);
   return {
-    notice: byId('notice'),
-    status: byId('status'),
-    retry: byId('retry'),
+    notice: byId('supporters-notice'),
+    status: byId('supporters-status'),
+    retry: byId('supporters-retry'),
     stats: byId('stats'),
     donate: byId('donate'),
     total: byId('total'),

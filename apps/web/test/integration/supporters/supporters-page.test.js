@@ -29,7 +29,7 @@ afterEach(() => {
 describe('the supporters page', () => {
   it('sums up the gifts and puts the top three on the podium', async () => {
     await bootPage(async () => jsonReply(samplePayload()));
-    expect(byId('notice').hidden).toBe(true);
+    expect(byId('supporters-notice').hidden).toBe(true);
     expect(byId('total').textContent).toBe('$500.50');
     expect(byId('count').textContent).toBe('5');
     expect(texts('.podium__name')).toEqual(['Sok Dara', 'Chan Bopha', 'Arun Kim']);
@@ -113,13 +113,13 @@ describe('the supporters page', () => {
       .mockResolvedValueOnce(jsonReply({}, 503))
       .mockResolvedValueOnce(jsonReply(samplePayload()));
     await bootPage(fetchFn);
-    expect(byId('notice').dataset.tone).toBe('error');
-    expect(byId('status').textContent).toBe(ERROR_MESSAGE);
+    expect(byId('supporters-notice').dataset.tone).toBe('error');
+    expect(byId('supporters-status').textContent).toBe(ERROR_MESSAGE);
     expect(byId('roll').hidden).toBe(true);
 
-    click(byId('retry'));
+    click(byId('supporters-retry'));
     await vi.waitFor(() => expect(byId('roll').hidden).toBe(false));
-    expect(byId('notice').hidden).toBe(true);
+    expect(byId('supporters-notice').hidden).toBe(true);
   });
 });
 

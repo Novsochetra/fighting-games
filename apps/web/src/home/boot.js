@@ -48,31 +48,33 @@ function wireBanners({ document, installer, settings, signal, visit }) {
   support.offer();
 }
 
-const createHomeSound = ({ createAudioContext, preferences }) =>
-  createSoundPlayer({
-    createContext: createAudioContext ?? (() => null),
-    isEnabled: preferences.isSoundOn,
-  });
-
-export function bootHome({
-  document,
-  fetch,
-  navigate,
-  gamepads,
-  storage,
-  createAudioContext,
-  installer,
-  analytics: analyticsSetup = {},
-  visit = { now: () => Date.now() },
-}) {
-  const lifetime = new AbortController();
-  const { signal } = lifetime;
+// In the arcade the other screens share the appearance and the sound, and the keys and the pad are
+// the arcade's only while it shows; on its own the arcade makes its own.
+function homeServices({ document, storage, createAudioContext, analytics, shared = {} }, signal) {
   const store = storage ?? createMemoryStorage();
   const preferences = createPreferences(store);
-  const analytics = createAnalytics({ ...analyticsSetup, storage: store });
+  const sound = () =>
+    createSoundPlayer({
+      createContext: createAudioContext ?? (() => null),
+      isEnabled: preferences.isSoundOn,
+    });
+
+  return {
+    preferences,
+    analytics: createAnalytics({ ...analytics, storage: store }),
+    appearance: shared.appearance ?? createAppearance({ document, storage: store, signal }),
+    sound: shared.sound ?? sound(),
+    isShowing: shared.isShowing ?? (() => true),
+  };
+}
+
+export function bootHome(options) {
+  const { document, fetch, navigate, gamepads, installer } = options;
+  const visit = options.visit ?? { now: () => Date.now() };
+  const lifetime = new AbortController();
+  const { signal } = lifetime;
+  const { preferences, analytics, appearance, sound, isShowing } = homeServices(options, signal);
   const { track } = analytics;
-  const appearance = createAppearance({ document, storage: store, signal });
-  const sound = createHomeSound({ createAudioContext, preferences });
   const view = createHomeView(document);
   const { home } = view.elements;
   const launcher = createLauncher({ document, home, findSource: view.findLaunchSource, navigate });
@@ -80,9 +82,11 @@ export function bootHome({
   const controller = createHomeController({ view, loadGames, launcher, preferences, sound, track });
   const sheet = createDetailsSheet({ document, sound, signal });
   const settings = { preferences, sound, appearance, analytics, track };
-  wireInputs({ document, view, controller, sheet, gamepads, settings, signal });
+
+  wireInputs({ document, view, controller, sheet, gamepads, settings, isShowing, signal });
   watchReturns({ document, launcher, controller, sound, signal });
   wireBanners({ document, installer, settings, signal, visit });
+
   return {
     controller,
     launcher,

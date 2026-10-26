@@ -73,10 +73,10 @@ export async function modulesOf(page) {
   return seen;
 }
 
-// Where the page's Back link (id="back") leads, as a folder of apps/web.
+// Where the page's Back link (data-back) leads, as a folder of apps/web.
 export async function backLinkTarget(page) {
   const html = await readFile(page, 'utf8');
-  const tag = /<a\b[^>]*\bid="back"[^>]*>/.exec(html)?.[0];
+  const tag = /<a\b[^>]*\bdata-back\b[^>]*>/.exec(html)?.[0];
   const href = tag && /\bhref="([^"]+)"/.exec(tag)?.[1];
   return href ? path.resolve(path.dirname(page), href) : null;
 }

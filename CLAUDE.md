@@ -86,14 +86,18 @@ A game hosted on its own site keeps only `game.json` (with an `https:` `url`) an
 ## Pages of the arcade
 
 A page of the arcade that is not a game (like `credits/` and `supporters/`) lives in
-`apps/web/<name>/index.html` and moves like an iOS screen, without being asked each time:
+`apps/web/<name>/index.html` and is a screen of the one-page arcade (`src/arcade/`, see "One page" in
+`docs/architecture.md`), without being asked each time:
 
-- it loads `src/home/page-push.css`, so it slides in over the arcade and the arcade's
-  `page-pop.css` slides it off again,
-- its Back is `<a id="back" href="../">` (named with `aria-label` where a phone hides the label),
-  wired with `wireBackLink` from `src/home/back-link.js`, so Back from a page opened from the arcade
-  goes back through history and the arcade comes back as it was left,
-- it shares the home page's tokens, buttons and appearance (`appearance-early.js`, `appearance.js`),
+- it loads `src/arcade/screens.css` and starts the shell, `src/arcade/main.js`, as its only module;
+  its body is one screen, `<div data-screen="<name>" tabindex="-1">`, listed in `SCREENS`
+  (`src/arcade/routes.js`) under its path, with its boot in `src/arcade/arcade.js`, so a tap between
+  screens changes the screen in the page and slides like an iOS screen,
+- its Back is `<a data-back href="../">` (named with `aria-label` where a phone hides the label),
+  which pops back to the arcade as it was left,
+- its ids are unique across every screen, as the screens share one document,
+- it shares the home page's tokens, buttons and appearance (`appearance-early.js`, and the shell's
+  shared appearance and sound, passed to its boot as `shared`),
 - its bar is `src/home/page-bar.css` with the iOS 26 soft edge of `src/home/scroll-edge.css`
   (`<header class="page-bar scroll-edge">`), as the arcade's own bar has, so what scrolls under it
   fades out, and it frosts over where a blur cannot be masked.

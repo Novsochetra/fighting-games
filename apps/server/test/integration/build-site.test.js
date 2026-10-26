@@ -31,7 +31,7 @@ afterAll(() => rm(tempRoot, { recursive: true, force: true }));
 describe('npm run build', () => {
   it.each([
     'index.html',
-    'src/home/main.js',
+    'src/arcade/main.js',
     'src/home/page.css',
     'src/home/tokens.css',
     'games/steel-and-dust/styles/tokens.css',

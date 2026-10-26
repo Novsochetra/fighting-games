@@ -1,5 +1,4 @@
 import { createAppearance } from '../home/appearance.js';
-import { wireBackLink } from '../home/back-link.js';
 import { createMemoryStorage, createPreferences } from '../home/preferences.js';
 import { createSoundPlayer } from '../home/sound-player.js';
 import { createDonateSheet } from './donate-sheet.js';
@@ -29,33 +28,24 @@ function wireDonateButtons({ document, donate, signal }) {
   }
 }
 
-// Opened from the arcade, Back goes back to it as it was left (back-link.js).
-function wireBack({ document, visit, signal }) {
-  const { history, referrer = '' } = visit ?? {};
-  if (history) {
-    wireBackLink({ link: document.getElementById('back'), history, referrer, signal });
+// In the arcade the screens share the appearance and the sound; on its own the page makes its own.
+function pageServices({ document, store, preferences, createAudioContext, shared, signal }) {
+  if (!shared.appearance) {
+    createAppearance({ document, storage: store, signal });
   }
+
+  return (
+    shared.sound ??
+    createSoundPlayer({
+      createContext: createAudioContext ?? (() => null),
+      isEnabled: preferences.isSoundOn,
+    })
+  );
 }
 
-// The home page's Support banner links here with #give, so the donate sheet opens at once.
-export function bootSupporters({ document, fetch, storage, createAudioContext, locale, visit }) {
-  const lifetime = new AbortController();
-  const { signal } = lifetime;
-  const store = storage ?? createMemoryStorage();
-  const preferences = createPreferences(store);
-  const { openDonate = false, now = () => Date.now() } = visit ?? {};
-  createAppearance({ document, storage: store, signal });
-  wireBack({ document, visit, signal });
-  const sound = createSoundPlayer({
-    createContext: createAudioContext ?? (() => null),
-    isEnabled: preferences.isSoundOn,
-  });
-  const view = createSupportersView(document);
-  const state = { data: null, order: SORTS[0] };
-  state.page = () => supportersPage(state.data, { order: state.order, locale });
-
-  // Loading again after a gift keeps the list up until the new one is in, so it never blinks out.
-  async function load() {
+// Loading again after a gift keeps the list up until the new one is in, so it never blinks out.
+function createLoad({ view, state, fetch }) {
+  return async function load() {
     if (!view.showsList()) {
       view.showLoading();
     }
@@ -66,7 +56,29 @@ export function bootSupporters({ document, fetch, storage, createAudioContext, l
     } catch {
       view.showError();
     }
-  }
+  };
+}
+
+// The home page's Support banner links here with #give, so the donate sheet opens at once.
+export function bootSupporters({
+  document,
+  fetch,
+  storage,
+  createAudioContext,
+  locale,
+  visit,
+  shared = {},
+}) {
+  const lifetime = new AbortController();
+  const { signal } = lifetime;
+  const store = storage ?? createMemoryStorage();
+  const preferences = createPreferences(store);
+  const { openDonate = false, now = () => Date.now() } = visit ?? {};
+  const sound = pageServices({ document, store, preferences, createAudioContext, shared, signal });
+  const view = createSupportersView(document);
+  const state = { data: null, order: SORTS[0] };
+  state.page = () => supportersPage(state.data, { order: state.order, locale });
+  const load = createLoad({ view, state, fetch });
 
   // A gift from this device stops the home page asking for one.
   const onGiven = () => {

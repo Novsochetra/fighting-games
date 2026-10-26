@@ -18,8 +18,18 @@ function wireGamepads({ gamepads, controller, isBlocked, signal }) {
   poller.start();
 }
 
-export function wireInputs({ document, view, controller, sheet, gamepads, settings, signal }) {
-  const isBlocked = sheet.isOpen;
+// While another screen of the arcade shows, the arcade's keys and pad are its own no longer.
+export function wireInputs({
+  document,
+  view,
+  controller,
+  sheet,
+  gamepads,
+  settings,
+  isShowing = () => true,
+  signal,
+}) {
+  const isBlocked = () => sheet.isOpen() || !isShowing();
   wireKeys({ document, controller, isBlocked, signal });
   wireCarousel({ elements: view.elements, controller, signal });
   wireControls({ view, controller, sheet, track: settings.track, signal });

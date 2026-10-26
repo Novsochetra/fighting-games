@@ -1,0 +1,69 @@
+/* A screen of the arcade that is not showing stays in the document, inert, its rendering kept but
+   not drawn: shown again, it is as it was left, where display: none would replay every rise, fade and
+   zoom that runs as a screen first shows. */
+[data-screen][inert] {
+  content-visibility: hidden;
+}
+
+@supports not (content-visibility: hidden) {
+  [data-screen][inert] {
+    display: none;
+  }
+}
+
+/* The screen arrived at takes the focus, as a page load would put it, without a ring round it. */
+[data-screen]:focus {
+  outline: none;
+}
+
+/* The screens change like those of an iOS navigation stack. A push slides the new one in from the
+   right with a shadow on its edge, over the one left, which slides a little to the left and dims; a
+   pop plays it backwards. The root is marked push or pop while it plays (screen-switch.js), so the
+   light and dark switch keeps its cross-fade. With reduced motion, page.css's cross-fade stands in
+   for the slide, as iOS dissolves. */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-transition='push']::view-transition-old(root) {
+    animation: screen-push-under var(--duration-navigation) var(--easing-navigation) both;
+  }
+
+  :root[data-transition='push']::view-transition-new(root) {
+    box-shadow: var(--shadow-navigation);
+    animation: screen-push-in var(--duration-navigation) var(--easing-navigation) both;
+  }
+
+  :root[data-transition='pop']::view-transition-old(root) {
+    z-index: 1;
+    box-shadow: var(--shadow-navigation);
+    animation: screen-pop-out var(--duration-navigation) var(--easing-navigation) both;
+  }
+
+  :root[data-transition='pop']::view-transition-new(root) {
+    animation: screen-pop-under var(--duration-navigation) var(--easing-navigation) both;
+  }
+}
+
+@keyframes screen-push-in {
+  from {
+    translate: 100% 0;
+  }
+}
+
+@keyframes screen-push-under {
+  to {
+    translate: var(--offset-under) 0;
+    filter: brightness(var(--dim-under));
+  }
+}
+
+@keyframes screen-pop-out {
+  to {
+    translate: 100% 0;
+  }
+}
+
+@keyframes screen-pop-under {
+  from {
+    translate: var(--offset-under) 0;
+    filter: brightness(var(--dim-under));
+  }
+}

@@ -126,7 +126,7 @@ describe('the donate sheet', () => {
 
   it('keeps the list up while it loads again with the gift, so it never blinks out', async () => {
     await openSheet();
-    const notice = byId('notice');
+    const notice = byId('supporters-notice');
     const noticeShown = [];
     const watch = new MutationObserver(() => noticeShown.push(!notice.hidden));
 

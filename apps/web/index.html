@@ -70,7 +70,7 @@
     <link rel="stylesheet" href="src/home/hints.css" />
     <link rel="stylesheet" href="src/home/support.css" />
     <link rel="stylesheet" href="src/home/made-by.css" />
-    <link rel="stylesheet" href="src/home/page-pop.css" />
+    <link rel="stylesheet" href="src/arcade/screens.css" />
     <link rel="stylesheet" href="src/home/launch.css" />
     <link rel="stylesheet" href="src/home/install.css" />
     <link rel="stylesheet" href="src/home/coffee.css" />
@@ -79,450 +79,476 @@
     <script type="speculationrules">
       { "prefetch": [{ "where": { "href_matches": "games/*" }, "eagerness": "moderate" }] }
     </script>
-    <script type="module" src="src/home/main.js"></script>
+    <script type="module" src="src/arcade/main.js"></script>
   </head>
   <body>
-    <div class="home" id="home">
-      <header class="topbar scroll-edge">
-        <h1 class="topbar__title" id="home-title">
-          <img class="topbar__logo" src="assets/icons/icon-192.png" alt="" width="28" height="28" />
-          Retro Arcade
-        </h1>
-        <div class="topbar__actions">
-          <a
-            class="glass-button glass-button--labeled support-link"
-            id="supporters-link"
-            href="supporters/"
-            aria-label="Supporters"
-          >
-            <svg class="icon icon--solid" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
-              />
-            </svg>
-            <span class="glass-button__label">Supporters</span>
-          </a>
-          <button
-            class="glass-button appearance-toggle"
-            id="appearance-toggle"
-            type="button"
-            aria-pressed="true"
-            aria-label="Dark mode"
-          >
-            <svg class="icon appearance-toggle__moon" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                class="icon__fill"
-                d="M20.2 14.6A8.4 8.4 0 0 1 9.4 3.8a8.4 8.4 0 1 0 10.8 10.8z"
-              />
-            </svg>
-            <svg class="icon appearance-toggle__sun" viewBox="0 0 24 24" aria-hidden="true">
-              <circle class="icon__fill" cx="12" cy="12" r="4.2" />
-              <path
-                d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"
-              />
-            </svg>
-          </button>
-          <button
-            class="glass-button"
-            id="sound-toggle"
-            type="button"
-            aria-pressed="true"
-            aria-label="Sound effects"
-          >
-            <svg class="icon sound-on" viewBox="0 0 24 24" aria-hidden="true">
-              <path class="icon__fill" d="M2.5 9h3.8L11.5 4.8v14.4L6.3 15H2.5z" />
-              <path d="M15.2 8.6a5 5 0 0 1 0 6.8M18.4 5.6a9.2 9.2 0 0 1 0 12.8" />
-            </svg>
-            <svg class="icon sound-off" viewBox="0 0 24 24" aria-hidden="true">
-              <path class="icon__fill" d="M2.5 9h3.8L11.5 4.8v14.4L6.3 15H2.5z" />
-              <path d="M15.5 9.2l5.6 5.6M21.1 9.2l-5.6 5.6" />
-            </svg>
-          </button>
-        </div>
-      </header>
-
-      <section class="hero" id="hero" aria-labelledby="home-title">
-        <div class="hero__backdrops" id="backdrops" aria-hidden="true"></div>
-        <div class="hero__frost" aria-hidden="true"></div>
-        <div class="hero__scrim" aria-hidden="true"></div>
-
-        <div class="hero__content">
-          <div class="notice" id="notice" data-tone="loading">
-            <p class="notice__message" id="status" role="status">Loading games…</p>
-            <button class="pill-button pill-button--glass" id="retry" type="button" hidden>
-              Try again
-            </button>
-          </div>
-          <noscript>
-            <p class="notice notice__message">Turn on JavaScript to see the games.</p>
-          </noscript>
-
-          <div class="stage" id="stage" hidden>
-            <div class="stage__heading">
-              <p class="stage__prompt">Choose your game</p>
-              <div class="pager" id="pager" aria-hidden="true"></div>
-            </div>
-
-            <div
-              class="carousel"
-              id="carousel"
-              role="group"
-              aria-roledescription="carousel"
-              aria-label="Games"
+    <div data-screen="home" tabindex="-1">
+      <div class="home" id="home">
+        <header class="topbar scroll-edge">
+          <h1 class="topbar__title" id="home-title">
+            <img
+              class="topbar__logo"
+              src="assets/icons/icon-192.png"
+              alt=""
+              width="28"
+              height="28"
+            />
+            Retro Arcade
+          </h1>
+          <div class="topbar__actions">
+            <a
+              class="glass-button glass-button--labeled support-link"
+              id="supporters-link"
+              href="supporters/"
+              aria-label="Supporters"
             >
-              <div class="carousel__track" id="carousel-track"></div>
-              <button
-                class="glass-button carousel__arrow carousel__arrow--previous"
-                id="previous"
-                type="button"
-                aria-label="Previous game"
-              >
-                <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M15 5l-7 7 7 7" />
-                </svg>
-              </button>
-              <button
-                class="glass-button carousel__arrow carousel__arrow--next"
-                id="next"
-                type="button"
-                aria-label="Next game"
-              >
-                <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-
-            <div class="spotlight">
-              <div class="spotlight__text" id="spotlight-text" aria-live="polite">
-                <h2 class="spotlight__title" id="spotlight-title"></h2>
-                <p class="spotlight__meta" id="spotlight-meta"></p>
-                <p class="spotlight__summary" id="spotlight-summary"></p>
-              </div>
-              <div class="spotlight__actions">
-                <a class="pill-button pill-button--primary" id="play" href="./">
-                  <svg class="icon icon--solid" viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                      d="M7 3.8c0-.9 1-1.5 1.8-1l12 7.4c.8.5.8 1.6 0 2l-12 7.5c-.8.5-1.8-.1-1.8-1z"
-                    />
-                  </svg>
-                  <span id="play-label">Play</span>
-                </a>
-                <button
-                  class="pill-button pill-button--glass"
-                  id="details-open"
-                  type="button"
-                  aria-haspopup="dialog"
-                >
-                  Details
-                </button>
-                <button
-                  class="glass-button glass-button--large favorite"
-                  id="favorite"
-                  type="button"
-                  aria-pressed="false"
-                  aria-label="Favorite"
-                >
-                  <svg class="icon favorite__heart" viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                      d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="library" id="library" aria-labelledby="library-title" hidden>
-        <header class="library__header">
-          <div class="library__heading">
-            <h2 class="library__title" id="library-title">All Games</h2>
-            <p class="library__count" id="library-count"></p>
-          </div>
-          <div class="segmented" id="filters" role="group" aria-label="Filter games">
-            <span class="segmented__thumb" aria-hidden="true"></span>
-            <span class="segmented__separator" aria-hidden="true"></span>
-            <span class="segmented__separator" aria-hidden="true"></span>
-            <button class="segmented__option" type="button" data-filter="all" aria-pressed="true">
-              All
+              <svg class="icon icon--solid" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
+                />
+              </svg>
+              <span class="glass-button__label">Supporters</span>
+            </a>
+            <button
+              class="glass-button appearance-toggle"
+              id="appearance-toggle"
+              type="button"
+              aria-pressed="true"
+              aria-label="Dark mode"
+            >
+              <svg class="icon appearance-toggle__moon" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  class="icon__fill"
+                  d="M20.2 14.6A8.4 8.4 0 0 1 9.4 3.8a8.4 8.4 0 1 0 10.8 10.8z"
+                />
+              </svg>
+              <svg class="icon appearance-toggle__sun" viewBox="0 0 24 24" aria-hidden="true">
+                <circle class="icon__fill" cx="12" cy="12" r="4.2" />
+                <path
+                  d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"
+                />
+              </svg>
             </button>
-            <button class="segmented__option" type="button" data-filter="recent">Recent</button>
-            <button class="segmented__option" type="button" data-filter="favorites">
-              Favorites
+            <button
+              class="glass-button"
+              id="sound-toggle"
+              type="button"
+              aria-pressed="true"
+              aria-label="Sound effects"
+            >
+              <svg class="icon sound-on" viewBox="0 0 24 24" aria-hidden="true">
+                <path class="icon__fill" d="M2.5 9h3.8L11.5 4.8v14.4L6.3 15H2.5z" />
+                <path d="M15.2 8.6a5 5 0 0 1 0 6.8M18.4 5.6a9.2 9.2 0 0 1 0 12.8" />
+              </svg>
+              <svg class="icon sound-off" viewBox="0 0 24 24" aria-hidden="true">
+                <path class="icon__fill" d="M2.5 9h3.8L11.5 4.8v14.4L6.3 15H2.5z" />
+                <path d="M15.5 9.2l5.6 5.6M21.1 9.2l-5.6 5.6" />
+              </svg>
             </button>
           </div>
         </header>
 
-        <ul class="library__grid" id="library-grid" aria-labelledby="library-title"></ul>
-        <p class="library__empty" id="library-empty" hidden></p>
-        <div class="library__more">
-          <button class="pill-button pill-button--surface" id="show-more" type="button" hidden>
-            Show more games
-          </button>
-          <p class="library__end" id="library-end" hidden>You have seen every game</p>
-        </div>
+        <section class="hero" id="hero" aria-labelledby="home-title">
+          <div class="hero__backdrops" id="backdrops" aria-hidden="true"></div>
+          <div class="hero__frost" aria-hidden="true"></div>
+          <div class="hero__scrim" aria-hidden="true"></div>
 
-        <aside class="support-callout" aria-labelledby="support-callout-title">
-          <span class="support-callout__badge" aria-hidden="true">
-            <svg class="icon icon--solid" viewBox="0 0 24 24">
-              <path
-                d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
-              />
-            </svg>
-          </span>
-          <div class="support-callout__text">
-            <h2 class="support-callout__title" id="support-callout-title">
-              Free to play, thanks to our supporters
-            </h2>
-            <p class="support-callout__body">
-              Every game here is free. The people who chip in keep the arcade running.
-            </p>
+          <div class="hero__content">
+            <div class="notice" id="notice" data-tone="loading">
+              <p class="notice__message" id="status" role="status">Loading games…</p>
+              <button class="pill-button pill-button--glass" id="retry" type="button" hidden>
+                Try again
+              </button>
+            </div>
+            <noscript>
+              <p class="notice notice__message">Turn on JavaScript to see the games.</p>
+            </noscript>
+
+            <div class="stage" id="stage" hidden>
+              <div class="stage__heading">
+                <p class="stage__prompt">Choose your game</p>
+                <div class="pager" id="pager" aria-hidden="true"></div>
+              </div>
+
+              <div
+                class="carousel"
+                id="carousel"
+                role="group"
+                aria-roledescription="carousel"
+                aria-label="Games"
+              >
+                <div class="carousel__track" id="carousel-track"></div>
+                <button
+                  class="glass-button carousel__arrow carousel__arrow--previous"
+                  id="previous"
+                  type="button"
+                  aria-label="Previous game"
+                >
+                  <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M15 5l-7 7 7 7" />
+                  </svg>
+                </button>
+                <button
+                  class="glass-button carousel__arrow carousel__arrow--next"
+                  id="next"
+                  type="button"
+                  aria-label="Next game"
+                >
+                  <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="spotlight">
+                <div class="spotlight__text" id="spotlight-text" aria-live="polite">
+                  <h2 class="spotlight__title" id="spotlight-title"></h2>
+                  <p class="spotlight__meta" id="spotlight-meta"></p>
+                  <p class="spotlight__summary" id="spotlight-summary"></p>
+                </div>
+                <div class="spotlight__actions">
+                  <a class="pill-button pill-button--primary" id="play" href="./">
+                    <svg class="icon icon--solid" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M7 3.8c0-.9 1-1.5 1.8-1l12 7.4c.8.5.8 1.6 0 2l-12 7.5c-.8.5-1.8-.1-1.8-1z"
+                      />
+                    </svg>
+                    <span id="play-label">Play</span>
+                  </a>
+                  <button
+                    class="pill-button pill-button--glass"
+                    id="details-open"
+                    type="button"
+                    aria-haspopup="dialog"
+                  >
+                    Details
+                  </button>
+                  <button
+                    class="glass-button glass-button--large favorite"
+                    id="favorite"
+                    type="button"
+                    aria-pressed="false"
+                    aria-label="Favorite"
+                  >
+                    <svg class="icon favorite__heart" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-          <a class="pill-button pill-button--primary support-callout__link" href="supporters/">
-            See supporters
-          </a>
-        </aside>
+        </section>
 
-        <footer class="hints" aria-label="Controls">
-          <p class="hints__item"><kbd>←</kbd><kbd>→</kbd> Browse</p>
-          <p class="hints__item"><kbd>Enter</kbd> Play</p>
-          <p class="hints__item"><kbd>D-pad</kbd><kbd>A</kbd> Gamepad</p>
-        </footer>
+        <section class="library" id="library" aria-labelledby="library-title" hidden>
+          <header class="library__header">
+            <div class="library__heading">
+              <h2 class="library__title" id="library-title">All Games</h2>
+              <p class="library__count" id="library-count"></p>
+            </div>
+            <div class="segmented" id="filters" role="group" aria-label="Filter games">
+              <span class="segmented__thumb" aria-hidden="true"></span>
+              <span class="segmented__separator" aria-hidden="true"></span>
+              <span class="segmented__separator" aria-hidden="true"></span>
+              <button class="segmented__option" type="button" data-filter="all" aria-pressed="true">
+                All
+              </button>
+              <button class="segmented__option" type="button" data-filter="recent">Recent</button>
+              <button class="segmented__option" type="button" data-filter="favorites">
+                Favorites
+              </button>
+            </div>
+          </header>
 
-        <p class="made-by">
-          <a class="made-by__link" id="credits-link" href="credits/">
-            <span class="made-by__avatar" aria-hidden="true">
-              NS
-              <img
-                class="made-by__photo"
-                src="assets/credits/portrait-small.jpg"
-                width="96"
-                height="96"
-                alt=""
-                loading="lazy"
-              />
-            </span>
-            <span class="made-by__text">
-              Made by <span class="made-by__name">Nov Sochetra</span>
-            </span>
-            <span class="made-by__more">
-              Credits
-              <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M9 5.5l6.5 6.5L9 18.5" />
+          <ul class="library__grid" id="library-grid" aria-labelledby="library-title"></ul>
+          <p class="library__empty" id="library-empty" hidden></p>
+          <div class="library__more">
+            <button class="pill-button pill-button--surface" id="show-more" type="button" hidden>
+              Show more games
+            </button>
+            <p class="library__end" id="library-end" hidden>You have seen every game</p>
+          </div>
+
+          <aside class="support-callout" aria-labelledby="support-callout-title">
+            <span class="support-callout__badge" aria-hidden="true">
+              <svg class="icon icon--solid" viewBox="0 0 24 24">
+                <path
+                  d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
+                />
               </svg>
             </span>
-          </a>
-        </p>
-        <p class="privacy-choices" id="privacy-choices" hidden>
-          <button class="privacy-choices__button" id="privacy-open" type="button">
-            Privacy choices
-          </button>
-        </p>
-      </section>
-    </div>
+            <div class="support-callout__text">
+              <h2 class="support-callout__title" id="support-callout-title">
+                Free to play, thanks to our supporters
+              </h2>
+              <p class="support-callout__body">
+                Every game here is free. The people who chip in keep the arcade running.
+              </p>
+            </div>
+            <a class="pill-button pill-button--primary support-callout__link" href="supporters/">
+              See supporters
+            </a>
+          </aside>
 
-    <aside class="install" id="install" aria-labelledby="install-title" hidden>
-      <img class="install__icon" src="assets/icons/icon-192.png" alt="" width="48" height="48" />
-      <div class="install__text">
-        <p class="install__title" id="install-title">Retro Arcade</p>
-        <p class="install__hint install__hint--prompt">Install it and open it like any app.</p>
-        <p class="install__hint install__hint--ios">
-          Tap
-          <svg class="icon install__share" viewBox="0 0 24 24" aria-label="Share" role="img">
-            <path d="M12 3.5v11M8.5 7 12 3.5 15.5 7M8.5 10.5h-2v10h11v-10h-2" />
-          </svg>
-          then Add to Home Screen.
-        </p>
-      </div>
-      <button class="pill-button pill-button--primary install__add" id="install-add" type="button">
-        Install
-      </button>
-      <button class="install__close" id="install-close" type="button" aria-label="Not now">
-        <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M7 7l10 10M17 7 7 17" />
-        </svg>
-      </button>
-    </aside>
+          <footer class="hints" aria-label="Controls">
+            <p class="hints__item"><kbd>←</kbd><kbd>→</kbd> Browse</p>
+            <p class="hints__item"><kbd>Enter</kbd> Play</p>
+            <p class="hints__item"><kbd>D-pad</kbd><kbd>A</kbd> Gamepad</p>
+          </footer>
 
-    <aside class="install install--support" id="support" aria-labelledby="support-title" hidden>
-      <span class="support-badge" aria-hidden="true">
-        <svg class="icon icon--solid" viewBox="0 0 24 24">
-          <path
-            d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
-          />
-        </svg>
-      </span>
-      <div class="install__text">
-        <p class="install__title" id="support-title">Enjoying the arcade?</p>
-        <p class="install__hint">Every game is free. A small gift keeps it that way.</p>
+          <p class="made-by">
+            <a class="made-by__link" id="credits-link" href="credits/">
+              <span class="made-by__avatar" aria-hidden="true">
+                NS
+                <img
+                  class="made-by__photo"
+                  src="assets/credits/portrait-small.jpg"
+                  width="96"
+                  height="96"
+                  alt=""
+                  loading="lazy"
+                />
+              </span>
+              <span class="made-by__text">
+                Made by <span class="made-by__name">Nov Sochetra</span>
+              </span>
+              <span class="made-by__more">
+                Credits
+                <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M9 5.5l6.5 6.5L9 18.5" />
+                </svg>
+              </span>
+            </a>
+          </p>
+          <p class="privacy-choices" id="privacy-choices" hidden>
+            <button class="privacy-choices__button" id="privacy-open" type="button">
+              Privacy choices
+            </button>
+          </p>
+        </section>
       </div>
-      <a
-        class="pill-button pill-button--primary install__add"
-        id="support-give"
-        href="supporters/#give"
-      >
-        Support
-      </a>
-      <button class="install__close" id="support-close" type="button" aria-label="Not now">
-        <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M7 7l10 10M17 7 7 17" />
-        </svg>
-      </button>
-    </aside>
 
-    <aside class="install install--consent" id="consent" aria-labelledby="consent-title" hidden>
-      <span class="consent-badge" aria-hidden="true">
-        <svg class="icon icon--bold" viewBox="0 0 24 24">
-          <path d="M5 19.5v-6M12 19.5v-15M19 19.5v-10" />
-        </svg>
-      </span>
-      <div class="install__text">
-        <p class="install__title" id="consent-title">Help make the arcade better</p>
-        <p class="install__hint">
-          Can we count visits and taps with Google Analytics? It uses cookies.
-        </p>
-      </div>
-      <div class="consent__actions">
-        <button class="pill-button install__add consent__refuse" id="consent-refuse" type="button">
-          No thanks
-        </button>
+      <aside class="install" id="install" aria-labelledby="install-title" hidden>
+        <img class="install__icon" src="assets/icons/icon-192.png" alt="" width="48" height="48" />
+        <div class="install__text">
+          <p class="install__title" id="install-title">Retro Arcade</p>
+          <p class="install__hint install__hint--prompt">Install it and open it like any app.</p>
+          <p class="install__hint install__hint--ios">
+            Tap
+            <svg class="icon install__share" viewBox="0 0 24 24" aria-label="Share" role="img">
+              <path d="M12 3.5v11M8.5 7 12 3.5 15.5 7M8.5 10.5h-2v10h11v-10h-2" />
+            </svg>
+            then Add to Home Screen.
+          </p>
+        </div>
         <button
           class="pill-button pill-button--primary install__add"
-          id="consent-allow"
+          id="install-add"
           type="button"
         >
-          Allow
+          Install
         </button>
-      </div>
-    </aside>
+        <button class="install__close" id="install-close" type="button" aria-label="Not now">
+          <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 7l10 10M17 7 7 17" />
+          </svg>
+        </button>
+      </aside>
 
-    <button
-      class="coffee-fab"
-      id="coffee-open"
-      type="button"
-      aria-label="Buy me a coffee"
-      aria-haspopup="dialog"
-    >
-      <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M4.5 9.5h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z" />
-        <path d="M15.5 11h1.25a2.25 2.25 0 0 1 0 4.5H15" />
-        <path d="M8 3.5c-.7.9-.7 1.8 0 2.7M11.5 3.5c-.7.9-.7 1.8 0 2.7" />
-      </svg>
-    </button>
-
-    <aside class="coffee-note" id="coffee-note" aria-label="A note from Nov Sochetra" hidden>
-      <button class="coffee-note__open" id="coffee-note-open" type="button">
-        <span class="coffee-note__from">
-          <img
-            class="coffee-note__avatar"
-            src="assets/credits/portrait-small.jpg"
-            width="96"
-            height="96"
-            alt=""
-          />
-          Nov Sochetra
-        </span>
-        <span class="coffee-note__message" lang="km"
-          >អរគុណសំរាប់ការគ្រាទ្រ 🙏 នឹងស្រលាញ់ហ្គេម ១ នេះ ។
-          ការគាំទ្ររបស់អ្នកពិតជាផ្ដល់កំលាំងចិត្តដល់ខ្ញុំក្នុងការបន្ដរកគំនិត ដើម្បី
-          បង្កើតហ្គេមផ្សេងៗទៀត 🫶។</span
-        >
-      </button>
-      <button class="coffee-note__close" id="coffee-note-close" type="button" aria-label="Close">
-        <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M7 7l10 10M17 7 7 17" />
-        </svg>
-      </button>
-    </aside>
-
-    <dialog
-      class="sheet coffee-sheet"
-      id="coffee-sheet"
-      aria-labelledby="coffee-title"
-      tabindex="-1"
-    >
-      <button class="glass-button sheet__close" id="coffee-close" type="button" aria-label="Close">
-        <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M6.5 6.5l11 11M17.5 6.5l-11 11" />
-        </svg>
-      </button>
-      <div class="sheet__body coffee">
-        <span class="coffee__badge" aria-hidden="true">
-          <svg class="icon icon--bold" viewBox="0 0 24 24">
-            <path d="M4.5 9.5h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z" />
-            <path d="M15.5 11h1.25a2.25 2.25 0 0 1 0 4.5H15" />
-            <path d="M8 3.5c-.7.9-.7 1.8 0 2.7M11.5 3.5c-.7.9-.7 1.8 0 2.7" />
+      <aside class="install install--support" id="support" aria-labelledby="support-title" hidden>
+        <span class="support-badge" aria-hidden="true">
+          <svg class="icon icon--solid" viewBox="0 0 24 24">
+            <path
+              d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.9 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.7 1.1-1.6 2.7-2.7 4.7-2.7 3.4 0 5.6 3.3 4.5 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"
+            />
           </svg>
         </span>
-        <h2 class="sheet__title" id="coffee-title">Buy me a coffee</h2>
-        <p class="sheet__description">
-          Every game here is free. Pick how you would like to chip in.
-        </p>
-        <div class="coffee__choices">
-          <a
-            class="pill-button pill-button--primary coffee__choice"
-            id="coffee-khqr"
-            href="supporters/#give"
+        <div class="install__text">
+          <p class="install__title" id="support-title">Enjoying the arcade?</p>
+          <p class="install__hint">Every game is free. A small gift keeps it that way.</p>
+        </div>
+        <a
+          class="pill-button pill-button--primary install__add"
+          id="support-give"
+          href="supporters/#give"
+        >
+          Support
+        </a>
+        <button class="install__close" id="support-close" type="button" aria-label="Not now">
+          <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 7l10 10M17 7 7 17" />
+          </svg>
+        </button>
+      </aside>
+
+      <aside class="install install--consent" id="consent" aria-labelledby="consent-title" hidden>
+        <span class="consent-badge" aria-hidden="true">
+          <svg class="icon icon--bold" viewBox="0 0 24 24">
+            <path d="M5 19.5v-6M12 19.5v-15M19 19.5v-10" />
+          </svg>
+        </span>
+        <div class="install__text">
+          <p class="install__title" id="consent-title">Help make the arcade better</p>
+          <p class="install__hint">
+            Can we count visits and taps with Google Analytics? It uses cookies.
+          </p>
+        </div>
+        <div class="consent__actions">
+          <button
+            class="pill-button install__add consent__refuse"
+            id="consent-refuse"
+            type="button"
           >
-            <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4.5 4.5h5v5h-5zM14.5 4.5h5v5h-5zM4.5 14.5h5v5h-5z" />
-              <path
-                class="icon__fill"
-                d="M14 14h2.5v2.5H14zM17.5 17.5H20V20h-2.5zM14 17.5h2.5V20H14zM17.5 14H20v2.5h-2.5z"
-              />
-            </svg>
-            Pay with KHQR
-          </a>
-          <a
-            class="pill-button pill-button--coffee coffee__choice"
-            id="coffee-bmc"
-            href="https://buymeacoffee.com/sochetranov"
-            target="_blank"
-            rel="noopener noreferrer"
+            No thanks
+          </button>
+          <button
+            class="pill-button pill-button--primary install__add"
+            id="consent-allow"
+            type="button"
           >
-            <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+            Allow
+          </button>
+        </div>
+      </aside>
+
+      <button
+        class="coffee-fab"
+        id="coffee-open"
+        type="button"
+        aria-label="Buy me a coffee"
+        aria-haspopup="dialog"
+      >
+        <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4.5 9.5h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z" />
+          <path d="M15.5 11h1.25a2.25 2.25 0 0 1 0 4.5H15" />
+          <path d="M8 3.5c-.7.9-.7 1.8 0 2.7M11.5 3.5c-.7.9-.7 1.8 0 2.7" />
+        </svg>
+      </button>
+
+      <aside class="coffee-note" id="coffee-note" aria-label="A note from Nov Sochetra" hidden>
+        <button class="coffee-note__open" id="coffee-note-open" type="button">
+          <span class="coffee-note__from">
+            <img
+              class="coffee-note__avatar"
+              src="assets/credits/portrait-small.jpg"
+              width="96"
+              height="96"
+              alt=""
+            />
+            Nov Sochetra
+          </span>
+          <span class="coffee-note__message" lang="km"
+            >អរគុណសំរាប់ការគ្រាទ្រ 🙏 នឹងស្រលាញ់ហ្គេម ១ នេះ ។
+            ការគាំទ្ររបស់អ្នកពិតជាផ្ដល់កំលាំងចិត្តដល់ខ្ញុំក្នុងការបន្ដរកគំនិត ដើម្បី
+            បង្កើតហ្គេមផ្សេងៗទៀត 🫶។</span
+          >
+        </button>
+        <button class="coffee-note__close" id="coffee-note-close" type="button" aria-label="Close">
+          <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 7l10 10M17 7 7 17" />
+          </svg>
+        </button>
+      </aside>
+
+      <dialog
+        class="sheet coffee-sheet"
+        id="coffee-sheet"
+        aria-labelledby="coffee-title"
+        tabindex="-1"
+      >
+        <button
+          class="glass-button sheet__close"
+          id="coffee-close"
+          type="button"
+          aria-label="Close"
+        >
+          <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6.5 6.5l11 11M17.5 6.5l-11 11" />
+          </svg>
+        </button>
+        <div class="sheet__body coffee">
+          <span class="coffee__badge" aria-hidden="true">
+            <svg class="icon icon--bold" viewBox="0 0 24 24">
               <path d="M4.5 9.5h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z" />
               <path d="M15.5 11h1.25a2.25 2.25 0 0 1 0 4.5H15" />
               <path d="M8 3.5c-.7.9-.7 1.8 0 2.7M11.5 3.5c-.7.9-.7 1.8 0 2.7" />
             </svg>
-            Buy me a coffee
+          </span>
+          <h2 class="sheet__title" id="coffee-title">Buy me a coffee</h2>
+          <p class="sheet__description">
+            Every game here is free. Pick how you would like to chip in.
+          </p>
+          <div class="coffee__choices">
+            <a
+              class="pill-button pill-button--primary coffee__choice"
+              id="coffee-khqr"
+              href="supporters/#give"
+            >
+              <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4.5 4.5h5v5h-5zM14.5 4.5h5v5h-5zM4.5 14.5h5v5h-5z" />
+                <path
+                  class="icon__fill"
+                  d="M14 14h2.5v2.5H14zM17.5 17.5H20V20h-2.5zM14 17.5h2.5V20H14zM17.5 14H20v2.5h-2.5z"
+                />
+              </svg>
+              Pay with KHQR
+            </a>
+            <a
+              class="pill-button pill-button--coffee coffee__choice"
+              id="coffee-bmc"
+              href="https://buymeacoffee.com/sochetranov"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4.5 9.5h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z" />
+                <path d="M15.5 11h1.25a2.25 2.25 0 0 1 0 4.5H15" />
+                <path d="M8 3.5c-.7.9-.7 1.8 0 2.7M11.5 3.5c-.7.9-.7 1.8 0 2.7" />
+              </svg>
+              Buy me a coffee
+            </a>
+          </div>
+          <p class="coffee__hint">
+            KHQR works with any Cambodian bank app and puts your name on the supporters list. Buy Me
+            a Coffee takes a card from anywhere.
+          </p>
+        </div>
+      </dialog>
+
+      <dialog class="sheet" id="details" aria-labelledby="details-title" tabindex="-1">
+        <div class="sheet__media">
+          <img class="sheet__art" id="details-art" alt="" />
+        </div>
+        <button
+          class="glass-button sheet__close"
+          id="details-close"
+          type="button"
+          aria-label="Close"
+        >
+          <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6.5 6.5l11 11M17.5 6.5l-11 11" />
+          </svg>
+        </button>
+        <div class="sheet__body">
+          <h2 class="sheet__title" id="details-title"></h2>
+          <p class="sheet__meta" id="details-meta"></p>
+          <p class="sheet__description" id="details-description"></p>
+          <h3 class="sheet__label" id="details-controls-label">Controls</h3>
+          <ul
+            class="sheet__chips"
+            id="details-controls"
+            aria-labelledby="details-controls-label"
+          ></ul>
+          <a class="pill-button pill-button--primary sheet__play" id="details-play" href="./">
+            <svg class="icon icon--solid" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 3.8c0-.9 1-1.5 1.8-1l12 7.4c.8.5.8 1.6 0 2l-12 7.5c-.8.5-1.8-.1-1.8-1z" />
+            </svg>
+            Play
           </a>
         </div>
-        <p class="coffee__hint">
-          KHQR works with any Cambodian bank app and puts your name on the supporters list. Buy Me a
-          Coffee takes a card from anywhere.
-        </p>
-      </div>
-    </dialog>
-
-    <dialog class="sheet" id="details" aria-labelledby="details-title" tabindex="-1">
-      <div class="sheet__media">
-        <img class="sheet__art" id="details-art" alt="" />
-      </div>
-      <button class="glass-button sheet__close" id="details-close" type="button" aria-label="Close">
-        <svg class="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M6.5 6.5l11 11M17.5 6.5l-11 11" />
-        </svg>
-      </button>
-      <div class="sheet__body">
-        <h2 class="sheet__title" id="details-title"></h2>
-        <p class="sheet__meta" id="details-meta"></p>
-        <p class="sheet__description" id="details-description"></p>
-        <h3 class="sheet__label" id="details-controls-label">Controls</h3>
-        <ul
-          class="sheet__chips"
-          id="details-controls"
-          aria-labelledby="details-controls-label"
-        ></ul>
-        <a class="pill-button pill-button--primary sheet__play" id="details-play" href="./">
-          <svg class="icon icon--solid" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7 3.8c0-.9 1-1.5 1.8-1l12 7.4c.8.5.8 1.6 0 2l-12 7.5c-.8.5-1.8-.1-1.8-1z" />
-          </svg>
-          Play
-        </a>
-      </div>
-    </dialog>
+      </dialog>
+    </div>
   </body>
 </html>

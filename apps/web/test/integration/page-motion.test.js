@@ -1,71 +1,99 @@
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { WEB_ROOT } from '../../../server/src/paths.js';
+import { SCREENS } from '../../src/arcade/routes.js';
 import { APPEARANCE_TRANSITION } from '../../src/home/appearance.js';
 import {
   backLinkTarget,
   gamePages,
-  modulesOf,
   pagesUnderTheArcade,
   stylesheetsOf,
 } from '../support/arcade-pages.js';
 
-// The arcade and every page under it change like screens in an iOS navigation stack, through a view
-// transition across documents that both pages of a move must opt in to. The pseudo-elements belong
-// to the page arrived at, so the arcade's sheet pops and every other page's pushes. A page under the
-// arcade also goes Back through history, so the arcade comes back as it was left. The pages are found
-// on disk, so one added later fails here until it does the same. A game keeps its own launch.
-const OPTS_IN = /@view-transition\s*\{\s*navigation:\s*auto;?\s*\}/;
-const MARK = `:root:not([data-transition='${APPEARANCE_TRANSITION}'])`;
+// The arcade and every page under it are screens of one page (src/arcade/): each page starts the
+// same shell and holds one screen the shell knows by the page's path, so a tap between them changes
+// the screen in the page, sliding like an iOS navigation stack; a page under the arcade goes Back
+// to it. The pages are found on disk, so one added later fails here until it does the same. A game
+// is a page of its own and keeps its own launch.
+const ARCADE = path.join(WEB_ROOT, 'index.html');
+const SHELL = path.join(WEB_ROOT, 'src', 'arcade', 'main.js');
+const SLIDES = path.join(WEB_ROOT, 'src', 'arcade', 'screens.css');
+const PAGES = [ARCADE, ...(await pagesUnderTheArcade())];
+const named = (page) => path.relative(WEB_ROOT, page);
+const pathOf = (page) => path.relative(WEB_ROOT, path.dirname(page)).replace(/(.+)$/, '$1/');
 
-async function motionSheetOf(page) {
-  const sheets = (await stylesheetsOf(page)).filter((sheet) => OPTS_IN.test(sheet.css));
-  return sheets.length === 1 ? sheets[0] : null;
+async function moduleScriptsOf(page) {
+  const html = await readFile(page, 'utf8');
+
+  return [...html.matchAll(/<script type="module" src="([^"]+)"/g)].map((match) =>
+    path.resolve(path.dirname(page), match[1]),
+  );
 }
 
-const ARCADE = path.join(WEB_ROOT, 'index.html');
-const BACK_LINK = path.join(WEB_ROOT, 'src', 'home', 'back-link.js');
-const PAGES = await pagesUnderTheArcade();
-const named = (page) => path.relative(WEB_ROOT, page);
+async function screensIn(page) {
+  const html = await readFile(page, 'utf8');
 
-describe('the arcade', () => {
-  it('pops a page off as it comes back, leaving the light and dark switch to its cross-fade', async () => {
-    const { css } = await motionSheetOf(ARCADE);
-    expect(css).toMatch(/@keyframes page-pop-out/);
-    expect(css).toContain(`${MARK}::view-transition-old(root)`);
-    expect(css).toContain(`${MARK}::view-transition-new(root)`);
-  });
+  return [...html.matchAll(/\bdata-screen="([^"]+)"/g)].map((match) => match[1]);
+}
 
-  it('finds every page under it, the credits and supporters pages among them', () => {
+describe('the arcade’s screens', () => {
+  it('are every page of the arcade found on disk, the supporters and credits among them', () => {
+    expect(SCREENS.map((screen) => screen.path).sort()).toEqual(PAGES.map(pathOf).sort());
     expect(PAGES.map(named)).toEqual(
       expect.arrayContaining(['credits/index.html', 'supporters/index.html']),
     );
   });
+
+  it('push and pop like an iOS stack, leaving the light and dark switch to its cross-fade', async () => {
+    const css = await readFile(SLIDES, 'utf8');
+
+    for (const kind of ['push', 'pop']) {
+      expect(css).toContain(`:root[data-transition='${kind}']::view-transition-old(root)`);
+      expect(css).toContain(`:root[data-transition='${kind}']::view-transition-new(root)`);
+    }
+
+    expect(css).toMatch(/@keyframes screen-push-in/);
+    expect(css).toMatch(/@keyframes screen-pop-out/);
+    expect(['push', 'pop']).not.toContain(APPEARANCE_TRANSITION);
+  });
 });
 
-describe.each(PAGES.map(named))('the page %s, under the arcade', (name) => {
+describe.each(PAGES.map(named))('the page %s', (name) => {
   const page = path.join(WEB_ROOT, name);
 
-  it('slides in like an iOS screen, leaving the light and dark switch to its cross-fade', async () => {
-    const sheet = await motionSheetOf(page);
-    expect(sheet, `${name} should load src/home/page-push.css`).not.toBeNull();
-    expect(sheet.css).toMatch(/@keyframes page-push-in/);
-    expect(sheet.css).toContain(`${MARK}::view-transition-old(root)`);
-    expect(sheet.css).toContain(`${MARK}::view-transition-new(root)`);
+  it('starts the arcade’s shell, with its slides, and nothing of its own', async () => {
+    const sheets = (await stylesheetsOf(page)).map((sheet) => sheet.file);
+
+    expect(await moduleScriptsOf(page)).toEqual([SHELL]);
+    expect(sheets, `${name} should load src/arcade/screens.css`).toContain(SLIDES);
   });
 
-  it('has a Back link to the arcade that goes back through history', async () => {
-    expect(await backLinkTarget(page)).toBe(WEB_ROOT);
-    expect((await modulesOf(page)).has(BACK_LINK), `${name} should wire back-link.js`).toBe(true);
+  it('holds the one screen the shell knows by its path', async () => {
+    const screen = SCREENS.find(({ path: own }) => own === pathOf(page));
+
+    expect(await screensIn(page)).toEqual([screen.id]);
+  });
+});
+
+describe.each((await pagesUnderTheArcade()).map(named))('the page %s, under the arcade', (name) => {
+  it('has a Back link to the arcade', async () => {
+    expect(await backLinkTarget(path.join(WEB_ROOT, name))).toBe(WEB_ROOT);
   });
 });
 
 describe('the games', () => {
-  it('keep their own launch and opt in to no slide', async () => {
+  it('keep their own launch: no shell, no screen and no slide', async () => {
     const games = await gamePages();
+
     expect(games.length).toBeGreaterThan(0);
+
     for (const page of games) {
-      expect(await motionSheetOf(page)).toBeNull();
+      const sheets = (await stylesheetsOf(page)).map((sheet) => sheet.file);
+
+      expect(await moduleScriptsOf(page)).not.toContain(SHELL);
+      expect(sheets).not.toContain(SLIDES);
+      expect(await screensIn(page)).toEqual([]);
     }
   });
 });

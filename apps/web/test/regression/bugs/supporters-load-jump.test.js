@@ -62,9 +62,9 @@ describe('the supporters arriving', () => {
 
   it('fade the spinner out where it stood rather than blink it away', async () => {
     await bootPage(async () => jsonReply(samplePayload()));
-    const copy = byId('notice').previousElementSibling;
+    const copy = byId('supporters-notice').previousElementSibling;
 
-    expect(byId('notice').hidden).toBe(true);
+    expect(byId('supporters-notice').hidden).toBe(true);
     expect(copy?.classList.contains('notice')).toBe(true);
     expect(copy.textContent).toContain('Loading supporters…');
     expect(copy.getAnimations()).toHaveLength(1);

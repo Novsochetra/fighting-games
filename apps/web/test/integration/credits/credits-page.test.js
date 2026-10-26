@@ -24,7 +24,7 @@ beforeEach(async () => {
 describe('the credits page', () => {
   it('names the maker in the large title and in the bar that takes over from it', () => {
     expect(textOf(document.querySelector('h1'))).toBe('Nov Sochetra');
-    expect(textOf(document.getElementById('bar-title'))).toBe('Nov Sochetra');
+    expect(textOf(document.getElementById('credits-bar-title'))).toBe('Nov Sochetra');
   });
 
   it('links to the maker on Buy Me a Coffee first, then GitHub and Facebook', () => {
@@ -54,13 +54,15 @@ describe('the credits page', () => {
   });
 
   it('leads back to the arcade, named even where a phone shows its chevron alone', () => {
-    const back = document.getElementById('back');
+    const back = document.querySelector('[data-screen="credits"] [data-back]');
     expect(back.getAttribute('href')).toBe('../');
     expect(back.getAttribute('aria-label')).toBe('Arcade');
   });
 
   it('leads on to the supporters page', async () => {
-    expect(document.getElementById('supporters-link').getAttribute('href')).toBe('../supporters/');
+    expect(document.getElementById('credits-supporters-link').getAttribute('href')).toBe(
+      '../supporters/',
+    );
     const supporters = await stat(path.join(WEB_ROOT, 'supporters', 'index.html'));
     expect(supporters.isFile()).toBe(true);
   });

@@ -20,6 +20,8 @@ apps/
                           donate/khqr.jpg, the KHQR code the donate sheet shows,
                           social/entry-screen.jpg, the picture a shared link shows, and
                           credits/, the maker's photos the credits page shows
+    src/arcade/           the shell that makes the arcade and the pages under it one page: the router,
+                          the screens and their slides (see One page)
     src/home/             home page modules and styles; tokens.css holds its colors, type and motion
     supporters/           the supporters page
     src/supporters/       supporters page modules and styles
@@ -57,9 +59,57 @@ Play opens it there instead of `games/<id>/`. The arcade draws art pixelated, bl
 whose art is rendered, like a 3D world, sets `"pixelArt": false` and its card, tile, backdrop and
 details art stay smooth (`is-smooth`).
 
+## One page
+
+The arcade, its supporters and its credits are screens of one page (`src/arcade/`), so a tap between
+them changes the screen in the page, never through a load: on a phone's link a move to the
+supporters took about 1.3 s, 47 files coming again every time, and now shows in about 40 ms once
+they are in. Each still has a page of its own on disk (`index.html`, `supporters/index.html`,
+`credits/index.html`), with its own title and link-preview tags, which a visitor can open directly,
+reload or share. Every one of them starts the same module, `src/arcade/main.js`, and holds one screen,
+`<div data-screen="supporters" tabindex="-1">` around its body.
+
+- **Screens** (`routes.js`, `screen.js`, `screen-markup.js`): `SCREENS` lists each screen and its path
+  under the arcade. The one the page opened at is in the document; once the browser is idle the
+  others come in from their own pages (`fetchScreen`): their screen, with every address in it made
+  whole against the page it came from (an image would otherwise load from the folder of whichever
+  screen came first), their stylesheets that the document lacks, and their title and description.
+  A screen shows only once its stylesheets are in, and boots the first time it shows, while the
+  address is its own, so its relative requests (`../api/supporters`) resolve as on its own page.
+  They share one appearance and one sound (`arcade.js`). A page that cannot come is opened by a load.
+- **Screens left** stay in the document, inert (`screens.css`): `content-visibility: hidden` keeps
+  their rendering without drawing them, so the arcade comes back as it was left, where
+  `display: none` would replay every rise, fade and zoom that plays as a screen first shows. The
+  arcade's keys and pad are its own only while it shows (`isShowing`, `wire-inputs.js`); its banners
+  and coffee button are inside it, so they leave with it. A sheet or popover left open closes as its
+  screen goes (`screen-switch.js`).
+- **Navigation** (`router.js`): a plain click on a link to a screen changes it in the page
+  (`screenLink`; a new tab, a download, a game or another site is left to the browser). Each change
+  is an entry in the tab's history (`{ arcade: { screen, index } }`), so the browser's back and
+  forward and a reload land where they should, and each screen keeps its own scroll, as each page
+  kept its own. A Back link (`data-back`) pops to the screen before when it came from there, so it
+  comes back as it was left; a page loaded from the arcade goes back through history
+  (`cameFrom`, `back-link.js`), so the browser brings the arcade back from its back/forward cache;
+  opened on its own, Back takes the arcade in, sliding the way Back does.
+- **Motion** (`screen-switch.js`, `screens.css`): a change is a view transition with the root marked
+  `push` or `pop` while it plays (`marked-transition.js`, which the light and dark switch shares as
+  `appearance`): a push slides the screen arrived at in from the right with a shadow on its edge, over
+  the one left, which slides a little left and dims, and a pop plays it backwards, as an iOS
+  navigation stack does. A swipe back the browser already slid (`hasUAVisualTransition`) plays no
+  slide of its own. With reduced motion page.css's cross-fade stands in, as iOS dissolves; a browser
+  without view transitions changes the screen at once.
+
+`test/integration/page-motion.test.js` finds every `index.html` under `apps/web/` outside the games,
+code and art, and fails for one that does not start the shell, load `screens.css`, hold the one
+screen `SCREENS` knows by its path, or (under the arcade) have a Back link to it; a new page of the
+arcade does all this (the rule is in `CLAUDE.md`). The games are pages of their own and keep their own
+launch. `test/regression/bugs/arcade-pages-reload.test.js` holds the arcade to changing screens
+without a load.
+
 ## Request flow
 
-1. `GET /` serves `apps/web/index.html`. The home page fetches `api/games`.
+1. `GET /` serves `apps/web/index.html`. The home page fetches `api/games`. Once the browser is idle
+   it fetches `supporters/` and `credits/` too, to take in their screens (see One page).
 2. `GET /api/games` reads every `apps/web/games/*/game.json` and returns `{ games: [...] }`. The
    list needs no database: adding a game folder adds it.
 3. Play links to `games/<id>/`, which serves that game's `index.html`, or to the `url` of a game
@@ -255,9 +305,8 @@ Every game is free, so the arcade thanks the people who chip in on its own page,
 game, so it shares the home page's tokens, buttons, segmented control and notice, and follows the same
 light or dark choice (`appearance-early.js`, `appearance.js`). Two links lead there from the home page:
 a heart in the top bar (the heart alone on a phone, `support.css`) and a card under the library.
-Like the credits page, it slides in over the arcade (`page-push.css`), and its Back goes back in
-history when it was opened from the arcade (`src/home/back-link.js`), so the arcade comes back as it
-was left. Its bar is the credits page's (`src/home/page-bar.css`): it stays at the top, and as the
+It is a screen of the arcade (see One page): it slides in over the arcade, and its Back pops
+back to it as it was left. Its bar is the credits page's (`src/home/page-bar.css`): it stays at the top, and as the
 large title scrolls under it, the page fades out under its soft edge and it shows Supporters small;
 on a phone Back keeps its
 chevron alone. Each page sets where its own large title passes under the bar (`--scroll-*-condense-*`
@@ -332,8 +381,8 @@ room, then rises in, one after another. As the supporters come in, Become a supp
 under the stats, which would otherwise shove it down 60px in one frame, while the spinner fades;
 then the stats, the podium and the list rise in. On the home page the spinner fades out over the
 stage's own fade-in (`stage-enter` in `hero.css`) and the library rises in under it. It moves
-elements with the Web Animations API rather than a view transition, since a same-document view
-transition would cut short the slide in from the arcade, which the list often lands in the middle
+elements with the Web Animations API rather than a view transition, since another view transition
+would cut short the slide in from the arcade (see One page), which the list often lands in the middle
 of. With reduced motion, or without the tokens (the tests), the swap happens at once.
 `test/regression/bugs/supporters-load-jump.test.js` holds the supporters page to it. The games and
 the Details sheet load nothing this way, so they keep their own motion.
@@ -345,10 +394,8 @@ of the arcade the way the supporters page is: the home page's tokens, buttons an
 The home page signs off under the library with Made by Nov Sochetra (`made-by.css`), which leads
 there; it sits after the controls hint, which touch screens hide, so every screen shows it.
 
-It is mostly markup and CSS. Its modules keep the appearance in step with the device and make Back
-go back in history when the page was opened from the arcade (`src/home/back-link.js`), so the browser brings
-the arcade back as it was left, from its back/forward cache, where following the link would load it
-fresh at the top. Opened any other way, or with a click that opens a tab, Back stays a plain link.
+It is mostly markup and CSS, and a screen of the arcade (see One page): it slides in over the
+arcade, and its Back pops back to it as it was left.
 
 A photo of the maker and their brother as children heads the page, as an artist's photo heads their
 page in Apple Music (`cover.css`, `assets/credits/childhood.jpg`): it fills the top behind the bar,
@@ -375,20 +422,8 @@ a hard line, so the bar frosts over with a material and a hairline instead, as i
 `test/integration/scroll-edge.test.js` finds every page as `page-motion.test.js` does and fails for
 one whose bar does not wear the edge. The games keep their own screens.
 
-The arcade and the pages under it, the credits and supporters pages, change like screens in an iOS
-navigation stack, through a view transition across documents (`@view-transition`), which both pages
-of a move opt in to. Its pseudo-elements belong to the page arrived at, so each page's sheet sets the
-motion of arriving there: `src/home/page-push.css`, on the pages under the arcade, slides the page in
-from the right over the one left, which slides a little left and dims, and the arcade's
-`page-pop.css` plays that backwards, the page sliding off to the right, on Back as on any way home.
-The games opt in to neither, so a game keeps its own launch. Every new page of the arcade does
-the same as these two (the rule is in `CLAUDE.md`): `test/integration/page-motion.test.js` finds
-every `index.html` under `apps/web/` outside the games, code and art, and fails for one that does not
-load `page-push.css` or whose Back link does not lead to the arcade through `back-link.js`. The light
-and dark switch is a view transition too, so `appearance.js` marks the root (`data-transition`)
-while it cross-fades and the slides leave it out. With reduced motion, page.css's cross-fade stands
-in for the slide, as iOS dissolves. A browser without view transitions across documents changes
-pages at once.
+The arcade and the pages under it change like screens in an iOS navigation stack, in one page (see
+One page): a push slides the screen arrived at in over the one left, and a pop plays it backwards.
 
 ## Game: Steel & Dust
 

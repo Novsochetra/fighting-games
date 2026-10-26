@@ -42,7 +42,7 @@ describe.each(PAGES)('the page %s', (name) => {
 
   it('leads back to the arcade, named even where a phone shows its chevron alone', async () => {
     await loadBody(page);
-    const back = document.querySelector('.page-bar > #back');
+    const back = document.querySelector('.page-bar > [data-back]');
     expect(back.getAttribute('href')).toBe('../');
     expect(back.getAttribute('aria-label')).toBe('Arcade');
   });
