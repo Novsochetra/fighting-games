@@ -314,8 +314,10 @@
   --offset-nudge: 3px;
   --offset-coffee-fab: var(--space-5);
   --offset-under: -30%;
-  --scroll-condense-start: calc(var(--size-cover) + 3.5rem);
-  --scroll-condense-end: calc(var(--size-cover) + 6rem);
+  --scroll-credits-condense-start: calc(var(--size-cover) + 3.5rem);
+  --scroll-credits-condense-end: calc(var(--size-cover) + 6rem);
+  --scroll-supporters-condense-start: calc(var(--size-heart-badge) + 2.5rem);
+  --scroll-supporters-condense-end: calc(var(--size-heart-badge) + 5rem);
 
   --duration-fast: 120ms;
   --duration-swap-out: 140ms;

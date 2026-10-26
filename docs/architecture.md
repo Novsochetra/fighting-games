@@ -247,7 +247,10 @@ light or dark choice (`appearance-early.js`, `appearance.js`). Two links lead th
 a heart in the top bar (the heart alone on a phone, `support.css`) and a card under the library.
 Like the credits page, it slides in over the arcade (`page-push.css`), and its Back goes back in
 history when it was opened from the arcade (`src/home/back-link.js`), so the arcade comes back as it
-was left.
+was left. Its bar is the credits page's (`src/home/page-bar.css`): it stays at the top, and as the
+large title scrolls under it, it frosts over and shows Supporters small; on a phone Back keeps its
+chevron alone. Each page sets where its own large title passes under the bar (`--scroll-*-condense-*`
+in `tokens.css`), and `test/integration/page-bar.test.js` holds both pages to it.
 
 The list comes from the server, `GET /api/supporters`:
 
@@ -332,8 +335,8 @@ rounded icon in its service's color (`tiles.css`): Find me (Buy Me a Coffee firs
 Facebook), Thanks to (the supporters page) and Made with (Inter, Kokoro). A row lights up while it
 is pressed, and on a mouse its arrow nudges toward where it leads. The bar floats over the cover; as
 the large name scrolls under it, it frosts over and shows the name small, as an iOS large title
-does. That runs on scroll-driven animations alone (`credits.css`), and a browser without them keeps
-a plain bar that scrolls away with the cover.
+does. That runs on scroll-driven animations alone (`src/home/page-bar.css`, which the supporters page
+shares), and a browser without them keeps a plain bar that scrolls away with the cover.
 With reduced motion nothing rises, pops or turns.
 
 The arcade and the pages under it, the credits and supporters pages, change like screens in an iOS

@@ -1,0 +1,88 @@
+/* The bar of a page under the arcade (credits, supporters), like an iOS navigation bar: Back at the
+   start, and the page's name small in the middle. Each page sets where its large title scrolls under
+   the bar, --page-bar-condense-start and --page-bar-condense-end. */
+.page-bar {
+  position: relative;
+  z-index: var(--layer-bar);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  padding: max(var(--space-4), env(safe-area-inset-top))
+    max(var(--space-gutter), env(safe-area-inset-right)) var(--space-4)
+    max(var(--space-gutter), env(safe-area-inset-left));
+}
+
+/* Over a cover photo the bar floats on it, as over an artist's photo in Apple Music. */
+.page-bar--over {
+  position: absolute;
+  inset: 0 0 auto;
+}
+
+.page-bar > .glass-button {
+  justify-self: start;
+}
+
+/* On a phone the back button keeps its chevron alone, so the small title can sit in the middle;
+   its aria-label still names it. */
+@media (max-width: 37.5rem) {
+  .page-bar > .glass-button {
+    inline-size: var(--size-glass-button);
+    padding: 0;
+  }
+
+  .page-bar .glass-button__label {
+    display: none;
+  }
+}
+
+/* The bar's material and its small title wait unseen until the large title scrolls under them. */
+.page-bar::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: '';
+  background: var(--color-material);
+  border-block-end: var(--border-width-hairline) solid var(--color-launcher-separator);
+  opacity: 0;
+  -webkit-backdrop-filter: var(--blur-glass);
+  backdrop-filter: var(--blur-glass);
+}
+
+.page-bar__title {
+  grid-column: 2;
+  margin: 0;
+  font-size: var(--font-size-apple-body);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  white-space: nowrap;
+  opacity: 0;
+}
+
+/* As in iOS, the large title hands over to the bar as it scrolls away. Without scroll-driven
+   animations the bar stays plain and scrolls away with the page. */
+@supports (animation-timeline: scroll()) {
+  .page-bar {
+    position: sticky;
+    inset-block-start: 0;
+  }
+
+  .page-bar--over {
+    position: fixed;
+  }
+
+  .page-bar::before,
+  .page-bar__title {
+    animation-name: bar-condense;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll();
+    animation-range: var(--page-bar-condense-start) var(--page-bar-condense-end);
+  }
+}
+
+@keyframes bar-condense {
+  to {
+    opacity: 1;
+  }
+}

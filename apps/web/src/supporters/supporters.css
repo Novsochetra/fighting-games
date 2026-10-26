@@ -1,5 +1,8 @@
 /* A soft pink light falls from the top of the page, the color of the heart. */
 .supporters-page {
+  --page-bar-condense-start: var(--scroll-supporters-condense-start);
+  --page-bar-condense-end: var(--scroll-supporters-condense-end);
+
   display: flex;
   flex-direction: column;
   min-block-size: 100dvh;
@@ -10,13 +13,6 @@
       var(--color-clear) 70%
     ),
     var(--color-launcher-background);
-}
-
-.supporters-bar {
-  display: flex;
-  padding: max(var(--space-4), env(safe-area-inset-top))
-    max(var(--space-gutter), env(safe-area-inset-right)) var(--space-4)
-    max(var(--space-gutter), env(safe-area-inset-left));
 }
 
 .supporters {
