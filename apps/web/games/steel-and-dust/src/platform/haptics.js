@@ -17,6 +17,7 @@ export function rumble(actuator, [first, ...rest]) {
     strongMagnitude: first.strong,
     weakMagnitude: first.weak,
   };
+
   return Promise.resolve()
     .then(() => actuator.playEffect('dual-rumble', effect))
     .then((result) => (result === 'complete' && rest.length ? rumble(actuator, rest) : result))
@@ -26,6 +27,7 @@ export function rumble(actuator, [first, ...rest]) {
 function rumblePad(navigator, rumbles) {
   const pads = navigator.getGamepads?.();
   const actuator = pads && firstStandardPad(pads)?.vibrationActuator;
+
   if (actuator?.playEffect) {
     rumble(actuator, rumbles);
   }
@@ -35,6 +37,7 @@ function rumblePad(navigator, rumbles) {
 // hapticActuators, so the pad's rumble is looked for where it is played from
 export function canVibrate(window) {
   const { Gamepad } = window;
+
   return !!window.navigator.vibrate || (!!Gamepad && 'vibrationActuator' in Gamepad.prototype);
 }
 

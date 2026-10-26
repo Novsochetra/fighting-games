@@ -13,6 +13,16 @@ export const HAPTIC_CUES = {
       { wait: 80, ms: 320, strong: 0.8, weak: 0.3 },
     ],
   },
+  // it swells over the cut-in, while the world stands still, and is over before the first blow,
+  // which would cut it short and can land on the cut-in's last tick, 45 ticks (750 ms) in
+  ultimate: {
+    phone: [30, 40, 50, 40, 220],
+    pad: [
+      { ms: 150, strong: 0.3, weak: 0.8 },
+      { ms: 200, strong: 0.7, weak: 0.6 },
+      { ms: 300, strong: 1, weak: 0.4 },
+    ],
+  },
   weapon: { phone: 15, pad: [{ ms: 60, strong: 0.2, weak: 0.5 }] },
   gem: { phone: 12, pad: [{ ms: 35, strong: 0, weak: 0.35 }] },
   clear: {

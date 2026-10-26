@@ -3,6 +3,7 @@ import { ultimateOf } from '../../data/ultimates/index.js';
 import { spendUlt } from '../combat/ult-bar.js';
 import { themeOf } from '../fighters/hero-colors.js';
 import { shake } from '../fx/camera-fx.js';
+import { buzz } from '../fx/haptics.js';
 import { addSparks } from '../fx/particles.js';
 import { runAbsoluteZero } from './absolute-zero.js';
 import { runThousandCuts } from './thousand-cuts.js';
@@ -29,6 +30,7 @@ export function startUlt(game, player) {
   spendUlt(game);
   game.ultFreeze = ultimateOf(game.settings.hero).intro;
   game.io.sfx('ult');
+  buzz(game, 'ultimate');
   shake(game, 2, 12);
   const color = themeOf(game).ult.edge;
   addSparks(game, { x: player.x, y: player.y - 24, count: 16, color, speed: 3.4 });

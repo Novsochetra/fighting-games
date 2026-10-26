@@ -9,6 +9,7 @@ export function createSession({ window }) {
   const coarsePointer = !!window.matchMedia?.('(pointer:coarse)').matches;
   const saved = loadSaved(window.localStorage, coarsePointer);
   const ports = { audio: null, haptics: null };
+
   const game = createGame({
     ...saved,
     device: { coarsePointer, touchUsed: false },
@@ -21,9 +22,11 @@ export function createSession({ window }) {
       now: () => Date.now(),
     },
   });
+
   ports.audio = createAudio(game);
   const ui = createUiState(game);
   ports.haptics = createHaptics({ navigator: window.navigator, ui });
   placeOnTitle(game);
+
   return { game, audio: ports.audio, ui };
 }

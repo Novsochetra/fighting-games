@@ -87,8 +87,10 @@ describe('settings panel', () => {
     const ui = { isTouchOn: () => true };
     const audio = { sfx: vi.fn() };
     const panel = createSettingsPanel({ list: {}, game, audio, layout: {}, ui, canVibrate: true });
+
     panel.change('haptics', 1, false);
     expect(io.vibrate).toHaveBeenCalledWith(HAPTIC_CUES.bigHit);
+
     panel.change('haptics', -1, false);
     expect(io.vibrate).toHaveBeenCalledTimes(1);
   });

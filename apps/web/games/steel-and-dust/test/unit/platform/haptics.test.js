@@ -8,6 +8,7 @@ function fakeActuator(result = 'complete') {
 
 function fakeNavigator(actuator) {
   const pad = { connected: true, mapping: 'standard', vibrationActuator: actuator };
+
   return { vibrate: vi.fn(), getGamepads: () => [null, pad] };
 }
 
@@ -17,8 +18,10 @@ describe('haptics', () => {
   it('plays a cue on the gamepad when the pad was used last', async () => {
     const actuator = fakeActuator();
     const navigator = fakeNavigator(actuator);
+
     createHaptics({ navigator, ui: { lastInput: 'pad' } }).play(HAPTIC_CUES.hurt);
     await settle();
+
     expect(actuator.playEffect).toHaveBeenCalledWith('dual-rumble', {
       startDelay: 0,
       duration: 150,
@@ -31,8 +34,10 @@ describe('haptics', () => {
   it('buzzes the phone when it was touched last', async () => {
     const actuator = fakeActuator();
     const navigator = fakeNavigator(actuator);
+
     createHaptics({ navigator, ui: { lastInput: 'touch' } }).play(HAPTIC_CUES.bossKnockOut);
     await settle();
+
     expect(navigator.vibrate).toHaveBeenCalledWith([60, 40, 90]);
     expect(actuator.playEffect).not.toHaveBeenCalled();
   });
@@ -40,26 +45,32 @@ describe('haptics', () => {
   it('stays still under a keyboard or a mouse', async () => {
     const actuator = fakeActuator();
     const navigator = fakeNavigator(actuator);
+
     for (const lastInput of ['key', 'mouse']) {
       createHaptics({ navigator, ui: { lastInput } }).play(HAPTIC_CUES.hit);
     }
+
     await settle();
+
     expect(navigator.vibrate).not.toHaveBeenCalled();
     expect(actuator.playEffect).not.toHaveBeenCalled();
   });
 
   it('copes with a pad that cannot rumble and a browser without either', () => {
     const navigator = fakeNavigator(undefined);
+    const bare = { ui: { lastInput: 'touch' }, navigator: {} };
+
     expect(() =>
       createHaptics({ navigator, ui: { lastInput: 'pad' } }).play(HAPTIC_CUES.hit),
     ).not.toThrow();
-    const bare = { ui: { lastInput: 'touch' }, navigator: {} };
     expect(() => createHaptics(bare).play(HAPTIC_CUES.hit)).not.toThrow();
   });
 
   it('plays each rumble of a cue after the one before it, waiting between them', async () => {
     const actuator = fakeActuator();
+
     await rumble(actuator, HAPTIC_CUES.bossKnockOut.pad);
+
     expect(actuator.playEffect.mock.calls.map(([, effect]) => effect)).toEqual([
       { startDelay: 0, duration: 140, strongMagnitude: 1, weakMagnitude: 0.7 },
       { startDelay: 80, duration: 320, strongMagnitude: 0.8, weakMagnitude: 0.3 },
@@ -68,7 +79,9 @@ describe('haptics', () => {
 
   it('drops the rest of a cue that a newer one cut short', async () => {
     const actuator = fakeActuator('preempted');
+
     await rumble(actuator, HAPTIC_CUES.clear.pad);
+
     expect(actuator.playEffect).toHaveBeenCalledTimes(1);
   });
 
@@ -78,6 +91,7 @@ describe('haptics', () => {
         throw new DOMException('no rumble', 'NotSupportedError');
       },
     };
+
     await expect(rumble(actuator, HAPTIC_CUES.hit.pad)).resolves.toBe('unsupported');
   });
 
@@ -87,6 +101,7 @@ describe('haptics', () => {
       Gamepad: { prototype: { vibrationActuator: null } },
     };
     const macSafari = { navigator: {}, Gamepad: { prototype: { vibrationActuator: null } } };
+
     expect(canVibrate(chrome)).toBe(true);
     expect(canVibrate(macSafari)).toBe(true);
     expect(canVibrate({ navigator: {}, Gamepad: { prototype: {} } })).toBe(false);
@@ -100,6 +115,7 @@ describe('haptics', () => {
       Gamepad: { prototype: { hapticActuators: [] } },
       GamepadHapticActuator: {},
     };
+
     expect(canVibrate(firefox)).toBe(false);
   });
 });
