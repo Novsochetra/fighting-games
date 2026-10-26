@@ -1,0 +1,48 @@
+/* The arcade's bars stay clear as in iOS 26, and what scrolls under one fades out behind a soft edge:
+   a blur tinted with the page's color, strongest at the top and gone a little below the bar. It
+   waits unseen until the page scrolls under the bar, between --scroll-edge-start and
+   --scroll-edge-end, which each bar sets, and lets taps through where it reaches past the bar. */
+.scroll-edge::before {
+  position: absolute;
+  inset: 0 0 calc(-1 * var(--size-scroll-edge-fade));
+  z-index: -1;
+  pointer-events: none;
+  content: '';
+  background: var(--color-scroll-edge);
+  opacity: 0;
+  -webkit-backdrop-filter: var(--blur-scroll-edge);
+  backdrop-filter: var(--blur-scroll-edge);
+  mask-image: linear-gradient(to bottom, var(--color-black) 30%, var(--color-clear));
+}
+
+/* Where a blur cannot be masked, the soft edge would end in a hard line, so the bar frosts over with
+   a material and a hairline instead, as iOS bars did before. */
+@supports not (
+  (mask-image: none) and ((backdrop-filter: none) or (-webkit-backdrop-filter: none))
+) {
+  .scroll-edge::before {
+    inset-block-end: 0;
+    background: var(--color-material);
+    border-block-end: var(--border-width-hairline) solid var(--color-launcher-separator);
+    -webkit-backdrop-filter: var(--blur-glass);
+    backdrop-filter: var(--blur-glass);
+  }
+}
+
+/* Without scroll-driven animations the edge stays unseen, and the bar scrolls away with the page. */
+@supports (animation-timeline: scroll()) {
+  .scroll-edge::before {
+    animation-name: scroll-edge-in;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll();
+    animation-range: var(--scroll-edge-start) var(--scroll-edge-end);
+  }
+}
+
+@keyframes scroll-edge-in {
+  to {
+    opacity: 1;
+  }
+}

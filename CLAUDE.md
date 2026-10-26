@@ -73,7 +73,10 @@ A page of the arcade that is not a game (like `credits/` and `supporters/`) live
 - its Back is `<a id="back" href="../">` (named with `aria-label` where a phone hides the label),
   wired with `wireBackLink` from `src/home/back-link.js`, so Back from a page opened from the arcade
   goes back through history and the arcade comes back as it was left,
-- it shares the home page's tokens, buttons and appearance (`appearance-early.js`, `appearance.js`).
+- it shares the home page's tokens, buttons and appearance (`appearance-early.js`, `appearance.js`),
+- its bar is `src/home/page-bar.css` with the iOS 26 soft edge of `src/home/scroll-edge.css`
+  (`<header class="page-bar scroll-edge">`), as the arcade's own bar has, so what scrolls under it
+  fades out, and it frosts over where a blur cannot be masked.
 
-`apps/web/test/integration/page-motion.test.js` finds every such page on disk and fails until it does
-all this. A game never loads these: it keeps its own launch.
+`apps/web/test/integration/page-motion.test.js` and `scroll-edge.test.js` find every such page on
+disk and fail until it does all this. A game never loads these: it keeps its own launch.

@@ -1,0 +1,107 @@
+/* The arcade's bar, like an iOS 26 navigation bar over a scroll view: it stays as the arcade scrolls,
+   its buttons floating as glass, and the arcade fades out under it as soon as it passes under
+   (scroll-edge.css). It takes no room of its own, so the hero's painting runs up under it. */
+.topbar {
+  --scroll-edge-start: var(--scroll-home-condense-start);
+  --scroll-edge-end: var(--scroll-home-condense-end);
+
+  position: relative;
+  z-index: var(--layer-bar);
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: space-between;
+  block-size: var(--size-home-bar);
+  margin-block-end: calc(-1 * var(--size-home-bar));
+  padding: calc(env(safe-area-inset-top) + var(--space-4))
+    max(var(--space-gutter), env(safe-area-inset-right)) var(--space-4)
+    max(var(--space-gutter), env(safe-area-inset-left));
+}
+
+.topbar__actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.topbar__title {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  margin: 0;
+  font-size: var(--font-size-apple-title-3);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-apple-title);
+  letter-spacing: var(--tracking-brand);
+  color: var(--color-on-art);
+  text-shadow: var(--text-shadow-on-art);
+  transition: color var(--duration-crossfade) var(--easing-gentle);
+}
+
+.topbar__logo {
+  flex: none;
+  inline-size: var(--size-logo);
+  block-size: var(--size-logo);
+}
+
+#sound-toggle[aria-pressed='true'] .sound-off,
+#sound-toggle[aria-pressed='false'] .sound-on {
+  display: none;
+}
+
+/* The sun and the moon share one spot; the one not showing turns away and shrinks out of sight. */
+.appearance-toggle {
+  display: inline-grid;
+  place-items: center;
+}
+
+.appearance-toggle .icon {
+  grid-area: 1 / 1;
+  transition:
+    opacity var(--duration-normal) var(--easing-standard),
+    rotate var(--duration-ring) var(--easing-spring),
+    scale var(--duration-ring) var(--easing-spring);
+}
+
+.appearance-toggle[aria-pressed='true'] .appearance-toggle__sun,
+.appearance-toggle[aria-pressed='false'] .appearance-toggle__moon {
+  opacity: 0;
+  rotate: -90deg;
+  scale: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .appearance-toggle .icon {
+    transition: none;
+  }
+}
+
+/* The bar stays on scroll-driven animations alone; without them it scrolls away with the painting,
+   as before. In the light appearance its name turns from the white it wears over the painting to the
+   label color as the light edge comes in under it. The scroll padding keeps a focused tile from
+   hiding under the bar. */
+@supports (animation-timeline: scroll()) {
+  html {
+    scroll-padding-block-start: var(--size-home-bar);
+  }
+
+  .topbar {
+    position: sticky;
+    inset-block-start: 0;
+  }
+
+  .topbar__title {
+    animation-name: topbar-title-condense;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll();
+    animation-range: var(--scroll-edge-start) var(--scroll-edge-end);
+  }
+}
+
+@keyframes topbar-title-condense {
+  to {
+    color: var(--color-label);
+    text-shadow: none;
+  }
+}
