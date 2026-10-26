@@ -301,7 +301,7 @@ three steps (`donate-sheet.js`, `donate.css`, the dialog and its closing animati
    bursting from the heart (`confetti.js` moves the paper, `confetti-view.js` draws it on a canvas
    for `--duration-confetti`). The canvas is a popover, so while it plays it sits in the top layer
    over the whole screen, above the sheet; with reduced motion there is none. The list loads again
-   with the new name.
+   with the new name, staying up until the new one is in, so it never blinks out to the spinner.
 
 The server reads the gift again (`read-donation.js`): it squeezes spaces, drops control characters,
 counts a name's characters as Postgres does (by code point, as a Khmer name needs), and holds the
@@ -321,6 +321,22 @@ colored by their name (`paletteOf` in `format.js`); anonymous ones stay gray. Be
 the podium and the list, a chip shows the gift's tier: its gem and name (`renderTier`), kept apart
 from the place medals so a Gold gift in second place reads plainly. With no one on the list
 yet the page says so and invites the first.
+
+**Loading.** The arcade's pages swap their loading notice for what they load, or for an error, through
+`src/home/layout-swap.js` (`createLayoutSwap`, given the blocks that change), so the page never jumps
+in one frame. It measures the blocks, makes the change and plays the difference, as iOS animates a
+layout change: what stays but moves glides from its old place on the spring (`--duration-rise`),
+what goes leaves a copy where it stood that fades out (`--duration-normal`; the copy has no ids and
+is inert, so it is never found, reached or announced), and what comes waits while the rest makes
+room, then rises in, one after another. As the supporters come in, Become a supporter glides down
+under the stats, which would otherwise shove it down 60px in one frame, while the spinner fades;
+then the stats, the podium and the list rise in. On the home page the spinner fades out over the
+stage's own fade-in (`stage-enter` in `hero.css`) and the library rises in under it. It moves
+elements with the Web Animations API rather than a view transition, since a same-document view
+transition would cut short the slide in from the arcade, which the list often lands in the middle
+of. With reduced motion, or without the tokens (the tests), the swap happens at once.
+`test/regression/bugs/supporters-load-jump.test.js` holds the supporters page to it. The games and
+the Details sheet load nothing this way, so they keep their own motion.
 
 ## Credits page
 

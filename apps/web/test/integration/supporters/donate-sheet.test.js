@@ -124,6 +124,24 @@ describe('the donate sheet', () => {
     await vi.waitFor(() => expect(byId('donate-sheet').open).toBe(false));
   });
 
+  it('keeps the list up while it loads again with the gift, so it never blinks out', async () => {
+    await openSheet();
+    const notice = byId('notice');
+    const noticeShown = [];
+    const watch = new MutationObserver(() => noticeShown.push(!notice.hidden));
+
+    watch.observe(notice, { attributes: true, attributeFilter: ['hidden'] });
+    type('donate-amount', '300');
+    type('donate-name', 'Nov Sochetra');
+    submitForm();
+    sendAfterWait();
+    await vi.waitFor(() => expect(texts('.podium__name')[0]).toBe('Nov Sochetra'));
+    watch.disconnect();
+
+    expect(noticeShown).not.toContain(true);
+    expect(notice.hidden).toBe(true);
+  });
+
   it('thanks an anonymous supporter without a name', async () => {
     await openSheet();
     type('donate-amount', '1');

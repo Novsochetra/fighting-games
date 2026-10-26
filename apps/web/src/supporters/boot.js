@@ -54,8 +54,12 @@ export function bootSupporters({ document, fetch, storage, createAudioContext, l
   const state = { data: null, order: SORTS[0] };
   state.page = () => supportersPage(state.data, { order: state.order, locale });
 
+  // Loading again after a gift keeps the list up until the new one is in, so it never blinks out.
   async function load() {
-    view.showLoading();
+    if (!view.showsList()) {
+      view.showLoading();
+    }
+
     try {
       state.data = await fetchSupporters(fetch);
       view.render(state.page());

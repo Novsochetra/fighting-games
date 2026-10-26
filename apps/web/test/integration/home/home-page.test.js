@@ -143,6 +143,27 @@ describe('home page loading, errors and an empty catalog', () => {
     expect(byId('stage').hidden).toBe(false);
   });
 
+  it('fades the loading notice out where it stood as the games come in, and the library rises', async () => {
+    const tokens = { '--duration-rise': '500ms', '--duration-normal': '200ms' };
+
+    for (const [name, value] of Object.entries(tokens)) {
+      document.documentElement.style.setProperty(name, value);
+    }
+
+    const rise = vi.spyOn(byId('library'), 'animate');
+
+    await bootWithRealCatalog();
+    const copy = byId('notice').previousElementSibling;
+    document.documentElement.removeAttribute('style');
+
+    expect(byId('notice').hidden).toBe(true);
+    expect(copy?.classList.contains('notice')).toBe(true);
+    expect(copy.textContent).toContain('Loading games…');
+    expect(copy.getAnimations()).toHaveLength(1);
+    expect(byId('library').hidden).toBe(false);
+    expect(rise.mock.calls[0][0][0]).toMatchObject({ opacity: 0 });
+  });
+
   it('shows an error with a retry button, and the retry loads the games', async () => {
     const body = await realCatalogJson();
     const fetchFn = vi

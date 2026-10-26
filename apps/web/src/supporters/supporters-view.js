@@ -1,3 +1,4 @@
+import { createLayoutSwap } from '../home/layout-swap.js';
 import { SORTS } from './ranking.js';
 import { renderPodiumPlace, renderRow } from './render-supporters.js';
 
@@ -11,6 +12,7 @@ function findElements(document) {
     status: byId('status'),
     retry: byId('retry'),
     stats: byId('stats'),
+    donate: byId('donate'),
     total: byId('total'),
     count: byId('count'),
     empty: byId('empty'),
@@ -34,6 +36,8 @@ function showSort(sort, order) {
 export function createSupportersView(document) {
   const elements = findElements(document);
   const content = [elements.stats, elements.empty, elements.podiumSection, elements.roll];
+  // the stats come in above Become a supporter, which would jump down as the list arrived
+  const swap = createLayoutSwap([elements.notice, elements.donate, ...content]);
 
   function showNotice(tone, message) {
     elements.notice.hidden = false;
@@ -65,9 +69,10 @@ export function createSupportersView(document) {
 
   return {
     elements,
-    showLoading: () => showNotice('loading', LOADING_MESSAGE),
-    showError: () => showNotice('error', ERROR_MESSAGE),
-    render,
+    showLoading: () => swap(() => showNotice('loading', LOADING_MESSAGE)),
+    showError: () => swap(() => showNotice('error', ERROR_MESSAGE)),
+    render: (page) => swap(() => render(page)),
     renderRoll,
+    showsList: () => elements.notice.hidden,
   };
 }

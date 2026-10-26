@@ -1,4 +1,5 @@
 import { createCarouselView } from './carousel-view.js';
+import { createLayoutSwap } from './layout-swap.js';
 import { pickLaunchSource } from './launch-source.js';
 import { createLibraryView } from './library-view.js';
 import { createSpotlightView } from './spotlight-view.js';
@@ -16,6 +17,7 @@ function findElements(document) {
     notice: byId('notice'),
     status: byId('status'),
     retry: byId('retry'),
+    library: byId('library'),
     carousel: byId('carousel'),
     track: byId('carousel-track'),
     pager: byId('pager'),
@@ -55,6 +57,8 @@ export function createHomeView(document) {
     spotlight: createSpotlightView(document),
     library: createLibraryView(document),
   };
+  // the stage fades in on its own (stage-enter in hero.css), so only the notice and the library swap
+  const swap = createLayoutSwap([elements.notice, elements.library]);
   const select = (index, card, { animate = false, focus = null } = {}) => {
     parts.carousel.select(index, { focus: focus === 'carousel' });
     parts.spotlight.show(card, index, { animate });
@@ -62,9 +66,9 @@ export function createHomeView(document) {
   };
   return {
     ...parts,
-    showLoading: () => showNotice(parts, { message: LOADING_MESSAGE, tone: 'loading' }),
-    showError: () => showNotice(parts, { message: ERROR_MESSAGE, tone: 'error' }),
-    showGames: (cards) => showGames(parts, cards),
+    showLoading: () => swap(() => showNotice(parts, { message: LOADING_MESSAGE, tone: 'loading' })),
+    showError: () => swap(() => showNotice(parts, { message: ERROR_MESSAGE, tone: 'error' })),
+    showGames: (cards) => swap(() => showGames(parts, cards)),
     select,
     revealHero: () => elements.hero.scrollIntoView?.({ block: 'start' }),
     findLaunchSource: (index) =>
