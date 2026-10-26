@@ -39,7 +39,6 @@ export interface Installer {
   events: EventTarget;
   isIos: boolean;
   isInstalled: () => boolean;
-  registerWorker: () => Promise<unknown>;
   now: () => number;
 }
 

@@ -27,7 +27,6 @@ describe('the install banner', () => {
   it('stays hidden until the browser can install the arcade, then offers Install', async () => {
     const installer = createFakeInstaller();
     await bootWithRealCatalog({ installer });
-    expect(installer.registerWorker).toHaveBeenCalledOnce();
     expect(offer()).toBeNull();
 
     const prompt = offerInstall(installer);

@@ -38,7 +38,6 @@ function useInstallPrompt() {
       },
       options,
     );
-    installer.registerWorker();
 
     return () => lifetime.abort();
   }, [installer, analytics]);

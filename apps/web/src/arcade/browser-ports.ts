@@ -5,7 +5,7 @@ import { browserAudioContext } from '../home/sound-player.js';
 import type { ArcadePorts } from './arcade-context';
 
 export function browserPorts(window: Window, root: URL): ArcadePorts {
-  const installer = browserInstaller(window, root);
+  const installer = browserInstaller(window);
   const { navigator } = window;
 
   return {

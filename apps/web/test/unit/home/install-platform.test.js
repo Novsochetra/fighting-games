@@ -1,24 +1,11 @@
-import { describe, expect, it, vi } from 'vitest';
-import { browserInstaller as installerAt } from '../../../src/home/install-platform.js';
+import { describe, expect, it } from 'vitest';
+import { browserInstaller } from '../../../src/home/install-platform.js';
 
-// the arcade opened on its supporters screen still keeps its worker at its own root
-const ROOT = new URL('https://arcade.test/');
-const browserInstaller = (window) => installerAt(window, ROOT);
-
-function fakeWindow({ modes = [], standalone, canPrompt = true, register } = {}) {
-  const window = {
+function fakeWindow({ modes = [], standalone } = {}) {
+  return {
     matchMedia: (query) => ({ matches: modes.some((mode) => query.includes(mode)) }),
-    navigator: {
-      platform: 'Linux armv8l',
-      maxTouchPoints: 5,
-      standalone,
-      serviceWorker: register ? { register } : undefined,
-    },
+    navigator: { platform: 'Linux armv8l', maxTouchPoints: 5, standalone },
   };
-  if (canPrompt) {
-    window.onbeforeinstallprompt = null;
-  }
-  return window;
 }
 
 describe('browserInstaller', () => {
@@ -27,27 +14,5 @@ describe('browserInstaller', () => {
     expect(browserInstaller(fakeWindow({ modes: ['standalone'] })).isInstalled()).toBe(true);
     expect(browserInstaller(fakeWindow({ modes: ['fullscreen'] })).isInstalled()).toBe(true);
     expect(browserInstaller(fakeWindow({ standalone: true })).isInstalled()).toBe(true);
-  });
-
-  it('registers the service worker at the arcade root where the browser can prompt', async () => {
-    const register = vi.fn(async () => ({ scope: 'http://localhost/' }));
-    const installer = browserInstaller(fakeWindow({ register }));
-    await expect(installer.registerWorker()).resolves.toEqual({ scope: 'http://localhost/' });
-    expect(register).toHaveBeenCalledWith(new URL('https://arcade.test/sw.js'));
-  });
-
-  it('leaves the worker out of browsers without an install prompt', async () => {
-    const register = vi.fn(async () => ({}));
-    const installer = browserInstaller(fakeWindow({ register, canPrompt: false }));
-    await expect(installer.registerWorker()).resolves.toBeNull();
-    expect(register).not.toHaveBeenCalled();
-  });
-
-  it('carries on when the browser refuses the worker', async () => {
-    const register = vi.fn(async () => {
-      throw new TypeError('Failed to register a ServiceWorker');
-    });
-    await expect(browserInstaller(fakeWindow({ register })).registerWorker()).resolves.toBeNull();
-    await expect(browserInstaller(fakeWindow()).registerWorker()).resolves.toBeNull();
   });
 });

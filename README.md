@@ -25,15 +25,16 @@ npm run dev
 ```
 
 Then open http://localhost:8765/. Open a game with a click or a tap, the arrow keys and Enter, or a
-gamepad.
+gamepad. `npm run dev` serves the arcade from Vite as you write it; `npm run build` then `npm start`
+serves the build, as Railway does, with the offline worker.
 
 ## Project layout
 
 ```
-apps/server/   Node HTTP server: the games, supporters and health API, and the static files
-apps/web/      everything the browser loads: the home, supporters and credits pages and the games,
-               each game with its own tokens
-scripts/       the static site build
+apps/server/   Node HTTP server: the games, supporters and health API, and the arcade's files
+apps/web/      everything the browser loads: the arcade (a React and TypeScript app with its home,
+               supporters and credits screens, built by Vite) and the games, each game with its own
+               tokens
 tools/         the project's own ESLint rules
 docs/          architecture notes
 ```
@@ -47,7 +48,9 @@ docs/          architecture notes
 | `npm run check`        | everything below; CI and the git pre-commit hook run it                        |
 | `npm run lint`         | ESLint (size, complexity and comment rules) and Stylelint (design tokens only) |
 | `npm run format:check` | Prettier                                                                       |
+| `npm run typecheck`    | TypeScript over the arcade                                                     |
 | `npm test`             | all tests; also `npm run test:unit`, `test:integration`, `test:regression`     |
+| `npm run build`        | the arcade into `dist/`                                                        |
 
 The lint rules enforce small files (150 lines) and functions (40 lines), complexity 10, no section
 banners, no `/** */` blocks, no `TODO` comments, and no raw colors outside the design tokens (the

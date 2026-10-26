@@ -59,6 +59,28 @@ describe('the built arcade', () => {
     expect(art.headers.get('cache-control')).toBe('no-cache');
   });
 
+  it('tags each file by its content, so a browser checking it again gets a 304', async () => {
+    const first = await get('/assets/icons/icon-32.png');
+    const tag = first.headers.get('etag');
+    const again = await fetch(`${server.baseUrl}/assets/icons/icon-32.png`, {
+      headers: { 'If-None-Match': tag },
+    });
+
+    expect(tag).toMatch(/^"[\w-]{27}"$/);
+    expect(again.status).toBe(304);
+    expect(again.headers.get('etag')).toBe(tag);
+    expect(await again.text()).toBe('');
+
+    await writeFile(path.join(distRoot, 'assets/icons/icon-32.png'), 'a new icon');
+    const changed = await fetch(`${server.baseUrl}/assets/icons/icon-32.png`, {
+      headers: { 'If-None-Match': tag },
+    });
+
+    expect(changed.status).toBe(200);
+    expect(changed.headers.get('etag')).not.toBe(tag);
+    expect(await changed.text()).toBe('a new icon');
+  });
+
   it('refuses to start without a build', async () => {
     const empty = await mkdtemp(path.join(tmpdir(), 'arcade-unbuilt-'));
 

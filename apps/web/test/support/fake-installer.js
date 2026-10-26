@@ -11,7 +11,6 @@ export function createFakeInstaller({ isIos = false, isInstalled = false, time =
     events: new EventTarget(),
     isIos,
     isInstalled: () => isInstalled,
-    registerWorker: vi.fn(async () => null),
     now: () => clock.time,
     clock,
   };

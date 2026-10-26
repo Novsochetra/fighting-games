@@ -18,7 +18,6 @@ apps/
   web/                    everything the browser loads
     index.html            the arcade's page; supporters/ and credits/ hold the other two
     vite.config.ts        the build: the three pages into dist/, the as-is files copied beside them
-    sw.js                 service worker, so browsers offer to install the arcade
     robots.txt            lets every crawler in and names the sitemap
     sitemap.xml           every page this server sends (see Search and link previews)
     assets/               the arcade's icons and manifest (tools/arcade_icons.py draws the icons),
@@ -32,6 +31,7 @@ apps/
                           colors, type and motion of every screen
     src/supporters/       the supporters screen and its donate sheet
     src/credits/          the credits screen: who makes the arcade, and where to find them
+    src/offline/          the service worker, which keeps the arcade and each game played for offline
     games/
       <game-id>/          one self-contained app: it loads nothing from outside its folder
         game.json         catalog entry, read by the server
@@ -129,13 +129,45 @@ rate limit and the checks below.
 
 **The build.** `npm run build` has Vite build the three pages into `dist/` (`base: './'`, so the same
 files work under any path) and copy what it never touches beside them (`as-is-files.js`: the games,
-the art, `robots.txt`, `sitemap.xml`, `sw.js` and `appearance-early.js`). Railway builds on each
-deploy and `npm start` serves `dist/`; it refuses to start without a build. Vite names each module
-and stylesheet it builds by its content, under `build/`, so the server lets a browser keep those for
-a year (`immutable`) and has it check everything else on each visit (`no-cache`). `npm run dev`
+the art, `robots.txt`, `sitemap.xml` and `appearance-early.js`), then builds the service worker (see
+Offline). Railway builds on each deploy and `npm start` serves `dist/`; it refuses to start without a
+build. Vite names each module and stylesheet it builds by its content, under `build/`, so the server
+lets a browser keep those for a year (`immutable`) and has it check everything else on each visit
+(`no-cache`). Every file carries an `ETag`, a hash of its content (`routes/file-tags.js`), so a check
+of a file that has not changed costs a `304` and no body, even across deploys. `npm run dev`
 serves the pages and modules from Vite as they are written, with hot reload, and the as-is files from
 disk as in production. If a game's module fails to load, its page reloads itself once under a fresh
 address (`src/boot/boot-recovery.js`).
+
+## Offline
+
+The arcade works offline like an installed app, and so does each game once it has been played here
+(`src/offline/`, a service worker of plain modules; `register-worker.ts` registers it from the built
+app in every browser, `npm run dev` runs without it). Morodok Angkor lives on its own site and is
+not kept.
+
+- **The arcade** (`arcade-cache.js`): the build writes the worker with the list of what it keeps
+  (vite-plugin-pwa's `injectManifest`, in `vite.config.ts`): the three pages, the built modules and
+  styles, the arcade's art, `appearance-early.js` and each game's card art (`catalog-art.js`), each
+  with a revision. Installing fills one cache named by that list and, once it is all in, takes over
+  at once; a page open on the old build keeps what it loaded, its next load is the new one, and the
+  builds before go. The pages and files come from that cache, so the arcade opens without the network.
+- **The API** (`api-cache.js`): the games and the supporters are read from the network first, and
+  the last answer stands in offline; the worker reads them once as it installs, since the first
+  visit read them before it was there. A gift sent offline fails as it always did, saying so.
+- **A game** (`game-cache.js`): opening a game is its first play, and the whole game comes down
+  behind it: the build writes each game's `offline.json` (`game-files.js`), every file it may load
+  as it is played (not its screenshots, link-preview art or notes, nor a sprite that has a packed
+  copy of itself in `packed/`, which only the packer reads) and a revision that changes with any of
+  them. Each file is checked with the server, so what the game has just loaded for itself costs a
+  `304`. A game is played from its download only once every file of one revision is in, marked last,
+  so a half download, or one across two deploys, is never played; until then it comes from the
+  network as before, and offline it says so. After a deploy that changes the game, the next play
+  brings the new revision down behind the old one, which it plays meanwhile, then lets the old go. A
+  prefetch of a game's page (the home's speculation rules) downloads nothing.
+
+`test/integration/offline/worker.test.js` runs the worker's answers against fake caches and a
+network that can go away.
 
 ## Home page
 
@@ -239,10 +271,7 @@ Install, and on an iPhone or iPad, where Safari installs only from its Share men
 tap. It never shows inside the installed app, and Not now (or turning down the browser's dialog)
 holds it back for two weeks (`install-offer.js`, the time kept by `preferences.js`). While it is up
 on a short screen, the hero's buttons rise above it. Chrome prompts only for a page with a service
-worker that has a fetch handler, so `sw.js` is the smallest one that does: it caches nothing, loads
-pages from the network and answers a failed page load with a short offline page, and its static
-route sends every file under `games/` straight to the network, so a game never waits on it. Only a
-browser with an install prompt registers it (`install-platform.js`).
+worker that has a fetch handler, which the arcade's offline worker is (see Offline).
 
 A support banner floats in the same place (`Banners.tsx`, `use-support.ts`, the install banner's
 styles with a heart for the icon, `support.css`) and asks a regular to chip in, with Support opening the donate

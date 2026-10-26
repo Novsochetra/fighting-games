@@ -1,12 +1,32 @@
-import { cp } from 'node:fs/promises';
+import { cp, readdir, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import react from '@vitejs/plugin-react';
 import { defineConfig, type Plugin } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 import { AS_IS, BUILD_FOLDER } from '../server/src/as-is-files.js';
+import { catalogArtEntries } from '../server/src/offline/catalog-art.js';
+import { offlineListOf } from '../server/src/offline/game-files.js';
+import { GAMES_ROOT } from '../server/src/paths.js';
 import { isPublishedPath } from '../server/src/public-files.js';
 
 const WEB_ROOT = import.meta.dirname;
 const OUT_DIR = path.resolve(WEB_ROOT, '../../dist');
+
+// Each game played here (one with its own page) gets the list its whole download goes by.
+async function writeOfflineLists(gamesRoot: string) {
+  const ids = await readdir(gamesRoot);
+  const played = ids.map(async (id) => {
+    const page = await stat(path.join(gamesRoot, id, 'index.html')).catch(() => null);
+
+    if (page) {
+      const list = await offlineListOf(path.join(gamesRoot, id));
+
+      await writeFile(path.join(gamesRoot, id, 'offline.json'), JSON.stringify(list));
+    }
+  });
+
+  await Promise.all(played);
+}
 
 function copyAsIs(): Plugin {
   return {
@@ -21,9 +41,36 @@ function copyAsIs(): Plugin {
       );
 
       await Promise.all(copies);
+      await writeOfflineLists(path.join(OUT_DIR, 'games'));
     },
   };
 }
+
+// The arcade's worker (src/offline/sw.js), built with the list of what it keeps: the pages, the
+// built modules and styles, the arcade's art, the early appearance script and each game's card art.
+// It is registered by the app itself, and the arcade keeps its own web manifest.
+const offline = VitePWA({
+  strategies: 'injectManifest',
+  srcDir: 'src/offline',
+  filename: 'sw.js',
+  injectRegister: false,
+  manifest: false,
+  injectManifest: {
+    rollupFormat: 'iife',
+    globPatterns: [
+      'index.html',
+      '*/index.html',
+      `${BUILD_FOLDER}/**/*`,
+      'assets/**/*',
+      'src/home/appearance-early.js',
+    ],
+    globIgnores: ['games/**'],
+    additionalManifestEntries: await catalogArtEntries({
+      webRoot: WEB_ROOT,
+      gamesRoot: GAMES_ROOT,
+    }),
+  },
+});
 
 // The arcade's three pages, each with its own head for search and link previews, around one React
 // app. Relative addresses (base './') keep the build working under any path, as the pages always have.
@@ -32,7 +79,7 @@ export default defineConfig({
   root: WEB_ROOT,
   base: './',
   publicDir: false,
-  plugins: [react(), copyAsIs()],
+  plugins: [react(), copyAsIs(), offline],
   build: {
     outDir: OUT_DIR,
     emptyOutDir: true,

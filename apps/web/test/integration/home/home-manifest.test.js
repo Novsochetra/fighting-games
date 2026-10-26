@@ -53,8 +53,4 @@ describe('the arcade as an installable app', () => {
     expect(await pngSize(path.join(WEB_ROOT, 'assets/icons/apple-touch-icon.png'))).toBe('180x180');
     expect(html).not.toContain('href="data:,"');
   });
-
-  it('keeps the service worker beside the page, so its scope covers the whole arcade', async () => {
-    expect((await stat(path.join(WEB_ROOT, 'sw.js'))).isFile()).toBe(true);
-  });
 });

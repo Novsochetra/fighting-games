@@ -12,16 +12,16 @@ not read it during a deploy: `railway config apply` sends it once (step 5), and 
 to it. It leaves the variables to the dashboard (`variables: { managed: false }`), so the database
 password never goes in the repo.
 
-| Step       | What runs                                      | Why                                                                                                                              |
-| ---------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| Builder    | Railpack (Railway's default builder), Node 22  | Node comes from `engines` in `package.json`.                                                                                     |
-| Install    | `npm ci`                                       | Exactly the lockfile.                                                                                                            |
-| Build      | `NPM_CONFIG_PRODUCTION= npm prune --omit=dev`  | The server runs the source as it is; this only drops the test and lint tools. Railpack sets `NPM_CONFIG_PRODUCTION=false`.       |
-| Pre-deploy | `node apps/server/src/db/migrate-cli.js`       | Applies new migrations before the new server starts. If one fails, the deploy stops and the old server keeps serving.            |
-| Start      | `node apps/server/src/main.js`                 | Node itself, not `npm start`, so it gets Railway's SIGTERM.                                                                      |
-| Health     | `GET /api/health` must answer 200 within 120 s | It reads the supporters table, so a database that is down or never migrated keeps traffic on the old server.                     |
-| Stop       | SIGTERM, then SIGKILL after 15 s               | The old server takes no new requests, finishes the ones under way, then closes the database pool.                                |
-| Region     | `asia-southeast1-eqsg3a` (Singapore), 1 copy   | Closest to Cambodia. Keep one copy: the rate limit lives in the server's memory, so a second copy would not see the first one's. |
+| Step       | What runs                                                      | Why                                                                                                                                               |
+| ---------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Builder    | Railpack (Railway's default builder), Node 22                  | Node comes from `engines` in `package.json`.                                                                                                      |
+| Install    | `npm ci`                                                       | Exactly the lockfile.                                                                                                                             |
+| Build      | `npm run build && NPM_CONFIG_PRODUCTION= npm prune --omit=dev` | Vite builds the arcade into `dist/`, which the server sends; then the build, test and lint tools go. Railpack sets `NPM_CONFIG_PRODUCTION=false`. |
+| Pre-deploy | `node apps/server/src/db/migrate-cli.js`                       | Applies new migrations before the new server starts. If one fails, the deploy stops and the old server keeps serving.                             |
+| Start      | `node apps/server/src/main.js`                                 | Node itself, not `npm start`, so it gets Railway's SIGTERM.                                                                                       |
+| Health     | `GET /api/health` must answer 200 within 120 s                 | It reads the supporters table, so a database that is down or never migrated keeps traffic on the old server.                                      |
+| Stop       | SIGTERM, then SIGKILL after 15 s                               | The old server takes no new requests, finishes the ones under way, then closes the database pool.                                                 |
+| Region     | `asia-southeast1-eqsg3a` (Singapore), 1 copy                   | Closest to Cambodia. Keep one copy: the rate limit lives in the server's memory, so a second copy would not see the first one's.                  |
 
 On Railway (`RAILWAY_ENVIRONMENT_ID` is set) the server listens on `0.0.0.0` and trusts one proxy hop
 (`TRUST_PROXY=1`), unless you set those variables. It refuses to start unless `DATABASE_URL` is a
