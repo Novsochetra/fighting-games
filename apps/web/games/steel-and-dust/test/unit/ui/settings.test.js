@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { HAPTIC_CUES } from '../../../src/data/haptics.js';
 import { defaultSettings } from '../../../src/data/settings.js';
 import { createSettingsPanel, settingsHtml } from '../../../src/ui/settings/settings-panel.js';
 import { SETTINGS_SCHEMA, steppedValue } from '../../../src/ui/settings/settings-schema.js';
@@ -78,5 +79,17 @@ describe('settings panel', () => {
     expect(game.io.saveSettings).not.toHaveBeenCalled();
     expect(panel.change('shake', -1, false)).toBe(true);
     expect(game.settings.shake).toBe(1);
+  });
+
+  it('gives a taste of a blow as Vibration turns on, and nothing as it turns off', () => {
+    const io = { saveSettings: vi.fn(), vibrate: vi.fn() };
+    const game = { settings: { ...defaultSettings(true), haptics: false }, io };
+    const ui = { isTouchOn: () => true };
+    const audio = { sfx: vi.fn() };
+    const panel = createSettingsPanel({ list: {}, game, audio, layout: {}, ui, canVibrate: true });
+    panel.change('haptics', 1, false);
+    expect(io.vibrate).toHaveBeenCalledWith(HAPTIC_CUES.bigHit);
+    panel.change('haptics', -1, false);
+    expect(io.vibrate).toHaveBeenCalledTimes(1);
   });
 });

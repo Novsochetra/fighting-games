@@ -32,6 +32,14 @@ export const SETTINGS_SCHEMA = [
     note: 'Touch: keep the button held to keep swinging',
     visible: ({ isTouchOn }) => isTouchOn(),
   },
+  {
+    key: 'haptics',
+    label: 'Vibration',
+    options: [false, true],
+    format: onOff,
+    note: 'Rumbles the gamepad or phone you play with',
+    visible: ({ canVibrate }) => canVibrate,
+  },
   { group: 'Screen' },
   {
     key: 'shake',
@@ -76,13 +84,6 @@ export const SETTINGS_SCHEMA = [
     format: (value) => (value ? 'Custom' : 'Default'),
     note: 'Move and resize the buttons and the stick, for each way you hold the phone',
     visible: ({ isTouchOn }) => isTouchOn(),
-  },
-  {
-    key: 'haptics',
-    label: 'Vibration',
-    options: [false, true],
-    format: onOff,
-    visible: ({ canVibrate }) => canVibrate,
   },
   { group: 'Training' },
   {

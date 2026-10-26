@@ -12,7 +12,6 @@ import { canAffordHeavy, ultReady } from './sim/combat/ult-bar.js';
 import { isFightOver } from './sim/stage/loot-time.js';
 import { beginTick, runTick } from './sim/tick.js';
 import { installTitleScene } from './ui/screen/title-scene.js';
-import { createUiState } from './ui/ui-state.js';
 
 function createCanvas(width, height) {
   const canvas = document.createElement('canvas');
@@ -22,8 +21,7 @@ function createCanvas(width, height) {
 }
 
 const elements = findElements(document);
-const { game, audio } = createSession({ window });
-const ui = createUiState(game);
+const { game, audio, ui } = createSession({ window });
 const pad = { connected: false };
 const { layout, fullscreen, menus, act } = installUi({ window, elements, game, audio, ui, pad });
 const { touchStick, gamepad } = installInput({ window, elements, game, audio, ui, layout, menus });

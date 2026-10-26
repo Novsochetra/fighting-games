@@ -1,4 +1,5 @@
 import { refreshAttackTokens } from '../../sim/fighters/tokens.js';
+import { buzz } from '../../sim/fx/haptics.js';
 import { SETTINGS_SCHEMA, steppedValue } from './settings-schema.js';
 
 function valueHtml(definition, settings) {
@@ -48,6 +49,8 @@ const AFTER_CHANGE = {
   stick: ({ layout }) => layout.applyTouchSettings(),
   padHidesTouch: ({ layout }) => layout.applyTouchSettings(),
   difficulty: ({ game }) => refreshAttackTokens(game),
+  // turned on, it gives a taste of what a blow feels like
+  haptics: ({ game }) => buzz(game, 'bigHit'),
 };
 
 export function createSettingsPanel({ list, game, audio, layout, ui, canVibrate }) {

@@ -32,7 +32,7 @@ function knockOutEnemy(game, enemy, direction) {
     kickX: direction * 2,
     kickY: 0,
   });
-  buzz(game, boss ? [60, 40, 90] : 22);
+  buzz(game, boss ? 'bossKnockOut' : 'knockOut');
   dropLoot(game, enemy);
   const standing = game.fighters.filter(
     (fighter) => fighter.side === 'enemy' && fighter.state !== 'ko',

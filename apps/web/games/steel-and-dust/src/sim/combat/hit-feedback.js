@@ -81,11 +81,11 @@ export function showDamageNumber(game, hit, { direction, damage }) {
 
 export function feelHit(game, hit, { direction, big }) {
   if (isPlayer(hit.attacker)) {
-    buzz(game, big ? 18 : 7);
+    buzz(game, big ? 'bigHit' : 'hit');
   }
   if (isPlayer(hit.target)) {
     game.hurtFlash = 14;
-    buzz(game, 40);
+    buzz(game, 'hurt');
     punch(game, {
       x: hit.target.x - game.camera.x,
       y: hit.target.y - 18,

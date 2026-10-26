@@ -17,5 +17,5 @@ export function stageClear(game) {
   const text = isLastMission(game.missionIndex) ? 'All clear' : 'Mission complete';
   showBanner(game, { text, color: COLORS.amber, time: BANNER_FOREVER, stamp: true });
   game.io.sfx('clear');
-  buzz(game, [40, 60, 40, 60, 120]);
+  buzz(game, 'clear');
 }

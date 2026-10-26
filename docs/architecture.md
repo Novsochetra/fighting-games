@@ -437,6 +437,17 @@ the custom centre to rest on. The buttons come after the zone in the page, so th
 (`sfx`, `announce`, `vibrate`, `saveRecords`, `saveHints`, `saveSettings`, `saveRun`, `saveLeaderboard`,
 `setMuted`, and `now` for the day a run ends), so it runs in Node tests unchanged.
 
+The hero's blows landing, the hero being hit, a knockout, a weapon or gem picked up and a mission
+cleared each send a haptic cue through `vibrate` (`buzz` in `src/sim/fx/haptics.js`, the cues in
+`src/data/haptics.js`). Each cue is written twice: a vibration pattern for a phone and rumbles of a
+gamepad's two motors, longer since a pad's motors take a moment to spin up. `src/platform/haptics.js`
+plays it in whatever the player used last (`ui.lastInput`): the first standard gamepad's
+`vibrationActuator` (Chrome, Edge and Safari on a Mac), or the phone's `navigator.vibrate`
+(Android), and nothing under a keyboard or a mouse. A pad plays one effect at a time, so each rumble
+of a cue starts when the last one ends, and a new cue cuts off the rest of the one playing. Safari
+on iPhone and iPad can do neither, so Settings shows Vibration only where one of them exists
+(`canVibrate`); turning it on plays a blow's cue as a taste.
+
 ### Missions
 
 The game is twelve missions (`src/data/missions/specs/`), each a road of its own with a painted theme,

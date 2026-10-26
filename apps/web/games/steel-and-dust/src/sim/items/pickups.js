@@ -54,7 +54,7 @@ function takeWeapon(game, player, pickup) {
   game.io.sfx('pickup');
   addRing(game, { x: pickup.x, y: pickup.y, color: weapon.trailColor });
   game.weaponPopup = 50;
-  buzz(game, 15);
+  buzz(game, 'weapon');
 }
 
 function collect(game, pickup) {

@@ -29,7 +29,7 @@ function takeGem(game, piece) {
     color: LOOT_COLORS.gemText,
   });
   game.io.sfx('gem', false, { x: piece.x });
-  buzz(game, 12);
+  buzz(game, 'gem');
 }
 
 function eatApple(game, piece) {

@@ -1,3 +1,4 @@
+import { canVibrate } from '../platform/haptics.js';
 import { createHelpPanel } from '../ui/help/help-panel.js';
 import { installCarouselEvents } from '../ui/heroes/carousel-events.js';
 import { createHeroPanel } from '../ui/heroes/hero-panel.js';
@@ -28,7 +29,7 @@ function createPanels({ elements, game, audio, layout, ui, window }) {
       audio,
       layout,
       ui,
-      canVibrate: !!window.navigator.vibrate,
+      canVibrate: canVibrate(window),
     }),
     help: createHelpPanel({ tabs: elements.helpTabs, body: elements.helpBody, game, ui }),
     heroes: createHeroPanel({ list: elements.heroList, game }),
