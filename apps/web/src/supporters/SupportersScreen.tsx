@@ -4,6 +4,7 @@ import { useArcade } from '../arcade/arcade-context';
 import { LayoutSwap } from '../arcade/LayoutSwap';
 import { Notice } from '../arcade/Notice';
 import { PageBar } from '../arcade/PageBar';
+import { useArriveDrawn } from '../arcade/use-arrive-drawn';
 import { DonateSheet } from './DonateSheet';
 import { SupportersHero } from './SupportersHero';
 import { EmptyList, Podium, Roll, type SortOrder, type SupportersView } from './SupportersLists';
@@ -19,6 +20,9 @@ export const ERROR_MESSAGE = 'The supporters did not load. Check your connection
 
 // the stats come in above Become a supporter, which would jump down as the list arrived
 const SWAP_BLOCKS = ['supporters-notice', 'donate', 'stats', 'empty', 'podium-section', 'roll'];
+
+// The places and rows that rise in as the list comes in (podium.css, roll.css).
+export const SUPPORTERS_ENTRANCES = ['place-rise', 'row-rise'];
 
 function useSupportersPage(order: SortOrder) {
   const { locale } = useArcade();
@@ -41,11 +45,12 @@ export function SupportersScreen() {
   const { query, page, phase } = useSupportersPage(order);
   const onGiven = useGiven();
   const main = useRef<HTMLElement>(null);
+  const screen = useArriveDrawn<HTMLDivElement>(SUPPORTERS_ENTRANCES);
   const blocks = () => SWAP_BLOCKS.map((id) => main.current!.querySelector<HTMLElement>(`#${id}`)!);
   const donate = () => setDonating(true);
 
   return (
-    <div className="supporters-page">
+    <div className="supporters-page" ref={screen}>
       <PageBar title="Supporters" titleId="supporters-bar-title" />
       <LayoutSwap phase={phase} blocks={blocks}>
         <main className="supporters" ref={main}>

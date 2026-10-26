@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import { useArcadeUrl } from '../arcade/arcade-context';
 import { PageBar } from '../arcade/PageBar';
+import { useArriveDrawn } from '../arcade/use-arrive-drawn';
 import { CreditsGroup } from './CreditsRow';
 import { FIND_ME, MADE_WITH, THANKS_TO } from './credits-links';
 import './cover.css';
@@ -62,10 +63,15 @@ function Maker() {
   );
 }
 
+// The parts that rise in as the page loads (credits.css, cover.css, maker.css).
+export const CREDITS_ENTRANCES = ['credits-rise', 'portrait-in'];
+
 // Who makes the arcade, like the profile card at the top of an iOS contact.
 export function CreditsScreen() {
+  const screen = useArriveDrawn<HTMLDivElement>(CREDITS_ENTRANCES);
+
   return (
-    <div className="credits-page">
+    <div className="credits-page" ref={screen}>
       <PageBar title="Nov Sochetra" titleId="credits-bar-title" over />
       <Cover />
       <main className="credits">

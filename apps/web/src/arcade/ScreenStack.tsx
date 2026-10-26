@@ -31,6 +31,9 @@ export function useIsTopScreen(): boolean {
   return !screen || screen.isTop;
 }
 
+// What the screen this is inside does in the stack: front or back while a move slides it.
+export const useScreenRole = (): LayerRole => use(ScreenContext)?.role ?? 'top';
+
 function roleOf(stack: StackModel, id: ScreenId): LayerRole {
   const pair = frontAndBack(stack);
 
