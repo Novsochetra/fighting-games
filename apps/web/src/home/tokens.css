@@ -253,6 +253,7 @@
   --size-row: 3.75rem;
   --size-coffee-fab: 3.75rem;
   --size-coffee-note: 16.5rem;
+  --size-coffee-note-beside: 20rem;
   --size-coffee-avatar: 1.375rem;
   --size-sheet-compact: 26rem;
   --size-coffee-clearance: calc(var(--size-coffee-fab) + var(--offset-coffee-fab) + var(--space-3));

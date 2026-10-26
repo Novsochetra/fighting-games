@@ -235,8 +235,10 @@ nine seconds; tapping the note opens the sheet too, and its own button puts it a
 (`coffee-sheet.css`, the dialog from `sheet.js`) offers both ways to give: Pay with KHQR, which
 leads to the donate sheet on the supporters page (`supporters/#give`), and Buy me a coffee in their
 yellow, which takes a card from anywhere in a new tab. Gifts on Buy Me a Coffee do not reach the
-supporters list. On a phone the hero's buttons rise above the coffee button, the note floats above
-them so Play stays in reach, and the button and note wait while a banner is up across the bottom.
+supporters list. On a phone the hero's buttons rise above the coffee button. The note sits beside
+the button where it fits under them, as on a tall phone, where the hero stops growing and leaves room
+below its buttons, and floats above them where it does not (`coffee-note-spot.js` measures when it
+shows), so Play stays in reach. The button and note wait while a banner is up across the bottom.
 
 ## Supporters page
 

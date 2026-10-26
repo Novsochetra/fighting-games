@@ -19,6 +19,16 @@ const COFFEE = 'https://buymeacoffee.com/sochetranov';
 const note = () => byId('coffee-note');
 const sheetIsOpen = () => byId('coffee-sheet').open;
 
+// happy-dom lays nothing out, so a phone's boxes are given: the coffee button ends at 912 and the
+// note stands 152 tall.
+function layOutPhone({ actionsBottom }) {
+  byId('coffee-open').getBoundingClientRect = () => ({ bottom: 912 });
+  document.querySelector('.spotlight__actions').getBoundingClientRect = () => ({
+    bottom: actionsBottom,
+  });
+  Object.defineProperty(note(), 'offsetHeight', { value: 152, configurable: true });
+}
+
 // The choices lead to other pages, which happy-dom would try to load.
 const stayOnPage = (event) => event.preventDefault();
 
@@ -78,6 +88,22 @@ describe('the coffee note', () => {
     vi.advanceTimersByTime(COFFEE_NOTE_MS);
     vi.runAllTimers();
     expect(note().hidden).toBe(true);
+  });
+
+  it('sits beside the coffee button where it fits under the hero buttons', async () => {
+    await bootWithRealCatalog();
+    layOutPhone({ actionsBottom: 728 });
+    vi.advanceTimersByTime(COFFEE_NOTE_DELAY_MS);
+    expect(note().hidden).toBe(false);
+    expect(note().dataset.spot).toBe('beside');
+  });
+
+  it('floats above the hero buttons where it would cover them beside the coffee button', async () => {
+    await bootWithRealCatalog();
+    layOutPhone({ actionsBottom: 800 });
+    vi.advanceTimersByTime(COFFEE_NOTE_DELAY_MS);
+    expect(note().hidden).toBe(false);
+    expect(note().dataset.spot).toBeUndefined();
   });
 
   it('opens the sheet when tapped, and goes away with its close button', async () => {
