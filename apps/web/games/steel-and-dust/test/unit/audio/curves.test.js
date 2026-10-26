@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { asCurve, expCurve, glide, linearCurve, toPairs } from '../../../src/audio/synth/curves.js';
+import {
+  asCurve,
+  expCurve,
+  glide,
+  linearCurve,
+  swell,
+  toPairs,
+} from '../../../src/audio/synth/curves.js';
 
 describe('toPairs', () => {
   it('reads flat points as [time, value] pairs', () => {
@@ -52,5 +59,27 @@ describe('asCurve', () => {
     const curve = (time) => time * 2;
     expect(asCurve(curve)).toBe(curve);
     expect(asCurve(7)(123)).toBe(7);
+  });
+});
+
+describe('swell', () => {
+  const level = swell({ peak: 0.1, length: 0.3 });
+
+  it('rises from silence to 1 at the peak and falls back to silence at the end', () => {
+    expect(level(0)).toBe(0);
+    expect(level(0.05)).toBeCloseTo(0.5, 12);
+    expect(level(0.1)).toBe(1);
+    expect(level(0.2)).toBeCloseTo(0.25, 12);
+    expect(level(0.3)).toBe(0);
+    expect(level(-0.1)).toBe(0);
+    expect(level(0.4)).toBe(0);
+  });
+
+  it('eases in, so the first steps are tiny', () => {
+    expect(level(0.001)).toBeLessThan(0.001);
+  });
+
+  it('lets go of the peak sooner with a larger fall', () => {
+    expect(swell({ peak: 0.1, length: 0.3, fall: 3 })(0.2)).toBeLessThan(level(0.2));
   });
 });

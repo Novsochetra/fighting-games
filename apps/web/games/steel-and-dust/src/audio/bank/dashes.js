@@ -1,97 +1,54 @@
-import { expCurve, glide } from '../synth/curves.js';
+import { glide } from '../synth/curves.js';
+import { hush, rush } from '../synth/air.js';
 import { layer } from '../synth/layer.js';
-import { swoosh } from '../synth/air.js';
-import { ring } from '../synth/struck.js';
-import { crackle, flap } from '../synth/texture.js';
 
-const WHISTLE = { resonance: 4, ratio: 1.6, level: 0.25 };
-
-function pushOff(track, pitch) {
-  const scuff = glide(2500, 0.04, 500);
-  layer(track, {
-    filter: 'lowpass',
-    cutoff: scuff,
-    attack: 0.0005,
-    decay: 0.045,
-    level: 2.5,
-    drive: 1.5,
-  });
-  crackle(track, { start: 0, length: 0.04, count: 6, cutoff: 1500, level: 0.35 });
-  const stamp = {
-    strike: { milliseconds: 4, lowpass: 600, click: 0.6 },
-    modes: [
-      [85, 0.09, 1],
-      [140, 0.06, 0.6],
-    ],
-  };
-  ring(track, stamp, pitch);
+function whomp(track, { from, to, seconds, attack, decay, level }) {
+  layer(track, { wave: 'sine', frequency: glide(from, seconds, to), attack, decay, level });
 }
 
-// the feet push off (a gritty scuff and a thump), a fast whoomp of air, a resonant "shhunn" that
-// falls away, and the cloak snapping behind
+// the feet push off padded, a thump and a breath of dust: a scuff with grit or crackle in it
+// makes the dash sound rough
+function pushOff(track, pitch) {
+  whomp(track, {
+    from: 110 * pitch,
+    to: 50,
+    seconds: 0.07,
+    attack: 0.002,
+    decay: 0.08,
+    level: 0.48,
+  });
+  const dust = glide(1400, 0.06, 300);
+  layer(track, { filter: 'lowpass', cutoff: dust, attack: 0.003, decay: 0.06, level: 0.72 });
+}
+
+// two bands of air crossing as they pass, like a phaser, over a dark rush and a low whomp. Every
+// part eases in and out and nothing flutters, and the hiss is rolled off the top: a click, a
+// flutter (heard as a rattle) or hiss is what makes a dash sound rough
+function swirl(track, pitch) {
+  const passing = { length: 0.3, peak: 0.08, resonance: 1.6 };
+  rush(track, { ...passing, from: 450 * pitch, top: 2000 * pitch, to: 650 * pitch, level: 0.7 });
+  rush(track, { ...passing, from: 2100 * pitch, top: 600 * pitch, to: 1400 * pitch, level: 0.55 });
+  const body = { length: 0.26, peak: 0.06, level: 0.5 };
+  hush(track, { ...body, from: 400 * pitch, top: 1500 * pitch, to: 500 * pitch });
+  whomp(track, { from: 100 * pitch, to: 55, seconds: 0.1, attack: 0.01, decay: 0.1, level: 0.3 });
+  return { lowpass: 3800 };
+}
+
 function buildDash(track, pitch) {
   pushOff(track, pitch);
-  swoosh(track, {
-    length: 0.26,
-    peak: 0.05,
-    cutoffFrom: 500 * pitch,
-    cutoffPeak: 1600 * pitch,
-    cutoffTo: 600 * pitch,
-    resonance: 1,
-    whistle: WHISTLE,
-    level: 0.9,
-  });
-  const air = expCurve([0, 5000 * pitch, 0.08, 2200 * pitch, 0.3, 800]);
-  layer(track, { filter: 'lowpass', cutoff: air, attack: 0.004, decay: 0.2, level: 0.5 });
-  const shhunn = glide(2600 * pitch, 0.18, 900 * pitch);
-  layer(track, {
-    filter: 'bandpass',
-    resonance: 4,
-    cutoff: shhunn,
-    attack: 0.006,
-    decay: 0.16,
-    level: 2,
-  });
-  flap(track, { start: 0.01, length: 0.16, cutoff: 750 * pitch, rate: 36, level: 2.5 });
-  return { drive: 1.5 };
+  return swirl(track, pitch);
 }
 
 // the air dash has no feet in it
-function buildDashAir(track, pitch) {
-  swoosh(track, {
-    length: 0.26,
-    peak: 0.05,
-    cutoffFrom: 550 * pitch,
-    cutoffPeak: 1700 * pitch,
-    cutoffTo: 650 * pitch,
-    resonance: 1,
-    whistle: WHISTLE,
-    level: 1,
-  });
-  const air = expCurve([0, 5500 * pitch, 0.08, 2400 * pitch, 0.28, 900]);
-  layer(track, { filter: 'lowpass', cutoff: air, attack: 0.003, decay: 0.2, level: 0.55 });
-  const shhunn = glide(2800 * pitch, 0.18, 1000 * pitch);
-  layer(track, {
-    filter: 'bandpass',
-    resonance: 4,
-    cutoff: shhunn,
-    attack: 0.005,
-    decay: 0.16,
-    level: 2,
-  });
-  const body = { strike: { milliseconds: 3, lowpass: 900, click: 0.4 }, modes: [[120, 0.06, 0.6]] };
-  ring(track, body, pitch);
-  flap(track, { start: 0.01, length: 0.18, cutoff: 800 * pitch, rate: 34, level: 2.8 });
-  return { drive: 1.4 };
-}
+const buildDashAir = (track, pitch) => swirl(track, pitch);
 
 export const DASH_SOUNDS = {
-  dash: { group: 'movement', level: 0.55, takes: 4, seconds: 0.32, priority: 1, build: buildDash },
+  dash: { group: 'movement', level: 0.32, takes: 4, seconds: 0.34, priority: 1, build: buildDash },
   dashAir: {
     group: 'movement',
-    level: 0.36,
+    level: 0.38,
     takes: 4,
-    seconds: 0.3,
+    seconds: 0.34,
     priority: 1,
     build: buildDashAir,
   },

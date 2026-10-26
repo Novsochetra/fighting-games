@@ -588,7 +588,11 @@ at a walk's pace and picks up to `RUN_SPEED`, and a ground dash held its way run
 hero's run strip, kicking dust up behind each stride and sounding a footstep with it
 (`src/sim/fighters/motion-effects.js`; the `step` sound in `src/audio/bank/movement.js`, the bank's
 lowest priority, so a footstep never takes a voice from another sound and is the first to go in a
-crowded fight). Attacks
+crowded fight). A dash sounds as a swirl of air (`src/audio/bank/dashes.js`): two bands of noise
+crossing like a phaser over a dark rush and a low whomp, a padded push-off under the ground dash.
+Every part eases in and out (`swell` in `src/audio/synth/curves.js`, `rush` and `hush` in `air.js`)
+and the hiss is rolled off its top, so it never clicks, rattles or hisses
+(`test/regression/bugs/rough-dash.test.js`). Attacks
 out of the run are the ones from a stand; jump is a long running leap.
 A boss is drawn at its `scale` (`spriteSize` in `src/render/fighters/enemy-sprites.js`), two to
 three times the hero's height, and its hit and hurt boxes grow with it; raiders are drawn at the

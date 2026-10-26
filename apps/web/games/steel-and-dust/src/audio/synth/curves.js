@@ -36,6 +36,21 @@ export const linearCurve = (points) => curve(points, blendLinear);
 
 export const glide = (from, seconds, to) => expCurve([0, from, seconds, to]);
 
+// a level that eases up from silence to 1 at the peak and falls back to silence at the end: it
+// never steps, so it never clicks. A larger `fall` lets go of the peak sooner
+export function swell({ peak, length, fall = 2 }) {
+  return (time) => {
+    if (time <= 0 || time >= length) {
+      return 0;
+    }
+    if (time < peak) {
+      const progress = time / peak;
+      return progress * progress * (3 - 2 * progress);
+    }
+    return Math.pow(1 - (time - peak) / (length - peak), fall);
+  };
+}
+
 export function asCurve(value) {
   return typeof value === 'function' ? value : () => value;
 }

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { swoosh, whoosh } from '../../../src/audio/synth/air.js';
+import { hush, rush, swoosh, whoosh } from '../../../src/audio/synth/air.js';
 import { crackle, flap } from '../../../src/audio/synth/texture.js';
 import { createTrack } from '../../../src/audio/synth/track.js';
 import { seededRandom } from '../../support/seeded-random.js';
@@ -53,5 +53,50 @@ describe('whoosh and swoosh', () => {
       expect(loudest(track.samples, 3000, 4500)).toBeGreaterThan(loudest(track.samples, 0, 500));
       expect(loudest(track.samples, 6175, 8000)).toBe(0);
     }
+  });
+});
+
+// how far the sound moves from one sample to the next, against its size: higher is brighter
+function brightness(samples) {
+  let energy = 0;
+  let change = 0;
+  for (let i = 1; i < samples.length; i++) {
+    energy += samples[i] * samples[i];
+    change += (samples[i] - samples[i - 1]) ** 2;
+  }
+  return change / energy;
+}
+
+describe('rush and hush', () => {
+  const PASSING = {
+    start: 0.01,
+    length: 0.14,
+    peak: 0.05,
+    from: 400,
+    top: 1600,
+    to: 500,
+    level: 1,
+  };
+
+  it('ease in from silence, swell to a peak and stay inside their length', () => {
+    for (const shape of [rush, hush]) {
+      Math.random = seededRandom(4);
+      const track = createTrack(8820, 44100);
+      shape(track, { ...PASSING, resonance: 1.4 });
+      expect(loudest(track.samples, 0, 441)).toBe(0);
+      expect(loudest(track.samples, 441, 500)).toBeLessThan(0.01);
+      expect(loudest(track.samples, 2400, 3200)).toBeGreaterThan(loudest(track.samples, 441, 1000));
+      expect(loudest(track.samples, 6615, 8820)).toBe(0);
+    }
+  });
+
+  it('hush carries the same air darker, without the hiss', () => {
+    Math.random = seededRandom(4);
+    const band = createTrack(8820, 44100);
+    rush(band, { ...PASSING, resonance: 1.4 });
+    Math.random = seededRandom(4);
+    const dark = createTrack(8820, 44100);
+    hush(dark, PASSING);
+    expect(brightness(dark.samples)).toBeLessThan(brightness(band.samples) / 2);
   });
 });

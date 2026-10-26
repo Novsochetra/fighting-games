@@ -1,4 +1,4 @@
-import { expCurve, linearCurve } from './curves.js';
+import { expCurve, linearCurve, swell } from './curves.js';
 import { layer } from './layer.js';
 
 function sweep(spec, ratio) {
@@ -73,4 +73,35 @@ export function swoosh(track, spec) {
         bandLevel(cutoffPeak * whistle.ratio, whistle.resonance, track.sampleRate),
     });
   }
+}
+
+// air passing by: its pitch climbs from `from` to `top` at the peak and settles to `to`, eased in
+// and out (see swell)
+function passing(track, spec, sound) {
+  const { start, length, peak, from, top, to, fall } = spec;
+  layer(track, {
+    ...sound,
+    cutoff: expCurve([0, from, peak, top, length, to]),
+    envelope: swell({ peak, length, fall }),
+    length,
+    start,
+  });
+}
+
+// a smooth rush of air: a band of noise; two moving opposite ways cross like a phaser
+export function rush(track, spec) {
+  const { top, resonance, level } = spec;
+  const sound = {
+    filter: 'bandpass',
+    resonance,
+    level: level * bandLevel(top, resonance, track.sampleRate),
+  };
+  passing(track, spec, sound);
+}
+
+// the body of a rush without its hiss: under a lowpass white noise falls 9 dB an octave, where a
+// band leaves it falling only 3
+export function hush(track, spec) {
+  const level = (spec.level * 0.25) / Math.sqrt(spec.top / (track.sampleRate / 2));
+  passing(track, spec, { filter: 'lowpass', resonance: 0.6, level });
 }
