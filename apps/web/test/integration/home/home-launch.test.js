@@ -6,10 +6,11 @@ import {
   bootWithSteelAndDust,
   byId,
   cards,
-  loadHomeMarkup,
   press,
   stopHomes,
   tiles,
+  waitUntil,
+  restoreFromCache,
 } from '../../support/home-harness.js';
 
 const SCREEN = { left: 0, top: 0, width: 400, height: 800 };
@@ -40,19 +41,11 @@ function stubLayout(overrides = {}) {
 const cardFrame = () => cards()[0].querySelector('.card__frame');
 
 const layer = () => document.querySelector('.launch');
-// happy-dom's PageTransitionEvent drops the persisted flag, so the event carries it by hand.
-function restoreFromCache(persisted = true) {
-  const event = new Event('pageshow');
-  Object.defineProperty(event, 'persisted', { value: persisted });
-  window.dispatchEvent(event);
-}
-
 const isMarkedLaunching = () => document.documentElement.classList.contains('is-launching');
 
 beforeEach(async () => {
   document.body.innerHTML = '';
   document.documentElement.classList.remove('is-launching');
-  await loadHomeMarkup();
   vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(SCREEN.height);
 });
 
@@ -90,7 +83,7 @@ describe('launching a game', () => {
     expect(isMarkedLaunching()).toBe(true);
     expect(navigate).not.toHaveBeenCalled();
 
-    await vi.waitFor(() => expect(navigate).toHaveBeenCalledWith('games/steel-and-dust/'));
+    await waitUntil(() => expect(navigate).toHaveBeenCalledWith('games/steel-and-dust/'));
   });
 
   it('opens from the library tile when the carousel has scrolled out of sight', async () => {
@@ -110,7 +103,7 @@ describe('launching a game', () => {
     expect(press('ArrowRight').defaultPrevented).toBe(false);
     press('Enter');
     expect(byId('spotlight-title').textContent).toBe('alpha');
-    await vi.waitFor(() => expect(navigate).toHaveBeenCalled());
+    await waitUntil(() => expect(navigate).toHaveBeenCalled());
     expect(navigate.mock.calls).toEqual([['games/alpha/']]);
     expect(document.querySelectorAll('.launch')).toHaveLength(1);
   });
@@ -131,17 +124,16 @@ describe('coming back from a game', () => {
   async function launchAndLeave() {
     const started = await bootWithRealCatalog();
     press('Enter');
-    await vi.waitFor(() => expect(started.navigate).toHaveBeenCalled());
+    await waitUntil(() => expect(started.navigate).toHaveBeenCalled());
     return started;
   }
 
   it('shrinks the panel back into the card when the page is restored from the cache', async () => {
-    const { home } = await launchAndLeave();
+    await launchAndLeave();
     expect(layer()).not.toBeNull();
     restoreFromCache();
-    await vi.waitFor(() => expect(layer()).toBeNull());
+    await waitUntil(() => expect(layer()).toBeNull());
     expect(cardFrame().classList.contains('is-launching')).toBe(false);
-    expect(home.launcher.isFlying()).toBe(false);
     expect(byId('home').getAnimations()).toEqual([]);
     expect(byId('home').style.transformOrigin).toBe('');
     expect(isMarkedLaunching()).toBe(false);
@@ -150,9 +142,9 @@ describe('coming back from a game', () => {
   it('can open a game again after coming back', async () => {
     const { navigate } = await launchAndLeave();
     restoreFromCache();
-    await vi.waitFor(() => expect(layer()).toBeNull());
+    await waitUntil(() => expect(layer()).toBeNull());
     press('Enter');
-    await vi.waitFor(() => expect(navigate).toHaveBeenCalledTimes(2));
+    await waitUntil(() => expect(navigate).toHaveBeenCalledTimes(2));
   });
 
   it('leaves the page alone on an ordinary page show', async () => {
@@ -166,17 +158,17 @@ describe('coming back from a game', () => {
     await launchAndLeave();
     byId('carousel-track').innerHTML = '';
     restoreFromCache();
-    await vi.waitFor(() => expect(layer()).toBeNull());
+    await waitUntil(() => expect(layer()).toBeNull());
   });
 
   it('brings the Recent list up to date with the game just played', async () => {
     const { navigate } = await bootWithRealCatalog();
-    document.querySelector('[data-filter="recent"]').click();
+    document.querySelector('[data-value="recent"]').click();
     press('Enter');
-    await vi.waitFor(() => expect(navigate).toHaveBeenCalled());
+    await waitUntil(() => expect(navigate).toHaveBeenCalled());
     expect(tiles()).toHaveLength(0);
     restoreFromCache();
-    await vi.waitFor(() => expect(layer()).toBeNull());
+    await waitUntil(() => expect(layer()).toBeNull());
     expect(tiles()).toHaveLength(1);
   });
 });

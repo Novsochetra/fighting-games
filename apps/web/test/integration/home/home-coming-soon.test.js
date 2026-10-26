@@ -8,18 +8,17 @@ import {
   cards,
   centerCard,
   click,
-  loadHomeMarkup,
   press,
   spotlightTitle,
   stopHomes,
   tiles,
+  onPage,
 } from '../../support/home-harness.js';
 
 const teasers = () => cards().filter((card) => card.querySelector('.art--soon'));
 
 beforeEach(async () => {
   document.body.innerHTML = '';
-  await loadHomeMarkup();
 });
 
 afterEach(stopHomes);
@@ -53,7 +52,7 @@ describe('the Coming Soon teasers', () => {
     press('ArrowLeft');
     expect(byId('hero').dataset.backdrop).toBe('art');
     expect(byId('play-label').textContent).toBe('Play');
-    expect(byId('play').getAttribute('href')).toBe('games/steel-and-dust/');
+    expect(byId('play').getAttribute('href')).toBe(onPage('games/steel-and-dust/'));
     expect(byId('details-open').hidden).toBe(false);
     expect(byId('favorite').hidden).toBe(false);
   });

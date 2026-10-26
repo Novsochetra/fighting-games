@@ -10,7 +10,7 @@ import {
   CONSENT_KEY,
   createAnalytics,
   isConsentChoice,
-} from '../../../src/home/analytics.js';
+} from '../../../src/home/analytics.ts';
 import { createMemoryStorage } from '../../../src/home/preferences.js';
 
 function setup({ isEnabled = true, choice = null } = {}) {

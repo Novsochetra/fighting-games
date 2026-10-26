@@ -1,23 +1,24 @@
 // @vitest-environment happy-dom
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { WEB_ROOT } from '../../../../server/src/paths.js';
-import { stylesheetsOf } from '../../support/arcade-pages.js';
-import { byId, loadHomeMarkup } from '../../support/home-harness.js';
+import { bootWithRealCatalog, byId, onPage, stopHomes } from '../../support/home-harness.js';
 
 // The arcade's bar stays at the top as the arcade scrolls, like an iOS 26 navigation bar, and the
 // arcade fades out under it as soon as it passes under (scroll-edge.test.js holds every bar to that).
-const HOME = path.join(WEB_ROOT, 'index.html');
 const TOPBAR = path.join(WEB_ROOT, 'src', 'home', 'topbar.css');
 const TOKENS = path.join(WEB_ROOT, 'src', 'home', 'tokens.css');
 const RANGE = ['--scroll-home-condense-start', '--scroll-home-condense-end'];
 
-const cssOf = async (file) => (await stylesheetsOf(HOME)).find((sheet) => sheet.file === file)?.css;
+const cssOf = (file) => readFile(file, 'utf8');
 
 beforeEach(async () => {
   document.body.innerHTML = '';
-  await loadHomeMarkup();
+  await bootWithRealCatalog();
 });
+
+afterEach(stopHomes);
 
 describe("the arcade's bar", () => {
   it('heads the home outside the hero, so the hero scrolling away leaves it in place', () => {
@@ -25,6 +26,13 @@ describe("the arcade's bar", () => {
     expect(byId('home').firstElementChild).toBe(bar);
     expect(bar.nextElementSibling).toBe(byId('hero'));
     expect(byId('hero').contains(bar)).toBe(false);
+  });
+
+  it('shows the logo beside the title', () => {
+    const logo = document.querySelector('#home-title > img.topbar__logo');
+
+    expect(logo.getAttribute('src')).toBe(onPage('assets/icons/icon-192.png'));
+    expect(logo.getAttribute('alt')).toBe('');
   });
 
   it('keeps the arcade named and its buttons in reach', () => {

@@ -6,7 +6,8 @@ import {
   cards,
   centerCard,
   click,
-  loadHomeMarkup,
+  dispatch,
+  onPage,
   press,
   selectedTile,
   spotlightTitle,
@@ -15,15 +16,12 @@ import {
 } from '../../support/home-harness.js';
 
 const pointer = (type, target, { x, y = 100 }) =>
-  target.dispatchEvent(
-    new PointerEvent(type, { bubbles: true, clientX: x, clientY: y, button: 0 }),
-  );
+  dispatch(target, new PointerEvent(type, { bubbles: true, clientX: x, clientY: y, button: 0 }));
 
 const activeDot = () => [...byId('pager').children].findIndex((dot) => dot.matches('.is-active'));
 
 beforeEach(async () => {
   document.body.innerHTML = '';
-  await loadHomeMarkup();
 });
 
 afterEach(() => {
@@ -50,7 +48,7 @@ describe('browsing the carousel', () => {
     expect(centerCard()).toBe(cards()[2]);
     expect(activeDot()).toBe(2);
     expect(selectedTile()).toBe(tiles()[2]);
-    expect(byId('play').getAttribute('href')).toBe('games/charlie/');
+    expect(byId('play').getAttribute('href')).toBe(onPage('games/charlie/'));
   });
 
   it('lays the cards out by their distance from the center one', async () => {
@@ -120,8 +118,8 @@ describe('browsing the carousel', () => {
   it('moves one card per sideways trackpad swipe', async () => {
     await bootWithGames(['alpha', 'bravo', 'charlie']);
     const wheel = new WheelEvent('wheel', { deltaX: 120, deltaY: 4, cancelable: true });
-    byId('carousel').dispatchEvent(wheel);
-    byId('carousel').dispatchEvent(new WheelEvent('wheel', { deltaX: 120, cancelable: true }));
+    dispatch(byId('carousel'), wheel);
+    dispatch(byId('carousel'), new WheelEvent('wheel', { deltaX: 120, cancelable: true }));
     expect(wheel.defaultPrevented).toBe(true);
     expect(spotlightTitle()).toBe('bravo');
   });

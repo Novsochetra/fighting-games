@@ -1,9 +1,10 @@
 // @vitest-environment happy-dom
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { WEB_ROOT } from '../../../../server/src/paths.js';
-import { CREDITS_PAGE, loadCreditsMarkup } from '../../support/credits-harness.js';
+import { ORIGIN, stopArcades } from '../../support/arcade-harness.js';
+import { CREDITS_PAGE, openCredits } from '../../support/credits-harness.js';
 import { claimedAndRealSize } from '../../support/jpeg-size.js';
 
 const SOCIAL_LINKS = [
@@ -12,19 +13,24 @@ const SOCIAL_LINKS = [
   'https://www.facebook.com/sochetra.nov.7',
 ];
 
-const all = (selector) => [...document.querySelectorAll(selector)];
-const isOutside = (link) => /^[a-z]+:/i.test(link.getAttribute('href'));
+let screen = null;
+
+const one = (selector) => screen.querySelector(selector);
+const all = (selector) => [...screen.querySelectorAll(selector)];
+const isOutside = (link) => new URL(link.href).origin !== new URL(ORIGIN).origin;
 const textOf = (element) => element.textContent.trim();
 
-beforeEach(async () => {
+beforeEach(() => {
   document.body.innerHTML = '';
-  await loadCreditsMarkup();
+  screen = openCredits();
 });
+
+afterEach(stopArcades);
 
 describe('the credits page', () => {
   it('names the maker in the large title and in the bar that takes over from it', () => {
-    expect(textOf(document.querySelector('h1'))).toBe('Nov Sochetra');
-    expect(textOf(document.getElementById('credits-bar-title'))).toBe('Nov Sochetra');
+    expect(textOf(one('h1'))).toBe('Nov Sochetra');
+    expect(textOf(one('#credits-bar-title'))).toBe('Nov Sochetra');
   });
 
   it('links to the maker on Buy Me a Coffee first, then GitHub and Facebook', () => {
@@ -54,24 +60,22 @@ describe('the credits page', () => {
   });
 
   it('leads back to the arcade, named even where a phone shows its chevron alone', () => {
-    const back = document.querySelector('[data-screen="credits"] [data-back]');
-    expect(back.getAttribute('href')).toBe('../');
+    const back = one('[data-back]');
+    expect(back.getAttribute('href')).toBe(ORIGIN);
     expect(back.getAttribute('aria-label')).toBe('Arcade');
   });
 
   it('leads on to the supporters page', async () => {
-    expect(document.getElementById('credits-supporters-link').getAttribute('href')).toBe(
-      '../supporters/',
-    );
+    expect(one('#credits-supporters-link').href).toBe(`${ORIGIN}supporters/`);
     const supporters = await stat(path.join(WEB_ROOT, 'supporters', 'index.html'));
     expect(supporters.isFile()).toBe(true);
   });
 
   it("sets the maker's photo on the edge of their childhood one, each the size of its file", async () => {
-    const cover = document.querySelector('.cover__photo');
-    const portrait = document.querySelector('.maker__photo');
+    const cover = one('.cover__photo');
+    const portrait = one('.maker__photo');
     expect(cover.getAttribute('alt')).toMatch(/brother/);
-    expect(textOf(document.querySelector('.cover__caption'))).toBe('Me and my brother');
+    expect(textOf(one('.cover__caption'))).toBe('Me and my brother');
     for (const photo of [cover, portrait]) {
       const { claimed, real } = await claimedAndRealSize(photo, CREDITS_PAGE);
       expect(real).toBe(claimed);

@@ -3,21 +3,19 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createMemoryStorage, STORAGE_KEYS } from '../../../src/home/preferences.js';
 import { CUES } from '../../../src/home/sound-cues.js';
 import { createFakeAudioContext } from '../../support/fake-audio.js';
-import { createFakeInstaller, DAY_MS, offerInstall } from '../../support/fake-installer.js';
 import {
-  bootWithRealCatalog,
-  byId,
-  click,
-  loadHomeMarkup,
-  stopHomes,
-} from '../../support/home-harness.js';
+  createFakeInstaller,
+  DAY_MS,
+  offerInstall,
+  installApp,
+} from '../../support/fake-installer.js';
+import { bootWithRealCatalog, byId, click, onPage, stopHomes } from '../../support/home-harness.js';
 
 const banner = () => byId('install');
 const offer = () => (banner().hidden ? null : banner().dataset.offer);
 
 beforeEach(async () => {
   document.body.innerHTML = '';
-  await loadHomeMarkup();
 });
 
 afterEach(() => {
@@ -36,7 +34,7 @@ describe('the install banner', () => {
     expect(prompt.defaultPrevented).toBe(true);
     expect(offer()).toBe('prompt');
     expect(banner().querySelector('.install__icon').getAttribute('src')).toBe(
-      'assets/icons/icon-192.png',
+      onPage('assets/icons/icon-192.png'),
     );
   });
 
@@ -54,7 +52,7 @@ describe('the install banner', () => {
     await prompt.userChoice;
     expect(storage.read(STORAGE_KEYS.installDismissedAt)).toBeNull();
 
-    installer.events.dispatchEvent(new Event('appinstalled'));
+    installApp(installer);
     expect(offer()).toBeNull();
   });
 

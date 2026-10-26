@@ -3,7 +3,6 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
   bootWithGames,
   cards,
-  loadHomeMarkup,
   press,
   spotlightTitle,
   stopHomes,
@@ -19,7 +18,6 @@ const pointer = (type, target, { x, y }) =>
 
 beforeEach(async () => {
   document.body.innerHTML = '';
-  await loadHomeMarkup();
 });
 
 afterEach(stopHomes);

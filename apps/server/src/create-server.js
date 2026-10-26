@@ -16,9 +16,10 @@ export function createArcadeServer({
   limiter,
   warn = console.warn,
   logError = console.error,
+  serveFiles,
 } = {}) {
   const routes = createApiRoutes({ gamesRoot, supporters, trustProxy, limiter, warn, logError });
-  const serveStatic = createStaticHandler({ webRoot });
+  const serveStatic = serveFiles ?? createStaticHandler({ webRoot });
   return http.createServer((request, response) => {
     dispatch({ request, response, routes, serveStatic }).catch((error) => {
       logError(error);

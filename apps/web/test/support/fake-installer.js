@@ -1,3 +1,4 @@
+import { act } from '@testing-library/react';
 import { vi } from 'vitest';
 
 export const DAY_MS = 24 * 60 * 60 * 1000;
@@ -21,6 +22,13 @@ export function offerInstall(installer, outcome = 'accepted') {
   const event = new Event('beforeinstallprompt', { cancelable: true });
   event.prompt = vi.fn(async () => {});
   event.userChoice = Promise.resolve({ outcome, platform: 'web' });
-  installer.events.dispatchEvent(event);
+  act(() => {
+    installer.events.dispatchEvent(event);
+  });
   return event;
 }
+
+export const installApp = (installer) =>
+  act(() => {
+    installer.events.dispatchEvent(new Event('appinstalled'));
+  });

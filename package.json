@@ -9,10 +9,11 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev": "node --watch apps/server/src/main.js",
+    "dev": "node --watch-path=apps/server/src apps/server/src/main.js --dev",
     "start": "node apps/server/src/main.js",
     "db:migrate": "node apps/server/src/db/migrate-cli.js",
-    "build": "node scripts/build-site.js",
+    "build": "vite build --config apps/web/vite.config.ts",
+    "typecheck": "tsc -p tsconfig.json",
     "lint": "eslint . && stylelint \"apps/**/*.css\"",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -20,7 +21,7 @@
     "test:unit": "vitest run --project unit",
     "test:integration": "vitest run --project integration",
     "test:regression": "vitest run --project regression",
-    "check": "npm run lint && npm run format:check && npm test",
+    "check": "npm run lint && npm run format:check && npm run typecheck && npm test && npm run build",
     "prepare": "git config core.hooksPath .githooks || true"
   },
   "devDependencies": {
@@ -28,11 +29,14 @@
     "@eslint/js": "^10.0.1",
     "eslint": "^10.13.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.13.0",
     "happy-dom": "^21.0.3",
     "prettier": "^3.9.10",
     "railway": "^3.16.0",
     "stylelint": "^17.16.0",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.0",
     "vitest": "^5.0.5"
   }
 }

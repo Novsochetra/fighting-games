@@ -1,12 +1,6 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  bootWithGames,
-  byId,
-  click,
-  loadHomeMarkup,
-  stopHomes,
-} from '../../support/home-harness.js';
+import { bootWithGames, byId, click, stopHomes } from '../../support/home-harness.js';
 
 // Bug: the carousel did not look like it slid. With one game and two teasers, every step took the card
 // on one edge round the loop: it blinked out there and faded in on the other edge while the other two
@@ -28,7 +22,6 @@ function recordSlots(card) {
 
 beforeEach(async () => {
   document.body.innerHTML = '';
-  await loadHomeMarkup();
   document.documentElement.style.setProperty('--duration-carousel', '550ms');
 });
 

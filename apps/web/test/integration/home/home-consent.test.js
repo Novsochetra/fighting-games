@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { CONSENT_KEY } from '../../../src/home/analytics.js';
+import { CONSENT_KEY } from '../../../src/home/analytics.ts';
 import { createMemoryStorage, STORAGE_KEYS } from '../../../src/home/preferences.js';
 import {
   clearBannerClasses,
@@ -8,13 +8,7 @@ import {
   storageWithConsent,
 } from '../../support/fake-analytics.js';
 import { createFakeInstaller } from '../../support/fake-installer.js';
-import {
-  bootWithRealCatalog,
-  byId,
-  click,
-  loadHomeMarkup,
-  stopHomes,
-} from '../../support/home-harness.js';
+import { bootWithRealCatalog, byId, click, stopHomes } from '../../support/home-harness.js';
 
 const isAsking = () => !byId('consent').hidden;
 const holdsOthersBack = () => document.documentElement.classList.contains('has-consent-banner');
@@ -27,14 +21,12 @@ async function bootLive(storage = createMemoryStorage(), options = {}) {
 
 async function bootAgain(storage) {
   stopHomes();
-  await loadHomeMarkup();
   return bootLive(storage);
 }
 
 beforeEach(async () => {
   document.body.innerHTML = '';
   clearBannerClasses();
-  await loadHomeMarkup();
 });
 
 afterEach(stopHomes);

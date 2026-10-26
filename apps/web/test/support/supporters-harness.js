@@ -1,10 +1,6 @@
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
+import { fireEvent, waitFor } from '@testing-library/react';
 import { expect, vi } from 'vitest';
-import { WEB_ROOT } from '../../../server/src/paths.js';
-import { bootSupporters } from '../../src/supporters/boot.js';
-
-export const SUPPORTERS_PAGE = path.join(WEB_ROOT, 'supporters', 'index.html');
+import { renderArcade, unmountArcade } from './render-arcade.tsx';
 
 export const samplePayload = () => ({
   currency: 'USD',
@@ -30,39 +26,51 @@ export function fakeApi({ payload = samplePayload(), postReply } = {}) {
     if (options.method !== 'POST') {
       return jsonReply(payload);
     }
+
     const body = JSON.parse(options.body);
+
     posts.push({ url, body, headers: options.headers });
+
     if (postReply) {
       return postReply(body);
     }
+
     const supporter = { ...body, date: '2026-10-24' };
+
     payload.supporters.push(supporter);
+
     return jsonReply({ supporter }, 201);
   });
+
   return { fetchFn, posts };
 }
 
-// Only the body: the head's stylesheet and module links would make happy-dom try to fetch them.
-export async function loadSupportersMarkup() {
-  const html = await readFile(SUPPORTERS_PAGE, 'utf8');
-  const [, bodyMarkup] = /<body[^>]*>([\s\S]*)<\/body>/.exec(html);
-  expect(bodyMarkup).not.toMatch(/<script|<link/);
-  document.body.innerHTML = bodyMarkup;
-}
+export const byId = (id) => document.getElementById(id);
 
-const booted = [];
+const isSettled = () => {
+  const notice = byId('supporters-notice');
 
-export async function bootPage(fetchFn, options = {}) {
-  const page = bootSupporters({ document, fetch: fetchFn, locale: 'en-US', ...options });
-  booted.push(page);
-  await page.ready;
+  return notice.hidden || notice.dataset.tone === 'error';
+};
+
+// Opens the arcade on the supporters screen and waits for the list (or its error) to show.
+export async function bootPage(fetchFn, { path = '/supporters/', ...options } = {}) {
+  const page = renderArcade({ path, fetch: fetchFn, ...options });
+
+  await waitFor(() => expect(isSettled()).toBe(true));
+
   return page;
 }
 
-export const stopPages = () => booted.splice(0).forEach((page) => page.stop());
+export const stopPages = () => unmountArcade();
 
-export const byId = (id) => document.getElementById(id);
 export const texts = (selector) =>
   [...document.querySelectorAll(selector)].map((element) => element.textContent.trim());
-export const click = (target) =>
-  target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, button: 0 }));
+
+export const click = (target) => fireEvent.click(target);
+
+export const type = (id, value) => fireEvent.input(byId(id), { target: { value } });
+
+export const submit = (id) => fireEvent.submit(byId(id));
+
+export const apiUrl = (page) => new URL('api/supporters', page.root).href;

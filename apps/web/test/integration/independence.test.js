@@ -5,10 +5,13 @@ import { GAMES_ROOT, WEB_ROOT } from '../../../server/src/paths.js';
 
 // Each game is its own app: it brings its own tokens, styles, modules and assets, and the home page
 // knows a game only through its game.json. A shared file would tie every game to the arcade.
-const SOURCE_FILE = /\.(js|css|html)$/;
+const SOURCE_FILE = /\.(js|ts|tsx|css|html)$/;
+const MODULE_REFERENCE = /(?:\bfrom|\bimport)\s*\(?\s*['"]([^'"]+)['"]/g;
 
 const REFERENCE_PATTERNS = {
-  '.js': /(?:\bfrom|\bimport)\s*\(?\s*['"]([^'"]+)['"]/g,
+  '.js': MODULE_REFERENCE,
+  '.ts': MODULE_REFERENCE,
+  '.tsx': MODULE_REFERENCE,
   '.html': /\b(?:href|src)="([^"]+)"/g,
   '.css': /url\(\s*['"]?([^'")]+)['"]?\s*\)|@import\s+['"]([^'"]+)['"]/g,
 };

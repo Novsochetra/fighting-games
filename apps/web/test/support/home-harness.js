@@ -1,10 +1,11 @@
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
+import { act } from '@testing-library/react';
 import { expect, vi } from 'vitest';
 import { serializeCatalog } from '../../../server/src/catalog/build-catalog.js';
 import { loadCatalog } from '../../../server/src/catalog/read-catalog.js';
-import { GAMES_ROOT, WEB_ROOT } from '../../../server/src/paths.js';
-import { bootHome } from '../../src/home/boot.js';
+import { GAMES_ROOT } from '../../../server/src/paths.js';
+import { renderArcade, unmountArcade, waitUntil } from './render-arcade.tsx';
+
+export { waitUntil };
 
 export const realCatalogJson = async () =>
   serializeCatalog(await loadCatalog({ gamesRoot: GAMES_ROOT, warn: () => {} }));
@@ -15,30 +16,37 @@ export const jsonReply = (body, status = 200) => ({
   json: async () => JSON.parse(body),
 });
 
-// Only the body: the head's stylesheet and module links would make happy-dom try to fetch them.
-export async function loadHomeMarkup() {
-  const html = await readFile(path.join(WEB_ROOT, 'index.html'), 'utf8');
-  const [, bodyMarkup] = /<body[^>]*>([\s\S]*)<\/body>/.exec(html);
-  expect(bodyMarkup).not.toMatch(/<script|<link/);
-  document.body.innerHTML = bodyMarkup;
+// The arcade's harness took the parts of a boot: the clock as the visit's, Google's tag as analytics.
+function portsOf({ visit, analytics, ...ports }) {
+  return { ...ports, now: visit?.now, analyticsTag: analytics };
 }
-
-const bootedHomes = [];
 
 export function startHome(fetchFn, options = {}) {
   const navigate = vi.fn();
-  const home = bootHome({ document, fetch: fetchFn, navigate, ...options });
-  bootedHomes.push(home);
-  return { navigate, home };
+  const page = renderArcade({ fetch: fetchFn, navigate, ...portsOf(options) });
+  const { preferences, appearance, analytics } = page.arcade;
+
+  return { navigate, page, home: { preferences, appearance, analytics } };
 }
+
+const isSettled = () => {
+  const notice = byId('notice');
+
+  return notice.hidden || notice.dataset.tone !== 'loading';
+};
+
+// Until the games, or what kept them away, show.
+export const settled = () => waitUntil(() => expect(isSettled()).toBe(true));
 
 export async function boot(fetchFn, options) {
   const started = startHome(fetchFn, options);
-  await started.home.ready;
+
+  await settled();
+
   return started;
 }
 
-export const stopHomes = () => bootedHomes.splice(0).forEach((home) => home.stop());
+export const stopHomes = () => unmountArcade();
 
 export async function bootWithGames(ids, options) {
   const { games } = JSON.parse(await realCatalogJson());
@@ -60,17 +68,40 @@ export const bootWithRealCatalog = async (options) => {
   return { body, ...(await boot(async () => jsonReply(body), options)) };
 };
 
-export const press = (key, target = document) => {
-  const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true });
-  target.dispatchEvent(event);
+// Each in act, so React has drawn what it did before the test looks.
+export const dispatch = (target, event) => {
+  act(() => {
+    target.dispatchEvent(event);
+  });
+
   return event;
 };
 
-export const click = (target, init = {}) => {
-  const event = new MouseEvent('click', { bubbles: true, cancelable: true, button: 0, ...init });
-  target.dispatchEvent(event);
-  return event;
-};
+export const press = (key, target = document) =>
+  dispatch(target, new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+
+export const click = (target, init = {}) =>
+  dispatch(
+    target,
+    new MouseEvent('click', { bubbles: true, cancelable: true, button: 0, ...init }),
+  );
+
+// The clock, faked by the test, moved in act so React draws what its timers did.
+export const tick = (ms) => act(() => vi.advanceTimersByTime(ms));
+
+export const runTimers = () => act(() => vi.runAllTimers());
+
+// The browser bringing the arcade back from its back/forward cache, as after Back from a game;
+// happy-dom's PageTransitionEvent drops the persisted flag, so the event carries it by hand.
+export function restoreFromCache(persisted = true) {
+  const event = new Event('pageshow');
+
+  Object.defineProperty(event, 'persisted', { value: persisted });
+  dispatch(window, event);
+}
+
+// An address on the page, which the arcade resolves against its own root.
+export const onPage = (path) => new URL(path, window.location.href).href;
 
 export const byId = (id) => document.getElementById(id);
 export const cards = () => [...document.querySelectorAll('#carousel-track .card')];

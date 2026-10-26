@@ -3,14 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CUES } from '../../../src/home/sound-cues.js';
 import { STORAGE_KEYS, createMemoryStorage } from '../../../src/home/preferences.js';
 import { createFakeAudioContext } from '../../support/fake-audio.js';
-import {
-  bootWithGames,
-  byId,
-  click,
-  loadHomeMarkup,
-  press,
-  stopHomes,
-} from '../../support/home-harness.js';
+import { bootWithGames, byId, click, press, stopHomes } from '../../support/home-harness.js';
 
 const setup = async (storage = createMemoryStorage()) => {
   const context = createFakeAudioContext();
@@ -24,7 +17,6 @@ const setup = async (storage = createMemoryStorage()) => {
 
 beforeEach(async () => {
   document.body.innerHTML = '';
-  await loadHomeMarkup();
 });
 
 afterEach(stopHomes);
@@ -47,7 +39,7 @@ describe('sound effects', () => {
   it('plays a cue for the heart, the segmented control and the details sheet', async () => {
     const { context } = await setup();
     click(byId('favorite'));
-    click(document.querySelector('[data-filter="recent"]'));
+    click(document.querySelector('[data-value="recent"]'));
     click(byId('details-open'));
     click(byId('details-close'));
     const expected = ['favoriteOn', 'switch', 'sheetOpen', 'sheetClose'];

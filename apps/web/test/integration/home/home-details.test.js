@@ -4,7 +4,7 @@ import {
   bootWithSteelAndDust,
   byId,
   click,
-  loadHomeMarkup,
+  onPage,
   press,
   stopHomes,
 } from '../../support/home-harness.js';
@@ -13,7 +13,6 @@ const dialog = () => byId('details');
 
 beforeEach(async () => {
   document.body.innerHTML = '';
-  await loadHomeMarkup();
 });
 
 afterEach(stopHomes);
@@ -28,9 +27,9 @@ describe('the details sheet', () => {
     const chips = [...byId('details-controls').children].map((chip) => chip.textContent);
     expect(chips).toEqual(['Keyboard', 'Gamepad', 'Touch']);
     expect(byId('details-art').getAttribute('src')).toBe(
-      'games/steel-and-dust/assets/screenshots/angkor-wat.png',
+      onPage('games/steel-and-dust/assets/screenshots/angkor-wat.png'),
     );
-    expect(byId('details-play').getAttribute('href')).toBe('games/steel-and-dust/');
+    expect(byId('details-play').getAttribute('href')).toBe(onPage('games/steel-and-dust/'));
   });
 
   it('closes with its button, with Escape and with a click on the dimmed page', async () => {

@@ -1,6 +1,8 @@
 import js from '@eslint/js';
 import prettier from 'eslint-config-prettier';
+import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
+import tseslint from 'typescript-eslint';
 import { localRules } from './tools/eslint-rules/index.js';
 
 const sizeAndComplexity = {
@@ -28,6 +30,14 @@ const readability = {
   'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
 };
 
+// TypeScript's own versions of the rules it would otherwise misread, as with a type used as a value
+const typescript = {
+  'no-unused-vars': 'off',
+  '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+  'no-shadow': 'off',
+  '@typescript-eslint/no-shadow': 'error',
+};
+
 const comments = {
   'no-warning-comments': [
     'error',
@@ -47,9 +57,15 @@ export default [
     languageOptions: { ecmaVersion: 'latest', sourceType: 'module', globals: globals.node },
     rules: { ...sizeAndComplexity, ...readability, ...comments },
   },
+  ...tseslint.configs.recommended.map((config) => ({ ...config, files: ['**/*.{ts,tsx}'] })),
   {
-    files: ['apps/web/**/*.js'],
-    ignores: ['apps/web/**/test/**'],
+    files: ['**/*.{ts,tsx}'],
+    plugins: reactHooks.configs.flat.recommended.plugins,
+    rules: { ...reactHooks.configs.flat.recommended.rules, ...typescript },
+  },
+  {
+    files: ['apps/web/**/*.{js,ts,tsx}'],
+    ignores: ['apps/web/**/test/**', 'apps/web/vite.config.ts'],
     languageOptions: { globals: globals.browser },
     rules: { 'local/no-raw-hex': 'error' },
   },
@@ -58,7 +74,7 @@ export default [
     rules: { 'local/no-raw-hex': 'off' },
   },
   {
-    files: ['**/test/**/*.js'],
+    files: ['**/test/**/*.{js,ts,tsx}'],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
     rules: {
       'max-lines-per-function': 'off',

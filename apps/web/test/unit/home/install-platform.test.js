@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
-import { browserInstaller } from '../../../src/home/install-platform.js';
+import { browserInstaller as installerAt } from '../../../src/home/install-platform.js';
+
+// the arcade opened on its supporters screen still keeps its worker at its own root
+const ROOT = new URL('https://arcade.test/');
+const browserInstaller = (window) => installerAt(window, ROOT);
 
 function fakeWindow({ modes = [], standalone, canPrompt = true, register } = {}) {
   const window = {
@@ -25,11 +29,11 @@ describe('browserInstaller', () => {
     expect(browserInstaller(fakeWindow({ standalone: true })).isInstalled()).toBe(true);
   });
 
-  it('registers the service worker next to the page where the browser can prompt', async () => {
+  it('registers the service worker at the arcade root where the browser can prompt', async () => {
     const register = vi.fn(async () => ({ scope: 'http://localhost/' }));
     const installer = browserInstaller(fakeWindow({ register }));
     await expect(installer.registerWorker()).resolves.toEqual({ scope: 'http://localhost/' });
-    expect(register).toHaveBeenCalledWith('sw.js');
+    expect(register).toHaveBeenCalledWith(new URL('https://arcade.test/sw.js'));
   });
 
   it('leaves the worker out of browsers without an install prompt', async () => {

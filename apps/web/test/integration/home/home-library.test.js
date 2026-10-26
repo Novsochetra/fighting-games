@@ -6,19 +6,17 @@ import {
   bootWithGames,
   byId,
   click,
-  loadHomeMarkup,
   press,
   stopHomes,
   tileTitles,
   tiles,
 } from '../../support/home-harness.js';
 
-const filter = (name) => document.querySelector(`#filters [data-filter="${name}"]`);
+const filter = (name) => document.querySelector(`#filters [data-value="${name}"]`);
 const libraryTitle = () => byId('library-title').textContent;
 
 beforeEach(async () => {
   document.body.innerHTML = '';
-  await loadHomeMarkup();
 });
 
 afterEach(stopHomes);
@@ -73,7 +71,6 @@ describe('favorites', () => {
     await bootWithGames(['alpha', 'bravo'], { storage });
     click(byId('favorite'));
     stopHomes();
-    await loadHomeMarkup();
     await bootWithGames(['alpha', 'bravo'], { storage });
     expect(byId('favorite').getAttribute('aria-pressed')).toBe('true');
   });
@@ -91,7 +88,6 @@ describe('recently played', () => {
     expect(libraryTitle()).toBe('Recently Played');
     expect(tileTitles()).toEqual(['charlie', 'alpha']);
     stopHomes();
-    await loadHomeMarkup();
     await bootWithGames(['alpha', 'bravo', 'charlie'], { storage });
     expect(byId('spotlight-title').textContent).toBe('charlie');
   });

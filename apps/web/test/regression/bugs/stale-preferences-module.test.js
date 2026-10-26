@@ -4,8 +4,8 @@ import { clearBannerClasses, createFakeAnalytics } from '../../support/fake-anal
 import {
   cards,
   jsonReply,
-  loadHomeMarkup,
   realCatalogJson,
+  settled,
   startHome,
   stopHomes,
 } from '../../support/home-harness.js';
@@ -26,7 +26,6 @@ vi.mock('../../../src/home/preferences.js', async (importOriginal) => {
 beforeEach(async () => {
   document.body.innerHTML = '';
   clearBannerClasses();
-  await loadHomeMarkup();
 });
 
 afterEach(stopHomes);
@@ -35,8 +34,8 @@ describe('the home page on an older preferences.js', () => {
   it('still boots, shows the games and asks the analytics question', async () => {
     const body = await realCatalogJson();
     const { setup } = createFakeAnalytics();
-    const { home } = startHome(async () => jsonReply(body), { analytics: setup });
-    await home.ready;
+    startHome(async () => jsonReply(body), { analytics: setup });
+    await settled();
     expect(cards().length).toBeGreaterThan(0);
     expect(document.getElementById('consent').hidden).toBe(false);
   });

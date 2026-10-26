@@ -1,19 +1,21 @@
 # Project rules
 
-A retro arcade: a Node server with a games API, a home page that lists the games, and the games
-themselves. Read `docs/architecture.md` before changing structure.
+A retro arcade: a Node server with a games API, the arcade itself (a React and TypeScript app, built
+by Vite, whose home lists the games), and the games themselves. Read `docs/architecture.md` before
+changing structure.
 
 ## Commands
 
-| Command              | What it runs                                                        |
-| -------------------- | ------------------------------------------------------------------- |
-| `npm run dev`        | the server on http://localhost:8765, restarting on change           |
-| `npm run check`      | lint, format check and every test; run it before you call work done |
-| `npm run lint`       | ESLint and Stylelint                                                |
-| `npm run format`     | Prettier, writes files                                              |
-| `npm test`           | all Vitest projects: `unit`, `integration`, `regression`            |
-| `npm run build`      | a static copy of the site in `dist/` (Railway serves the source)    |
-| `npm run db:migrate` | applies new migrations to the Postgres at `DATABASE_URL`            |
+| Command              | What it runs                                                       |
+| -------------------- | ------------------------------------------------------------------ |
+| `npm run dev`        | the server on http://localhost:8765 with Vite, reloading on change |
+| `npm run check`      | lint, format, types, every test and the build; run it before done  |
+| `npm run lint`       | ESLint and Stylelint                                               |
+| `npm run format`     | Prettier, writes files                                             |
+| `npm run typecheck`  | TypeScript over the arcade (`tsconfig.json`)                       |
+| `npm test`           | all Vitest projects: `unit`, `integration`, `regression`           |
+| `npm run build`      | the arcade into `dist/`, which `npm start` and Railway serve       |
+| `npm run db:migrate` | applies new migrations to the Postgres at `DATABASE_URL`           |
 
 ## Coding
 
@@ -85,22 +87,25 @@ A game hosted on its own site keeps only `game.json` (with an `https:` `url`) an
 
 ## Pages of the arcade
 
-A page of the arcade that is not a game (like `credits/` and `supporters/`) lives in
-`apps/web/<name>/index.html` and is a screen of the one-page arcade (`src/arcade/`, see "One page" in
-`docs/architecture.md`), without being asked each time:
+A page of the arcade that is not a game (like `credits/` and `supporters/`) is a screen of the one
+React app (`src/arcade/`, see "One app" in `docs/architecture.md`), without being asked each time:
 
-- it loads `src/arcade/screens.css` and starts the shell, `src/arcade/main.js`, as its only module;
-  its body is one screen, `<div data-screen="<name>" tabindex="-1">`, listed in `SCREENS`
-  (`src/arcade/routes.js`) under its path, with its boot in `src/arcade/arcade.js`, so a tap between
-  screens changes the screen in the page and slides like an iOS screen,
-- its Back is `<a data-back href="../">` (named with `aria-label` where a phone hides the label),
-  which pops back to the arcade as it was left,
+- its page, `apps/web/<name>/index.html`, keeps its own head (title, description, link-preview
+  tags, `appearance-early.js`) and starts the app, `src/main.tsx`, as its only module, its body only
+  `<div id="root" data-screen="<name>">`; the screen is listed in `SCREENS` (`src/arcade/screens.ts`)
+  under its path, rendered by `renderScreen` and headed by `SCREEN_HEADS`, so a tap between screens
+  changes the screen in the page and slides like an iOS screen,
+- it lives in `src/<name>/` as components over plain logic modules, and resolves every address
+  against the arcade's root (`useArcadeUrl`), since it shows under another screen's address too,
+- its bar is `PageBar` (`src/arcade/PageBar.tsx`): Back is `<a data-back>` to the arcade (named with
+  `aria-label` where a phone hides the label), which pops back to the arcade as it was left, over the
+  iOS 26 soft edge of `src/home/scroll-edge.css` (`<header class="page-bar scroll-edge">`), as the
+  arcade's own bar has, so what scrolls under it fades out, and it frosts over where a blur cannot be
+  masked; its own CSS sets where its large title passes under the bar (`--page-bar-condense-*`),
 - its ids are unique across every screen, as the screens share one document,
-- it shares the home page's tokens, buttons and appearance (`appearance-early.js`, and the shell's
-  shared appearance and sound, passed to its boot as `shared`),
-- its bar is `src/home/page-bar.css` with the iOS 26 soft edge of `src/home/scroll-edge.css`
-  (`<header class="page-bar scroll-edge">`), as the arcade's own bar has, so what scrolls under it
-  fades out, and it frosts over where a blur cannot be masked.
+- it shares the arcade's tokens, buttons, sheets (`use-sheet.ts`) and appearance and sound
+  (`useArcade`).
 
-`apps/web/test/integration/page-motion.test.js` and `scroll-edge.test.js` find every such page on
-disk and fail until it does all this. A game never loads these: it keeps its own launch.
+`apps/web/test/integration/page-motion.test.js`, `page-bar.test.js` and `scroll-edge.test.js` find
+every such page on disk and render every screen, and fail until it does all this. A game never loads
+these: it keeps its own launch.

@@ -1,6 +1,28 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createLayoutSwap, enterDelay, planSwap } from '../../../src/home/layout-swap.js';
+import {
+  enterDelay,
+  planSwap,
+  playSwap,
+  snapshotSwap,
+  stopSwap,
+} from '../../../src/home/layout-swap.js';
+
+// A swap as a screen makes one (LayoutSwap.tsx): where the blocks show, the change, then the moves.
+function swapOf(elements) {
+  const running = [];
+
+  return (update) => {
+    const snapshot = snapshotSwap(elements);
+
+    stopSwap(running);
+    update();
+
+    if (snapshot) {
+      running.push(...playSwap(elements, snapshot));
+    }
+  };
+}
 
 const TOKENS = {
   '--duration-rise': '500ms',
@@ -64,10 +86,10 @@ function setUpPage() {
     stats.hidden = false;
   };
 
-  return { notice, donate, stats, show, swap: createLayoutSwap([notice, donate, stats]) };
+  return { notice, donate, stats, show, swap: swapOf([notice, donate, stats]) };
 }
 
-describe('createLayoutSwap', () => {
+describe('a layout swap', () => {
   beforeEach(() => {
     for (const [name, value] of Object.entries(TOKENS)) {
       document.documentElement.style.setProperty(name, value);

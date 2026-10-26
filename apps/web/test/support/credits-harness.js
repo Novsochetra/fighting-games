@@ -1,14 +1,12 @@
-import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { expect } from 'vitest';
 import { WEB_ROOT } from '../../../server/src/paths.js';
+import { screenOf, startArcadeAt } from './arcade-harness.js';
 
 export const CREDITS_PAGE = path.join(WEB_ROOT, 'credits', 'index.html');
 
-// Only the body: the head's stylesheet and module links would make happy-dom try to fetch them.
-export async function loadCreditsMarkup() {
-  const html = await readFile(CREDITS_PAGE, 'utf8');
-  const [, bodyMarkup] = /<body[^>]*>([\s\S]*)<\/body>/.exec(html);
-  expect(bodyMarkup).not.toMatch(/<script|<link/);
-  document.body.innerHTML = bodyMarkup;
+// The credits as a visitor opens their page: the arcade, with its home under them.
+export function openCredits() {
+  startArcadeAt('credits');
+
+  return screenOf('credits');
 }

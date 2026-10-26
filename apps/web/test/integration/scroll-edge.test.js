@@ -1,28 +1,18 @@
 // @vitest-environment happy-dom
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { WEB_ROOT } from '../../../server/src/paths.js';
-import { pagesUnderTheArcade, stylesheetsOf } from '../support/arcade-pages.js';
+import { SCREENS } from '../../src/arcade/screens.ts';
+import { screenOf, startArcadeAt, stopArcades } from '../support/arcade-harness.js';
 
-// The arcade and every page under it head with a bar that stays clear as in iOS 26, the page fading
-// out under it behind a soft edge, and frosting over as iOS bars did before where a blur cannot be
-// masked. The pages are found on disk, so one added later fails here until it does the same. A game
-// keeps its own screens.
+// The arcade and every screen over it head with a bar that stays clear as in iOS 26, the screen
+// fading out under it behind a soft edge, and frosting over as iOS bars did before where a blur cannot
+// be masked. page-motion.test.js holds every page on disk to being a screen, so one added later
+// fails here until it does the same. A game keeps its own screens.
 const SCROLL_EDGE = path.join(WEB_ROOT, 'src', 'home', 'scroll-edge.css');
-const ARCADE = path.join(WEB_ROOT, 'index.html');
-const PAGES = [ARCADE, ...(await pagesUnderTheArcade())];
-const named = (page) => path.relative(WEB_ROOT, page);
 
-// Only the body: the head's stylesheet and module links would make happy-dom try to fetch them.
-async function loadBody(page) {
-  const html = await readFile(page, 'utf8');
-  document.body.innerHTML = /<body[^>]*>([\s\S]*)<\/body>/.exec(html)[1];
-}
-
-beforeEach(() => {
-  document.body.innerHTML = '';
-});
+afterEach(stopArcades);
 
 describe('the soft edge', () => {
   it('blurs what scrolls under a bar behind a mask, coming in at the range each bar sets', async () => {
@@ -39,15 +29,18 @@ describe('the soft edge', () => {
   });
 });
 
-describe.each(PAGES.map(named))('the page %s', (name) => {
-  const page = path.join(WEB_ROOT, name);
+it('loads the soft edge for every screen', async () => {
+  const shared = await readFile(path.join(WEB_ROOT, 'src', 'arcade', 'global-styles.ts'), 'utf8');
 
-  it('loads the soft edge and puts it under its bar', async () => {
-    const sheets = await stylesheetsOf(page);
-    expect(sheets.map((sheet) => sheet.file)).toContain(SCROLL_EDGE);
-    await loadBody(page);
-    const edges = document.querySelectorAll('.scroll-edge');
+  expect(shared).toContain("import '../home/scroll-edge.css';");
+});
+
+describe.each(SCREENS.map((screen) => screen.id))('the %s screen', (id) => {
+  it('puts the soft edge under its bar', () => {
+    startArcadeAt(id);
+    const edges = screenOf(id).querySelectorAll('.scroll-edge');
+
     expect(edges).toHaveLength(1);
-    expect(edges[0].matches('header.topbar, header.page-bar'), name).toBe(true);
+    expect(edges[0].matches('header.topbar, header.page-bar'), id).toBe(true);
   });
 });

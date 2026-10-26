@@ -3,13 +3,15 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { WEB_ROOT } from '../../../../server/src/paths.js';
-import { COFFEE_NOTE_DELAY_MS, COFFEE_NOTE_MS } from '../../../src/home/coffee.js';
+import { COFFEE_NOTE_DELAY_MS, COFFEE_NOTE_MS } from '../../../src/home/use-coffee-note.ts';
 import {
   bootWithRealCatalog,
   byId,
   click,
-  loadHomeMarkup,
+  onPage,
+  runTimers,
   stopHomes,
+  tick,
 } from '../../support/home-harness.js';
 
 // The coffee button floats at the bottom right like Buy Me a Coffee's own widget, with a note in
@@ -35,7 +37,6 @@ const stayOnPage = (event) => event.preventDefault();
 beforeEach(async () => {
   vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
   document.body.innerHTML = '';
-  await loadHomeMarkup();
   window.addEventListener('click', stayOnPage);
 });
 
@@ -49,6 +50,7 @@ describe('the coffee button', () => {
   it("replaces Buy Me a Coffee's widget script with the arcade's own button", async () => {
     const html = await readFile(path.join(WEB_ROOT, 'index.html'), 'utf8');
     expect(html).not.toMatch(/<script[^>]*buymeacoffee/);
+    await bootWithRealCatalog();
     expect(byId('coffee-open').getAttribute('aria-label')).toBe('Buy me a coffee');
   });
 
@@ -56,7 +58,7 @@ describe('the coffee button', () => {
     await bootWithRealCatalog();
     click(byId('coffee-open'));
     expect(sheetIsOpen()).toBe(true);
-    expect(byId('coffee-khqr').getAttribute('href')).toBe('supporters/#give');
+    expect(onPage(byId('coffee-khqr').getAttribute('href'))).toBe(onPage('supporters/#give'));
     const card = byId('coffee-bmc');
     expect(card.getAttribute('href')).toBe(COFFEE);
     expect(card.getAttribute('target')).toBe('_blank');
@@ -72,7 +74,7 @@ describe('the coffee button', () => {
     expect(sheetIsOpen()).toBe(false);
     click(byId('coffee-open'));
     click(byId('coffee-bmc'));
-    vi.runAllTimers();
+    runTimers();
     expect(sheetIsOpen()).toBe(false);
   });
 });
@@ -81,19 +83,19 @@ describe('the coffee note', () => {
   it('says thank you in Khmer a moment after the arcade opens, then steps back', async () => {
     await bootWithRealCatalog();
     expect(note().hidden).toBe(true);
-    vi.advanceTimersByTime(COFFEE_NOTE_DELAY_MS);
+    tick(COFFEE_NOTE_DELAY_MS);
     expect(note().hidden).toBe(false);
     const message = note().querySelector('[lang="km"]');
     expect(message.textContent).toMatch(/^អរគុណ/);
-    vi.advanceTimersByTime(COFFEE_NOTE_MS);
-    vi.runAllTimers();
+    tick(COFFEE_NOTE_MS);
+    runTimers();
     expect(note().hidden).toBe(true);
   });
 
   it('sits beside the coffee button where it fits under the hero buttons', async () => {
     await bootWithRealCatalog();
     layOutPhone({ actionsBottom: 728 });
-    vi.advanceTimersByTime(COFFEE_NOTE_DELAY_MS);
+    tick(COFFEE_NOTE_DELAY_MS);
     expect(note().hidden).toBe(false);
     expect(note().dataset.spot).toBe('beside');
   });
@@ -101,25 +103,24 @@ describe('the coffee note', () => {
   it('floats above the hero buttons where it would cover them beside the coffee button', async () => {
     await bootWithRealCatalog();
     layOutPhone({ actionsBottom: 800 });
-    vi.advanceTimersByTime(COFFEE_NOTE_DELAY_MS);
+    tick(COFFEE_NOTE_DELAY_MS);
     expect(note().hidden).toBe(false);
     expect(note().dataset.spot).toBeUndefined();
   });
 
   it('opens the sheet when tapped, and goes away with its close button', async () => {
     await bootWithRealCatalog();
-    vi.advanceTimersByTime(COFFEE_NOTE_DELAY_MS);
+    tick(COFFEE_NOTE_DELAY_MS);
     click(byId('coffee-note-open'));
-    vi.runAllTimers();
+    runTimers();
     expect(sheetIsOpen()).toBe(true);
     expect(note().hidden).toBe(true);
 
     stopHomes();
-    await loadHomeMarkup();
     await bootWithRealCatalog();
-    vi.advanceTimersByTime(COFFEE_NOTE_DELAY_MS);
+    tick(COFFEE_NOTE_DELAY_MS);
     click(byId('coffee-note-close'));
-    vi.runAllTimers();
+    runTimers();
     expect(note().hidden).toBe(true);
     expect(sheetIsOpen()).toBe(false);
   });

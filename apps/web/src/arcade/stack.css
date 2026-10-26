@@ -1,0 +1,37 @@
+/* The arcade's screens, stacked as in an iOS navigation stack: each a layer over the whole window that
+   scrolls on its own, so a screen under the stack keeps its scroll. A screen left under it stays
+   rendered but unseen, so nothing replays as it shows again. */
+.screen-stack {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.screen-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden auto;
+  overscroll-behavior-y: contain;
+  background: var(--color-launcher-background);
+  outline: none;
+}
+
+.screen-layer--front {
+  z-index: 1;
+}
+
+.screen-layer--hidden {
+  visibility: hidden;
+}
+
+/* An open sheet holds the screen under it still (sheet.js). */
+:root.has-open-sheet .screen-layer {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .screen-layer {
+    scroll-behavior: smooth;
+  }
+}

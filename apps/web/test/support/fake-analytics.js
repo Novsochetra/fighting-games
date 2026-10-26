@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import { CONSENT_KEY } from '../../src/home/analytics.js';
+import { CONSENT_KEY } from '../../src/home/analytics.ts';
 import { createMemoryStorage } from '../../src/home/preferences.js';
 
 // The live site's analytics with Google's tag swapped for one that only records what it was given.

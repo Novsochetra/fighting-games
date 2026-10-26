@@ -137,9 +137,11 @@ function play(elements, { plan, before, copies, timing }) {
 
 // Canceling rejects the animation's finished promise; browsers count that as handled, but not every
 // engine does, and a stopped glide is no error.
-function stop(animation) {
-  animation.finished.catch(() => {});
-  animation.cancel();
+export function stopSwap(running) {
+  for (const animation of running.splice(0)) {
+    animation.finished.catch(() => {});
+    animation.cancel();
+  }
 }
 
 function canAnimate(document) {
@@ -148,28 +150,22 @@ function canAnimate(document) {
   return !prefersReducedMotion(window) && readDuration(document, '--duration-rise') > 0;
 }
 
-// A page that swaps its loading notice for its content (or back) passes the blocks that change, none
-// inside another; each swap moves them smoothly instead of in one frame. A swap that lands while the
-// last still plays starts from where everything shows at that moment.
-export function createLayoutSwap(elements) {
-  const running = [];
+// Where the blocks show just before a change, none inside another; null when nothing animates.
+export function snapshotSwap(elements) {
+  if (!canAnimate(elements[0].ownerDocument)) {
+    return null;
+  }
 
-  return function swap(update) {
-    const document = elements[0].ownerDocument;
+  const before = elements.map(measure);
+  const copies = elements.map((element, i) => (before[i].shown ? element.cloneNode(true) : null));
 
-    if (!canAnimate(document)) {
-      update();
-      return;
-    }
+  return { before, copies };
+}
 
-    const before = elements.map(measure);
-    const copies = elements.map((element, i) => (before[i].shown ? element.cloneNode(true) : null));
+// Moves the blocks from where the snapshot saw them to where the change put them.
+export function playSwap(elements, { before, copies }) {
+  const plan = planSwap(before, elements.map(measure));
+  const timing = readSwapTiming(elements[0].ownerDocument);
 
-    running.splice(0).forEach(stop);
-    update();
-    const plan = planSwap(before, elements.map(measure));
-    const timing = readSwapTiming(document);
-
-    running.push(...play(elements, { plan, before, copies, timing }).filter(Boolean));
-  };
+  return play(elements, { plan, before, copies, timing }).filter(Boolean);
 }

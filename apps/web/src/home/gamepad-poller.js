@@ -4,8 +4,13 @@ import { newlyPressed, readAllGamepads } from './gamepad.js';
 export function createGamepadPoller({ getGamepads, requestFrame, onAction }) {
   let previous = new Set();
   let running = false;
+  let stopped = false;
 
   function tick() {
+    if (stopped) {
+      running = false;
+      return;
+    }
     const pads = Array.from(getGamepads() ?? []).filter(Boolean);
     if (pads.length === 0) {
       running = false;
@@ -20,10 +25,15 @@ export function createGamepadPoller({ getGamepads, requestFrame, onAction }) {
 
   return {
     start() {
+      stopped = false;
       if (!running) {
         running = true;
         requestFrame(tick);
       }
+    },
+    // the arcade's screen going away stops the loop at its next frame
+    stop() {
+      stopped = true;
     },
     isRunning: () => running,
   };

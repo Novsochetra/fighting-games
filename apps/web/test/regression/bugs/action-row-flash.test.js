@@ -1,13 +1,6 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  bootWithRealCatalog,
-  byId,
-  click,
-  loadHomeMarkup,
-  press,
-  stopHomes,
-} from '../../support/home-harness.js';
+import { bootWithRealCatalog, byId, click, press, stopHomes } from '../../support/home-harness.js';
 
 // Bug: swiping between cards made the buttons under the title flash. Play, Details and the heart
 // swapped in one frame (Play jumped across the row, the others blinked out), and every swipe back to
@@ -17,7 +10,6 @@ const heart = () => document.querySelector('#favorite .favorite__heart');
 
 beforeEach(async () => {
   document.body.innerHTML = '';
-  await loadHomeMarkup();
   const root = document.documentElement.style;
   root.setProperty('--duration-ring', '450ms');
   root.setProperty('--scale-heart-pop', '1.28');

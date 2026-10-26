@@ -7,13 +7,7 @@ import { APPEARANCE_KEY } from '../../../src/home/appearance.js';
 import { createMemoryStorage } from '../../../src/home/preferences.js';
 import { CUES } from '../../../src/home/sound-cues.js';
 import { createFakeAudioContext } from '../../support/fake-audio.js';
-import {
-  bootWithRealCatalog,
-  byId,
-  click,
-  loadHomeMarkup,
-  stopHomes,
-} from '../../support/home-harness.js';
+import { bootWithRealCatalog, byId, click, stopHomes } from '../../support/home-harness.js';
 
 const appearance = () => document.documentElement.dataset.appearance;
 
@@ -25,7 +19,6 @@ beforeEach(async () => {
     matches: false,
     addEventListener: () => {},
   }));
-  await loadHomeMarkup();
 });
 
 afterEach(() => {
@@ -38,7 +31,8 @@ describe('light and dark appearance', () => {
     const html = await readFile(path.join(WEB_ROOT, 'index.html'), 'utf8');
     const early = html.indexOf('<script src="src/home/appearance-early.js"></script>');
     expect(early).toBeGreaterThan(0);
-    expect(early).toBeLessThan(html.indexOf('<link rel="stylesheet"'));
+    expect(early).toBeLessThan(html.search(/<link\s+rel="stylesheet"/));
+    expect(early).toBeLessThan(html.indexOf('<script type="module"'));
     expect(html).toContain('<meta name="color-scheme" content="dark light" />');
   });
 

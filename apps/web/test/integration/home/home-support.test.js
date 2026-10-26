@@ -7,9 +7,11 @@ import {
   bootWithRealCatalog,
   byId,
   click,
-  loadHomeMarkup,
   press,
   stopHomes,
+  waitUntil,
+  onPage,
+  restoreFromCache,
 } from '../../support/home-harness.js';
 
 const banner = () => byId('support');
@@ -29,13 +31,6 @@ function clockVisit(time = 1_000_000) {
   return { clock, visit: { now: () => clock.time } };
 }
 
-// happy-dom's PageTransitionEvent drops the persisted flag, so the event carries it by hand.
-function restoreFromCache() {
-  const event = new Event('pageshow');
-  Object.defineProperty(event, 'persisted', { value: true });
-  window.dispatchEvent(event);
-}
-
 async function bootFan(storage, extra = {}) {
   const { clock, visit } = clockVisit();
   const started = await bootWithRealCatalog({ storage, visit, ...extra });
@@ -44,13 +39,11 @@ async function bootFan(storage, extra = {}) {
 
 async function bootAgain(storage) {
   stopHomes();
-  await loadHomeMarkup();
   return bootFan(storage);
 }
 
 beforeEach(async () => {
   document.body.innerHTML = '';
-  await loadHomeMarkup();
 });
 
 afterEach(() => {
@@ -64,7 +57,7 @@ describe('the support banner', () => {
     const { clock } = await bootFan(storage);
     expect(isShown()).toBe(true);
     expect(document.documentElement.classList.contains('has-support-banner')).toBe(true);
-    expect(byId('support-give').getAttribute('href')).toBe('supporters/#give');
+    expect(onPage(byId('support-give').getAttribute('href'))).toBe(onPage('supporters/#give'));
     expect(storage.read(STORAGE_KEYS.supportSnoozedUntil)).toBe(clock.time + SUPPORT_RESHOW_MS);
     expect(storage.read(STORAGE_KEYS.supportSeenPlays)).toBe(3);
   });
@@ -90,7 +83,7 @@ describe('the support banner', () => {
     const { navigate } = await bootFan(storage);
     expect(isShown()).toBe(false);
     press('Enter');
-    await vi.waitFor(() => expect(navigate).toHaveBeenCalled());
+    await waitUntil(() => expect(navigate).toHaveBeenCalled());
     expect(storage.read(STORAGE_KEYS.plays)).toBe(3);
     restoreFromCache();
     expect(isShown()).toBe(true);

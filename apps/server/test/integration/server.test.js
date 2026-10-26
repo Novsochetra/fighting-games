@@ -71,7 +71,7 @@ describe('static files from apps/web', () => {
   });
 
   it.each([
-    ['/src/arcade/main.js', 'text/javascript; charset=utf-8'],
+    ['/src/home/appearance-early.js', 'text/javascript; charset=utf-8'],
     ['/src/home/tokens.css', 'text/css; charset=utf-8'],
     ['/games/steel-and-dust/assets/icons/icon-192.png', 'image/png'],
     [

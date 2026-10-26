@@ -7,7 +7,7 @@ import {
   readServerConfig,
 } from '../../src/config.js';
 import { chooseRoute } from '../../src/router.js';
-import { isPublishedPath } from '../../src/static-site/build-site.js';
+import { isPublishedPath } from '../../src/public-files.js';
 
 describe('readServerConfig', () => {
   it('defaults to port 8765 on the loopback address', () => {

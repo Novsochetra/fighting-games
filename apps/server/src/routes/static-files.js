@@ -5,7 +5,11 @@ import { contentTypeFor } from '../content-types.js';
 import { BASE_HEADERS, sendNotFound, sendRedirect } from '../http-responses.js';
 import { resolveStaticTarget, splitRequestTarget } from '../static-path.js';
 
-export function createStaticHandler({ webRoot }) {
+// A file named by its content (isImmutable) never changes, so a browser keeps it for a year without
+// asking again; every other file it checks on each visit.
+const KEPT_FOR_A_YEAR = 'public, max-age=31536000, immutable';
+
+export function createStaticHandler({ webRoot, isImmutable = () => false }) {
   return async function serveStatic(request, response) {
     const { pathname, query } = splitRequestTarget(request.url);
     const target = resolveStaticTarget(webRoot, pathname);
@@ -19,7 +23,9 @@ export function createStaticHandler({ webRoot }) {
     if (!stats.isFile() || target.trailingSlash) {
       return sendNotFound(response);
     }
-    return sendFile({ request, response, filePath: target.filePath, size: stats.size });
+    const cache = isImmutable(target.canonicalPath) ? KEPT_FOR_A_YEAR : null;
+
+    return sendFile({ request, response, filePath: target.filePath, size: stats.size, cache });
   };
 }
 
@@ -35,9 +41,10 @@ async function serveDirectory({ request, response, target, query }) {
   return sendFile({ request, response, filePath: indexPath, size: stats.size });
 }
 
-function sendFile({ request, response, filePath, size }) {
+function sendFile({ request, response, filePath, size, cache = null }) {
   response.writeHead(200, {
     ...BASE_HEADERS,
+    ...(cache && { 'Cache-Control': cache }),
     'Content-Type': contentTypeFor(filePath),
     'Content-Length': size,
   });

@@ -1,12 +1,6 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import {
-  bootWithRealCatalog,
-  byId,
-  click,
-  loadHomeMarkup,
-  stopHomes,
-} from '../../support/home-harness.js';
+import { bootWithRealCatalog, byId, click, stopHomes } from '../../support/home-harness.js';
 
 // Bug: with the details sheet up on an iPhone, a finger dragging on the dimmed page scrolled the
 // arcade behind the sheet, and the sheet opened with a focus ring around its close button. The page
@@ -16,7 +10,6 @@ const isHeld = () => document.documentElement.classList.contains('has-open-sheet
 beforeEach(async () => {
   document.body.innerHTML = '';
   document.documentElement.classList.remove('has-open-sheet');
-  await loadHomeMarkup();
 });
 
 afterEach(stopHomes);

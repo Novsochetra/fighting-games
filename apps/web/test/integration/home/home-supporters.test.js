@@ -3,18 +3,13 @@ import { stat } from 'node:fs/promises';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { WEB_ROOT } from '../../../../server/src/paths.js';
-import {
-  bootWithRealCatalog,
-  byId,
-  loadHomeMarkup,
-  stopHomes,
-} from '../../support/home-harness.js';
+import { bootWithRealCatalog, byId, onPage, stopHomes } from '../../support/home-harness.js';
 
-const linksToSupporters = () => [...document.querySelectorAll('a[href="supporters/"]')];
+const linksToSupporters = () =>
+  [...document.querySelectorAll('a')].filter((link) => link.href === onPage('supporters/'));
 
 beforeEach(async () => {
   document.body.innerHTML = '';
-  await loadHomeMarkup();
 });
 
 afterEach(stopHomes);

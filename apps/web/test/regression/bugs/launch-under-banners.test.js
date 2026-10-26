@@ -3,12 +3,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { WEB_ROOT } from '../../../../server/src/paths.js';
-import {
-  bootWithSteelAndDust,
-  loadHomeMarkup,
-  press,
-  stopHomes,
-} from '../../support/home-harness.js';
+import { bootWithSteelAndDust, press, stopHomes } from '../../support/home-harness.js';
 
 // Bug: opening a game zoomed the home away behind the growing card, but the install banner and the
 // coffee button float outside the home, so they stayed sharp on top of the launch until the card
@@ -37,7 +32,6 @@ const isMarkedLaunching = () => document.documentElement.classList.contains('is-
 beforeEach(async () => {
   document.body.innerHTML = '';
   document.documentElement.classList.remove('is-launching');
-  await loadHomeMarkup();
   stubLayout();
 });
 

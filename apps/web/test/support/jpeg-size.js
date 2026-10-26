@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { WEB_ROOT } from '../../../server/src/paths.js';
 
 // A JPEG keeps its size in its start-of-frame segment (SOF0 to SOF3), height before width.
 export function jpegSize(bytes) {
@@ -15,9 +16,12 @@ export function jpegSize(bytes) {
 }
 
 // The size an <img> claims, so the page saves its place before it loads, and the size of the JPEG
-// it names, found beside the page that holds it.
+// it names: an address under the arcade, as a screen gives it, or a path beside the page.
 export async function claimedAndRealSize(img, pageFile) {
-  const file = path.resolve(path.dirname(pageFile), img.getAttribute('src'));
+  const src = img.getAttribute('src');
+  const file = URL.canParse(src)
+    ? path.join(WEB_ROOT, decodeURIComponent(new URL(src).pathname))
+    : path.resolve(path.dirname(pageFile), src);
   return {
     claimed: `${img.getAttribute('width')}x${img.getAttribute('height')}`,
     real: jpegSize(await readFile(file)),

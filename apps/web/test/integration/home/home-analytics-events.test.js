@@ -7,15 +7,15 @@ import {
   sentEvents,
   storageWithConsent,
 } from '../../support/fake-analytics.js';
-import { createFakeInstaller, offerInstall } from '../../support/fake-installer.js';
+import { createFakeInstaller, offerInstall, installApp } from '../../support/fake-installer.js';
 import {
   bootWithGames,
   bootWithRealCatalog,
   bootWithSteelAndDust,
   byId,
   click,
-  loadHomeMarkup,
   press,
+  realCatalogJson,
   stopHomes,
 } from '../../support/home-harness.js';
 
@@ -33,7 +33,6 @@ const stayOnPage = (event) => event.preventDefault();
 beforeEach(async () => {
   document.body.innerHTML = '';
   clearBannerClasses();
-  await loadHomeMarkup();
   window.addEventListener('click', stayOnPage);
 });
 
@@ -44,8 +43,8 @@ afterEach(() => {
 
 describe('the home page events', () => {
   it('count a play from the Play button, with the game', async () => {
-    const { tag, home } = await bootCounted();
-    const gameId = home.controller.selectedCard().id;
+    const { tag } = await bootCounted();
+    const gameId = JSON.parse(await realCatalogJson()).games[0].id;
     click(byId('play'));
     expect(sentEvents(tag)).toContainEqual([
       'play_game',
@@ -75,8 +74,8 @@ describe('the home page events', () => {
     click(byId('details-open'));
     click(byId('details-close'));
     click(byId('favorite'));
-    click(document.querySelector('[data-filter="recent"]'));
-    click(document.querySelector('[data-filter="all"]'));
+    click(document.querySelector('[data-value="recent"]'));
+    click(document.querySelector('[data-value="all"]'));
     click(byId('show-more'));
     expect(sentEvents(tag)).toEqual([
       ['view_game_details', { game_id: 'game-0' }],
@@ -130,7 +129,7 @@ describe('the home page events', () => {
     click(byId('install-add'));
     await prompt.userChoice;
     await Promise.resolve();
-    installer.events.dispatchEvent(new Event('appinstalled'));
+    installApp(installer);
     expect(sentEvents(tag)).toEqual([
       ['install_banner_shown', { offer: 'prompt' }],
       ['install_click', {}],
@@ -152,7 +151,6 @@ describe('the home page events', () => {
     ]);
 
     stopHomes();
-    await loadHomeMarkup();
     storage.write(STORAGE_KEYS.supportSeenPlays, 2);
     const again = await bootCounted(bootWithRealCatalog, { installer, storage });
     click(byId('support-give'));

@@ -3,14 +3,8 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { WEB_ROOT } from '../../../../server/src/paths.js';
-import { createFakeInstaller, offerInstall } from '../../support/fake-installer.js';
-import {
-  bootWithRealCatalog,
-  byId,
-  click,
-  loadHomeMarkup,
-  stopHomes,
-} from '../../support/home-harness.js';
+import { createFakeInstaller, offerInstall, installApp } from '../../support/fake-installer.js';
+import { bootWithRealCatalog, byId, click, stopHomes } from '../../support/home-harness.js';
 
 // Bug: on a phone the install banner floated over Play, Details and the heart, since a short screen
 // keeps them at its bottom. While the banner is up the root carries has-install-banner, and on a short
@@ -20,7 +14,6 @@ const isLifted = () => document.documentElement.classList.contains('has-install-
 beforeEach(async () => {
   document.body.innerHTML = '';
   document.documentElement.classList.remove('has-install-banner');
-  await loadHomeMarkup();
 });
 
 afterEach(stopHomes);
@@ -36,7 +29,7 @@ describe('the hero buttons beside the install banner', () => {
     expect(isLifted()).toBe(false);
 
     offerInstall(installer);
-    installer.events.dispatchEvent(new Event('appinstalled'));
+    installApp(installer);
     expect(isLifted()).toBe(false);
   });
 

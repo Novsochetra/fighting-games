@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { COMING_SOON_COUNT } from '../../../src/home/coming-soon.js';
-import { EMPTY_MESSAGE, ERROR_MESSAGE } from '../../../src/home/home-view.js';
+import { EMPTY_MESSAGE, ERROR_MESSAGE } from '../../../src/home/Hero.tsx';
 import {
   boot,
   bootWithRealCatalog,
@@ -11,19 +11,20 @@ import {
   centerCard,
   click,
   jsonReply,
-  loadHomeMarkup,
   press,
+  onPage,
   realCatalogJson,
   selectedTile,
+  settled,
   spotlightTitle,
   startHome,
   stopHomes,
   tiles,
+  waitUntil,
 } from '../../support/home-harness.js';
 
 beforeEach(async () => {
   document.body.innerHTML = '';
-  await loadHomeMarkup();
 });
 
 afterEach(stopHomes);
@@ -33,13 +34,13 @@ describe('home page with the real catalog', () => {
     const body = await realCatalogJson();
     const fetchFn = vi.fn(async () => jsonReply(body));
     await boot(fetchFn);
-    expect(fetchFn).toHaveBeenCalledWith('api/games', expect.any(Object));
+    expect(fetchFn).toHaveBeenCalledWith(onPage('api/games'), expect.any(Object));
     const { games } = JSON.parse(body);
     expect(cards()).toHaveLength(games.length + COMING_SOON_COUNT);
     expect(tiles()).toHaveLength(games.length);
     const [first] = games;
     expect(cards()[0].getAttribute('aria-label')).toBe(first.title);
-    expect(cards()[0].querySelector('img').getAttribute('src')).toBe(first.screenshot);
+    expect(cards()[0].querySelector('img').getAttribute('src')).toBe(onPage(first.screenshot));
     expect(tiles()[0].textContent).toContain(first.genre);
   });
 
@@ -48,11 +49,11 @@ describe('home page with the real catalog', () => {
     expect(spotlightTitle()).toBe('Steel & Dust');
     expect(byId('spotlight-meta').textContent).toBe("Beat 'em up · 1 player · 2026");
     expect(byId('spotlight-summary').textContent).toBe('A side-scrolling pixel-art brawler.');
-    expect(byId('play').getAttribute('href')).toBe('games/steel-and-dust/');
+    expect(byId('play').getAttribute('href')).toBe(onPage('games/steel-and-dust/'));
     expect(byId('play').getAttribute('aria-label')).toBe('Play Steel & Dust');
     const backdrop = byId('backdrops').querySelector('.backdrop.is-active');
     expect(backdrop.querySelector('source').getAttribute('srcset')).toBe(
-      'games/steel-and-dust/assets/ui/select/bg-portrait.png',
+      onPage('games/steel-and-dust/assets/ui/select/bg-portrait.png'),
     );
   });
 
@@ -124,7 +125,7 @@ describe('a game hosted on its own site', () => {
     expect(backdrop.classList.contains('is-smooth')).toBe(true);
     expect(byId('play').getAttribute('href')).toBe('https://morodokangkor.com/');
     click(byId('play'));
-    await vi.waitFor(() => expect(navigate).toHaveBeenCalledWith('https://morodokangkor.com/'));
+    await waitUntil(() => expect(navigate).toHaveBeenCalledWith('https://morodokangkor.com/'));
   });
 });
 
@@ -134,12 +135,12 @@ describe('home page loading, errors and an empty catalog', () => {
     const pending = new Promise((resolve) => {
       resolveFetch = resolve;
     });
-    const { home } = startHome(() => pending);
+    startHome(() => pending);
     expect(byId('notice').dataset.tone).toBe('loading');
     expect(byId('stage').hidden).toBe(true);
     expect(byId('library').hidden).toBe(true);
     resolveFetch(jsonReply(await realCatalogJson()));
-    await home.ready;
+    await settled();
     expect(byId('stage').hidden).toBe(false);
   });
 
@@ -150,9 +151,12 @@ describe('home page loading, errors and an empty catalog', () => {
       document.documentElement.style.setProperty(name, value);
     }
 
+    const body = await realCatalogJson();
+
+    startHome(async () => jsonReply(body));
     const rise = vi.spyOn(byId('library'), 'animate');
 
-    await bootWithRealCatalog();
+    await settled();
     const copy = byId('notice').previousElementSibling;
     document.documentElement.removeAttribute('style');
 
@@ -170,7 +174,7 @@ describe('home page loading, errors and an empty catalog', () => {
       .fn()
       .mockResolvedValueOnce(jsonReply('{}', 503))
       .mockResolvedValue(jsonReply(body));
-    const { home } = await boot(fetchFn);
+    await boot(fetchFn);
     const retry = byId('retry');
     expect(byId('status').textContent).toBe(ERROR_MESSAGE);
     expect(retry.hidden).toBe(false);
@@ -178,8 +182,8 @@ describe('home page loading, errors and an empty catalog', () => {
     expect(press('Enter', retry).defaultPrevented).toBe(false);
 
     click(retry);
-    await vi.waitFor(() => expect(cards().length).toBeGreaterThan(0));
-    expect(home.controller.selectedIndex()).toBe(0);
+    await waitUntil(() => expect(cards().length).toBeGreaterThan(0));
+    expect(centerCard()).toBe(cards()[0]);
     expect(retry.hidden).toBe(true);
   });
 

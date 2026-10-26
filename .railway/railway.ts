@@ -9,9 +9,9 @@ export default defineRailway(() => {
   const arcade = service('@arcade/server', {
     source: github('Novsochetra/fighting-games', { branch: 'main', checkSuites: false }),
     build: {
-      // The server runs the source as it is, so the only build step drops the test and lint tools.
+      // Vite builds the arcade into dist/, which the server sends; then the build and test tools go.
       // Railpack sets NPM_CONFIG_PRODUCTION=false, which would make npm keep them.
-      buildCommand: 'NPM_CONFIG_PRODUCTION= npm prune --omit=dev',
+      buildCommand: 'npm run build && NPM_CONFIG_PRODUCTION= npm prune --omit=dev',
       // No watch list, so a change to any file deploys: the server also sends the pages and games.
       // Railway first watched only apps/server/; applying [] once cleared that, and Railway keeps an
       // empty list as null. '/**' still skipped a push that changed only apps/web/.

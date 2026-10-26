@@ -1,0 +1,32 @@
+export const PlayIcon = () => (
+  <svg className="icon icon--solid" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M7 3.8c0-.9 1-1.5 1.8-1l12 7.4c.8.5.8 1.6 0 2l-12 7.5c-.8.5-1.8-.1-1.8-1z" />
+  </svg>
+);
+
+// the banners' Not now, thinner than a sheet's close
+export const DismissIcon = () => (
+  <svg className="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M7 7l10 10M17 7 7 17" />
+  </svg>
+);
+
+const COFFEE_PATHS = (
+  <>
+    <path d="M4.5 9.5h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z" />
+    <path d="M15.5 11h1.25a2.25 2.25 0 0 1 0 4.5H15" />
+    <path d="M8 3.5c-.7.9-.7 1.8 0 2.7M11.5 3.5c-.7.9-.7 1.8 0 2.7" />
+  </>
+);
+
+export const CoffeeIcon = ({ hidden = true }: { hidden?: boolean }) => (
+  <svg className="icon icon--bold" viewBox="0 0 24 24" aria-hidden={hidden || undefined}>
+    {COFFEE_PATHS}
+  </svg>
+);
+
+export const ChevronIcon = () => (
+  <svg className="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M9 5.5l6.5 6.5L9 18.5" />
+  </svg>
+);

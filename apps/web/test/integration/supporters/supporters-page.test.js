@@ -1,25 +1,21 @@
 // @vitest-environment happy-dom
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { waitFor } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { CUES } from '../../../src/home/sound-cues.js';
-import { ERROR_MESSAGE } from '../../../src/supporters/supporters-view.js';
+import { ERROR_MESSAGE } from '../../../src/supporters/SupportersScreen.tsx';
 import { createFakeAudioContext } from '../../support/fake-audio.js';
 import {
+  apiUrl,
   bootPage,
   byId,
   click,
   jsonReply,
-  loadSupportersMarkup,
   samplePayload,
   stopPages,
   texts,
 } from '../../support/supporters-harness.js';
 
-const sortOption = (order) => document.querySelector(`[data-sort="${order}"]`);
-
-beforeEach(async () => {
-  document.body.innerHTML = '';
-  await loadSupportersMarkup();
-});
+const sortOption = (order) => document.querySelector(`#sort [data-value="${order}"]`);
 
 afterEach(() => {
   stopPages();
@@ -77,11 +73,11 @@ describe('the supporters page', () => {
     expect(context.started).toHaveLength(CUES.switch.length);
   });
 
-  it('loads the list from the server, and offers the donate sheet once the script runs', async () => {
-    expect(byId('donate').hidden).toBe(true);
+  it('loads the list from the server under the arcade, and offers the donate sheet', async () => {
     const fetchFn = vi.fn(async () => jsonReply(samplePayload()));
-    await bootPage(fetchFn);
-    expect(fetchFn).toHaveBeenCalledWith('../api/supporters', expect.anything());
+    const page = await bootPage(fetchFn);
+
+    expect(fetchFn).toHaveBeenCalledWith(apiUrl(page), expect.anything());
     expect(byId('donate').hidden).toBe(false);
     expect(byId('donate').tagName).toBe('BUTTON');
   });
@@ -108,17 +104,18 @@ describe('the supporters page', () => {
   });
 
   it('says so when the list fails to load, and tries again on request', async () => {
-    const fetchFn = vi
-      .fn()
-      .mockResolvedValueOnce(jsonReply({}, 503))
-      .mockResolvedValueOnce(jsonReply(samplePayload()));
+    const replies = [jsonReply({}, 503), jsonReply(samplePayload())];
+    // the arcade under the screen asks for its games too, which this test leaves out
+    const fetchFn = vi.fn(async (url) =>
+      url.endsWith('/api/supporters') ? replies.shift() : jsonReply({}, 404),
+    );
     await bootPage(fetchFn);
     expect(byId('supporters-notice').dataset.tone).toBe('error');
     expect(byId('supporters-status').textContent).toBe(ERROR_MESSAGE);
     expect(byId('roll').hidden).toBe(true);
 
     click(byId('supporters-retry'));
-    await vi.waitFor(() => expect(byId('roll').hidden).toBe(false));
+    await waitFor(() => expect(byId('roll').hidden).toBe(false));
     expect(byId('supporters-notice').hidden).toBe(true);
   });
 });

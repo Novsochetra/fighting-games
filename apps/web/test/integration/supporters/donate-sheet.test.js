@@ -1,4 +1,5 @@
 // @vitest-environment happy-dom
+import { act, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createMemoryStorage, STORAGE_KEYS } from '../../../src/home/preferences.js';
 import { CUES } from '../../../src/home/sound-cues.js';
@@ -6,14 +7,16 @@ import { SEND_FAILED } from '../../../src/supporters/donate-client.js';
 import { PAY_WAIT_SECONDS } from '../../../src/supporters/pay-wait.js';
 import { createFakeAudioContext } from '../../support/fake-audio.js';
 import {
+  apiUrl,
   bootPage,
   byId,
   click,
   fakeApi,
   jsonReply,
-  loadSupportersMarkup,
   stopPages,
+  submit,
   texts,
+  type,
 } from '../../support/supporters-harness.js';
 
 const visibleStep = () =>
@@ -21,21 +24,17 @@ const visibleStep = () =>
     .filter((panel) => !panel.hidden)
     .map((panel) => panel.dataset.stepPanel);
 
-const type = (id, value) => {
-  byId(id).value = value;
-  byId(id).dispatchEvent(new Event('input', { bubbles: true }));
-};
-
-const submitForm = () =>
-  byId('donate-form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+const submitForm = () => submit('donate-form');
 
 async function openSheet(api = fakeApi(), options = {}) {
-  await bootPage(api.fetchFn, options);
+  const page = await bootPage(api.fetchFn, options);
+
   click(byId('donate'));
-  return api;
+
+  return { ...api, page };
 }
 
-const waitOut = (seconds = PAY_WAIT_SECONDS) => vi.advanceTimersByTime(seconds * 1000);
+const waitOut = (seconds = PAY_WAIT_SECONDS) => act(() => vi.advanceTimersByTime(seconds * 1000));
 
 const sendAfterWait = () => {
   waitOut();
@@ -50,10 +49,8 @@ const tierLine = (id) => ({
 });
 
 // Only the countdown's interval is faked: the fetches and the sheet's closing timer stay real.
-beforeEach(async () => {
+beforeEach(() => {
   vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
-  document.body.innerHTML = '';
-  await loadSupportersMarkup();
 });
 
 afterEach(() => {
@@ -85,14 +82,14 @@ describe('the donate sheet', () => {
   });
 
   it('shows the KHQR code for the amount, with a way to save it on a phone', async () => {
-    await openSheet();
+    const { page } = await openSheet();
     type('donate-amount', '5');
     submitForm();
     expect(visibleStep()).toEqual(['pay']);
     expect(byId('donate-pay-title').textContent).toBe('Send $5');
     expect(byId('donate-pay-amount').textContent).toBe('$5');
     const qr = document.querySelector('.donate__qr');
-    expect(qr.getAttribute('src')).toBe('../assets/donate/khqr.jpg');
+    expect(qr.getAttribute('src')).toBe(new URL('assets/donate/khqr.jpg', page.root).href);
     expect(document.querySelector('.donate__save').hasAttribute('download')).toBe(true);
 
     click(byId('donate-back'));
@@ -108,20 +105,20 @@ describe('the donate sheet', () => {
     submitForm();
     sendAfterWait();
 
-    await vi.waitFor(() => expect(visibleStep()).toEqual(['thanks']));
+    await waitFor(() => expect(visibleStep()).toEqual(['thanks']));
     expect(api.posts).toEqual([
       {
-        url: '../api/supporters',
+        url: apiUrl(api.page),
         body: { name: 'Nov Sochetra', amount: 300, message: 'For the next boss' },
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       },
     ]);
     expect(byId('donate-thanks-title').textContent).toBe('Thank you, Nov Sochetra!');
-    await vi.waitFor(() => expect(texts('.podium__name')[0]).toBe('Nov Sochetra'));
+    await waitFor(() => expect(texts('.podium__name')[0]).toBe('Nov Sochetra'));
     expect(byId('donate-amount').value).toBe('');
 
     click(byId('donate-done'));
-    await vi.waitFor(() => expect(byId('donate-sheet').open).toBe(false));
+    await waitFor(() => expect(byId('donate-sheet').open).toBe(false));
   });
 
   it('keeps the list up while it loads again with the gift, so it never blinks out', async () => {
@@ -135,7 +132,7 @@ describe('the donate sheet', () => {
     type('donate-name', 'Nov Sochetra');
     submitForm();
     sendAfterWait();
-    await vi.waitFor(() => expect(texts('.podium__name')[0]).toBe('Nov Sochetra'));
+    await waitFor(() => expect(texts('.podium__name')[0]).toBe('Nov Sochetra'));
     watch.disconnect();
 
     expect(noticeShown).not.toContain(true);
@@ -147,7 +144,7 @@ describe('the donate sheet', () => {
     type('donate-amount', '1');
     submitForm();
     sendAfterWait();
-    await vi.waitFor(() => expect(visibleStep()).toEqual(['thanks']));
+    await waitFor(() => expect(visibleStep()).toEqual(['thanks']));
     expect(byId('donate-thanks-title').textContent).toBe('Thank you!');
   });
 
@@ -157,7 +154,7 @@ describe('the donate sheet', () => {
     type('donate-amount', '5');
     submitForm();
     sendAfterWait();
-    await vi.waitFor(() => expect(byId('donate-pay-error').hidden).toBe(false));
+    await waitFor(() => expect(byId('donate-pay-error').hidden).toBe(false));
     expect(byId('donate-pay-error').textContent).toBe(message);
     expect(visibleStep()).toEqual(['pay']);
     expect(byId('donate-sent').disabled).toBe(false);
@@ -174,7 +171,7 @@ describe('the donate sheet', () => {
     type('donate-amount', '5');
     submitForm();
     sendAfterWait();
-    await vi.waitFor(() => expect(byId('donate-pay-error').textContent).toBe(SEND_FAILED));
+    await waitFor(() => expect(byId('donate-pay-error').textContent).toBe(SEND_FAILED));
   });
 
   it('holds back I sent it while the supporter pays, counting down', async () => {
@@ -234,7 +231,7 @@ describe('the donate sheet', () => {
     waitOut();
     const before = context.started.length;
     click(byId('donate-sent'));
-    await vi.waitFor(() => expect(visibleStep()).toEqual(['thanks']));
+    await waitFor(() => expect(visibleStep()).toEqual(['thanks']));
     expect(tierLine('donate-thanks-tier')).toMatchObject({
       hidden: false,
       tier: 'gold',
@@ -244,18 +241,19 @@ describe('the donate sheet', () => {
   });
 
   it('opens at once for a visitor sent by the home page Support banner', async () => {
-    await bootPage(fakeApi().fetchFn, { visit: { openDonate: true } });
+    await bootPage(fakeApi().fetchFn, { path: '/supporters/#give' });
     expect(byId('donate-sheet').open).toBe(true);
     expect(visibleStep()).toEqual(['form']);
   });
 
   it('remembers a gift on this device, so the home page stops asking', async () => {
     const storage = createMemoryStorage();
-    await openSheet(fakeApi(), { storage, visit: { now: () => 4242 } });
+
+    await openSheet(fakeApi(), { storage, now: () => 4242 });
     type('donate-amount', '5');
     submitForm();
     sendAfterWait();
-    await vi.waitFor(() => expect(visibleStep()).toEqual(['thanks']));
+    await waitFor(() => expect(visibleStep()).toEqual(['thanks']));
     expect(storage.read(STORAGE_KEYS.gaveAt)).toBe(4242);
   });
 });

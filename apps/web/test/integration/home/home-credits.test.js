@@ -3,27 +3,21 @@ import { stat } from 'node:fs/promises';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { WEB_ROOT } from '../../../../server/src/paths.js';
-import {
-  bootWithRealCatalog,
-  byId,
-  loadHomeMarkup,
-  stopHomes,
-} from '../../support/home-harness.js';
+import { bootWithRealCatalog, byId, onPage, stopHomes } from '../../support/home-harness.js';
 import { claimedAndRealSize } from '../../support/jpeg-size.js';
 
 beforeEach(async () => {
   document.body.innerHTML = '';
-  await loadHomeMarkup();
+  await bootWithRealCatalog();
 });
 
 afterEach(stopHomes);
 
 describe('the way to the credits page', () => {
-  it('signs off under the library, once the games are in, with who made the arcade', async () => {
-    await bootWithRealCatalog();
+  it('signs off under the library, once the games are in, with who made the arcade', () => {
     const link = byId('credits-link');
     expect(link.closest('#library').hidden).toBe(false);
-    expect(link.getAttribute('href')).toBe('credits/');
+    expect(onPage(link.getAttribute('href'))).toBe(onPage('credits/'));
     expect(link.querySelector('.made-by__name').textContent).toBe('Nov Sochetra');
   });
 

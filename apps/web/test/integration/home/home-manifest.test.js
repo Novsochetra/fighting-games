@@ -54,13 +54,6 @@ describe('the arcade as an installable app', () => {
     expect(html).not.toContain('href="data:,"');
   });
 
-  it('shows the logo beside the title in the top bar', async () => {
-    const html = await readPage();
-    expect(html).toMatch(
-      /<h1 class="topbar__title" id="home-title">\s*<img\s+class="topbar__logo"\s+src="assets\/icons\/icon-192.png"\s+alt=""/,
-    );
-  });
-
   it('keeps the service worker beside the page, so its scope covers the whole arcade', async () => {
     expect((await stat(path.join(WEB_ROOT, 'sw.js'))).isFile()).toBe(true);
   });
