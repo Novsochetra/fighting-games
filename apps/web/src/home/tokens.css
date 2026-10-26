@@ -414,7 +414,7 @@
   --color-soon-sheen: rgb(255 255 255 / 70%);
   --color-soon-glow: rgb(0 0 0 / 5%);
   --color-material: rgb(255 255 255 / 80%);
-  --color-scroll-edge: rgb(255 255 255 / 82%);
+  --color-scroll-edge: rgb(255 255 255 / 64%);
   --color-material-edge: rgb(0 0 0 / 6%);
   --color-fill-quiet: rgb(118 118 128 / 12%);
   --color-error: var(--color-apple-red-light);
