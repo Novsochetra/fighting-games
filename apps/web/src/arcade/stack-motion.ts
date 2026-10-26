@@ -47,7 +47,9 @@ const lookOf = (document: Document): SlideLook => ({
 });
 
 // Plays a move on its two layers and settles once both have; without the tokens' timing (the
-// tests) it settles at once.
+// tests) it settles at once. Each layer holds the move's last frame until the stack settles and
+// cancels it, since one that went back to rest first stood a popped screen over the window again
+// for a frame.
 export function playMove(
   move: Exclude<Move, 'none'>,
   layers: { front: HTMLElement; back: HTMLElement },
@@ -63,9 +65,10 @@ export function playMove(
   }
 
   const frames = slideFrames(move, lookOf(document));
+  const held = { ...timing, fill: 'forwards' as const };
   const animations = [
-    layers.front.animate(frames.front, timing),
-    layers.back.animate(frames.back, timing),
+    layers.front.animate(frames.front, held),
+    layers.back.animate(frames.back, held),
   ];
   const finished = Promise.all(animations.map((animation) => animation.finished)).then(
     () => {},

@@ -8,9 +8,13 @@
   isolation: isolate;
 }
 
+/* Each layer is a stacking context of its own, so the fixed and sticky parts of a screen (the
+   arcade's top bar, coffee button and note) stay under the screen over it, not only while a slide's
+   transform makes one. */
 .screen-layer {
   position: absolute;
   inset: 0;
+  isolation: isolate;
   overflow: hidden auto;
   overscroll-behavior-y: contain;
   background: var(--color-launcher-background);
