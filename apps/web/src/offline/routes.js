@@ -6,6 +6,9 @@ const GAME = /^games\/([\w-]+)\//;
 // where the arcade asks how much of a game is kept (GET), saves it (POST) and removes it (DELETE);
 // only the worker answers it, so without one the arcade finds nothing there and offers no save
 const SAVE = /^api\/offline\/([\w-]+)$/;
+// the version of the build the server holds now, which the arcade reads past every cache to learn
+// of a deploy (src/arcade/update-check.js), so the worker never answers it from what it keeps
+const VERSION = 'version.json';
 
 const pathUnder = (url, scope) =>
   url.pathname.slice(scope.pathname.length).replace(/(^|\/)index\.html$/, '$1');
@@ -42,7 +45,7 @@ export function routeOf(request, scopeUrl) {
     return { kind: 'save', id: save[1] };
   }
 
-  if (!isOurs || request.method !== 'GET') {
+  if (!isOurs || request.method !== 'GET' || path === VERSION) {
     return { kind: 'pass' };
   }
 

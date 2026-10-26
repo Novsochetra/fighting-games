@@ -3,6 +3,7 @@ import { createAnalytics, type AnalyticsSetup } from '../home/analytics';
 import { createAppearance } from '../home/appearance.js';
 import { createPreferences } from '../home/preferences.js';
 import { createSoundPlayer } from '../home/sound-player.js';
+import { createUpdateCheck } from './update-check.js';
 
 // Where the arcade keeps its preferences (preferences.js): localStorage, or memory where it is refused.
 export interface ArcadeStorage {
@@ -22,6 +23,12 @@ export interface ArcadePorts {
   root: URL;
   // a game opens with a load of its own page
   navigate: (href: string) => void;
+  // a load of the page, into the newest build once its worker has taken over (update-check.js)
+  reload: () => void;
+  // the version of the build this page comes from (arcade-version.js), none on the dev server
+  version?: string | null;
+  // where the arcade's worker is registered, in a browser that has workers
+  workers?: ServiceWorkerContainer;
   referrer: string;
   // the clock the arcade's reminders count from
   now: () => number;
@@ -47,12 +54,14 @@ export interface Arcade extends ArcadePorts {
   analytics: ReturnType<typeof createAnalytics>;
   appearance: ReturnType<typeof createAppearance>;
   sound: ReturnType<typeof createSoundPlayer>;
+  updates: ReturnType<typeof createUpdateCheck>;
 }
 
 const ArcadeContext = createContext<Arcade | null>(null);
 
-// One appearance, one sound and one count of visits for every screen, made once for the page (main.tsx), outside React,
-// whose development checks run effects twice and would stop a listener made in one.
+// One appearance, one sound, one count of visits and one check for a new build for every screen,
+// made once for the page (main.tsx), outside React, whose development checks run effects twice and
+// would stop a listener made in one.
 export function createArcade(ports: ArcadePorts, signal?: AbortSignal): Arcade {
   const preferences = createPreferences(ports.storage);
 
@@ -68,6 +77,14 @@ export function createArcade(ports: ArcadePorts, signal?: AbortSignal): Arcade {
     sound: createSoundPlayer({
       createContext: ports.createAudioContext,
       isEnabled: preferences.isSoundOn,
+    }),
+    updates: createUpdateCheck({
+      version: ports.version ?? null,
+      fetch: ports.fetch,
+      root: ports.root,
+      workers: ports.workers,
+      document: ports.window.document,
+      signal,
     }),
   };
 }

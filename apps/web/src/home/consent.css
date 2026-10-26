@@ -37,7 +37,7 @@
   background: var(--color-fill-quiet);
 }
 
-:root.has-consent-banner .install:not(.install--consent) {
+:root.has-consent-banner .install:not(.install--consent, .install--update) {
   display: none;
 }
 

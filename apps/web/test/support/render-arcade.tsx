@@ -39,6 +39,7 @@ function fakeArcade({ path = '/', ...given }: ArcadeOptions) {
       locale: 'en-US',
       root,
       navigate: vi.fn(),
+      reload: vi.fn(),
       referrer: '',
       now: () => Date.now(),
       ...ports,

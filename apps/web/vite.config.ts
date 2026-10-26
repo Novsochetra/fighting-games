@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import { defineConfig, type Plugin } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { AS_IS, BUILD_FOLDER } from '../server/src/as-is-files.js';
+import { buildVersion } from '../server/src/build-version.js';
 import { catalogArtEntries } from '../server/src/offline/catalog-art.js';
 import { offlineListOf } from '../server/src/offline/game-files.js';
 import { GAMES_ROOT } from '../server/src/paths.js';
@@ -46,6 +47,30 @@ function copyAsIs(): Plugin {
   };
 }
 
+// Each page names the build it comes from, and version.json the one the server holds now, so an
+// arcade left open on an older build learns of a deploy (src/arcade/update-check.js).
+function stampVersion(): Plugin {
+  let version = '';
+
+  return {
+    name: 'arcade-version',
+    apply: 'build',
+    buildStart() {
+      version = buildVersion();
+    },
+    transformIndexHtml: () => [
+      { tag: 'meta', attrs: { name: 'arcade-version', content: version }, injectTo: 'head' },
+    ],
+    generateBundle() {
+      this.emitFile({
+        type: 'asset',
+        fileName: 'version.json',
+        source: JSON.stringify({ version }),
+      });
+    },
+  };
+}
+
 // The arcade's worker (src/offline/sw.js), built with the list of what it keeps: the pages, the
 // built modules and styles, the arcade's art, the early appearance script and each game's card art.
 // It is registered by the app itself, and the arcade keeps its own web manifest.
@@ -79,7 +104,7 @@ export default defineConfig({
   root: WEB_ROOT,
   base: './',
   publicDir: false,
-  plugins: [react(), copyAsIs(), offline],
+  plugins: [react(), stampVersion(), copyAsIs(), offline],
   build: {
     outDir: OUT_DIR,
     emptyOutDir: true,

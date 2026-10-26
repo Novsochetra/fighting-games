@@ -58,6 +58,11 @@ describe('routeOf', () => {
     expect(routeOf(get('elsewhere/'), 'https://arcade.test/arcade/').kind).toBe('pass');
   });
 
+  it('leaves the deployed version to the network, so a deploy is never hidden by what it keeps', () => {
+    expect(routeOf(get('version.json'), SCOPE)).toEqual({ kind: 'pass' });
+    expect(routeOf(get('version.json?seen=1'), SCOPE)).toEqual({ kind: 'pass' });
+  });
+
   it('follows the arcade to whatever path it is served from', () => {
     const scope = 'https://example.com/arcade/';
 

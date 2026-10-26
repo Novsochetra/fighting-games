@@ -5,6 +5,7 @@ import { EVENTS } from './analytics-events.js';
 import { useHome } from './home-context';
 import { DismissIcon } from './home-icons';
 import { InstallBanner } from './InstallBanner';
+import { UpdateBanner } from './UpdateBanner';
 
 function SupportBanner() {
   const { support } = useHome().banners;
@@ -118,11 +119,12 @@ export function PrivacyChoices() {
   );
 }
 
-// The banners float over the arcade's foot: the analytics question first, then install, then a
-// word for the supporters, one at a time.
+// The banners float over the arcade's foot, one at a time: a new version first, as the others come
+// again after a reload, then the analytics question, then install, then a word for the supporters.
 export function Banners() {
   return (
     <>
+      <UpdateBanner />
       <InstallBanner />
       <SupportBanner />
       <ConsentBanner />

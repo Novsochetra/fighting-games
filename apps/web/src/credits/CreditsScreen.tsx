@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { useArcadeUrl } from '../arcade/arcade-context';
+import { useArcade, useArcadeUrl } from '../arcade/arcade-context';
 import { PageBar } from '../arcade/PageBar';
 import { useArriveDrawn } from '../arcade/use-arrive-drawn';
 import { CreditsGroup } from './CreditsRow';
@@ -63,6 +63,19 @@ function Maker() {
   );
 }
 
+// The build this page runs, so a phone that seems behind can be checked against the latest deploy.
+function Footer() {
+  const { version } = useArcade();
+
+  return (
+    <footer className="credits__footer" style={order(7)}>
+      <p className="credits__thanks">And you, for playing.</p>
+      <p>© 2026 Nov Sochetra</p>
+      {version && <p id="credits-version">Version {version}</p>}
+    </footer>
+  );
+}
+
 // The parts that rise in as the page loads (credits.css, cover.css, maker.css).
 export const CREDITS_ENTRANCES = ['credits-rise', 'portrait-in'];
 
@@ -85,10 +98,7 @@ export function CreditsScreen() {
         />
         <CreditsGroup title="Thanks to" titleId="thanks-title" order={5} links={THANKS_TO} />
         <CreditsGroup title="Made with" titleId="tools-title" order={6} links={MADE_WITH} />
-        <footer className="credits__footer" style={order(7)}>
-          <p className="credits__thanks">And you, for playing.</p>
-          <p>© 2026 Nov Sochetra</p>
-        </footer>
+        <Footer />
       </main>
     </div>
   );

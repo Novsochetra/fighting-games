@@ -22,4 +22,5 @@ export const clearBannerClasses = () =>
     'has-consent-banner',
     'has-install-banner',
     'has-support-banner',
+    'has-update-banner',
   );

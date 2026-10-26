@@ -28,6 +28,15 @@ beforeEach(() => {
 afterEach(stopArcades);
 
 describe('the credits page', () => {
+  it('names the build it runs at its foot, so a phone can be checked against the deploy', () => {
+    expect(one('#credits-version')).toBeNull();
+
+    stopArcades();
+    screen = openCredits({ version: '06f31ee' });
+    expect(textOf(one('#credits-version'))).toBe('Version 06f31ee');
+    expect(one('#credits-version').closest('footer')).not.toBeNull();
+  });
+
   it('names the maker in the large title and in the bar that takes over from it', () => {
     expect(textOf(one('h1'))).toBe('Nov Sochetra');
     expect(textOf(one('#credits-bar-title'))).toBe('Nov Sochetra');

@@ -101,7 +101,13 @@
   transition: padding-block-end var(--duration-sheet) var(--easing-spring);
 }
 
+/* A new version takes the banners' place first: the others come again after the reload. */
+:root.has-update-banner .install:not(.install--update) {
+  display: none;
+}
+
 @media (max-height: 58rem) {
+  :root.has-update-banner .spotlight,
   :root.has-install-banner .spotlight,
   :root.has-support-banner .spotlight,
   :root.has-consent-banner .spotlight {

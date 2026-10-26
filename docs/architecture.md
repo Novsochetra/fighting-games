@@ -14,6 +14,7 @@ apps/
       security/           the same-site check and the rate limit for the API
       supporters/         reading a gift, the Postgres and in-memory stores, the JSON they send
       as-is-files.js      what the arcade sends as it is, past Vite: the games, the art, robots.txt…
+      build-version.js    the version each build of the arcade carries (see A new build)
     test/{unit,integration}
   web/                    everything the browser loads
     index.html            the arcade's page; supporters/ and credits/ hold the other two
@@ -134,7 +135,10 @@ rate limit and the checks below.
 **The build.** `npm run build` has Vite build the three pages into `dist/` (`base: './'`, so the same
 files work under any path) and copy what it never touches beside them (`as-is-files.js`: the games,
 the art, `robots.txt`, `sitemap.xml` and `appearance-early.js`), then builds the service worker (see
-Offline). Railway builds on each deploy and `npm start` serves `dist/`; it refuses to start without a
+Offline). Each build has a version (`build-version.js`): the commit Railway deploys
+(`RAILWAY_GIT_COMMIT_SHA`), else the one checked out, else the time of the build. It writes it into
+each page's head (`<meta name="arcade-version">`) and into `version.json`, the version the server
+holds now (see A new build). Railway builds on each deploy and `npm start` serves `dist/`; it refuses to start without a
 build. Vite names each module and stylesheet it builds by its content, under `build/`, so the server
 lets a browser keep those for a year (`immutable`) and has it check everything else on each visit
 (`no-cache`). Every file carries an `ETag`, a hash of its content (`routes/file-tags.js`), so a check
@@ -178,6 +182,19 @@ not kept.
   Looking never downloads, so showing the buttons spends no data. One download runs per game,
   shared by a save and a play keeping it fresh. The server has no such address, so where no worker
   runs the arcade offers no save.
+
+- **A new build** (`src/arcade/update-check.js`, `arcade-version.js`, `newest-worker.js`,
+  `UpdateBanner.tsx`, `use-update.ts`): the pages come from what the worker keeps, so an arcade
+  left open, or opened from the worker's copy, runs the build it loaded after a deploy, and a load
+  before the new worker has taken over opens the old build again; an installed arcade that a phone
+  brings back without a load could stay old for days. So the arcade compares its page's version
+  with `version.json` as it opens and each time it is shown again (`visibilitychange`), past every
+  cache (the worker leaves `version.json` to the network). When the server holds a newer build, it
+  has the worker fetch it (`registration.update()`) and waits until it has taken over, then the home
+  shows a banner, New version ready, whose Reload opens the new build at once. It takes the
+  banners' place first (`has-update-banner`), as the others come again after the reload. Nothing
+  reloads by itself, so a gift under way is never lost. The credits screen names the version the
+  page runs. `npm run dev` writes no version, so it never asks.
 
 `test/integration/offline/worker.test.js` runs the worker's answers against fake caches and a
 network that can go away.
@@ -483,7 +500,8 @@ is pressed, and on a mouse its arrow nudges toward where it leads. The bar float
 the large name scrolls under it, the page fades out under its soft edge and it shows the name small,
 as an iOS large title does. That runs on scroll-driven animations alone (`src/home/page-bar.css`, which the supporters page
 shares), and a browser without them keeps a plain bar that scrolls away with the cover.
-With reduced motion nothing rises, pops or turns.
+With reduced motion nothing rises, pops or turns. Its foot names the version of the build the page
+runs (see A new build), so a phone that seems behind can be checked against the latest deploy.
 
 The arcade's bar and every page's stay clear as in iOS 26, and what scrolls under one fades out
 behind a soft edge (`src/home/scroll-edge.css`, the class `scroll-edge` on the bar): a blur tinted

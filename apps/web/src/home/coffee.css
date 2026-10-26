@@ -168,6 +168,7 @@
     );
   }
 
+  :root.has-update-banner :is(.coffee-fab, .coffee-note),
   :root.has-install-banner :is(.coffee-fab, .coffee-note),
   :root.has-support-banner :is(.coffee-fab, .coffee-note),
   :root.has-consent-banner :is(.coffee-fab, .coffee-note) {
