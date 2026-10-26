@@ -67,6 +67,7 @@
   --color-soon-sheen: rgb(255 255 255 / 9%);
   --color-soon-glow: rgb(255 255 255 / 7%);
   --color-material: rgb(30 30 32 / 78%);
+  --color-scroll-edge: rgb(0 0 0 / 64%);
   --color-material-edge: rgb(255 255 255 / 12%);
   --color-fill-quiet: rgb(118 118 128 / 24%);
   --color-field: var(--color-fill-quiet);
@@ -224,6 +225,8 @@
   --size-icon-small: 0.875rem;
   --size-icon-inline: 1.0625em;
   --size-logo: 1.75rem;
+  --size-home-bar: calc(env(safe-area-inset-top) + 2 * var(--space-4) + var(--size-glass-button));
+  --size-scroll-edge-fade: 1.5rem;
   --size-install: 30rem;
   --size-install-icon: 3rem;
   --size-install-button: 2.25rem;
@@ -290,6 +293,7 @@
   --shadow-coffee: 0 10px 28px rgb(255 129 63 / 42%), inset 0 1px 0 rgb(255 255 255 / 30%);
 
   --blur-glass: blur(24px) saturate(180%);
+  --blur-scroll-edge: blur(18px) saturate(150%);
   --blur-sheet-backdrop: blur(12px);
   --blur-hero-floor: none;
   --blur-launch: blur(48px) saturate(160%) brightness(70%);
@@ -318,6 +322,8 @@
   --scroll-credits-condense-end: calc(var(--size-cover) + 6rem);
   --scroll-supporters-condense-start: calc(var(--size-heart-badge) + 2.5rem);
   --scroll-supporters-condense-end: calc(var(--size-heart-badge) + 5rem);
+  --scroll-home-condense-start: 0;
+  --scroll-home-condense-end: 2.5rem;
 
   --duration-fast: 120ms;
   --duration-swap-out: 140ms;
@@ -408,6 +414,7 @@
   --color-soon-sheen: rgb(255 255 255 / 70%);
   --color-soon-glow: rgb(0 0 0 / 5%);
   --color-material: rgb(255 255 255 / 80%);
+  --color-scroll-edge: rgb(255 255 255 / 82%);
   --color-material-edge: rgb(0 0 0 / 6%);
   --color-fill-quiet: rgb(118 118 128 / 12%);
   --color-error: var(--color-apple-red-light);
@@ -440,8 +447,10 @@
 }
 
 /* Over the bare painting, the light appearance writes the top bar and the prompt in white with a soft
-   shadow, like type over a photo; over a teaser's plain backdrop they stay dark. */
-:root[data-appearance='light'] .hero[data-backdrop='art'] {
+   shadow, like type over a photo; over a teaser's plain backdrop they stay dark. The bar sits just
+   before the hero, so it follows the hero's backdrop. */
+:root[data-appearance='light']
+  :is(.hero[data-backdrop='art'], .topbar:has(+ .hero[data-backdrop='art'])) {
   --color-on-art: var(--color-white);
   --color-on-art-secondary: rgb(255 255 255 / 94%);
   --color-dot: rgb(255 255 255 / 55%);

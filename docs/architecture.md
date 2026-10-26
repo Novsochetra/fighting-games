@@ -109,6 +109,14 @@ the time, so when the device next changes (at sunset, say) the arcade follows it
 `appearance-early.js`, a classic script in the head, sets the attribute before the first paint, so a
 light screen never shows dark first; a test holds it to the same choice as `resolveAppearance`.
 
+- **Top bar** (`topbar.css`): the arcade's name with the supporters, appearance and sound buttons.
+  It heads the home outside the hero and takes no room of its own, so the painting runs up under it.
+  Like an iOS 26 navigation bar over a scroll view, it stays at the top as the arcade scrolls: clear
+  over the painting at the top, the arcade fades out under its soft edge (see the end of the credits
+  page's section) once anything passes under it (`--scroll-home-condense-*` in `tokens.css`), and in
+  the light appearance its name turns from the white it wears over the painting to the label color.
+  It follows the hero's backdrop through `:has()`. That runs on scroll-driven animations alone, and a
+  browser without them keeps a plain bar that scrolls away with the hero.
 - **Hero** (`hero.css`, `spotlight-view.js`): the game's `banner` (its `poster`, a tall crop, on
   narrow screens) cross-fades in behind a dim, under one slow Ken Burns zoom on the whole stack. Its
   title, genre line and first sentence rise in under the carousel, over Play, Details and a heart; a
@@ -248,7 +256,8 @@ a heart in the top bar (the heart alone on a phone, `support.css`) and a card un
 Like the credits page, it slides in over the arcade (`page-push.css`), and its Back goes back in
 history when it was opened from the arcade (`src/home/back-link.js`), so the arcade comes back as it
 was left. Its bar is the credits page's (`src/home/page-bar.css`): it stays at the top, and as the
-large title scrolls under it, it frosts over and shows Supporters small; on a phone Back keeps its
+large title scrolls under it, the page fades out under its soft edge and it shows Supporters small;
+on a phone Back keeps its
 chevron alone. Each page sets where its own large title passes under the bar (`--scroll-*-condense-*`
 in `tokens.css`), and `test/integration/page-bar.test.js` holds both pages to it.
 
@@ -334,10 +343,19 @@ rise in after one another on the arcade's spring. Its links are an inset grouped
 rounded icon in its service's color (`tiles.css`): Find me (Buy Me a Coffee first, then GitHub and
 Facebook), Thanks to (the supporters page) and Made with (Inter, Kokoro). A row lights up while it
 is pressed, and on a mouse its arrow nudges toward where it leads. The bar floats over the cover; as
-the large name scrolls under it, it frosts over and shows the name small, as an iOS large title
-does. That runs on scroll-driven animations alone (`src/home/page-bar.css`, which the supporters page
+the large name scrolls under it, the page fades out under its soft edge and it shows the name small,
+as an iOS large title does. That runs on scroll-driven animations alone (`src/home/page-bar.css`, which the supporters page
 shares), and a browser without them keeps a plain bar that scrolls away with the cover.
 With reduced motion nothing rises, pops or turns.
+
+The arcade's bar and every page's stay clear as in iOS 26, and what scrolls under one fades out
+behind a soft edge (`src/home/scroll-edge.css`, the class `scroll-edge` on the bar): a blur tinted
+with the page's color (`--color-scroll-edge`, `--blur-scroll-edge`), strongest at the top and gone
+a little below the bar (`--size-scroll-edge-fade`). Each bar sets where it comes in
+(`--scroll-edge-start` and `--scroll-edge-end`). Where a blur cannot be masked the edge would end in
+a hard line, so the bar frosts over with a material and a hairline instead, as iOS bars did before.
+`test/integration/scroll-edge.test.js` finds every page as `page-motion.test.js` does and fails for
+one whose bar does not wear the edge. The games keep their own screens.
 
 The arcade and the pages under it, the credits and supporters pages, change like screens in an iOS
 navigation stack, through a view transition across documents (`@view-transition`), which both pages
