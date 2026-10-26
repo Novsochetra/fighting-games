@@ -1,3 +1,4 @@
+import { placeCoffeeNote } from './coffee-note-spot.js';
 import { prefersReducedMotion, readDuration } from './motion-tokens.js';
 import { createSheet } from './sheet.js';
 
@@ -9,6 +10,7 @@ function findElements(document) {
   const byId = (id) => document.getElementById(id);
   return {
     button: byId('coffee-open'),
+    actions: document.querySelector('.spotlight__actions'),
     note: byId('coffee-note'),
     noteOpen: byId('coffee-note-open'),
     noteClose: byId('coffee-note-close'),
@@ -21,7 +23,7 @@ function findElements(document) {
 
 // Its exit runs on a timer the length of its token, as the sheets' does, since a browser may never
 // send animationend for a hidden page.
-function createNote({ note, document, signal }) {
+function createNote({ note, place, document, signal }) {
   let timer = null;
   const later = (task, delay) => {
     clearTimeout(timer);
@@ -47,6 +49,7 @@ function createNote({ note, document, signal }) {
   }
   function show() {
     note.hidden = false;
+    place();
     later(hide, COFFEE_NOTE_MS);
   }
   signal.addEventListener('abort', () => clearTimeout(timer));
@@ -59,7 +62,9 @@ export function wireCoffee({ document, sound, signal }) {
   const elements = findElements(document);
   const { dialog, close: closeButton } = elements;
   const sheet = createSheet({ dialog, closeButton, document, sound, signal });
-  const note = createNote({ note: elements.note, document, signal });
+  const { button, actions } = elements;
+  const place = () => placeCoffeeNote({ note: elements.note, button, actions, document });
+  const note = createNote({ note: elements.note, place, document, signal });
   const open = () => {
     note.hide();
     sheet.open();

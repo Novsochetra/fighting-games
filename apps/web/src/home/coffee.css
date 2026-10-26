@@ -146,8 +146,9 @@
 }
 
 /* On a phone the button sits where the hero keeps Play, so the hero's buttons rise above it, and the
-   note floats above them, so Play stays in reach while it shows. A banner across the bottom asks
-   first, so the button and its note wait while one is up. */
+   note sits beside the button where it fits under them and floats above them where it does not, so
+   Play stays in reach while it shows. A banner across the bottom asks first, so the button and its
+   note wait while one is up. */
 @media (max-width: 40rem) {
   .spotlight {
     padding-block-end: calc(
@@ -159,6 +160,18 @@
     inset-block-end: calc(
       max(var(--space-3), env(safe-area-inset-bottom)) + var(--size-coffee-clearance) +
         var(--size-pill-button) + var(--space-3)
+    );
+  }
+
+  .coffee-note[data-spot='beside'] {
+    inset-block-end: max(var(--offset-coffee-fab), env(safe-area-inset-bottom));
+    inset-inline-end: calc(
+      max(var(--offset-coffee-fab), env(safe-area-inset-right)) + var(--size-coffee-fab) +
+        var(--space-3)
+    );
+    inline-size: min(
+      var(--size-coffee-note-beside),
+      calc(100vw - 2 * var(--offset-coffee-fab) - var(--size-coffee-fab) - var(--space-3))
     );
   }
 
