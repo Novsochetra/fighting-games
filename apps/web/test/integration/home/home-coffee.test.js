@@ -100,7 +100,7 @@ describe('the coffee note', () => {
     expect(note().dataset.spot).toBe('beside');
   });
 
-  it('floats above the hero buttons where it would cover them beside the coffee button', async () => {
+  it('sits right above the coffee button where it would cover the hero buttons beside it', async () => {
     await bootWithRealCatalog();
     layOutPhone({ actionsBottom: 800 });
     tick(COFFEE_NOTE_DELAY_MS);

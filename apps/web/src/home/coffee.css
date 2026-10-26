@@ -145,21 +145,14 @@
   block-size: var(--size-icon-small);
 }
 
-/* On a phone the button sits where the hero keeps Play, so the hero's buttons rise above it, and the
-   note sits beside the button where it fits under them and floats above them where it does not, so
-   Play stays in reach while it shows. A banner across the bottom asks first, so the button and its
-   note wait while one is up. */
+/* On a phone the button sits where the hero keeps Play, so the hero's buttons rise above it. The
+   note sits beside the button where it fits under them; where it does not, it stays right above the
+   button it speaks for, over the hero's buttons only for the few seconds it shows. A banner across
+   the bottom asks first, so the button and its note wait while one is up. */
 @media (max-width: 40rem) {
   .spotlight {
     padding-block-end: calc(
       max(var(--space-3), env(safe-area-inset-bottom)) + var(--size-coffee-clearance)
-    );
-  }
-
-  .coffee-note {
-    inset-block-end: calc(
-      max(var(--space-3), env(safe-area-inset-bottom)) + var(--size-coffee-clearance) +
-        var(--size-pill-button) + var(--space-3)
     );
   }
 

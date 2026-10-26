@@ -13,8 +13,8 @@ export const fitsBesideButton = ({ buttonBottom, noteHeight, actionsBottom, gap 
   buttonBottom - noteHeight - gap >= actionsBottom;
 
 // The hero stops growing on a tall phone, which leaves room under its buttons for the note right
-// beside the coffee button; where it would cover them it floats above them (coffee.css), so Play
-// stays in reach. Its height is read untransformed, since it pops in from a smaller scale.
+// beside the coffee button; where it would cover them it sits right above the button (coffee.css).
+// Its height is read untransformed, since it pops in from a smaller scale.
 export function placeCoffeeNote({ note, button, actions, document }) {
   note.dataset.spot = 'beside';
   const fits = fitsBesideButton({
