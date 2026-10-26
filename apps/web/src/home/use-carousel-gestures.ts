@@ -18,9 +18,11 @@ function useSwipes(carousel: RefObject<HTMLElement | null>, step: (delta: number
     element.addEventListener(
       'pointerdown',
       (event) => {
-        const isArrow = Boolean((event.target as Element)?.closest?.('.carousel__arrow'));
+        const isControl = Boolean(
+          (event.target as Element)?.closest?.('.carousel__arrow, .save-button'),
+        );
 
-        start = event.button === 0 && !isArrow ? { x: event.clientX, y: event.clientY } : null;
+        start = event.button === 0 && !isControl ? { x: event.clientX, y: event.clientY } : null;
         swipedRef.current = false;
       },
       options,

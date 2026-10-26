@@ -24,20 +24,8 @@ function createTestClock() {
 
 export const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
 
-// the arcade's worker as the game's loading screen hears it: `answer` is what it says next about
-// keeping the game for offline, null for an address nothing answers (the game outside the arcade)
-export function fakeArcadeWorker(answer) {
-  const worker = { answer, asked: 0 };
-  worker.fetch = async () => {
-    worker.asked += 1;
-    return worker.answer === null
-      ? new Response('Not found', { status: 404 })
-      : new Response(JSON.stringify(worker.answer));
-  };
-  return worker;
-}
-
-// the page as it first paints, with the boot started on images, a font and a clock the test drives
+// the page as it first paints, with the boot started on images, a font and a clock the test drives,
+// and the network a test may watch
 export function openBootPage({ fontLoads = Promise.resolve([]), fetch } = {}) {
   document.body.innerHTML = PAGE.match(/<body>([\s\S]*)<\/body>/)[1];
   const images = createLateImages();

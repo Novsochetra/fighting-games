@@ -6,6 +6,7 @@ import { DetailsSheet } from './DetailsSheet';
 import { Hero } from './Hero';
 import { HomeContext, useHomeState } from './home-context';
 import { Library } from './Library';
+import { RemoveSaveSheet } from './RemoveSaveSheet';
 import { TopBar } from './TopBar';
 import { useHomeInputs } from './use-home-inputs';
 import './home-styles';
@@ -40,6 +41,7 @@ export function HomeScreen() {
         <Banners />
         <Coffee />
         <DetailsSheet details={home.details} />
+        <RemoveSaveSheet />
       </Inputs>
     </HomeContext>
   );

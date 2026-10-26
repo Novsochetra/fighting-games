@@ -45,14 +45,16 @@ export function fakeCaches() {
   };
 }
 
-// The server's answers by address, and a network that can go away.
+// The server's answers by address, and a network that can go away, or hold its answers until the
+// test lets `hold` settle.
 export function fakeNetwork(files) {
-  const network = { online: true, requests: [] };
+  const network = { online: true, requests: [], hold: null };
 
   network.fetch = async (request) => {
     const address = addressOf(request, { ignoreSearch: true });
 
     network.requests.push({ address, cache: request.cache });
+    await network.hold;
 
     if (!network.online) {
       throw new TypeError('Failed to fetch');

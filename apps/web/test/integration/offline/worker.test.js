@@ -9,7 +9,7 @@ import { fakeCaches, fakeNetwork } from '../../support/fake-caches.js';
 // keeps and from a network that can go away.
 const SCOPE = 'https://arcade.test/';
 const GAME = `${SCOPE}games/steel-and-dust/`;
-const PROGRESS = 'games/steel-and-dust/.offline-progress';
+const SAVE = 'api/offline/steel-and-dust';
 const MANIFEST = [
   { url: 'index.html', revision: 'a1' },
   { url: 'supporters/index.html', revision: 'b1' },
@@ -112,11 +112,28 @@ describe('the arcade offline', () => {
   });
 });
 
+const save = (worker) => worker.request(SAVE, { method: 'POST' });
+const remove = (worker) => worker.request(SAVE, { method: 'DELETE' });
+const caught = async (worker) =>
+  (await worker.caches.keys()).filter((name) => name.startsWith('game-'));
+
 describe('a game offline', () => {
-  it('comes down whole behind its first play, then plays without the network', async () => {
+  it('plays from the network, and saves nothing the player has not saved', async () => {
     const worker = await startWorker();
 
     expect(await text(worker.open('games/steel-and-dust/'))).toBe('steel & dust 1');
+    expect(await caught(worker)).toEqual([]);
+    worker.network.online = false;
+    const page = await worker.open('games/steel-and-dust/');
+
+    expect(page.status).toBe(503);
+    expect(await page.text()).toContain('You are offline');
+  });
+
+  it('plays a saved game without the network', async () => {
+    const worker = await startWorker();
+
+    await save(worker);
     worker.network.online = false;
 
     expect(await text(worker.open('games/steel-and-dust/?from=arcade'))).toBe('steel & dust 1');
@@ -129,18 +146,17 @@ describe('a game offline', () => {
     delete files[`${GAME}src/main.js`];
     const worker = await startWorker(files);
 
-    await worker.open('games/steel-and-dust/');
+    await save(worker);
     worker.network.online = false;
     const page = await worker.open('games/steel-and-dust/');
 
     expect(page.status).toBe(503);
-    expect(await page.text()).toContain('You are offline');
   });
 
-  it('plays the revision it has while a deploy’s comes down, then the new one', async () => {
+  it('keeps a saved game fresh: a play brings a deploy’s revision down behind the one it plays', async () => {
     const worker = await startWorker();
 
-    await worker.open('games/steel-and-dust/');
+    await save(worker);
     Object.assign(
       worker.files,
       gameAt('r2', { 'index.html': 'steel & dust 2', 'src/main.js': 'game 2' }),
@@ -148,69 +164,94 @@ describe('a game offline', () => {
 
     expect(await text(worker.open('games/steel-and-dust/'))).toBe('steel & dust 1');
     expect(await text(worker.request('games/steel-and-dust/src/main.js'))).toBe('game 2');
-    expect(await worker.caches.keys()).not.toContain('game-steel-and-dust@r1');
+    expect(await caught(worker)).toEqual(['game-steel-and-dust@r2']);
   });
 
   it('downloads nothing for a prefetch, which only the arcade’s hover asked for', async () => {
     const worker = await startWorker();
     const prefetch = new Headers({ 'Sec-Purpose': 'prefetch' });
 
+    await save(worker);
+    worker.files[`${GAME}offline.json`] = JSON.stringify({ revision: 'r2', files: [] });
+    worker.network.requests.length = 0;
     await worker.request('games/steel-and-dust/', { mode: 'navigate', headers: prefetch });
 
-    expect(await worker.caches.keys()).not.toContain('game-steel-and-dust@r1');
     expect(worker.network.requests.map((request) => request.address)).not.toContain(
       `${GAME}offline.json`,
     );
   });
-
-  it('says the arcade is offline for a game not played here yet', async () => {
-    const worker = await startWorker();
-
-    worker.network.online = false;
-    const page = await worker.open('games/steel-and-dust/');
-
-    expect(page.status).toBe(503);
-  });
 });
 
-describe('a game’s loading screen asking how much of it is kept', () => {
-  it('hears how far the download is, then that the game plays offline', async () => {
+describe('saving a game for offline from the arcade', () => {
+  it('downloads nothing while the arcade only looks', async () => {
     const worker = await startWorker();
 
-    expect(await json(worker.request(PROGRESS))).toEqual({
-      ready: false,
-      done: 0,
-      total: 0,
-      failed: false,
-    });
-    expect(await json(worker.request(PROGRESS))).toEqual({ ready: true });
-    worker.network.online = false;
-
-    expect(await text(worker.open('games/steel-and-dust/'))).toBe('steel & dust 1');
+    expect(await json(worker.request(SAVE))).toEqual({ state: 'not-saved' });
+    expect(worker.network.requests.map(({ address }) => address)).not.toContain(
+      `${GAME}offline.json`,
+    );
   });
 
-  it('shares one download with the play that opened the game', async () => {
+  it('hears how far the save is, then that the game is saved', async () => {
     const worker = await startWorker();
 
-    await Promise.all([worker.open('games/steel-and-dust/'), worker.request(PROGRESS)]);
+    expect(await json(save(worker))).toEqual({ state: 'saving', done: 0, total: 0 });
+    expect(await json(worker.request(SAVE))).toEqual({ state: 'saved' });
+  });
+
+  it('downloads each file once for two taps at once', async () => {
+    const worker = await startWorker();
+
+    await Promise.all([save(worker), save(worker)]);
     const asked = worker.network.requests.filter(({ address }) => address === `${GAME}src/main.js`);
 
     expect(asked).toHaveLength(1);
   });
 
-  it('hears that the download failed, and the next play tries again', async () => {
+  it('hears that the save failed, and saves on the next try', async () => {
     const files = server();
     const mainJs = files[`${GAME}src/main.js`];
 
     delete files[`${GAME}src/main.js`];
     const worker = await startWorker(files);
 
-    await worker.open('games/steel-and-dust/');
+    await save(worker);
 
-    expect(await json(worker.request(PROGRESS))).toMatchObject({ ready: false, failed: true });
+    expect(await json(worker.request(SAVE))).toEqual({ state: 'failed' });
     worker.files[`${GAME}src/main.js`] = mainJs;
+    await save(worker);
+
+    expect(await json(worker.request(SAVE))).toEqual({ state: 'saved' });
+  });
+});
+
+describe('removing a saved game', () => {
+  it('frees every revision it kept, and a play does not bring it back', async () => {
+    const worker = await startWorker();
+
+    await save(worker);
+
+    expect(await json(remove(worker))).toEqual({ state: 'not-saved' });
+    expect(await caught(worker)).toEqual([]);
     await worker.open('games/steel-and-dust/');
 
-    expect(await json(worker.request(PROGRESS))).toEqual({ ready: true });
+    expect(await caught(worker)).toEqual([]);
+    expect(await json(worker.request(SAVE))).toEqual({ state: 'not-saved' });
+  });
+
+  it('stops a download on its way and keeps none of it', async () => {
+    const worker = await startWorker();
+    const held = Promise.withResolvers();
+
+    worker.network.hold = held.promise;
+    const saving = save(worker);
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await remove(worker);
+    held.resolve();
+    await saving;
+
+    expect(await json(worker.request(SAVE))).toEqual({ state: 'not-saved' });
+    expect(await caught(worker)).toEqual([]);
   });
 });

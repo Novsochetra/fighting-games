@@ -1,7 +1,7 @@
 import { apiNetworkFirst } from './api-cache.js';
 import { fromArcade } from './arcade-cache.js';
 import { fromGame } from './game-cache.js';
-import { progressResponse } from './game-downloads.js';
+import { keepSavedFresh, saveResponse } from './game-downloads.js';
 import { offlineResponse } from './offline-page.js';
 import { routeOf } from './routes.js';
 
@@ -36,11 +36,10 @@ async function fromGameOrNetwork(context, { id, key }) {
 // is a play.
 const isPrefetch = (request) => request.headers?.get('Sec-Purpose')?.includes('prefetch') ?? false;
 
-// Opening a game is its first play: the whole game comes down behind it, or its new revision after
-// a deploy, while it plays from what it had.
+// A play of a saved game brings a deploy's revision down behind it, while it plays from what it had.
 function startGame(event, context, route) {
   if (context.request.mode === 'navigate' && !isPrefetch(context.request)) {
-    event.waitUntil(context.downloads.play(context, route.id));
+    event.waitUntil(keepSavedFresh(context, route.id));
   }
 
   return fromGameOrNetwork(context, route);
@@ -60,8 +59,8 @@ export function respondTo(event, services) {
       return apiNetworkFirst(context);
     case 'game':
       return startGame(event, context, route);
-    case 'game-progress':
-      return progressResponse(event, context, route.id);
+    case 'save':
+      return saveResponse(event, context, route.id);
     case 'navigate':
       return context.fetch(event.request).catch(offlineResponse);
     default:

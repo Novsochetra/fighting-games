@@ -22,12 +22,21 @@ export async function completeGame({ caches, scope, id }) {
   return null;
 }
 
+// A player who removes a game while it comes down (a play keeping it fresh) wants none of it kept.
+function stopIfRemoved(progress) {
+  if (progress.removed) {
+    throw new Error('removed by the player');
+  }
+}
+
 // Each file is checked with the server (no-cache), so the files the game has just loaded for itself
 // cost only a 304, not a second download.
 async function downloadInto(cache, addresses, { fetch, progress }) {
   const queue = [...addresses];
   const worker = async () => {
     for (let address = queue.shift(); address; address = queue.shift()) {
+      stopIfRemoved(progress);
+
       if (!(await cache.match(address))) {
         const response = await fetch(new Request(address, { cache: 'no-cache' }));
 
@@ -45,15 +54,17 @@ async function downloadInto(cache, addresses, { fetch, progress }) {
   await Promise.all(Array.from({ length: AT_ONCE }, worker));
 }
 
-// The whole game, on its first play and again after a deploy changes it: the list (offline.json,
-// written by the build) names every file and the revision they make up, and `progress` counts the
-// files in as they come. An older revision goes once the new one is in.
+// The whole game, on the player's save and again, on a play, after a deploy changes it: the list
+// (offline.json, written by the build) names every file and the revision they make up, and
+// `progress` counts the files in as they come. An older revision goes once the new one is in.
 export async function downloadGame({ caches, fetch, scope, id, progress = { done: 0, total: 0 } }) {
   const reply = await fetch(
     new Request(addressOf(id, 'offline.json', scope), { cache: 'no-store' }),
   );
   const { revision, files } = await reply.json();
   const name = cacheNameOf(id, revision);
+
+  stopIfRemoved(progress);
   const cache = await caches.open(name);
 
   progress.total = files.length;
@@ -66,6 +77,7 @@ export async function downloadGame({ caches, fetch, scope, id, progress = { done
       files.map((file) => addressOf(id, file, scope)),
       { fetch, progress },
     );
+    stopIfRemoved(progress);
     await cache.put(markOf(id, scope), new Response('complete'));
   }
 
@@ -74,6 +86,13 @@ export async function downloadGame({ caches, fetch, scope, id, progress = { done
   );
 
   await Promise.all(others.map((other) => caches.delete(other)));
+}
+
+// Every revision of a game, whole or half come down, so removing it frees all the room it took.
+export async function removeGame({ caches, id }) {
+  const names = (await caches.keys()).filter((name) => name.startsWith(cacheNameOf(id, '')));
+
+  await Promise.all(names.map((name) => caches.delete(name)));
 }
 
 // A game's folder is its page.

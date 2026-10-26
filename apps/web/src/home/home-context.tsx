@@ -6,6 +6,8 @@ import { useCatalog } from './use-catalog';
 import { useDetails } from './use-details';
 import { useLauncher } from './use-launcher';
 import { useLibrary } from './use-library';
+import { useOfflineSaves } from './use-offline-saves';
+import { useRemoveSave } from './use-remove-save';
 import { useSelection } from './use-selection';
 
 // The arcade's state and what its controls do, for every part of the home screen.
@@ -18,6 +20,8 @@ export function useHomeState(homeRef: RefObject<HTMLElement | null>) {
   const launcher = useLauncher(homeRef);
   const details = useDetails();
   const banners = useBanners();
+  const saves = useOfflineSaves();
+  const removal = useRemoveSave();
   const [favorites, favoritesChanged] = useReducer((count: number) => count + 1, 0);
   const parts = { arcade, cards, choice, library, launcher, homeRef, favoritesChanged };
 
@@ -28,6 +32,8 @@ export function useHomeState(homeRef: RefObject<HTMLElement | null>) {
     launcher,
     details,
     banners,
+    saves,
+    removal,
     favorites,
     ...homeActions(parts),
   };

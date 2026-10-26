@@ -87,6 +87,12 @@
   background: var(--color-brand-coffee);
 }
 
+/* An answer that throws something away, in Apple's system red. */
+.pill-button--destructive {
+  color: var(--color-on-button-destructive);
+  background: var(--color-button-destructive);
+}
+
 /* A teaser's Play: frosted and still, since there is nothing to open yet. */
 .pill-button.is-unavailable {
   color: var(--color-label-secondary);
@@ -109,6 +115,7 @@
 
   .pill-button--primary:not(.is-unavailable):hover,
   .pill-button--surface:hover,
+  .pill-button--destructive:hover,
   .pill-button--coffee:hover {
     filter: brightness(var(--dim-pressed));
   }

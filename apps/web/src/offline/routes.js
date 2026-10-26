@@ -3,20 +3,15 @@ const PAGES = ['', 'supporters/', 'credits/'];
 // the API's reads (api-cache.js keeps their last answers)
 const API_READS = ['api/games', 'api/supporters'];
 const GAME = /^games\/([\w-]+)\//;
-// where, in its own folder, a game's loading screen asks how much of it is kept; only the worker
-// answers it, so outside the arcade the game finds nothing there and waits for nothing
-const GAME_PROGRESS = /^games\/([\w-]+)\/\.offline-progress$/;
+// where the arcade asks how much of a game is kept (GET), saves it (POST) and removes it (DELETE);
+// only the worker answers it, so without one the arcade finds nothing there and offers no save
+const SAVE = /^api\/offline\/([\w-]+)$/;
 
 const pathUnder = (url, scope) =>
   url.pathname.slice(scope.pathname.length).replace(/(^|\/)index\.html$/, '$1');
 
 function sameOriginRoute(request, path) {
-  const progress = GAME_PROGRESS.exec(path);
   const game = GAME.exec(path);
-
-  if (progress) {
-    return { kind: 'game-progress', id: progress[1] };
-  }
 
   if (game) {
     return { kind: 'game', id: game[1], key: path };
@@ -34,16 +29,22 @@ function sameOriginRoute(request, path) {
 }
 
 // What the worker does with a request: the arcade's pages and files come from what it keeps, the
-// API's reads from the network first, a game from its own download (and how much of it is in, from
-// the worker), and anything else (a gift sent, another site) is left to the browser.
+// API's reads from the network first, a game from its own download (and a save of it, from the
+// worker), and anything else (a gift sent, another site) is left to the browser.
 export function routeOf(request, scopeUrl) {
   const url = new URL(request.url);
   const scope = new URL(scopeUrl);
   const isOurs = url.origin === scope.origin && url.pathname.startsWith(scope.pathname);
+  const path = isOurs ? pathUnder(url, scope) : '';
+  const save = SAVE.exec(path);
+
+  if (save && ['GET', 'POST', 'DELETE'].includes(request.method)) {
+    return { kind: 'save', id: save[1] };
+  }
 
   if (!isOurs || request.method !== 'GET') {
     return { kind: 'pass' };
   }
 
-  return sameOriginRoute(request, pathUnder(url, scope));
+  return sameOriginRoute(request, path);
 }

@@ -4,6 +4,8 @@ import type { GameCard } from './game-card';
 import { GameArt } from './GameArt';
 import { useHome } from './home-context';
 import { LibraryFooter } from './LibraryFooter';
+import { OfflineTag } from './OfflineTag';
+import { SaveButton } from './SaveButton';
 import type { Filter } from './use-library';
 
 const FILTER_OPTIONS = [
@@ -19,23 +21,25 @@ interface TileProps {
   isSelected: boolean;
 }
 
+// A tile's save button sits on its art's corner, beside the tile's own button rather than in it,
+// since a button cannot hold another; both rise in on the tile's turn.
 function Tile({ card, index, order, isSelected }: TileProps) {
   const home = useHome();
 
   return (
-    <li className="library__slot">
+    <li className="library__slot" style={{ '--order': order } as CSSProperties}>
       <button
         className={`tile${isSelected ? ' is-selected' : ''}`}
         type="button"
         data-game-index={index}
         aria-current={isSelected || undefined}
-        style={{ '--order': order } as CSSProperties}
         onClick={() => home.pickTile(index)}
       >
         <span className="tile__media">
           <span className="tile__ring" aria-hidden="true" />
           <span className="tile__frame">
             <GameArt card={card} loading="lazy" />
+            <OfflineTag card={card} />
           </span>
         </span>
         <span className="tile__text">
@@ -43,6 +47,7 @@ function Tile({ card, index, order, isSelected }: TileProps) {
           <span className="tile__genre">{card.genre}</span>
         </span>
       </button>
+      <SaveButton card={card} id={`tile-save-${card.id}`} place="tile" />
     </li>
   );
 }

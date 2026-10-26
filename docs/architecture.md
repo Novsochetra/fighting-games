@@ -159,24 +159,25 @@ not kept.
 - **The API** (`api-cache.js`): the games and the supporters are read from the network first, and
   the last answer stands in offline; the worker reads them once as it installs, since the first
   visit read them before it was there. A gift sent offline fails as it always did, saying so.
-- **A game** (`game-cache.js`): opening a game is its first play, and the whole game comes down
-  behind it: the build writes each game's `offline.json` (`game-files.js`), every file it may load
+- **A game** (`game-cache.js`): a game is kept once the player saves it (see Saving a game), and
+  the whole of it comes down: the build writes each game's `offline.json` (`game-files.js`), every file it may load
   as it is played (not its screenshots, link-preview art or notes, nor a sprite that has a packed
   copy of itself in `packed/`, which only the packer reads) and a revision that changes with any of
   them. Each file is checked with the server, so what the game has just loaded for itself costs a
   `304`. A game is played from its download only once every file of one revision is in, marked last,
   so a half download, or one across two deploys, is never played; until then it comes from the
-  network as before, and offline it says so. After a deploy that changes the game, the next play
-  brings the new revision down behind the old one, which it plays meanwhile, then lets the old go. A
-  prefetch of a game's page (the home's speculation rules) downloads nothing.
-- **A game's first play waits for its download** (`game-downloads.js`): the worker answers
-  `games/<id>/.offline-progress`, an address in the game's own folder, with `{ ready: true }` once a
-  revision is whole, else how many of its files are in (`done`, `total`) or that the download
-  `failed`. One download runs per game, shared by the play and the asking, and asking starts one
-  when none runs (the browser stops an idle worker, and its download with it). A game's loading
-  screen may ask (Steel & Dust's `offline-wait.js`) and stay up until the game is kept, so a player
-  who goes offline after the first play still has it; it waits no more when the download fails or
-  brings no file for a while. The server has no such file, so outside the arcade nothing waits.
+  network as before, and offline it says so. A play saves nothing the player has not saved, but it
+  keeps a saved game fresh: after a deploy that changes the game, the next play brings the new
+  revision down behind the old one, which it plays meanwhile, then lets the old go. A prefetch of a
+  game's page (the home's speculation rules) downloads nothing.
+- **Saving a game** (`game-downloads.js`): the player saves a game, and removes it, with the
+  arcade's buttons; a play never waits for a download. The worker answers `api/offline/<id>`: a GET
+  with `saved` once a revision is whole, else `saving` with how many of its files are in (`done`,
+  `total`), `failed`, or `not-saved`; a POST starts the download; a DELETE removes every revision
+  of the game, whole or half come down, and stops one on its way, so a removed game stays removed.
+  Looking never downloads, so showing the buttons spends no data. One download runs per game,
+  shared by a save and a play keeping it fresh. The server has no such address, so where no worker
+  runs the arcade offers no save.
 
 `test/integration/offline/worker.test.js` runs the worker's answers against fake caches and a
 network that can go away.
@@ -238,8 +239,27 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   fresh. The arcade opens on the game played last. The library reads the favorites and the games
   played as it changes filter or page and when asked, so a game opened is in Recent once the arcade
   is back from it, not while its card flies.
+- **Save for offline** (`SaveButton.tsx`, `OfflineTag.tsx`, `save-button.css`,
+  `use-save-status.ts`, `use-offline-saves.ts`, `offline-saves.js`, `offline-save.js`): a small
+  round cloud-download button floats on the center card's top corner (one for the carousel, coming
+  in again once each new card has turned to the center) and on the corner of each tile, and keeps
+  one of the arcade's own games for offline (see Offline). While it saves, a ring around it fills
+  with the share saved. A saved game wears an Available offline tag on its art (every card and tile, and the
+  details sheet), and its button turns into a trash can, red under the pointer, that asks before
+  removing the game (`RemoveSaveSheet.tsx`, `use-remove-save.ts`, a small sheet whose Remove is
+  Apple's red). Its tooltip, one short line on hover after a beat or on keyboard focus, says what a
+  tap does or how far the save has got; the button's name says it all aloud, so the tooltip and the
+  tag are only for the eye. One store holds every game's status for the home screen, so the card,
+  the tile and the details sheet show the same save; it asks the worker as a game first shows, every
+  half second while one saves, and again for each game back from a play. The ring and tooltip are
+  drawn inside the button, so a fade of the button takes them along. Where no worker answers, or for
+  a game on its own site, no button shows.
 - **Details** (`DetailsSheet.tsx`, `use-details.ts`, `sheet.css`): a `<dialog>` form sheet with the whole description
-  and the controls, centered on wide screens and rising from the bottom on phones. While it is up
+  and the controls, centered on wide screens and rising from the bottom on phones. Beside its Play,
+  Save offline (`SaveOffline.tsx`) is the same save as the round buttons, spelled out: it asks the
+  worker again as the sheet opens, fills a ring with the share saved while it saves, then reads
+  Remove offline copy once saved (asking first, in a sheet of its own), or Try again after a failed
+  save. While it is up
   the page behind holds still (`has-open-sheet` on the root), since a modal dialog alone lets iOS
   Safari and a mouse wheel scroll the arcade under it, and the sheet itself takes the focus. Every
   sheet of the arcade works through `use-sheet.ts` over `sheet.js`: it shows while its screen asks

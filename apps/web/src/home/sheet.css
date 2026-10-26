@@ -125,8 +125,65 @@
   border-radius: var(--radius-pill);
 }
 
-.sheet__play {
+.sheet__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
   margin-block-start: var(--space-3);
+}
+
+/* The sheet is the color of the surface button, which would vanish into it. */
+.sheet .pill-button--surface {
+  background: var(--color-field);
+}
+
+/* The percent changes twice a second while a game saves; even digits keep the button still. */
+.sheet__save {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The question before a saved game is removed: a small sheet, its answer first. */
+.sheet--confirm {
+  inline-size: min(var(--size-sheet-compact), calc(100% - 2 * var(--space-gutter)));
+}
+
+.sheet--confirm .sheet__actions {
+  inline-size: 100%;
+}
+
+.sheet--confirm .pill-button {
+  flex: 1;
+}
+
+.sheet__save[aria-disabled='true'] {
+  cursor: default;
+}
+
+.sheet__save.is-saved {
+  color: var(--color-label-secondary);
+}
+
+.save-ring circle {
+  stroke-width: var(--size-stroke-bold);
+}
+
+.save-ring__track {
+  opacity: var(--opacity-ring-track);
+}
+
+.save-ring__value {
+  stroke-dasharray: 100;
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--duration-normal) var(--easing-standard);
+  transform: rotate(-90deg);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .save-ring__value {
+    transition: none;
+  }
 }
 
 @media (max-width: 40rem) {

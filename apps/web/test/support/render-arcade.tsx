@@ -75,14 +75,14 @@ export function unmountArcade() {
 
 // Waits as vi.waitFor does, which goes on with a faked clock, where Testing Library's waitFor would
 // wait on the clock; React draws meanwhile as on a page, as it does inside waitFor.
-export async function waitUntil(check: () => void) {
+export async function waitUntil(check: () => void, options?: Parameters<typeof vi.waitFor>[1]) {
   const scope = globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean };
   const wasActing = scope.IS_REACT_ACT_ENVIRONMENT;
 
   scope.IS_REACT_ACT_ENVIRONMENT = false;
 
   try {
-    await vi.waitFor(check);
+    await vi.waitFor(check, options);
   } finally {
     scope.IS_REACT_ACT_ENVIRONMENT = wasActing;
   }

@@ -31,12 +31,21 @@ describe('routeOf', () => {
     expect(routeOf(get('games/steel-and-dust/src/main.js'), SCOPE).kind).toBe('game');
   });
 
-  it('answers a game’s loading screen asking how much of the game is kept', () => {
-    expect(routeOf(get('games/steel-and-dust/.offline-progress'), SCOPE)).toEqual({
-      kind: 'game-progress',
+  it('answers the arcade looking at a game’s save, saving it and removing it', () => {
+    expect(routeOf(get('api/offline/steel-and-dust'), SCOPE)).toEqual({
+      kind: 'save',
       id: 'steel-and-dust',
     });
-    expect(routeOf(get('games/steel-and-dust/src/.offline-progress'), SCOPE).kind).toBe('game');
+    expect(routeOf({ ...get('api/offline/steel-and-dust'), method: 'POST' }, SCOPE).kind).toBe(
+      'save',
+    );
+    expect(routeOf({ ...get('api/offline/steel-and-dust'), method: 'DELETE' }, SCOPE).kind).toBe(
+      'save',
+    );
+    expect(routeOf({ ...get('api/offline/steel-and-dust'), method: 'PUT' }, SCOPE).kind).toBe(
+      'pass',
+    );
+    expect(routeOf(get('api/offline/steel-and-dust/src'), SCOPE).kind).toBe('file');
   });
 
   it('opens any other page from the network', () => {

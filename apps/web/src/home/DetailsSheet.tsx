@@ -4,7 +4,10 @@ import type { GameCard } from './game-card';
 import { useHome } from './home-context';
 import { PlayIcon } from './home-icons';
 import { isPlainClick } from './input-actions.js';
+import { OfflineTag } from './OfflineTag';
+import { SaveOffline } from './SaveOffline';
 import type { Details } from './use-details';
+import { useSaveStatus } from './use-save-status';
 
 function Media({ card }: { card: GameCard | null }) {
   const url = useArcadeUrl();
@@ -18,6 +21,7 @@ function Media({ card }: { card: GameCard | null }) {
         src={art ? url(art) : undefined}
         alt=""
       />
+      <OfflineTag card={card} />
     </div>
   );
 }
@@ -87,6 +91,15 @@ function Story({ card }: { card: GameCard | null }) {
 export function DetailsSheet({ details }: { details: Details }) {
   const home = useHome();
   const { card, dialogRef, closeRef, finish } = details;
+  const save = useSaveStatus(card, details.isOpen);
+  // a saved game's pill asks before removing it, in a sheet of its own
+  const tapSave = () => {
+    if (save.status?.state === 'saved') {
+      finish();
+    }
+
+    save.tap();
+  };
   const play = () => {
     finish();
     home.open(home.selected, 'details');
@@ -105,7 +118,10 @@ export function DetailsSheet({ details }: { details: Details }) {
       <div className="sheet__body">
         <Story card={card} />
         <Controls controls={card?.controls ?? []} />
-        <PlayLink card={card} onPlay={play} />
+        <div className="sheet__actions">
+          <PlayLink card={card} onPlay={play} />
+          <SaveOffline status={save.status} onTap={tapSave} />
+        </div>
       </div>
     </dialog>
   );

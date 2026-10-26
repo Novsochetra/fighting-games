@@ -1,16 +1,25 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, type ReactNode } from 'react';
 import { createCarouselMotion } from './carousel-motion.js';
 import type { GameCard } from './game-card';
 import { GameArt } from './GameArt';
 import { useHome } from './home-context';
+import { OfflineTag } from './OfflineTag';
+import { SaveButton } from './SaveButton';
 import { useCarouselGestures } from './use-carousel-gestures';
 
 // The cards near the center are seen at once; the rest load as the carousel brings them near.
 export const EAGER_CARD_COUNT = 5;
 
+interface CarouselCardProps {
+  card: GameCard;
+  index: number;
+  // drawn over the art, such as the Offline tag
+  children?: ReactNode;
+}
+
 // The cards are placed by the carousel's turn (card-motion.js), which owns their slot, their ring
 // and their place in the tab order; React only puts them on the page.
-export function CarouselCard({ card, index }: { card: GameCard; index: number }) {
+export function CarouselCard({ card, index, children }: CarouselCardProps) {
   return (
     <button
       className="card"
@@ -22,6 +31,7 @@ export function CarouselCard({ card, index }: { card: GameCard; index: number })
       <span className="card__ring" aria-hidden="true" />
       <span className="card__frame">
         <GameArt card={card} loading={index < EAGER_CARD_COUNT ? 'eager' : 'lazy'} />
+        {children}
       </span>
     </button>
   );
@@ -70,6 +80,8 @@ export function Carousel() {
   const carousel = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const isSingle = home.cards.length < 2;
+  // one save button floats on the center card's corner, coming in again with each card it serves
+  const selected = home.cards[home.selected];
   const onTrackClick = useCarouselGestures(carousel);
 
   useCarouselTurns(track);
@@ -85,9 +97,12 @@ export function Carousel() {
     >
       <div className="carousel__track" id="carousel-track" ref={track} onClick={onTrackClick}>
         {home.cards.map((card, index) => (
-          <CarouselCard key={card.id} card={card} index={index} />
+          <CarouselCard key={card.id} card={card} index={index}>
+            <OfflineTag card={card} />
+          </CarouselCard>
         ))}
       </div>
+      {selected && <SaveButton key={selected.id} card={selected} id="card-save" place="card" />}
       <Arrow side="previous" hidden={isSingle} onClick={() => home.step(-1)} />
       <Arrow side="next" hidden={isSingle} onClick={() => home.step(1)} />
     </div>
