@@ -31,9 +31,11 @@ function rumblePad(navigator, rumbles) {
   }
 }
 
-// Safari on iPhone has neither, and Firefox dropped navigator.vibrate
+// Safari on iPhone has neither, Firefox dropped navigator.vibrate and keeps only its own
+// hapticActuators, so the pad's rumble is looked for where it is played from
 export function canVibrate(window) {
-  return !!window.navigator.vibrate || 'GamepadHapticActuator' in window;
+  const { Gamepad } = window;
+  return !!window.navigator.vibrate || (!!Gamepad && 'vibrationActuator' in Gamepad.prototype);
 }
 
 // a cue is felt in what the player holds: the gamepad, or the phone, whichever they used last

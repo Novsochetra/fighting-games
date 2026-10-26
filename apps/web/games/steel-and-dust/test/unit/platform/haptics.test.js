@@ -82,8 +82,24 @@ describe('haptics', () => {
   });
 
   it('offers vibration where a phone or a gamepad can give it', () => {
-    expect(canVibrate({ navigator: { vibrate() {} } })).toBe(true);
-    expect(canVibrate({ navigator: {}, GamepadHapticActuator: class {} })).toBe(true);
+    const chrome = {
+      navigator: { vibrate() {} },
+      Gamepad: { prototype: { vibrationActuator: null } },
+    };
+    const macSafari = { navigator: {}, Gamepad: { prototype: { vibrationActuator: null } } };
+    expect(canVibrate(chrome)).toBe(true);
+    expect(canVibrate(macSafari)).toBe(true);
+    expect(canVibrate({ navigator: {}, Gamepad: { prototype: {} } })).toBe(false);
     expect(canVibrate({ navigator: {} })).toBe(false);
+  });
+
+  // Firefox's pads have the actuator interface for its own hapticActuators, but no rumble we play
+  it('does not offer it for a pad that only has Firefox hapticActuators', () => {
+    const firefox = {
+      navigator: {},
+      Gamepad: { prototype: { hapticActuators: [] } },
+      GamepadHapticActuator: {},
+    };
+    expect(canVibrate(firefox)).toBe(false);
   });
 });
