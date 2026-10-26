@@ -26,6 +26,7 @@ describe('routeOf', () => {
     expect(routeOf(get('games/steel-and-dust/', 'navigate'), SCOPE)).toEqual({
       kind: 'game',
       id: 'steel-and-dust',
+      key: 'games/steel-and-dust/',
     });
     expect(routeOf(get('games/steel-and-dust/src/main.js'), SCOPE).kind).toBe('game');
   });

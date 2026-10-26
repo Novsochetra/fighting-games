@@ -11,9 +11,10 @@ async function fromArcadeOrNetwork(context, key) {
 }
 
 // A game downloaded whole plays from its download, its pages and files all of one revision; until
-// then it comes from the network, as it always did.
-async function fromGameOrNetwork(context, id) {
-  const kept = await fromGame({ ...context, id });
+// then it comes from the network, as it always did. Its card art is kept with the arcade's files
+// (catalog-art.js), so the arcade shows it offline before the game is ever played.
+async function fromGameOrNetwork(context, { id, key }) {
+  const kept = (await fromGame({ ...context, id })) ?? (await fromArcade({ ...context, key }));
 
   if (kept) {
     return kept;
@@ -36,12 +37,12 @@ const isPrefetch = (request) => request.headers?.get('Sec-Purpose')?.includes('p
 
 // Opening a game is its first play: the whole game comes down behind it, or its new revision after
 // a deploy, while it plays from what it had.
-function startGame(event, context, id) {
+function startGame(event, context, route) {
   if (context.request.mode === 'navigate' && !isPrefetch(context.request)) {
-    event.waitUntil(downloadGame({ ...context, id }).catch(() => {}));
+    event.waitUntil(downloadGame({ ...context, id: route.id }).catch(() => {}));
   }
 
-  return fromGameOrNetwork(context, id);
+  return fromGameOrNetwork(context, route);
 }
 
 // The response the worker gives a request, or null for one it leaves to the browser.
@@ -57,7 +58,7 @@ export function respondTo(event, services) {
     case 'api':
       return apiNetworkFirst(context);
     case 'game':
-      return startGame(event, context, route.id);
+      return startGame(event, context, route);
     case 'navigate':
       return context.fetch(event.request).catch(offlineResponse);
     default:

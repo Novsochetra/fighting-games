@@ -12,6 +12,8 @@ const MANIFEST = [
   { url: 'index.html', revision: 'a1' },
   { url: 'supporters/index.html', revision: 'b1' },
   { url: 'build/main-3f9a.js', revision: null },
+  // a game's card art, which the arcade keeps with its own files (catalog-art.js)
+  { url: 'games/steel-and-dust/assets/screenshots/angkor-wat.png', revision: 'c1' },
 ];
 
 const gameAt = (revision, files) => ({
@@ -24,6 +26,7 @@ const server = () => ({
   [`${SCOPE}supporters/index.html`]: 'the supporters',
   [`${SCOPE}build/main-3f9a.js`]: 'the app',
   [`${SCOPE}api/games`]: '{"games":[]}',
+  [`${GAME}assets/screenshots/angkor-wat.png`]: 'the card art',
   ...gameAt('r1', { 'index.html': 'steel & dust 1', 'src/main.js': 'game 1' }),
 });
 
@@ -62,6 +65,16 @@ describe('the arcade offline', () => {
     expect(await text(worker.open('supporters/?from=share#give'))).toBe('the supporters');
     expect(await text(worker.open(''))).toBe('the arcade');
     expect(await text(worker.request('build/main-3f9a.js'))).toBe('the app');
+  });
+
+  it('shows each game’s card art, kept with the arcade, before the game is ever played', async () => {
+    const worker = await startWorker();
+
+    worker.network.online = false;
+
+    expect(
+      await text(worker.request('games/steel-and-dust/assets/screenshots/angkor-wat.png')),
+    ).toBe('the card art');
   });
 
   it('lists the games offline from the first visit, read as the worker came in', async () => {

@@ -11,7 +11,7 @@ function sameOriginRoute(request, path) {
   const game = GAME.exec(path);
 
   if (game) {
-    return { kind: 'game', id: game[1] };
+    return { kind: 'game', id: game[1], key: path };
   }
 
   if (API_READS.includes(path)) {
