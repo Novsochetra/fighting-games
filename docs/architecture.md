@@ -92,10 +92,14 @@ app, `src/main.tsx`, and names the screen it opens on (`<div id="root" data-scre
   goes back through history too (`cameFrom`, `back-link.js`), so the browser brings the arcade back
   from its back/forward cache; opened on its own, Back takes the arcade in, sliding the way Back
   does. A click that opens a tab is left to the link.
-- **Motion** (`stack-motion.ts`): a push slides the screen arriving in from the right with a shadow
-  on its edge, over the one left, which slides a little left and dims, and a pop plays it backwards,
-  on the navigation tokens (`--duration-navigation`, `--easing-navigation`); with reduced motion the
-  screen only fades, as iOS dissolves.
+- **Motion** (`stack-motion.ts`): on a phone a push slides the screen arriving in from the right
+  with a shadow on its edge, over the one left, which slides a little left and dims, and a pop plays
+  it backwards, on the navigation tokens (`--duration-navigation`, `--easing-navigation`). With a
+  mouse or trackpad (`@media (hover: hover) and (pointer: fine)` in `tokens.css` sets
+  `--motion-navigation: zoom`) the arcade moves like a desktop app instead: a push zooms in, the
+  screen arriving growing into place as it fades in, and a pop zooms back out, only opacity and scale
+  changing so the compositor plays it alone. With reduced motion the screen only fades, as iOS
+  dissolves.
 
 `test/integration/page-motion.test.js` finds every `index.html` under `apps/web/` outside the games,
 code and art, and fails for one that does not start the app, name the screen `SCREENS` knows by its

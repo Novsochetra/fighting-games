@@ -319,6 +319,8 @@
   --offset-nudge: 3px;
   --offset-coffee-fab: var(--space-5);
   --offset-under: -30%;
+  --scale-under: 1.03;
+  --scale-away: 0.96;
   --scroll-credits-condense-start: calc(var(--size-cover) + 3.5rem);
   --scroll-credits-condense-end: calc(var(--size-cover) + 6rem);
   --scroll-supporters-condense-start: calc(var(--size-heart-badge) + 2.5rem);
@@ -361,6 +363,7 @@
   --easing-launch: cubic-bezier(0.32, 0.72, 0, 1);
   --easing-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
   --easing-navigation: var(--easing-launch);
+  --motion-navigation: slide;
   --easing-gentle: ease-in-out;
   --easing-step-8: steps(8);
 
@@ -370,6 +373,15 @@
   --layer-bar: 40;
   --layer-install: 100;
   --layer-launch: 200;
+}
+
+/* With a mouse or trackpad the arcade is a page on a desktop, not an app on a phone: a move between
+   screens zooms in and out, and sooner, instead of sliding over from the side (stack-motion.ts). */
+@media (hover: hover) and (pointer: fine) {
+  :root {
+    --duration-navigation: 400ms;
+    --motion-navigation: zoom;
+  }
 }
 
 /* Apple's light appearance. The painting behind the cards is left untouched down past the cards and
