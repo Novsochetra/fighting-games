@@ -12,7 +12,7 @@
   opacity: 0;
   -webkit-backdrop-filter: var(--blur-scroll-edge);
   backdrop-filter: var(--blur-scroll-edge);
-  mask-image: linear-gradient(to bottom, var(--color-black) 50%, var(--color-clear));
+  mask-image: linear-gradient(to bottom, var(--color-black) 30%, var(--color-clear));
 }
 
 /* Where a blur cannot be masked, the soft edge would end in a hard line, so the bar frosts over with
