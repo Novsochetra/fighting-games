@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { keepApiReads } from '../../../src/offline/api-cache.js';
 import { keepArcade } from '../../../src/offline/arcade-cache.js';
+import { createDownloads } from '../../../src/offline/game-downloads.js';
 import { respondTo } from '../../../src/offline/respond.js';
 import { fakeCaches, fakeNetwork } from '../../support/fake-caches.js';
 
@@ -8,6 +9,7 @@ import { fakeCaches, fakeNetwork } from '../../support/fake-caches.js';
 // keeps and from a network that can go away.
 const SCOPE = 'https://arcade.test/';
 const GAME = `${SCOPE}games/steel-and-dust/`;
+const PROGRESS = 'games/steel-and-dust/.offline-progress';
 const MANIFEST = [
   { url: 'index.html', revision: 'a1' },
   { url: 'supporters/index.html', revision: 'b1' },
@@ -33,7 +35,13 @@ const server = () => ({
 async function startWorker(files = server()) {
   const caches = fakeCaches();
   const network = fakeNetwork(files);
-  const services = { caches, fetch: network.fetch, manifest: MANIFEST, scope: SCOPE };
+  const services = {
+    caches,
+    downloads: createDownloads(),
+    fetch: network.fetch,
+    manifest: MANIFEST,
+    scope: SCOPE,
+  };
 
   // as the worker installs (sw.js)
   await Promise.all([keepArcade(services), keepApiReads(services)]);
@@ -55,6 +63,7 @@ async function startWorker(files = server()) {
 }
 
 const text = async (response) => (await response).text();
+const json = async (response) => (await response).json();
 
 describe('the arcade offline', () => {
   it('opens its pages from the build it keeps, with any query or fragment', async () => {
@@ -161,5 +170,47 @@ describe('a game offline', () => {
     const page = await worker.open('games/steel-and-dust/');
 
     expect(page.status).toBe(503);
+  });
+});
+
+describe('a game’s loading screen asking how much of it is kept', () => {
+  it('hears how far the download is, then that the game plays offline', async () => {
+    const worker = await startWorker();
+
+    expect(await json(worker.request(PROGRESS))).toEqual({
+      ready: false,
+      done: 0,
+      total: 0,
+      failed: false,
+    });
+    expect(await json(worker.request(PROGRESS))).toEqual({ ready: true });
+    worker.network.online = false;
+
+    expect(await text(worker.open('games/steel-and-dust/'))).toBe('steel & dust 1');
+  });
+
+  it('shares one download with the play that opened the game', async () => {
+    const worker = await startWorker();
+
+    await Promise.all([worker.open('games/steel-and-dust/'), worker.request(PROGRESS)]);
+    const asked = worker.network.requests.filter(({ address }) => address === `${GAME}src/main.js`);
+
+    expect(asked).toHaveLength(1);
+  });
+
+  it('hears that the download failed, and the next play tries again', async () => {
+    const files = server();
+    const mainJs = files[`${GAME}src/main.js`];
+
+    delete files[`${GAME}src/main.js`];
+    const worker = await startWorker(files);
+
+    await worker.open('games/steel-and-dust/');
+
+    expect(await json(worker.request(PROGRESS))).toMatchObject({ ready: false, failed: true });
+    worker.files[`${GAME}src/main.js`] = mainJs;
+    await worker.open('games/steel-and-dust/');
+
+    expect(await json(worker.request(PROGRESS))).toEqual({ ready: true });
   });
 });

@@ -165,6 +165,14 @@ not kept.
   network as before, and offline it says so. After a deploy that changes the game, the next play
   brings the new revision down behind the old one, which it plays meanwhile, then lets the old go. A
   prefetch of a game's page (the home's speculation rules) downloads nothing.
+- **A game's first play waits for its download** (`game-downloads.js`): the worker answers
+  `games/<id>/.offline-progress`, an address in the game's own folder, with `{ ready: true }` once a
+  revision is whole, else how many of its files are in (`done`, `total`) or that the download
+  `failed`. One download runs per game, shared by the play and the asking, and asking starts one
+  when none runs (the browser stops an idle worker, and its download with it). A game's loading
+  screen may ask (Steel & Dust's `offline-wait.js`) and stay up until the game is kept, so a player
+  who goes offline after the first play still has it; it waits no more when the download fails or
+  brings no file for a while. The server has no such file, so outside the arcade nothing waits.
 
 `test/integration/offline/worker.test.js` runs the worker's answers against fake caches and a
 network that can go away.

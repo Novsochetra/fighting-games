@@ -24,7 +24,7 @@ export async function completeGame({ caches, scope, id }) {
 
 // Each file is checked with the server (no-cache), so the files the game has just loaded for itself
 // cost only a 304, not a second download.
-async function downloadInto(cache, addresses, fetch) {
+async function downloadInto(cache, addresses, { fetch, progress }) {
   const queue = [...addresses];
   const worker = async () => {
     for (let address = queue.shift(); address; address = queue.shift()) {
@@ -37,6 +37,8 @@ async function downloadInto(cache, addresses, fetch) {
 
         await cache.put(address, response);
       }
+
+      progress.done += 1;
     }
   };
 
@@ -44,9 +46,9 @@ async function downloadInto(cache, addresses, fetch) {
 }
 
 // The whole game, on its first play and again after a deploy changes it: the list (offline.json,
-// written by the build) names every file and the revision they make up. An older revision goes
-// once the new one is in.
-export async function downloadGame({ caches, fetch, scope, id }) {
+// written by the build) names every file and the revision they make up, and `progress` counts the
+// files in as they come. An older revision goes once the new one is in.
+export async function downloadGame({ caches, fetch, scope, id, progress = { done: 0, total: 0 } }) {
   const reply = await fetch(
     new Request(addressOf(id, 'offline.json', scope), { cache: 'no-store' }),
   );
@@ -54,11 +56,15 @@ export async function downloadGame({ caches, fetch, scope, id }) {
   const name = cacheNameOf(id, revision);
   const cache = await caches.open(name);
 
-  if (!(await cache.match(markOf(id, scope)))) {
+  progress.total = files.length;
+
+  if (await cache.match(markOf(id, scope))) {
+    progress.done = files.length;
+  } else {
     await downloadInto(
       cache,
       files.map((file) => addressOf(id, file, scope)),
-      fetch,
+      { fetch, progress },
     );
     await cache.put(markOf(id, scope), new Response('complete'));
   }

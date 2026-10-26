@@ -1,13 +1,16 @@
 import { keepApiReads } from './api-cache.js';
 import { dropOtherArcades, keepArcade } from './arcade-cache.js';
+import { createDownloads } from './game-downloads.js';
 import { respondTo } from './respond.js';
 
 // vite-plugin-pwa writes the arcade's files, each with its revision, into this list as it builds
 // the worker (apps/web/vite.config.ts).
 const manifest = self.__WB_MANIFEST;
+const downloads = createDownloads();
 
 const services = () => ({
   caches,
+  downloads,
   fetch: (request) => fetch(request),
   manifest,
   scope: self.registration.scope,

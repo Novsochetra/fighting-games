@@ -31,6 +31,14 @@ describe('routeOf', () => {
     expect(routeOf(get('games/steel-and-dust/src/main.js'), SCOPE).kind).toBe('game');
   });
 
+  it('answers a game’s loading screen asking how much of the game is kept', () => {
+    expect(routeOf(get('games/steel-and-dust/.offline-progress'), SCOPE)).toEqual({
+      kind: 'game-progress',
+      id: 'steel-and-dust',
+    });
+    expect(routeOf(get('games/steel-and-dust/src/.offline-progress'), SCOPE).kind).toBe('game');
+  });
+
   it('opens any other page from the network', () => {
     expect(routeOf(get('robots.txt', 'navigate'), SCOPE)).toEqual({ kind: 'navigate' });
   });

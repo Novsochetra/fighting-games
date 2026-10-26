@@ -1,6 +1,7 @@
 import { apiNetworkFirst } from './api-cache.js';
 import { fromArcade } from './arcade-cache.js';
-import { downloadGame, fromGame } from './game-cache.js';
+import { fromGame } from './game-cache.js';
+import { progressResponse } from './game-downloads.js';
 import { offlineResponse } from './offline-page.js';
 import { routeOf } from './routes.js';
 
@@ -39,7 +40,7 @@ const isPrefetch = (request) => request.headers?.get('Sec-Purpose')?.includes('p
 // a deploy, while it plays from what it had.
 function startGame(event, context, route) {
   if (context.request.mode === 'navigate' && !isPrefetch(context.request)) {
-    event.waitUntil(downloadGame({ ...context, id: route.id }).catch(() => {}));
+    event.waitUntil(context.downloads.play(context, route.id));
   }
 
   return fromGameOrNetwork(context, route);
@@ -59,6 +60,8 @@ export function respondTo(event, services) {
       return apiNetworkFirst(context);
     case 'game':
       return startGame(event, context, route);
+    case 'game-progress':
+      return progressResponse(event, context, route.id);
     case 'navigate':
       return context.fetch(event.request).catch(offlineResponse);
     default:
