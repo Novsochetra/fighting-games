@@ -43,7 +43,27 @@ themselves. Read `docs/architecture.md` before changing structure.
 - Write self-explaining code: descriptive names, no single-letter names except `x`, `y`, `i`, `j`.
 - Keep comments minimal: no comments that restate the code, no section-banner comments, no long
   JSDoc on obvious functions.
-- Prettier owns formatting (`.prettierrc.json`).
+- Prettier owns formatting (`.prettierrc.json`), but it never adds a blank line, so space code into
+  steps yourself. Put a blank line:
+  - after the setup (the `const`s that gather what a function needs), before its logic,
+  - after a block (`if`, `for`, `try`, `switch`) that closes with `}` when more code follows,
+  - after an early return (`if (!pad) { ...; return; }`),
+  - before the final `return`, unless it is the only line of the function,
+  - between the methods of an object.
+
+  Never put one right after `{` or right before `}`. Blank lines don't count toward the lint size
+  limits (`skipBlankLines` in `eslint.config.js`).
+
+  ```js
+  function rumblePad(navigator, rumbles) {
+    const pads = navigator.getGamepads?.();
+    const actuator = pads && firstStandardPad(pads)?.vibrationActuator;
+
+    if (actuator?.playEffect) {
+      rumble(actuator, rumbles);
+    }
+  }
+  ```
 
 ## Testing
 
