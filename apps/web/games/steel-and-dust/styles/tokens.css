@@ -92,6 +92,9 @@
   --font-size-game-stats: clamp(13px, 2.2vmin, 17px);
   --font-size-credits-heading: clamp(11px, 1.9vmin, 15px);
   --font-size-credits-name: clamp(16px, 3.4vmin, 28px);
+  --font-size-results-label: clamp(10px, 1.6vmin, 13px);
+  --font-size-results-value: clamp(14px, 2.8vmin, 22px);
+  --font-size-results-score: clamp(30px, 8vmin, 64px);
 
   --font-weight-regular: 400;
   --font-weight-semibold: 600;
@@ -143,6 +146,7 @@
   --duration-sprite-run: 640ms;
   --duration-dust: 320ms;
   --duration-credits-hold: 3600ms;
+  --duration-results-step: 70ms;
 
   --easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --easing-overshoot: cubic-bezier(0.2, 1.6, 0.4, 1);

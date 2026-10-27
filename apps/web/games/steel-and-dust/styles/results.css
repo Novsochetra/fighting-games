@@ -1,0 +1,168 @@
+/* the run summed up once the last mission is clear: a card in the HUD's own mossy frame, the score
+   big in the logo's gold, the rest in tiles; on a wide screen the buttons stand beside it, on a
+   narrow one under it */
+#m-clear {
+  --stone: 2;
+}
+
+/* the row takes the menu's whole width, so the card's width resolves against it and the buttons
+   stay beside the card wherever both fit */
+.results {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--stone) * 8px) calc(var(--stone) * 14px);
+  width: 100%;
+}
+
+.results .mlist {
+  margin-top: 0;
+}
+
+.results-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(calc(220px + var(--stone) * 120px), 100%);
+  padding: calc(var(--stone) * 3px) calc(var(--stone) * 6px) calc(var(--stone) * 6px);
+  border: solid var(--color-clear);
+  border-width: calc(12px * var(--stone)) calc(14px * var(--stone));
+  border-image: url('../assets/ui/hud/panel-frame.png') 12 14 / calc(12px * var(--stone))
+    calc(14px * var(--stone)) / 0 round;
+  background:
+    radial-gradient(
+        ellipse 70% 45% at 50% 30%,
+        color-mix(in srgb, var(--color-amber) 16%, transparent),
+        var(--color-clear)
+      )
+      padding-box,
+    var(--color-backdrop-strong) padding-box;
+  image-rendering: pixelated;
+}
+
+.results-hero {
+  margin: 0;
+  font-size: var(--font-size-game-stats);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--hero-color);
+  text-shadow: var(--text-shadow-pixel-xs);
+}
+
+.results-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: calc(var(--stone) * 4px) 0 calc(var(--stone) * 5px);
+}
+
+.results-label,
+.results-tiles dt {
+  font-size: var(--font-size-results-label);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.results-score b {
+  margin-top: 0.15em;
+  font-size: var(--font-size-results-score);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-none);
+  color: var(--color-gold);
+  text-shadow: var(--text-shadow-logo);
+  font-variant-numeric: tabular-nums;
+}
+
+/* a jade stamp, the color the leaderboard gives the run that just ended */
+.results-best {
+  margin-top: calc(var(--stone) * 4px);
+  padding: 2px 8px;
+  border: 2px solid var(--color-green);
+  font-size: var(--font-size-results-label);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-mint-light);
+  background: color-mix(in srgb, var(--color-green) 16%, transparent);
+  text-shadow: var(--text-shadow-pixel-xs);
+  rotate: -3deg;
+}
+
+.results-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(var(--stone) * 2px);
+  width: 100%;
+  margin: 0;
+}
+
+.results-tiles div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2em;
+  padding: calc(var(--stone) * 3px) 2px;
+  border-top: 1px solid color-mix(in srgb, var(--color-gold) 28%, transparent);
+  background: color-mix(in srgb, var(--color-gold) 5%, transparent);
+  text-align: center;
+}
+
+.results-tiles dd {
+  margin: 0;
+  font-size: var(--font-size-results-value);
+  color: var(--color-text);
+  text-shadow: var(--text-shadow-pixel-xs);
+  white-space: nowrap;
+}
+
+/* coming in after the credits: the card rises, the score lands, the tiles follow one by one and
+   a new best is stamped on last */
+.menu.enter .results-card {
+  animation: menu-rise var(--duration-slow) var(--easing-standard) var(--duration-quick) both;
+}
+
+.menu.enter .results-score b {
+  animation: results-land var(--duration-logo) var(--easing-overshoot) var(--duration-slow) both;
+}
+
+.menu.enter .results-tiles div {
+  animation: menu-rise var(--duration-normal) var(--easing-standard)
+    calc(var(--duration-slow) + var(--duration-results-step) * var(--i)) both;
+}
+
+.menu.enter .results-best {
+  animation: results-stamp var(--duration-slow) var(--easing-overshoot)
+    calc(var(--duration-slow) + var(--duration-logo)) both;
+}
+
+@keyframes results-land {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+}
+
+@keyframes results-stamp {
+  from {
+    opacity: 0;
+    scale: 2.2;
+    rotate: -14deg;
+  }
+}
+
+/* short screens draw the stone at 1x, as the menus' buttons do */
+@media (max-height: 560px) {
+  #m-clear {
+    --stone: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu.enter .results-card,
+  .menu.enter .results-score b,
+  .menu.enter .results-tiles div,
+  .menu.enter .results-best {
+    animation: none;
+  }
+}

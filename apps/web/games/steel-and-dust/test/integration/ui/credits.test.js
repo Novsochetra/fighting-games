@@ -97,7 +97,7 @@ describe('the credits once the last mission is clear', () => {
 
     expect(page.menus.state.stack).toEqual(['clear']);
     expect(openMenu().id).toBe('m-clear');
-    expect(document.getElementById('clearStats').textContent).toContain('Missions');
+    expect(document.getElementById('clearStats').textContent).toContain('Score');
   });
 
   it('skip to the clear menu with Escape, or Enter on Skip', async () => {

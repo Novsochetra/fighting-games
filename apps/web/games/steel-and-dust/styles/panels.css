@@ -20,29 +20,6 @@
   margin-inline: 0.5em;
 }
 
-.stats {
-  display: grid;
-  grid-template-columns: auto auto;
-  gap: 4px 28px;
-  font-family: var(--font-display);
-  font-size: var(--font-size-game-stats);
-  margin: 4px 0 6px;
-}
-
-.stats dt {
-  color: var(--color-text-muted);
-}
-
-.stats dd {
-  margin: 0;
-  text-align: right;
-  color: var(--color-text);
-}
-
-.stats .new {
-  color: var(--color-accent);
-}
-
 .mnote kbd {
   font-family: var(--font-display);
   font-size: var(--font-size-2xs);

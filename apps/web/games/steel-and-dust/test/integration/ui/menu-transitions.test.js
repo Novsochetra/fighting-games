@@ -55,4 +55,24 @@ describe('moving between the menus', () => {
     expect(document.querySelectorAll('#menus .menu.open')).toHaveLength(1);
     expect(document.querySelectorAll('#menus .menu.enter')).toHaveLength(0);
   });
+
+  it('brings the clear menu in once the credits give way to it, and only fades it back after', () => {
+    const clear = () => document.getElementById('m-clear');
+
+    page.game.mode = 'clear';
+    page.menus.sync();
+
+    expect(openMenu().id).toBe('m-credits');
+
+    page.act('back');
+
+    expect(openMenu()).toBe(clear());
+    expect(clear().classList.contains('enter')).toBe(true);
+
+    page.act('leaderboard');
+    page.act('back');
+
+    expect(openMenu()).toBe(clear());
+    expect(clear().classList.contains('enter')).toBe(false);
+  });
 });

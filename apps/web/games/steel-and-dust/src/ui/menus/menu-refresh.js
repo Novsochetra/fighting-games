@@ -1,11 +1,6 @@
 import { hasLivesLeft } from '../../sim/stage/lives.js';
-import {
-  clearStatsHtml,
-  continueSavedLabel,
-  overNoteHtml,
-  titleNoteHtml,
-  weaponButtonLabel,
-} from './menu-text.js';
+import { continueSavedLabel, overNoteHtml, titleNoteHtml, weaponButtonLabel } from './menu-text.js';
+import { clearResultsHtml } from './results-text.js';
 
 // with a run saved, Continue takes the lead and Play starts a new one in its place
 function showSavedRun(byId, checkpoint) {
@@ -43,7 +38,7 @@ export function createMenuRefreshers({ document, game, context }) {
       byId('overBoardBtn').hidden = !out;
     },
     clear() {
-      byId('clearStats').innerHTML = clearStatsHtml(game);
+      byId('clearStats').innerHTML = clearResultsHtml(game);
     },
   };
 }

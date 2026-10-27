@@ -15,7 +15,7 @@ const MENUS_FOR_MODE = {
 export class MenuController {
   constructor({ document, game, audio, ui, context, panels }) {
     Object.assign(this, { document, game, audio, ui, panels });
-    this.state = { stack: [], selected: 0, mode: null };
+    this.state = { stack: [], selected: 0, mode: null, unseen: new Set() };
     this.refreshers = createMenuRefreshers({ document, game, context });
   }
 
@@ -56,13 +56,17 @@ export class MenuController {
   }
 
   // `entering` plays the menu's way in (the logo dropping in); coming back from a panel stacked on
-  // it only fades it up again, or the title would bounce every time Settings closes
+  // it only fades it up again, or the title would bounce every time Settings closes. A base menu
+  // that waited unseen under another (the clear menu under the credits) comes in the first time
   show(entering = false) {
+    const arriving = this.state.unseen.delete(this.top()) || entering;
+
     for (const menu of this.document.querySelectorAll('#menus .menu')) {
       const open = menu.id === `m-${this.top()}`;
       menu.classList.toggle('open', open);
-      menu.classList.toggle('enter', open && entering);
+      menu.classList.toggle('enter', open && arriving);
     }
+
     Object.assign(this.document.getElementById('menus').dataset, menuBackdrop(this.state.stack));
     this.refresh();
     this.state.selected = this.panels[this.top()]?.firstSelected?.() ?? 0;
@@ -107,6 +111,7 @@ export class MenuController {
     }
     this.state.mode = this.game.mode;
     this.state.stack = [...(MENUS_FOR_MODE[this.game.mode] ?? [])];
+    this.state.unseen = new Set(this.state.stack.slice(0, -1));
 
     for (const id of this.state.stack) {
       this.panels[id]?.build();

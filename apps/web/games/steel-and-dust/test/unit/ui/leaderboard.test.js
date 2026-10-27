@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { dayLabel, leaderboardHtml } from '../../../src/ui/leaderboard/leaderboard-panel.js';
-import {
-  clearStatsHtml,
-  continueSavedLabel,
-  overNoteHtml,
-} from '../../../src/ui/menus/menu-text.js';
+import { continueSavedLabel, overNoteHtml } from '../../../src/ui/menus/menu-text.js';
 
 const AT = new Date(2026, 9, 24, 21, 30).getTime();
 const run = (score, more = {}) => ({
@@ -97,13 +93,5 @@ describe('the menus on a saved or ended run', () => {
     const lastRun = run(9000);
     const fallen = game({ lives: 2, leaderboard: [lastRun], lastRun });
     expect(overNoteHtml(fallen)).not.toContain('Leaderboard');
-  });
-
-  it('shows the place of a cleared run among its stats', () => {
-    const lastRun = run(6200, { cleared: true });
-    expect(clearStatsHtml(game({ leaderboard: [lastRun], lastRun }))).toContain(
-      '<dt>Leaderboard</dt><dd>#1</dd>',
-    );
-    expect(clearStatsHtml(game())).not.toContain('Leaderboard');
   });
 });

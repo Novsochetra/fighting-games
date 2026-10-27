@@ -68,6 +68,7 @@
     <link rel="stylesheet" href="styles/help.css" />
     <link rel="stylesheet" href="styles/leaderboard.css" />
     <link rel="stylesheet" href="styles/credits.css" />
+    <link rel="stylesheet" href="styles/results.css" />
     <link rel="stylesheet" href="styles/stone.css" />
     <link rel="stylesheet" href="styles/stone-menus.css" />
     <link rel="stylesheet" href="styles/heroes.css" />
@@ -189,13 +190,15 @@
 
         <section class="menu" id="m-clear" aria-label="All missions clear">
           <h2 class="mtitle good">All missions clear</h2>
-          <dl class="stats" id="clearStats"></dl>
-          <div class="mlist">
-            <button class="mbtn primary" data-act="again">Play again</button>
-            <button class="mbtn" data-act="leaderboard">Leaderboard</button>
-            <button class="mbtn" data-act="credits">Credits</button>
-            <button class="mbtn" data-act="quit">Title</button>
-            <button class="mbtn" data-act="arcade">Back to arcade</button>
+          <div class="results">
+            <div class="results-card" id="clearStats"></div>
+            <div class="mlist">
+              <button class="mbtn primary" data-act="again">Play again</button>
+              <button class="mbtn" data-act="leaderboard">Leaderboard</button>
+              <button class="mbtn" data-act="credits">Credits</button>
+              <button class="mbtn" data-act="quit">Title</button>
+              <button class="mbtn" data-act="arcade">Back to arcade</button>
+            </div>
           </div>
         </section>
 

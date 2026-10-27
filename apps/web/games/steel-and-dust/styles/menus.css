@@ -42,8 +42,7 @@
 .menu.sub.open .box,
 .menu.enter .mlist,
 .menu.enter .mtitle,
-.menu.enter .mnote,
-.menu.enter .stats {
+.menu.enter .mnote {
   animation: menu-rise var(--duration-normal) var(--easing-standard) var(--duration-instant) both;
 }
 
@@ -194,8 +193,7 @@
   .menu.enter .logo,
   .menu.enter .mlist,
   .menu.enter .mtitle,
-  .menu.enter .mnote,
-  .menu.enter .stats {
+  .menu.enter .mnote {
     animation: none;
   }
 }

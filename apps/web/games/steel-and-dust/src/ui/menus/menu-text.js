@@ -1,8 +1,5 @@
-import { difficultyOf } from '../../data/difficulty.js';
 import { rankOf } from '../../data/leaderboard.js';
-import { MISSIONS } from '../../data/missions/index.js';
 import { WEAPONS } from '../../data/weapons/index.js';
-import { formatClock } from '../../render/hud/clock.js';
 import { hasLivesLeft } from '../../sim/stage/lives.js';
 
 function titleTip({ ui, fullscreen, isIos, padConnected }) {
@@ -43,7 +40,7 @@ function livesLeftHtml(lives) {
   return lives > 0 ? `lives left <b>${lives}</b>` : '<b>no lives left</b>';
 }
 
-function boardPlace(game) {
+export function boardPlace(game) {
   const rank = rankOf(game.leaderboard, game.lastRun);
   return rank ? `#${rank}` : '';
 }
@@ -58,24 +55,6 @@ export function overNoteHtml(game) {
   const mission = `Mission <b>${game.missionIndex + 1}</b>`;
   const note = `${mission} &nbsp;·&nbsp; score <b>${game.score}</b> &nbsp;·&nbsp; ${livesLeftHtml(game.lives)}`;
   return note + boardPlaceHtml(game);
-}
-
-export function clearStatsHtml(game) {
-  const best = game.newBestScore ? ' <span class="new">new best!</span>' : '';
-  const rows = [
-    ['Missions', `${game.missionIndex + 1} / ${MISSIONS.length}`],
-    ['Time', formatClock(game.playTime)],
-    ['Score', game.score + best],
-    ['Leaderboard', boardPlace(game)],
-    ['Best combo', `${game.records.bestCombo} hits`],
-    ['Continues', game.continues],
-    ['Lives left', game.lives],
-    ['Difficulty', difficultyOf(game.settings).name],
-  ];
-  return rows
-    .filter(([, value]) => value !== '')
-    .map(([name, value]) => `<dt>${name}</dt><dd>${value}</dd>`)
-    .join('');
 }
 
 export function weaponButtonLabel(game) {
