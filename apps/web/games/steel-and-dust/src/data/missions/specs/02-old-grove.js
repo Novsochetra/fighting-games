@@ -31,6 +31,7 @@ export const OLD_GROVE = {
     {
       // a hollow between two root shoulders; slingers throw from the deck over it
       screens: 2,
+      trees: [607],
       ground: [
         ...mound(-250, -150, 12, 30),
         ...contour(60, [

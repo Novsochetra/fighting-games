@@ -10,6 +10,7 @@ export const FIREFLY_HOLLOW = {
   zones: [
     {
       screens: 2,
+      trees: [610],
       // mossy stones: a slope, a step up to the old wall's top and a long slope down
       ground: [
         ...contour(60, [
@@ -56,6 +57,7 @@ export const FIREFLY_HOLLOW = {
     },
     {
       screens: 2,
+      trees: [613],
       // the bone pens' earthwork: up a slope, a step to its top, broken steps down the back
       ground: [
         ...mound(-250, -150, 10, 40),

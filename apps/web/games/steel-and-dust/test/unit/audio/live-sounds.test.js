@@ -91,6 +91,8 @@ describe('live sounds', () => {
         'splash',
         'nagaHiss',
         'rainbow',
+        'creak',
+        'timber',
       ].sort(),
     );
   });

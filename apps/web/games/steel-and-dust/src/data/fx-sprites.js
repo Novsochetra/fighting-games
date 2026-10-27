@@ -76,6 +76,7 @@ export const FX_SPRITES = {
   keg: { frameWidth: 39, frameHeight: 62, frames: 3, ticks: 1, anchorX: 20, anchorY: 61 },
   blast: { frameWidth: 79, frameHeight: 69, frames: 8, ticks: 4, anchorX: 40, anchorY: 68 },
   moatWater: { frameWidth: 60, frameHeight: 42, frames: 4, ticks: 10, anchorX: 0, anchorY: 0 },
+  deadTree: { frameWidth: 169, frameHeight: 117, frames: 4, ticks: 1, anchorX: 38, anchorY: 116 },
   ...HEAVY_FX_SPRITES,
 };
 

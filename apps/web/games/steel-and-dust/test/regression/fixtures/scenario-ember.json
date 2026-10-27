@@ -9144,22 +9144,22 @@
   {
    "tick": 1680,
    "frame": {
-    "calls": 1492,
-    "digest": "b4f4d985f5be0edd"
+    "calls": 1497,
+    "digest": "9387f3e9daaef615"
    }
   },
   {
    "tick": 1920,
    "frame": {
-    "calls": 1399,
-    "digest": "c815176b7326c096"
+    "calls": 1404,
+    "digest": "7e3c53121db6bd08"
    }
   },
   {
    "tick": 2160,
    "frame": {
-    "calls": 1502,
-    "digest": "a9e365f58154ff73"
+    "calls": 1507,
+    "digest": "c1b2eb63e06066be"
    }
   }
  ]

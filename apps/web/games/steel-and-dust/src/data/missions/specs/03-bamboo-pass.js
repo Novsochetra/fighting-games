@@ -10,6 +10,7 @@ export const BAMBOO_PASS = {
   zones: [
     {
       screens: 2,
+      trees: [600],
       // shrine steps low enough to walk, up to a terrace and down the far side; bombers get a deck
       ground: [
         ...contour(60, [
@@ -59,6 +60,7 @@ export const BAMBOO_PASS = {
     },
     {
       screens: 3,
+      trees: [1019],
       // the great stair to the upper terrace and its long slope down, then a ledge to jump
       ground: [
         ...contour(60, [

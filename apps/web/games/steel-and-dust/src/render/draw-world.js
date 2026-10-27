@@ -19,6 +19,7 @@ import { drawKegs } from './scene/kegs.js';
 import { drawGround } from './scene/ground.js';
 import { drawMoats } from './scene/moats.js';
 import { drawPlatforms } from './scene/platforms.js';
+import { drawTrees } from './scene/trees.js';
 import { drawGroundLoot, drawLootSparkles } from './scene/loot.js';
 import { drawChests } from './scene/loot-chest.js';
 import { drawPickups } from './scene/pickups.js';
@@ -109,6 +110,7 @@ export function drawWorld(painter, { game, view, cameraX }) {
   drawGround(painter, { cameraX, colors, tick, terrain, backdrop });
   drawMoats(painter, view.fxSheets, { water: terrain.water, cameraX, tick });
   drawProps(painter, { cameraX, props: mission.props, sheets: view.propSheets });
+  drawTrees(painter, view.fxSheets, { trees: game.trees, cameraX });
   drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });
   drawCrates(painter, game.crates, cameraX);
   drawKegs(painter, view.fxSheets, { kegs: game.kegs, cameraX, tick });

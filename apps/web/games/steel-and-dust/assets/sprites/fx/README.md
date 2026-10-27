@@ -77,6 +77,7 @@ colors.
 | `keg.png` | 3 × 39×62 | Raider Camp: a powder keg, unlit (0), its fuse burning (1) and flashing white just before it blows (2) | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --colors 32 --groups 2,1` |
 | `blast.png` | 8 × 79×69 | Raider Camp: a powder keg blowing up, drawn at twice the sprites' density | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --colors 32 --common-grid --untint` |
 | `moatWater.png` | 4 × 60×42 | Angkor Wat: the surface of the moat in the causeway's breach, a seamless tile looping through its 4 frames | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --colors 24 --common-grid --keep-edges --inset 1` |
+| `deadTree.png` | 4 × 169×117 | Forests: a dead pine standing (0), leaning as it gives way (1), falling (2) and lying felled beside its stump (3), held by the stump and drawn at twice the sprites' density | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --colors 24 --cuts 400,820,1200 --cell 4.94,4.94 --anchor-left-run --anchor-rows 3`, then each frame shifted to put its stump on one column |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to

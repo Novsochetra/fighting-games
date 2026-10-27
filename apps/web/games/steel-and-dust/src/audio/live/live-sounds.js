@@ -3,6 +3,7 @@ import { BOSS_SOUNDS } from './boss-sounds.js';
 import { ELEMENT_SOUNDS } from './element-sounds.js';
 import { EVENT_SOUNDS } from './event-sounds.js';
 import { HANDOFF_SOUNDS } from './handoff-sounds.js';
+import { HAZARD_SOUNDS } from './hazard-sounds.js';
 import { HEAVY_SOUNDS } from './heavy/index.js';
 import { MENU_SOUNDS } from './menu-sounds.js';
 import { MOAT_SOUNDS } from './moat-sounds.js';
@@ -25,6 +26,7 @@ export const LIVE_SOUNDS = {
   ...WARDEN_SOUNDS,
   ...BAYON_SOUNDS,
   ...MOAT_SOUNDS,
+  ...HAZARD_SOUNDS,
 };
 
 export function isLiveSound(key) {

@@ -1,5 +1,5 @@
 import { VIEW_WIDTH } from '../../config.js';
-import { layoutKegs } from './hazards-layout.js';
+import { layoutOnRoad } from './hazards-layout.js';
 import { layoutProps } from './props-layout.js';
 import { groundAt, layoutTerrain } from './terrain.js';
 
@@ -74,7 +74,8 @@ export function layoutMission(spec, index) {
     zones,
     terrain,
     crates: layoutCrates(zones, spec.crates, terrain),
-    kegs: layoutKegs(spec.zones, zones, terrain),
+    kegs: layoutOnRoad(spec.zones, zones, { terrain, key: 'kegs' }),
+    trees: layoutOnRoad(spec.zones, zones, { terrain, key: 'trees' }),
     props: layoutProps(spec, { length, terrain }),
   };
 }

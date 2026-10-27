@@ -14,6 +14,7 @@ import { updateEffects } from './fx/update-effects.js';
 import { updateKegs } from './hazards/kegs.js';
 import { updateMoat } from './hazards/moat.js';
 import { updateProjectiles } from './hazards/projectiles.js';
+import { updateTrees } from './hazards/trees.js';
 import { updateShockwaves } from './hazards/shockwaves.js';
 import { updateHints } from './hints.js';
 import { expireBuffer } from './input/read-input.js';
@@ -39,6 +40,7 @@ function updateWorld(game) {
   updateShockwaves(game);
   updateProjectiles(game);
   updateKegs(game);
+  updateTrees(game);
   updateMirages(game);
   updateSummons(game);
   updatePickups(game);

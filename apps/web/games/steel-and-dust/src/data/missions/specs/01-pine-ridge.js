@@ -20,6 +20,7 @@ export const PINE_RIDGE = {
     {
       // a long climb to a knoll, a drop to its shelf and down again; a deck stands over the lock
       screens: 2,
+      trees: [634],
       ground: [
         ...contour(60, [
           [110, 24],
