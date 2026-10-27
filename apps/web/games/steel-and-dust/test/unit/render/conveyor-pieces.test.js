@@ -1,6 +1,35 @@
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { CONVEYOR, beltLength } from '../../../src/data/conveyors.js';
-import { beltPieces, plateSlots, plateSpan } from '../../../src/render/scene/conveyor-pieces.js';
+import { FX_SCALE, FX_SPRITES } from '../../../src/data/fx-sprites.js';
+import {
+  BELT_SINK,
+  PLATES,
+  beltPieces,
+  plateSlots,
+  plateSpan,
+} from '../../../src/render/scene/conveyor-pieces.js';
+import { readPngAlpha } from '../../support/png-alpha.js';
+
+const GAME_ROOT = fileURLToPath(new URL('../../../', import.meta.url));
+const art = readPngAlpha(join(GAME_ROOT, 'assets/sprites/fx/conveyor.png'));
+const { frameWidth, anchorX, anchorY } = FX_SPRITES.conveyor;
+const SEGMENT_FRAMES = [0, 1, 2, 3];
+// the columns of a segment frame the belt runs along, clear of its ragged ends
+const ALONG = { from: 8, to: 72 };
+const SLAT = 6;
+
+const topRow = (frame, x) => {
+  let y = 0;
+  while (!art.alpha(frame * frameWidth + x, y)) {
+    y++;
+  }
+
+  return y;
+};
+const lit = (frame, x, y) =>
+  art.rgb(frame * frameWidth + x, y).reduce((sum, value) => sum + value) > 300;
 
 const BELT = { from: 100, to: 100 + beltLength(3), y: 184, direction: 1, segments: 3 };
 // the ticks the belt takes to run one segment on
@@ -49,5 +78,34 @@ describe('a conveyor belt as drawn', () => {
 
     expect(near).toBe(segments[0].back - CONVEYOR.segment / 2);
     expect(far).toBe(segments.at(-1).back + CONVEYOR.segment / 2);
+  });
+
+  it('is seen side-on, as the road is: its top runs level, not up and down in steps', () => {
+    for (const frame of SEGMENT_FRAMES) {
+      const tops = new Set();
+      for (let x = ALONG.from; x < ALONG.to; x++) {
+        tops.add(topRow(frame, x));
+      }
+
+      expect([...tops], `frame ${frame}`).toHaveLength(1);
+    }
+  });
+
+  it('has a slat every few pixels from its anchor, a whole number to a segment, so it runs on', () => {
+    const top = topRow(0, anchorX);
+
+    expect((CONVEYOR.segment / FX_SCALE) % SLAT).toBe(0);
+    for (const frame of SEGMENT_FRAMES) {
+      for (let x = ALONG.from; x < ALONG.to; x++) {
+        const gap = (x - anchorX + SLAT * 10) % SLAT === SLAT - 1;
+        expect(lit(frame, x, top + 2), `frame ${frame} column ${x}`).toBe(!gap);
+      }
+    }
+  });
+
+  it('runs its moving slats over the whole belt, top to bottom, the static one hidden under them', () => {
+    const top = BELT_SINK + (topRow(0, anchorX) - anchorY) * FX_SCALE;
+
+    expect(PLATES.top).toBe(top);
   });
 });

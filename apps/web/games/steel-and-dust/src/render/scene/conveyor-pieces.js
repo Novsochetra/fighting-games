@@ -11,8 +11,8 @@ const FIRST_SEGMENT_BACK = 45.5;
 // a segment's plates reach this far either side of its anchor
 const HALF_PLATES = 18;
 
-// the belt is set in the floor, its plates as high over the feet as the road's cinders; the
-// furnace stands on the floor just past the mouth, its chute over the belt's far end
+// the belt is set in the floor, the tops of its slats as high over the feet as the road's
+// cinders; the furnace stands on the floor just past the mouth, its chute over the belt's far end
 export const BELT_SINK = 18;
 export const PLATES = { top: -3, bottom: 5 };
 export const FURNACE_AHEAD = 11;
