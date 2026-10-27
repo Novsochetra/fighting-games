@@ -4,7 +4,6 @@ import { applyHit } from '../combat/apply-hit.js';
 import { hurtBox, overlaps } from '../combat/boxes.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust } from '../fx/particles.js';
-import { isFightOver } from '../stage/loot-time.js';
 import { groundAt } from '../stage/terrain.js';
 import { addBurst } from '../summons/bursts.js';
 import { crushArea, rollOn } from './boulder-roll.js';
@@ -32,14 +31,12 @@ export function createTempleBoulders(spots) {
   }));
 }
 
-// it breaks loose once the hero is past its spot, but never in a boss fight or after the last one;
-// one he left a screen behind stays put, so two never roll at once
+// it breaks loose once the hero is past its spot; one he left a screen behind stays put, so two
+// never roll at once
 function mayBreakLoose(game, boulder) {
   const { x } = game.player;
-  const bossUp = game.fighters.some((fighter) => fighter.def.boss && fighter.state !== 'ko');
-  const near = x >= boulder.spot && x < boulder.spot + VIEW_WIDTH;
 
-  return near && !bossUp && !isFightOver(game);
+  return x >= boulder.spot && x < boulder.spot + VIEW_WIDTH;
 }
 
 function breakLoose(game, boulder) {

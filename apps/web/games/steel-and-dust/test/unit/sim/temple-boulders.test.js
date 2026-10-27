@@ -78,14 +78,11 @@ describe('a temple boulder', () => {
     expect(boulder.state).toBe('waiting');
   });
 
-  it('never breaks loose while a boss stands', () => {
+  it('breaks loose with a boss on the road too', () => {
     const { game, boulder } = templeGame();
-    const boss = spawnEnemy(game, 'pharaoh', SPOT + 200);
+    spawnEnemy(game, 'pharaoh', SPOT + 200);
     game.player.x = SPOT + 10;
 
-    run(game, 20);
-    expect(boulder.state).toBe('waiting');
-    boss.state = 'ko';
     run(game, 1);
 
     expect(boulder.state).toBe('loose');
