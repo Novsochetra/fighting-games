@@ -1,6 +1,7 @@
 import { drawCampfires } from './campfires.js';
 import { drawConveyors } from './conveyors.js';
 import { drawHammerMarks, drawHammers } from './hammers.js';
+import { drawHornets } from './hornets.js';
 import { drawKegs } from './kegs.js';
 import { drawSpikeTraps } from './spike-traps.js';
 import { drawTempleBoulders } from './temple-boulders.js';
@@ -8,6 +9,7 @@ import { drawQuicksand } from './quicksand.js';
 import { drawVents } from './vents.js';
 import { drawSlabs } from './slabs.js';
 import { drawTowerStones, drawTowers } from './towers.js';
+import { drawNests } from './nests.js';
 
 // what stands on the road in front of the crates and behind the fighters: kegs, fires and the
 // marks under hammers about to drop
@@ -24,6 +26,7 @@ export function drawRoadProps(painter, { game, view, cameraX }) {
   drawVents(painter, sheets, { vents: game.vents, cameraX });
   drawSlabs(painter, sheets, { slabs: game.slabs, cameraX, tick });
   drawTowers(painter, sheets, { towers: game.towers, cameraX, tick });
+  drawNests(painter, sheets, { nests: game.nests, cameraX });
 }
 
 // what hangs or flies over the fighters: the hammers
@@ -31,4 +34,5 @@ export function drawOverheadProps(painter, { game, view, cameraX }) {
   drawHammers(painter, view.fxSheets, { hammers: game.hammers, cameraX });
   drawTempleBoulders(painter, view.fxSheets, { game, cameraX });
   drawTowerStones(painter, view.fxSheets, { towers: game.towers, cameraX });
+  drawHornets(painter, view.fxSheets, { nests: game.nests, cameraX, tick: game.tickCount });
 }

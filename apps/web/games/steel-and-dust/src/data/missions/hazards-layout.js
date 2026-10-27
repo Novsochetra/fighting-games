@@ -29,5 +29,6 @@ export function layoutRoadProps(zoneSpecs, zones, terrain) {
     vents: onRoad('vents'),
     slabs: onRoad('slabs'),
     towers: onRoad('towers'),
+    nests: onRoad('nests'),
   };
 }

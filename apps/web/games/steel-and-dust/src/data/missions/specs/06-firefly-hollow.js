@@ -30,6 +30,7 @@ export const FIREFLY_HOLLOW = {
     },
     {
       screens: 3,
+      nests: [1040],
       // the hollow itself: a deck over its floor between two shoulders, then the great mound
       ground: [...terrace(60, 220, 24, 90), ...ledge(330, 420, 16, 40), ...mound(500, 740, 28, 90)],
       platforms: [
@@ -58,6 +59,7 @@ export const FIREFLY_HOLLOW = {
     {
       screens: 2,
       trees: [613],
+      nests: [400],
       // the bone pens' earthwork: up a slope, a step to its top, broken steps down the back
       ground: [
         ...mound(-250, -150, 10, 40),
