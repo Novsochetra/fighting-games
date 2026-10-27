@@ -15,7 +15,7 @@ function watchLoad(piece, prepare = () => {}) {
 }
 
 function loadLayer({ createImage, baseUrl }, folder, { name, parallax, once = false }) {
-  const layer = { image: createImage(), parallax, once, ready: false, settled: false };
+  const layer = { name, image: createImage(), parallax, once, ready: false, settled: false };
   watchLoad(layer);
   layer.image.src = `${baseUrl}${DIRECTORY}${folder}/${name}.png`;
   return layer;
@@ -47,6 +47,7 @@ export function loadPaintedBackdrop(loaders, spec) {
     ground,
     cliff: spec.cliff ? loadCliff(loaders, spec.folder) : null,
     ambient: spec.ambient,
+    nestTree: spec.nestTree,
   };
 }
 

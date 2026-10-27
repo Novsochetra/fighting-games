@@ -14,7 +14,9 @@ import { WARDEN_FORTRESS } from './warden-fortress.js';
 // the painted forests: the layers in assets/backdrops/<folder>/, how fast each one scrolls with
 // the camera, and what moves in the air around them; an emitter's x is a spot in its near layer.
 // `ground.png` is the road's cross-section, laid along the terrain with row `groundTop` on its
-// surface
+// surface. A forest with hornets' nests names the tree they hang from: the columns `from` to `to`
+// of a layer that hold one of its trees, the row `base` where the tree's foot meets its ground,
+// and the column `bough` where the nest's branch grows from its trunk
 export const PAINTED_BACKDROPS = {
   pineRidge: PINE_RIDGE,
   oldGrove: OLD_GROVE,

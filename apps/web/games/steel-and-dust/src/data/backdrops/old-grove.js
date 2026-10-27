@@ -7,6 +7,7 @@ export const OLD_GROVE = {
     { name: 'near', parallax: 0.45 },
     { name: 'way-in', parallax: 0.5, once: true },
   ],
+  nestTree: { layer: 'near', from: 95, to: 205, base: 180, bough: 159 },
   ambient: [
     {
       kind: 'shafts',

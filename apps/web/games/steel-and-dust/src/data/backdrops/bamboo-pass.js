@@ -7,6 +7,7 @@ export const BAMBOO_PASS = {
     { name: 'near', parallax: 0.45 },
     { name: 'way-in', parallax: 0.5, once: true },
   ],
+  nestTree: { layer: 'near', from: 291, to: 367, base: 189, bough: 350 },
   ambient: [
     {
       kind: 'shafts',
