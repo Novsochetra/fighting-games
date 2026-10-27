@@ -37,6 +37,11 @@ editor (whose copy of the controls stands where the real ones do) keep off the f
 flat, a Fold's near-square screen puts the touch buttons under the game instead of over the road, as
 an upright phone does.
 
+Wherever the touch buttons stand under the game (an upright phone, an unfolded Fold), the game
+stands at the top of the screen, right under the status bar, and pause stands on it, in the HUD's
+top row beside the score. So a phone half-folded on a table in a browser that cannot see the fold
+(Safari has no Viewport Segments API) still shows the whole game on its top half.
+
 ## Settings
 
 Saved in the browser: music and sound volume, difficulty (Easy, Normal, Hard), auto-aim (attacks turn toward the nearest raider, on by default on touch screens), hold ATTACK to combo, screen shake (off / low / full), flashes, damage numbers, touch controls (auto / on / off), joystick (fixed in the corner, floating under your thumb, or hidden), hide with a gamepad (on by default: the touch controls step aside while you play with a gamepad and come back on a touch), button size, button layout (drag the touch buttons and the joystick anywhere and resize them, for example a left-handed layout with the joystick on the right; kept apart for the phone held sideways and upright; Reset brings back the original), vibration, and **Training tools**. With Training tools on, 1–4 swap weapons, 0 fills the ULT bar, H shows hitboxes and frame data, and the pause menu has a weapon switch.

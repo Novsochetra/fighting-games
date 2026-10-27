@@ -66,10 +66,12 @@ body.stick-hidden .stick-zone {
   background: var(--color-stick-knob-active);
 }
 
+/* over a stage that stands above the touch buttons, the pause button stands in the HUD's top row
+   (src/ui/screen/pause-place.js) */
 .tb-pause {
   position: absolute;
-  top: calc(8px + var(--sat));
-  right: calc(8px + var(--sar));
+  top: var(--pause-top, calc(8px + var(--sat)));
+  right: var(--pause-right, calc(8px + var(--sar)));
   width: 44px;
   height: 44px;
   pointer-events: auto;

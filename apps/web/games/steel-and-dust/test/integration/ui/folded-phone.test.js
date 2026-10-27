@@ -7,6 +7,7 @@ const rect = (x, y, width, height) => ({ x, y, width, height });
 const FOLD_FLAT = [rect(0, 0, 1104, 884)];
 const FOLD_ON_TABLE = [rect(0, 0, 1104, 442), rect(0, 442, 1104, 442)];
 const DUO_AS_BOOK = [rect(0, 0, 540, 720), rect(574, 0, 540, 720)];
+const FLIP_ON_TABLE = [rect(0, 0, 412, 502), rect(0, 502, 412, 502)];
 
 // Chrome hands the page its segments on window.viewport; happy-dom has none, so the test folds
 // the phone by hand
@@ -73,7 +74,7 @@ describe('the page on a folded phone', () => {
   it('stands the game over the touch buttons on an unfolded Fold', () => {
     holdPhone(1104, 884);
 
-    expect(stage()).toEqual(rect(47, 56, 1009, 568));
+    expect(stage()).toEqual(rect(0, 0, 1104, 621));
   });
 
   it('moves the game to the top half as the Fold is folded on a table, with no resize', () => {
@@ -94,6 +95,23 @@ describe('the page on a folded phone', () => {
     expect(boxOf(document.getElementById('touch'))).toEqual(['0px', '442px', '1104px', '442px']);
     expect(stickY).toBeGreaterThan(64);
     expect(stickY).toBeLessThan(442 - 64);
+  });
+
+  it("moves pause from the game's HUD row to the bottom half as a Flip is folded on a table", () => {
+    const app = document.getElementById('app').style;
+
+    fold([rect(0, 0, 412, 1004)]);
+    holdPhone(412, 1004);
+
+    expect([app.getPropertyValue('--pause-top'), app.getPropertyValue('--pause-right')]).toEqual([
+      '0px',
+      '94px',
+    ]);
+
+    fold(FLIP_ON_TABLE);
+    posture.dispatchEvent(new Event('change'));
+
+    expect(app.getPropertyValue('--pause-top')).toBe('');
   });
 
   it('gives the touch controls the whole screen again once the Fold lies flat', () => {

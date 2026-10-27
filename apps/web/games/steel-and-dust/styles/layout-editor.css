@@ -132,7 +132,7 @@ body.stick-hidden .layout-preview .stick-base {
   }
 }
 
-/* an upright phone stacks the two groups, so the bar stays narrow and clear of the pause button */
+/* an upright phone stacks the two groups, so the bar stays narrow */
 @media (max-width: 560px) {
   .layout-tools {
     flex-direction: column;

@@ -3,6 +3,7 @@ import { applyButtonLayout, applyStickZone } from '../layout/apply-button-layout
 import { layoutForScreen } from '../layout/layout-draft.js';
 import { customStickPlace } from '../layout/stick-place.js';
 import { fitMenus, menuBox } from './menu-area.js';
+import { pausePlace, placePause } from './pause-place.js';
 import { createSafeArea } from './safe-area.js';
 import { arrangeStage, STICK_RADIUS, stickRestPosition } from './stage-layout.js';
 import { fitTouchLayer, touchAreaOf } from './touch-area.js';
@@ -29,16 +30,18 @@ function hingeNow({ window, elements }) {
 function fitStage({ elements, game, ui, window, safe }) {
   const hinge = hingeNow({ window, elements });
   const screen = screenOf(elements);
-  const { rect } = arrangeStage({
+  const arranged = arrangeStage({
     ...screen,
     safe,
     touch: ui.showsTouchControls(),
     buttonScale: buttonScale(game.settings),
     hinge,
   });
+  const { rect } = arranged;
 
   fitMenus(elements.menus, menuBox({ hinge, ...screen }));
   fitTouchLayer(elements.touch, touchAreaOf(hinge));
+  placePause(elements.app, pausePlace({ ...arranged, hinge, width: screen.width }));
   Object.assign(elements.stage.style, {
     left: `${rect.x}px`,
     top: `${rect.y}px`,
