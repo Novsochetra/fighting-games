@@ -11,6 +11,7 @@ import { followFloor } from './fighters/terrain-motion.js';
 import { updateFighter } from './fighters/update-fighter.js';
 import { shedHeroAura } from './fx/hero-aura.js';
 import { updateEffects } from './fx/update-effects.js';
+import { updateCampfires } from './hazards/campfires.js';
 import { updateKegs } from './hazards/kegs.js';
 import { updateMoat } from './hazards/moat.js';
 import { updateProjectiles } from './hazards/projectiles.js';
@@ -41,6 +42,7 @@ function updateWorld(game) {
   updateProjectiles(game);
   updateKegs(game);
   updateTrees(game);
+  updateCampfires(game);
   updateMirages(game);
   updateSummons(game);
   updatePickups(game);

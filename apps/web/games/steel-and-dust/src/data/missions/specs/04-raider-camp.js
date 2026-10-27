@@ -19,6 +19,7 @@ export const RAIDER_CAMP = {
       ],
       // the camp's black powder, stacked where the raiders work
       kegs: [420, 650],
+      campfires: [520],
       waves: [
         ['knife', 'spitter', 'grunt'],
         ['shield', 'grunt', 'knife'],
@@ -31,6 +32,7 @@ export const RAIDER_CAMP = {
       ground: [...terrace(60, 180, 18, 60), ...ledge(270, 380, 14, 50)],
       platforms: [{ at: 186, width: 80, rise: 36, kind: 'planks' }],
       kegs: [470, 640],
+      campfires: [555],
       waves: [
         ['spitter', 'spitter', 'hound'],
         ['shield', 'sling', 'scrapper'],
@@ -59,6 +61,7 @@ export const RAIDER_CAMP = {
         { at: 1030, width: 80, rise: 34, kind: 'planks' },
       ],
       kegs: [450, 1080],
+      campfires: [390],
       waves: [
         ['hound', 'knife', 'spitter'],
         ['shield', 'shield', 'sling'],
@@ -81,6 +84,7 @@ export const RAIDER_CAMP = {
       ],
       platforms: [{ at: 330, width: 80, rise: 30, kind: 'planks' }],
       kegs: [430],
+      campfires: [560],
       waves: [
         ['spitter', 'sling', 'scrapper', 'knife'],
         ['shield', 'hound', 'spitter', 'jackal'],

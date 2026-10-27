@@ -76,6 +76,7 @@ export function layoutMission(spec, index) {
     crates: layoutCrates(zones, spec.crates, terrain),
     kegs: layoutOnRoad(spec.zones, zones, { terrain, key: 'kegs' }),
     trees: layoutOnRoad(spec.zones, zones, { terrain, key: 'trees' }),
+    campfires: layoutOnRoad(spec.zones, zones, { terrain, key: 'campfires' }),
     props: layoutProps(spec, { length, terrain }),
   };
 }

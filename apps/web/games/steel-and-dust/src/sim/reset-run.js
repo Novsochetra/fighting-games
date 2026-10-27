@@ -3,6 +3,7 @@ import { START_LIVES } from '../data/player.js';
 import { missionAt } from '../data/missions/index.js';
 import { createFighter } from './fighters/create-fighter.js';
 import { takeOwnWeapon } from './fighters/loadout.js';
+import { createCampfires } from './hazards/campfires.js';
 import { createKegs } from './hazards/kegs.js';
 import { createTrees } from './hazards/trees.js';
 import { createCrates } from './items/crates.js';
@@ -42,6 +43,7 @@ function resetWorld(game, player, missionIndex) {
     crates: createCrates(mission.crates),
     kegs: createKegs(mission.kegs),
     trees: createTrees(mission.trees),
+    campfires: createCampfires(mission.campfires),
     terrain: mission.terrain,
     arena: null,
     missionIndex,
