@@ -103,6 +103,22 @@
   text-wrap: balance;
 }
 
+/* how to get a name in here: the ask in gold, then where to give */
+.credits-invite {
+  max-width: 34ch;
+  margin: 2em 0 0;
+  font-size: var(--font-size-game-stats);
+  color: var(--color-gold);
+  text-shadow: var(--text-shadow-pixel-xs);
+  text-wrap: balance;
+}
+
+.credits-invite span {
+  display: block;
+  margin-top: 0.5em;
+  color: var(--color-text);
+}
+
 .credits-finale {
   margin: 4em 0 0;
   font-size: var(--font-size-game-title);

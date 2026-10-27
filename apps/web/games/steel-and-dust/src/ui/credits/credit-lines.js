@@ -2,8 +2,14 @@ import { heroById } from '../../data/heroes.js';
 import { creditedSupporters } from './supporter-list.js';
 
 const MAKER = 'Nov Sochetra';
-const INVITE = 'Chip in at the arcade and your name rolls here too';
-const KHMER = /[\u1780-\u17ff\u19e0-\u19ff]/;
+// written out for the player to read and visit; nothing loads from it
+const ARCADE_SITE = 'khmerarcade.games';
+const KHMER = /[ក-៿᧠-᧿]/;
+
+// how a player's name gets into these credits, in plain words: a gift on the arcade
+function inviteLine(text) {
+  return { kind: 'invite', text, sub: `Support the arcade at ${ARCADE_SITE}` };
+}
 
 // a Khmer name is marked so, and the browser sets it in a Khmer font with the taller line it needs
 function nameLine(text) {
@@ -31,18 +37,18 @@ function supporterLines(gifts) {
   if (!gifts) {
     return [
       { kind: 'note', text: 'Thank you to everyone who keeps the arcade free' },
-      { kind: 'note', text: INVITE },
+      inviteLine('Want your name here?'),
     ];
   }
 
   if (!gifts.length) {
-    return [{ kind: 'note', text: 'Chip in at the arcade and yours is the first name here' }];
+    return [{ kind: 'note', text: 'No supporters yet' }, inviteLine('Be the first name here')];
   }
 
   return [
     { kind: 'note', text: 'They keep every game free' },
     ...namedLines(creditedSupporters(gifts)),
-    { kind: 'note', text: INVITE },
+    inviteLine('Want your name here?'),
   ];
 }
 

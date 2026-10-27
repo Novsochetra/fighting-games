@@ -1,5 +1,11 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { LOOT_TIME } from '../../../src/data/loot.js';
+import { knockOut } from '../../../src/sim/combat/knock-out.js';
+import { selectMission } from '../../../src/sim/stage/flow.js';
+import { CLEAR_TICKS } from '../../../src/sim/stage/stage-clear.js';
+import { tick } from '../../../src/sim/tick.js';
+import { spawnEnemy } from '../../support/loot-game.js';
 import { openMenu, openPage } from '../../support/menu-page.js';
 
 const gift = (name, amount) => ({ name, amount, date: '2026-10-20', message: '' });
@@ -21,6 +27,22 @@ const supportersAnswer = (supporters) => async () => ({
   ok: true,
   json: async () => ({ supporters }),
 });
+
+// one tick of the game's loop: the run moves on, then the page follows it as main.js's frame does
+function frame(page) {
+  tick(page.game);
+  page.supporters.followRun(page.game);
+  page.menus.sync();
+}
+
+// the last mission played until the Bayon Guardian falls
+function fellLastBoss(page) {
+  selectMission(page.game, 11);
+  page.act('hero-angkor');
+  page.game.fighters = [page.game.player];
+  page.game.boss = spawnEnemy(page.game, 'guardian', page.game.player.x + 90);
+  knockOut(page.game, page.game.boss, 1);
+}
 
 function endRoll() {
   roll()
@@ -103,5 +125,30 @@ describe('the credits once the last mission is clear', () => {
     endRoll();
 
     expect(page.menus.state.stack).toEqual(['clear', 'leaderboard']);
+  });
+
+  it('read the supporters again as the last boss falls, so a gift made during the run rolls too', async () => {
+    const supporters = [gift('Dara', 5)];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: true, json: async () => ({ supporters }) })),
+    );
+    await page.supporters.load();
+    supporters.push(gift('Kanha', 10));
+    fellLastBoss(page);
+
+    frame(page);
+
+    expect(page.game.lootTime).toBeGreaterThan(0);
+    expect(fetch).toHaveBeenCalledTimes(2);
+    await vi.waitFor(() => expect(page.supporters.gifts).toHaveLength(2));
+
+    for (let i = 0; i < LOOT_TIME.limit + CLEAR_TICKS && page.game.mode !== 'clear'; i++) {
+      frame(page);
+    }
+
+    expect(openMenu().id).toBe('m-credits');
+    expect(rollTexts('.credits-name')).toEqual(['Nov Sochetra', 'Kanha', 'Dara']);
+    expect(fetch).toHaveBeenCalledTimes(2);
   });
 });

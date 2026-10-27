@@ -44,6 +44,7 @@ function syncDom() {
       touchStick.rest();
     }
   }
+  supporters.followRun(game);
   const playing = game.mode === 'play';
   elements.ultButton.classList.toggle('ready', ultReady(game) && playing && !isFightOver(game));
   elements.heavyButton.classList.toggle('empty', !canAffordHeavy(game) && playing);

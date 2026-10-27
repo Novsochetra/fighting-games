@@ -119,8 +119,9 @@ load.
    on its own site.
 4. The supporters screen fetches `GET /api/supporters`; its donate sheet sends `POST /api/supporters`.
    Steel & Dust reads the same list, by address (`../../api/supporters`) as its way back to the
-   arcade is, for the credits that roll once its last mission is clear; it shares no code with the
-   arcade to read it (`games/steel-and-dust/src/ui/credits/`).
+   arcade is, for the credits that roll once its last mission is clear: as the game loads, and again
+   as its last boss falls, so a gift made during the run is named. It shares no code with the arcade
+   to read it (`games/steel-and-dust/src/ui/credits/`).
 5. `GET /api/health` answers `{"ok":true}` once the supporters table answers (Railway's health check).
 
 The arcade runs on Railway as one service: the same server sends the pages and the API, from one

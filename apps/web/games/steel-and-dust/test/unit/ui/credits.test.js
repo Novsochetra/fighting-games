@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { MISSIONS } from '../../../src/data/missions/index.js';
 import { creditLines } from '../../../src/ui/credits/credit-lines.js';
 import { rollPath, SCREEN_SECONDS } from '../../../src/ui/credits/roll-path.js';
 import { creditedSupporters, readSupporterList } from '../../../src/ui/credits/supporter-list.js';
@@ -6,6 +7,8 @@ import { createSupportersFeed } from '../../../src/ui/credits/supporters-feed.js
 
 const gift = (name, amount, date = '2026-10-20') => ({ name, amount, date, message: '' });
 const texts = (lines, kind) => lines.filter((line) => line.kind === kind).map((line) => line.text);
+const invites = (lines) => lines.filter((line) => line.kind === 'invite');
+const SUPPORT = 'Support the arcade at khmerarcade.games';
 
 describe('reading the supporters list', () => {
   it('keeps each gift with its name, amount in cents and day', () => {
@@ -79,8 +82,14 @@ describe('the credit lines', () => {
     expect(texts(supporters, 'note')).toEqual([
       'They keep every game free',
       'and 1 anonymous supporter',
-      'Chip in at the arcade and your name rolls here too',
     ]);
+  });
+
+  it('ends the supporters on how to join them, plainly: a gift on the arcade', () => {
+    const all = lines(readSupporterList({ supporters: [gift('Dara', 5)] }));
+
+    expect(invites(all)).toEqual([{ kind: 'invite', text: 'Want your name here?', sub: SUPPORT }]);
+    expect(all.at(-2).kind).toBe('invite');
   });
 
   it('marks only a Khmer name as Khmer', () => {
@@ -96,13 +105,19 @@ describe('the credit lines', () => {
   });
 
   it('asks for the first supporter while there is none', () => {
-    expect(texts(lines([]), 'note')).toEqual([
-      'Chip in at the arcade and yours is the first name here',
+    const all = lines([]);
+
+    expect(texts(all, 'note')).toEqual(['No supporters yet']);
+    expect(invites(all)).toEqual([
+      { kind: 'invite', text: 'Be the first name here', sub: SUPPORT },
     ]);
   });
 
-  it('thanks everyone when the list could not be read', () => {
-    expect(texts(lines(null), 'note')).toContain('Thank you to everyone who keeps the arcade free');
+  it('thanks everyone when the list could not be read, and still says how to join', () => {
+    const all = lines(null);
+
+    expect(texts(all, 'note')).toEqual(['Thank you to everyone who keeps the arcade free']);
+    expect(invites(all)).toEqual([{ kind: 'invite', text: 'Want your name here?', sub: SUPPORT }]);
   });
 });
 
@@ -150,5 +165,58 @@ describe('the supporters feed', () => {
 
     expect(failing.gifts).toBeNull();
     expect(offline.gifts).toBeNull();
+  });
+
+  describe('following the run', () => {
+    const LAST = MISSIONS.length - 1;
+    const run = (missionIndex, { lootTime = 0, clearTime = 0 } = {}) => ({
+      missionIndex,
+      lootTime,
+      clearTime,
+    });
+
+    it('reads the list again once, as the last boss falls', () => {
+      const fetch = answer({ supporters: [] });
+      const feed = createSupportersFeed(fetch);
+
+      feed.followRun(run(LAST));
+      feed.followRun(run(LAST, { lootTime: 1 }));
+      feed.followRun(run(LAST, { lootTime: 300 }));
+      feed.followRun(run(LAST, { clearTime: 40 }));
+
+      expect(fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('leaves the list alone when an earlier boss falls', () => {
+      const fetch = answer({ supporters: [] });
+      const feed = createSupportersFeed(fetch);
+
+      feed.followRun(run(LAST - 1, { lootTime: 1 }));
+      feed.followRun(run(0, { clearTime: 40 }));
+
+      expect(fetch).not.toHaveBeenCalled();
+    });
+
+    it('reads it again at the end of the next run', () => {
+      const fetch = answer({ supporters: [] });
+      const feed = createSupportersFeed(fetch);
+
+      feed.followRun(run(LAST, { clearTime: 40 }));
+      feed.followRun(run(0));
+      feed.followRun(run(LAST, { lootTime: 1 }));
+
+      expect(fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('keeps the list read before when the read at the end fails', async () => {
+      const fetch = answer({ supporters: [gift('Dara', 5)] });
+      const feed = createSupportersFeed(fetch);
+
+      await feed.load();
+      fetch.mockRejectedValueOnce(new TypeError('offline'));
+      await feed.load();
+
+      expect(feed.gifts).toEqual([{ name: 'Dara', cents: 500, date: '2026-10-20' }]);
+    });
   });
 });
