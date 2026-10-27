@@ -17,6 +17,8 @@ export const RAIDER_CAMP = {
         { at: 300, width: 80, rise: 40, kind: 'planks' },
         { at: 560, width: 80, rise: 30, kind: 'planks' },
       ],
+      // the camp's black powder, stacked where the raiders work
+      kegs: [420, 650],
       waves: [
         ['knife', 'spitter', 'grunt'],
         ['shield', 'grunt', 'knife'],
@@ -28,6 +30,7 @@ export const RAIDER_CAMP = {
       // a ditch between two earthworks, with a deck across it for the spitters
       ground: [...terrace(60, 180, 18, 60), ...ledge(270, 380, 14, 50)],
       platforms: [{ at: 186, width: 80, rise: 36, kind: 'planks' }],
+      kegs: [470, 640],
       waves: [
         ['spitter', 'spitter', 'hound'],
         ['shield', 'sling', 'scrapper'],
@@ -55,6 +58,7 @@ export const RAIDER_CAMP = {
         { at: 160, width: 80, rise: 30, kind: 'planks' },
         { at: 1030, width: 80, rise: 34, kind: 'planks' },
       ],
+      kegs: [450, 1080],
       waves: [
         ['hound', 'knife', 'spitter'],
         ['shield', 'shield', 'sling'],
@@ -76,6 +80,7 @@ export const RAIDER_CAMP = {
         ]),
       ],
       platforms: [{ at: 330, width: 80, rise: 30, kind: 'planks' }],
+      kegs: [430],
       waves: [
         ['spitter', 'sling', 'scrapper', 'knife'],
         ['shield', 'hound', 'spitter', 'jackal'],

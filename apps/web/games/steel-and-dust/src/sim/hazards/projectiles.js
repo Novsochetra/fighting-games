@@ -4,6 +4,7 @@ import { strikePharaohSpells } from '../bosses/pharaoh-targets.js';
 import { trailColorOf } from '../fighters/hero-colors.js';
 import { showHint } from '../hints.js';
 import { breakCratesIn } from '../items/crates.js';
+import { lightKegsIn } from './kegs.js';
 import { groundAt } from '../stage/terrain.js';
 import { FLIGHT } from './flights.js';
 import { diveToward } from './shot-aim.js';
@@ -95,6 +96,7 @@ export function updateProjectiles(game) {
     }
     if (shot.side === 'player') {
       breakCratesIn(game, area);
+      lightKegsIn(game, area);
       strikePharaohSpells(game, shot, area);
     }
   }

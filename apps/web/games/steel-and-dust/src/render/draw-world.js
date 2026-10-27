@@ -15,6 +15,7 @@ import { drawParticles } from './fx/particles.js';
 import { drawSoldiers } from './fx/soldiers.js';
 import { drawBehindBursts, drawSummons } from './fx/summons.js';
 import { drawCrates } from './scene/crate.js';
+import { drawKegs } from './scene/kegs.js';
 import { drawGround } from './scene/ground.js';
 import { drawPlatforms } from './scene/platforms.js';
 import { drawGroundLoot, drawLootSparkles } from './scene/loot.js';
@@ -108,6 +109,7 @@ export function drawWorld(painter, { game, view, cameraX }) {
   drawProps(painter, { cameraX, props: mission.props, sheets: view.propSheets });
   drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });
   drawCrates(painter, game.crates, cameraX);
+  drawKegs(painter, view.fxSheets, { kegs: game.kegs, cameraX, tick });
   drawPickups(painter, game.pickups);
   drawGroundHazards(painter, game.projectiles, view.fxSheets);
   drawFighters(painter, { game, view, cameraX });

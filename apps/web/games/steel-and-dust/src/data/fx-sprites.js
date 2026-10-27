@@ -73,6 +73,8 @@ export const FX_SPRITES = {
   gather: { frameWidth: 67, frameHeight: 84, frames: 8, ticks: 2, anchorX: 33, anchorY: 76 },
   sever: { frameWidth: 55, frameHeight: 55, frames: 7, ticks: 2, anchorX: 24, anchorY: 27 },
   rubble: { frameWidth: 105, frameHeight: 92, frames: 11, ticks: 2, anchorX: 53, anchorY: 46 },
+  keg: { frameWidth: 39, frameHeight: 62, frames: 3, ticks: 1, anchorX: 20, anchorY: 61 },
+  blast: { frameWidth: 79, frameHeight: 69, frames: 8, ticks: 4, anchorX: 40, anchorY: 68 },
   ...HEAVY_FX_SPRITES,
 };
 

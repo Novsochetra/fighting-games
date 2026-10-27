@@ -6,6 +6,7 @@ import { floorUnder, isFlat } from '../fighters/terrain-motion.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust } from '../fx/particles.js';
 import { breakCratesIn } from '../items/crates.js';
+import { lightKegsIn } from './kegs.js';
 import { floorBelow, isWall } from '../stage/terrain.js';
 import { hazardAttacker } from './hazard-attacker.js';
 
@@ -82,6 +83,7 @@ function sweep(game, wave) {
   strike(game, wave, area);
   if (wave.side === 'player') {
     breakCratesIn(game, area);
+    lightKegsIn(game, area);
   }
 }
 
