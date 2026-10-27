@@ -19,6 +19,10 @@ describe('what lies behind the open menu', () => {
     expect(menuBackdrop(['pause', 'settings'])).toEqual({ scene: 'off', dim: 'panel' });
   });
 
+  it('keeps the last road in sight behind the credits, dimmed like the clear menu', () => {
+    expect(menuBackdrop(['clear', 'credits'])).toEqual({ scene: 'off', dim: 'menu' });
+  });
+
   it('keeps only a light dim over the screen while the buttons are laid out', () => {
     expect(menuBackdrop(['title', 'settings', 'layout'])).toEqual({ scene: 'on', dim: 'light' });
     expect(menuBackdrop(['pause', 'settings', 'layout'])).toEqual({ scene: 'off', dim: 'light' });

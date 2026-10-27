@@ -8,6 +8,7 @@ const DIM_FOR_MENU = {
   pause: 'menu',
   over: 'menu',
   clear: 'menu',
+  credits: 'menu',
   layout: 'light',
 };
 

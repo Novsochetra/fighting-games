@@ -25,7 +25,7 @@ describe('songFor', () => {
     expect(songFor(gameIn({ clearTime: 12 }))).toBeNull();
   });
 
-  it('stays silent in the other modes', () => {
-    expect(songFor(gameIn({ mode: 'clear' }))).toBeNull();
+  it('plays the title song again as the credits roll once the last mission is clear', () => {
+    expect(songFor(gameIn({ mode: 'clear', clearTime: 600 }))).toBe('title');
   });
 });

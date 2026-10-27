@@ -3,7 +3,13 @@ import { menuBackdrop } from './menu-backdrop.js';
 import { navigableItems } from './menu-items.js';
 import { createMenuRefreshers } from './menu-refresh.js';
 
-const MENU_FOR_MODE = { title: 'title', pause: 'pause', over: 'over', clear: 'clear' };
+// the credits roll over the clear menu as the last mission ends, and leave it to be read after
+const MENUS_FOR_MODE = {
+  title: ['title'],
+  pause: ['pause'],
+  over: ['over'],
+  clear: ['clear', 'credits'],
+};
 
 // one base menu per mode; Settings and How to play stack on top of it
 export class MenuController {
@@ -100,8 +106,12 @@ export class MenuController {
       return false;
     }
     this.state.mode = this.game.mode;
-    const base = MENU_FOR_MODE[this.game.mode];
-    this.state.stack = base ? [base] : [];
+    this.state.stack = [...(MENUS_FOR_MODE[this.game.mode] ?? [])];
+
+    for (const id of this.state.stack) {
+      this.panels[id]?.build();
+    }
+
     this.show(true);
     return true;
   }

@@ -23,6 +23,9 @@ export function navigableItems(document, top) {
   if (top === 'layout') {
     return [...menu.querySelectorAll('.layout-bar button')];
   }
+  if (top === 'credits') {
+    return [menu.querySelector('.xbtn')];
+  }
   return [...menu.querySelectorAll('.mbtn')].filter((button) => !button.hidden);
 }
 

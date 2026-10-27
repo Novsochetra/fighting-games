@@ -15,6 +15,10 @@ import { drawForeground } from './scene/foreground/index.js';
 import { drawPaintedBackdrop, drawPaintedFronts } from './scene/painted-backdrop.js';
 import { scenePalette } from './scene/scene-palette.js';
 
+// the title has no run to show, and once the last mission clears the run is over: the credits and
+// the clear menu stand over the bare road, with no HUD, card or loot summary under them
+const MODES_WITHOUT_HUD = new Set(['title', 'clear']);
+
 function drawAir(painter, setLayer, { game, backdrop, theme, cameraX }, plane) {
   setLayer(0, true);
   const colors = scenePalette(theme).ambient;
@@ -49,7 +53,7 @@ export function renderFrame(game, view) {
   if (wipe) {
     pixelate(painter, view, mosaicBlock(wipe));
   }
-  if (game.mode !== 'title') {
+  if (!MODES_WITHOUT_HUD.has(game.mode)) {
     drawHud(painter, game, view);
   }
   drawOverlays(painter, { game, view });

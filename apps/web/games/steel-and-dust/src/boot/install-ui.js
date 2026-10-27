@@ -1,4 +1,6 @@
 import { canVibrate } from '../platform/haptics.js';
+import { createCreditsPanel, installCreditsEnd } from '../ui/credits/credits-panel.js';
+import { createSupportersFeed } from '../ui/credits/supporters-feed.js';
 import { createHelpPanel } from '../ui/help/help-panel.js';
 import { installCarouselEvents } from '../ui/heroes/carousel-events.js';
 import { createHeroPanel } from '../ui/heroes/hero-panel.js';
@@ -21,7 +23,7 @@ function isIos(navigator) {
   );
 }
 
-function createPanels({ elements, game, audio, layout, ui, window }) {
+function createPanels({ elements, game, audio, layout, ui, window, supporters }) {
   const panels = {
     settings: createSettingsPanel({
       list: elements.settingsList,
@@ -34,6 +36,7 @@ function createPanels({ elements, game, audio, layout, ui, window }) {
     help: createHelpPanel({ tabs: elements.helpTabs, body: elements.helpBody, game, ui }),
     heroes: createHeroPanel({ list: elements.heroList, game }),
     leaderboard: createLeaderboardPanel({ list: elements.leaderboardList, game }),
+    credits: createCreditsPanel({ root: elements.credits, game, feed: supporters }),
   };
   panels.layout = createLayoutEditor({ window, game, audio, layout, settings: panels.settings });
   return panels;
@@ -44,7 +47,8 @@ export function installUi({ window, elements, game, audio, ui, pad }) {
   const layout = createScreenFit({ document, window, elements, game, ui });
   ui.onTouchShownChange = () => layout.applyTouchSettings();
   const fullscreen = createFullscreen({ document, screen: window.screen, ui });
-  const panels = createPanels({ elements, game, audio, layout, ui, window });
+  const supporters = createSupportersFeed((address) => window.fetch(address));
+  const panels = createPanels({ elements, game, audio, layout, ui, window, supporters });
   const context = () => ({
     ui,
     fullscreen,
@@ -63,9 +67,10 @@ export function installUi({ window, elements, game, audio, ui, pad }) {
   menus.handleKey = (event) => handleMenuKey(event, { menus, navigate, ui });
   installMenuEvents({ document, menus, act, ui, panels, audio });
   installCarouselEvents({ stage: elements.heroStage, menus, audio });
+  installCreditsEnd({ root: elements.credits, menus });
   installScreenFit(window, layout);
   installFullscreen({ window, document, fullscreen, layout });
   installGestureGuards({ window, document, elements });
   installMenuTapFix(elements.menus);
-  return { layout, fullscreen, menus, act };
+  return { layout, fullscreen, menus, act, supporters };
 }

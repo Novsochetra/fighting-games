@@ -131,6 +131,8 @@ describe('the leaderboard', () => {
     page.game.clearTime = CLEAR_TICKS;
     tick(page.game);
     page.menus.sync();
+    expect(openMenu().id).toBe('m-credits');
+    page.key('Escape');
     expect(openMenu().id).toBe('m-clear');
     expect(page.game.checkpoint).toBeNull();
     expect(page.game.leaderboard[0]).toMatchObject({ score: 6200, mission: 12, cleared: true });

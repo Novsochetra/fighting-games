@@ -23,7 +23,14 @@ function createCanvas(width, height) {
 const elements = findElements(document);
 const { game, audio, ui } = createSession({ window });
 const pad = { connected: false };
-const { layout, fullscreen, menus, act } = installUi({ window, elements, game, audio, ui, pad });
+const { layout, fullscreen, menus, act, supporters } = installUi({
+  window,
+  elements,
+  game,
+  audio,
+  ui,
+  pad,
+});
 const { touchStick, gamepad } = installInput({ window, elements, game, audio, ui, layout, menus });
 layout.onFit = () => touchStick.rest();
 const titleScene = installTitleScene(window);
@@ -91,6 +98,8 @@ bootLoading.spritesMayStart.then(() => {
   });
   clock = createClock(performance.now());
   bootLoading.appReady();
+  // the supporters the credits name wait until the game is up, so they never hold its loading
+  supporters.load();
   requestAnimationFrame(frame);
 });
 

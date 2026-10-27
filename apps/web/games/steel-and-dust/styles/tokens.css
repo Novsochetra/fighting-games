@@ -90,6 +90,8 @@
   --font-size-game-title: clamp(26px, 6vmin, 52px);
   --font-size-game-button: clamp(14px, 2.4vmin, 19px);
   --font-size-game-stats: clamp(13px, 2.2vmin, 17px);
+  --font-size-credits-heading: clamp(11px, 1.9vmin, 15px);
+  --font-size-credits-name: clamp(16px, 3.4vmin, 28px);
 
   --font-weight-regular: 400;
   --font-weight-semibold: 600;
@@ -99,6 +101,7 @@
   --leading-logo: 0.95;
   --leading-tight: 1.15;
   --leading-normal: 1.45;
+  --leading-khmer: 1.7;
 
   --tracking-slight: 0.02em;
   --tracking-wide: 0.04em;
@@ -139,6 +142,7 @@
   --duration-loader-follow: 700ms;
   --duration-sprite-run: 640ms;
   --duration-dust: 320ms;
+  --duration-credits-hold: 3600ms;
 
   --easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --easing-overshoot: cubic-bezier(0.2, 1.6, 0.4, 1);

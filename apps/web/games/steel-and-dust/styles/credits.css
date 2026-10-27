@@ -1,0 +1,142 @@
+/* the credits roll up over the last road, as an arcade game's do once it is beaten; the whole roll
+   is one column moved by one transform, so the compositor plays it alone */
+#m-credits {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* lines come in at the foot of the screen and leave at its top through a soft edge */
+.credits-window {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    var(--color-clear),
+    var(--color-black) 14%,
+    var(--color-black) 86%,
+    var(--color-clear)
+  );
+}
+
+.credits-roll {
+  position: absolute;
+  inset: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-inline: calc(24px + var(--sal)) calc(24px + var(--sar));
+  text-align: center;
+  translate: 0 var(--roll-from);
+}
+
+/* --duration-roll and the path come from the roll's own length (credits-panel.js) */
+.credits-roll.rolling {
+  animation: credits-roll var(--duration-roll) var(--easing-linear) both;
+}
+
+.credits-roll.rolling .credits-finale {
+  animation: credits-finale var(--duration-credits-hold) var(--easing-standard) var(--duration-roll)
+    both;
+}
+
+@keyframes credits-roll {
+  from {
+    translate: 0 var(--roll-from);
+  }
+
+  to {
+    translate: 0 var(--roll-to);
+  }
+}
+
+/* the thanks swell once as they come to rest, and hold there to be read */
+@keyframes credits-finale {
+  15% {
+    scale: 1.12;
+    color: var(--color-cream);
+  }
+
+  35%,
+  100% {
+    scale: 1;
+  }
+}
+
+.credits-logo {
+  margin: 0;
+}
+
+.credits-heading {
+  margin: 2.6em 0 0.7em;
+  font-size: var(--font-size-credits-heading);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-gold);
+  text-shadow: var(--text-shadow-pixel-xs);
+}
+
+.credits-name,
+.credits-hero {
+  max-width: 100%;
+  margin: 0.2em 0;
+  font-size: var(--font-size-credits-name);
+  color: var(--color-text);
+  text-shadow: var(--text-shadow-pixel-sm);
+  overflow-wrap: anywhere;
+}
+
+.credits-name:lang(km) {
+  line-height: var(--leading-khmer);
+}
+
+.credits-hero {
+  color: var(--hero-color);
+}
+
+.credits-note {
+  max-width: 34ch;
+  margin: 0.7em 0;
+  font-size: var(--font-size-game-stats);
+  color: var(--color-text-muted);
+  text-shadow: var(--text-shadow-pixel-xs);
+  text-wrap: balance;
+}
+
+.credits-finale {
+  margin: 4em 0 0;
+  font-size: var(--font-size-game-title);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gold);
+  text-shadow: var(--text-shadow-pixel-md);
+}
+
+.credits-skip {
+  position: absolute;
+  top: calc(12px + var(--sat));
+  right: calc(12px + var(--sar));
+}
+
+/* with reduced motion nothing rolls: the credits stand as a list to scroll, and Skip moves on */
+@media (prefers-reduced-motion: reduce) {
+  .credits-window {
+    overflow-y: auto;
+    mask-image: none;
+  }
+
+  #menus .credits-window,
+  #menus .credits-window * {
+    touch-action: pan-y;
+  }
+
+  .credits-roll {
+    position: static;
+    padding-block: calc(64px + var(--sat)) calc(32px + var(--sab));
+    translate: none;
+  }
+
+  .credits-roll.rolling,
+  .credits-roll.rolling .credits-finale {
+    animation: none;
+  }
+}
