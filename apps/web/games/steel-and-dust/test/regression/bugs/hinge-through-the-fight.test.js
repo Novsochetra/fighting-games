@@ -39,7 +39,8 @@ function hingeLine([first, second]) {
 describe('a folded phone', () => {
   for (const [phone, [width, height, segments]] of Object.entries(FOLDED)) {
     it(`keeps the fight off the hinge of a ${phone}`, () => {
-      const screen = { width, height, safe: noInsets, buttonScale: 1, hinge: hingeOf(segments) };
+      const hinge = hingeOf(segments, { width, height });
+      const screen = { width, height, safe: noInsets, buttonScale: 1, hinge };
 
       for (const touch of [true, false]) {
         expect(overlaps(arrangeStage({ ...screen, touch }).rect, hingeLine(segments))).toBe(false);
@@ -49,7 +50,7 @@ describe('a folded phone', () => {
 
   it('keeps the menus off the gap between the two screens of a Surface Duo', () => {
     for (const [width, height, segments] of [DUO_AS_BOOK, DUO_SIDEWAYS]) {
-      const menus = menuBox({ hinge: hingeOf(segments), width, height });
+      const menus = menuBox({ hinge: hingeOf(segments, { width, height }), width, height });
 
       expect(overlaps(menus, hingeLine(segments))).toBe(false);
     }

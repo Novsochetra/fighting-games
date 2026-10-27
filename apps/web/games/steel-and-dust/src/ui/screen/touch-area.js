@@ -1,5 +1,10 @@
-// a phone half-folded on a table keeps the stick, the buttons and pause on its bottom half, so a
-// thumb on the game's half never catches the stick; `area` is null for the whole screen
+// a phone half-folded on a table keeps every touch control (stick, buttons and pause) to its bottom
+// half, so a thumb on the game's half never catches the stick; null is the whole screen
+export function touchAreaOf(hinge) {
+  return hinge?.stacked ? hinge.controls : null;
+}
+
+// places the touch layer, or the layout editor's copy of it, on that area
 export function fitTouchLayer(touch, area) {
   Object.assign(touch.style, {
     left: area ? `${area.x}px` : '',

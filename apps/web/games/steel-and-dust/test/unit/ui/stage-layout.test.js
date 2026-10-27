@@ -22,7 +22,6 @@ describe('stage layout', () => {
     expect(arrangeStage(screen(1000, 400, { touch: false }))).toEqual({
       rect: { x: 144, y: 0, width: 711, height: 400 },
       controlsBelow: false,
-      touchArea: null,
     });
   });
 
@@ -57,24 +56,15 @@ describe('stage layout', () => {
     expect(arrangeStage(screen(1180, 820)).controlsBelow).toBe(false);
   });
 
-  it('shows the game on the top half and the touch controls on the bottom half of a phone on a table', () => {
+  it('shows the game on the top half of a phone on a table, the buttons on the bottom half', () => {
     const top = { x: 0, y: 0, width: 1104, height: 442 };
     const bottom = { x: 0, y: 442, width: 1104, height: 442 };
-    const { rect, controlsBelow, touchArea } = arrangeStage(
+    const { rect, controlsBelow } = arrangeStage(
       screen(1104, 884, { hinge: { stacked: true, game: top, controls: bottom } }),
     );
 
     expect(controlsBelow).toBe(true);
     expect(rect).toEqual({ x: 159, y: 0, width: 785, height: 442 });
-    expect(touchArea).toBe(bottom);
-  });
-
-  it('keeps the touch controls on the whole screen of a phone folded like a book', () => {
-    const left = { x: 0, y: 0, width: 540, height: 720 };
-    const right = { x: 574, y: 0, width: 540, height: 720 };
-    const hinge = { stacked: false, game: left, controls: right };
-
-    expect(arrangeStage(screen(1114, 720, { hinge })).touchArea).toBeNull();
   });
 
   it('keeps the game off the hinge of a phone folded like a book', () => {

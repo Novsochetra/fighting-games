@@ -46,6 +46,8 @@ export function installUi({ window, elements, game, audio, ui, pad }) {
   const { document } = window;
   const layout = createScreenFit({ document, window, elements, game, ui });
   ui.onTouchShownChange = () => layout.applyTouchSettings();
+  // first, so a resize or a fold refits the page before the layout editor redraws over it
+  installScreenFit(window, layout);
   const fullscreen = createFullscreen({ document, screen: window.screen, ui });
   const supporters = createSupportersFeed((address) => window.fetch(address));
   const panels = createPanels({ elements, game, audio, layout, ui, window, supporters });
@@ -68,7 +70,6 @@ export function installUi({ window, elements, game, audio, ui, pad }) {
   installMenuEvents({ document, menus, act, ui, panels, audio });
   installCarouselEvents({ stage: elements.heroStage, menus, audio });
   installCreditsEnd({ root: elements.credits, menus });
-  installScreenFit(window, layout);
   installFullscreen({ window, document, fullscreen, layout });
   installGestureGuards({ window, document, elements });
   installMenuTapFix(elements.menus);

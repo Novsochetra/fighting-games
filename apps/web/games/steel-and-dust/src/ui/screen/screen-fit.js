@@ -3,30 +3,10 @@ import { applyButtonLayout, applyStickZone } from '../layout/apply-button-layout
 import { layoutForScreen } from '../layout/layout-draft.js';
 import { customStickPlace } from '../layout/stick-place.js';
 import { fitMenus, menuBox } from './menu-area.js';
+import { createSafeArea } from './safe-area.js';
 import { arrangeStage, STICK_RADIUS, stickRestPosition } from './stage-layout.js';
-import { fitTouchLayer } from './touch-area.js';
-import { readHinge } from './viewport-segments.js';
-
-const SAFE_AREA_PROBE =
-  'position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;' +
-  'padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) ' +
-  'env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);';
-
-// CSS env() is the only way to read the phone's notch and home-bar insets
-function createSafeArea(document, window) {
-  const probe = document.createElement('div');
-  probe.style.cssText = SAFE_AREA_PROBE;
-  document.body.appendChild(probe);
-  return () => {
-    const style = window.getComputedStyle(probe);
-    return {
-      top: parseFloat(style.paddingTop) || 0,
-      right: parseFloat(style.paddingRight) || 0,
-      bottom: parseFloat(style.paddingBottom) || 0,
-      left: parseFloat(style.paddingLeft) || 0,
-    };
-  };
-}
+import { fitTouchLayer, touchAreaOf } from './touch-area.js';
+import { onFoldChange, readHinge } from './viewport-segments.js';
 
 function applyTouchClasses(document, { game, ui }) {
   const { classList } = document.body;
@@ -40,10 +20,16 @@ function screenOf(elements) {
   return { width: elements.app.clientWidth, height: elements.app.clientHeight };
 }
 
+// read again on every use rather than kept from the last fit, which may not have run yet when a
+// fold or a turn reaches the layout editor
+function hingeNow({ window, elements }) {
+  return readHinge(window, screenOf(elements));
+}
+
 function fitStage({ elements, game, ui, window, safe }) {
-  const hinge = readHinge(window);
+  const hinge = hingeNow({ window, elements });
   const screen = screenOf(elements);
-  const { rect, touchArea } = arrangeStage({
+  const { rect } = arrangeStage({
     ...screen,
     safe,
     touch: ui.showsTouchControls(),
@@ -52,15 +38,13 @@ function fitStage({ elements, game, ui, window, safe }) {
   });
 
   fitMenus(elements.menus, menuBox({ hinge, ...screen }));
-  fitTouchLayer(elements.touch, touchArea);
+  fitTouchLayer(elements.touch, touchAreaOf(hinge));
   Object.assign(elements.stage.style, {
     left: `${rect.x}px`,
     top: `${rect.y}px`,
     width: `${rect.width}px`,
     height: `${rect.height}px`,
   });
-
-  return touchArea;
 }
 
 function controlsLayout({ elements, game }) {
@@ -77,7 +61,7 @@ function customStick(context, scale) {
   if (!stick) {
     return null;
   }
-  const layer = context.touchArea ?? screenOf(context.elements);
+  const layer = touchAreaOf(hingeNow(context)) ?? screenOf(context.elements);
   return customStickPlace({ stick, layer, radius: STICK_RADIUS * scale * stick.size });
 }
 
@@ -90,14 +74,16 @@ function fitControls(context) {
 // in px of the stick zone, which is as tall as the touch layer: the app, or a folded phone's bottom
 // half. The app still measures while the touch layer is hidden (the layout editor places its copy
 // of the stick from the title or pause menu)
-function originalStickRest({ context, window, safe, scale }) {
-  const { elements, touchArea } = context;
+function originalStickRest({ context, safe, scale }) {
+  const { elements } = context;
+  const hinge = hingeNow(context);
+  const touchArea = touchAreaOf(hinge);
   const { controlsBelow } = arrangeStage({
     ...screenOf(elements),
     safe,
     touch: true,
     buttonScale: scale,
-    hinge: readHinge(window),
+    hinge,
   });
 
   return stickRestPosition({
@@ -111,16 +97,20 @@ function originalStickRest({ context, window, safe, scale }) {
 
 export function createScreenFit({ document, window, elements, game, ui }) {
   const readSafeArea = createSafeArea(document, window);
-  const context = { elements, game, touchArea: null };
+  const context = { elements, game, window };
   const layout = {
     originalStickRest(scale) {
-      return originalStickRest({ context, window, safe: readSafeArea(), scale });
+      return originalStickRest({ context, safe: readSafeArea(), scale });
+    },
+    // where the touch layer stands, null for the whole screen (the layout editor lays its copy there)
+    touchArea() {
+      return touchAreaOf(hingeNow(context));
     },
     stickRest(scale) {
       return customStick(context, scale)?.rest ?? layout.originalStickRest(scale);
     },
     fit() {
-      context.touchArea = fitStage({ elements, game, ui, window, safe: readSafeArea() });
+      fitStage({ elements, game, ui, window, safe: readSafeArea() });
       fitControls(context);
       layout.onFit?.();
     },
@@ -136,6 +126,5 @@ export function installScreenFit(window, layout) {
   window.addEventListener('resize', layout.fit);
   window.visualViewport?.addEventListener('resize', layout.fit);
   window.addEventListener('orientationchange', () => window.setTimeout(layout.fit, 250));
-  // folding a phone halfway changes its segments without always changing its size
-  window.navigator.devicePosture?.addEventListener('change', layout.fit);
+  onFoldChange(window, layout.fit);
 }

@@ -1,5 +1,6 @@
 import { BUTTON_SIZE } from '../../data/button-layout.js';
 import { buttonScale } from '../../data/settings.js';
+import { fitTouchLayer } from '../screen/touch-area.js';
 import { applyButtonLayout } from './apply-button-layout.js';
 import { orientationOf, shownControls, sizeOf } from './layout-draft.js';
 import { centreOf, coverCost, fractionOf, halfExtentOf } from './layout-geometry.js';
@@ -63,6 +64,7 @@ export class LayoutView {
     const entries = draft[this.orientation()];
     this.picked = picked;
     this.shown = shownControls(settings.stick);
+    fitTouchLayer(this.preview, this.layout.touchArea());
     applyButtonLayout(this.preview, entries);
     for (const element of this.controls) {
       element.classList.toggle('picked', element.dataset.control === picked);
@@ -82,11 +84,13 @@ export class LayoutView {
   }
 
   // the buttons place themselves through CSS; the stick rests where the screen fit puts the
-  // original one, or at its custom centre
+  // original one, or at its custom centre on the touch layer
   placeStick(entries, settings) {
     const stick = this.controlFor('stick');
+    const screen = { width: this.app.clientWidth, height: this.app.clientHeight };
+    const layer = this.layout.touchArea() ?? screen;
     const rest = entries
-      ? { x: entries.stick.x * this.app.clientWidth, y: entries.stick.y * this.app.clientHeight }
+      ? { x: entries.stick.x * layer.width, y: entries.stick.y * layer.height }
       : this.layout.originalStickRest(buttonScale(settings));
     stick.style.left = `${rest.x}px`;
     stick.style.top = `${rest.y}px`;

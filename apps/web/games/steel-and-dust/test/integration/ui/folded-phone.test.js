@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { TouchStick } from '../../../src/input/touch-stick.js';
-import { openPage } from '../../support/menu-page.js';
+import { openMenu, openPage } from '../../support/menu-page.js';
 
 const rect = (x, y, width, height) => ({ x, y, width, height });
 const FOLD_FLAT = [rect(0, 0, 1104, 884)];
@@ -40,6 +40,14 @@ function installStick(page) {
   return elements.base;
 }
 
+function openLayoutEditor(page) {
+  page.act('settings');
+  document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
+  expect(openMenu().id).toBe('m-layout');
+}
+
+const preview = () => document.querySelector('#m-layout .layout-preview');
+const boxOf = ({ style }) => [style.left, style.top, style.width, style.height];
 const menuWidth = () => document.getElementById('menus').style.getPropertyValue('--menu-width');
 
 describe('the page on a folded phone', () => {
@@ -81,10 +89,9 @@ describe('the page on a folded phone', () => {
 
     fold(FOLD_ON_TABLE);
     holdPhone(1104, 884);
-    const { left, top, width, height } = document.getElementById('touch').style;
     const stickY = parseFloat(stick.style.top);
 
-    expect([left, top, width, height]).toEqual(['0px', '442px', '1104px', '442px']);
+    expect(boxOf(document.getElementById('touch'))).toEqual(['0px', '442px', '1104px', '442px']);
     expect(stickY).toBeGreaterThan(64);
     expect(stickY).toBeLessThan(442 - 64);
   });
@@ -96,6 +103,19 @@ describe('the page on a folded phone', () => {
     posture.dispatchEvent(new Event('change'));
 
     expect(document.getElementById('touch').style.top).toBe('');
+  });
+
+  it("lays the button layout editor's controls where the real ones stand, as the phone folds", () => {
+    fold(FOLD_ON_TABLE);
+    holdPhone(1104, 884);
+    openLayoutEditor(page);
+
+    expect(boxOf(preview())).toEqual(['0px', '442px', '1104px', '442px']);
+
+    fold(FOLD_FLAT);
+    posture.dispatchEvent(new Event('change'));
+
+    expect(boxOf(preview())).toEqual(['', '', '', '']);
   });
 
   it('keeps the game and the menus on one screen of a Surface Duo held like a book', () => {

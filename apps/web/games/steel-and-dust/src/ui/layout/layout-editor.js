@@ -1,3 +1,4 @@
+import { onFoldChange } from '../screen/viewport-segments.js';
 import {
   createDraft,
   customised,
@@ -109,11 +110,14 @@ export function createLayoutEditor({ window, game, audio, layout, settings }) {
       TOOLBAR_ACTIONS[button.dataset.edit](editor);
     }
   });
-  // a phone turned while editing shows, and edits, the other orientation's layout
-  window.addEventListener('resize', () => {
+  // a phone turned while editing shows, and edits, the other orientation's layout, and a phone
+  // folded while editing moves the controls with the touch layer
+  const redraw = () => {
     if (view.isOpen()) {
       editor.render();
     }
-  });
+  };
+  window.addEventListener('resize', redraw);
+  onFoldChange(window, redraw);
   return editor;
 }

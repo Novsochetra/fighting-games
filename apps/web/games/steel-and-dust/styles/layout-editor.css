@@ -1,6 +1,12 @@
 /* the Button layout editor (src/ui/layout/) lies over the paused game or the title under only a light
-   dim (`menuBackdrop`), so the buttons and the stick are placed against the real screen */
-#m-layout {
+   dim (`menuBackdrop`), so the buttons and the stick are placed against the real screen. It keeps the
+   whole screen on a folded phone too, where the other menus keep to the game's half, and lays its
+   copy of the touch layer where the real one stands (src/ui/screen/touch-area.js) */
+#menus #m-layout {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   padding: 0;
   overflow: hidden;
 }
@@ -53,14 +59,14 @@ body.stick-hidden .layout-preview .stick-base {
 
   position: absolute;
   top: calc(8px + var(--sat));
-  left: 50%;
+  left: calc(var(--menu-x, 0px) + var(--menu-width, 100%) / 2);
   translate: -50% 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
   width: max-content;
-  max-width: calc(100% - 16px);
+  max-width: calc(var(--menu-width, 100%) - 16px);
   padding: 2px 4px;
   border: solid var(--color-clear);
   border-width: calc(12px * var(--stone)) calc(14px * var(--stone));

@@ -126,3 +126,23 @@
     --px: 1;
   }
 }
+
+/* a phone folded like a book, or a Surface Duo held so, runs the bar on its left half, the game's,
+   off the fold, as long as on a phone that half's width: five stretches on a Duo's half, three on a
+   Fold's. The env() holds the left half's right edge, which no other screen has */
+@media (horizontal-viewport-segments: 2) {
+  .loader {
+    --tiles: 5;
+    --px: 2;
+  }
+
+  .loader-stage {
+    left: calc(env(viewport-segment-right 0 0, 100vw) / 2);
+  }
+}
+
+@media (horizontal-viewport-segments: 2) and (max-width: 959px) {
+  .loader {
+    --tiles: 3;
+  }
+}
