@@ -56,7 +56,7 @@ export function blowKeg(game, keg) {
       strike(game, keg, target);
     }
   }
-  addBurst(game, { sprite: 'blast', x: keg.x, y: keg.y, scale: BLAST_SCALE });
+  addBurst(game, { sprite: 'blast', x: keg.x, y: keg.y + KEG.setIn, scale: BLAST_SCALE });
   scatterStaves(game, keg);
   shake(game, 4, 16);
   game.flashTime = Math.max(game.flashTime, 4);

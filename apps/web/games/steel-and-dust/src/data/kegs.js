@@ -14,6 +14,9 @@ export const KEG = {
   // the blast's reach either side of the keg and above it, as wide as the blast is drawn
   reach: 42,
   rise: 60,
+  // the keg and its blast are drawn a little down into the road's grass, so the keg's round foot
+  // sits in it rather than on its top edge
+  setIn: 5,
 };
 
 // enough to finish a foot soldier and leave a heavy reeling; the hero only takes a knock

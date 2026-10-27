@@ -18,7 +18,9 @@ export function kegFrame(keg, tick) {
 export function drawKegs(painter, sheets, { kegs, cameraX, tick }) {
   for (const keg of kegs) {
     if (!keg.gone && keg.x > cameraX - MARGIN && keg.x < cameraX + VIEW_WIDTH + MARGIN) {
-      drawFxFrame(painter, sheets, { name: 'keg', frame: kegFrame(keg, tick), x: keg.x, y: keg.y });
+      const frame = kegFrame(keg, tick);
+
+      drawFxFrame(painter, sheets, { name: 'keg', frame, x: keg.x, y: keg.y + KEG.setIn });
     }
   }
 }

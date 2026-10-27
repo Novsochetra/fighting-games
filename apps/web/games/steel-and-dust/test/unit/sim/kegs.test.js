@@ -47,6 +47,16 @@ describe('a powder keg', () => {
     expect(game.summons.some((summon) => summon.sprite === 'blast')).toBe(true);
   });
 
+  it('bursts from the foot of the keg where it is drawn, set down into the road grass', () => {
+    const { game, kegs } = gameWithKegs(200);
+
+    blowKeg(game, kegs[0]);
+
+    const blast = game.summons.find((summon) => summon.sprite === 'blast');
+    expect(blast.y).toBeGreaterThan(kegs[0].y);
+    expect(blast).toMatchObject({ x: 200, y: kegs[0].y + KEG.setIn });
+  });
+
   it('knocks out the raiders in its reach and leaves the rest alone', () => {
     const { game, kegs } = gameWithKegs(200);
     const near = spawnEnemy(game, 'grunt', 220);
