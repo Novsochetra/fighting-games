@@ -23,9 +23,6 @@ export function drawRoadProps(painter, { game, view, cameraX }) {
   drawQuicksand(painter, sheets, { quicksand: game.quicksand, cameraX, tick });
   drawVents(painter, sheets, { vents: game.vents, cameraX });
   drawSlabs(painter, sheets, { slabs: game.slabs, cameraX, tick });
-  drawKegs(painter, sheets, { kegs: game.kegs, cameraX, tick });
-  drawCampfires(painter, sheets, { campfires: game.campfires, cameraX, tick });
-  drawHammerMarks(painter, { hammers: game.hammers, cameraX, tick });
   drawTowers(painter, sheets, { towers: game.towers, cameraX, tick });
 }
 
