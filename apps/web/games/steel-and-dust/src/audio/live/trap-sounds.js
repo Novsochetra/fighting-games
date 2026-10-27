@@ -8,5 +8,16 @@ function spikeTrap(live, start) {
   hiss(live, { start, ...scrape, attack: 0.004, duration: 0.12, volume: 0.07 });
 }
 
+// a carved boulder rolling down the road: a long low rumble with stone knocking under it, fading as
+// it rolls on
+function boulderRoll(live, start) {
+  thump(live, { start, from: 62, to: 36, duration: 2, volume: 0.3 });
+  const grind = { type: 'bandpass', from: 260, to: 160, resonance: 1.6 };
+  hiss(live, { start, ...grind, attack: 0.2, duration: 1.8, volume: 0.1 });
+  for (let i = 0; i < 6; i++) {
+    thump(live, { start: start + 0.2 + i * 0.3, from: 120, to: 60, duration: 0.12, volume: 0.1 });
+  }
+}
+
 // the Mirage Temple's traps
-export const TRAP_SOUNDS = { spikeTrap };
+export const TRAP_SOUNDS = { spikeTrap, boulderRoll };
