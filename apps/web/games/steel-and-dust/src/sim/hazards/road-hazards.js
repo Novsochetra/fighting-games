@@ -4,7 +4,9 @@ import { createHammers, updateHammers } from './hammers.js';
 import { createKegs, updateKegs } from './kegs.js';
 import { createSpikeTraps, updateSpikeTraps } from './spike-traps.js';
 import { createTempleBoulders, updateTempleBoulders } from './temple-boulders.js';
+import { createQuicksand, updateQuicksand } from './quicksand.js';
 import { createTrees, updateTrees } from './trees.js';
+import { createVents, updateVents } from './vents.js';
 
 // a fresh set of the mission's road hazards for a run, from where its layout put them
 export function createRoadHazards(mission) {
@@ -16,6 +18,8 @@ export function createRoadHazards(mission) {
     conveyors: createConveyors(mission.conveyors),
     spikeTraps: createSpikeTraps(mission.spikeTraps),
     boulders: createTempleBoulders(mission.boulders),
+    quicksand: createQuicksand(mission.quicksand),
+    vents: createVents(mission.vents),
   };
 }
 
@@ -29,4 +33,6 @@ export function updateRoadHazards(game) {
   updateConveyors(game);
   updateSpikeTraps(game);
   updateTempleBoulders(game);
+  updateQuicksand(game);
+  updateVents(game);
 }

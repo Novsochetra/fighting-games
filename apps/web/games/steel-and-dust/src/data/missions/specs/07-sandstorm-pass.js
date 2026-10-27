@@ -16,6 +16,7 @@ export const SANDSTORM_PASS = {
   zones: [
     {
       screens: 2,
+      quicksand: [375],
       ground: [...mound(60, 330, 24, 72), ...mound(470, 720, 10, 40)],
       waves: [
         ['witch', 'grunt', 'assassin'],
@@ -25,6 +26,7 @@ export const SANDSTORM_PASS = {
     },
     {
       screens: 3,
+      quicksand: [780],
       ground: [
         ...mound(-270, -160, 10, 40),
         ...ledge(60, {
@@ -47,6 +49,7 @@ export const SANDSTORM_PASS = {
     },
     {
       screens: 2,
+      quicksand: [380],
       ground: [
         ...ramp(-260, -150, 20),
         ...stairs(60, [
@@ -64,6 +67,7 @@ export const SANDSTORM_PASS = {
     },
     {
       screens: 3,
+      quicksand: [740],
       ground: [
         ...mound(60, 380, 32, 96),
         ...stairs(480, [

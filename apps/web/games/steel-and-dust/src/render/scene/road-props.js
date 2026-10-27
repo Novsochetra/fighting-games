@@ -4,6 +4,8 @@ import { drawHammerMarks, drawHammers } from './hammers.js';
 import { drawKegs } from './kegs.js';
 import { drawSpikeTraps } from './spike-traps.js';
 import { drawTempleBoulders } from './temple-boulders.js';
+import { drawQuicksand } from './quicksand.js';
+import { drawVents } from './vents.js';
 
 // what stands on the road in front of the crates and behind the fighters: kegs, fires and the
 // marks under hammers about to drop
@@ -16,6 +18,8 @@ export function drawRoadProps(painter, { game, view, cameraX }) {
   drawCampfires(painter, sheets, { campfires: game.campfires, cameraX, tick });
   drawHammerMarks(painter, { hammers: game.hammers, cameraX, tick });
   drawSpikeTraps(painter, sheets, { spikeTraps: game.spikeTraps, cameraX });
+  drawQuicksand(painter, sheets, { quicksand: game.quicksand, cameraX, tick });
+  drawVents(painter, sheets, { vents: game.vents, cameraX });
 }
 
 // what hangs or flies over the fighters: the hammers
