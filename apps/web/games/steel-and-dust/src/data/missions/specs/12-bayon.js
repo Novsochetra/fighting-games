@@ -84,6 +84,7 @@ export const BAYON = {
         { at: 850, width: 80, rise: 28, kind: 'lintel' },
         { at: 1030, width: 80, rise: 32, kind: 'lintel' },
       ],
+      slabs: [400, 790, 980],
       waves: [
         ['monk', 'sentry', 'monk', 'vulture'],
         ['tombguard', 'witch', 'juggernaut'],

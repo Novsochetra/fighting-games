@@ -86,7 +86,7 @@ export const FX_SPRITES = {
   furnaceMouth: { frameWidth: 82, frameHeight: 75, frames: 4, ticks: 5, anchorX: 42, anchorY: 74 },
   spikeTrap: { frameWidth: 78, frameHeight: 44, frames: 5, ticks: 1, anchorX: 39, anchorY: 43 },
   templeBoulder: { frameWidth: 94, frameHeight: 91, frames: 4, ticks: 3, anchorX: 47, anchorY: 90 },
-  crackedFloor: { frameWidth: 102, frameHeight: 58, frames: 4, ticks: 1, anchorX: 51, anchorY: 57 },
+  crackedFloor: { frameWidth: 102, frameHeight: 58, frames: 4, ticks: 1, anchorX: 51, anchorY: 16 },
   faceTower: { frameWidth: 92, frameHeight: 128, frames: 4, ticks: 1, anchorX: 45, anchorY: 127 },
   campfire: { frameWidth: 52, frameHeight: 96, frames: 6, ticks: 5, anchorX: 26, anchorY: 95 },
   deadTree: { frameWidth: 169, frameHeight: 117, frames: 4, ticks: 1, anchorX: 38, anchorY: 116 },

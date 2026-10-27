@@ -21,5 +21,6 @@ export function layoutRoadProps(zoneSpecs, zones, terrain) {
     trees: onRoad('trees'),
     campfires: onRoad('campfires'),
     hammers: onRoad('hammers'),
+    slabs: onRoad('slabs'),
   };
 }
