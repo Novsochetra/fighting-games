@@ -49,12 +49,13 @@ def indexed_sheet(rows, done, rgb_palette):
 
 def held_loops(image):
     sheet = np.array(image)
+    palette = np.array(image.getpalette()[:768], np.uint8).reshape(-1, 3)
     names = [name for name, *_ in STRIPS]
     for name, loop in LOOPS.items():
         row = names.index(name)
         band = sheet[FRAME_HEIGHT * row:FRAME_HEIGHT * (row + 1)]
         cells = [band[:, FRAME_WIDTH * c:FRAME_WIDTH * (c + 1)].copy() for c in range(len(loop['bob']))]
-        for column, cell in enumerate(steadied(cells, loop)):
+        for column, cell in enumerate(steadied(cells, loop, palette)):
             band[:, FRAME_WIDTH * column:FRAME_WIDTH * (column + 1)] = cell
     held = Image.fromarray(sheet, 'P')
     held.putpalette(image.getpalette())

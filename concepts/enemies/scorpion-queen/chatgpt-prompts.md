@@ -414,7 +414,8 @@ put right in the bake:
   blow is out, with a small lunge (`REACH` in `tools/queen_sheet/lay_out.py`), so her hurt box and
   reaches in `src/data/enemies/boss-bodies.js` and her moves' hitboxes stay as they were.
 - It redrew her whole body in every pose, so a loop shimmered. Her idle, walk and charge keep
-  their first pose's body over each pose's own legs (`tools/queen_sheet/loops.py`).
+  their first pose's body over each pose's own legs, joined along the path through her waist where
+  the two drawings agree, so no line shows there (`tools/queen_sheet/loops.py`).
 - It placed each pose a little differently in its cell. Each is lined up by her planted rear legs.
 
 ## Baking them into the game
