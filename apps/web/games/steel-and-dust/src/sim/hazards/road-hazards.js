@@ -1,7 +1,17 @@
-import { updateCampfires } from './campfires.js';
-import { updateHammers } from './hammers.js';
-import { updateKegs } from './kegs.js';
-import { updateTrees } from './trees.js';
+import { createCampfires, updateCampfires } from './campfires.js';
+import { createHammers, updateHammers } from './hammers.js';
+import { createKegs, updateKegs } from './kegs.js';
+import { createTrees, updateTrees } from './trees.js';
+
+// a fresh set of the mission's road hazards for a run, from where its layout put them
+export function createRoadHazards(mission) {
+  return {
+    kegs: createKegs(mission.kegs),
+    trees: createTrees(mission.trees),
+    campfires: createCampfires(mission.campfires),
+    hammers: createHammers(mission.hammers),
+  };
+}
 
 // what stands on the road and acts on the fight: kegs burning down, trees falling, fires and
 // hammers

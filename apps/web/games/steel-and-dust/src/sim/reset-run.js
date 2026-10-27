@@ -3,10 +3,7 @@ import { START_LIVES } from '../data/player.js';
 import { missionAt } from '../data/missions/index.js';
 import { createFighter } from './fighters/create-fighter.js';
 import { takeOwnWeapon } from './fighters/loadout.js';
-import { createCampfires } from './hazards/campfires.js';
-import { createHammers } from './hazards/hammers.js';
-import { createKegs } from './hazards/kegs.js';
-import { createTrees } from './hazards/trees.js';
+import { createRoadHazards } from './hazards/road-hazards.js';
 import { createCrates } from './items/crates.js';
 import { refreshPose } from './pose/refresh-pose.js';
 import { attachScarf } from './pose/scarf.js';
@@ -42,10 +39,7 @@ function resetWorld(game, player, missionIndex) {
     lootFx: [],
     lootSeed: lootSeedFor(missionIndex),
     crates: createCrates(mission.crates),
-    kegs: createKegs(mission.kegs),
-    trees: createTrees(mission.trees),
-    campfires: createCampfires(mission.campfires),
-    hammers: createHammers(mission.hammers),
+    ...createRoadHazards(mission),
     terrain: mission.terrain,
     arena: null,
     missionIndex,

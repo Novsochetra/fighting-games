@@ -1,5 +1,5 @@
 import { drawCampfires } from './campfires.js';
-import { drawHammerMarks } from './hammers.js';
+import { drawHammerMarks, drawHammers } from './hammers.js';
 import { drawKegs } from './kegs.js';
 
 // what stands on the road in front of the crates and behind the fighters: kegs, fires and the
@@ -11,4 +11,9 @@ export function drawRoadProps(painter, { game, view, cameraX }) {
   drawKegs(painter, sheets, { kegs: game.kegs, cameraX, tick });
   drawCampfires(painter, sheets, { campfires: game.campfires, cameraX, tick });
   drawHammerMarks(painter, { hammers: game.hammers, cameraX, tick });
+}
+
+// what hangs or flies over the fighters: the hammers
+export function drawOverheadProps(painter, { game, view, cameraX }) {
+  drawHammers(painter, view.fxSheets, { hammers: game.hammers, cameraX });
 }

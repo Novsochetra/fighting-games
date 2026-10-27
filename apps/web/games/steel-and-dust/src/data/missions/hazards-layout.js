@@ -11,3 +11,15 @@ export function layoutOnRoad(zoneSpecs, zones, { terrain, key }) {
     }),
   );
 }
+
+// every road hazard a mission's zones place, by the key the zones list them under
+export function layoutRoadProps(zoneSpecs, zones, terrain) {
+  const onRoad = (key) => layoutOnRoad(zoneSpecs, zones, { terrain, key });
+
+  return {
+    kegs: onRoad('kegs'),
+    trees: onRoad('trees'),
+    campfires: onRoad('campfires'),
+    hammers: onRoad('hammers'),
+  };
+}

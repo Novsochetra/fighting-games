@@ -81,6 +81,16 @@ colors.
 | `campfire.png` | 6 × 52×96 | Raider Camp: a campfire on the road, a 6-frame flicker loop, each fire on its own beat | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --common-grid --untint` |
 | `hammerHead.png` | 1 × 101×85 | Iron Works: a drop hammer's head, its striking face glowing, held by the middle of that face | ChatGPT image on magenta (the head and its piston side by side), baked with `tools/bake_magenta_sheet.py --common-grid` and cut apart |
 | `hammerPipe.png` | 1 × 53×143 | Iron Works: the drop hammer's piston and guide rails, laid end to end from its head up out of the view | the same image, the other half |
+| `hornetNest.png` | 4 × 89×72 | Forests: a hornets' nest hanging from its branch (0), swaying as it is struck (1), cracking as it falls (2) and broken open on the road (3) | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --common-grid --cuts 500,980,1420` |
+| `hornet.png` | 4 × 49×39 | Forests: one hornet of a swarm, its wings beating through 4 frames | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --common-grid` |
+| `quicksand.png` | 6 × 60×20 | Sandstorm Pass: a patch of quicksand on the road, its sand swirling in a 6-frame loop | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --cell 5.55,5.55` |
+| `slagVent.png` | 10 × 46×119 | Iron Works: a slag vent's grate cold (0), glowing (1-2), erupting (3-7) and dying down (8-9) | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --cell 4.05,4.05` |
+| `conveyor.png` | 6 × 80×48 | Iron Works: four segments of a conveyor belt (0-3), the drive-wheel end (4) and the far end (5) | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --common-grid` |
+| `furnaceMouth.png` | 4 × 82×75 | Iron Works: a brick furnace at the end of a belt, its mouth burning in a 4-frame loop | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --cell 6.07,6.07 --cuts 517,998,1480` |
+| `spikeTrap.png` | 5 × 78×44 | Mirage Temple: a spike tile flat (0), puffing dust (1), spikes half up (2), fully up (3) and sinking back (4) | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --common-grid` |
+| `templeBoulder.png` | 4 × 94×91 | Mirage Temple: a carved boulder rolling, a quarter turn a frame | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --common-grid` |
+| `crackedFloor.png` | 4 × 102×58 | Bayon: a gallery floor slab whole (0), cracking (1), breaking up (2) and fallen through (3) | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --common-grid` |
+| `faceTower.png` | 4 × 92×128 | Bayon: a face tower standing (0), cracking (1), coming apart (2), and one falling stone of it (3) | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --common-grid` |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to
