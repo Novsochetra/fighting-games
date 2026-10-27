@@ -17,6 +17,9 @@ const GLOW_LAYERS = [
 ];
 const GLOW = 0.05;
 const FLICKER = 0.015;
+// the fire is drawn a little down into the road's grass, so its stones sit in it rather than on
+// its top edge
+const SET_IN = 3;
 
 // each fire flickers on its own beat, so two in view never burn in step
 export function campfireFrame(fire, tick) {
@@ -40,9 +43,10 @@ export function drawCampfires(painter, sheets, { campfires, cameraX, tick }) {
   for (const fire of campfires) {
     if (fire.x > cameraX - MARGIN && fire.x < cameraX + VIEW_WIDTH + MARGIN) {
       const frame = campfireFrame(fire, tick);
+      const ground = { x: fire.x, y: fire.y + SET_IN };
 
-      drawGlow(painter, fire, tick);
-      drawFxFrame(painter, sheets, { name: 'campfire', frame, x: fire.x, y: fire.y });
+      drawGlow(painter, ground, tick);
+      drawFxFrame(painter, sheets, { name: 'campfire', frame, ...ground });
     }
   }
 }
