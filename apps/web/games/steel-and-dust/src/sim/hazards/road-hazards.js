@@ -2,6 +2,7 @@ import { createCampfires, updateCampfires } from './campfires.js';
 import { createHammers, updateHammers } from './hammers.js';
 import { createKegs, updateKegs } from './kegs.js';
 import { createSlabs, updateSlabs } from './slabs.js';
+import { createTowers, updateTowers } from './towers.js';
 import { createTrees, updateTrees } from './trees.js';
 
 // a fresh set of the mission's road hazards for a run, from where its layout put them
@@ -12,6 +13,7 @@ export function createRoadHazards(mission) {
     campfires: createCampfires(mission.campfires),
     hammers: createHammers(mission.hammers),
     slabs: createSlabs(mission.slabs),
+    towers: createTowers(mission.towers),
   };
 }
 
@@ -23,4 +25,5 @@ export function updateRoadHazards(game) {
   updateCampfires(game);
   updateHammers(game);
   updateSlabs(game);
+  updateTowers(game);
 }
