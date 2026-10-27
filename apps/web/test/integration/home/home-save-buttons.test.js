@@ -18,7 +18,7 @@ const tagOn = (frame) => frame?.querySelector('.offline-tag')?.textContent ?? nu
 const centerFrame = () => document.querySelector('#carousel-track .card.is-center .card__frame');
 const tileFrame = () => document.querySelector('#library-grid .tile .tile__frame');
 const ringShare = (button) =>
-  Number(button.querySelector('.save-ring__value')?.style.strokeDashoffset ?? NaN);
+  Number(button.querySelector('.save-button__ring-value')?.style.strokeDashoffset ?? NaN);
 
 async function bootSteelAndDust(worker) {
   await bootWithSaveWorker(worker, ['steel-and-dust']);
@@ -65,7 +65,7 @@ describe('the save buttons on the home screen', () => {
     worker.status = { state: 'saved' };
     await named(tileSave, 'Remove the offline copy of Steel & Dust');
 
-    expect(cardSave().querySelector('.save-ring')).toBeNull();
+    expect(cardSave().querySelector('.save-button__ring')).toBeNull();
     expect(iconOf(cardSave())).not.toBe(saveIcon);
     expect(tipOf(cardSave())).toBe('Remove offline copy');
     expect(worker.posts).toBe(1);

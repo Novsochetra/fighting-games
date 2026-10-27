@@ -6,13 +6,13 @@ import { useSaveStatus, type SaveStatus } from './use-save-status';
 // the share saved, as a ring drawn around the button, filling clockwise from the top
 function ProgressRing({ percent }: { percent: number }) {
   return (
-    <svg className="save-ring" viewBox="0 0 64 64" aria-hidden="true">
-      <circle className="save-ring__track" cx="32" cy="32" r="30" />
+    <svg className="save-button__ring" aria-hidden="true">
+      <circle className="save-button__ring-track" cx="50%" cy="50%" r="50%" />
       <circle
-        className="save-ring__value"
-        cx="32"
-        cy="32"
-        r="30"
+        className="save-button__ring-value"
+        cx="50%"
+        cy="50%"
+        r="50%"
         pathLength={100}
         style={{ strokeDashoffset: 100 - percent }}
       />
