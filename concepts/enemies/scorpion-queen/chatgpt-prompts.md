@@ -403,11 +403,28 @@ stands out on Ember Woods where the old sheet blended in. ChatGPT drew it as rou
 despite the prompt, and her chitin came out indigo rather than near-black; both are fine, since
 the shrink redraws every pixel and indigo stays clear of the dark trunks and road.
 
-## After the images
+## The strips
 
-Each pose is lifted off the cyan, shrunk so her idle stance stands about 88 px tall, stood on the
-feet line of her 256x160 frames (x = 128, y = 156), folded into one palette and given a 1 px dark
-outline, then laid into `queen.png` in the strip order of `src/data/enemies/enemy-sprites.js`.
-`python3 tools/pack_enemy_sheets.py` repacks the sheet, her `hurtShape` and `reach` in
-`src/data/enemies/boss-bodies.js` are measured again on the new strike poses, and
-`assets/sprites/fx/wasp.png` takes the four wasps in 56x48 frames.
+The strips the prompts gave are in `chatgpt/` beside this file, named as in the table above (as
+`.webp`). Every one kept the design, the pose count and the strike pose; what ChatGPT got wrong is
+put right in the bake:
+
+- It drew her strikes close to her body: her claw swipe and tail sting reached about 60 px ahead of
+  her feet, where her blows reach 100 and 90. The claw and the tail are drawn out on the frames the
+  blow is out, with a small lunge (`REACH` in `tools/queen_sheet/lay_out.py`), so her hurt box and
+  reaches in `src/data/enemies/boss-bodies.js` and her moves' hitboxes stay as they were.
+- It redrew her whole body in every pose, so a loop shimmered. Her idle, walk and charge keep
+  their first pose's body over each pose's own legs (`tools/queen_sheet/loops.py`).
+- It placed each pose a little differently in its cell. Each is lined up by her planted rear legs.
+
+## Baking them into the game
+
+    python3 tools/queen_sheet/bake.py
+    python3 tools/pack_enemy_sheets.py
+
+The first writes `queen.png` and `fx/wasp.png` in the game's sprites, the second repacks the sheet
+the game loads. Each pose is cut off the cyan, shrunk so its strip's stance stands as tall as her
+idle (88 px with the outline), stood on the feet line of her 256x160 frames (x = 128, y = 156),
+folded into one 84-color palette with a 1 px dark outline (her venom glows to its edge), and laid
+into `queen.png` in the strip order of `src/data/enemies/enemy-sprites.js`; the wasp gets its own
+16 colors. To redo a strip, make it again from its prompt, save it over its `.webp` and bake again.
