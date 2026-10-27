@@ -395,6 +395,14 @@ Using the same style and palette as the attached Scorpion Queen, draw one of her
 - A floor shadow or a ground strip: "No ground and no shadow, only flat cyan behind her."
 - Text or numbers under the poses: "Remove all text and numbers."
 
+## The design
+
+The design prompt 1 gave is `chatgpt/queen_ref.webp` beside this file: attach it to every strip
+prompt. Shrunk to her 88 px stance it stands 102 px long, the size of her old idle frame, and
+stands out on Ember Woods where the old sheet blended in. ChatGPT drew it as rough pixel art
+despite the prompt, and her chitin came out indigo rather than near-black; both are fine, since
+the shrink redraws every pixel and indigo stays clear of the dark trunks and road.
+
 ## After the images
 
 Each pose is lifted off the cyan, shrunk so her idle stance stands about 88 px tall, stood on the
