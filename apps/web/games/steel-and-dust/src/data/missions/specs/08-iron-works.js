@@ -63,6 +63,7 @@ export const IRON_WORKS = {
     },
     {
       screens: 3,
+      vents: [460, 780],
       ground: [
         ...mound(-260, -150, 12, 36),
         ...stairs(60, [

@@ -81,7 +81,7 @@ export const FX_SPRITES = {
   hornetNest: { frameWidth: 89, frameHeight: 72, frames: 4, ticks: 1, anchorX: 43, anchorY: 71 },
   hornet: { frameWidth: 49, frameHeight: 39, frames: 4, ticks: 2, anchorX: 20, anchorY: 38 },
   quicksand: { frameWidth: 60, frameHeight: 20, frames: 6, ticks: 6, anchorX: 30, anchorY: 7 },
-  slagVent: { frameWidth: 46, frameHeight: 119, frames: 10, ticks: 4, anchorX: 23, anchorY: 118 },
+  slagVent: { frameWidth: 46, frameHeight: 119, frames: 10, ticks: 4, anchorX: 23, anchorY: 106 },
   conveyor: { frameWidth: 80, frameHeight: 48, frames: 6, ticks: 1, anchorX: 41, anchorY: 47 },
   furnaceMouth: { frameWidth: 82, frameHeight: 75, frames: 4, ticks: 5, anchorX: 42, anchorY: 74 },
   spikeTrap: { frameWidth: 78, frameHeight: 44, frames: 5, ticks: 1, anchorX: 39, anchorY: 43 },
