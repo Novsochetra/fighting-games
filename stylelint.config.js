@@ -27,5 +27,12 @@ export default {
         'declaration-property-value-allowed-list': null,
       },
     },
+    {
+      // a font face is declared in plain values: custom properties do not reach @font-face
+      files: ['**/fonts.css'],
+      rules: {
+        'declaration-property-value-allowed-list': null,
+      },
+    },
   ],
 };

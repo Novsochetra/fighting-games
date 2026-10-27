@@ -17,9 +17,13 @@ describe('the pixel font', () => {
     );
   });
 
-  it('loads only the pixel font', () => {
+  it('loads only the pixel font, from its own folder', () => {
     const page = readFileSync(new URL('index.html', GAME), 'utf8');
-    expect(page).toContain('family=Silkscreen');
+    const faces = readFileSync(new URL('fonts.css', STYLES), 'utf8');
+    expect(page).toContain('href="styles/fonts.css"');
     expect(page).not.toContain('Barlow');
+    expect(faces.match(/font-family: '[^']+'/g)).toEqual(
+      Array(4).fill("font-family: 'Silkscreen'"),
+    );
   });
 });

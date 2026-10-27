@@ -171,7 +171,8 @@ not kept.
   the whole of it comes down: the build writes each game's `offline.json` (`game-files.js`), every file it may load
   as it is played (not its screenshots, link-preview art or notes, nor a sprite that has a packed
   copy of itself in `packed/`, which only the packer reads) and a revision that changes with any of
-  them. Each file is checked with the server, so what the game has just loaded for itself costs a
+  them. Only the game's own folder comes down, so a game keeps its fonts there too (Steel & Dust's
+  Silkscreen, `assets/fonts/`): a font from another site, like Google Fonts, is lost offline. Each file is checked with the server, so what the game has just loaded for itself costs a
   `304`. A game is played from its download only once every file of one revision is in, marked last,
   so a half download, or one across two deploys, is never played; until then it comes from the
   network as before, and offline it says so. A play saves nothing the player has not saved, but it

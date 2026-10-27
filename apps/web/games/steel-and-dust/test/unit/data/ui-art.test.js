@@ -5,11 +5,12 @@ import { UI_ART } from '../../../src/data/ui-art.js';
 const GAME = new URL('../../../', import.meta.url);
 const STYLES = new URL('styles/', GAME);
 
-// every image a stylesheet draws, as a path from the game page
+// every image a stylesheet draws, as a path from the game page; the pixel font's files are waited
+// for on their own (src/ui/loading/fonts.js)
 function stylesheetImages() {
   return readdirSync(STYLES).flatMap((file) => {
     const css = readFileSync(new URL(file, STYLES), 'utf8');
-    return [...css.matchAll(/url\('([^']+)'\)/g)].map((match) =>
+    return [...css.matchAll(/url\('([^']+\.(?:png|jpe?g|webp|gif|svg))'\)/g)].map((match) =>
       new URL(match[1], STYLES).href.slice(GAME.href.length),
     );
   });
