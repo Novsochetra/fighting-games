@@ -2,12 +2,12 @@ import { createCampfires, updateCampfires } from './campfires.js';
 import { createConveyors, updateConveyors } from './conveyors.js';
 import { createHammers, updateHammers } from './hammers.js';
 import { createKegs, updateKegs } from './kegs.js';
-import { createSpikeTraps, updateSpikeTraps } from './spike-traps.js';
-import { createTempleBoulders, updateTempleBoulders } from './temple-boulders.js';
+import { createNests, updateNests } from './nests.js';
 import { createQuicksand, updateQuicksand } from './quicksand.js';
 import { createSlabs, updateSlabs } from './slabs.js';
+import { createSpikeTraps, updateSpikeTraps } from './spike-traps.js';
+import { createTempleBoulders, updateTempleBoulders } from './temple-boulders.js';
 import { createTowers, updateTowers } from './towers.js';
-import { createNests, updateNests } from './nests.js';
 import { createTrees, updateTrees } from './trees.js';
 import { createVents, updateVents } from './vents.js';
 
@@ -29,8 +29,7 @@ export function createRoadHazards(mission) {
   };
 }
 
-// what stands on the road and acts on the fight: kegs burning down, trees falling, fires and
-// hammers
+// everything on the road that acts on the fight, each tick
 export function updateRoadHazards(game) {
   updateKegs(game);
   updateTrees(game);
