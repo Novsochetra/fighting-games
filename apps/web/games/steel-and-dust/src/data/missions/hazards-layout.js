@@ -23,5 +23,7 @@ export function layoutRoadProps(zoneSpecs, zones, terrain) {
     campfires: onRoad('campfires'),
     hammers: onRoad('hammers'),
     conveyors: layoutConveyors(zoneSpecs, zones, terrain),
+    spikeTraps: onRoad('spikeTraps'),
+    boulders: onRoad('boulders'),
   };
 }
