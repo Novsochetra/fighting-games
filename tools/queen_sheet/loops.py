@@ -7,8 +7,9 @@ import numpy as np
 # first pose's legs too: she breathes, her legs stay planted)
 SPLIT = 128
 LOOPS = {
-    # she breathes from lower down, below the hand on her hip, so the whole hand rises with her
-    'idle': {'bob': [0, 1, 2, 1], 'legs': False, 'split': 136},
+    # she breathes above her back, where the line crosses only upright shapes (the tail rising,
+    # her hair, body and arm), which stretch cleanly; her back, legs and pincers stay planted
+    'idle': {'bob': [0, 1, 2, 1], 'legs': False, 'split': 112},
     'walk': {'bob': [0, 1, 1, 0, 0, 1, 1, 0], 'legs': True, 'split': SPLIT},
     'charge': {'bob': [0, 1, 1, 0, 0, 1, 1, 0], 'legs': True, 'split': SPLIT},
 }
@@ -23,9 +24,9 @@ def lifted(frame, bob, split):
     result = frame.copy()
     if bob:
         result[:split - bob] = frame[bob:split]
-        # the rows the lift leaves stretch what runs on below the split (her abdomen, the sash);
-        # anything else there (the edge of a hand) has been lifted away with her
-        result[split - bob:split] = np.where(frame[split] > 0, frame[split - bob:split], 0)
+        # the rows the lift leaves are the first row under the split drawn on up (her back, the
+        # sash): whatever was drawn there before (the edge of a hand) has been lifted away with her
+        result[split - bob:split] = frame[split]
     return result
 
 
