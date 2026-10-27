@@ -76,6 +76,7 @@ colors.
 | `axeWhirl.png` | 6 × 176×144 | Warden Ox: the red whirl round him in the Executioner's Round, winding up (0), spinning (1-4, a loop) and dying away (5), drawn behind him | ChatGPT image, the painted checker and the axe at its middle keyed out, shrunk and cut into frames; the steel and white edges the axe left, and loose fragments inside the ring, were taken out |
 | `keg.png` | 3 × 39×62 | Raider Camp: a powder keg, unlit (0), its fuse burning (1) and flashing white just before it blows (2) | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --colors 32 --groups 2,1` |
 | `blast.png` | 8 × 79×69 | Raider Camp: a powder keg blowing up, drawn at twice the sprites' density | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --colors 32 --common-grid --untint` |
+| `moatWater.png` | 4 × 60×42 | Angkor Wat: the surface of the moat in the causeway's breach, a seamless tile looping through its 4 frames | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --colors 24 --common-grid --keep-edges --inset 1` |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to

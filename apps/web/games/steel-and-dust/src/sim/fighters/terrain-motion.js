@@ -1,4 +1,4 @@
-import { STEP_UP, floorBelow, groundAt, isWall, platformUnder } from '../stage/terrain.js';
+import { STEP_UP, floorBelow, groundAt, isWall, platformUnder, waterAt } from '../stage/terrain.js';
 
 // a flat road keeps the old arithmetic exactly, so every helper here leaves it alone
 export function isFlat(terrain) {
@@ -49,13 +49,18 @@ export function followFloor(terrain, fighter) {
   }
 }
 
-// a rise taller than a step, measured from where the feet were, sends the fighter back to where
-// it stood; returns the side it ran into, or 0
+// feet on the road stop at the edge of a moat; only a body in the air can come down in it
+function wadesIn(terrain, fighter, toX) {
+  return !fighter.airborne && waterAt(terrain, toX) !== null;
+}
+
+// a rise taller than a step, measured from where the feet were, or the edge of a moat sends the
+// fighter back to where it stood; returns the side it ran into, or 0
 export function blockWall(terrain, fighter, from) {
   if (isFlat(terrain) || fighter.entering || fighter.x === from.x) {
     return 0;
   }
-  if (!isWall(terrain, fighter.x, from.y)) {
+  if (!isWall(terrain, fighter.x, from.y) && !wadesIn(terrain, fighter, fighter.x)) {
     return 0;
   }
   const side = Math.sign(fighter.x - from.x);
@@ -69,8 +74,9 @@ export function nudge(terrain, fighter, distance) {
     fighter.x += distance;
     return;
   }
-  if (!isWall(terrain, fighter.x + distance, fighter.y)) {
-    fighter.x += distance;
+  const toX = fighter.x + distance;
+  if (!isWall(terrain, toX, fighter.y) && !wadesIn(terrain, fighter, toX)) {
+    fighter.x = toX;
     followFloor(terrain, fighter);
   }
 }

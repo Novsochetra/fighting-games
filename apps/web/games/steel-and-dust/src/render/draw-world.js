@@ -17,6 +17,7 @@ import { drawBehindBursts, drawSummons } from './fx/summons.js';
 import { drawCrates } from './scene/crate.js';
 import { drawKegs } from './scene/kegs.js';
 import { drawGround } from './scene/ground.js';
+import { drawMoats } from './scene/moats.js';
 import { drawPlatforms } from './scene/platforms.js';
 import { drawGroundLoot, drawLootSparkles } from './scene/loot.js';
 import { drawChests } from './scene/loot-chest.js';
@@ -106,6 +107,7 @@ export function drawWorld(painter, { game, view, cameraX }) {
   const backdrop = view.backdrops[mission.theme];
   const { terrain, tickCount: tick } = game;
   drawGround(painter, { cameraX, colors, tick, terrain, backdrop });
+  drawMoats(painter, view.fxSheets, { water: terrain.water, cameraX, tick });
   drawProps(painter, { cameraX, props: mission.props, sheets: view.propSheets });
   drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });
   drawCrates(painter, game.crates, cameraX);

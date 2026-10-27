@@ -1,6 +1,7 @@
 import { isFlat, onOneLevel } from '../../fighters/terrain-motion.js';
 import { STEP_UP, faceAhead, floorBelow, groundAt, platformUnder } from '../../stage/terrain.js';
 import { HOP_REACH, drop, hop, isResting } from './hop.js';
+import { tryLeap } from './leap.js';
 
 // how close the hero must be for a raider to hop up to him or drop down to him
 const HOP_RANGE = 40;
@@ -94,6 +95,9 @@ export function tryClimb(game, raider) {
   if (isResting(raider)) {
     raider.ai.hopWait--;
     return false;
+  }
+  if (tryLeap(game, raider, game.player.x)) {
+    return true;
   }
   const plan = planClimb(game.terrain, raider, game.player);
   if (!plan) {

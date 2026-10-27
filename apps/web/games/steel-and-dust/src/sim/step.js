@@ -12,6 +12,7 @@ import { updateFighter } from './fighters/update-fighter.js';
 import { shedHeroAura } from './fx/hero-aura.js';
 import { updateEffects } from './fx/update-effects.js';
 import { updateKegs } from './hazards/kegs.js';
+import { updateMoat } from './hazards/moat.js';
 import { updateProjectiles } from './hazards/projectiles.js';
 import { updateShockwaves } from './hazards/shockwaves.js';
 import { updateHints } from './hints.js';
@@ -50,6 +51,7 @@ function updateWorld(game) {
     }
     followFloor(game.terrain, fighter);
   }
+  updateMoat(game);
   game.fighters = game.fighters.filter((fighter) => !fighter.removed);
   if (game.boss && game.boss.removed) {
     game.boss = null;

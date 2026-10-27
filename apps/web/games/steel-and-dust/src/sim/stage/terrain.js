@@ -1,6 +1,7 @@
+import { waterAt, waterBetween } from '../../data/missions/moats.js';
 import { groundAt } from '../../data/missions/terrain.js';
 
-export { groundAt };
+export { groundAt, waterAt, waterBetween };
 
 // the tallest step a fighter walks up or down without jumping or falling
 export const STEP_UP = 8;

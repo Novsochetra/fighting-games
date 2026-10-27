@@ -75,6 +75,7 @@ export const FX_SPRITES = {
   rubble: { frameWidth: 105, frameHeight: 92, frames: 11, ticks: 2, anchorX: 53, anchorY: 46 },
   keg: { frameWidth: 39, frameHeight: 62, frames: 3, ticks: 1, anchorX: 20, anchorY: 61 },
   blast: { frameWidth: 79, frameHeight: 69, frames: 8, ticks: 4, anchorX: 40, anchorY: 68 },
+  moatWater: { frameWidth: 60, frameHeight: 42, frames: 4, ticks: 10, anchorX: 0, anchorY: 0 },
   ...HEAVY_FX_SPRITES,
 };
 
