@@ -1,4 +1,5 @@
 import { createCampfires, updateCampfires } from './campfires.js';
+import { createConveyors, updateConveyors } from './conveyors.js';
 import { createHammers, updateHammers } from './hammers.js';
 import { createKegs, updateKegs } from './kegs.js';
 import { createTrees, updateTrees } from './trees.js';
@@ -10,6 +11,7 @@ export function createRoadHazards(mission) {
     trees: createTrees(mission.trees),
     campfires: createCampfires(mission.campfires),
     hammers: createHammers(mission.hammers),
+    conveyors: createConveyors(mission.conveyors),
   };
 }
 
@@ -20,4 +22,5 @@ export function updateRoadHazards(game) {
   updateTrees(game);
   updateCampfires(game);
   updateHammers(game);
+  updateConveyors(game);
 }
