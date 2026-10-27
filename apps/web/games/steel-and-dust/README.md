@@ -34,7 +34,7 @@ Saved in the browser: music and sound volume, difficulty (Easy, Normal, Hard), a
 
 ## What's in it
 
-- **4 weapons:** Fists, Sword, Spear, Axe, each drawn in the hero's hands with its own smear colour (gold, green, ice, ember). Every Shade fights with its own sword, and Bokator and the Angkor Warrior with their fists; a hero's own weapon never breaks. A weapon picked up breaks after a set number of hits, with a warning when it starts to crack, and leaves the hero their own again.
+- **4 weapons:** Fists, Sword, Spear, Axe, each drawn in the hero's hands with its own smear colour (gold, green, ice, ember). Every Shade fights with its own sword, the Angkor Warrior with his gold dav (a sword) and Bokator with his fists; a hero's own weapon never breaks. A weapon picked up breaks after a set number of hits, with a warning when it starts to crack, and leaves the hero their own again.
 - **Combo chains**, each with the same structure:
   - `J J J J` ground string, and a fifth `J` that rushes after the knocked-back enemy and launches them
   - `J J K` launcher branch
@@ -124,7 +124,9 @@ hitbox, knockback, ... })` entry in `src/data/weapons/<weapon>/` or `src/data/en
 - **Weapon variants.** PixelLab drew every animation with the sword, so `tools/bake_hero_weapons.py`
   builds the other weapons from those frames into `assets/sprites/hero/arsenal/`, one strip per animation
   with four rows: sword, fists, spear, axe. Rebuild with `pip install numpy scipy pillow && python3 tools/bake_hero_weapons.py`
-  (add `firefly`, `antler`, `blue`, `ember`, `bokator` or `angkor` for the other heroes).
+  (add `firefly`, `antler`, `blue`, `ember`, `bokator` or `angkor` for the other heroes). A strip drawn
+  for one row alone in `assets/sprites/heroes/<id>/<weapon>/` takes that row instead: the Ember Shade's
+  spear moves, Bokator's bare hands, and the Angkor Warrior's run and dash, his dav gripped in his trailing fist.
 - **Enemy sprites.** Each enemy is one PNG in `assets/sprites/enemies/` with a row per strip (idle, walk,
   attack, hurt, knock-out, and a lunge, slam or charge where it has one), described in
   `src/data/enemies/enemy-sprites.js`. `src/sim/enemy-animation.js` picks the frame for each state: the

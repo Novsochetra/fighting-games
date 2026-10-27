@@ -16,7 +16,8 @@ const drawnCards = (folder) => ({
 // (data/ultimates/); the Moss, Firefly, Antler Spirit and Blue Shades' ultimate is dressed in their
 // element by the same bake as their other strips, so it is drawn from their arsenal too; Bokator
 // fights his bare-handed from his own strips, so he has no ultimate strip; `weapon` is the hero's
-// own, in hand from the start and never broken: the Shades' sword, the Khmer fighters' fists
+// own, in hand from the start and never broken: the Shades' sword, Bokator's fists and the Angkor
+// Warrior's gold dav, drawn in his sword row as on his card and in his ultimate
 export const HEROES = [
   {
     id: 'moss',
@@ -76,7 +77,7 @@ export const HEROES = [
     id: 'angkor',
     name: 'Angkor Warrior',
     tagline: 'Steps out of the Bayon walls',
-    weapon: 'fists',
+    weapon: 'sword',
     directory: 'assets/sprites/heroes/angkor/arsenal/',
     ultStrip: 'assets/sprites/heroes/angkor/hero_ult.png',
     cards: drawnCards('assets/sprites/heroes/angkor/'),

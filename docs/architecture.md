@@ -797,14 +797,17 @@ much of it others are kept off (`src/sim/fighters/separate.js`).
 A Shade's `arsenal/` strips are baked from its sword strips by `tools/bake_hero_weapons.py`, which
 also dresses the Moss, Firefly, Antler Spirit and Blue Shades and their ultimate in their element
 (`tools/shade_fx/`: grove moss and spores, a firefly swarm, teal ghost fire, frost), drawn into the
-pixels of every frame the way the Ember Shade's frames burn. The two Khmer fighters' select cards
-play loops drawn for them, `card_pose.png` and `card_idle.png`, cut from their sheets and lit by
-`tools/hero_cards/`.
+pixels of every frame the way the Ember Shade's frames burn. A strip drawn for one weapon's row
+alone, in `heroes/<id>/<weapon>/`, takes that row in place of the baked one: the Ember Shade's spear
+moves, Bokator's bare-hand moves, and the Angkor Warrior's run and dash with his dav gripped in his
+trailing fist. The two Khmer fighters' select cards play loops drawn for them, `card_pose.png` and
+`card_idle.png`, cut from their sheets and lit by `tools/hero_cards/`.
 
-Every hero sets out with their own weapon (`weapon` in `src/data/heroes.js`: the Shades' sword, the
-Khmer fighters' fists), which never breaks (`takeOwnWeapon` in `src/sim/fighters/loadout.js`, given
-by `resetRun` and again by `startPlay`, since the road is set up before the hero is picked); a weapon
-picked up breaks after its hits and leaves the hero their own again.
+Every hero sets out with their own weapon (`weapon` in `src/data/heroes.js`: the Shades' sword,
+the Angkor Warrior's gold dav, a sword too, and Bokator's fists), which never breaks
+(`takeOwnWeapon` in `src/sim/fighters/loadout.js`, given by `resetRun` and again by `startPlay`,
+since the road is set up before the hero is picked); a weapon picked up breaks after its hits and
+leaves the hero their own again.
 
 Each Shade fights in its own style and has its own ultimate:
 

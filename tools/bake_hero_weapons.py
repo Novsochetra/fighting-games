@@ -26,7 +26,9 @@ white-gold against tan skin: it is found as the longest thin straight run of gol
 give the line where it is not), all of it goes wherever open air lies either side of it, where it
 crosses his body it is covered with what lies beside it and the new edge gets his dark outline, only
 smears count as hide frames for him, and his fists row takes his own bare-hand moves from
-heroes/bokator/fists/. The Angkor Warrior's gold blade is found and taken away the same way.
+heroes/bokator/fists/. The Angkor Warrior's gold blade is found and taken away the same way; his
+sheets hang it at his hip with no hand on it as he runs and dashes, so his sword row takes those two
+from heroes/angkor/sword/, drawn on his fists row with the dav gripped in his trailing fist.
 
 OVERRIDES fixes frames where detection misses: g = grip, t = blade tip, in frame pixels;
 hide = recolour the smear only and draw no weapon (strike frames where the blade is lost in the smear).
@@ -1728,8 +1730,8 @@ def save_indexed(a,path):
     im.putpalette(cols[:,:3].astype(np.uint8).tobytes())
     im.save(path,optimize=True,transparency=bytes(cols[:,3].astype(np.uint8)))
 # a hero with moves of its own for a weapon keeps them in <hero>/<weapon>/ (the Ember Shade's spear,
-# the Bokator fighter's bare hands), one row per attack with the sword strip's frame count; they take
-# that weapon's row instead of a sword swing with the weapon drawn in
+# the Bokator fighter's bare hands, the Angkor Warrior's dav in hand as he runs and dashes), one row
+# per strip with the sword strip's frame count; they take that weapon's row instead of the baked one
 def own_row(n,N,weapon):
     path=SRC+weapon+'/hero_'+n+'.png'
     if not os.path.exists(path): return None
