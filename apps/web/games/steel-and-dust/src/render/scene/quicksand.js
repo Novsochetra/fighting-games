@@ -6,6 +6,9 @@ const MARGIN = 40;
 // the patch art is drawn at the road's own density, a patch as wide as two heroes
 const PATCH_SCALE = 2;
 const { frames, ticks } = FX_SPRITES.quicksand;
+// the patch is drawn down into the road, so only its far rim shows over the road's top edge and
+// it lies in the road rather than on it
+const SET_IN = 6;
 
 // each patch swirls on its own beat, so two in view never turn in step
 export function quicksandFrame(patch, tick) {
@@ -21,7 +24,7 @@ export function drawQuicksand(painter, sheets, { quicksand, cameraX, tick }) {
         name: 'quicksand',
         frame,
         x: patch.x,
-        y: patch.y,
+        y: patch.y + SET_IN,
         scale: PATCH_SCALE,
       });
     }
