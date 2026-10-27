@@ -103,6 +103,79 @@ describe('a raider in the quicksand', () => {
     expect(raider.sunk).toBeFalsy();
   });
 
+  it('standing its ground in it, sinks in and is held once it has stood there a moment', () => {
+    const { game } = sandGame();
+    const raider = Object.assign(spawnEnemy(game, 'grunt', SPOT + 6), { state: 'idle' });
+
+    sink(game, QUICKSAND.mire - 1);
+    expect(raider.state).toBe('idle');
+    expect(raider.sunk).toBeFalsy();
+    sink(game, 1);
+
+    expect(raider).toMatchObject({ state: 'hurt', x: SPOT + 6 });
+    expect(raider.sunk).toBeGreaterThan(0);
+  });
+
+  it('swinging at the hero from it, is held just the same', () => {
+    const { game } = sandGame();
+    const raider = Object.assign(spawnEnemy(game, 'grunt', SPOT), { state: 'attack' });
+
+    sink(game, QUICKSAND.mire);
+
+    expect(raider.state).toBe('hurt');
+    expect(raider.sunk).toBeGreaterThan(0);
+  });
+
+  it('that keeps walking, is never held, however long it takes to cross', () => {
+    const { game } = sandGame();
+    const raider = Object.assign(spawnEnemy(game, 'grunt', SPOT), { state: 'walk', vx: 0.02 });
+
+    sink(game, QUICKSAND.mire * 3);
+
+    expect(raider.state).toBe('walk');
+    expect(raider.sunk).toBeFalsy();
+  });
+
+  it('fighting back and forth in it, sinks in a little more every time it stands', () => {
+    const { game } = sandGame();
+    const raider = Object.assign(spawnEnemy(game, 'grunt', SPOT), { state: 'attack' });
+
+    sink(game, QUICKSAND.mire / 2);
+    raider.state = 'walk';
+    sink(game, QUICKSAND.mire);
+    raider.state = 'attack';
+    sink(game, QUICKSAND.mire / 2);
+
+    expect(raider.state).toBe('hurt');
+    expect(raider.sunk).toBeGreaterThan(0);
+  });
+
+  it('that steps out of the sand, has its feet free and starts over', () => {
+    const { game } = sandGame();
+    const raider = Object.assign(spawnEnemy(game, 'grunt', SPOT), { state: 'idle' });
+
+    sink(game, QUICKSAND.mire - 10);
+    raider.x = SPOT + QUICKSAND.halfWidth + 10;
+    sink(game, 1);
+    raider.x = SPOT;
+    sink(game, QUICKSAND.mire - 10);
+
+    expect(raider.state).toBe('idle');
+    expect(raider.sunk).toBeFalsy();
+  });
+
+  it('kicks up dust at its feet as it bogs down, the warning that it is going under', () => {
+    const { game } = sandGame();
+    Object.assign(spawnEnemy(game, 'grunt', SPOT), { state: 'idle' });
+
+    sink(game, Math.floor(QUICKSAND.mire / 2));
+    const early = game.particles.length;
+    sink(game, Math.floor(QUICKSAND.mire / 2) - 1);
+
+    expect(early).toBe(0);
+    expect(game.particles.length).toBeGreaterThan(0);
+  });
+
   it('knocked out on the sand, goes down into it', () => {
     const { game } = sandGame();
     const body = Object.assign(spawnEnemy(game, 'grunt', SPOT), { state: 'ko' });

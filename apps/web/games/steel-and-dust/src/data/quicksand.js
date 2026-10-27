@@ -1,8 +1,13 @@
-// a patch of soft sand on the canyon road: a raider knocked off its feet in it is held fast and
-// sinks until it is swallowed; the hero wading through it is slowed and pulled down
+// a patch of soft sand on the canyon road: a raider knocked off its feet in it, or standing still
+// in it too long, is held fast and sinks until it is swallowed; the hero wading through it is
+// slowed and pulled down
 export const QUICKSAND = {
   // the sand feet can stand in, either side of the patch's middle, inside the rocks round its rim
   halfWidth: 25,
+  // a raider on its feet that has stood its ground in the sand this long all told (squaring up,
+  // swinging, waiting its turn, between steps back and forth) has sunk in too far to pull free,
+  // and is held as if knocked down there; one that walks straight across gets out
+  mire: 90,
   // a held raider goes down this far a tick at scale 1, and is swallowed once it is in up to the
   // top of its head: about two and a half seconds, whatever its size
   raiderSink: 0.3,

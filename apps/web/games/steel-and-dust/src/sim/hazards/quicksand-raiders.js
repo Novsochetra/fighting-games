@@ -8,6 +8,8 @@ import { letGo, patchAt, standsIn, wade } from './quicksand-patch.js';
 
 // off its feet in the sand: staggered, knocked down or getting up, or thrown and just landed
 const KNOCKED = new Set(['hurt', 'down', 'getup', 'juggle']);
+// on the move, its feet never settle into the sand
+const STRIDING = new Set(['walk', 'run', 'dash']);
 const HELD_REACH = QUICKSAND.halfWidth + 6;
 const STRUGGLE_EVERY = 10;
 
@@ -73,7 +75,31 @@ function sinkBody(raider) {
   }
 }
 
-// on its feet a raider wades through; knocked off them in the sand it is held there
+// on its feet a raider wades through, but every moment it stands still it settles further in,
+// a little dust kicked up over the last of it as warning, until the sand holds it; walking on
+// does not pull its feet back out, only leaving the sand does
+function settle(game, patch, raider) {
+  wade(raider);
+  if (STRIDING.has(raider.state)) {
+    return;
+  }
+
+  raider.mired = (raider.mired ?? 0) + 1;
+  if (raider.mired >= QUICKSAND.mire) {
+    hold(game, patch, raider);
+  } else if (raider.mired > QUICKSAND.mire / 2 && raider.mired % STRUGGLE_EVERY === 0) {
+    addDust(game, { x: raider.x, y: patch.y, count: 1 });
+  }
+}
+
+function leave(raider) {
+  letGo(raider);
+  if (raider.mired) {
+    raider.mired = 0;
+  }
+}
+
+// knocked off its feet in the sand, or standing still in it too long, a raider is held there
 export function sinkRaider(game, raider) {
   const held = raider.sunk > 0 && raider.state !== 'ko';
   const patch = patchAt(game.quicksand, raider.x, held ? HELD_REACH : QUICKSAND.halfWidth);
@@ -81,12 +107,12 @@ export function sinkRaider(game, raider) {
   if (patch && held) {
     hold(game, patch, raider);
   } else if (!patch || !standsIn(patch, raider)) {
-    letGo(raider);
+    leave(raider);
   } else if (raider.state === 'ko') {
     sinkBody(raider);
   } else if (KNOCKED.has(raider.state)) {
     hold(game, patch, raider);
   } else {
-    wade(raider);
+    settle(game, patch, raider);
   }
 }

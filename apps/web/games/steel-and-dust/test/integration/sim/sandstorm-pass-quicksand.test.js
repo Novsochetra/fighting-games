@@ -65,6 +65,43 @@ describe('the quicksand of Sandstorm Pass', () => {
     }
   });
 
+  it('swallows a raider that stands in it to fight the hero on its rim', () => {
+    const { game, patch } = atThePatch();
+    const raider = createFighter('enemy', 'grunt', patch.x + 8, patch.y);
+    raider.facing = -1;
+    game.fighters.push(raider);
+    game.player.x = patch.x - QUICKSAND.halfWidth - 14;
+
+    for (let tick = 0; tick < 600 && !raider.sunk; tick++) {
+      runTicks(game, 1);
+    }
+
+    expect(raider.state).toBe('hurt');
+    expect(raider.sunk).toBeGreaterThan(0);
+    runTicks(game, 200);
+
+    expect(raider.removed).toBe(true);
+    expect(game.player.hp).toBeGreaterThan(0);
+  });
+
+  it('lets a raider walk across it to the hero on the far side', () => {
+    const { game, patch } = atThePatch();
+    const raider = createFighter('enemy', 'grunt', patch.x + QUICKSAND.halfWidth + 30, patch.y);
+    raider.facing = -1;
+    game.fighters.push(raider);
+    game.player.x = patch.x - QUICKSAND.halfWidth - 60;
+    let deepest = 0;
+
+    for (let tick = 0; tick < 240 && raider.x > patch.x - QUICKSAND.halfWidth; tick++) {
+      runTicks(game, 1);
+      deepest = Math.max(deepest, raider.sunk ?? 0);
+    }
+
+    expect(raider.x).toBeLessThan(patch.x - QUICKSAND.halfWidth);
+    expect(deepest).toBe(0);
+    expect(raider.removed).toBeFalsy();
+  });
+
   it('slows the hero running through it', () => {
     const sand = atThePatch();
     const road = atThePatch();
