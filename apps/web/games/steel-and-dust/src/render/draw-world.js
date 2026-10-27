@@ -4,6 +4,7 @@ import { heroById } from '../data/heroes.js';
 import { dimForBossUltimate, isBossUltimate } from './fighters/boss-ultimate.js';
 import { drawFighter } from './fighters/draw-fighter.js';
 import { heroSheetFor } from './fighters/hero-sheets.js';
+import { drawSinking } from './fighters/sinking.js';
 import { drawTrail } from './fighters/trail.js';
 import { drawCarvings } from './fx/carvings.js';
 import { drawDebugBoxes } from './fx/debug-boxes.js';
@@ -61,13 +62,15 @@ function drawOne(painter, { game, view, fighter, sheet, cameraX }) {
   if (isBossUltimate(fighter)) {
     dimForBossUltimate(painter, fighter, cameraX);
   }
-  drawFighter(painter, {
-    fighter,
-    sheet,
-    enemySheets: view.enemySheets,
-    tickCount: game.tickCount,
-    floor: floorBelow(game.terrain, fighter.x, fighter.y),
-  });
+  drawSinking(painter, fighter, () =>
+    drawFighter(painter, {
+      fighter,
+      sheet,
+      enemySheets: view.enemySheets,
+      tickCount: game.tickCount,
+      floor: floorBelow(game.terrain, fighter.x, fighter.y),
+    }),
+  );
   drawTrail(painter, { fighter, sheet });
 }
 
