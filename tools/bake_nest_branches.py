@@ -23,9 +23,9 @@ FRAME, HEIGHT = 89, 72
 KNOT_BOTTOM, BRANCH_BOTTOM = 21, 31
 # the rope's loop round the branch, which stays with the nest
 ROPE = (33, 10, 36, 22)
-# each forest's near layer and the patch of its nest tree's bark (left, top, right, bottom)
+# each forest's near layer and the patch of its nest tree's bark (left, top, right, bottom); Pine
+# Ridge's pine has no branch for its nest, which hangs by its rope among the needles
 FORESTS = [
-    ('pine-ridge', (40, 150, 54, 180)),
     ('old-grove', (128, 70, 166, 120)),
     ('bamboo-pass', (330, 80, 356, 130)),
     ('ember-woods', (326, 80, 358, 140)),

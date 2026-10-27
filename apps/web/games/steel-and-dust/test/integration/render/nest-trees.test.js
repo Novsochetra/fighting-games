@@ -37,22 +37,38 @@ function renderAt(mission, cameraX) {
 }
 
 describe('the hornet nests over the forest roads', () => {
-  it('hang by a branch of a tree of their own forest, drawn on the road before the nest', () => {
+  it('hang from a tree of their own forest, drawn on the road before the nest', () => {
     for (const { mission, nest } of placed) {
       const { nestTree } = PAINTED_BACKDROPS[mission.theme];
       const log = renderAt(mission, nest.x - 192);
       const slice = `drawImage(img(${nestTree.layer}.png),${nestTree.from},0,`;
-      const bark = `drawImage(img(nestBranch.png),${nestTree.branch * FX_SPRITES.nestBranch.frameWidth},0,`;
       const tree = log.findIndex((call) => call.startsWith(slice));
-      const branch = log.findIndex((call) => call.startsWith(bark));
       const hanging = log.findIndex((call) =>
         call.startsWith('drawImage(img(hornetNest.png),0,0,'),
       );
       const label = `${mission.name} nest at ${nest.x}`;
 
       expect(tree, label).toBeGreaterThan(-1);
-      expect(branch, label).toBeGreaterThan(tree);
-      expect(hanging, label).toBeGreaterThan(branch);
+      expect(hanging, label).toBeGreaterThan(tree);
+    }
+  });
+
+  it('hang by a branch in the tree’s own bark, or, in a pine, by the rope alone', () => {
+    for (const { mission, nest } of placed) {
+      const { nestTree } = PAINTED_BACKDROPS[mission.theme];
+      const log = renderAt(mission, nest.x - 192);
+      const branches = log.filter((call) => call.startsWith('drawImage(img(nestBranch.png),'));
+      const frame = nestTree.branch * FX_SPRITES.nestBranch.frameWidth;
+      const label = `${mission.name} nest at ${nest.x}`;
+
+      if (nestTree.branch === undefined) {
+        expect(branches, label).toEqual([]);
+      } else {
+        expect(
+          branches.map((call) => call.split(',')[1]),
+          label,
+        ).toEqual([`${frame}`]);
+      }
     }
   });
 });

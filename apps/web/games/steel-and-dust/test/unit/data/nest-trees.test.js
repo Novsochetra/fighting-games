@@ -80,7 +80,7 @@ describe('the trees the hornet nests hang from', () => {
     }
   });
 
-  it('grow the nest’s branch out of the tree itself, not out of the air beside it', () => {
+  it('hold the nest’s branch, or its rope, in the tree itself, not in the air beside it', () => {
     for (const [theme, backdrop] of forests) {
       const { bough } = backdrop.nestTree;
       const row = boughRow(backdrop.nestTree);
@@ -95,10 +95,12 @@ describe('the trees the hornet nests hang from', () => {
   });
 
   it('paint the branch the nest hangs by in the tree’s own bark, a frame of its own each', () => {
-    const frames = forests.map(([, backdrop]) => backdrop.nestTree.branch);
+    const branched = forests.filter(([, backdrop]) => backdrop.nestTree.branch !== undefined);
+    const frames = branched.map(([, backdrop]) => backdrop.nestTree.branch);
 
-    expect(new Set(frames).size).toBe(forests.length);
-    for (const [theme, backdrop] of forests) {
+    expect(new Set(frames).size).toBe(FX_SPRITES.nestBranch.frames);
+    expect(frames.length).toBe(FX_SPRITES.nestBranch.frames);
+    for (const [theme, backdrop] of branched) {
       const { branch } = backdrop.nestTree;
       const bark = treeColours(backdrop);
       const colours = [...branchColours(branch)];

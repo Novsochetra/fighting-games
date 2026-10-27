@@ -17,7 +17,9 @@ import { WARDEN_FORTRESS } from './warden-fortress.js';
 // surface. A forest with hornets' nests names the tree they hang from: the columns `from` to `to`
 // of a layer that hold one of its trees, the row `base` where the tree's foot meets its ground,
 // the column `bough` where the nest's branch grows from its trunk, and the frame `branch` of
-// assets/sprites/fx/nestBranch.png that paints that branch in the tree's bark
+// assets/sprites/fx/nestBranch.png that paints that branch in the tree's bark. A tree with no
+// `branch` (a pine, thick with needles) holds the nest by its rope, tied in among its boughs at
+// column `bough`
 export const PAINTED_BACKDROPS = {
   pineRidge: PINE_RIDGE,
   oldGrove: OLD_GROVE,

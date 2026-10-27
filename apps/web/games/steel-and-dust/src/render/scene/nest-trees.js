@@ -3,22 +3,26 @@ import { NEST } from '../../data/nests.js';
 import { drawFxFrame } from '../fx/fx-sheets.js';
 import { hangingAt } from './nests.js';
 
-// where the thick end of a nest's branch meets its tree, from the point the nest hangs at: the
-// branch's own pixels in the nest art, which is drawn at half the world's
+// where a nest meets its tree, from the point it hangs at (the nest art's own pixels, which it
+// draws at half the world's): the thick end of its branch, or, in a tree it hangs in by its rope
+// alone, the top of that rope
 const BRANCH_FOOT = { x: -16, y: -22 };
+const ROPE_TOP = { x: -4, y: -30 };
 // the tree is drawn a little down into the road's grass, so its roots sit in it
 const SET_IN = 3;
+
+const footOf = (tree) => (tree.branch === undefined ? ROPE_TOP : BRANCH_FOOT);
 
 // the tree a nest hangs from is one of the forest's own, cut from its near layer and stood on the
 // road, so the nest's branch grows out of a trunk that scrolls with the road under it
 export function nestTreeAt(nest, tree) {
-  const left = nest.x + BRANCH_FOOT.x - (tree.bough - tree.from);
+  const left = nest.x + footOf(tree).x - (tree.bough - tree.from);
 
   return { left, top: nest.y + SET_IN - tree.base, width: tree.to - tree.from };
 }
 
-// the row of the tree the branch grows from: where its foot meets the trunk
-export const boughRow = (tree) => tree.base - SET_IN - NEST.hang + BRANCH_FOOT.y;
+// the row of the tree where the nest's branch, or its rope, meets it
+export const boughRow = (tree) => tree.base - SET_IN - NEST.hang + footOf(tree).y;
 
 function nearLayer(backdrop, tree) {
   return backdrop.layers.find((layer) => layer.name === tree.layer);
@@ -30,6 +34,10 @@ function drawTree(painter, sheets, { nest, tree, image }) {
   const { from, base } = tree;
 
   painter.context.drawImage(image, from, 0, width, base, left, top, width, base);
+  if (tree.branch === undefined) {
+    return;
+  }
+
   drawFxFrame(painter, sheets, {
     name: 'nestBranch',
     frame: tree.branch,

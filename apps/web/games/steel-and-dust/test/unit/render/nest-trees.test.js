@@ -73,6 +73,15 @@ describe('the tree a hornet nest hangs from', () => {
     expect(log).toContain(`translate(${NEST_AT.x},${NEST_AT.y - NEST.hang})`);
   });
 
+  it('holds a nest by its rope alone when it has no branch, the rope’s top in its boughs', () => {
+    const pine = { ...TREE, branch: undefined };
+    const calls = draws([NEST_AT], { backdrop: { ...forest, nestTree: pine } });
+    const place = nestTreeAt(NEST_AT, pine);
+
+    expect(calls.map(([image]) => image)).toEqual(['img(near)']);
+    expect(place.left + (pine.bough - pine.from)).toBe(NEST_AT.x - 4);
+  });
+
   it('is drawn only while some of it is in view', () => {
     const { left, width } = nestTreeAt(NEST_AT, TREE);
 
