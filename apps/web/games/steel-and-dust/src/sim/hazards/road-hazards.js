@@ -5,6 +5,8 @@ import { createKegs, updateKegs } from './kegs.js';
 import { createSpikeTraps, updateSpikeTraps } from './spike-traps.js';
 import { createTempleBoulders, updateTempleBoulders } from './temple-boulders.js';
 import { createQuicksand, updateQuicksand } from './quicksand.js';
+import { createSlabs, updateSlabs } from './slabs.js';
+import { createTowers, updateTowers } from './towers.js';
 import { createTrees, updateTrees } from './trees.js';
 import { createVents, updateVents } from './vents.js';
 
@@ -20,6 +22,8 @@ export function createRoadHazards(mission) {
     boulders: createTempleBoulders(mission.boulders),
     quicksand: createQuicksand(mission.quicksand),
     vents: createVents(mission.vents),
+    slabs: createSlabs(mission.slabs),
+    towers: createTowers(mission.towers),
   };
 }
 
@@ -35,4 +39,6 @@ export function updateRoadHazards(game) {
   updateTempleBoulders(game);
   updateQuicksand(game);
   updateVents(game);
+  updateSlabs(game);
+  updateTowers(game);
 }
