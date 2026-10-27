@@ -33,13 +33,14 @@ export const IRON_WORKS = {
           [60, 12],
         ]),
         ...ramp(500, 680, 20),
-        ...mound(820, 1060, 14, 56),
+        ...mound(990, 1110, 12, 40),
       ],
       platforms: [
         { at: 230, width: 80, rise: 26, kind: 'catwalk' },
         { at: 600, width: 80, rise: 30, kind: 'catwalk' },
       ],
       hammers: [400],
+      conveyors: [{ at: 830, segments: 2, direction: -1 }],
       waves: [
         ['bomber', 'stoker', 'jackal'],
         ['juggernaut', 'shield', 'sentry'],

@@ -1,4 +1,5 @@
 import { drawCampfires } from './campfires.js';
+import { drawConveyors } from './conveyors.js';
 import { drawHammerMarks, drawHammers } from './hammers.js';
 import { drawKegs } from './kegs.js';
 
@@ -8,6 +9,7 @@ export function drawRoadProps(painter, { game, view, cameraX }) {
   const sheets = view.fxSheets;
   const tick = game.tickCount;
 
+  drawConveyors(painter, sheets, { conveyors: game.conveyors, cameraX, tick });
   drawKegs(painter, sheets, { kegs: game.kegs, cameraX, tick });
   drawCampfires(painter, sheets, { campfires: game.campfires, cameraX, tick });
   drawHammerMarks(painter, { hammers: game.hammers, cameraX, tick });

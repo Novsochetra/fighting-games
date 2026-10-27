@@ -1,3 +1,4 @@
+import { layoutConveyors } from '../conveyors.js';
 import { groundAt } from './terrain.js';
 
 // a zone's `kegs`, `trees` and the like are offsets from its left wall, like its platforms', each
@@ -21,5 +22,6 @@ export function layoutRoadProps(zoneSpecs, zones, terrain) {
     trees: onRoad('trees'),
     campfires: onRoad('campfires'),
     hammers: onRoad('hammers'),
+    conveyors: layoutConveyors(zoneSpecs, zones, terrain),
   };
 }
