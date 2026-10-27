@@ -15,6 +15,7 @@ export const IRON_WORKS = {
       screens: 2,
       ground: [...mound(60, 320, 24, 72), ...mound(470, 700, 12, 48)],
       platforms: [{ at: 120, width: 80, rise: 32, kind: 'catwalk' }],
+      hammers: [370],
       waves: [
         ['stoker', 'scrapper', 'stoker'],
         ['sentry', 'juggernaut', 'knife'],
@@ -38,6 +39,7 @@ export const IRON_WORKS = {
         { at: 230, width: 80, rise: 26, kind: 'catwalk' },
         { at: 600, width: 80, rise: 30, kind: 'catwalk' },
       ],
+      hammers: [400],
       waves: [
         ['bomber', 'stoker', 'jackal'],
         ['juggernaut', 'shield', 'sentry'],

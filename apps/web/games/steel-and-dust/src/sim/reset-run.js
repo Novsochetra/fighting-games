@@ -4,6 +4,7 @@ import { missionAt } from '../data/missions/index.js';
 import { createFighter } from './fighters/create-fighter.js';
 import { takeOwnWeapon } from './fighters/loadout.js';
 import { createCampfires } from './hazards/campfires.js';
+import { createHammers } from './hazards/hammers.js';
 import { createKegs } from './hazards/kegs.js';
 import { createTrees } from './hazards/trees.js';
 import { createCrates } from './items/crates.js';
@@ -44,6 +45,7 @@ function resetWorld(game, player, missionIndex) {
     kegs: createKegs(mission.kegs),
     trees: createTrees(mission.trees),
     campfires: createCampfires(mission.campfires),
+    hammers: createHammers(mission.hammers),
     terrain: mission.terrain,
     arena: null,
     missionIndex,

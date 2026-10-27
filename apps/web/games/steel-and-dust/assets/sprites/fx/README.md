@@ -79,6 +79,8 @@ colors.
 | `moatWater.png` | 4 × 60×42 | Angkor Wat: the surface of the moat in the causeway's breach, a seamless tile looping through its 4 frames | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --colors 24 --common-grid --keep-edges --inset 1` |
 | `deadTree.png` | 4 × 169×117 | Forests: a dead pine standing (0), leaning as it gives way (1), falling (2) and lying felled beside its stump (3), held by the stump and drawn at twice the sprites' density | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --colors 24 --cuts 400,820,1200 --cell 4.94,4.94 --anchor-left-run --anchor-rows 3`, then each frame shifted to put its stump on one column |
 | `campfire.png` | 6 × 52×96 | Raider Camp: a campfire on the road, a 6-frame flicker loop, each fire on its own beat | ChatGPT image on magenta, baked with `tools/bake_magenta_sheet.py --common-grid --untint` |
+| `hammerHead.png` | 1 × 101×85 | Iron Works: a drop hammer's head, its striking face glowing, held by the middle of that face | ChatGPT image on magenta (the head and its piston side by side), baked with `tools/bake_magenta_sheet.py --common-grid` and cut apart |
+| `hammerPipe.png` | 1 × 53×143 | Iron Works: the drop hammer's piston and guide rails, laid end to end from its head up out of the view | the same image, the other half |
 
 The workbench effects are saved in the PixelLab account's My effects under those ids, so they can be
 opened, retuned with their sliders and exported again. The lion's leap frames play once over every bound, from push-off to

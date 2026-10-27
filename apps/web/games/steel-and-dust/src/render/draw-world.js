@@ -14,12 +14,12 @@ import { drawGroundHazards, drawProjectiles, drawShockwaves } from './fx/hazards
 import { drawParticles } from './fx/particles.js';
 import { drawSoldiers } from './fx/soldiers.js';
 import { drawBehindBursts, drawSummons } from './fx/summons.js';
-import { drawCampfires } from './scene/campfires.js';
 import { drawCrates } from './scene/crate.js';
-import { drawKegs } from './scene/kegs.js';
+import { drawHammers } from './scene/hammers.js';
 import { drawGround } from './scene/ground.js';
 import { drawMoats } from './scene/moats.js';
 import { drawPlatforms } from './scene/platforms.js';
+import { drawRoadProps } from './scene/road-props.js';
 import { drawTrees } from './scene/trees.js';
 import { drawGroundLoot, drawLootSparkles } from './scene/loot.js';
 import { drawChests } from './scene/loot-chest.js';
@@ -114,11 +114,11 @@ export function drawWorld(painter, { game, view, cameraX }) {
   drawTrees(painter, view.fxSheets, { trees: game.trees, cameraX });
   drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });
   drawCrates(painter, game.crates, cameraX);
-  drawKegs(painter, view.fxSheets, { kegs: game.kegs, cameraX, tick });
-  drawCampfires(painter, view.fxSheets, { campfires: game.campfires, cameraX, tick });
+  drawRoadProps(painter, { game, view, cameraX });
   drawPickups(painter, game.pickups);
   drawGroundHazards(painter, game.projectiles, view.fxSheets);
   drawFighters(painter, { game, view, cameraX });
+  drawHammers(painter, view.fxSheets, { hammers: game.hammers, cameraX });
   drawSummons(painter, game.summons, view.fxSheets);
   drawShockwaves(painter, game.shockwaves);
   drawProjectiles(painter, game.projectiles, view.fxSheets);

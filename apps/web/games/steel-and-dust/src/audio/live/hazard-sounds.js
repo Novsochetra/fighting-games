@@ -1,4 +1,4 @@
-import { blip, click, crunch, thump } from './layers.js';
+import { blip, click, crunch, hiss, metal, thump } from './layers.js';
 
 // a dead tree giving way: dry wood cracking in slow, uneven snaps over a low groan
 function creak(live, start) {
@@ -17,4 +17,13 @@ function timber(live, start) {
   }
 }
 
-export const HAZARD_SOUNDS = { creak, timber };
+// a steam hammer hitting the foundry floor: a heavy iron clang over a deep blow, and the steam
+// blown out from under it
+function hammerSlam(live, start) {
+  thump(live, { start, from: 140, to: 34, duration: 0.6, volume: 0.42 });
+  metal(live, { start, frequencies: [220, 347, 513], duration: 0.5, volume: 0.07 });
+  const blowOut = { type: 'highpass', from: 2400, to: 900, resonance: 0.8 };
+  hiss(live, { start: start + 0.03, ...blowOut, attack: 0.01, duration: 0.5, volume: 0.08 });
+}
+
+export const HAZARD_SOUNDS = { creak, timber, hammerSlam };
