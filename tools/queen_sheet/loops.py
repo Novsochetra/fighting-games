@@ -2,32 +2,25 @@
 
 import numpy as np
 
+from pixel_art import glowing, to_lab
+
 # ChatGPT redrew her whole body in every pose of a loop, so a loop played back shimmers; each loop
-# keeps its first pose's body, lifted by the bob, over each pose's own legs (the idle over the
-# first pose's legs too: she breathes, her legs stay planted)
+# keeps its first pose's body. Her walk and charge put each pose's own legs under it; her idle
+# keeps the first pose whole, and only her venom pulses. A sprite has no layers, so lifting part
+# of her body to breathe stretched a row somewhere: a leg kinked, an outline thickened or her hair
+# smeared, wherever the line ran
 SPLIT = 128
 LOOPS = {
-    # she breathes above her back, where the line crosses only upright shapes (the tail rising,
-    # her hair, body and arm), which stretch cleanly; her back, legs and pincers stay planted
-    'idle': {'bob': [0, 1, 2, 1], 'legs': False, 'split': 112},
-    'walk': {'bob': [0, 1, 1, 0, 0, 1, 1, 0], 'legs': True, 'split': SPLIT},
-    'charge': {'bob': [0, 1, 1, 0, 0, 1, 1, 0], 'legs': True, 'split': SPLIT},
+    'idle': {'frames': 4, 'legs': False, 'glow': [0, 1, 2, 1]},
+    'walk': {'frames': 8, 'legs': True},
+    'charge': {'frames': 8, 'legs': True},
 }
 # a pose's legs are drawn a pixel or three off her body, and in a shape of their own: they are
 # moved under the body, then joined to it along the path through her waist where the two agree
 SHIFT = 4
 ABOVE, BELOW = 6, 14
 CLEAR_AGAINST_DRAWN = 4000.0
-
-
-def lifted(frame, bob, split):
-    result = frame.copy()
-    if bob:
-        result[:split - bob] = frame[bob:split]
-        # the rows the lift leaves are the first row under the split drawn on up (her back, the
-        # sash): whatever was drawn there before (the edge of a hand) has been lifted away with her
-        result[split - bob:split] = frame[split]
-    return result
+VIVID = 60
 
 
 def mismatch(body, legs, palette):
@@ -70,12 +63,27 @@ def joined(body, legs, palette):
     return result
 
 
+def pulsed(frame, level, palette):
+    # each venom color steps up the venom ramp by the level, so the glow brightens and fades; a
+    # dull olive the shrink left in the sting stays as it is, or stepping onto it muddies the glow
+    lab = to_lab(palette.astype(np.float64))
+    glow = glowing(lab) & (np.hypot(lab[:, 1], lab[:, 2]) >= VIVID)
+    glow[0] = False
+    ramp = sorted(np.nonzero(glow)[0], key=lambda index: lab[index, 0])
+    table = np.arange(len(palette))
+    for rank, index in enumerate(ramp):
+        table[index] = ramp[min(rank + level, len(ramp) - 1)]
+    return table[frame].astype(frame.dtype)
+
+
 def steadied(frames, loop, palette):
     first = frames[0]
     held = []
-    for frame, bob in zip(frames, loop['bob']):
-        body = lifted(first, bob, loop['split'])
+    for index, frame in enumerate(frames):
+        body = first.copy()
         if loop['legs']:
             body = joined(body, under_body(body, frame, palette), palette)
+        if 'glow' in loop:
+            body = pulsed(body, loop['glow'][index], palette)
         held.append(body)
     return held

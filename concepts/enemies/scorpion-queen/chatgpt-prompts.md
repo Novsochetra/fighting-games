@@ -413,9 +413,11 @@ put right in the bake:
   her feet, where her blows reach 100 and 90. The claw and the tail are drawn out on the frames the
   blow is out, with a small lunge (`REACH` in `tools/queen_sheet/lay_out.py`), so her hurt box and
   reaches in `src/data/enemies/boss-bodies.js` and her moves' hitboxes stay as they were.
-- It redrew her whole body in every pose, so a loop shimmered. Her idle, walk and charge keep
-  their first pose's body over each pose's own legs, joined along the path through her waist where
-  the two drawings agree, so no line shows there (`tools/queen_sheet/loops.py`).
+- It redrew her whole body in every pose, so a loop shimmered. Her walk and charge keep their
+  first pose's body over each pose's own legs, joined along the path through her waist where the
+  two drawings agree, so no line shows there; her idle keeps its first pose whole and only her
+  venom pulses (`tools/queen_sheet/loops.py`). A real breathing idle has to be drawn, not
+  stretched out of one frame.
 - It placed each pose a little differently in its cell. Each is lined up by her planted rear legs.
 
 ## Baking them into the game

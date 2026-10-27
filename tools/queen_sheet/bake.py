@@ -54,7 +54,7 @@ def held_loops(image):
     for name, loop in LOOPS.items():
         row = names.index(name)
         band = sheet[FRAME_HEIGHT * row:FRAME_HEIGHT * (row + 1)]
-        cells = [band[:, FRAME_WIDTH * c:FRAME_WIDTH * (c + 1)].copy() for c in range(len(loop['bob']))]
+        cells = [band[:, FRAME_WIDTH * c:FRAME_WIDTH * (c + 1)].copy() for c in range(loop['frames'])]
         for column, cell in enumerate(steadied(cells, loop, palette)):
             band[:, FRAME_WIDTH * column:FRAME_WIDTH * (column + 1)] = cell
     held = Image.fromarray(sheet, 'P')
