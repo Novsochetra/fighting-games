@@ -94,6 +94,7 @@ describe('live sounds', () => {
         'creak',
         'timber',
         'hammerSlam',
+        'spikeTrap',
       ].sort(),
     );
   });

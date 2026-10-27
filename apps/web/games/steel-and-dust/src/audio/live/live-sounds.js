@@ -10,6 +10,7 @@ import { MOAT_SOUNDS } from './moat-sounds.js';
 import { SIGNATURE_SOUNDS } from './signature-sounds.js';
 import { SUMMARY_SOUNDS } from './summary-sounds.js';
 import { TEMPLE_SOUNDS } from './temple-sounds.js';
+import { TRAP_SOUNDS } from './trap-sounds.js';
 import { WARDEN_SOUNDS } from './warden-sounds.js';
 
 // the rarer menu, event and boss sounds, built from live nodes each time: { key: (live, start) => {} }
@@ -27,6 +28,7 @@ export const LIVE_SOUNDS = {
   ...BAYON_SOUNDS,
   ...MOAT_SOUNDS,
   ...HAZARD_SOUNDS,
+  ...TRAP_SOUNDS,
 };
 
 export function isLiveSound(key) {
