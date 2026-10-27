@@ -4,6 +4,21 @@ import { rollPath } from './roll-path.js';
 // the logo wears the title's carved crest and rule
 const CLASS_FOR_KIND = { logo: 'logo credits-logo' };
 
+// a line's second part, and the link it ends on (the supporters page)
+function subElement(document, { sub, link }) {
+  const element = document.createElement('span');
+  element.textContent = sub;
+
+  if (link) {
+    const anchor = document.createElement('a');
+    anchor.href = link.href;
+    anchor.textContent = link.text;
+    element.append(' ', anchor);
+  }
+
+  return element;
+}
+
 // supporters type their own names, so every line goes in as text, never as markup
 function lineElement(document, line) {
   const element = document.createElement(line.kind === 'heading' ? 'h3' : 'p');
@@ -11,9 +26,11 @@ function lineElement(document, line) {
   element.textContent = line.text;
 
   if (line.sub) {
-    const sub = document.createElement('span');
-    sub.textContent = line.sub;
-    element.append(sub);
+    element.append(subElement(document, line));
+  }
+
+  if (line.tier) {
+    element.dataset.tier = line.tier;
   }
 
   if (line.hero) {

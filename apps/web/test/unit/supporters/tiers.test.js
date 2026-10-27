@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { TIERS as SERVER_TIERS } from '../../../../server/src/supporters/tiers.js';
 import { QUICK_AMOUNTS } from '../../../src/supporters/donate-form.js';
 import { nextTierOf, presentTier, TIERS, tierOf } from '../../../src/supporters/tiers.js';
 
@@ -40,5 +41,14 @@ describe('presentTier', () => {
 
   it('says Diamond is the top', () => {
     expect(presentTier(40, money)).toMatchObject({ id: 'diamond', nudge: 'The top tier' });
+  });
+});
+
+describe('the tiers the server names', () => {
+  // the sheet shows a tier while an amount is typed; the list names each gift's from the server
+  it('start at the same amounts as the server, which has the last word', () => {
+    const steps = TIERS.map(({ id, min }) => ({ id, minCents: Math.round(min * 100) }));
+
+    expect(steps).toEqual(SERVER_TIERS);
   });
 });

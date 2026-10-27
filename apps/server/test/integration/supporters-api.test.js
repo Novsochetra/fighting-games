@@ -44,11 +44,20 @@ describe('the supporters API', () => {
 
     const reply = await give({ name: ' Sok Dara ', amount: 25, message: 'Keep it free!' });
     expect(reply.status).toBe(201);
-    expect(JSON.parse(reply.text).supporter).toMatchObject({ name: 'Sok Dara', amount: 25 });
+    expect(JSON.parse(reply.text).supporter).toMatchObject({
+      name: 'Sok Dara',
+      amount: 25,
+      tier: 'diamond',
+    });
 
     const { json } = await list({ 'sec-fetch-site': 'same-origin' });
     expect(json.supporters).toEqual([
-      expect.objectContaining({ name: 'Sok Dara', amount: 25, message: 'Keep it free!' }),
+      expect.objectContaining({
+        name: 'Sok Dara',
+        amount: 25,
+        tier: 'diamond',
+        message: 'Keep it free!',
+      }),
     ]);
     expect(json.supporters[0].date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });

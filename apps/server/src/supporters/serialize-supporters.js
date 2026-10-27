@@ -1,3 +1,5 @@
+import { tierOfCents } from './tiers.js';
+
 export const CURRENCY = 'USD';
 
 // The arcade and most of its players are in Cambodia, so a gift made late in the evening there is
@@ -13,8 +15,16 @@ const dayFormat = new Intl.DateTimeFormat('en-CA', {
 
 export const toArcadeDay = (date) => dayFormat.format(date);
 
+// the tier is named here, from the cents the gift was stored in, so every page and game that reads
+// the list calls a gift the same thing
 export function presentSupporter({ name, amountCents, message, createdAt }) {
-  return { name, amount: amountCents / 100, date: toArcadeDay(createdAt), message };
+  return {
+    name,
+    amount: amountCents / 100,
+    tier: tierOfCents(amountCents),
+    date: toArcadeDay(createdAt),
+    message,
+  };
 }
 
 export function serializeSupporters(supporters) {

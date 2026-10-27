@@ -94,6 +94,47 @@
   color: var(--hero-color);
 }
 
+/* each tier heads its supporters between two cut gems, in the metals and the diamond blue the
+   arcade gives its tiers */
+.credits-tier {
+  --tier-top: var(--color-tier-bronze-top);
+  --tier-bottom: var(--color-tier-bronze-bottom);
+
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  margin: 1.8em 0 0.5em;
+  font-size: var(--font-size-credits-heading);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--tier-top);
+  text-shadow: var(--text-shadow-pixel-xs);
+}
+
+.credits-tier::before,
+.credits-tier::after {
+  content: '';
+  width: 1em;
+  height: 1em;
+  background: linear-gradient(var(--tier-top) 50%, var(--tier-bottom) 50%);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+
+.credits-tier[data-tier='silver'] {
+  --tier-top: var(--color-tier-silver-top);
+  --tier-bottom: var(--color-tier-silver-bottom);
+}
+
+.credits-tier[data-tier='gold'] {
+  --tier-top: var(--color-tier-gold-top);
+  --tier-bottom: var(--color-tier-gold-bottom);
+}
+
+.credits-tier[data-tier='diamond'] {
+  --tier-top: var(--color-tier-diamond-top);
+  --tier-bottom: var(--color-tier-diamond-bottom);
+}
+
 .credits-note {
   max-width: 34ch;
   margin: 0.7em 0;
@@ -117,6 +158,17 @@
   display: block;
   margin-top: 0.5em;
   color: var(--color-text);
+}
+
+/* the supporters page, a tap away even as the credits roll */
+.credits-invite a {
+  color: var(--color-mint-light);
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.credits-invite a:hover {
+  color: var(--color-cream);
 }
 
 .credits-finale {

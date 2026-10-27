@@ -1,14 +1,16 @@
 import { heroById } from '../../data/heroes.js';
 import { creditedSupporters } from './supporter-list.js';
+import { tierName } from './supporter-tiers.js';
 
 const MAKER = 'Nov Sochetra';
-// written out for the player to read and visit; nothing loads from it
-const ARCADE_SITE = 'khmerarcade.games';
+// the arcade's supporters page, by address from the game's page as Back to arcade finds the arcade,
+// and written out as players would type it
+const SUPPORTERS_PAGE = { href: '../../supporters/', text: 'khmerarcade.games/supporters' };
 const KHMER = /[ក-៿᧠-᧿]/;
 
-// how a player's name gets into these credits, in plain words: a gift on the arcade
+// how a player's name gets into these credits, in plain words, with the way there
 function inviteLine(text) {
-  return { kind: 'invite', text, sub: `Support the arcade at ${ARCADE_SITE}` };
+  return { kind: 'invite', text, sub: 'Support the arcade at', link: SUPPORTERS_PAGE };
 }
 
 // a Khmer name is marked so, and the browser sets it in a Khmer font with the taller line it needs
@@ -22,8 +24,10 @@ function anonymousLine(count, afterNames) {
   return `${afterNames ? 'and ' : ''}${count} ${supporters}`;
 }
 
-function namedLines({ names, anonymous }) {
-  const lines = names.map(nameLine);
+// a tier's heading, its names, then its gifts made without a name
+function groupLines({ tier, names, anonymous }) {
+  const heading = tier ? [{ kind: 'tier', text: tierName(tier), tier }] : [];
+  const lines = [...heading, ...names.map(nameLine)];
 
   if (anonymous) {
     lines.push({ kind: 'note', text: anonymousLine(anonymous, names.length > 0) });
@@ -47,7 +51,7 @@ function supporterLines(gifts) {
 
   return [
     { kind: 'note', text: 'They keep every game free' },
-    ...namedLines(creditedSupporters(gifts)),
+    ...creditedSupporters(gifts).flatMap(groupLines),
     inviteLine('Want your name here?'),
   ];
 }

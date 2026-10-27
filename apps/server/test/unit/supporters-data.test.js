@@ -6,6 +6,7 @@ import {
   serializeSupporters,
   toArcadeDay,
 } from '../../src/supporters/serialize-supporters.js';
+import { tierOfCents } from '../../src/supporters/tiers.js';
 
 describe('readDonation', () => {
   it('cleans the name and message and keeps the amount in cents', () => {
@@ -65,6 +66,7 @@ describe('serializeSupporters', () => {
     expect(presentSupporter(supporter)).toEqual({
       name: 'Mey',
       amount: 19.99,
+      tier: 'gold',
       date: '2026-10-01',
       message: '',
     });
@@ -72,6 +74,21 @@ describe('serializeSupporters', () => {
       currency: 'USD',
       supporters: [presentSupporter(supporter)],
     });
+  });
+});
+
+describe('tierOfCents', () => {
+  it.each([
+    [100, 'bronze'],
+    [499, 'bronze'],
+    [500, 'silver'],
+    [999, 'silver'],
+    [1000, 'gold'],
+    [2499, 'gold'],
+    [2500, 'diamond'],
+    [1000000, 'diamond'],
+  ])('names a gift of %i cents %s', (cents, tier) => {
+    expect(tierOfCents(cents)).toBe(tier);
   });
 });
 

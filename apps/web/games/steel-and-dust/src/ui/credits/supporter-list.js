@@ -1,3 +1,5 @@
+import { isTier, TIERS, tierRank } from './supporter-tiers.js';
+
 const DAY = /^\d{4}-\d{2}-\d{2}$/;
 
 function isGift(entry) {
@@ -16,9 +18,10 @@ export function readSupporterList(json) {
     return null;
   }
 
-  return json.supporters.filter(isGift).map(({ name, amount, date }) => ({
+  return json.supporters.filter(isGift).map(({ name, amount, tier, date }) => ({
     name: typeof name === 'string' ? name.trim() : '',
     cents: Math.round(amount * 100),
+    tier: isTier(tier) ? tier : null,
     date,
   }));
 }
@@ -31,27 +34,47 @@ function byGift(first, second) {
   );
 }
 
-// one line a name, a supporter who gave twice under it counted once, with the most given first and
-// the earliest first among equals; a gift without a name is only counted
-export function creditedSupporters(gifts) {
-  const byName = new Map();
-  let anonymous = 0;
-
-  for (const { name, cents, date } of gifts) {
-    if (!name) {
-      anonymous++;
-      continue;
-    }
-
-    const kept = byName.get(name) ?? { name, cents: 0, date };
-    byName.set(name, {
-      name,
-      cents: kept.cents + cents,
-      date: date < kept.date ? date : kept.date,
-    });
+// a supporter who gave more than once is named once, by all they gave, under the highest tier they
+// reached, as the arcade's list shows each of their gifts
+function joined(kept, gift) {
+  if (!kept) {
+    return gift;
   }
 
-  const names = [...byName.values()].sort(byGift).map((supporter) => supporter.name);
+  return {
+    name: gift.name,
+    cents: kept.cents + gift.cents,
+    date: gift.date < kept.date ? gift.date : kept.date,
+    tier: tierRank(gift.tier) < tierRank(kept.tier) ? gift.tier : kept.tier,
+  };
+}
 
-  return { names, anonymous };
+function groupOf(tier, { people, anonymous }) {
+  const names = people
+    .filter((person) => person.tier === tier)
+    .sort(byGift)
+    .map((person) => person.name);
+
+  return { tier, names, anonymous: anonymous.get(tier) ?? 0 };
+}
+
+// the supporters by tier, highest first, the most given first in each; a gift without a name is only
+// counted, in its tier, and gifts with no tier come last
+export function creditedSupporters(gifts) {
+  const byName = new Map();
+  const anonymous = new Map();
+
+  for (const gift of gifts) {
+    if (gift.name) {
+      byName.set(gift.name, joined(byName.get(gift.name), gift));
+    } else {
+      anonymous.set(gift.tier, (anonymous.get(gift.tier) ?? 0) + 1);
+    }
+  }
+
+  const supporters = { people: [...byName.values()], anonymous };
+
+  return [...TIERS.map((tier) => tier.id), null]
+    .map((tier) => groupOf(tier, supporters))
+    .filter((group) => group.names.length || group.anonymous);
 }

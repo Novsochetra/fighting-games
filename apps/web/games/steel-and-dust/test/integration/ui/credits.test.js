@@ -8,7 +8,14 @@ import { tick } from '../../../src/sim/tick.js';
 import { spawnEnemy } from '../../support/loot-game.js';
 import { openMenu, openPage } from '../../support/menu-page.js';
 
-const gift = (name, amount) => ({ name, amount, date: '2026-10-20', message: '' });
+// a gift as the arcade's API sends it, its tier named by the server
+const gift = (name, amount, tier = 'bronze') => ({
+  name,
+  amount,
+  tier,
+  date: '2026-10-20',
+  message: '',
+});
 
 const roll = () => document.querySelector('#m-credits .credits-roll');
 const rollTexts = (selector) =>
@@ -64,7 +71,7 @@ describe('the credits once the last mission is clear', () => {
   it('roll over the clear menu, naming the Shade who won and every supporter', async () => {
     await clearTheGame(
       page,
-      supportersAnswer([gift('Dara', 5), gift('Sok Chan', 25), gift('', 1)]),
+      supportersAnswer([gift('Dara', 5, 'silver'), gift('Sok Chan', 25, 'diamond'), gift('', 1)]),
     );
 
     expect(page.menus.state.stack).toEqual(['clear', 'credits']);
@@ -72,9 +79,27 @@ describe('the credits once the last mission is clear', () => {
     expect(fetch).toHaveBeenCalledWith('../../api/supporters');
     expect(rollTexts('.credits-hero')).toEqual(['Angkor Warrior']);
     expect(rollTexts('.credits-name')).toEqual(['Nov Sochetra', 'Sok Chan', 'Dara']);
-    expect(rollTexts('.credits-note')).toContain('and 1 anonymous supporter');
+    expect(rollTexts('.credits-tier')).toEqual(['Diamond', 'Silver', 'Bronze']);
+    expect([...roll().querySelectorAll('.credits-tier')].map((line) => line.dataset.tier)).toEqual([
+      'diamond',
+      'silver',
+      'bronze',
+    ]);
+    expect(rollTexts('.credits-note')).toContain('1 anonymous supporter');
     expect(roll().classList.contains('rolling')).toBe(true);
     expect(roll().style.getPropertyValue('--duration-roll')).toMatch(/^[\d.]+s$/);
+  });
+
+  it("link the invite to the arcade's supporters page, from the game's own address", async () => {
+    await clearTheGame(page, supportersAnswer([gift('Dara', 5)]));
+
+    const link = roll().querySelector('.credits-invite a');
+
+    expect(link.getAttribute('href')).toBe('../../supporters/');
+    expect(link.textContent).toBe('khmerarcade.games/supporters');
+    expect(link.parentElement.textContent).toBe(
+      'Support the arcade at khmerarcade.games/supporters',
+    );
   });
 
   it('write a name as its supporter typed it, never as markup', async () => {
@@ -134,7 +159,7 @@ describe('the credits once the last mission is clear', () => {
       vi.fn(async () => ({ ok: true, json: async () => ({ supporters }) })),
     );
     await page.supporters.load();
-    supporters.push(gift('Kanha', 10));
+    supporters.push(gift('Kanha', 10, 'gold'));
     fellLastBoss(page);
 
     frame(page);

@@ -409,10 +409,23 @@ The list comes from the server, `GET /api/supporters`:
 {
   "currency": "USD",
   "supporters": [
-    { "name": "Sok Dara", "amount": 25, "date": "2026-10-20", "message": "Keep it free!" }
+    {
+      "name": "Sok Dara",
+      "amount": 25,
+      "tier": "diamond",
+      "date": "2026-10-20",
+      "message": "Keep it free!"
+    }
   ]
 }
 ```
+
+The list comes in the order the gifts were made, oldest first, the same for every reader, and each
+page or game sorts it its own way (the supporters screen by Top or Recent, Steel & Dust's credits by
+tier); one address with one answer is also the one the offline worker keeps. Each gift carries its
+`tier` (`bronze`, `silver`, `gold` or `diamond`), named by the server from the amount
+(`supporters/tiers.js`), so a game reads it without the arcade's code. No tier is stored: it follows
+from the amount, so new steps need no migration.
 
 The gifts live in Postgres, in one `supporters` table (`apps/server/src/db/migrations.js`): amounts
 in whole cents, a `created_at`, and a `hidden` flag. The date sent is the day in Phnom Penh. Without
@@ -430,8 +443,8 @@ three steps (`DonateSheet.tsx`, its steps in `DonateForm.tsx` and `DonateSteps.t
    the two equal. As the amount changes, its tier shows under it (`tiers.js`): Bronze from $1,
    Silver from $5, Gold from $10 and Diamond from $25, one for each quick amount, with how much more
    reaches the next. A tier is a cut gem drawn in CSS (`tier.css`), in the podium's metals and a
-   diamond blue with a glint; it pops when the tier changes. The server keeps no tier: it follows
-   from the amount.
+   diamond blue with a glint; it pops when the tier changes. The server names each listed gift's tier
+   from the same steps, and has the last word; a test keeps the sheet's steps equal to the server's.
 2. The KHQR code (`assets/donate/khqr.jpg`, Wing Bank, NOV SOCHETRA) and the amount to send with any
    bank app that scans KHQR. A phone can't scan its own screen, so Save the code downloads it for
    the bank app's scan-from-photo. No one can see whether money arrived, so I sent it is the gift;

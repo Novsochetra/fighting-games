@@ -47,6 +47,14 @@
   --color-hero-ember: #ff7a2a;
   --color-hero-bokator: #ffd25a;
   --color-hero-angkor: #f29ab2;
+  --color-tier-bronze-top: #f2b682;
+  --color-tier-bronze-bottom: #b36b36;
+  --color-tier-silver-top: #f2f2f7;
+  --color-tier-silver-bottom: #a3a3ab;
+  --color-tier-gold-top: #ffe17a;
+  --color-tier-gold-bottom: #d9a30f;
+  --color-tier-diamond-top: #d8f8ff;
+  --color-tier-diamond-bottom: #3d8bff;
   --color-touch-heavy-border: color-mix(in srgb, var(--color-coral) 90%, transparent);
   --color-touch-jump: color-mix(in srgb, var(--color-teal) 28%, transparent);
   --color-touch-jump-border: color-mix(in srgb, var(--color-mint-light) 90%, transparent);
