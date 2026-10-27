@@ -64,7 +64,7 @@
 
 .hero-carousel {
   height: calc(var(--frame) * 14px + var(--px) * 80px + var(--below));
-  margin-inline: calc(50% - 50vw);
+  margin-inline: calc(50% - var(--menu-width, 100vw) / 2);
 }
 
 .hero-step {

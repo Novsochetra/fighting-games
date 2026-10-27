@@ -28,6 +28,13 @@ Open it from the arcade home page, or go straight to `games/steel-and-dust/` on 
 
 Menus work with the arrow keys and Enter (Esc goes back), with a gamepad (A / B), or by touch.
 
+On a foldable or dual-screen phone the game keeps clear of the fold, read from Chrome's Viewport
+Segments API (`window.viewport.segments`, `src/ui/screen/viewport-segments.js`). Half-folded on a
+table like a laptop (a Galaxy Z Fold or Flip in Flex mode, a Surface Duo turned sideways), the
+game plays on the top half and the stick, the buttons and pause sit on the bottom half, like a
+handheld. Folded like a book, it plays on the left half. Unfolded flat, a Fold's near-square screen
+puts the touch buttons under the game instead of over the road, as an upright phone does.
+
 ## Settings
 
 Saved in the browser: music and sound volume, difficulty (Easy, Normal, Hard), auto-aim (attacks turn toward the nearest raider, on by default on touch screens), hold ATTACK to combo, screen shake (off / low / full), flashes, damage numbers, touch controls (auto / on / off), joystick (fixed in the corner, floating under your thumb, or hidden), hide with a gamepad (on by default: the touch controls step aside while you play with a gamepad and come back on a touch), button size, button layout (drag the touch buttons and the joystick anywhere and resize them, for example a left-handed layout with the joystick on the right; kept apart for the phone held sideways and upright; Reset brings back the original), vibration, and **Training tools**. With Training tools on, 1–4 swap weapons, 0 fills the ULT bar, H shows hitboxes and frame data, and the pause menu has a weapon switch.
