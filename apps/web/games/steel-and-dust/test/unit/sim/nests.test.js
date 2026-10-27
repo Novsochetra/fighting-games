@@ -93,7 +93,7 @@ describe('a hornet nest', () => {
     const shakes = [0, 1, 2, 3].map((time) => tremble({ state: 'struck', time }));
 
     expect(['hanging', 'struck', 'falling', 'broken'].map((state) => nestFrame({ state }))).toEqual(
-      [0, 0, 2, 3],
+      [0, 0, 1, 2],
     );
     expect(shakes).toEqual([-1, -1, 1, 1]);
     expect(tremble({ state: 'falling', time: 2 })).toBe(0);

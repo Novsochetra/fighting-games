@@ -7,7 +7,7 @@ export const EMBER_WOODS = {
     { name: 'near', parallax: 0.45 },
     { name: 'way-in', parallax: 0.5, once: true },
   ],
-  nestTree: { layer: 'near', from: 287, to: 381, base: 180, bough: 351 },
+  nestTree: { layer: 'near', from: 287, to: 381, base: 180, bough: 351, branch: 3 },
   ambient: [
     { kind: 'leaves', plane: 'back', count: 12, drift: 0.45, wind: 0.25 },
     { kind: 'leaves', plane: 'front', count: 8, drift: 1.2, wind: 0.3 },

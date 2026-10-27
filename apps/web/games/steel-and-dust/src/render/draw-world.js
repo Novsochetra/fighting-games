@@ -115,7 +115,7 @@ export function drawWorld(painter, { game, view, cameraX }) {
   drawMoats(painter, view.fxSheets, { water: terrain.water, cameraX, tick });
   drawProps(painter, { cameraX, props: mission.props, sheets: view.propSheets });
   drawTrees(painter, view.fxSheets, { trees: game.trees, cameraX });
-  drawNestTrees(painter, { nests: game.nests, backdrop, cameraX });
+  drawNestTrees(painter, view.fxSheets, { nests: game.nests, backdrop, cameraX });
   drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });
   drawCrates(painter, game.crates, cameraX);
   drawRoadProps(painter, { game, view, cameraX });

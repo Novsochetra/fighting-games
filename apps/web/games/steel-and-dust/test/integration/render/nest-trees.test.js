@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PAINTED_BACKDROPS } from '../../../src/data/backdrops/index.js';
+import { FX_SPRITES } from '../../../src/data/fx-sprites.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { createView } from '../../../src/render/create-view.js';
 import { renderFrame } from '../../../src/render/render-frame.js';
@@ -36,19 +37,22 @@ function renderAt(mission, cameraX) {
 }
 
 describe('the hornet nests over the forest roads', () => {
-  it('hang from a tree of their own forest, drawn on the road before the nest', () => {
+  it('hang by a branch of a tree of their own forest, drawn on the road before the nest', () => {
     for (const { mission, nest } of placed) {
       const { nestTree } = PAINTED_BACKDROPS[mission.theme];
       const log = renderAt(mission, nest.x - 192);
       const slice = `drawImage(img(${nestTree.layer}.png),${nestTree.from},0,`;
+      const bark = `drawImage(img(nestBranch.png),${nestTree.branch * FX_SPRITES.nestBranch.frameWidth},0,`;
       const tree = log.findIndex((call) => call.startsWith(slice));
+      const branch = log.findIndex((call) => call.startsWith(bark));
       const hanging = log.findIndex((call) =>
         call.startsWith('drawImage(img(hornetNest.png),0,0,'),
       );
       const label = `${mission.name} nest at ${nest.x}`;
 
       expect(tree, label).toBeGreaterThan(-1);
-      expect(hanging, label).toBeGreaterThan(tree);
+      expect(branch, label).toBeGreaterThan(tree);
+      expect(hanging, label).toBeGreaterThan(branch);
     }
   });
 });

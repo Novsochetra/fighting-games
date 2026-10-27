@@ -6,7 +6,7 @@ export const PINE_RIDGE = {
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },
   ],
-  nestTree: { layer: 'near', from: 13, to: 83, base: 180, bough: 50 },
+  nestTree: { layer: 'near', from: 13, to: 83, base: 180, bough: 50, branch: 0 },
   ambient: [
     { kind: 'birds', plane: 'back', period: 1400, y: 46 },
     { kind: 'mist', plane: 'back', y: 152, height: 32, drift: 0.3 },

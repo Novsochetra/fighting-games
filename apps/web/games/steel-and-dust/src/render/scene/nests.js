@@ -3,10 +3,8 @@ import { NEST } from '../../data/nests.js';
 import { drawFxFrame } from '../fx/fx-sheets.js';
 
 const MARGIN = 48;
-// a struck nest still hangs from its branch, trembling under it
-const FRAMES = { hanging: 0, struck: 0, falling: 2, broken: 3 };
-// the hanging frame's branch alone, left on the tree once the nest has torn loose
-const BRANCH = 1;
+// a struck nest still hangs from its tree's branch (drawn with the tree), trembling under it
+const FRAMES = { hanging: 0, struck: 0, falling: 1, broken: 2 };
 
 export function nestFrame(nest) {
   return FRAMES[nest.state];
@@ -23,18 +21,8 @@ export const inView = (nest, cameraX) =>
 export const hangingAt = (nest) => nest.y - NEST.hang;
 
 function drawNest(painter, sheets, nest) {
-  const torn = nest.state === 'falling' || nest.state === 'broken';
   const x = nest.x + tremble(nest);
   const y = hangingAt(nest) + nest.drop;
-
-  if (torn) {
-    drawFxFrame(painter, sheets, {
-      name: 'hornetNest',
-      frame: BRANCH,
-      x: nest.x,
-      y: hangingAt(nest),
-    });
-  }
 
   drawFxFrame(painter, sheets, { name: 'hornetNest', frame: nestFrame(nest), x, y });
 }
