@@ -79,7 +79,7 @@ export const FX_SPRITES = {
   hammerHead: { frameWidth: 101, frameHeight: 85, frames: 1, ticks: 1, anchorX: 50, anchorY: 84 },
   hammerPipe: { frameWidth: 53, frameHeight: 143, frames: 1, ticks: 1, anchorX: 26, anchorY: 143 },
   hornetNest: { frameWidth: 89, frameHeight: 72, frames: 4, ticks: 1, anchorX: 43, anchorY: 71 },
-  hornet: { frameWidth: 49, frameHeight: 39, frames: 4, ticks: 2, anchorX: 20, anchorY: 38 },
+  hornet: { frameWidth: 49, frameHeight: 39, frames: 4, ticks: 2, anchorX: 26, anchorY: 26 },
   quicksand: { frameWidth: 60, frameHeight: 20, frames: 6, ticks: 6, anchorX: 30, anchorY: 19 },
   slagVent: { frameWidth: 46, frameHeight: 119, frames: 10, ticks: 4, anchorX: 23, anchorY: 118 },
   conveyor: { frameWidth: 80, frameHeight: 48, frames: 6, ticks: 1, anchorX: 41, anchorY: 47 },

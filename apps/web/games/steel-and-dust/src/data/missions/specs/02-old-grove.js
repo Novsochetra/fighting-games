@@ -11,6 +11,7 @@ export const OLD_GROVE = {
     {
       // a root crown: a slope up to its top, a sheer step down onto its shoulder and off it
       screens: 2,
+      nests: [690],
       ground: [
         ...contour(60, [
           [90, 18],

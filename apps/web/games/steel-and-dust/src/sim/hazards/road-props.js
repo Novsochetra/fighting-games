@@ -1,4 +1,5 @@
 import { lightKegsIn } from './kegs.js';
+import { knockNestsIn } from './nests.js';
 import { fellTreesIn } from './trees.js';
 
 // the hero's blows, slash waves and shockwaves set off what stands on the road where they reach,
@@ -6,4 +7,5 @@ import { fellTreesIn } from './trees.js';
 export function strikeRoad(game, area, direction) {
   lightKegsIn(game, area);
   fellTreesIn(game, area, direction);
+  knockNestsIn(game, area);
 }
