@@ -2,6 +2,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { FX_SCALE, FX_SPRITES } from '../../../src/data/fx-sprites.js';
+import { SPIKE_TRAP } from '../../../src/data/spike-traps.js';
 import { tileKind } from '../../../src/render/scene/spike-traps.js';
 import { createSpikeTraps } from '../../../src/sim/hazards/spike-traps.js';
 import { readPngAlpha } from '../../support/png-alpha.js';
@@ -19,10 +20,10 @@ const LINE = { left: 1, right: 76 };
 const FAR_EDGE = anchorY;
 const NEAR_EDGE = frameHeight - 1;
 // a row through the back row of slots and one through the front row, and the row the back
-// row's openings start on
-const BACK_SLOTS = 26;
-const FRONT_SLOTS = 37;
-const SLOT_TOP = 24;
+// row's openings start on, down from the far edge
+const BACK_SLOTS = FAR_EDGE + 10;
+const FRONT_SLOTS = FAR_EDGE + 21;
+const SLOT_TOP = FAR_EDGE + 8;
 const SPIKE_HALF = 3;
 // how deep the Mirage Temple road's top is, from the road line to where its brick face begins
 const ROAD_DEPTH = 13;
@@ -94,10 +95,21 @@ function runMiddles(frame, y, isDark) {
 const darkSlot = (colour) => colour !== -1 && ((colour >> 16) & 255) < 120;
 const painted = (colour) => colour !== -1;
 
-// every pixel of the slot's spike over the face, as one string to compare
+// the row the front row's spike tips first show on, under which the two rows of spikes mingle
+function frontTipsRow(frame) {
+  for (let y = 0; y < FAR_EDGE; y++) {
+    if (runMiddles(frame, y, painted).length > 5) {
+      return y;
+    }
+  }
+
+  return FAR_EDGE;
+}
+
+// every pixel of the slot's spike over the front row's tips, as one string to compare
 function spikeOver(frame, slot) {
   const pixels = [];
-  for (let y = 0; y < FAR_EDGE; y++) {
+  for (let y = 0; y < frontTipsRow(frame); y++) {
     for (let x = slot - SPIKE_HALF; x <= slot + SPIKE_HALF; x++) {
       pixels.push(pixelAt(frame, x, y));
     }
@@ -146,12 +158,20 @@ describe('a spike trap as drawn', () => {
 
   it('covers the road from its far edge to its near one, with a front row of slots', () => {
     const back = runMiddles(PHASE.rest, BACK_SLOTS, darkSlot);
-    const front = runMiddles(PHASE.rest, FRONT_SLOTS, darkSlot);
 
     expect(Math.abs((NEAR_EDGE - FAR_EDGE) * FX_SCALE - ROAD_DEPTH)).toBeLessThanOrEqual(1);
     expect(back).toHaveLength(5);
-    expect(front).toHaveLength(5);
-    expect(front.at(-1) - front[0]).toBeGreaterThan(back.at(-1) - back[0]);
+    expect(runMiddles(PHASE.rest, FRONT_SLOTS, darkSlot)).toHaveLength(4);
+  });
+
+  it('sets each slot of its front row between two of the back row, so no spike hides another', () => {
+    const back = runMiddles(PHASE.rest, BACK_SLOTS, darkSlot);
+    const front = runMiddles(PHASE.rest, FRONT_SLOTS, darkSlot);
+
+    front.forEach((slot, i) => {
+      expect(slot - back[i], `front slot ${i}`).toBeGreaterThan(SPIKE_HALF);
+      expect(back[i + 1] - slot, `front slot ${i}`).toBeGreaterThan(SPIKE_HALF);
+    });
   });
 
   it('pushes the same spike up out of every slot', () => {
@@ -171,6 +191,10 @@ describe('a spike trap as drawn', () => {
     expect(rise).toBeLessThan(SLOT_TOP);
     expect(up).toBeLessThan(rise);
     expect(sink).toBeGreaterThan(rise);
+  });
+
+  it('stands its spikes as high over the road as they stab', () => {
+    expect(FAR_EDGE - risenTo(PHASE.up)).toBe(SPIKE_TRAP.height / FX_SCALE);
   });
 
   it('puffs its warning dust up off the face', () => {
