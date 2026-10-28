@@ -3060,12 +3060,12 @@
     }
    ],
    "world": {
-    "particles": "d7e521bfa096ce40",
+    "particles": "f8ebbe0adc5c19cd",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "02eabfc9bc65f996",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "69511890f7002a63",
+    "summons": "537edd06885428d4",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "b533ee19254a5515"
    }
@@ -3231,7 +3231,7 @@
     "floaters": "ad54b801ae03f8d2",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "7af2eea1abb21b59",
+    "summons": "6f60f9a18a42d9aa",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "b533ee19254a5515"
    }
@@ -4078,12 +4078,12 @@
     }
    ],
    "world": {
-    "particles": "99d76aa261819a3e",
+    "particles": "23449f01d79ad1ab",
     "effects": "6232e9c9af2a0a00",
     "floaters": "6332b61d3c3d5d24",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "0dbabc2c9ee8871c",
+    "summons": "85901b6c47375188",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "b533ee19254a5515"
    }
@@ -4249,7 +4249,7 @@
     "floaters": "9641df09c22ac481",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "089183cf9918b3fb",
+    "summons": "d231c260e8183ed6",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "b533ee19254a5515"
    }
@@ -11514,7 +11514,7 @@
     }
    ],
    "world": {
-    "particles": "3efa42596d689e9a",
+    "particles": "eb0624c7d9ea3b04",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "a527cc81285d5cc1",
     "shockwaves": "da39a3ee5e6b4b0d",
@@ -16959,7 +16959,7 @@
     "floaters": "7cfe445d8ea84f76",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "9445499f70a5213e",
+    "summons": "d9664355eb44f098",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "b533ee19254a5515"
    }
@@ -16998,7 +16998,7 @@
     5
    ],
    "camera": [
-    0,
+    0.15016937255859375,
     0,
     0
    ],
@@ -17076,12 +17076,12 @@
     }
    ],
    "world": {
-    "particles": "0afa015dd9fe816c",
-    "effects": "8decbf76bb66a1e5",
-    "floaters": "7de3cf3835e6cd98",
+    "particles": "dec0843c8c9c712d",
+    "effects": "4157512af2376da3",
+    "floaters": "7542c9ce0c72712d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "29dbf37f0fefa51f",
+    "summons": "5dbac4e65855171a",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "b533ee19254a5515"
    }
@@ -17120,7 +17120,7 @@
     4
    ],
    "camera": [
-    0.22525405883789062,
+    0.23001087674629161,
     0,
     6
    ],
@@ -17200,7 +17200,7 @@
    "world": {
     "particles": "9adad8b3f786edbd",
     "effects": "4c6c31c8982785bf",
-    "floaters": "be1c9adb02f42fc5",
+    "floaters": "f2244be2ec06d922",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "29fc905e9a190259",
@@ -17322,7 +17322,7 @@
    "world": {
     "particles": "d887b202a2d6cf14",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "4143933065264169",
+    "floaters": "b5d133500f9615b6",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "37fafbbfa9c16a0c",
@@ -17539,6 +17539,28 @@
      "entering": false,
      "cooldown": 0,
      "spacing": 52.90268717659637
+    },
+    {
+     "kind": "tombguard",
+     "x": 649.8910462482172,
+     "y": 203.05999999999995,
+     "vx": 2.4,
+     "vy": 4.979999999999997,
+     "state": "ko",
+     "stateTime": 0,
+     "hp": 0,
+     "facing": -1,
+     "weapon": "shield",
+     "airborne": true,
+     "move": null,
+     "moveTime": 0,
+     "juggle": 2,
+     "invincible": 0,
+     "hitstop": 0,
+     "token": false,
+     "entering": false,
+     "cooldown": 0,
+     "spacing": 61.16314213257283
     }
    ],
    "world": {
@@ -17547,7 +17569,7 @@
     "floaters": "bcfedbd0af57b05d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "8364b2aff4a216f5",
+    "summons": "bdd863e5d4ca2754",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "b533ee19254a5515"
    }
@@ -17642,12 +17664,12 @@
     }
    ],
    "world": {
-    "particles": "337c5f22a6ac8c11",
+    "particles": "6f694e645c1dbf53",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "c2efb6ef80a8863e",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "9971a0adf0983588",
+    "summons": "91e6771aefd63d82",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "b533ee19254a5515"
    }
@@ -19095,12 +19117,12 @@
    },
    "enemies": [],
    "world": {
-    "particles": "32dab0cbe203de66",
+    "particles": "ed4ef72bbde538e4",
     "effects": "da39a3ee5e6b4b0d",
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "d75dec589c7166d6",
+    "summons": "da39a3ee5e6b4b0d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "b533ee19254a5515"
    }
@@ -20441,231 +20463,231 @@
    "tick": 360,
    "frame": {
     "calls": 1616,
-    "digest": "7309779aa50df72b"
+    "digest": "905513131620d01c"
    }
   },
   {
    "tick": 480,
    "frame": {
     "calls": 1973,
-    "digest": "37727c72fb1e6608"
+    "digest": "008c5f1f0caadf0e"
    }
   },
   {
    "tick": 600,
    "frame": {
     "calls": 1760,
-    "digest": "19e3c37ea214833d"
+    "digest": "eb91930e09dcaeac"
    }
   },
   {
    "tick": 720,
    "frame": {
     "calls": 1705,
-    "digest": "15105ca6a07c4f18"
+    "digest": "48590e74f494c1e4"
    }
   },
   {
    "tick": 840,
    "frame": {
     "calls": 1711,
-    "digest": "f23c8c550aae76c3"
+    "digest": "42eb45f357d807cf"
    }
   },
   {
    "tick": 960,
    "frame": {
     "calls": 1692,
-    "digest": "57b8024aac0e4999"
+    "digest": "0a26f9de3825d963"
    }
   },
   {
    "tick": 1080,
    "frame": {
     "calls": 1472,
-    "digest": "71522d16cf279ed9"
+    "digest": "b8a8f74e00b99a75"
    }
   },
   {
    "tick": 1200,
    "frame": {
     "calls": 1664,
-    "digest": "68327ff91600b558"
+    "digest": "9dae7b1f07bce5ff"
    }
   },
   {
    "tick": 1320,
    "frame": {
     "calls": 3327,
-    "digest": "b820b67f89afe03c"
+    "digest": "08f408ea8bd27073"
    }
   },
   {
    "tick": 1440,
    "frame": {
     "calls": 2090,
-    "digest": "82756b105b07ff46"
+    "digest": "751eb5c2092b913a"
    }
   },
   {
    "tick": 1560,
    "frame": {
     "calls": 1495,
-    "digest": "6f556464de0312b9"
+    "digest": "7940e8a9f36ab5c0"
    }
   },
   {
    "tick": 1680,
    "frame": {
     "calls": 1605,
-    "digest": "523bddef7d0c79b4"
+    "digest": "8b19a882fba892eb"
    }
   },
   {
    "tick": 1800,
    "frame": {
     "calls": 1603,
-    "digest": "8d82a8e026873800"
+    "digest": "46f30adb190ccaea"
    }
   },
   {
    "tick": 1920,
    "frame": {
     "calls": 1503,
-    "digest": "c4911997f8036bf5"
+    "digest": "b2b1246ee5fbdb32"
    }
   },
   {
    "tick": 2040,
    "frame": {
     "calls": 1598,
-    "digest": "c2be60f3c7f2e6c4"
+    "digest": "ae860a3638f5c2d6"
    }
   },
   {
    "tick": 2160,
    "frame": {
     "calls": 1483,
-    "digest": "b4b906f4a61dc051"
+    "digest": "200f9965fb5fe9bf"
    }
   },
   {
    "tick": 2280,
    "frame": {
     "calls": 1520,
-    "digest": "3230ed10bd3eacaf"
+    "digest": "d56f614231597295"
    }
   },
   {
    "tick": 2400,
    "frame": {
     "calls": 1585,
-    "digest": "febc77603554f051"
+    "digest": "7ca94c28015b6800"
    }
   },
   {
    "tick": 2520,
    "frame": {
     "calls": 1439,
-    "digest": "5c599982bbbf4da1"
+    "digest": "e3d309dfc79996d9"
    }
   },
   {
    "tick": 2640,
    "frame": {
     "calls": 1320,
-    "digest": "96e78fbdc3e5249a"
+    "digest": "17d4d35bb192faaf"
    }
   },
   {
    "tick": 2760,
    "frame": {
     "calls": 1644,
-    "digest": "bb8cf3acba917b39"
+    "digest": "6c726fb87d2b68d5"
    }
   },
   {
    "tick": 2880,
    "frame": {
     "calls": 1233,
-    "digest": "243349faecae50ad"
+    "digest": "af8365d14ae5b952"
    }
   },
   {
    "tick": 3000,
    "frame": {
     "calls": 1197,
-    "digest": "0ce8cdf95a6ce293"
+    "digest": "b5a5ea7862cfa3aa"
    }
   },
   {
    "tick": 3120,
    "frame": {
     "calls": 1172,
-    "digest": "f2cf74429ba8287e"
+    "digest": "3870942a2db5acd2"
    }
   },
   {
    "tick": 3240,
    "frame": {
     "calls": 2529,
-    "digest": "42cba54023d50a4a"
+    "digest": "fae60d63ee77ee96"
    }
   },
   {
    "tick": 3360,
    "frame": {
     "calls": 1149,
-    "digest": "a8d7611cb73f1562"
+    "digest": "54c40bd300ed14da"
    }
   },
   {
    "tick": 3480,
    "frame": {
     "calls": 1104,
-    "digest": "7db99bb21feca287"
+    "digest": "0d19e39f2b015ac2"
    }
   },
   {
    "tick": 3600,
    "frame": {
     "calls": 1469,
-    "digest": "945ad98309e7a9e7"
+    "digest": "0b7ee9aa4d0563d1"
    }
   },
   {
    "tick": 3720,
    "frame": {
-    "calls": 1430,
-    "digest": "cf26301f1eeafaee"
+    "calls": 1454,
+    "digest": "d380d077fa55cbd2"
    }
   },
   {
    "tick": 3840,
    "frame": {
-    "calls": 2195,
-    "digest": "53e1064dc87d5e6f"
+    "calls": 2200,
+    "digest": "86582fa2b69776c1"
    }
   },
   {
    "tick": 3960,
    "frame": {
     "calls": 1255,
-    "digest": "b389501fa8d8b589"
+    "digest": "7b575d7a5c09248a"
    }
   },
   {
    "tick": 4080,
    "frame": {
     "calls": 2169,
-    "digest": "3a1de8317893cbc4"
+    "digest": "0d812bd2c878a792"
    }
   },
   {
    "tick": 4200,
    "frame": {
     "calls": 1086,
-    "digest": "f6a32f41d54a8b01"
+    "digest": "3d6dc07887140fa7"
    }
   },
   {

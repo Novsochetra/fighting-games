@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { PAINTED_THEMES } from '../../../src/art/painted-themes/index.js';
+import { GROUND_Y } from '../../../src/config.js';
+import { MOAT_LEVEL } from '../../../src/data/missions/moats.js';
 import { createPainter } from '../../../src/render/painter.js';
 import { drawMoats } from '../../../src/render/scene/moats.js';
 import { createRecordingContext } from '../../support/recording-canvas.js';
@@ -9,7 +11,9 @@ import { createRecordingContext } from '../../support/recording-canvas.js';
 // painted behind it. The breach now shows that painted moat itself, and all that is drawn in it is
 // the light on its ripples along the waterline: the lake's own glints, flashing and fading
 const { glints } = PAINTED_THEMES.angkorWat.ambient;
-const SPAN = { from: 200, to: 244, level: 190 };
+const SPAN = { from: 200, to: 244, level: MOAT_LEVEL };
+// the painted moat's waterline seen through the breach, just under the road
+const WATERLINE = GROUND_Y + 6;
 const CAMERA_X = 100;
 const TICKS = 900;
 
@@ -61,8 +65,8 @@ describe('the water in the Angkor moat’s breach', () => {
     expect(dashes.length).toBeGreaterThan(0);
     for (const dash of dashes) {
       expect(glints).toContain(dash.color);
-      expect(dash.y).toBeGreaterThanOrEqual(SPAN.level - 2);
-      expect(dash.y).toBeLessThanOrEqual(SPAN.level + 6);
+      expect(dash.y).toBeGreaterThanOrEqual(WATERLINE - 2);
+      expect(dash.y).toBeLessThanOrEqual(WATERLINE + 6);
     }
   });
 

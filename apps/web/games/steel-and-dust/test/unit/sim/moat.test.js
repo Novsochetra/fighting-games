@@ -58,10 +58,29 @@ describe('a raider that falls in the moat', () => {
 
     updateMoat(game);
 
-    expect(raider).toMatchObject({ removed: true, state: 'ko' });
+    expect(raider.state).toBe('ko');
     expect(game.score).toBeGreaterThan(score + MOAT.ringOutBonus);
     expect(soundKeys(sounds)).toEqual(expect.arrayContaining(['splash', 'ko']));
     expect(game.floaters.map((floater) => floater.text)).toContain('Ring out!');
+  });
+
+  it('sinks on through the water rather than hopping up off it, gone once over its head', () => {
+    const { game } = moatGame();
+    const raider = fallingIn(spawnEnemy(game, 'grunt', FROM + 10), FROM + 10);
+    raider.vy = 4;
+
+    updateMoat(game);
+
+    expect(raider).toMatchObject({ vx: 0, vy: 4, removed: false });
+
+    raider.y = MOAT_LEVEL + MOAT.raiderHeight * raider.scale - 1;
+    updateMoat(game);
+    expect(raider.removed).toBe(false);
+
+    raider.y += 1;
+    updateMoat(game);
+    expect(raider.removed).toBe(true);
+    expect(game.summons.filter((summon) => summon.kind === 'splash')).toHaveLength(1);
   });
 
   it('leaves its purse on the nearer bank, rolling away from the water', () => {
@@ -85,8 +104,9 @@ describe('a raider that falls in the moat', () => {
 
     updateMoat(game);
 
-    expect(raider.removed).toBe(true);
+    expect(raider).toMatchObject({ state: 'ko', removed: false });
     expect(game.score).toBe(score);
+    expect(game.floaters.map((floater) => floater.text)).not.toContain('Ring out!');
   });
 });
 

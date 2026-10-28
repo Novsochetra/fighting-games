@@ -1,9 +1,12 @@
-import { GROUND_Y, VIEW_HEIGHT } from '../../config.js';
+import { VIEW_HEIGHT } from '../../config.js';
 
-// the water lies a little below the road, under the lip of the causeway it cuts through
-export const MOAT_LEVEL = GROUND_Y + 6;
-// the bed is out of sight, so nothing ever lands on it: whatever falls in reaches the water first
-const MOAT_BED = VIEW_HEIGHT + 48;
+// the water lies at the foot of the pit the breach cuts, just under the bottom of the screen and
+// deeper than the hardest shake lifts the screen, so all that is ever seen of it is the splash a
+// body throws up as it falls in
+export const MOAT_LEVEL = VIEW_HEIGHT + 8;
+// the bed lies deeper than any raider sinks before the water closes over its head, so nothing
+// ever lands on it
+const MOAT_BED = MOAT_LEVEL + 120;
 
 // a zone's `moats` are [from, to] offsets from its left wall, cut through the road to the water
 export function carveMoats(zoneSpecs, zones, heights) {

@@ -1,6 +1,5 @@
 import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
-import { VIEW_HEIGHT } from '../../config.js';
 import { FX_SCALE, FX_SPRITES } from '../../data/fx-sprites.js';
 import { MOAT, MOAT_SPLASH } from '../../data/moat.js';
 import { knockOut } from '../combat/knock-out.js';
@@ -23,7 +22,7 @@ function splashX(water, x) {
 function splash(game, x, water) {
   const at = splashX(water, x);
 
-  addSplash(game, { x: at, y: VIEW_HEIGHT + MOAT_SPLASH.sunk });
+  addSplash(game, { x: at, y: water.level });
   game.io.sfx('splash', false, { x: at });
 }
 
@@ -59,19 +58,30 @@ function washAshore(pieces, bank) {
   }
 }
 
-// a raider already knocked out just sinks; one still fighting is out at once
+// a raider already knocked out just sinks; one still fighting is out at once. Either sinks on
+// down through the water, out of sight under its splash, rather than hopping up off it as a body
+// knocked out on the road does
 function ringOut(game, raider, water) {
+  const height = MOAT.raiderHeight * raider.scale;
+  const sinking = { vx: 0, vy: Math.max(0, raider.vy), sinksTo: water.level + height };
+
   if (raider.state !== 'ko') {
     const spilled = game.loot.length;
 
     knockOut(game, raider, Math.sign(raider.vx) || raider.facing);
     washAshore(game.loot.slice(spilled), bankBeside(game, water, raider.x));
     game.score += MOAT.ringOutBonus;
-    const y = raider.y - 56 * raider.scale;
+    const y = raider.y - height;
     addFloatText(game, { x: raider.x, y, text: 'Ring out!', color: COLORS.gold });
   }
 
-  raider.removed = true;
+  Object.assign(raider, sinking);
+}
+
+function sinkAway(raider) {
+  if (raider.y >= raider.sinksTo) {
+    raider.removed = true;
+  }
 }
 
 function sinks(game, piece) {
@@ -84,6 +94,15 @@ function sinks(game, piece) {
   addSparks(game, { x: piece.x, y: water.level, count: 2, color: FX_COLORS.foam, speed: 1 });
 
   return true;
+}
+
+function plunge(game, fighter, water) {
+  splash(game, fighter.x, water);
+  if (fighter.side === 'player' || fighter.def.boss) {
+    climbOut(game, fighter, water);
+  } else {
+    ringOut(game, fighter, water);
+  }
 }
 
 // the ultimate places the hero itself, wherever it likes
@@ -99,15 +118,10 @@ export function updateMoat(game) {
   for (const fighter of game.fighters) {
     const water = waterAt(game.terrain, fighter.x);
 
-    if (!fallsIn(fighter, water)) {
-      continue;
-    }
-
-    splash(game, fighter.x, water);
-    if (fighter.side === 'player' || fighter.def.boss) {
-      climbOut(game, fighter, water);
-    } else {
-      ringOut(game, fighter, water);
+    if (fighter.sinksTo) {
+      sinkAway(fighter);
+    } else if (fallsIn(fighter, water)) {
+      plunge(game, fighter, water);
     }
   }
 

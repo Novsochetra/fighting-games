@@ -54,7 +54,7 @@ describe('the moat across the Naga Causeway', () => {
       x: raider.x,
       y: raider.y,
     });
-    runTicks(game, 40);
+    runTicks(game, 60);
 
     expect(raider.hp).toBeGreaterThan(0);
     expect(game.fighters).not.toContain(raider);
