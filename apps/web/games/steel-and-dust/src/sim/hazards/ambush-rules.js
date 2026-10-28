@@ -1,10 +1,3 @@
-const STOMP_HIT = {
-  knockback: [2.2, -2.6],
-  knockAway: true,
-  knockdown: true,
-  hitstop: 6,
-  hitstun: 20,
-};
 const ERUPT_HIT = {
   knockback: [1.4, -4.6],
   knockAway: true,
@@ -15,13 +8,12 @@ const ERUPT_HIT = {
 
 // the raiders' ambushes (drop-marks.js, mounds.js), read with the rest in shot-rules.js
 export const AMBUSH_RULES = {
-  // the shadow strikes nothing until its raider lands on it and stomps
+  // the shadow strikes nothing itself: its raider lands striking (dropSlam in raider-moves.js)
   dropMark: {
     range: 240,
-    area: (mark) => ({ x: mark.x - 10, y: mark.y - 18, width: 20, height: 18 }),
-    hit: STOMP_HIT,
-    enemyWeapon: 'hammer',
-    armed: (mark) => mark.stomp > 0,
+    area: (mark) => ({ x: mark.x, y: mark.y, width: 0, height: 0 }),
+    hit: null,
+    enemyWeapon: 'none',
   },
   // the mound only strikes as it bursts
   mound: {

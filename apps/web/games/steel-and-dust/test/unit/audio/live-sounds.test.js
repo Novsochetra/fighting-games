@@ -61,6 +61,8 @@ describe('live sounds', () => {
         'hypnosis',
         'dig',
         'eruption',
+        'rustle',
+        'branchSnap',
         'buzz',
         'howl',
         'zap',

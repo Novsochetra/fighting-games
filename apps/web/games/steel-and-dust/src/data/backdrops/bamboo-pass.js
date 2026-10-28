@@ -2,6 +2,8 @@ export const BAMBOO_PASS = {
   folder: 'bamboo-pass',
   groundTop: 1,
   cliff: true,
+  // the painted trees overhead reach this far down: it rustles over a raider about to drop
+  canopy: 104,
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },

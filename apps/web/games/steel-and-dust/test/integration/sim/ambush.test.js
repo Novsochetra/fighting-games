@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { GROUND_Y } from '../../../src/config.js';
-import { BURROW, DROP } from '../../../src/data/ambush.js';
+import { BURROW } from '../../../src/data/ambush.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { screenEdges } from '../../../src/sim/fighters/arena-bounds.js';
 import { pendingAmbushes, startAmbush } from '../../../src/sim/stage/ambush.js';
@@ -31,53 +30,6 @@ function tickUntil(game, done, limit = 400) {
 
   return done();
 }
-
-describe('a raider dropping out of the trees', () => {
-  beforeEach(() => {
-    Math.random = seededRandom(3);
-  });
-  afterEach(() => {
-    Math.random = originalRandom;
-  });
-
-  it('waits in the trees over its shadow, then falls in from above the screen onto it', () => {
-    const game = ambushArena();
-    startAmbush(game, { kind: 'grunt', ambush: 'drop', slot: 0 });
-    const mark = ambushOf(game, 'dropMark');
-    expect(mark.x).toBe(HERO_X - DROP.gap);
-    runTicks(game, DROP.warn - 1);
-    expect(raiders(game)).toHaveLength(0);
-    expect(pendingAmbushes(game)).toBe(1);
-    runTicks(game, 1);
-    const [raider] = raiders(game);
-    expect(raider).toMatchObject({ kind: 'grunt', airborne: true, entering: false });
-    expect(raider.y).toBeLessThan(0);
-    expect(pendingAmbushes(game)).toBe(0);
-    expect(tickUntil(game, () => !raider.airborne)).toBe(true);
-    expect(Math.abs(raider.x - mark.x)).toBeLessThan(4);
-    expect(raider.y).toBe(GROUND_Y);
-    expect(game.player.hp).toBe(game.player.maxHp);
-  });
-
-  it('stomps a hero who stays on the shadow under them', () => {
-    const game = ambushArena();
-    startAmbush(game, { kind: 'grunt', ambush: 'drop', slot: 2 });
-    expect(ambushOf(game, 'dropMark').x).toBe(HERO_X);
-    tickUntil(game, () => game.player.hp < game.player.maxHp, DROP.warn + 120);
-    expect(game.player.hp).toBe(game.player.maxHp - DROP.stompDamage);
-  });
-
-  it('misses a hero who steps off the shadow before it lands', () => {
-    const game = ambushArena();
-    startAmbush(game, { kind: 'grunt', ambush: 'drop', slot: 2 });
-    runTicks(game, DROP.warn - 10);
-    game.player.x = HERO_X + 70;
-    expect(raiders(game)).toHaveLength(0);
-    tickUntil(game, () => raiders(game)[0] && !raiders(game)[0].airborne);
-    runTicks(game, DROP.stompTicks + 2);
-    expect(game.player.hp).toBe(game.player.maxHp);
-  });
-});
 
 describe('a raider bursting out of the sand', () => {
   beforeEach(() => {

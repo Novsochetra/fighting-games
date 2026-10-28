@@ -10,6 +10,8 @@ const AIR_FRAME_BY_SPEED = [
 // no sheet has a jump strip: a hop rises on the walk's knee-up frame and comes down on its stride
 const HOP_RISE_FRAME = 1;
 const HOP_FALL_FRAME = 0;
+// a raider dropping out of the trees falls with its weapon raised, the first frame of its swing
+const DROP_FRAME = 1;
 
 function lastFrame(sprite, name) {
   return sprite.strips[name].frames - 1;
@@ -33,6 +35,10 @@ function airFrame(fighter, sprite) {
 }
 
 function hopFrame(fighter) {
+  if (fighter.dropping) {
+    return ['attack', DROP_FRAME];
+  }
+
   return ['walk', fighter.vy < 0 ? HOP_RISE_FRAME : HOP_FALL_FRAME];
 }
 

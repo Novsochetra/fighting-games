@@ -22,10 +22,15 @@ function zoomOf(camera) {
 export function createCameraTransform(context, game) {
   const shake = shakeOffset(game);
   const zoom = zoomOf(game.camera);
-  return function setLayer(offsetX, shaken) {
+  const setLayer = (offsetX, shaken) => {
     const scale = RENDER_SCALE * zoom.scale;
     const x = RENDER_SCALE * (zoom.scale * offsetX + zoom.x + (shaken ? shake.x : 0));
     const y = RENDER_SCALE * (zoom.scale * 0 + zoom.y + (shaken ? shake.y : 0));
     context.setTransform(scale, 0, 0, scale, x, y);
   };
+
+  // a drawer laying pieces of a shaken layer over a still one needs the shake itself
+  setLayer.shake = shake;
+
+  return setLayer;
 }

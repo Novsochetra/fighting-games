@@ -2,6 +2,8 @@ export const OLD_GROVE = {
   folder: 'old-grove',
   groundTop: 8,
   cliff: true,
+  // the painted trees overhead reach this far down: it rustles over a raider about to drop
+  canopy: 72,
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },

@@ -11,6 +11,7 @@ import { missionOf } from '../sim/stage/mission.js';
 import { drawAmbient } from './scene/ambient/index.js';
 import { sceneLoaded } from './scene-loaded.js';
 import { backdropFor } from './scene/backdrop.js';
+import { drawCanopyRustle } from './scene/canopy-rustle.js';
 import { drawForeground } from './scene/foreground/index.js';
 import { drawPaintedBackdrop, drawPaintedFronts } from './scene/painted-backdrop.js';
 import { scenePalette } from './scene/scene-palette.js';
@@ -39,6 +40,7 @@ export function renderFrame(game, view) {
   const { theme } = missionOf(game);
   const scene = { game, backdrop: backdropFor(view, theme), theme, cameraX };
   drawPaintedBackdrop(painter, setLayer, scene);
+  drawCanopyRustle(painter, setLayer, scene);
   drawAir(painter, setLayer, scene, 'back');
   setLayer(-cameraX, true);
   drawWorld(painter, { game, view, cameraX });

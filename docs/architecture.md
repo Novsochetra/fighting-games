@@ -625,9 +625,20 @@ length.
   locked screen, or what the camera shows of a wide zone. Raiders walk in from just past it.
 - A wave in a spec may be an ambush instead (`dropIn` or `burrowIn`, `src/data/missions/ambushes.js`;
   timings in `src/data/ambush.js`), whose raiders come in mid-screen (`src/sim/stage/ambush.js`).
-  Out of the trees (Old Grove, Bamboo Pass, Firefly Hollow), each raider's spot round the hero is
-  marked as a pounce's is, its shadow growing under a blinking red bar while leaves shake down, then
-  it falls in from above the screen and stomps the spot (`src/sim/hazards/drop-marks.js`). Out of
+  Out of the trees (Old Grove, Bamboo Pass, Firefly Hollow), each raider's spot round the hero
+  first gathers a faint shadow while the road's own painted trees rustle over it: a backdrop with a
+  `canopy` (how far down its trees reach) has the patch above the spot redrawn, layer by layer, with
+  its nearer layers swayed and sagged as one, fading to nothing at the patch's edges and foot so
+  no seam shows, on the still screen with the shake sampled in, and before the air, so light
+  shafts, motes and mist still pass in front (`src/render/scene/canopy-rustle.js`). The road's own
+  leaves (its `ambient.leaves`) drift down from the canopy and come to rest on the ground, and a
+  night road with fireflies startles some out of the branches (`src/sim/fx/canopy-fx.js`, drawn as
+  the roads' own ambient leaves and fireflies are, from the seeded `fxRandom`, so they never change
+  a fight). For its last ticks the shadow is marked red as every danger is; then the branch snaps,
+  throwing leaves, and the raider falls from above the screen with its weapon raised (the first frame
+  of its attack strip) and lands striking, in a `dropSlam` that knocks a hero still on the spot away
+  (`src/sim/hazards/drop-marks.js`), the soil puffing up in the road's own color; `rustle`,
+  `branchSnap` and a thud go with it (`src/audio/live/ambush-sounds.js`). Out of
   the sand (Sandstorm Pass, Mirage Temple), it digs in at a screen edge and its mound crawls after
   the hero, stops to shake, and bursts it up, throwing a hero who stayed on it
   (`src/sim/hazards/mounds.js`, the mound cut from the Scorpion Queen's burrow frames). Both are

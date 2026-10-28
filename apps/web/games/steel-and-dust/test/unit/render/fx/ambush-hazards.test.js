@@ -22,24 +22,28 @@ function drawn(draw, shot) {
   return log;
 }
 
-const mark = (fields) => ({ x: 120, y: GROUND_Y, raider: null, landed: false, ...fields });
+const mark = (fields) => ({ x: 120, y: GROUND_Y, raider: null, ...fields });
 const widest = (log) => Math.max(...drawnRects(log).map((rect) => rect.width));
+const isRed = (log) => drawnRects(log).some((rect) => rect.color === COLORS.red);
 const mound = (fields) => ({ x: 200, y: GROUND_Y, direction: 1, haltAt: 0, eruptAt: 0, ...fields });
 const moundDrawnAt = (log) => log.find((entry) => entry.startsWith('translate('));
 
 describe('the spot a raider drops on', () => {
-  it('is marked red, and its shadow grows as the raider is about to fall', () => {
-    const early = drawn(drawDropMark, mark({ time: 2 }));
-    const late = drawn(drawDropMark, mark({ time: DROP.warn - 2 }));
-    expect(drawnRects(early).some((rect) => rect.color === COLORS.red)).toBe(true);
-    expect(widest(late)).toBeGreaterThan(widest(early));
+  it('only gathers a shadow while the raider settles in the trees, widening as it waits', () => {
+    const first = drawn(drawDropMark, mark({ time: 2 }));
+    const later = drawn(drawDropMark, mark({ time: DROP.warn - DROP.markFrom - 1 }));
+
+    expect(isRed(first) || isRed(later)).toBe(false);
+    expect(widest(later)).toBeGreaterThan(widest(first));
   });
 
-  it('follows the falling raider down, and is gone once it lands', () => {
+  it('is marked red as every danger is for its last ticks, and as the raider comes down', () => {
+    const ready = drawn(drawDropMark, mark({ time: DROP.warn - DROP.markFrom }));
     const high = drawn(drawDropMark, mark({ time: 80, raider: { y: 10 } }));
     const low = drawn(drawDropMark, mark({ time: 90, raider: { y: GROUND_Y - 10 } }));
+
+    expect([ready, high, low].every(isRed)).toBe(true);
     expect(widest(low)).toBeGreaterThan(widest(high));
-    expect(drawn(drawDropMark, mark({ time: 95, landed: true }))).toEqual([]);
   });
 });
 

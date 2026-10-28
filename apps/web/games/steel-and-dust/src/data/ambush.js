@@ -7,8 +7,15 @@ export const DROP = {
   // raiders of one wave fall round the hero this far apart, in turn on either side
   gap: 44,
   fromY: -24,
-  stompTicks: 6,
-  stompDamage: 8,
+  // its shadow is only a shadow at first, marked red as every danger is for the last ticks
+  markFrom: 24,
+  // leaves are shaken loose this high in the canopy, and another every `leafEvery` ticks
+  leafTop: 20,
+  leafBottom: 40,
+  leafEvery: 4,
+  // the leaves the branch throws as it gives way, and the fireflies a night road startles out
+  burst: 10,
+  fireflies: 5,
 };
 
 export const BURROW = {

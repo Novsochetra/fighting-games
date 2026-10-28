@@ -1,14 +1,18 @@
-import { FX_COLORS } from '../../art/fx-colors.js';
+import { PAINTED_THEMES } from '../../art/painted-themes/index.js';
 import { DROP } from '../../data/ambush.js';
+import { startMove } from '../fighters/actions.js';
 import { onScreen } from '../fighters/arena-bounds.js';
 import { shake } from '../fx/camera-fx.js';
-import { addDust } from '../fx/particles.js';
+import { burstLeaves, kickLeaves, puffSoil, shedLeaf, startleFireflies } from '../fx/canopy-fx.js';
+import { missionOf } from '../stage/mission.js';
 import { spawnRaiderAt } from '../stage/spawn-enemy.js';
 import { floorBelow } from '../stage/terrain.js';
 
 const MARGIN = 18;
-// a raider knocked about in the air never lands its stomp
+// a raider knocked about in the air never lands its slam
 const FALLING = new Set(['air', 'idle', 'walk']);
+// the leaves rustle as the raider settles on the branch, and again as it gets ready to jump
+const RUSTLES = [1, DROP.warn - 26];
 
 // the spot a raider will drop on: the first floor from the sky down, a deck or the road
 export function markDrop(game, { kind, x }) {
@@ -22,56 +26,70 @@ export function markDrop(game, { kind, x }) {
     side: 'enemy',
     time: 0,
     raider: null,
-    landed: false,
-    stomp: 0,
-    damage: DROP.stompDamage,
     hitTargets: new Set(),
   });
 }
 
-// leaves shaken out of the canopy over the spot, swaying a little as they fall
-function shakeLeaves(game, mark) {
-  if (mark.time % 3 !== 0) {
-    return;
+// the road's own leaves, its soil, and its fireflies if it has them
+const roadOf = (game) => PAINTED_THEMES[missionOf(game).theme];
+
+function rustle(game, mark) {
+  const { ambient } = roadOf(game);
+
+  if (ambient.leaves && mark.time % DROP.leafEvery === 0) {
+    shedLeaf(game, { x: mark.x, colors: ambient.leaves });
   }
 
-  const spread = ((mark.time * 7) % 25) - 12;
+  if (mark.time === 1 && ambient.fireflies) {
+    startleFireflies(game, { x: mark.x, colors: ambient.fireflies });
+  }
 
-  game.particles.push({
-    kind: 'leaf',
-    x: mark.x + spread,
-    y: (mark.time * 3) % 20,
-    vx: 0.7,
-    vy: 1.5,
-    life: 96,
-    maxLife: 96,
-    color: mark.time % 6 ? FX_COLORS.canopyLeaf : FX_COLORS.canopyLeafDark,
-  });
+  if (RUSTLES.includes(mark.time)) {
+    game.io.sfx('rustle', false, { x: mark.x });
+  }
 }
 
-// the raider falls in from above the screen, too high to be reached until it comes down
+// the branch gives way and the raider drops out of the leaves, weapon raised
 function release(game, mark) {
   const raider = spawnRaiderAt(game, mark.raiderKind, { x: mark.x, y: DROP.fromY });
+  const { ambient } = roadOf(game);
 
-  Object.assign(raider, { airborne: true, state: 'air', vx: 0, vy: 0 });
+  Object.assign(raider, { airborne: true, state: 'air', vx: 0, vy: 0, dropping: true });
   mark.raider = raider;
+  if (ambient.leaves) {
+    burstLeaves(game, { x: mark.x, colors: ambient.leaves });
+  }
+
+  if (ambient.fireflies) {
+    startleFireflies(game, { x: mark.x, colors: ambient.fireflies });
+  }
+
+  game.io.sfx('branchSnap', false, { x: mark.x });
 }
 
-function stomp(game, mark) {
+// it lands striking, on the spot round both its sides
+function land(game, mark) {
   const { raider } = mark;
+  const { ambient, ground } = roadOf(game);
 
-  Object.assign(mark, { x: raider.x, y: raider.y, landed: true, stomp: DROP.stompTicks });
+  Object.assign(mark, { x: raider.x, y: raider.y, dead: true });
+  raider.dropping = false;
+  startMove(game, raider, 'dropSlam');
+  puffSoil(game, { x: raider.x, y: raider.y, soil: ground.sand });
+  if (ambient.leaves) {
+    kickLeaves(game, { x: raider.x, y: raider.y, colors: ambient.leaves });
+  }
+
   shake(game, 2, 8);
-  addDust(game, { x: raider.x, y: raider.y, count: 10 });
   game.io.sfx('blunt', false, { x: raider.x });
 }
 
-// the shadow grows while the leaves come down, the raider drops onto it and stomps the spot
+// the trees rustle over the spot while its shadow grows, then the raider drops onto it
 export function holdDropMark(game, mark) {
   if (!mark.raider) {
     mark.x = onScreen(game, mark.x, MARGIN);
     mark.y = floorBelow(game.terrain, mark.x, -Infinity);
-    shakeLeaves(game, mark);
+    rustle(game, mark);
     if (mark.time >= DROP.warn) {
       release(game, mark);
     }
@@ -79,16 +97,12 @@ export function holdDropMark(game, mark) {
     return;
   }
 
-  if (mark.landed) {
-    mark.dead = --mark.stomp <= 0;
-    return;
-  }
-
   const { raider } = mark;
 
   if (raider.removed || !FALLING.has(raider.state)) {
+    raider.dropping = false;
     mark.dead = true;
   } else if (!raider.airborne) {
-    stomp(game, mark);
+    land(game, mark);
   }
 }

@@ -1,3 +1,4 @@
+import { AMBUSH_SOUNDS } from './ambush-sounds.js';
 import { BAYON_SOUNDS } from './bayon-sounds.js';
 import { BOSS_SOUNDS } from './boss-sounds.js';
 import { ELEMENT_SOUNDS } from './element-sounds.js';
@@ -25,6 +26,7 @@ export const LIVE_SOUNDS = {
   ...WARDEN_SOUNDS,
   ...BAYON_SOUNDS,
   ...MOAT_SOUNDS,
+  ...AMBUSH_SOUNDS,
 };
 
 export function isLiveSound(key) {

@@ -107,4 +107,15 @@ export const RAIDER_MOVES = {
       backFoot: -8,
     },
   }),
+  // a raider dropping out of the trees lands striking, on the spot round both its sides
+  // (src/sim/hazards/drop-marks.js)
+  dropSlam: defineMove({
+    name: 'Drop Slam',
+    frames: [1, 6, 16],
+    damage: 8,
+    hitbox: [-12, -22, 24, 22],
+    knockback: [2.2, -2.6],
+    knockAway: true,
+    knockdown: true,
+  }),
 };

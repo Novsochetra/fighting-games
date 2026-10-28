@@ -36,9 +36,31 @@ const MOVE_PARTICLE = {
     particle.y += particle.vy;
   },
 
-  // a leaf shaken out of the canopy rocks from side to side as it drifts down
-  leaf(particle) {
-    particle.x += particle.vx * Math.sin(particle.life * 0.15);
+  // a leaf thrown about slows to its own drift, rocks from side to side and lies where it lands
+  leaf(particle, terrain) {
+    if (particle.resting) {
+      return;
+    }
+
+    const lastY = particle.y;
+
+    particle.vy += (particle.fall - particle.vy) * 0.08;
+    particle.vx *= 0.94;
+    particle.x += particle.vx + Math.sin(particle.life * 0.12 + particle.phase) * particle.sway;
+    particle.y += particle.vy;
+
+    const floor = floorBelow(terrain, particle.x, lastY);
+
+    if (particle.y >= floor) {
+      Object.assign(particle, { y: floor - 1, resting: true });
+    }
+  },
+
+  // a startled firefly darts off, slows and drifts upward as it settles
+  firefly(particle) {
+    particle.vx *= 0.96;
+    particle.vy = particle.vy * 0.96 - 0.004;
+    particle.x += particle.vx + Math.sin(particle.life * 0.1 + particle.phase) * 0.2;
     particle.y += particle.vy;
   },
 };

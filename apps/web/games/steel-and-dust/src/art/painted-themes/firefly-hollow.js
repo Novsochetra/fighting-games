@@ -4,5 +4,7 @@ export const FIREFLY_HOLLOW = {
     fireflies: ['#f4ff9a', '#c8f060'],
     mist: '#a6abd6',
     mote: '#c5c7e4',
+    // moonlit leaves, shaken down only by a raider about to drop
+    leaves: ['#2f565b', '#4a7f78', '#6aa59a'],
   },
 };

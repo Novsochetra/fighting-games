@@ -46,6 +46,7 @@ export function loadPaintedBackdrop(loaders, spec) {
     fronts: (spec.fronts ?? []).map((layer) => loadLayer(loaders, spec.folder, layer)),
     ground,
     cliff: spec.cliff ? loadCliff(loaders, spec.folder) : null,
+    canopy: spec.canopy ?? 0,
     ambient: spec.ambient,
   };
 }

@@ -53,6 +53,7 @@ describe('move tables', () => {
       'toss',
       'bash',
       'charge',
+      'dropSlam',
       'pipe',
       'claw',
       'pounce',
