@@ -44,6 +44,24 @@ describe('a spike trap as drawn', () => {
     expect(topRow(PHASE.sink)).toBeGreaterThanOrEqual(GRATE_TOP);
   });
 
+  it('is let into the road: narrower at its far edge, which is dark, than at its lit near edge', () => {
+    const nearEdge = frameHeight - 1;
+    const width = (y) => {
+      let count = 0;
+      for (let x = 0; x < frameWidth; x++) {
+        count += art.alpha(x, y) ? 1 : 0;
+      }
+
+      return count;
+    };
+    const brightness = (y) =>
+      art.rgb(Math.floor(frameWidth / 2), y).reduce((sum, value) => sum + value);
+
+    expect(width(GRATE_TOP)).toBeLessThan(width(nearEdge));
+    expect(width(nearEdge)).toBe(frameWidth);
+    expect(brightness(GRATE_TOP)).toBeLessThan(brightness(nearEdge));
+  });
+
   it('pushes the same spike up out of every slot', () => {
     const middle = spikeColumns(PHASE.up, SLOTS[2]);
 
