@@ -79,6 +79,22 @@ changing structure.
 - Changing game behavior on purpose (balance, new moves) changes the recorded runs in
   `test/regression/fixtures/`: update them with `npm run test:regression -- -u` and review the diff.
 
+## Versions
+
+The arcade's version is SemVer, the `version` in the root `package.json`; each build adds its
+commit after a `+` (`1.0.0+5f272d9`, see "The build" in `docs/architecture.md`). Raise it without
+being asked, in the change that ships something players see:
+
+- `npm version patch --no-git-tag-version` for fixes, balance and tuning, art and sound redone,
+- `npm version minor --no-git-tag-version` for something new: a game, a screen, a mode, a hero, a
+  mission, a move,
+- `npm version major --no-git-tag-version` only for a change that breaks what a player keeps (their
+  saves, an installed arcade), and only once the user agrees.
+
+A change players never see (tests, docs, tooling, a refactor) keeps the version. A branch raises it
+once, by the most its change needs, over the version on `main` as it merges; say in the reply which
+version it now is.
+
 ## Layout of a game
 
 `apps/web/games/<id>/` holds `game.json` (the catalog entry), `index.html`, `assets/`, `styles/`
