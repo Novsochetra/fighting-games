@@ -2,6 +2,8 @@ export const OLD_GROVE = {
   folder: 'old-grove',
   groundTop: 8,
   cliff: true,
+  // the deep earth under a raised step lies level with the road's, not run down from its last row
+  deep: { from: 40 },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },

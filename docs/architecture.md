@@ -756,7 +756,14 @@ length.
   step is drawn with that face hung from its lip and cut off at the low ground, the high side's turf
   rounded over the shoulder and hanging a pixel past it, and a soft contact shadow at its foot
   (`src/render/scene/cliff-faces.js`). Only the drawing rounds the shoulder; fighters still stand
-  on the sheer step.
+  on the sheer step. A raised road whose cross-section is too short to reach the bottom of the
+  screen under its high steps gives its backdrop a `deep` body (`deep.png`, 216 tall): only the
+  cross-section's rows above `deep.from` follow the surface, and under them the body is laid at the
+  world's own rows, so every step stands on the same courses and earth down to the bottom of the
+  screen (`src/render/scene/deep-ground.js`). A body built of courses (`deep.faces`) also loads
+  `face.png` and `breach.png`, the ends of its courses where a step cuts through it and the two
+  broken banks of a cut that runs on down out of sight, drawn at the same world rows.
+  `tools/road_body.py` paints them from `ground.png`.
 
 Fighters are drawn from PixelLab sprite sheets in `assets/sprites/`: one folder of strips per playable
 Shade (`src/data/heroes.js`; only the picked Shade's are kept, `keepPickedHero` in

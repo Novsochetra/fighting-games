@@ -24,6 +24,8 @@ export const WARDEN_FORTRESS = {
   folder: 'warden-fortress',
   groundTop: 14,
   cliff: true,
+  // the deep earth under a raised step lies level with the road's, not run down from its last row
+  deep: { from: 46 },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: NEAR_DRIFT },

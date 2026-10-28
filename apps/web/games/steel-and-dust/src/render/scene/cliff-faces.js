@@ -1,3 +1,5 @@
+import { drawDeepFace } from './deep-ground.js';
+
 // a jump smaller than this is a slope's stair-step, not a face
 const SHEER = 3;
 // the face's rough outer edge stands up to this far out over the low side
@@ -60,7 +62,7 @@ function drawSlice(context, texture, step, { surfaceY, slice }) {
   const { image, top } = texture;
   const { x, width } = across(step, slice.from, slice.to);
   const height = top + slice.rows;
-  for (let drawn = 0; drawn < width;) {
+  for (let drawn = 0; drawn < width; ) {
     const sourceX = (((x + drawn) % image.width) + image.width) % image.width;
     const span = Math.min(width - drawn, image.width - sourceX);
     const destinationY = surfaceY + slice.drop - top;
@@ -90,9 +92,12 @@ function drawFace(context, cliff, step) {
   context.drawImage(picture, 0, 0, width, rise, x, step.top, width, rise);
 }
 
-export function drawCliffFaces(painter, runs, { texture, cliff, colors }) {
+export function drawCliffFaces(painter, runs, { texture, cliff, colors, deep }) {
   const { context } = painter;
   for (const step of cliffSteps(runs)) {
+    if (deep) {
+      drawDeepFace(context, deep, { step, fromY: step.top - texture.top + deep.from });
+    }
     drawFace(context, cliff, step);
     for (const slice of LIP) {
       drawSlice(context, texture, step, { surfaceY: step.top, slice });

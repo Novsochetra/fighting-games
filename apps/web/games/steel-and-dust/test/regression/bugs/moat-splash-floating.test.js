@@ -71,7 +71,7 @@ describe('the splash of a raider falling in the Angkor moat', () => {
     const log = renderLog(game);
     const splash = drawnAt(log, /^drawImage\(img\(splash\.png\)/);
     const face = (x) =>
-      drawnAt(log, new RegExp(`^drawImage\\((img\\(cliff\\.png\\)|canvas\\(12x64,).*,${x},`));
+      drawnAt(log, new RegExp(`^drawImage\\((img\\(cliff\\.png\\)|canvas\\(12x\\d+,).*,${x},`));
 
     expect(splash).toBeGreaterThan(-1);
     expect(face(moat.from + 2 - FACE_WIDTH)).toBeGreaterThan(splash);

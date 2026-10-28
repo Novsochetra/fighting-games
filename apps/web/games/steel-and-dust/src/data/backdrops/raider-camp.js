@@ -2,6 +2,8 @@ export const RAIDER_CAMP = {
   folder: 'raider-camp',
   groundTop: 13,
   cliff: true,
+  // the deep earth under a raised step lies level with the road's, not run down from its last row
+  deep: { from: 44 },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },

@@ -6,6 +6,10 @@ export const ANGKOR_WAT = {
   folder: 'angkor-wat',
   groundTop: 10,
   cliff: true,
+  // only the paving and its turf follow the steps; from the mortar under the paving down, the road
+  // is built level: laterite courses up to the highest step and earth under the road's own course,
+  // their ends staggered and broken where a step or the breach cuts through them
+  deep: { from: 20, faces: true },
   layers: [
     { name: 'back', parallax: 0.03 },
     { name: 'near', parallax: 0.45 },
