@@ -28,12 +28,12 @@ beforeEach(() => {
 afterEach(stopArcades);
 
 describe('the credits page', () => {
-  it('names the build it runs at its foot, so a phone can be checked against the deploy', () => {
+  it('names the release and build it runs at its foot, so a phone can be checked against the deploy', () => {
     expect(one('#credits-version')).toBeNull();
 
     stopArcades();
-    screen = openCredits({ version: '06f31ee' });
-    expect(textOf(one('#credits-version'))).toBe('Version 06f31ee');
+    screen = openCredits({ version: '1.0.0+06f31ee' });
+    expect(textOf(one('#credits-version'))).toBe('Version 1.0.0 (06f31ee)');
     expect(one('#credits-version').closest('footer')).not.toBeNull();
   });
 

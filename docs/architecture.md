@@ -139,8 +139,12 @@ rate limit and the checks below.
 **The build.** `npm run build` has Vite build the three pages into `dist/` (`base: './'`, so the same
 files work under any path) and copy what it never touches beside them (`as-is-files.js`: the games,
 the art, `robots.txt`, `sitemap.xml` and `appearance-early.js`), then builds the service worker (see
-Offline). Each build has a version (`build-version.js`): the commit Railway deploys
-(`RAILWAY_GIT_COMMIT_SHA`), else the one checked out, else the time of the build. It writes it into
+Offline). Each build has a version (`build-version.js`), SemVer with the build after a `+`, as
+`1.0.0+5f272d9`: the release is the `version` in the root `package.json`, and the build is the commit
+Railway deploys (`RAILWAY_GIT_COMMIT_SHA`), else the one checked out, else the time of the build. The
+release is raised by hand, in the commit that ships the change: MAJOR for a change that breaks what a
+player keeps (their saves, an installed arcade), MINOR for something new (a game, a screen, a mode),
+PATCH for fixes and tuning (`npm version minor --no-git-tag-version`). It writes the version into
 each page's head (`<meta name="arcade-version">`) and into `version.json`, the version the server
 holds now (see A new build). Railway builds on each deploy and `npm start` serves `dist/`; it refuses to start without a
 build. Vite names each module and stylesheet it builds by its content, under `build/`, so the server
@@ -199,7 +203,9 @@ not kept.
   shows a banner, New version ready, whose Reload opens the new build at once. It takes the
   banners' place first (`has-update-banner`), as the others come again after the reload. Nothing
   reloads by itself, so a gift under way is never lost. The credits screen names the version the
-  page runs. `npm run dev` writes no version, so it never asks.
+  page runs, as Version 1.0.0 (5f272d9) (`src/credits/version-label.js`). A new build is one whose
+  version differs, so a redeploy of the same commit asks no one to reload. `npm run dev` writes no
+  version, so it never asks.
 
 `test/integration/offline/worker.test.js` runs the worker's answers against fake caches and a
 network that can go away.

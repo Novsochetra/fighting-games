@@ -4,6 +4,7 @@ import { PageBar } from '../arcade/PageBar';
 import { useArriveDrawn } from '../arcade/use-arrive-drawn';
 import { CreditsGroup } from './CreditsRow';
 import { FIND_ME, MADE_WITH, THANKS_TO } from './credits-links';
+import { versionLabel } from './version-label.js';
 import './cover.css';
 import './credits.css';
 import './maker.css';
@@ -71,7 +72,7 @@ function Footer() {
     <footer className="credits__footer" style={order(7)}>
       <p className="credits__thanks">And you, for playing.</p>
       <p>© 2026 Nov Sochetra</p>
-      {version && <p id="credits-version">Version {version}</p>}
+      {version && <p id="credits-version">Version {versionLabel(version)}</p>}
     </footer>
   );
 }
