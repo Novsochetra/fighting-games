@@ -1,5 +1,6 @@
 import { smoothstep } from '../../lib/math.js';
 import { canopyAcross } from './canopy-columns.js';
+import { layerOrigin } from './layer-spans.js';
 import { drawSwayPatch } from './sway-patch.js';
 
 // a crown's patch reaches this far past its painted edge, so a leaf swaying out over the sky is
@@ -31,6 +32,8 @@ export function canopySource(mark, road) {
     mark,
     time: mark.time,
     give: canopy.give ?? CANOPY_GIVE,
+    // where the canopy's painting lies, which its trunks' and stalks' give is worked out from
+    shape: layerOrigin(road.layer, cameraX),
   };
 }
 
@@ -51,6 +54,7 @@ export function crownSource(mark, { cameraX }) {
     mark,
     time: mark.time,
     give: CROWN_GIVE,
+    shape: 'crown',
   };
 }
 

@@ -57,11 +57,30 @@ describe('the shadow of a raider overhead', () => {
   it('drapes over a hump, following what each column of it falls on', () => {
     const hump = (x) => GROUND_Y - Math.max(0, 6 - Math.abs(x - 120));
     const { rects } = drawn(mark({ time: 50 }), hump);
-    const top = (x) => Math.min(...rects.filter((rect) => rect.x === x).map((rect) => rect.y));
+    const covers = (rect, x) => rect.x <= x && x < rect.x + rect.width;
+    const top = (x) => Math.min(...rects.filter((rect) => covers(rect, x)).map((rect) => rect.y));
 
     expect(top(120)).toBe(GROUND_Y - 6);
     expect(top(124)).toBe(GROUND_Y - 2);
     expect(top(114)).toBe(GROUND_Y);
+  });
+
+  it('lays each row in runs of pixels alike, never laying a pixel twice', () => {
+    const hump = (x) => GROUND_Y - Math.max(0, 6 - Math.abs(x - 120));
+    const pixelsOf = (rects) =>
+      rects.flatMap((rect) =>
+        Array.from({ length: rect.width }, (_, i) => `${rect.x + i},${rect.y}`),
+      );
+
+    for (const floorAt of [FLAT, hump]) {
+      const pixels = pixelsOf(drawn(mark({ time: 50 }), floorAt).rects);
+
+      expect(new Set(pixels).size).toBe(pixels.length);
+    }
+
+    const flat = drawn(mark({ time: 50 })).rects;
+
+    expect(flat.length).toBeLessThan(pixelsOf(flat).length / 2);
   });
 
   it('hands over to the raider its own shadow over the last stretch of its fall', () => {

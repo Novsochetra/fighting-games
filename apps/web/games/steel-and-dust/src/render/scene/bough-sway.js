@@ -66,6 +66,13 @@ function released(since) {
   };
 }
 
+// every drop moves its bough alike, and each frame plays it from the first tick, so each tick of
+// it is worked out once; a raider is down and gone well before this many ticks
+const KEPT_TICKS = 600;
+const played = [];
+
+const swayAt = (time) => (time < DROP.warn ? waiting(time) : released(time - DROP.warn));
+
 // how far, in pixels, the trees right over a raider are moved `time` ticks into its drop: sideways
 // and down, eased all the way, for the patch round it to share out by how much each part gives;
 // still before it comes
@@ -74,5 +81,11 @@ export function boughSway(time) {
     return { sway: 0, sag: 0 };
   }
 
-  return time < DROP.warn ? waiting(time) : released(time - DROP.warn);
+  if (!Number.isInteger(time) || time >= KEPT_TICKS) {
+    return swayAt(time);
+  }
+
+  played[time] ??= swayAt(time);
+
+  return played[time];
 }

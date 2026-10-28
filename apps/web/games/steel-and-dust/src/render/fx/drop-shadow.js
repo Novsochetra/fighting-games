@@ -57,6 +57,32 @@ function shadeAt(row, { across, soft }) {
   return row.shade * (row.soft ? soft : 1) * (1 - 0.5 * fade * soft);
 }
 
+// one row of the shadow, laid in runs of columns alike, on the same floor and just as dark, so a
+// shadow is a few rectangles a frame rather than one for every pixel of it
+function drawRow(painter, row, { columns, soft, darkness, strength }) {
+  let run = null;
+
+  for (const { x, across, floor } of columns) {
+    const shade = shadeAt(row, { across, soft }) * darkness * strength;
+    const y = floor + row.dy;
+
+    if (run && run.shade === shade && run.y === y && run.x + run.width === x) {
+      run.width++;
+      continue;
+    }
+
+    if (run) {
+      painter.alpha(run.shade).rect(run.x, run.y, run.width, 1);
+    }
+
+    run = shade > 0 ? { x, y, width: 1, shade } : null;
+  }
+
+  if (run) {
+    painter.alpha(run.shade).rect(run.x, run.y, run.width, 1);
+  }
+}
+
 // the shadow deepens what it lies on instead of painting over it, so grass stays grass and sand
 // stays sand, only darker; and it lies on whatever the light from overhead meets in each column,
 // the turf as it is drawn or a deck, so it drapes over a hump instead of floating over it
@@ -64,20 +90,16 @@ function drawLaid(painter, mark, { floorAt, strength }) {
   const { half, darkness, soft } = dropShadow(mark);
   const centerX = Math.round(mark.x);
   const reach = Math.ceil(half);
+  const columns = [];
+
+  for (let x = centerX - reach; x < centerX + reach; x++) {
+    columns.push({ x, across: Math.abs(x + 0.5 - centerX) / half, floor: floorAt(x) });
+  }
 
   painter.context.globalCompositeOperation = 'multiply';
   painter.use(FX_COLORS.dropShadow);
-  for (let x = centerX - reach; x < centerX + reach; x++) {
-    const across = Math.abs(x + 0.5 - centerX) / half;
-    const floor = floorAt(x);
-
-    for (const row of ROWS) {
-      const shade = shadeAt(row, { across, soft }) * darkness * strength;
-
-      if (shade > 0) {
-        painter.alpha(shade).rect(x, floor + row.dy, 1, 1);
-      }
-    }
+  for (const row of ROWS) {
+    drawRow(painter, row, { columns, soft, darkness, strength });
   }
 
   painter.context.globalCompositeOperation = 'source-over';

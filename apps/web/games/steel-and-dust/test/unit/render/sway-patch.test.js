@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { smoothstep } from '../../../src/lib/math.js';
-import { drawSwayPatch, swayBlocks } from '../../../src/render/scene/sway-patch.js';
+import { drawSwayPatch, swayBlocks, swayPlan } from '../../../src/render/scene/sway-patch.js';
 import { createRecordingContext } from '../../support/recording-canvas.js';
 
 // a raider over the middle of a 60 by 30 patch, its trees easing still toward the sides and foot
@@ -13,6 +13,7 @@ const source = (time, middle = 30) => ({
   down: (y) => smoothstep((30 - y) / 20),
   time,
   give: { sway: 1, sag: 1 },
+  shape: middle,
 });
 const patchOf = (...sources) => ({
   left: 0,
@@ -92,6 +93,46 @@ describe('the patch of trees a raider shakes', () => {
         swayBlocks(patchOf(...sources)),
       );
     }
+  });
+
+  it('comes to the same pixels laid out once and kept, while the trees move on the screen too', () => {
+    const owner = {};
+
+    for (let time = 1; time < 90; time++) {
+      // the camera moving on every few ticks, and back
+      const middle = 30 + (Math.floor(time / 6) % 5) - 2;
+      const sources = [source(time, middle), source(time - 30, middle + 14)];
+      const cover = { ...patchOf(...sources), top: 4, bottom: 20, keepStill: true };
+
+      expect(swayBlocks({ ...patchOf(...sources), owner }), `at ${time}`).toEqual(
+        swayBlocks(patchOf(...sources)),
+      );
+      expect(swayBlocks({ ...cover, owner }), `cover at ${time}`).toEqual(swayBlocks(cover));
+    }
+  });
+
+  it('lays a still layer back in one piece over moved parts that touch, across and down', () => {
+    const image = (name) => ({ width: 200, height: 216, recordingId: () => name });
+    const layers = [
+      { name: 'far', image: image('far'), parallax: 0.1 },
+      { name: 'near', image: image('near'), parallax: 0.5 },
+    ];
+    const { context, log } = createRecordingContext(null);
+    const patch = { ...patchOf(source(12)), top: 5 };
+    const { blocks, stills } = swayPlan(patch);
+    const count = (name) => log.filter((entry) => entry.startsWith(`drawImage(${name},`)).length;
+    const pixels = (list, key) =>
+      list.reduce(
+        (sum, block) => sum + block[key].reduce((row, { width }) => row + width, 0) * block.height,
+        0,
+      );
+
+    drawSwayPatch(context, patch, { layers, cameraX: 0, shake: { x: 0, y: 0 } });
+
+    expect(count('near')).toBe(blocks.reduce((sum, { runs }) => sum + runs.length, 0));
+    expect(count('far')).toBe(stills.reduce((sum, { spans }) => sum + spans.length, 0));
+    expect(count('far')).toBeLessThan(count('near'));
+    expect(pixels(stills, 'spans')).toBe(pixels(blocks, 'runs'));
   });
 
   it('lays the far plate back still under each moved part, then the nearer layers, one moved', () => {

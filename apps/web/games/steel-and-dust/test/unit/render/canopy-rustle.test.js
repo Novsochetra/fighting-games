@@ -101,8 +101,11 @@ describe('a crown a raider hides in', () => {
     expect(near.length).toBeGreaterThan(0);
     expect(near.every(([, , , , x]) => x >= 100 + cameraShift - 4)).toBe(true);
     expect(near.every(([, , width, , x]) => x + width <= 160 + cameraShift + 4)).toBe(true);
+    const area = (pieces) => pieces.reduce((sum, piece) => sum + piece[6] * piece[7], 0);
+
     expect(moved.length).toBeGreaterThan(0);
-    expect(back.length).toBe(near.length);
+    expect(area(back)).toBe(area(near));
+    expect(back.length).toBeLessThanOrEqual(near.length);
   });
 
   it('leaves a ledge still: a raider climbing onto stone or iron does not sway it', () => {

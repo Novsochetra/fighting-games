@@ -662,7 +662,15 @@ length.
     a frame is the same however many were drawn; `sway-memory.js` only saves the replay). Where
     the trees of two raiders overlap, their motions add up before that rounding. The patch is laid
     in blocks of rows moved alike, the far plate still under them (`sway-patch.js`,
-    `layer-spans.js`); `test/integration/render/tree-sway.test.js` plays a wave on every road.
+    `sway-blocks.js`, `layer-spans.js`); `test/integration/render/tree-sway.test.js` plays a wave
+    on every road.
+  - A phone draws all that every frame, so none of it is worked out twice: a bough's motion once a
+    tick for every drop (`bough-sway.js`), a canopy's trunks and stalks once a road
+    (`canopy-columns.js`), and how a patch's columns and rows share out the give once while it
+    stays put on the screen (`sway-layout.js`, its blocks kept until a part of the trees moves). A
+    still layer is laid back in as few pieces as the moved parts touching make, and the shadow in
+    runs of pixels alike. Each of these only saves work: the pixels are the same as working it all
+    out afresh (`test/unit/render/sway-patch.test.js`).
   - All of that is laid on the still screen with the shake sampled in, and before the air, so light
     shafts, motes and mist still pass in front. Leaves (the road's `ambient.leaves`, or a crown's
     `debris`) drift down and come to rest on the ground, a night road startles fireflies out of the

@@ -19,25 +19,45 @@ function continues(memory, sources, span) {
   );
 }
 
-// the mixes of give played so far for the raiders now in `owner`'s trees, brought up to the tick
-// `lines` end on, keyed as sway-patch.js keys them
-export function mixesFor(owner, sources, lines) {
+// a memory of nothing yet: its mixes, keyed as sway-layout.js keys them, the layouts of the
+// patches drawn from them, and the tick a mix last moved a part of the trees
+export const freshMemory = (sources, span) => ({
+  marks: marksOf(sources),
+  span,
+  mixes: new Map(),
+  layouts: new Map(),
+  changedAt: span,
+});
+
+// plays every mix on to the tick `lines` end on, noting whether any of them moved
+function playOn(memory, lines) {
+  for (const mix of memory.mixes.values()) {
+    const { sway, sag } = mix;
+    const swayWas = sway.offset;
+    const sagWas = sag.offset;
+
+    playMix(mix, lines, memory.span + 1);
+    if (sway.offset !== swayWas || sag.offset !== sagWas) {
+      memory.changedAt = lines[0].length - 1;
+    }
+  }
+}
+
+// the memory of the raiders now in `owner`'s trees, its mixes brought up to the tick `lines` end on
+export function swayMemory(owner, sources, lines) {
   const span = lines[0].length - 1;
   const last = memories.get(owner);
 
   if (last && continues(last, sources, span)) {
-    for (const mix of last.mixes.values()) {
-      playMix(mix, lines, last.span + 1);
-    }
-
+    playOn(last, lines);
     Object.assign(last, { marks: marksOf(sources), span });
 
-    return last.mixes;
+    return last;
   }
 
-  const memory = { marks: marksOf(sources), span, mixes: new Map() };
+  const memory = freshMemory(sources, span);
 
   memories.set(owner, memory);
 
-  return memory.mixes;
+  return memory;
 }

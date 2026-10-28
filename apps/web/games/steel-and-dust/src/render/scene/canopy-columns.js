@@ -17,14 +17,12 @@ function alongLayer({ layer, cameraX }, x) {
   return (((x - layerOrigin(layer, cameraX)) % width) + width) % width;
 }
 
-// how much of a trunk stands at column x of the screen: 1 in the thick of one, easing to 0 just
-// past its edges
-export function trunkAt(road, x) {
-  const width = road.layer.image.width;
-  const along = alongLayer(road, x);
+// how much of a trunk stands at column `along` of the canopy's painting: 1 in the thick of one,
+// easing to 0 just past its edges
+function trunkAlong(canopy, width, along) {
   let still = 0;
 
-  for (const [from, to] of road.canopy.trunks ?? []) {
+  for (const [from, to] of canopy.trunks ?? []) {
     for (const at of [along - width, along, along + width]) {
       const inside = Math.min(at - from, to - at);
 
@@ -35,27 +33,62 @@ export function trunkAt(road, x) {
   return still;
 }
 
-// where on the screen the stalk column x belongs to stands: the stalk it is in, or the nearer one
-// across a gap, so each gap is shared out between the stalks either side of it and a stalk leans
-// as one, never squeezed
-export function stalkAt(road, x) {
-  const width = road.layer.image.width;
-  const along = alongLayer(road, x);
-  let nearest = { distance: Infinity, from: x, to: x };
+// the stalk column `along` of the painting belongs to: the one it is in, or the nearer one across a
+// gap, as columns of the painting laid end to end
+function stalkAlong(canopy, width, along) {
+  let nearest = { distance: Infinity, from: along, to: along };
 
-  for (const [from, to] of road.canopy.stalks) {
+  for (const [from, to] of canopy.stalks ?? []) {
     for (const shift of [-width, 0, width]) {
       const distance = Math.max(from + shift - along, along - to - shift, 0);
 
       if (distance < nearest.distance) {
-        const left = x - along + shift;
-
-        nearest = { distance, from: left + from, to: left + to };
+        nearest = { distance, from: from + shift, to: to + shift };
       }
     }
   }
 
   return nearest;
+}
+
+// a canopy's trunks and stalks are worked out for every column of its painting once, the first
+// time a raider drops in it, as every frame asks for them all again
+const tables = new WeakMap();
+
+function tableOf({ canopy, layer }) {
+  const width = layer.image.width;
+  const kept = tables.get(canopy);
+
+  if (kept?.width === width) {
+    return kept;
+  }
+
+  const columns = Array.from({ length: width }, (_, along) => along);
+  const table = {
+    width,
+    trunks: columns.map((along) => trunkAlong(canopy, width, along)),
+    stalks: columns.map((along) => stalkAlong(canopy, width, along)),
+  };
+
+  tables.set(canopy, table);
+
+  return table;
+}
+
+// how much of a trunk stands at column x of the screen: 1 in the thick of one, easing to 0 just
+// past its edges
+export function trunkAt(road, x) {
+  return tableOf(road).trunks[alongLayer(road, x)];
+}
+
+// where on the screen the stalk column x belongs to stands: the stalk it is in, or the nearer one
+// across a gap, so each gap is shared out between the stalks either side of it and a stalk leans
+// as one, never squeezed
+export function stalkAt(road, x) {
+  const along = alongLayer(road, x);
+  const { distance, from, to } = tableOf(road).stalks[along];
+
+  return { distance, from: x - along + from, to: x - along + to };
 }
 
 // how much the trees round a drop at `spotX` give, column by column, and how far either side of

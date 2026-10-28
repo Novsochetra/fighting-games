@@ -19683,36 +19683,36 @@
   {
    "tick": 3600,
    "frame": {
-    "calls": 2488,
-    "digest": "856ee2bc9f4bae61"
+    "calls": 2134,
+    "digest": "7e98b7079b959f84"
    }
   },
   {
    "tick": 3840,
    "frame": {
     "calls": 1479,
-    "digest": "338642744502c389"
+    "digest": "831e6bd3e7e2f1a9"
    }
   },
   {
    "tick": 4080,
    "frame": {
     "calls": 1545,
-    "digest": "d89d9194942b1b7f"
+    "digest": "9e3eb1017bec93f6"
    }
   },
   {
    "tick": 4320,
    "frame": {
     "calls": 2609,
-    "digest": "349c70696bfc8330"
+    "digest": "6aa692f469e8ff77"
    }
   },
   {
    "tick": 4560,
    "frame": {
     "calls": 1367,
-    "digest": "1296c53ee3fd072e"
+    "digest": "42772be5a3919093"
    }
   }
  ]
