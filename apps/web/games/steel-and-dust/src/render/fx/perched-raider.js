@@ -5,7 +5,7 @@ import { easeOutCubic } from '../../lib/math.js';
 import { enemySheetReady } from '../fighters/enemy-sheets.js';
 import { drawEnemyFrame } from '../fighters/enemy-sprites.js';
 import { perchOnScreen } from '../scene/canopy-rustle.js';
-import { CELL_HEIGHT, CELL_WIDTH, drawLayerCell } from '../scene/rustle-cells.js';
+import { drawLayerSpan } from '../scene/layer-spans.js';
 
 // it climbs up from this far below the ledge's edge, where the ledge hides it, so it comes up
 // over the edge instead of appearing on it
@@ -36,12 +36,16 @@ function drawWallOver(context, { perch, x, layer, cameraX }) {
 
   context.save();
   context.translate(cameraX, 0);
-  for (let column = screenX - REACH; column < screenX + REACH; column += CELL_WIDTH) {
-    for (let row = perch.wall; row <= perch.y; row += CELL_HEIGHT) {
-      drawLayerCell(context, layer, { cameraX, shake: STILL, x: column, y: row, dx: 0, dy: 0 });
-    }
-  }
-
+  drawLayerSpan(context, layer, {
+    cameraX,
+    shake: STILL,
+    x: screenX - REACH,
+    y: perch.wall,
+    width: REACH * 2,
+    height: perch.y - perch.wall + 1,
+    dx: 0,
+    dy: 0,
+  });
   context.restore();
 }
 

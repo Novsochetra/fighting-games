@@ -2,8 +2,20 @@ export const FIREFLY_HOLLOW = {
   folder: 'firefly-hollow',
   groundTop: 8,
   cliff: true,
-  // the painted trees overhead reach this far down: it rustles over a raider about to drop
-  canopy: 92,
+  // the painted boughs overhead, which sway over a raider about to drop out of them, the vines
+  // hanging from them with them, easing still toward the trunks' flared feet; the trunks stand still
+  canopy: {
+    layer: 'near',
+    foot: 110,
+    fade: 54,
+    trunks: [
+      [36, 63],
+      [166, 194],
+      [316, 343],
+      [420, 447],
+      [700, 727],
+    ],
+  },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },

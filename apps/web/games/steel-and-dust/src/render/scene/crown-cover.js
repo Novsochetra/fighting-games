@@ -1,6 +1,6 @@
 import { DROP } from '../../data/ambush.js';
-import { crownPatch } from './canopy-rustle.js';
-import { CELL_HEIGHT, CELL_WIDTH, drawLayerCell } from './rustle-cells.js';
+import { rustlePatch } from './canopy-rustle.js';
+import { drawSwayedLayer } from './sway-patch.js';
 
 // a raider is about this tall, and stays in the leaves at most this long after it lets go; the
 // leaves cover it only down to a little below where it hid, so it comes out of them as it falls
@@ -15,37 +15,19 @@ const isLeavingCrown = (shot) =>
   shot.raider &&
   shot.time - DROP.warn < COVER_TICKS;
 
-// the cells of the crown round the raider's body, on the same grid the rustle moves them on
-function cellsOver(patch, { left, right, top, bottom }) {
-  const cells = [];
-  const fromX = patch.left + Math.floor((left - patch.left) / CELL_WIDTH) * CELL_WIDTH;
-  const fromY = patch.top + Math.floor((top - patch.top) / CELL_HEIGHT) * CELL_HEIGHT;
-
-  for (let x = Math.max(patch.left, fromX); x < Math.min(patch.right, right); x += CELL_WIDTH) {
-    for (let y = Math.max(patch.top, fromY); y < Math.min(patch.bottom, bottom); y += CELL_HEIGHT) {
-      cells.push({ x, y });
-    }
-  }
-
-  return cells;
-}
-
-function coverRaider(context, mark, { layer, cameraX, shake }) {
-  const crown = crownPatch(mark, { cameraX });
-  const patch = { ...crown, bottom: Math.min(crown.bottom, mark.perch.y + COVER_BELOW) };
+// the part of the swaying trees over the raider's body, down to a little below where it hid
+function overBody(patch, mark, cameraX) {
   const raiderX = Math.round(mark.raider.x - cameraX);
-  const body = {
-    left: raiderX - HALF_WIDTH,
-    right: raiderX + HALF_WIDTH,
-    top: Math.round(mark.raider.y) - BODY,
-    bottom: Math.round(mark.raider.y),
+  const feet = Math.round(mark.raider.y);
+
+  return {
+    ...patch,
+    left: Math.max(patch.left, raiderX - HALF_WIDTH),
+    right: Math.min(patch.right, raiderX + HALF_WIDTH),
+    top: Math.max(patch.top, feet - BODY),
+    bottom: Math.min(patch.bottom, feet, mark.perch.y + COVER_BELOW),
+    keepStill: true,
   };
-
-  for (const { x, y } of cellsOver(patch, body)) {
-    const { dx, dy } = patch.offset(x, y);
-
-    drawLayerCell(context, layer, { cameraX, shake, x, y, dx, dy });
-  }
 }
 
 // a raider letting go of a crown drops out through its leaves: for its first ticks the crown's own
@@ -53,8 +35,9 @@ function coverRaider(context, mark, { layer, cameraX, shake }) {
 // instead of appearing in front of them
 export function drawCrownCover(painter, setLayer, { game, backdrop, cameraX }) {
   const marks = game.projectiles.filter(isLeavingCrown);
+  const patch = marks.length && rustlePatch(game, { backdrop, cameraX });
 
-  if (!marks.length) {
+  if (!patch) {
     return;
   }
 
@@ -63,7 +46,9 @@ export function drawCrownCover(painter, setLayer, { game, backdrop, cameraX }) {
     const layer = backdrop.layers.find((one) => one.name === mark.perch.layer && one.ready);
 
     if (layer) {
-      coverRaider(painter.context, mark, { layer, cameraX, shake: setLayer.shake });
+      const scene = { cameraX, shake: setLayer.shake };
+
+      drawSwayedLayer(painter.context, layer, overBody(patch, mark, cameraX), scene);
     }
   }
 

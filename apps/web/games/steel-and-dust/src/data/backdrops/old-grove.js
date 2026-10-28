@@ -2,8 +2,19 @@ export const OLD_GROVE = {
   folder: 'old-grove',
   groundTop: 8,
   cliff: true,
-  // the painted trees overhead reach this far down: it rustles over a raider about to drop
-  canopy: 72,
+  // the painted trees overhead, which sway over a raider about to drop out of them: the boughs and
+  // all that hangs from them, down to `foot`, easing still over the last `fade` rows, in clear air
+  // below the vines; the trunks among them (spans of the layer's own columns) stand still
+  canopy: {
+    layer: 'near',
+    foot: 90,
+    fade: 12,
+    trunks: [
+      [18, 56],
+      [135, 167],
+      [266, 300],
+    ],
+  },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },

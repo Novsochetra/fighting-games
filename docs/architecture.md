@@ -629,10 +629,12 @@ length.
   weapon raised (the first frame of its attack strip) and lands striking, in a `dropSlam` that
   knocks a hero still on the spot away (`src/sim/hazards/drop-marks.js`), the soil puffing up in
   the road's own color. What it waits on is the road's own painting:
-  - Under a `canopy` (Old Grove, Bamboo Pass, Firefly Hollow: how far down the painted trees reach)
-    it waits above the screen anywhere round the hero; the patch over the spot is redrawn layer by
-    layer, its nearer layers swayed and sagged as one, fading to nothing at the patch's edges and
-    foot so no seam shows (`src/render/scene/canopy-rustle.js`, cells in `rustle-cells.js`).
+  - Under a `canopy` (Old Grove, Bamboo Pass, Firefly Hollow: the painted trees overhead, their
+    `trunks` and `stalks` held to the painting by `test/unit/data/canopy-trees.test.js`) it waits
+    above the screen anywhere round the hero, and the trees round the spot sway: the boughs and all
+    that hangs from them, easing still toward the patch's sides and down to the canopy's `foot`, in
+    clear air below the vines, the trunks among them standing still; bamboo leans from far below,
+    each stalk as one (`src/render/scene/canopy-rustle.js`, `canopy-columns.js`).
   - On a road with `perches` (`src/data/backdrops/<folder>.js`: spots in a repeating layer's own
     pixels, held to the painting by `test/unit/data/drop-perches.test.js`) it waits on the one
     nearest its spot that is in sight (`src/sim/hazards/drop-perches.js`), its mark kept under it
@@ -645,6 +647,16 @@ length.
     there, waiting, and crouching to spring (`src/render/fx/perched-raider.js`); behind a parapet
     the wall's own pixels from its `wall` line down are laid back over it, so it shows only
     between the merlons, and it springs up onto the wall to leap.
+  - The trees move as a bough does under the raider's weight (`src/render/scene/bough-sway.js`):
+    it sinks and settles, leans once as the raider shifts, dips and trembles as it gets ready, and
+    springs up past rest as it lets go, whipping aside and dying away, eased all the way. Each part
+    takes its share of that by how much it gives and moves by whole pixels: only once well past
+    halfway to the next, never straight back, never more than a pixel a tick, so nothing
+    staircases, tears or flickers (`held-sway.js`, played through from the drop's first tick, so
+    a frame is the same however many were drawn; `sway-memory.js` only saves the replay). Where
+    the trees of two raiders overlap, their motions add up before that rounding. The patch is laid
+    in blocks of rows moved alike, the far plate still under them (`sway-patch.js`,
+    `layer-spans.js`); `test/integration/render/tree-sway.test.js` plays a wave on every road.
   - All of that is laid on the still screen with the shake sampled in, and before the air, so light
     shafts, motes and mist still pass in front. Leaves (the road's `ambient.leaves`, or a crown's
     `debris`) drift down and come to rest on the ground, a night road startles fireflies out of the

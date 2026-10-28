@@ -28356,43 +28356,43 @@
   {
    "tick": 5760,
    "frame": {
-    "calls": 2238,
-    "digest": "fcaab7cecdac87b8"
+    "calls": 1500,
+    "digest": "5305611b353bd415"
    }
   },
   {
    "tick": 6000,
    "frame": {
     "calls": 1420,
-    "digest": "85ebc9b3974e46a3"
+    "digest": "368202eaa9a710fc"
    }
   },
   {
    "tick": 6240,
    "frame": {
     "calls": 1002,
-    "digest": "51524baea51d9be8"
+    "digest": "d1c2b4ade1b8d04b"
    }
   },
   {
    "tick": 6480,
    "frame": {
     "calls": 1539,
-    "digest": "f78bdf080503df19"
+    "digest": "f5df2a5dfee363ca"
    }
   },
   {
    "tick": 6720,
    "frame": {
     "calls": 966,
-    "digest": "fadf3257bbf9d380"
+    "digest": "19f8a3411c23437f"
    }
   },
   {
    "tick": 6960,
    "frame": {
     "calls": 890,
-    "digest": "48d11caf33f42eef"
+    "digest": "cf65bfa72e0832f7"
    }
   }
  ]

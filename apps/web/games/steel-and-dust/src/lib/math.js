@@ -22,6 +22,13 @@ export function easeOutBack(progress) {
   return 1 + 2.70158 * past * past * past + 1.70158 * past * past;
 }
 
+// eases in and out over 0 to 1, and holds still past either end
+export function smoothstep(progress) {
+  const clamped = clamp(progress, 0, 1);
+
+  return clamped * clamped * (3 - 2 * clamped);
+}
+
 export function easeInOutCubic(progress) {
   if (progress < 0.5) {
     return 4 * progress * progress * progress;
