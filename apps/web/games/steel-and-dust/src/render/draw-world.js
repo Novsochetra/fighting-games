@@ -111,8 +111,10 @@ export function drawWorld(painter, { game, view, cameraX }) {
   const colors = scenePalette(mission.theme).ground;
   const backdrop = view.backdrops[mission.theme];
   const { terrain, tickCount: tick } = game;
-  drawGround(painter, { cameraX, colors, tick, terrain, backdrop });
+  // the water lies behind the road, so each bank's rock face stands over its edge and runs on
+  // down into it
   drawMoats(painter, view.fxSheets, { water: terrain.water, cameraX, tick });
+  drawGround(painter, { cameraX, colors, tick, terrain, backdrop });
   drawProps(painter, { cameraX, props: mission.props, sheets: view.propSheets });
   drawTrees(painter, view.fxSheets, { trees: game.trees, cameraX });
   drawNestTrees(painter, view.fxSheets, { nests: game.nests, backdrop, cameraX });
