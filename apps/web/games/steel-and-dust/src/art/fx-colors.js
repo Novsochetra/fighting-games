@@ -63,7 +63,5 @@ export const FX_COLORS = {
   rootCrack: '#1d180c',
   footDust: '#bdb592',
   foam: '#d6f6ff',
-  // the deep water under the moat's painted surface, its bottom row run on down
-  moatDeep: '#223e55',
   rainbow: ['#ff5a6e', '#ffa63a', '#ffe45a', '#6aff8a', '#4ad8ff', '#6a7aff', '#d27aff'],
 };

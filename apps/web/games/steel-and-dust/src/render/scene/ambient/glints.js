@@ -14,7 +14,7 @@ function flashOf(seed, tick) {
 }
 
 function glintAt(i, { effect, tick, cameraX }) {
-  const seed = i + SALT;
+  const seed = i + SALT + (effect.seed ?? 0);
   const { flash, lit } = flashOf(seed, tick);
   if (lit >= 1) {
     return null;

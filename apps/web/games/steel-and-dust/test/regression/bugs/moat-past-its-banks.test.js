@@ -50,7 +50,7 @@ function faceAt(log, x) {
 describe('the Angkor moat between its banks', () => {
   it('is drawn before the rock face of either bank, so the faces stand over its edges', () => {
     const { log, moat } = renderMoat();
-    const water = log.findIndex((call) => call.startsWith('drawImage(img(moatWater.png),'));
+    const water = log.findIndex((call) => call.startsWith(`rect(${moat.from},`));
     const nearBank = faceAt(log, moat.from + 2 - FACE_WIDTH);
     const farBank = faceAt(log, moat.to - 2);
 
