@@ -41,7 +41,7 @@ colors.
 | `glob.png` | 4 × 44×20 | Cobra Matriarch: a venom glob flying (loops) | ChatGPT image, shrunk and cut into frames |
 | `puddle.png` | 6 × 80×40 | Cobra Matriarch: a poison puddle bubbling (loops) | stand-in ellipses, to be replaced by the ChatGPT strip |
 | `hypnosis.png` | 8 × 128×80 | Cobra Matriarch: the Hypnotic Gaze's rings and flash | ChatGPT image, shrunk and cut into frames; the fading rings kept down to a quarter's opacity |
-| `wasp.png` | 4 × 56×48 | Scorpion Queen: an ember wasp of the Hive Swarm flying (loops) | ChatGPT image, shrunk and cut into frames |
+| `wasp.png` | 4 × 56×48 | Scorpion Queen: a hive wasp of the Hive Swarm flying (loops), in her obsidian and venom green with pale lilac wings, so it shows against her orange sky | ChatGPT image (`concepts/enemies/scorpion-queen/chatgpt/wasp.webp`), baked by `tools/queen_sheet/bake.py`: its body held in one place while the wings beat |
 | `eruption.png` | 6 × 144×144 | Scorpion Queen: the earth bursting up behind her as she surfaces | ChatGPT image, shrunk and cut into frames |
 | `howl.png` | 6 × 112×112 | Gnoll Packlord: the Pack Call's rings spreading from his throat | ChatGPT image (three effects on one sheet), split into rows, shrunk and cut into frames |
 | `bones.png` | 6 × 144×72 | Gnoll Packlord: bones and earth bursting where the Leaping Maul lands | the same sheet's second row |

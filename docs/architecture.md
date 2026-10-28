@@ -767,7 +767,9 @@ take 40 MB unpacked instead of 251 MB). `drawEnemyFrame` lands each piece on the
 cell put it on, its edges drawn in to whole screen pixels and a centre exactly between two sheet
 pixels taking the first (`TIE_BREAK`). Run the tool again after changing a grid sheet:
 `test/unit/data/enemy-atlas.test.js` checks every packed piece against its cell, and
-`test/regression/bugs/enemy-sheet-memory.test.js` keeps the loaded sheets small.
+`test/regression/bugs/enemy-sheet-memory.test.js` keeps the loaded sheets small. The Scorpion
+Queen's grid sheet and her swarm's wasp are baked from ChatGPT images by `tools/queen_sheet/bake.py`
+(the prompts and images are in `concepts/enemies/scorpion-queen/`); pack the sheets after it.
 A Shade's strips are packed the same way (`tools/pack_hero_strips.py`, both tools on
 `tools/sheet_packing.py`): each strip's packed copy sits in `packed/` beside it, in its own palette
 or colors, and `src/data/hero-atlas/<shade>.js` holds each strip's frame height and pieces, a line
