@@ -4,6 +4,7 @@ import { isFightOver } from '../../stage/loot-time.js';
 import { tryBlink } from './blink.js';
 import { thinkBoss } from './boss.js';
 import { tryClimb } from './climb.js';
+import { tryLeap } from './leap.js';
 import { thinkMelee } from './melee.js';
 import { standStill, walk } from './movement.js';
 import { thinkSlinger } from './slinger.js';
@@ -13,9 +14,13 @@ function arenaMiddle(game) {
   return (left + right) / 2;
 }
 
+// the camera can run on ahead of a raider still walking in, so it may meet a moat on the way
 function walkIntoArena(game, fighter) {
-  fighter.facing = arenaMiddle(game) >= fighter.x ? 1 : -1;
+  const middle = arenaMiddle(game);
+
+  fighter.facing = middle >= fighter.x ? 1 : -1;
   walk(fighter, 1, 1);
+  tryLeap(game, fighter, middle);
 }
 
 function fightIsOff(game) {

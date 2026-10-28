@@ -1,6 +1,7 @@
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
 import { STEP_UP } from '../../sim/stage/terrain.js';
 import { drawCliffFaces, roundedShoulders } from './cliff-faces.js';
+import { drawDeepRun } from './deep-ground.js';
 import { drawRoadDetails, drawSwayingGrass } from './road-details.js';
 
 const TOP_SOIL = 11;
@@ -55,38 +56,50 @@ function drawStepFaces(painter, runs, colors) {
 }
 
 // the painted cross-section is anchored to the road, so it scrolls with it and wraps every tile;
-// its last row runs on down to the bottom of the view under a high hill
-function drawTextureRun(context, { image, top }, { x, width, y }) {
+// a road built on a deep body lays only its paving along the surface and the body under it, any
+// other runs the cross-section's last row on down to the bottom of the view under a high hill
+function drawTextureRun(painter, { image, top }, { run, deep, shadow }) {
+  const { context } = painter;
+  const { x, width, y } = run;
   const tileWidth = image.width;
+  const rows = deep ? deep.from : image.height;
   const bottom = y - top + image.height;
   for (let drawn = 0; drawn < width;) {
     const sourceX = (((x + drawn) % tileWidth) + tileWidth) % tileWidth;
     const span = Math.min(width - drawn, tileWidth - sourceX);
-    context.drawImage(
-      image,
-      sourceX,
-      0,
-      span,
-      image.height,
-      x + drawn,
-      y - top,
-      span,
-      image.height,
-    );
-    if (bottom < VIEW_HEIGHT) {
+    context.drawImage(image, sourceX, 0, span, rows, x + drawn, y - top, span, rows);
+    if (!deep && bottom < VIEW_HEIGHT) {
       const rest = VIEW_HEIGHT - bottom;
       context.drawImage(image, sourceX, image.height - 1, span, 1, x + drawn, bottom, span, rest);
     }
     drawn += span;
   }
+  if (deep) {
+    drawDeepRun(painter, deep, { run, fromY: y - top + deep.from, shadow });
+  }
 }
 
 // a road with a painted cliff gives its sheer steps a rock face; the others keep the earth line
-function drawSheerFaces(painter, runs, { colors, texture, cliff }) {
+function drawSheerFaces(painter, runs, { colors, texture, cliff, deep }) {
   if (texture?.ready && cliff?.ready) {
-    drawCliffFaces(painter, runs, { texture, cliff, colors });
+    drawCliffFaces(painter, runs, { texture, cliff, colors, deep });
   } else {
     drawStepFaces(painter, runs, colors);
+  }
+}
+
+// a road's level body is drawn once both its cross-section and its body have loaded
+function bodyOf(texture, deep) {
+  return texture?.ready && deep?.ready ? deep : null;
+}
+
+function drawRuns(painter, runs, { texture, deep, colors }) {
+  for (const run of runs) {
+    if (texture?.ready) {
+      drawTextureRun(painter, texture, { run, deep, shadow: colors.shadow });
+    } else {
+      drawSoilRun(painter, run, colors);
+    }
   }
 }
 
@@ -97,16 +110,12 @@ export function drawnSurface(surfaceAt, { texture, cliff }) {
 
 export function drawTerrainGround(painter, { cameraX, colors, tick, texture, cliff, ...road }) {
   const painted = texture?.ready;
+  const deep = bodyOf(texture, road.deep);
   const surfaceAt = drawnSurface(road.surfaceAt, { texture, cliff });
   const runs = surfaceRuns(surfaceAt, cameraX, cameraX + VIEW_WIDTH);
-  for (const run of runs) {
-    if (painted) {
-      drawTextureRun(painter.context, texture, run);
-    } else {
-      drawSoilRun(painter, run, colors);
-    }
-  }
-  drawSheerFaces(painter, runs, { colors, texture, cliff });
+
+  drawRuns(painter, runs, { texture, deep, colors });
+  drawSheerFaces(painter, runs, { colors, texture, cliff, deep });
   if (!painted) {
     drawRoadDetails(painter, { cameraX, colors, tick, surfaceAt });
   }

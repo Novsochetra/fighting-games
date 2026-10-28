@@ -75,6 +75,18 @@ describe('painted backdrops', () => {
     expect(loadPaintedBackdrop(loaders, plain).cliff).toBeNull();
   });
 
+  it('load the level body under a raised road, and the ends of its courses where it is built', () => {
+    const temple = loadPaintedBackdrop(loaders, PAINTED_BACKDROPS.angkorWat).deep;
+    const ruin = loadPaintedBackdrop(loaders, PAINTED_BACKDROPS.bayon).deep;
+
+    expect([temple.image.name, temple.image.height, temple.from]).toEqual(['deep.png', 216, 20]);
+    expect([temple.face.image.name, temple.breach.image.name]).toEqual(['face.png', 'breach.png']);
+    expect(temple.breach.mirrored.width).toBe(temple.breach.image.width);
+    expect([ruin.image.name, ruin.image.height, ruin.from]).toEqual(['deep.png', 216, 48]);
+    expect([ruin.face, ruin.breach]).toEqual([null, null]);
+    expect(loadPaintedBackdrop(loaders, PAINTED_BACKDROPS.pineRidge).deep).toBeNull();
+  });
+
   it('tile each layer across the view from its own share of the camera', () => {
     const { draws } = record([strip(320, 0.08), strip(384, 0.45)], 1000);
     expect(draws).toEqual([

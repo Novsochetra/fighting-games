@@ -15,11 +15,14 @@ export const OLD_GROVE = {
       [266, 300],
     ],
   },
+  // the deep earth under a raised step lies level with the road's, not run down from its last row
+  deep: { from: 40 },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },
     { name: 'way-in', parallax: 0.5, once: true },
   ],
+  nestTree: { layer: 'near', from: 95, to: 205, base: 180, bough: 159, branch: 0 },
   ambient: [
     {
       kind: 'shafts',

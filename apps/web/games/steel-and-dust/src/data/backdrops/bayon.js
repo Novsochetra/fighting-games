@@ -30,6 +30,9 @@ export const BAYON = {
     tileWidth: 384,
     spots: [{ kind: 'ledge', from: 92, to: 146, y: 101 }],
   },
+  // its stone and laterite follow the steps; the earth under them lies level, so a raised step
+  // stands on earth like the road's, not on a dark gap
+  deep: { from: 48 },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },

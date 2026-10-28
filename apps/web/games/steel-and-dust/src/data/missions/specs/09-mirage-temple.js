@@ -14,6 +14,7 @@ export const MIRAGE_TEMPLE = {
       screens: 2,
       ground: [...mound(90, 340, 24, 80), ...mound(500, 700, 10, 50)],
       platforms: [{ at: 170, width: 80, rise: 30, kind: 'slab' }],
+      boulders: [340],
       waves: [
         ['ghoul', 'ghoul', 'ghoul'],
         ['tombguard', 'ghoul', 'witch'],
@@ -36,6 +37,7 @@ export const MIRAGE_TEMPLE = {
         { at: 140, width: 80, rise: 28, kind: 'slab' },
         { at: 660, width: 80, rise: 30, kind: 'slab' },
       ],
+      spikeTraps: [366],
       waves: [
         ['ghoul', 'witch', 'assassin'],
         ['tombguard', 'ghoul', 'sentry'],
@@ -48,6 +50,8 @@ export const MIRAGE_TEMPLE = {
       screens: 2,
       ground: [...ramp(-270, -150, 16), ...mound(60, 330, 30, 90), ...mound(480, 720, 12, 48)],
       platforms: [{ at: 160, width: 80, rise: 30, kind: 'slab' }],
+      spikeTraps: [406],
+      boulders: [196],
       waves: [
         ['ghoul', 'tombguard', 'vulture'],
         ['witch', 'witch', 'ghoul'],
@@ -68,6 +72,8 @@ export const MIRAGE_TEMPLE = {
         ...mound(820, 1060, 12, 48),
       ],
       platforms: [{ at: 560, width: 80, rise: 28, kind: 'slab' }],
+      spikeTraps: [380],
+      boulders: [728],
       waves: [
         ['ghoul', 'ghoul', 'tombguard'],
         ['assassin', 'witch', 'ghoul'],

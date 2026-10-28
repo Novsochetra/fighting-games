@@ -1,4 +1,5 @@
 import { VIEW_WIDTH } from '../../config.js';
+import { layoutRoadProps } from './hazards-layout.js';
 import { layoutProps } from './props-layout.js';
 import { groundAt, layoutTerrain } from './terrain.js';
 
@@ -76,6 +77,7 @@ export function layoutMission(spec, index) {
     zones,
     terrain,
     crates: layoutCrates(zones, spec.crates, terrain),
+    ...layoutRoadProps(spec.zones, zones, terrain),
     props: layoutProps(spec, { length, terrain }),
   };
 }

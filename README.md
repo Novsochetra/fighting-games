@@ -73,5 +73,10 @@ The arcade runs on Railway as one service, the pages and the API from one addres
 Railway Postgres database. Every push to `main` deploys; `docs/deploy-railway.md` has the setup steps.
 `.github/workflows/ci.yml` runs `npm run check` on every push and pull request.
 
+Each build is versioned in SemVer with its commit as the build, as `1.0.0+5f272d9`, and the credits
+show it as Version 1.0.0 (5f272d9). The release is the `version` in `package.json`: raise it in the
+commit that ships a new game or feature (`npm version minor --no-git-tag-version`) or a fix
+(`npm version patch --no-git-tag-version`); the build follows each commit by itself.
+
 `npm run dev` needs no database: without `DATABASE_URL` the server keeps gifts in memory until it
 stops.

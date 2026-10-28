@@ -4,6 +4,7 @@ import { heroById } from '../data/heroes.js';
 import { dimForBossUltimate, isBossUltimate } from './fighters/boss-ultimate.js';
 import { drawFighter } from './fighters/draw-fighter.js';
 import { heroSheetFor } from './fighters/hero-sheets.js';
+import { drawSinking } from './fighters/sinking.js';
 import { drawTrail } from './fighters/trail.js';
 import { drawCarvings } from './fx/carvings.js';
 import { drawDebugBoxes } from './fx/debug-boxes.js';
@@ -16,7 +17,11 @@ import { drawSoldiers } from './fx/soldiers.js';
 import { drawBehindBursts, drawSummons } from './fx/summons.js';
 import { drawCrates } from './scene/crate.js';
 import { drawGround, floorUnderSky } from './scene/ground.js';
+import { drawMoats } from './scene/moats.js';
+import { drawNestTrees } from './scene/nest-trees.js';
 import { drawPlatforms } from './scene/platforms.js';
+import { drawOverheadProps, drawRoadProps } from './scene/road-props.js';
+import { drawTrees } from './scene/trees.js';
 import { drawGroundLoot, drawLootSparkles } from './scene/loot.js';
 import { drawChests } from './scene/loot-chest.js';
 import { drawPickups } from './scene/pickups.js';
@@ -58,13 +63,15 @@ function drawOne(painter, { game, view, fighter, sheet, cameraX }) {
   if (isBossUltimate(fighter)) {
     dimForBossUltimate(painter, fighter, cameraX);
   }
-  drawFighter(painter, {
-    fighter,
-    sheet,
-    enemySheets: view.enemySheets,
-    tickCount: game.tickCount,
-    floor: floorBelow(game.terrain, fighter.x, fighter.y),
-  });
+  drawSinking(painter, fighter, () =>
+    drawFighter(painter, {
+      fighter,
+      sheet,
+      enemySheets: view.enemySheets,
+      tickCount: game.tickCount,
+      floor: floorBelow(game.terrain, fighter.x, fighter.y),
+    }),
+  );
   drawTrail(painter, { fighter, sheet });
 }
 
@@ -99,24 +106,44 @@ function drawFighters(painter, { game, view, cameraX }) {
   }
 }
 
-export function drawWorld(painter, { game, view, cameraX }) {
-  const mission = missionOf(game);
-  const colors = scenePalette(mission.theme).ground;
-  const backdrop = view.backdrops[mission.theme];
-  const { terrain, tickCount: tick } = game;
-  drawGround(painter, { cameraX, colors, tick, terrain, backdrop });
-  drawProps(painter, { cameraX, props: mission.props, sheets: view.propSheets });
-  drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });
-  drawCrates(painter, game.crates, cameraX);
-  drawPickups(painter, game.pickups);
+// a drop spot's shadow falls on whatever is under the open sky in each column: a deck, or the turf
+function drawHazardsOnRoad(painter, { game, view, backdrop, cameraX }) {
   drawGroundHazards(painter, game.projectiles, view.fxSheets, {
-    floorAt: floorUnderSky(terrain, backdrop),
+    floorAt: floorUnderSky(game.terrain, backdrop),
     enemySheets: view.enemySheets,
     backdrop,
     cameraX,
     heroX: game.player.x,
   });
+}
+
+export function drawWorld(painter, { game, view, cameraX }) {
+  const mission = missionOf(game);
+  const palette = scenePalette(mission.theme);
+  const colors = palette.ground;
+  const backdrop = view.backdrops[mission.theme];
+  const { terrain, tickCount: tick } = game;
+  // the water lies behind the road, so each bank's rock face stands over its edge and runs on
+  // down into it
+  drawMoats(painter, {
+    water: terrain.water,
+    cameraX,
+    tick,
+    glints: palette.ambient.glints,
+    summons: game.summons,
+    sheets: view.fxSheets,
+  });
+  drawGround(painter, { cameraX, colors, tick, terrain, backdrop });
+  drawProps(painter, { cameraX, props: mission.props, sheets: view.propSheets });
+  drawTrees(painter, view.fxSheets, { trees: game.trees, cameraX });
+  drawNestTrees(painter, view.fxSheets, { nests: game.nests, backdrop, cameraX });
+  drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });
+  drawCrates(painter, game.crates, cameraX);
+  drawRoadProps(painter, { game, view, cameraX });
+  drawPickups(painter, game.pickups);
+  drawHazardsOnRoad(painter, { game, view, backdrop, cameraX });
   drawFighters(painter, { game, view, cameraX });
+  drawOverheadProps(painter, { game, view, cameraX });
   drawSummons(painter, game.summons, view.fxSheets);
   drawShockwaves(painter, game.shockwaves);
   drawProjectiles(painter, game.projectiles, view.fxSheets);

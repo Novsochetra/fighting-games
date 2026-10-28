@@ -9,3 +9,5 @@ export const WEB_ROOT = path.resolve(SOURCE_FOLDER, '../../web');
 export const GAMES_ROOT = path.join(WEB_ROOT, 'games');
 // What npm run build writes (apps/web/vite.config.ts), which npm start serves.
 export const DIST_ROOT = path.resolve(SOURCE_FOLDER, '../../../dist');
+// The arcade's package.json, whose version is the arcade's release (build-version.js).
+export const ARCADE_PACKAGE = path.resolve(SOURCE_FOLDER, '../../../package.json');

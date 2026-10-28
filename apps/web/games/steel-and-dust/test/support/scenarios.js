@@ -253,6 +253,16 @@ export const SCENARIOS = {
     renderEvery: 240,
     scheduled: { 600: ['fill'], 1200: ['w2'], 2400: ['w4'], 3000: ['fill'], 3600: ['w3'] },
   },
+  // the Naga Causeway at Angkor Wat: raiders leap the breach down to the moat, and the bot jumps
+  // it and knocks them in
+  causeway: {
+    mission: 10,
+    seed: 1110,
+    ticks: 2400,
+    sampleEvery: 30,
+    renderEvery: 240,
+    scheduled: { 600: ['fill'], 1200: ['w3'] },
+  },
   // the seventh mission, the painted canyon in a sandstorm: blinking witches and assassins,
   // slings, bombers and sentries on wide zones over dunes, rock ledges and scaffolds
   sandstorm: {

@@ -10,6 +10,7 @@ import { updatePhoenix } from './phoenix.js';
 import { updatePillar } from './pillars.js';
 import { updatePoison } from './poison.js';
 import { updateSoldier } from './soldiers.js';
+import { updateSplash } from './splashes.js';
 import { updateStag } from './stags.js';
 import { updateStoneSkin } from './stone-skin.js';
 import { updateThorn } from './thorns.js';
@@ -30,6 +31,7 @@ const UPDATE_BY_KIND = {
   echo: updateEcho,
   hangingCut: updateHangingCut,
   carving: updateCarving,
+  splash: updateSplash,
 };
 
 // a summon with a delay starts at a negative time and waits for zero

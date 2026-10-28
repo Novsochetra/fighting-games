@@ -186,7 +186,11 @@ tiles side by side, and every road got a cliff face. All of it is reproducible w
   (Pro) call at 16x64 with a crop of the Pine Ridge cross-section as the style image gave 16
   candidate faces (earth, stones, roots, strata, stacked stones); `cliff` picks one per forest,
   repaints it in that forest's earth by brightness rank, darkens it as a face turned from the light,
-  crumbles its outer edge and leaves its top clear so the road's own turf rolls over it:
+  crumbles its outer edge in its own earth and leaves its top clear so the road's own turf rolls
+  over it. The faces were first crumbled with a black outline, a line drawn round each face against
+  the scenery; `edge` repainted it on the four with one (Pine Ridge, Old Grove, Bamboo Pass, Ember
+  Woods) from the faces themselves, as the PixelLab candidates were not kept. The black lines of
+  Old Grove's roots stay inside its face, as its road outlines its own roots in black:
 
   | Folder            | Candidate         | Arguments after `<ground.png>` (left width skip depth turf lip shade) |
   | ----------------- | ----------------- | --------------------------------------------------------------------- |
@@ -241,10 +245,10 @@ python3 $T pieces props.png prop
 python3 $T key $C/ground.webp ground-keyed.png 0.15
 python3 $T tile ground-keyed.png $A/ground.png 32 128
 python3 $T course $A/ground.png course.png 8 19 270
-python3 $T place $A/near.png 768 187 '#b07a80' 0.2 48 prop-7.png:4 prop-4.png:44 prop-6.png:128 \
-  prop-5.png:186 prop-3.png:262 prop-2.png:324:m course.png:366 prop-0.png:372:10 prop-1.png:410:10 \
-  prop-1.png:502:10 prop-0.png:594:m:10 prop-2.png:642 prop-7.png:712:m
-python3 $T face $A/ground.png $A/cliff.png 10 60
+python3 $T place $A/near.png 768 187 '#b07a80' 0.2 48 prop-2.png:507:m course.png:549 \
+  prop-0.png:555:10 prop-1.png:593:10 prop-1.png:685:10 prop-0.png:777:m:10 prop-2.png:825 \
+  prop-4.png:866 prop-5.png:946 prop-6.png:922 prop-3.png:1020
+python3 tools/road_body.py courses $A/ground.png $A 10 19 29 31
 ```
 
 - `back.png` (553x216) is rows 208-808 of the scene, a 3:1 band with the central tower's tip at
@@ -259,17 +263,42 @@ python3 $T face $A/ground.png $A/cliff.png 10 60
 - `near.png` (768 wide): the props sheet keyed at 0.15 (the singha a little taller than a fighter),
   cut into its eight props (naga end, balustrade run, singha, spirit house; gateway, frangipani and
   banana, ferns, broken pillar), laid out by hand and hazed 0.2 toward the moat mist (`#b07a80`).
-  Two tall accents (the gateway, the frangipani) come first, then a long low run: two singhas
-  guarding a naga balustrade with a naga at each end, so half the strip leaves the temple in view.
-  The run stands on a `course` of the road's own paving (rows 8-19 of `ground.png`): much of this
-  road is raised 16 to 36 px, and without the course the 25 px balustrade hid behind it. The
-  incense smoke rises from the spirit house's sticks at x 280, y 162.
+  Columns 274-504 are left empty: they are the ones that slide behind the moat's breach in the
+  Naga Causeway from any camera that shows it, and with the naga balustrade there it stood at the
+  road's own height in the gap and read as a bridge. Through the breach the back plate's own moat
+  shows over the water instead (`test/regression/bugs/naga-behind-the-breach.test.js`). The rest
+  holds two singhas guarding a naga balustrade with a naga at each end, then the gateway, the
+  frangipani with the ferns at their feet, and the spirit house; the broken pillars did not fit. A
+  piece laid past the strip's right end runs on at its left. The run stands on a `course` of the
+  road's own paving (rows 8-19 of `ground.png`): much of this road is raised 16 to 36 px, and
+  without the course the 25 px balustrade hid behind it. The incense smoke rises from the spirit
+  house's sticks at x 270, y 162.
 - `ground.png` (227x49) is the cross-section keyed at 0.15 and cut between columns 2 and 229, the
   pair that match best, so it tiles without a crossfade. Its first full row is 8, the lit top of the
   paving slabs; `groundTop` is 10 so the fighters stand on that top face. Its last row is one plain
   deep-earth colour, so the run down under a high step does not draw stripes.
-- `cliff.png` (12x64) is the ground's own columns 60-71 from the surface down, darkened to 0.75 as
-  a face turned from the light, its lip lit and its outer edge dark.
+- `deep.png` (227x216), `face.png` (44x216), `breach.png` (32x216) and `cliff.png` (12x26) are the
+  road's body, made with `tools/road_body.py courses` from `ground.png` (`deep: { from: 20, faces:
+  true }`). Much of this road is raised 16 to 36 px, and the cross-section only reached a few dozen
+  rows under it, its last row stretched to the bottom of the screen: a flat dark void under every
+  terrace and stair, every step and both banks of the moat's breach a ruler-straight cut. Now only
+  the paving and its turf (rows 0-19) follow each step; under them the road is built level at the
+  world's rows. `deep.png` is the road's own laterite course (rows 19-28, its mortar line first)
+  laid course on course up to the highest step, each shifted along from the one under it so no
+  joint stands over another, worn quieter than the road's own, a block in eleven fallen out to the
+  dark core behind and two strangler-fig roots crawling down it; from world row 193 down it is the
+  cross-section's own course and earth, so the road at its base level is laid as before, and all of
+  it darkens and cools toward the theme's `rock` (`#4f2c3c`) down to the bottom of the screen, where
+  the fight's feet are. The paving casts a two-row shadow on the wall under it (in code).
+  `face.png` is four sets of the ends of those courses where a step cuts through them, each end
+  jutting out up to 4 px, flush or fallen back 2-3 px, with an eroded earth edge and roots under
+  the road's course; a step picks its set by where it stands. `breach.png` is the two banks of the
+  moat's breach, drawn by hand course by course (a face that runs on down out of sight is a
+  breach): blocks jutting 5 and 6 px, a block fallen out of each, the earth bulging out under one
+  and falling back under the other, roots hanging into the gap. `cliff.png` is the end of the
+  paving at a step's lip, a pixel overhanging and its end in shade, with three strands of creeper
+  in the theme's `grass` hanging off it. Before this it was the ground's own columns 60-71 darkened
+  to 0.75, the full height of a face.
 - `way-in.png` (384 wide, the last of Warden's Fortress on the left of the first screen) is kept
   from the first version: the banner tower, spiked barricade and bare pennant pole cut from
   `warden-fortress/near.png` (columns 1430-1506, 925-1000, 590-597), overgrown with one Edit (Pro
@@ -309,3 +338,43 @@ commands, because the tool has no step for them.
 - `cliff.png` (12x64) is drawn by hand in `ground.png`'s colours, the face of a sheer step: two
   courses of grey-green sandstone with moss on the lip and in the joint, a course of laterite set
   back a pixel under them, then earth with fig roots going dark, with a dark outer edge.
+- `deep.png` is the earth under its raised steps; see "The ground under raised steps" below.
+
+## The ground under raised steps
+
+A cross-section is laid along the road's surface, so under a step raised above the road's base
+level it ends that much higher. On most roads it ended before the bottom of the screen, and its last
+row was stretched down the rest of the way: a flat dark band under every high hill, terrace and
+stair, striped where that row was not one colour (Angkor Wat 29 rows, Warden's Fortress 18, Iron
+Works 14, Sandstorm Pass 13, Old Grove 12, the Bayon 11, Ember Woods 7, Raider Camp 5, Firefly
+Hollow 4). Each of those roads now has a `deep.png` (as wide as its `ground.png`, 216 tall) and
+`deep: { from }` in its backdrop: the cross-section's rows above `from` still follow every step, and
+under them the road's body lies at the world's own rows (`src/render/scene/deep-ground.js`). From
+the world row where the road at its base level lays row `from` on down, `deep.png` is the
+cross-section's own rows, so the road at its base level looks as it did; above that, under the
+raised ground, it is a band of the cross-section's deep earth from `from`, repeated upward, shifted
+along each time and every other one upside down, so the earth darkening with depth draws no line
+where two meet. The band starts below any stratum that would draw lines across a hill (Raider
+Camp's dark layer at row 53, Sandstorm Pass's light and dark lines at rows 42-45), which still
+follow the surface:
+
+```
+python3 tools/road_body.py earth <folder>/ground.png <folder>/deep.png <groundTop> <from> <band>
+```
+
+| Folder             | `groundTop` | `from` | band |
+| ------------------ | ----------- | ------ | ---- |
+| `old-grove/`       | 8           | 40     | 12   |
+| `raider-camp/`     | 13          | 44     | 9    |
+| `ember-woods/`     | 5           | 37     | 12   |
+| `firefly-hollow/`  | 8           | 40     | 12   |
+| `sandstorm-pass/`  | 2           | 46     | 7    |
+| `iron-works/`      | 14          | 46     | 12   |
+| `warden-fortress/` | 14          | 46     | 12   |
+| `bayon/`           | 19          | 48     | 10   |
+
+Angkor Wat's body is built of courses instead (`courses`, in its section above). Pine Ridge and
+Mirage Temple reach the bottom of the screen under their highest ground, and Bamboo Pass falls one
+row short, its last row drawn once; they keep the cross-section alone.
+`test/regression/bugs/raised-road-over-a-void.test.js` renders every road's highest ground and
+fails if any runs a row on down.

@@ -5,6 +5,8 @@ import { STEP_UP } from '../../stage/terrain.js';
 
 const HOP_VY = -5.8;
 const HOP_SPEED = 1.4;
+// a leap over a moat is the same hop thrown further, to clear the water from its very edge
+const LEAP_SPEED = 2.2;
 // the hop peaks 53px up; anything taller than this is left alone so a raider never hops at a
 // ledge it cannot land on
 export const HOP_REACH = 48;
@@ -46,6 +48,19 @@ export function hop(game, raider, { toX, faceX, rise }) {
   const travel = toX - raider.x;
   const faceGap = faceX === null ? null : Math.abs(faceX - raider.x);
   jump(game, raider, { vy: HOP_VY, vx: hopSpeed({ travel, faceGap, rise }) });
+  raider.ai.hopWait = HOP_WAIT;
+}
+
+// a hop that comes down on the spot `toX` away at the height it left from, however far that is
+export function leap(game, raider, toX) {
+  const travel = toX - raider.x;
+  const { land } = hopTimes(0);
+
+  jump(game, raider, {
+    vy: HOP_VY,
+    vx: Math.sign(travel) * Math.min(LEAP_SPEED, Math.abs(travel) / land),
+  });
+
   raider.ai.hopWait = HOP_WAIT;
 }
 

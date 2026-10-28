@@ -51,6 +51,7 @@ export const BAYON = {
         { at: 830, width: 80, rise: 30, kind: 'lintel' },
         { at: 1000, width: 80, rise: 24, kind: 'lintel' },
       ],
+      towers: [955],
       waves: [
         ['vulture', 'sentry', 'tombguard', 'monk'],
         dropIn(['assassin', 'ghoul', 'assassin', 'ghoul']),
@@ -85,6 +86,7 @@ export const BAYON = {
         { at: 850, width: 80, rise: 28, kind: 'lintel' },
         { at: 1030, width: 80, rise: 32, kind: 'lintel' },
       ],
+      slabs: [400, 790, 980],
       waves: [
         ['monk', 'sentry', 'monk', 'vulture'],
         ['tombguard', 'witch', 'juggernaut'],
@@ -122,6 +124,7 @@ export const BAYON = {
         { at: 820, width: 80, rise: 34, kind: 'lintel' },
         { at: 990, width: 80, rise: 26, kind: 'lintel' },
       ],
+      towers: [390, 945],
       waves: [
         ['ghoul', 'sentry', 'assassin', 'witch'],
         ['juggernaut', 'vulture', 'tombguard', 'monk'],

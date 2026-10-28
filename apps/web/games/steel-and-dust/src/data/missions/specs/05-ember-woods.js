@@ -31,6 +31,8 @@ export const EMBER_WOODS = {
     },
     {
       screens: 3,
+      trees: [842],
+      nests: [1060],
       // the ember ridge: up to its crest and down a broken step; then two rises of rock and a
       // deck over the lock for the sentries
       ground: [
@@ -65,6 +67,8 @@ export const EMBER_WOODS = {
     },
     {
       screens: 2,
+      trees: [580],
+      nests: [440],
       // a leaf hollow between two low knolls, a deck over it
       ground: [...mound(60, 200, 18, 50), ...mound(270, 400, 12, 40)],
       platforms: [{ at: 190, width: 80, rise: 36, kind: 'planks' }],

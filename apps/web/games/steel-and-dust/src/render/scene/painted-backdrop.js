@@ -23,7 +23,7 @@ function loadLayer({ createImage, baseUrl }, folder, { name, parallax, once = fa
 
 // the face of a step whose high ground is on the left; its mirror image is made once, on load,
 // for the faces that look the other way
-function loadCliff({ createImage, createCanvas, baseUrl }, folder) {
+function loadCliff({ createImage, createCanvas, baseUrl }, folder, name = 'cliff') {
   const cliff = { image: createImage(), mirrored: null, ready: false, settled: false };
   watchLoad(cliff, () => {
     const { width, height } = cliff.image;
@@ -32,8 +32,20 @@ function loadCliff({ createImage, createCanvas, baseUrl }, folder) {
     context.setTransform(-1, 0, 0, 1, width, 0);
     context.drawImage(cliff.image, 0, 0);
   });
-  cliff.image.src = `${baseUrl}${DIRECTORY}${folder}/cliff.png`;
+  cliff.image.src = `${baseUrl}${DIRECTORY}${folder}/${name}.png`;
   return cliff;
+}
+
+// the road's body under its paving, laid level along the world's rows from the cross-section's row
+// `from` down, and, where it is built of courses, their ends where a step or a breach cuts through
+function loadDeep(loaders, folder, { from, faces = false }) {
+  const deep = loadLayer(loaders, folder, { name: 'deep', parallax: 1 });
+
+  return Object.assign(deep, {
+    from,
+    face: faces ? loadCliff(loaders, folder, 'face') : null,
+    breach: faces ? loadCliff(loaders, folder, 'breach') : null,
+  });
 }
 
 export function loadPaintedBackdrop(loaders, spec) {
@@ -47,7 +59,9 @@ export function loadPaintedBackdrop(loaders, spec) {
     ground,
     cliff: spec.cliff ? loadCliff(loaders, spec.folder) : null,
     canopy: spec.canopy ?? null,
+    deep: spec.deep ? loadDeep(loaders, spec.folder, spec.deep) : null,
     ambient: spec.ambient,
+    nestTree: spec.nestTree,
   };
 }
 

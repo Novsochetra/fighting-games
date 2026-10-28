@@ -8912,15 +8912,15 @@
   {
    "tick": 1920,
    "frame": {
-    "calls": 1416,
-    "digest": "91504e1944dc6fc6"
+    "calls": 1421,
+    "digest": "56331108e4c05137"
    }
   },
   {
    "tick": 2160,
    "frame": {
-    "calls": 1285,
-    "digest": "0179c8387dd5eba3"
+    "calls": 1290,
+    "digest": "316b06ef3ebe0d5b"
    }
   }
  ]

@@ -9,6 +9,8 @@ export const RAIDER_CAMP = {
     tileWidth: 384,
     spots: [{ kind: 'ledge', from: 109, to: 144, y: 92 }],
   },
+  // the deep earth under a raised step lies level with the road's, not run down from its last row
+  deep: { from: 44 },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },

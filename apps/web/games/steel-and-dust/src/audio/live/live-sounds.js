@@ -4,12 +4,14 @@ import { BOSS_SOUNDS } from './boss-sounds.js';
 import { ELEMENT_SOUNDS } from './element-sounds.js';
 import { EVENT_SOUNDS } from './event-sounds.js';
 import { HANDOFF_SOUNDS } from './handoff-sounds.js';
+import { HAZARD_SOUNDS } from './hazard-sounds.js';
 import { HEAVY_SOUNDS } from './heavy/index.js';
 import { MENU_SOUNDS } from './menu-sounds.js';
 import { MOAT_SOUNDS } from './moat-sounds.js';
 import { SIGNATURE_SOUNDS } from './signature-sounds.js';
 import { SUMMARY_SOUNDS } from './summary-sounds.js';
 import { TEMPLE_SOUNDS } from './temple-sounds.js';
+import { TRAP_SOUNDS } from './trap-sounds.js';
 import { WARDEN_SOUNDS } from './warden-sounds.js';
 
 // the rarer menu, event and boss sounds, built from live nodes each time: { key: (live, start) => {} }
@@ -27,6 +29,8 @@ export const LIVE_SOUNDS = {
   ...BAYON_SOUNDS,
   ...MOAT_SOUNDS,
   ...AMBUSH_SOUNDS,
+  ...HAZARD_SOUNDS,
+  ...TRAP_SOUNDS,
 };
 
 export function isLiveSound(key) {

@@ -68,15 +68,30 @@ describe('painted backdrops', () => {
     }
   });
 
+  // a road whose body draws the ends of its own courses hangs only its paving's end from the lip
   it('find a cliff face on disk for every road that has one, about 12 by 64', () => {
     const withCliffs = Object.entries(PAINTED_BACKDROPS).filter(([, spec]) => spec.cliff);
     expect(withCliffs.length).toBeGreaterThanOrEqual(6);
-    for (const [themeId, { folder }] of withCliffs) {
+    for (const [themeId, { folder, deep }] of withCliffs) {
       const { width, height } = layerSize(folder, 'cliff');
       expect(width, themeId).toBeGreaterThanOrEqual(8);
       expect(width, themeId).toBeLessThanOrEqual(16);
-      expect(height, themeId).toBe(64);
+      expect(height, themeId).toBe(deep?.faces ? 26 : 64);
     }
+  });
+
+  it('find the level body of every raised road that has one, the height of the view', () => {
+    const withBodies = Object.entries(PAINTED_BACKDROPS).filter(([, spec]) => spec.deep);
+    expect(withBodies.length).toBeGreaterThanOrEqual(9);
+    for (const [themeId, { folder, deep }] of withBodies) {
+      expect(layerSize(folder, 'deep'), themeId).toEqual({
+        ...layerSize(folder, 'ground'),
+        height: 216,
+      });
+      expect(deep.from, themeId).toBeLessThan(layerSize(folder, 'ground').height);
+    }
+    expect(layerSize('angkor-wat', 'face')).toEqual({ width: 4 * 11, height: 216 });
+    expect(layerSize('angkor-wat', 'breach')).toEqual({ width: 2 * 16, height: 216 });
   });
 
   it('put every emitter inside its near layer, which repeats at the width the emitter expects', () => {

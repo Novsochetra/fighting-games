@@ -16,6 +16,7 @@ export const IRON_WORKS = {
       screens: 2,
       ground: [...mound(60, 320, 24, 72), ...mound(470, 700, 12, 48)],
       platforms: [{ at: 120, width: 80, rise: 32, kind: 'catwalk' }],
+      hammers: [370],
       waves: [
         ['stoker', 'scrapper', 'stoker'],
         dropIn(['stoker', 'knife', 'stoker']),
@@ -33,12 +34,14 @@ export const IRON_WORKS = {
           [60, 12],
         ]),
         ...ramp(500, 680, 20),
-        ...mound(820, 1060, 14, 56),
+        ...mound(990, 1110, 12, 40),
       ],
       platforms: [
         { at: 230, width: 80, rise: 26, kind: 'catwalk' },
         { at: 600, width: 80, rise: 30, kind: 'catwalk' },
       ],
+      hammers: [400],
+      conveyors: [{ at: 830, segments: 2, direction: -1 }],
       waves: [
         ['bomber', 'stoker', 'jackal'],
         ['juggernaut', 'shield', 'sentry'],
@@ -62,6 +65,7 @@ export const IRON_WORKS = {
     },
     {
       screens: 3,
+      vents: [460, 780],
       ground: [
         ...mound(-260, -150, 12, 36),
         ...stairs(60, [

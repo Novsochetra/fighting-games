@@ -2,9 +2,9 @@ import { layoutTerrain } from '../../src/data/missions/terrain.js';
 import { groundAt } from '../../src/sim/stage/terrain.js';
 import { createPlayingGame } from './test-game.js';
 
-// one zone that starts at x = 0, so ground points and platform spots are world x
-export function buildTerrain({ length = 1200, ground = [], platforms = [] } = {}) {
-  return layoutTerrain([{ ground, platforms }], [{ left: 0, right: length }], length);
+// one zone that starts at x = 0, so ground points, platform spots and moats are world x
+export function buildTerrain({ length = 1200, ground = [], platforms = [], moats } = {}) {
+  return layoutTerrain([{ ground, platforms, moats }], [{ left: 0, right: length }], length);
 }
 
 // a mission's own zones, each with a bank before it (a sheer face up, a slope down), a hill
@@ -37,6 +37,8 @@ export function useTerrain(game, terrain) {
   for (const crate of game.crates) {
     crate.y = groundAt(terrain, crate.x);
   }
+  // a tree is laid where its own road is level for its whole length, which another road is not
+  game.trees = [];
   return game;
 }
 

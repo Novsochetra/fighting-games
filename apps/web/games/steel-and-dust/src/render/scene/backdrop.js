@@ -9,8 +9,8 @@ export function backdropFor(view, themeId) {
   return view.backdrops[themeId];
 }
 
-export function backdropPieces({ layers, fronts, ground, cliff }) {
-  return [...layers, ...fronts, ground, cliff].filter(Boolean);
+export function backdropPieces({ layers, fronts, ground, cliff, deep }) {
+  return [...layers, ...fronts, ground, cliff, deep, deep?.face, deep?.breach].filter(Boolean);
 }
 
 export function backdropSettled(backdrop) {

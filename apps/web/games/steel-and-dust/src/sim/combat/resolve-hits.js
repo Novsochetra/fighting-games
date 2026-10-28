@@ -5,6 +5,7 @@ import { strikePharaohSpells } from '../bosses/pharaoh-targets.js';
 import { isPlayer } from '../fighters/loadout.js';
 import { addFloatText, addRing } from '../fx/effects.js';
 import { addSparks } from '../fx/particles.js';
+import { strikeRoad } from '../hazards/road-props.js';
 import { reverseDive } from '../hazards/shot-aim.js';
 import { isDeflectable } from '../hazards/shot-rules.js';
 import { breakCrate } from '../items/crates.js';
@@ -130,6 +131,7 @@ function resolveAttacker(game, attacker) {
     return;
   }
   hitCrates(game, attacker, area);
+  strikeRoad(game, area, attacker.facing);
   strikePharaohSpells(game, attacker, area);
   deflectKnives(game, attacker, area);
   if (connected) {

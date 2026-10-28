@@ -4,8 +4,8 @@ import { drawnSurface, drawTerrainGround } from './terrain-ground.js';
 // the road follows the terrain's hills and steps, laid from the backdrop's painted cross-section
 export function drawGround(painter, { cameraX, colors, tick, terrain, backdrop }) {
   const surfaceAt = (x) => groundAt(terrain, x);
-  const { ground: texture, cliff } = backdrop ?? {};
-  drawTerrainGround(painter, { cameraX, colors, tick, surfaceAt, texture, cliff });
+  const { ground: texture, cliff, deep } = backdrop ?? {};
+  drawTerrainGround(painter, { cameraX, colors, tick, surfaceAt, texture, cliff, deep });
 }
 
 // what the light from straight overhead meets in each column: a deck over the road there, or the

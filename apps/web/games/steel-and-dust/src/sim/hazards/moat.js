@@ -1,0 +1,129 @@
+import { COLORS } from '../../art/colors.js';
+import { FX_COLORS } from '../../art/fx-colors.js';
+import { FX_SCALE, FX_SPRITES } from '../../data/fx-sprites.js';
+import { MOAT, MOAT_SPLASH } from '../../data/moat.js';
+import { knockOut } from '../combat/knock-out.js';
+import { endMove } from '../fighters/actions.js';
+import { addFloatText } from '../fx/effects.js';
+import { addSparks } from '../fx/particles.js';
+import { groundAt, waterAt } from '../stage/terrain.js';
+import { addSplash } from '../summons/splashes.js';
+
+// the water bursts up out of the breach, not out of a bank's rock face, however near an edge the
+// body went in: as near where it fell as the splash's width allows, or mid-breach if it is wider
+function splashX(water, x) {
+  const middle = (water.from + water.to) / 2;
+  const halfWidth = (FX_SPRITES.splash.frameWidth * FX_SCALE * MOAT_SPLASH.scale) / 2;
+  const room = Math.max(0, (water.to - water.from) / 2 - halfWidth);
+
+  return Math.min(Math.max(x, middle - room), middle + room);
+}
+
+function splash(game, x, water) {
+  const at = splashX(water, x);
+
+  addSplash(game, { x: at, y: water.level });
+  game.io.sfx('splash', false, { x: at });
+}
+
+// the bank on the side nearer `x`, and the way from the water onto it
+function bankBeside(game, water, x) {
+  const side = x < (water.from + water.to) / 2 ? -1 : 1;
+  const bankX = side < 0 ? water.from - MOAT.bankIn : water.to + MOAT.bankIn;
+
+  return { x: bankX, y: groundAt(game.terrain, bankX), side };
+}
+
+// the hero or a boss hauls out onto the nearer bank, and only the hero pays for the fall; a
+// knocked-out body is laid there and stays down
+function climbOut(game, fighter, water) {
+  const { x, y } = bankBeside(game, water, fighter.x);
+
+  Object.assign(fighter, { x, y, vx: 0, vy: 0, airborne: false, airDashUsed: false, pogoCount: 0 });
+  if (fighter.state === 'ko') {
+    return;
+  }
+
+  endMove(game, fighter);
+  if (fighter.side === 'player') {
+    fighter.hp = Math.max(1, fighter.hp - MOAT.heroDamage);
+    fighter.invincible = Math.max(fighter.invincible, MOAT.heroInvincible);
+  }
+}
+
+// its purse washes up on the nearer bank rather than sinking with it
+function washAshore(pieces, bank) {
+  for (const piece of pieces) {
+    Object.assign(piece, { x: bank.x, y: bank.y - 1, vx: bank.side * Math.abs(piece.vx) });
+  }
+}
+
+// a raider already knocked out just sinks; one still fighting is out at once. Either sinks on
+// down through the water, out of sight under its splash, rather than hopping up off it as a body
+// knocked out on the road does
+function ringOut(game, raider, water) {
+  const height = MOAT.raiderHeight * raider.scale;
+  const sinking = { vx: 0, vy: Math.max(0, raider.vy), sinksTo: water.level + height };
+
+  if (raider.state !== 'ko') {
+    const spilled = game.loot.length;
+
+    knockOut(game, raider, Math.sign(raider.vx) || raider.facing);
+    washAshore(game.loot.slice(spilled), bankBeside(game, water, raider.x));
+    game.score += MOAT.ringOutBonus;
+    const y = raider.y - height;
+    addFloatText(game, { x: raider.x, y, text: 'Ring out!', color: COLORS.gold });
+  }
+
+  Object.assign(raider, sinking);
+}
+
+function sinkAway(raider) {
+  if (raider.y >= raider.sinksTo) {
+    raider.removed = true;
+  }
+}
+
+function sinks(game, piece) {
+  const water = waterAt(game.terrain, piece.x);
+
+  if (!water || piece.y < water.level) {
+    return false;
+  }
+
+  addSparks(game, { x: piece.x, y: water.level, count: 2, color: FX_COLORS.foam, speed: 1 });
+
+  return true;
+}
+
+function plunge(game, fighter, water) {
+  splash(game, fighter.x, water);
+  if (fighter.side === 'player' || fighter.def.boss) {
+    climbOut(game, fighter, water);
+  } else {
+    ringOut(game, fighter, water);
+  }
+}
+
+// the ultimate places the hero itself, wherever it likes
+function fallsIn(fighter, water) {
+  return water !== null && fighter.y >= water.level && !fighter.removed && fighter.state !== 'ult';
+}
+
+export function updateMoat(game) {
+  if (!game.terrain.water?.length) {
+    return;
+  }
+
+  for (const fighter of game.fighters) {
+    const water = waterAt(game.terrain, fighter.x);
+
+    if (fighter.sinksTo) {
+      sinkAway(fighter);
+    } else if (fallsIn(fighter, water)) {
+      plunge(game, fighter, water);
+    }
+  }
+
+  game.loot = game.loot.filter((piece) => !sinks(game, piece));
+}

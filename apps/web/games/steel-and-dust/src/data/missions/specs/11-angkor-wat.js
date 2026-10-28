@@ -22,6 +22,9 @@ export const ANGKOR_WAT = {
           [14, 8],
         ]),
       ],
+      // a breach in the causeway down to the moat: a raider knocked into the water is out at once.
+      // It stays clear of the screen the last wave locks, so no raider walks in over it
+      moats: [[310, 354]],
       platforms: [
         { at: 118, width: 80, rise: 28, kind: 'lintel' },
         { at: 476, width: 80, rise: 24, kind: 'lintel' },

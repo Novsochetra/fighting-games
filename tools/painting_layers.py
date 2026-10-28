@@ -19,11 +19,12 @@
         faces turned from the light: the plinth a balustrade stands on
     python3 tools/painting_layers.py place <out> <width> <base_y> <haze #rrggbb> <amount> <colours> <piece>[:x[:m][:lift]]...
         lays pieces on a transparent strip, each one's lowest row on base_y minus lift (m mirrors
-        it), hazes the strip toward the road's air and reduces it to `colours`
+        it; one laid past the strip's right end runs on at its left, as the strip tiles), hazes the
+        strip toward the road's air and reduces it to `colours`
     python3 tools/painting_layers.py face <ground> <out> <surface_row> <x> [width=12] [shade=0.75]
         the face of a step whose high ground is on the left, from the ground's own columns under
         its surface: darkened as a face turned from the light, the lip lit and the outer edge
-        dark; 64 rows tall, the last row run on down
+        its own dirt, not an outline; 64 rows tall, the last row run on down
 """
 import sys
 from PIL import Image, ImageOps
@@ -189,7 +190,12 @@ def place(dst, width, base_y, colour, amount, colours, *specs):
         piece = Image.open(path).convert('RGBA')
         piece = ImageOps.mirror(piece) if 'm' in flags else piece
         lift = next((int(flag) for flag in flags if flag.isdigit()), 0)
-        strip.alpha_composite(piece, (int(x), int(base_y) - lift + 1 - piece.height))
+        top = int(base_y) - lift + 1 - piece.height
+        # the strip tiles, so a piece laid past its right end runs on at its left
+        left = int(x) % int(width)
+        strip.alpha_composite(piece, (left, top))
+        if left + piece.width > int(width):
+            strip.alpha_composite(piece, (0, top), (int(width) - left, 0))
     tint = tuple(int(colour[i:i + 2], 16) for i in (1, 3, 5))
     share = float(amount)
     strip.putdata([
@@ -209,11 +215,12 @@ def face(ground, dst, surface_row, x, width='12', shade='0.75'):
     for y in range(rows.height, CLIFF_HEIGHT):
         out.paste(last, (0, y))
     px = out.load()
-    darkest = min((px[i, y] for i in range(width) for y in range(CLIFF_HEIGHT)), key=lambda c: sum(c[:3]))
+    # the edge is the dirt beside it, not the ground's darkest colour: a black line down a face
+    # reads as a drawn outline wherever it meets the sky or water, and the rest of the road has none
     for y in range(CLIFF_HEIGHT):
         for i in range(width - 1):
             px[i, y] = darken(px[i, y], float(shade)) if y else px[i, y]
-        px[width - 1, y] = darkest
+        px[width - 1, y] = px[width - 2, y]
     out.save(dst)
 
 

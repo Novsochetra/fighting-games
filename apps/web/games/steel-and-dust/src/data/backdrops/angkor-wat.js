@@ -6,6 +6,10 @@ export const ANGKOR_WAT = {
   folder: 'angkor-wat',
   groundTop: 10,
   cliff: true,
+  // only the paving and its turf follow the steps; from the mortar under the paving down, the road
+  // is built level: laterite courses up to the highest step and earth under the road's own course,
+  // their ends staggered and broken where a step or the breach cuts through them
+  deep: { from: 20, faces: true },
   layers: [
     { name: 'back', parallax: 0.03 },
     { name: 'near', parallax: 0.45 },
@@ -25,7 +29,7 @@ export const ANGKOR_WAT = {
     { kind: 'birds', plane: 'back', period: 1500, y: 44 },
     { kind: 'glints', plane: 'back', count: 14, top: 165, bottom: 180, drift: 0.03 },
     { kind: 'motes', plane: 'back', count: 10, drift: 0.3, top: 40, bottom: 150 },
-    { kind: 'smoke', plane: 'back', emitters: [{ x: 280, y: 162 }], tileWidth: 768, drift: 0.45 },
+    { kind: 'smoke', plane: 'back', emitters: [{ x: 270, y: 162 }], tileWidth: 768, drift: 0.45 },
     { kind: 'butterflies', plane: 'back', count: 4, top: 120, bottom: 176, drift: 0.45 },
     { kind: 'leaves', plane: 'front', count: 6, drift: 1.1, wind: 0.15 },
   ],

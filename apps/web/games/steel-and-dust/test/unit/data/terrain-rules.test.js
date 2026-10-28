@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { GROUND_Y, VIEW_WIDTH } from '../../../src/config.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { PLATFORM_SPRITES } from '../../../src/data/platform-sprites.js';
-import { STEP_UP, groundAt } from '../../../src/sim/stage/terrain.js';
+import { STEP_UP, groundAt, waterAt } from '../../../src/sim/stage/terrain.js';
 
 const ZONE_PAD = 40;
 const MAX_RISE = 40;
@@ -12,6 +12,9 @@ const LOCK_RISE = 16;
 const heightsBetween = (mission, from, to) =>
   Array.from({ length: to - from + 1 }, (_, i) => groundAt(mission.terrain, from + i));
 const isLevel = (mission, from, to) => new Set(heightsBetween(mission, from, to)).size === 1;
+// a moat's breach has rules of its own (moat-rules.test.js)
+const roadBetween = (mission, from, to) =>
+  heightsBetween(mission, from, to).filter((_, i) => !waterAt(mission.terrain, from + i));
 const lockScreen = (zone) => [zone.right - VIEW_WIDTH, zone.right];
 
 describe('the terrain of every mission', () => {
@@ -24,7 +27,7 @@ describe('the terrain of every mission', () => {
 
   it('rises at most 40px, with no wall taller than 24px', () => {
     for (const mission of MISSIONS) {
-      const heights = heightsBetween(mission, 0, mission.length);
+      const heights = roadBetween(mission, 0, mission.length);
       expect(Math.min(...heights), mission.name).toBeGreaterThanOrEqual(GROUND_Y - MAX_RISE);
       expect(Math.max(...heights), mission.name).toBe(GROUND_Y);
       for (let x = 1; x < heights.length; x++) {

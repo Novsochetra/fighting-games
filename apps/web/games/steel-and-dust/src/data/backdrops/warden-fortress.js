@@ -36,6 +36,8 @@ export const WARDEN_FORTRESS = {
       { kind: 'ledge', from: 1433, to: 1503, y: 27, wall: 16 },
     ],
   },
+  // the deep earth under a raised step lies level with the road's, not run down from its last row
+  deep: { from: 46 },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: NEAR_DRIFT },

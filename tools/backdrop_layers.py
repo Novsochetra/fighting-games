@@ -44,8 +44,11 @@
         drops its white sky rows, keeps `width` columns from `left`, repaints it in the colours
         of the forest's ground cross-section `skip` to `skip + depth` rows under its surface
         (matched by brightness, then darkened to `shade` of the way down the ramp), crumbles its
-        right edge, and leaves its top clear so the road's own turf shows above it, `turf` rows
-        deep on the inner side thinning to `lip` rows at the edge; 64 rows tall
+        right edge in its own earth, and leaves its top clear so the road's own turf shows above
+        it, `turf` rows deep on the inner side thinning to `lip` rows at the edge; 64 rows tall
+    python3 tools/backdrop_layers.py edge <cliff.png> [outline=000000]
+        repaints, in place, the outline a face crumbled before was given along its edge, in the
+        nearest earth in from it on each row
 """
 import sys
 from collections import Counter
@@ -323,7 +326,8 @@ def match_brightness(im, palette):
 
 def crumble(im, darkest):
     # the outer edge wanders in and out by a pixel or two every few rows, but light pixels
-    # (stones, roots) on it stay and jut out; the new edge gets the art's dark outline
+    # (stones, roots) on it stay and jut out; the new edge is the face's own earth, as a dark
+    # outline there reads as a line drawn round the face wherever it meets the sky
     w = im.width
     cut, run = 1, 0
     for y in range(im.height):
@@ -336,8 +340,42 @@ def crumble(im, darkest):
             here -= 1
         for x in range(w - here, w):
             im.putpixel((x, y), (0, 0, 0, 0))
-        im.putpixel((w - here - 1, y), darkest)
     return im
+
+
+def earth_beside(pixels, x, y, outline, height):
+    # in from the edge on its row, or, where a root line runs the whole row, the nearest earth
+    # above or below it
+    for inner in range(x - 1, -1, -1):
+        if pixels[inner, y][3] and pixels[inner, y][:3] != outline:
+            return pixels[inner, y]
+    for distance in range(1, height):
+        for near in (y + distance, y - distance):
+            if 0 <= near < height and pixels[x, near][3] and pixels[x, near][:3] != outline:
+                return pixels[x, near]
+    return pixels[x, y]
+
+
+# crumble cuts a row back by up to two columns, and a face crumbled before its edge was left in its
+# own earth outlined the column in from the cut, so its outline lies in the last three
+CRUMBLED = 3
+
+
+def edge(path, outline='000000'):
+    # the outline in the crumbled band takes the nearest earth in from it on its row; the columns
+    # were set down by different amounts under the turf, so a row's outline is not always its last
+    # pixel, and a root line meeting the edge loses its outline there too. The same shift left
+    # crumbs a pixel off the face, a speck in the air at three times the size, which go
+    im = Image.open(path).convert('RGBA')
+    px = im.load()
+    colour = tuple(int(outline[i:i + 2], 16) for i in (0, 2, 4))
+    for y in range(im.height):
+        for x in range(im.width - CRUMBLED, im.width):
+            if px[x, y][3] and px[x, y][:3] == colour:
+                px[x, y] = earth_beside(px, x, y, colour, im.height)
+            if px[x, y][3] and not px[x - 1, y][3]:
+                px[x, y] = (0, 0, 0, 0)
+    im.save(path)
 
 
 TURF_EDGE = [0, 1, 0, -1, 0, 1, 1, 0, -1, 0, 1, 0]
@@ -352,7 +390,7 @@ def face_start(x, width, turf, lip):
 
 def shade_ranks(im, palette, amount):
     # the face is turned away from the light, so every pixel steps down the earth's ramp, but
-    # never to the very darkest, which is kept for its outline
+    # never into its darkest eighth, which the road keeps for its deepest cracks
     index = {colour: i for i, colour in enumerate(palette)}
     lowest = len(palette) // 8
     for y in range(im.height):
@@ -396,6 +434,7 @@ if __name__ == '__main__':
         'vary': vary,
         'wayin': wayin,
         'cliff': cliff,
+        'edge': edge,
         'unblend': unblend,
         'join': join,
     }[

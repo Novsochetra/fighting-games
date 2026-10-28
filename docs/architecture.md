@@ -139,8 +139,12 @@ rate limit and the checks below.
 **The build.** `npm run build` has Vite build the three pages into `dist/` (`base: './'`, so the same
 files work under any path) and copy what it never touches beside them (`as-is-files.js`: the games,
 the art, `robots.txt`, `sitemap.xml` and `appearance-early.js`), then builds the service worker (see
-Offline). Each build has a version (`build-version.js`): the commit Railway deploys
-(`RAILWAY_GIT_COMMIT_SHA`), else the one checked out, else the time of the build. It writes it into
+Offline). Each build has a version (`build-version.js`), SemVer with the build after a `+`, as
+`1.0.0+5f272d9`: the release is the `version` in the root `package.json`, and the build is the commit
+Railway deploys (`RAILWAY_GIT_COMMIT_SHA`), else the one checked out, else the time of the build. The
+release is raised by hand, in the commit that ships the change: MAJOR for a change that breaks what a
+player keeps (their saves, an installed arcade), MINOR for something new (a game, a screen, a mode),
+PATCH for fixes and tuning (`npm version minor --no-git-tag-version`). It writes the version into
 each page's head (`<meta name="arcade-version">`) and into `version.json`, the version the server
 holds now (see A new build). Railway builds on each deploy and `npm start` serves `dist/`; it refuses to start without a
 build. Vite names each module and stylesheet it builds by its content, under `build/`, so the server
@@ -199,7 +203,9 @@ not kept.
   shows a banner, New version ready, whose Reload opens the new build at once. It takes the
   banners' place first (`has-update-banner`), as the others come again after the reload. Nothing
   reloads by itself, so a gift under way is never lost. The credits screen names the version the
-  page runs. `npm run dev` writes no version, so it never asks.
+  page runs, as Version 1.0.0 (5f272d9) (`src/credits/version-label.js`). A new build is one whose
+  version differs, so a redeploy of the same commit asks no one to reload. `npm run dev` writes no
+  version, so it never asks.
 
 `test/integration/offline/worker.test.js` runs the worker's answers against fake caches and a
 network that can go away.
@@ -803,7 +809,14 @@ length.
   step is drawn with that face hung from its lip and cut off at the low ground, the high side's turf
   rounded over the shoulder and hanging a pixel past it, and a soft contact shadow at its foot
   (`src/render/scene/cliff-faces.js`). Only the drawing rounds the shoulder; fighters still stand
-  on the sheer step.
+  on the sheer step. A raised road whose cross-section is too short to reach the bottom of the
+  screen under its high steps gives its backdrop a `deep` body (`deep.png`, 216 tall): only the
+  cross-section's rows above `deep.from` follow the surface, and under them the body is laid at the
+  world's own rows, so every step stands on the same courses and earth down to the bottom of the
+  screen (`src/render/scene/deep-ground.js`). A body built of courses (`deep.faces`) also loads
+  `face.png` and `breach.png`, the ends of its courses where a step cuts through it and the two
+  broken banks of a cut that runs on down out of sight, drawn at the same world rows.
+  `tools/road_body.py` paints them from `ground.png`.
 
 Fighters are drawn from PixelLab sprite sheets in `assets/sprites/`: one folder of strips per playable
 Shade (`src/data/heroes.js`; only the picked Shade's are kept, `keepPickedHero` in
@@ -820,7 +833,9 @@ take 40 MB unpacked instead of 251 MB). `drawEnemyFrame` lands each piece on the
 cell put it on, its edges drawn in to whole screen pixels and a centre exactly between two sheet
 pixels taking the first (`TIE_BREAK`). Run the tool again after changing a grid sheet:
 `test/unit/data/enemy-atlas.test.js` checks every packed piece against its cell, and
-`test/regression/bugs/enemy-sheet-memory.test.js` keeps the loaded sheets small.
+`test/regression/bugs/enemy-sheet-memory.test.js` keeps the loaded sheets small. The Scorpion
+Queen's grid sheet and her swarm's wasp are baked from ChatGPT images by `tools/queen_sheet/bake.py`
+(the prompts and images are in `concepts/enemies/scorpion-queen/`); pack the sheets after it.
 A Shade's strips are packed the same way (`tools/pack_hero_strips.py`, both tools on
 `tools/sheet_packing.py`): each strip's packed copy sits in `packed/` beside it, in its own palette
 or colors, and `src/data/hero-atlas/<shade>.js` holds each strip's frame height and pieces, a line

@@ -1,7 +1,12 @@
 import { GROUND_Y } from '../../config.js';
+import { carveMoats } from './moats.js';
 
 // a flat road has no height table at all, so every flat mission keeps the old arithmetic exactly
-export const FLAT_TERRAIN = Object.freeze({ heights: null, platforms: Object.freeze([]) });
+export const FLAT_TERRAIN = Object.freeze({
+  heights: null,
+  platforms: Object.freeze([]),
+  water: Object.freeze([]),
+});
 
 // the height of the road under a spot; the ends of the road hold their heights beyond it
 export function groundAt(terrain, x) {
@@ -52,9 +57,11 @@ function layoutPlatforms(zoneSpecs, zones, heights) {
 }
 
 export function layoutTerrain(zoneSpecs, zones, length) {
-  if (!zoneSpecs.some((spec) => spec.ground || spec.platforms)) {
+  if (!zoneSpecs.some((spec) => spec.ground || spec.platforms || spec.moats)) {
     return FLAT_TERRAIN;
   }
   const heights = layoutHeights(zoneSpecs, zones, length);
-  return { heights, platforms: layoutPlatforms(zoneSpecs, zones, heights) };
+  const water = carveMoats(zoneSpecs, zones, heights);
+
+  return { heights, platforms: layoutPlatforms(zoneSpecs, zones, heights), water };
 }

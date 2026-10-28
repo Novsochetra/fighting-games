@@ -3,6 +3,7 @@ import { START_LIVES } from '../data/player.js';
 import { missionAt } from '../data/missions/index.js';
 import { createFighter } from './fighters/create-fighter.js';
 import { takeOwnWeapon } from './fighters/loadout.js';
+import { createRoadHazards } from './hazards/road-hazards.js';
 import { createCrates } from './items/crates.js';
 import { refreshPose } from './pose/refresh-pose.js';
 import { attachScarf } from './pose/scarf.js';
@@ -38,6 +39,7 @@ function resetWorld(game, player, missionIndex) {
     lootFx: [],
     lootSeed: lootSeedFor(missionIndex),
     crates: createCrates(mission.crates),
+    ...createRoadHazards(mission),
     terrain: mission.terrain,
     arena: null,
     missionIndex,

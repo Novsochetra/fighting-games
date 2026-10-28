@@ -12,6 +12,7 @@ export const OLD_GROVE = {
     {
       // a root crown: a slope up to its top, a sheer step down onto its shoulder and off it
       screens: 2,
+      nests: [690],
       ground: [
         ...contour(60, [
           [90, 18],
@@ -32,6 +33,7 @@ export const OLD_GROVE = {
     {
       // a hollow between two root shoulders; slingers throw from the deck over it
       screens: 2,
+      trees: [607],
       ground: [
         ...mound(-250, -150, 12, 30),
         ...contour(60, [

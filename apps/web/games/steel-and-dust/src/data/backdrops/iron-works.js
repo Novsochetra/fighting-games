@@ -22,6 +22,8 @@ export const IRON_WORKS = {
       { kind: 'ledge', from: 749, to: 775, y: 97 },
     ],
   },
+  // the deep earth under a raised step lies level with the road's, not run down from its last row
+  deep: { from: 46 },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'mouth', parallax: 0.3, once: true },

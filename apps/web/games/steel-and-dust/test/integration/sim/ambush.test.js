@@ -80,7 +80,8 @@ describe('a raider bursting out of the sand', () => {
 });
 
 // the bot plays on with its health kept up; every ambush it meets is noted as it starts, and the
-// zone is watched for moving on while a raider is still in the trees or under the sand
+// zone is watched for moving on while a raider is still in the trees or under the sand. The run is
+// long enough for the bot to wade the Sandstorm Pass's quicksand and still leave the ambush's zone
 function playRoad(theme) {
   Math.random = seededRandom(9);
   const game = createScenarioGame(
@@ -92,7 +93,7 @@ function playRoad(theme) {
   const run = { ambushes: [], perches: [], offScreen: 0, leftEarly: 0, zones: 0 };
 
   driver.act('play');
-  for (let tick = 0; tick < 7000; tick++) {
+  for (let tick = 0; tick < 9000; tick++) {
     const zone = game.stage.zoneIndex;
     const waiting = pendingAmbushes(game);
 
