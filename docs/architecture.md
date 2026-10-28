@@ -182,8 +182,9 @@ not kept.
   them. Only the game's own folder comes down, so a game keeps its fonts there too (Steel & Dust's
   Silkscreen, `assets/fonts/`): a font from another site, like Google Fonts, is lost offline. Each file is checked with the server, so what the game has just loaded for itself costs a
   `304`. A game is played from its download only once every file of one revision is in, marked last,
-  so a half download, or one across two deploys, is never played; until then it comes from the
-  network as before, and offline it says so. A play saves nothing the player has not saved, but it
+  so a half download, or one across two deploys, is never played: the list is read again before the
+  mark, and a deploy that landed meanwhile has its own revision brought down instead. Until then it
+  comes from the network as before, and offline it says so. A play saves nothing the player has not saved, but it
   keeps a saved game fresh: after a deploy that changes the game, the next play brings the new
   revision down behind the old one, which it plays meanwhile. A page plays the revision it opened on
   to the end, even once the new one is in (the oldest whole one, `completeGame`), and the play after

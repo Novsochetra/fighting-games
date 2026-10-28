@@ -96,10 +96,50 @@ async function downloadInto(cache, addresses, { fetch, progress, untilQuiet }) {
   await Promise.all(Array.from({ length: AT_ONCE }, worker));
 }
 
-// The whole game, on the player's save and again, on a play, after a deploy changes it: the list
-// (offline.json, written by the build) names every file and the revision they make up, and
-// `progress` counts the files in as they come. What a stopped download left half done goes once the
-// new revision is in, but an older whole one stays: the game may still be loading from it, and
+// The list (offline.json, written by the build) names every file of the game and the revision they
+// make up.
+async function readList({ fetch, scope, id }) {
+  const reply = await fetch(
+    new Request(addressOf(id, 'offline.json', scope), { cache: 'no-store' }),
+  );
+
+  return reply.json();
+}
+
+// One revision's files into its cache, marked whole last, and only while the server still serves
+// that revision once they are in: a deploy that landed meanwhile had its files come down under the
+// old revision's name. Answers nothing once the revision is whole, else the list to bring down now.
+async function keepRevision(download, { revision, files }) {
+  const { caches, scope, id, progress } = download;
+  const cache = await caches.open(cacheNameOf(id, revision));
+  const mark = markOf(id, scope);
+
+  Object.assign(progress, { done: 0, total: files.length });
+
+  if (await cache.match(mark)) {
+    progress.done = files.length;
+
+    return null;
+  }
+
+  const addresses = files.map((file) => addressOf(id, file, scope));
+
+  await downloadInto(cache, addresses, download);
+  stopIfRemoved(progress);
+  const served = await readList(download);
+
+  if (served.revision !== revision) {
+    return served;
+  }
+
+  await cache.put(mark, new Response('complete'));
+
+  return null;
+}
+
+// The whole game, on the player's save and again, on a play, after a deploy changes it, with
+// `progress` counting the files in as they come. What a stopped download left half done goes once a
+// revision is whole, but an older whole one stays: the game may still be loading from it, and
 // taking it away under the page mixed the new revision's files into the old (keepNewestWhole lets
 // it go).
 export async function downloadGame({
@@ -110,27 +150,10 @@ export async function downloadGame({
   progress = { done: 0, total: 0 },
   untilQuiet = async () => {},
 }) {
-  const reply = await fetch(
-    new Request(addressOf(id, 'offline.json', scope), { cache: 'no-store' }),
-  );
-  const { revision, files } = await reply.json();
-  const name = cacheNameOf(id, revision);
+  const download = { caches, fetch, scope, id, progress, untilQuiet };
 
-  stopIfRemoved(progress);
-  const cache = await caches.open(name);
-
-  progress.total = files.length;
-
-  if (await cache.match(markOf(id, scope))) {
-    progress.done = files.length;
-  } else {
-    await downloadInto(
-      cache,
-      files.map((file) => addressOf(id, file, scope)),
-      { fetch, progress, untilQuiet },
-    );
+  for (let list = await readList(download); list; list = await keepRevision(download, list)) {
     stopIfRemoved(progress);
-    await cache.put(markOf(id, scope), new Response('complete'));
   }
 
   const whole = await wholeRevisions({ caches, scope, id });
