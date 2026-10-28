@@ -1,21 +1,20 @@
 import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
-import { FX_SPRITES } from '../../data/fx-sprites.js';
-import { MOAT } from '../../data/moat.js';
+import { VIEW_HEIGHT } from '../../config.js';
+import { FX_SCALE, FX_SPRITES } from '../../data/fx-sprites.js';
+import { MOAT, MOAT_SPLASH } from '../../data/moat.js';
 import { knockOut } from '../combat/knock-out.js';
 import { endMove } from '../fighters/actions.js';
 import { addFloatText } from '../fx/effects.js';
 import { addSparks } from '../fx/particles.js';
 import { groundAt, waterAt } from '../stage/terrain.js';
-import { addBurst } from '../summons/bursts.js';
-
-const SPLASH_SCALE = 0.8;
+import { addSplash } from '../summons/splashes.js';
 
 // the water bursts up out of the breach, not out of a bank's rock face, however near an edge the
 // body went in: as near where it fell as the splash's width allows, or mid-breach if it is wider
 function splashX(water, x) {
   const middle = (water.from + water.to) / 2;
-  const halfWidth = (FX_SPRITES.splash.frameWidth * SPLASH_SCALE) / 2;
+  const halfWidth = (FX_SPRITES.splash.frameWidth * FX_SCALE * MOAT_SPLASH.scale) / 2;
   const room = Math.max(0, (water.to - water.from) / 2 - halfWidth);
 
   return Math.min(Math.max(x, middle - room), middle + room);
@@ -24,7 +23,7 @@ function splashX(water, x) {
 function splash(game, x, water) {
   const at = splashX(water, x);
 
-  addBurst(game, { sprite: 'splash', x: at, y: water.level, scale: SPLASH_SCALE });
+  addSplash(game, { x: at, y: VIEW_HEIGHT + MOAT_SPLASH.sunk });
   game.io.sfx('splash', false, { x: at });
 }
 

@@ -16,7 +16,13 @@ const TICKS = 900;
 function drawnAt(tick) {
   const { context, log } = createRecordingContext(null);
 
-  drawMoats(createPainter(context), { water: [SPAN], cameraX: CAMERA_X, tick, glints });
+  drawMoats(createPainter(context), {
+    water: [SPAN],
+    cameraX: CAMERA_X,
+    tick,
+    glints,
+    summons: [],
+  });
 
   return log;
 }

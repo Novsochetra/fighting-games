@@ -9,3 +9,7 @@ export const MOAT = {
   // how far from the edge a body climbs out, and a raider's purse washes up
   bankIn: 12,
 };
+
+// the water a body throws up as it falls in bursts up out of the pit from below the bottom of the
+// screen, its flat foot `sunk` deep enough that no shake lifts it into view
+export const MOAT_SPLASH = { scale: 1.4, sunk: 8 };

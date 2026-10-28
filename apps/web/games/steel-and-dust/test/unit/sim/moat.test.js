@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GROUND_Y } from '../../../src/config.js';
-import { FX_SPRITES } from '../../../src/data/fx-sprites.js';
+import { FX_SCALE, FX_SPRITES } from '../../../src/data/fx-sprites.js';
 import { MOAT } from '../../../src/data/moat.js';
 import { MOAT_LEVEL } from '../../../src/data/missions/moats.js';
 import { blockWall, nudge } from '../../../src/sim/fighters/terrain-motion.js';
@@ -22,7 +22,7 @@ function moatGame(road = ROAD) {
 }
 
 function splashIn(game) {
-  return game.summons.find((summon) => summon.sprite === 'splash');
+  return game.summons.find((summon) => summon.kind === 'splash');
 }
 
 // a body knocked over the water, its feet just reaching it
@@ -109,8 +109,8 @@ describe('the splash of a body falling in the moat', () => {
     fallingIn(spawnEnemy(game, 'grunt', FROM + 100), FROM + 100);
 
     updateMoat(game);
-    const [byTheBank, midWater] = game.summons.filter((summon) => summon.sprite === 'splash');
-    const halfWidth = (FX_SPRITES.splash.frameWidth * byTheBank.scale) / 2;
+    const [byTheBank, midWater] = game.summons.filter((summon) => summon.kind === 'splash');
+    const halfWidth = (FX_SPRITES.splash.frameWidth * FX_SCALE * byTheBank.scale) / 2;
 
     expect(byTheBank.x - halfWidth).toBeCloseTo(FROM);
     expect(midWater.x).toBe(FROM + 100);

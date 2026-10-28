@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { FX_SPRITES } from '../../../src/data/fx-sprites.js';
+import { FX_SCALE, FX_SPRITES } from '../../../src/data/fx-sprites.js';
 import { applyHit } from '../../../src/sim/combat/apply-hit.js';
 import { createFighter } from '../../../src/sim/fighters/create-fighter.js';
 import { selectMission, startPlay } from '../../../src/sim/stage/flow.js';
@@ -34,7 +34,7 @@ function knockIntoMoat() {
 function firstSplash(game) {
   for (let i = 0; i < 60; i++) {
     runTicks(game, 1);
-    const splash = game.summons.find((summon) => summon.sprite === 'splash');
+    const splash = game.summons.find((summon) => summon.kind === 'splash');
 
     if (splash) {
       return splash;
@@ -55,7 +55,7 @@ describe('the splash of a raider knocked into the Angkor moat', () => {
   it('bursts up out of the middle of the breach, not out of the bank it fell by', () => {
     const { game, moat } = knockIntoMoat();
     const splash = firstSplash(game);
-    const width = FX_SPRITES.splash.frameWidth * splash.scale;
+    const width = FX_SPRITES.splash.frameWidth * FX_SCALE * splash.scale;
 
     expect(moat.to - moat.from).toBeLessThan(width);
     expect(splash.x).toBe((moat.from + moat.to) / 2);

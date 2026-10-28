@@ -1,5 +1,6 @@
 import { VIEW_WIDTH } from '../../config.js';
 import { drawGlints } from './ambient/glints.js';
+import { drawMoatSplashes } from './moat-splashes.js';
 
 // the light on the moat's ripples along its waterline is the lake's own glints, a few to the
 // breach, the nearer ones lower down throwing longer dashes, seeded apart from the lake's so they
@@ -31,10 +32,11 @@ function drawMoat(painter, { from, to, level }, { cameraX, tick, glints }) {
   context.restore();
 }
 
-export function drawMoats(painter, { water, cameraX, tick, glints }) {
+export function drawMoats(painter, { water, cameraX, tick, glints, summons, sheets }) {
   for (const span of water ?? []) {
     if (span.to > cameraX && span.from < cameraX + VIEW_WIDTH) {
       drawMoat(painter, span, { cameraX, tick, glints });
+      drawMoatSplashes(painter, span, { summons, sheets });
     }
   }
 }

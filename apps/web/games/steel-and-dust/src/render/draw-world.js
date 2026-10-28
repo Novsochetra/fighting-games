@@ -114,7 +114,14 @@ export function drawWorld(painter, { game, view, cameraX }) {
   const { terrain, tickCount: tick } = game;
   // the water lies behind the road, so each bank's rock face stands over its edge and runs on
   // down into it
-  drawMoats(painter, { water: terrain.water, cameraX, tick, glints: palette.ambient.glints });
+  drawMoats(painter, {
+    water: terrain.water,
+    cameraX,
+    tick,
+    glints: palette.ambient.glints,
+    summons: game.summons,
+    sheets: view.fxSheets,
+  });
   drawGround(painter, { cameraX, colors, tick, terrain, backdrop });
   drawProps(painter, { cameraX, props: mission.props, sheets: view.propSheets });
   drawTrees(painter, view.fxSheets, { trees: game.trees, cameraX });
