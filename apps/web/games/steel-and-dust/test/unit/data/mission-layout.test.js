@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GROUND_Y, VIEW_WIDTH } from '../../../src/config.js';
+import { burrowIn, dropIn } from '../../../src/data/missions/ambushes.js';
 import { layoutMission } from '../../../src/data/missions/layout.js';
 import { groundAt } from '../../../src/sim/stage/terrain.js';
 
@@ -58,7 +59,19 @@ describe('laying out a mission', () => {
   it('turns a boss zone into one locked wave of that boss', () => {
     expect(mission.zones[2]).toMatchObject({ boss: 'colossus', screens: 1 });
     expect(mission.zones[2].waves).toEqual([
-      { kinds: ['colossus'], at: mission.zones[2].at, lock: true },
+      { kinds: ['colossus'], ambush: null, at: mission.zones[2].at, lock: true },
+    ]);
+  });
+
+  it('keeps the way a wave ambushes the hero, and lays out its raiders as any wave', () => {
+    const zones = [
+      { screens: 2, waves: [['grunt'], dropIn(['knife', 'grunt']), burrowIn(['ghoul'])] },
+    ];
+    const [zone] = layoutMission({ ...SPEC, zones }, 0).zones;
+    expect(zone.waves.map(({ kinds, ambush, lock }) => [kinds, ambush, lock])).toEqual([
+      [['grunt'], null, false],
+      [['knife', 'grunt'], 'drop', false],
+      [['ghoul'], 'burrow', true],
     ]);
   });
 

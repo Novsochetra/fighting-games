@@ -1,3 +1,4 @@
+import { dropIn } from '../ambushes.js';
 import { contour, ledge, mound } from '../ground-shapes.js';
 
 export const BAMBOO_PASS = {
@@ -82,7 +83,7 @@ export const BAMBOO_PASS = {
       ],
       waves: [
         ['bomber', 'scrapper', 'jackal'],
-        ['hound', 'knife', 'hound'],
+        dropIn(['jackal', 'knife', 'grunt']),
         ['sling', 'bomber', 'grunt'],
         ['hound', 'jackal', 'bomber', 'scrapper'],
       ],

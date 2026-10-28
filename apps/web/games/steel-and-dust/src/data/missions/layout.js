@@ -14,9 +14,12 @@ const LEAD_IN = 110;
 // until the zone's final screen is in view
 const FOLLOW_LEAD = Math.round(VIEW_WIDTH * 0.58);
 
+// a spec's wave is its raiders' kinds, or an ambush of them (ambushes.js)
+const waveOf = (spec) => (Array.isArray(spec) ? { kinds: spec, ambush: null } : spec);
+
 function spreadWaves(waves, from, to) {
-  return waves.map((kinds, i) => ({
-    kinds,
+  return waves.map((spec, i) => ({
+    ...waveOf(spec),
     at: waves.length > 1 ? Math.round(from + ((to - from) * i) / (waves.length - 1)) : from,
     lock: i === waves.length - 1,
   }));

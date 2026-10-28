@@ -20,6 +20,17 @@ function growBossHp(game, boss) {
   Object.assign(boss, { hp, maxHp: hp, hpLag: hp });
 }
 
+// an ambushing raider comes into the fight where it is put, already inside the screen
+export function spawnRaiderAt(game, kind, { x, y }) {
+  const raider = createFighter('enemy', kind, x, y);
+
+  raider.facing = game.player.x >= x ? 1 : -1;
+  refreshPose(raider);
+  game.fighters.push(raider);
+
+  return raider;
+}
+
 export function spawnEnemy(game, kind, side) {
   const { left, right } = screenEdges(game);
   const x = side < 0 ? left - 18 : right + 18;

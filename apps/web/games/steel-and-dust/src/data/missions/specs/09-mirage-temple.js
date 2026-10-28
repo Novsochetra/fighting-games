@@ -1,3 +1,4 @@
+import { burrowIn } from '../ambushes.js';
 import { dais, mound, ramp } from '../ground-shapes.js';
 
 export const MIRAGE_TEMPLE = {
@@ -38,7 +39,7 @@ export const MIRAGE_TEMPLE = {
       waves: [
         ['ghoul', 'witch', 'assassin'],
         ['tombguard', 'ghoul', 'sentry'],
-        ['ghoul', 'ghoul', 'monk'],
+        burrowIn(['ghoul', 'ghoul', 'scorpion']),
         ['tombguard', 'witch', 'ghoul', 'scorpion'],
       ],
     },

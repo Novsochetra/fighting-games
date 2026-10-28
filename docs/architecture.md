@@ -623,6 +623,16 @@ length.
   pins the camera to the screen it starts on (`src/sim/stage/zones.js`).
 - `screenEdges` (`src/sim/fighters/arena-bounds.js`) is the part of the road a fight happens in: the
   locked screen, or what the camera shows of a wide zone. Raiders walk in from just past it.
+- A wave in a spec may be an ambush instead (`dropIn` or `burrowIn`, `src/data/missions/ambushes.js`;
+  timings in `src/data/ambush.js`), whose raiders come in mid-screen (`src/sim/stage/ambush.js`).
+  Out of the trees (Old Grove, Bamboo Pass, Firefly Hollow), each raider's spot round the hero is
+  marked as a pounce's is, its shadow growing under a blinking red bar while leaves shake down, then
+  it falls in from above the screen and stomps the spot (`src/sim/hazards/drop-marks.js`). Out of
+  the sand (Sandstorm Pass, Mirage Temple), it digs in at a screen edge and its mound crawls after
+  the hero, stops to shake, and bursts it up, throwing a hero who stayed on it
+  (`src/sim/hazards/mounds.js`, the mound cut from the Scorpion Queen's burrow frames). Both are
+  projectiles kept inside the screen until their raider is in the fight, and a zone counts a raider
+  still waiting to ambush as standing, so it never moves on without it.
 - A mission ends when its own boss falls (`isMissionBoss` in `src/sim/stage/mission.js`); a boss met
   earlier on its road is a mid-boss and only opens the road. The score, clock, continues, lives and
   ULT bar carry into the next mission (`enterNextMission`); the hero starts it fresh. A new run
@@ -1046,8 +1056,9 @@ single-file game), one shorter run for each of the other Shades, one against eac
 Colossus, Ironhorn, the Cobra Matriarch, the Scorpion Queen, the Gnoll Packlord, the Storm Djinn, the
 Furnace Knight, the Sand Pharaoh, the Naga Raja, the Bayon Guardian), one run
 through the wide zones
-of the fourth mission, one over the hills of the third, one through the seventh, the sandstorm canyon,
-and one through the twelfth, the Bayon.
+of the fourth mission, one over the hills of the third, one into the second's ambush out of the
+trees, one through the seventh, the sandstorm canyon (and its ambush out of the sand), and one
+through the twelfth, the Bayon.
 Any change to
 arithmetic, to the order of `Math.random()` calls or to the order of canvas calls shows up there.
 When a change is meant to alter behavior, regenerate the fixtures with `npm run test:regression -- -u`

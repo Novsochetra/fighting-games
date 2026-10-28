@@ -2,6 +2,7 @@ import { COLORS } from '../../art/colors.js';
 import { FX_COLORS } from '../../art/fx-colors.js';
 import { FX_SPRITES } from '../../data/fx-sprites.js';
 import { point } from '../painter.js';
+import { drawDropMark, drawMound } from './ambush-hazards.js';
 import { drawBolt, drawBomb, drawFire, drawSand, drawVenom } from './enemy-shots.js';
 import { drawPillarMark, drawRootMark } from './bayon-hazards.js';
 import { BOSS_HAZARD_DRAWERS } from './boss-hazards.js';
@@ -95,11 +96,21 @@ const DRAW_SHOT = {
   fire: drawFire,
   crescent: drawCrescent,
   pounceMark: drawPounceMark,
+  dropMark: drawDropMark,
+  mound: drawMound,
   ...BOSS_HAZARD_DRAWERS,
 };
 
 // what lies flat on the road is drawn under the fighters' feet
-const ON_GROUND = new Set(['puddle', 'pounceMark', 'lavaPool', 'canopic', 'stoneFace']);
+const ON_GROUND = new Set([
+  'puddle',
+  'pounceMark',
+  'dropMark',
+  'mound',
+  'lavaPool',
+  'canopic',
+  'stoneFace',
+]);
 // what strikes from above has its spot marked on the road under the fighters, and itself over them
 const GROUND_MARK = {
   stormStrike: drawStrikeMark,

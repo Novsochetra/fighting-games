@@ -1,3 +1,4 @@
+import { dropIn } from '../ambushes.js';
 import { contour, ledge, mound, ramp, terrace } from '../ground-shapes.js';
 
 export const FIREFLY_HOLLOW = {
@@ -38,7 +39,7 @@ export const FIREFLY_HOLLOW = {
       waves: [
         ['assassin', 'monk', 'sling'],
         ['vulture', 'vulture', 'shield'],
-        ['monk', 'assassin', 'bomber'],
+        dropIn(['assassin', 'monk', 'assassin']),
         ['assassin', 'vulture', 'monk', 'hound'],
       ],
     },

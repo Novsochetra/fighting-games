@@ -234,6 +234,16 @@ export const SCENARIOS = {
     renderEvery: 240,
     scheduled: { 600: ['fill'], 1200: ['w2'], 2400: ['w3'], 3000: ['fill'], 3600: ['w4'] },
   },
+  // the second mission's grove, into its ambush: three raiders dropping out of the trees round the
+  // hero, each onto a shadow grown on the road first
+  grove: {
+    mission: 1,
+    seed: 9,
+    ticks: 3600,
+    sampleEvery: 30,
+    renderEvery: 240,
+    scheduled: { 1500: ['fill'] },
+  },
   // the third mission's hills: stairs, banks and plank decks the bot climbs, drops and fights on
   hills: {
     mission: 2,

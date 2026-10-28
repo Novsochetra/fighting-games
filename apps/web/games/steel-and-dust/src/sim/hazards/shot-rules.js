@@ -1,4 +1,5 @@
 import { knifeBox } from '../combat/boxes.js';
+import { AMBUSH_RULES } from './ambush-rules.js';
 import { BAYON_RULES } from './bayon-rules.js';
 import { FORGE_RULES } from './forge-rules.js';
 import { MOAT_RULES } from './moat-rules.js';
@@ -135,6 +136,7 @@ export const SHOT_RULES = {
     enemyWeapon: 'none',
     rehitEvery: 30,
   },
+  ...AMBUSH_RULES,
   ...STORM_RULES,
   ...FORGE_RULES,
   ...TEMPLE_RULES,

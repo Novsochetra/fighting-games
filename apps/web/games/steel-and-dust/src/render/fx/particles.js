@@ -37,7 +37,16 @@ function streak(painter, particle) {
   painter.alpha(1);
 }
 
-const DRAW_PARTICLE = { spark, dust, chunk, mote, streak, ...HEAVY_PARTICLE_DRAWS };
+// a falling leaf turns over, flat one moment and edge-on the next, and fades as it settles
+function leaf(painter, particle) {
+  const flat = (particle.life >> 3) & 1;
+
+  painter.alpha(Math.min(1, particle.life / 12));
+  painter.use(particle.color).rect(particle.x, particle.y, flat ? 3 : 2, flat ? 1 : 2);
+  painter.alpha(1);
+}
+
+const DRAW_PARTICLE = { spark, dust, chunk, mote, streak, leaf, ...HEAVY_PARTICLE_DRAWS };
 
 export function drawParticles(painter, particles) {
   for (const particle of particles) {

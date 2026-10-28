@@ -28,6 +28,7 @@ export const FX_SPRITES = {
   hypnosis: { frameWidth: 128, frameHeight: 80, frames: 8, ticks: 3, anchorX: 64, anchorY: 40 },
   wasp: { frameWidth: 56, frameHeight: 48, frames: 4, ticks: 3, anchorX: 28, anchorY: 24 },
   eruption: { frameWidth: 144, frameHeight: 144, frames: 6, ticks: 3, anchorX: 72, anchorY: 143 },
+  mound: { frameWidth: 96, frameHeight: 58, frames: 4, ticks: 5, anchorX: 52, anchorY: 56 },
   howl: { frameWidth: 112, frameHeight: 112, frames: 6, ticks: 3, anchorX: 56, anchorY: 56 },
   bones: { frameWidth: 144, frameHeight: 72, frames: 6, ticks: 3, anchorX: 72, anchorY: 71 },
   redeye: { frameWidth: 56, frameHeight: 16, frames: 4, ticks: 3, anchorX: 15, anchorY: 8 },

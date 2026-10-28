@@ -5,10 +5,12 @@ import { followHero } from './curse-marks.js';
 import { flyBoulder } from './boulders.js';
 import { skimGround } from './crescents.js';
 import { spinDustDevil } from './dust-devils.js';
+import { holdDropMark } from './drop-marks.js';
 import { flyBomb } from './enemy-shots.js';
 import { growRoot } from './fig-roots.js';
 import { runLance } from './flame-lances.js';
 import { burnPillar } from './gaze-pillars.js';
+import { tunnelMound } from './mounds.js';
 import { crawlScarabs } from './scarabs.js';
 import { coolLava, flySlagPot } from './slag-pots.js';
 import { riseSpike } from './spikes.js';
@@ -55,4 +57,6 @@ export const FLIGHT = {
   spiritNaga: sweepSpirit,
   serpentRise: burstSerpent,
   rainbowOrb: spinOrb,
+  dropMark: holdDropMark,
+  mound: tunnelMound,
 };

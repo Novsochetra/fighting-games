@@ -35,6 +35,12 @@ const MOVE_PARTICLE = {
     particle.x += particle.vx;
     particle.y += particle.vy;
   },
+
+  // a leaf shaken out of the canopy rocks from side to side as it drifts down
+  leaf(particle) {
+    particle.x += particle.vx * Math.sin(particle.life * 0.15);
+    particle.y += particle.vy;
+  },
 };
 MOVE_PARTICLE.streak = MOVE_PARTICLE.mote;
 Object.assign(MOVE_PARTICLE, HEAVY_PARTICLE_MOVERS);

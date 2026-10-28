@@ -13,7 +13,7 @@ const BOSS_EFFECTS = {
   colossus: ['boulder', 'shards', 'spike'],
   ironhorn: ['impact', 'bamboo', 'stars'],
   cobra: ['glob', 'puddle', 'hypnosis'],
-  queen: ['wasp', 'eruption'],
+  queen: ['wasp', 'eruption', 'mound'],
   gnoll: ['howl', 'bones', 'redeye'],
   djinn: ['zap', 'tornado', 'thunder'],
   furnace: ['blaze', 'slag', 'lava', 'beam', 'flare', 'steam'],

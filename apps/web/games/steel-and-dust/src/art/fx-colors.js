@@ -63,5 +63,7 @@ export const FX_COLORS = {
   rootCrack: '#1d180c',
   footDust: '#bdb592',
   foam: '#d6f6ff',
+  canopyLeaf: '#c2d86a',
+  canopyLeafDark: '#6f9a3e',
   rainbow: ['#ff5a6e', '#ffa63a', '#ffe45a', '#6aff8a', '#4ad8ff', '#6a7aff', '#d27aff'],
 };

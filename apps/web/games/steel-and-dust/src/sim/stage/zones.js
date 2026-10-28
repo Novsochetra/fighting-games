@@ -1,6 +1,7 @@
 import { COLORS } from '../../art/colors.js';
 import { VIEW_WIDTH } from '../../config.js';
 import { showBanner } from '../fx/effects.js';
+import { pendingAmbushes, startAmbush } from './ambush.js';
 import { cameraTarget } from './camera.js';
 import { isFightOver } from './loot-time.js';
 import { currentZone } from './mission.js';
@@ -9,9 +10,13 @@ import { spawnEnemy } from './spawn-enemy.js';
 
 const WAVE_PAUSE = 45;
 
+// a raider still in the trees or under the sand stands in the zone as much as one on the road
 function standingEnemies(game) {
-  return game.fighters.filter((fighter) => fighter.side === 'enemy' && fighter.state !== 'ko')
-    .length;
+  const standing = game.fighters.filter(
+    (fighter) => fighter.side === 'enemy' && fighter.state !== 'ko',
+  ).length;
+
+  return standing + pendingAmbushes(game);
 }
 
 // a lock wave pins the camera to the screen the hero is on until the wave is beaten
@@ -25,7 +30,13 @@ function lockScreen(game) {
 
 function releaseWave(game, wave) {
   wave.kinds.forEach((kind, i) => {
-    game.stage.spawnQueue.push({ kind, side: i % 2 ? 1 : -1, delay: i === 0 ? 20 : 28 });
+    game.stage.spawnQueue.push({
+      kind,
+      side: i % 2 ? 1 : -1,
+      delay: i === 0 ? 20 : 28,
+      ambush: wave.ambush,
+      slot: i,
+    });
   });
   if (wave.lock) {
     lockScreen(game);
@@ -55,7 +66,12 @@ function spawnFromQueue(game) {
   queue[0].delay--;
   if (queue[0].delay <= 0) {
     const next = queue.shift();
-    spawnEnemy(game, next.kind, next.side);
+
+    if (next.ambush) {
+      startAmbush(game, next);
+    } else {
+      spawnEnemy(game, next.kind, next.side);
+    }
   }
 }
 

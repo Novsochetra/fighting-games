@@ -1,3 +1,4 @@
+import { dropIn } from '../ambushes.js';
 import { contour, ledge, mound } from '../ground-shapes.js';
 
 export const OLD_GROVE = {
@@ -43,7 +44,7 @@ export const OLD_GROVE = {
       platforms: [{ at: 205, width: 80, rise: 36, kind: 'planks' }],
       waves: [
         ['sling', 'grunt', 'grunt'],
-        ['jackal', 'jackal', 'scrapper'],
+        dropIn(['jackal', 'jackal', 'scrapper']),
         ['sling', 'scrapper', 'knife', 'jackal'],
       ],
     },

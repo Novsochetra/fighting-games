@@ -1,4 +1,5 @@
 import { VIEW_WIDTH } from '../../config.js';
+import { clamp } from '../../lib/math.js';
 
 const MARGIN = 6;
 // a boss keeps his whole body on the screen: half his width, in his own units (body-point.js)
@@ -20,6 +21,13 @@ export function screenEdges(game) {
     return view;
   }
   return { left: Math.max(arena.left, view.left), right: Math.min(arena.right, view.right) };
+}
+
+// a spot kept `margin` inside that part of the road
+export function onScreen(game, x, margin) {
+  const { left, right } = screenEdges(game);
+
+  return clamp(x, left + margin, right - margin);
 }
 
 // raiders walking in from off screen are free until they are well inside; checking that here

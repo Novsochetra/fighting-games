@@ -1,3 +1,4 @@
+import { burrowIn } from '../ambushes.js';
 import { mound, ramp, stairs } from '../ground-shapes.js';
 
 // a sand slope up onto a red-rock ledge that steps back down to the road
@@ -40,7 +41,7 @@ export const SANDSTORM_PASS = {
       platforms: [{ at: 540, width: 80, rise: 30, kind: 'scaffold' }],
       waves: [
         ['assassin', 'assassin', 'sling'],
-        ['witch', 'vulture', 'scorpion'],
+        burrowIn(['scorpion', 'jackal', 'scorpion']),
         ['juggernaut', 'monk', 'bomber'],
         ['witch', 'witch', 'juggernaut', 'assassin'],
       ],

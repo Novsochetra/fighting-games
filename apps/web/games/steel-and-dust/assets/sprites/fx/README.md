@@ -43,6 +43,7 @@ colors.
 | `hypnosis.png` | 8 × 128×80 | Cobra Matriarch: the Hypnotic Gaze's rings and flash | ChatGPT image, shrunk and cut into frames; the fading rings kept down to a quarter's opacity |
 | `wasp.png` | 4 × 56×48 | Scorpion Queen: an ember wasp of the Hive Swarm flying (loops) | ChatGPT image, shrunk and cut into frames |
 | `eruption.png` | 6 × 144×144 | Scorpion Queen: the earth bursting up behind her as she surfaces | ChatGPT image, shrunk and cut into frames |
+| `mound.png` | 4 × 96×58 | Raiders' sand ambush: the mound crawling after the hero (loops), then shaking as it stops; the eruption above follows it, smaller | cut from frames 8-11 of the Scorpion Queen's `burrow` row in `enemies/queen.png`, in that sheet's palette |
 | `howl.png` | 6 × 112×112 | Gnoll Packlord: the Pack Call's rings spreading from his throat | ChatGPT image (three effects on one sheet), split into rows, shrunk and cut into frames |
 | `bones.png` | 6 × 144×72 | Gnoll Packlord: bones and earth bursting where the Leaping Maul lands | the same sheet's second row |
 | `redeye.png` | 4 × 56×16 | Gnoll Packlord: the red streak his eyes leave in the Blood Frenzy | the same sheet's third row, drawn flying left and mirrored as he lunges |

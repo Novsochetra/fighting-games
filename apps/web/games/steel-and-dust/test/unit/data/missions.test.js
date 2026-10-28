@@ -9,6 +9,10 @@ import { PROP_SPRITES } from '../../../src/data/prop-sprites.js';
 const kindsIn = (mission) =>
   mission.zones.flatMap((zone) => zone.waves.flatMap((wave) => wave.kinds));
 const allKinds = new Set(MISSIONS.flatMap(kindsIn));
+const ambushesIn = (mission) =>
+  mission.zones
+    .flatMap((zone) => zone.waves.filter((wave) => wave.ambush))
+    .map((wave) => [mission.name, wave.ambush]);
 const bossTypes = Object.entries(ENEMY_TYPES).filter(([, type]) => type.boss);
 
 describe('the twelve missions', () => {
@@ -44,6 +48,29 @@ describe('the twelve missions', () => {
       expect(mission.terrain.platforms.length, mission.name).toBeGreaterThan(0);
       for (const platform of mission.terrain.platforms) {
         expect(platform.kind, mission.name).toBe('lintel');
+      }
+    }
+  });
+
+  it('ambush out of the trees on three forest roads and out of the sand on two desert ones', () => {
+    expect(MISSIONS.flatMap(ambushesIn)).toEqual([
+      ['Old Grove', 'drop'],
+      ['Bamboo Pass', 'drop'],
+      ['Firefly Hollow', 'drop'],
+      ['Sandstorm Pass', 'burrow'],
+      ['Mirage Temple', 'burrow'],
+    ]);
+  });
+
+  it('never ambush with a boss, nor with the wave that locks a zone', () => {
+    for (const mission of MISSIONS) {
+      for (const zone of mission.zones) {
+        const ambushes = zone.waves.filter((wave) => wave.ambush);
+        expect(zone.boss && ambushes.length, mission.name).toBeFalsy();
+        expect(
+          ambushes.some((wave) => wave.lock),
+          mission.name,
+        ).toBe(false);
       }
     }
   });
