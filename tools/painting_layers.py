@@ -23,7 +23,7 @@
     python3 tools/painting_layers.py face <ground> <out> <surface_row> <x> [width=12] [shade=0.75]
         the face of a step whose high ground is on the left, from the ground's own columns under
         its surface: darkened as a face turned from the light, the lip lit and the outer edge
-        dark; 64 rows tall, the last row run on down
+        its own dirt, not an outline; 64 rows tall, the last row run on down
 """
 import sys
 from PIL import Image, ImageOps
@@ -209,11 +209,12 @@ def face(ground, dst, surface_row, x, width='12', shade='0.75'):
     for y in range(rows.height, CLIFF_HEIGHT):
         out.paste(last, (0, y))
     px = out.load()
-    darkest = min((px[i, y] for i in range(width) for y in range(CLIFF_HEIGHT)), key=lambda c: sum(c[:3]))
+    # the edge is the dirt beside it, not the ground's darkest colour: a black line down a face
+    # reads as a drawn outline wherever it meets the sky or water, and the rest of the road has none
     for y in range(CLIFF_HEIGHT):
         for i in range(width - 1):
             px[i, y] = darken(px[i, y], float(shade)) if y else px[i, y]
-        px[width - 1, y] = darkest
+        px[width - 1, y] = px[width - 2, y]
     out.save(dst)
 
 

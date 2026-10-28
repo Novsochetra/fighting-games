@@ -269,7 +269,8 @@ python3 $T face $A/ground.png $A/cliff.png 10 60
   paving slabs; `groundTop` is 10 so the fighters stand on that top face. Its last row is one plain
   deep-earth colour, so the run down under a high step does not draw stripes.
 - `cliff.png` (12x64) is the ground's own columns 60-71 from the surface down, darkened to 0.75 as
-  a face turned from the light, its lip lit and its outer edge dark.
+  a face turned from the light, its lip lit and its outer edge the dirt beside it: a black outline
+  there read as a drawn line down both sides of the moat.
 - `way-in.png` (384 wide, the last of Warden's Fortress on the left of the first screen) is kept
   from the first version: the banner tower, spiked barricade and bare pennant pole cut from
   `warden-fortress/near.png` (columns 1430-1506, 925-1000, 590-597), overgrown with one Edit (Pro
