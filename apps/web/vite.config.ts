@@ -9,24 +9,33 @@ import { catalogArtEntries } from '../server/src/offline/catalog-art.js';
 import { offlineListOf } from '../server/src/offline/game-files.js';
 import { GAMES_ROOT } from '../server/src/paths.js';
 import { isPublishedPath } from '../server/src/public-files.js';
+import { bundleGame } from './build-steps/bundle-game.js';
 
 const WEB_ROOT = import.meta.dirname;
 const OUT_DIR = path.resolve(WEB_ROOT, '../../dist');
 
-// Each game played here (one with its own page) gets the list its whole download goes by.
-async function writeOfflineLists(gamesRoot: string) {
+// The games played here, each with a page of its own (a game on its own site keeps only its art).
+async function playedGames(gamesRoot: string) {
   const ids = await readdir(gamesRoot);
-  const played = ids.map(async (id) => {
-    const page = await stat(path.join(gamesRoot, id, 'index.html')).catch(() => null);
+  const pages = await Promise.all(
+    ids.map((id) => stat(path.join(gamesRoot, id, 'index.html')).catch(() => null)),
+  );
 
-    if (page) {
-      const list = await offlineListOf(path.join(gamesRoot, id));
+  return ids.filter((_, i) => pages[i]);
+}
 
-      await writeFile(path.join(gamesRoot, id, 'offline.json'), JSON.stringify(list));
-    }
-  });
+// Each game played here comes as a few bundles, then gets the list its whole download goes by, so
+// the list names the bundles, not the modules they were built from.
+async function buildGames(gamesRoot: string) {
+  for (const id of await playedGames(gamesRoot)) {
+    const gameRoot = path.join(gamesRoot, id);
 
-  await Promise.all(played);
+    await bundleGame({ sourceRoot: path.join(GAMES_ROOT, id), gameRoot });
+    await writeFile(
+      path.join(gameRoot, 'offline.json'),
+      JSON.stringify(await offlineListOf(gameRoot)),
+    );
+  }
 }
 
 function copyAsIs(): Plugin {
@@ -42,7 +51,7 @@ function copyAsIs(): Plugin {
       );
 
       await Promise.all(copies);
-      await writeOfflineLists(path.join(OUT_DIR, 'games'));
+      await buildGames(path.join(OUT_DIR, 'games'));
     },
   };
 }

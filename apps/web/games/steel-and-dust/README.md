@@ -1,7 +1,8 @@
 # Steel & Dust
 
 A 2D pixel-art melee brawler, inspired by Metal Slug's stages but with weapons instead of guns.
-Plain JavaScript and Canvas, native ES modules, no build step.
+Plain JavaScript and Canvas, native ES modules, run as they are written on the dev server; the
+arcade's build joins them into three bundles (`apps/web/build-steps/bundle-game.js`).
 
 Open it from the arcade home page, or go straight to `games/steel-and-dust/` on the dev server
 (`npm run dev` at the repo root).

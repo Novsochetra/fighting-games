@@ -3,7 +3,8 @@
 A small retro arcade: a Node server, the arcade itself (a React app with its home, supporters and
 credits screens), and one folder per game. The arcade is TypeScript and React, built by Vite; its
 logic stays in plain modules (`.js`, tested on their own), which the components call. The games are
-their own apps of native ES modules, which Vite never touches.
+their own apps of native ES modules, written and run in development as they are, which the build
+only joins into a few bundles per game (see The build).
 
 ```
 apps/
@@ -19,6 +20,7 @@ apps/
   web/                    everything the browser loads
     index.html            the arcade's page; supporters/ and credits/ hold the other two
     vite.config.ts        the build: the three pages into dist/, the as-is files copied beside them
+    build-steps/          the build's own steps: bundle-game.js joins each game's scripts into bundles
     robots.txt            lets every crawler in and names the sitemap
     sitemap.xml           every page this server sends (see Search and link previews)
     assets/               the arcade's icons and manifest (tools/arcade_icons.py draws the icons),
@@ -139,7 +141,13 @@ rate limit and the checks below.
 **The build.** `npm run build` has Vite build the three pages into `dist/` (`base: './'`, so the same
 files work under any path) and copy what it never touches beside them (`as-is-files.js`: the games,
 the art, `robots.txt`, `sitemap.xml` and `appearance-early.js`), then builds the service worker (see
-Offline). Each build has a version (`build-version.js`), SemVer with the build after a `+`, as
+Offline). Each game's page is built on the way (`build-steps/bundle-game.js`): the modules each of
+its module scripts loads are joined into a few bundles in the game's own `build/` folder, as they are
+written (`esnext`) and minified, with names that change with their content; the page is pointed at
+them and the modules are left out. Steel & Dust's 925 modules, thirty imports deep, were about 1,150
+requests a load, each through the arcade's worker, and one that failed held its start; it now loads
+three bundles. A game still loads nothing from outside its folder, and its `offline.json` names the
+bundles. Each build has a version (`build-version.js`), SemVer with the build after a `+`, as
 `1.0.0+5f272d9`: the release is the `version` in the root `package.json`, and the build is the commit
 Railway deploys (`RAILWAY_GIT_COMMIT_SHA`), else the one checked out, else the time of the build. The
 release is raised by hand, in the commit that ships the change: MAJOR for a change that breaks what a
@@ -152,7 +160,7 @@ lets a browser keep those for a year (`immutable`) and has it check everything e
 (`no-cache`). Every file carries an `ETag`, a hash of its content (`routes/file-tags.js`), so a check
 of a file that has not changed costs a `304` and no body, even across deploys. `npm run dev`
 serves the pages and modules from Vite as they are written, with hot reload, and the as-is files from
-disk as in production. If a game's module fails to load, fails to come down at all (a dropped
+disk as in production, each game's modules unbundled. If a game's module fails to load, fails to come down at all (a dropped
 connection, a phone that slept mid-load), or its load hears of no file coming in for 15 seconds (a
 request that never answers), its page reloads itself under a fresh address, each try a second
 later than the last, up to three times (`src/boot/boot-recovery.js`). The page's first script
