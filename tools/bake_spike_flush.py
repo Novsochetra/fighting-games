@@ -1,6 +1,6 @@
 """Set the Mirage Temple's spike tiles flush into the road, their top face all that shows.
 
-    python3 tools/bake_spike_flush.py <baked spike tile strip> <out>
+    python3 tools/bake_spike_flush.py <baked spike tile strip> <game folder>
 
 The baked strip (tools/bake_magenta_sheet.py) paints each tile as a raised slab, its dark front
 face standing up out of the side-on road. Set flush into the road, a slab shows only its top face,
@@ -12,6 +12,11 @@ frames do not line up with each other row for row, so every frame is the resting
 what comes up out of its slots is put back over it: one spike, cut clean from the frame where they
 stand fully up, out of every slot, as high as each frame of the bake shows them (none, none, half
 up, up, sinking), and the warning's dust, painted paler than the sand and rimmed so it reads.
+
+The stone is the road's own: each of its colours becomes the colour of the Mirage Temple road's
+cross-section (assets/backdrops/mirage-temple/ground.png) nearest it in lightness, its far edge and
+the seams between tiles the road's dark brick, and a little of the road's sand drifts over its far
+edge, so it lies in the road rather than on it.
 """
 import sys
 
@@ -24,7 +29,7 @@ REST, WARN, UP = 0, 1, 3
 # to the road's near edge: the bake's rows of it that make each row of the face, the far rim and
 # back row of slots, a strip of rim, the front row of slots, the near rim and the lip
 FACE_TOP = 16
-ROW_FROM = [*range(17, 31), 31, *range(21, 31), 33, 34]
+ROW_FROM = [*range(18, 31), 31, *range(21, 31), 34]
 DEPTH = FACE_TOP + 1 + len(ROW_FROM)
 # the face's sides on its first and its last row: it is narrower at its far edge
 FAR_SIDES, NEAR_SIDES = (8, 72), (1, 76)
@@ -53,7 +58,18 @@ SPIKE_ROWS = {
 }
 SLOT_FLOOR = 28
 # the floors of the back and front rows of slots on the face
-SLOT_FLOORS = (SLOT_FLOOR, FACE_TOP + 1 + ROW_FROM.index(SLOT_FLOOR, 15))
+SLOT_FLOORS = tuple(FACE_TOP + 1 + i for i, row in enumerate(ROW_FROM) if row == SLOT_FLOOR)
+# the road's cross-section, whose colours the stone takes, from its sand down to its bricks, and
+# two paler tints of its sand for the stone's lit edges
+ROAD = 'assets/backdrops/mirage-temple/ground.png'
+ROAD_ROWS = range(15, 60)
+LIT_SAND = [(0xF6, 0xBF, 0x98, 255), (0xFA, 0xD3, 0xB4, 255)]
+# the far edge and the seams between tiles, in the road's dark brick
+SEAM = (0x70, 0x31, 0x3D, 255)
+# the road's sand, drifting over the far edge in uneven runs: the columns each run starts on
+# along the frame and how long it is
+SAND = [(0xF0, 0xA3, 0x7D, 255), (0xEA, 0x8B, 0x6D, 255)]
+DRIFTS = [(3, 2), (11, 1), (17, 3), (29, 1), (34, 2), (46, 1), (53, 3), (62, 1), (70, 2)]
 OUTLINE = (0x1C, 0x0B, 0x12, 255)
 # the middle column of each slot, where its spike stands, and how far down from fully up the
 # spikes stand in each frame
@@ -96,9 +112,8 @@ def along(x, row_from, row_to):
 
 def face_of(rest, kind):
     """the resting tile's top face run on to the road's near edge: its far rim and back row of
-    slots, then a front row of slots, then its near rim and lip, every row stretched to sides that
-    slope out evenly, so the front row is a little wider, as nearer things are; its far edge is one
-    clean line, where the bake's specks, the grain of a raised slab's top, look like grit"""
+    slots, then a front row of slots, then its lit lip, every row stretched to its sides, so the
+    front row is a little wider, as nearer things are"""
     out = Image.new('RGBA', (FRAME, DEPTH))
     source, pixels = rest.load(), out.load()
     for offset, row in enumerate(ROW_FROM):
@@ -107,10 +122,61 @@ def face_of(rest, kind):
         src_left, src_right = extent(source, row)
         for x in range(left, right + 1):
             pixels[x, y] = source[along(x, (left, right), (src_left, src_right)), row]
+    return out
+
+
+def lightness(colour):
+    red, green, blue = colour[:3]
+    return 0.299 * red + 0.587 * green + 0.114 * blue
+
+
+def road_colours(game):
+    road = Image.open(f'{game}/{ROAD}').convert('RGBA')
+    pixels = road.load()
+    found = {pixels[x, y] for x in range(road.width) for y in ROAD_ROWS if pixels[x, y][3] == 255}
+    return sorted([*found, *LIT_SAND], key=lightness)
+
+
+def in_road_stone(face, palette):
+    """every colour of the stone turned to the road's colour nearest it in lightness"""
+    pixels = face.load()
+    for x in range(face.width):
+        for y in range(face.height):
+            if pixels[x, y][3]:
+                pixels[x, y] = min(palette, key=lambda c: abs(lightness(c) - lightness(pixels[x, y])))
+
+
+def joined(face, kind):
+    """a side joined to the next tile is the stone's rim running on to one seam on the line they
+    share, not the bevel and outline of a slab's edge"""
+    pixels = face.load()
+    joined_left, joined_right = kind
+    for y in range(FACE_TOP + 1, DEPTH):
+        if joined_left:
+            for x in range(1, 4):
+                pixels[x, y] = pixels[4, y]
+            pixels[1, y] = SEAM
+        if joined_right:
+            for x in range(73, 77):
+                pixels[x, y] = pixels[72, y]
+
+
+def far_edge(face):
+    """the far edge one clean line of the road's dark brick, where the bake's specks, the grain of
+    a raised slab's top, look like grit, with the road's sand drifting over it here and there"""
+    pixels = face.load()
+    drifted = {start + i for start, run in DRIFTS for i in range(run)}
     for x in range(FRAME):
         if pixels[x, FACE_TOP + 1][3]:
-            pixels[x, FACE_TOP] = OUTLINE
-    return out
+            pixels[x, FACE_TOP] = SAND[x % 2] if x in drifted else SEAM
+
+
+def stone(rest, kind, palette):
+    face = face_of(rest, kind)
+    in_road_stone(face, palette)
+    joined(face, kind)
+    far_edge(face)
+    return face
 
 
 def spike_of(up):
@@ -157,20 +223,20 @@ def puff(face, warn):
         face.alpha_composite(dust, (0, DUST_DROP + floor - SLOT_FLOOR))
 
 
-def main(source, out):
+def main(source, game):
     baked = Image.open(source).convert('RGBA')
     tiles = [baked.crop((i * FRAME, 0, (i + 1) * FRAME, HEIGHT)) for i in range(PHASES)]
-    spike = spike_of(tiles[UP])
+    spike, palette = spike_of(tiles[UP]), road_colours(game)
     strip = Image.new('RGBA', (FRAME * PHASES * len(KINDS), DEPTH))
     for index, kind in enumerate(KINDS):
         for phase in range(PHASES):
-            frame = face_of(tiles[REST], kind)
+            frame = stone(tiles[REST], kind, palette)
             if phase == WARN:
                 puff(frame, tiles[WARN])
             if phase in DROPS:
                 raise_spikes(frame, tiles[REST], spike, DROPS[phase], kind)
             strip.paste(frame, ((index * PHASES + phase) * FRAME, 0))
-    strip.save(out)
+    strip.save(f'{game}/assets/sprites/fx/spikeTrap.png')
 
 
 if __name__ == '__main__':

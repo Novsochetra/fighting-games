@@ -8,6 +8,7 @@ import { readPngAlpha } from '../../support/png-alpha.js';
 
 const GAME_ROOT = fileURLToPath(new URL('../../../', import.meta.url));
 const art = readPngAlpha(join(GAME_ROOT, 'assets/sprites/fx/spikeTrap.png'));
+const road = readPngAlpha(join(GAME_ROOT, 'assets/backdrops/mirage-temple/ground.png'));
 const { frameWidth, frameHeight, anchorY } = FX_SPRITES.spikeTrap;
 const PHASE = { rest: 0, warn: 1, rise: 2, up: 3, sink: 4 };
 const PHASES = Object.keys(PHASE).length;
@@ -19,9 +20,9 @@ const FAR_EDGE = anchorY;
 const NEAR_EDGE = frameHeight - 1;
 // a row through the back row of slots and one through the front row, and the row the back
 // row's openings start on
-const BACK_SLOTS = 27;
-const FRONT_SLOTS = 38;
-const SLOT_TOP = 25;
+const BACK_SLOTS = 26;
+const FRONT_SLOTS = 37;
+const SLOT_TOP = 24;
 const SPIKE_HALF = 3;
 // how deep the Mirage Temple road's top is, from the road line to where its brick face begins
 const ROAD_DEPTH = 13;
@@ -113,6 +114,34 @@ describe('a spike trap as drawn', () => {
   it('shows only its top face, narrower at its dark far edge than at its lit near one', () => {
     expect(widthAt(FAR_EDGE)).toBeLessThan(widthAt(NEAR_EDGE));
     expect(brightness(FAR_EDGE)).toBeLessThan(brightness(NEAR_EDGE));
+  });
+
+  it('is the road’s own stone: its colours are the road’s, or paler tints of its sand', () => {
+    const roadColours = new Set();
+    let palest = 0;
+    for (let x = 0; x < road.width; x++) {
+      for (let y = 0; y < road.height; y++) {
+        if (road.alpha(x, y) === 255) {
+          roadColours.add(road.colorKey(x, y));
+          palest = Math.max(
+            palest,
+            road.rgb(x, y).reduce((sum, value) => sum + value),
+          );
+        }
+      }
+    }
+    const strays = [];
+    for (let x = 0; x < frameWidth; x++) {
+      for (let y = FAR_EDGE; y <= NEAR_EDGE; y++) {
+        const colour = pixelAt(PHASE.rest, x, y);
+        const pale = colour !== -1 && art.rgb(x, y).reduce((sum, value) => sum + value) > palest;
+        if (colour !== -1 && !roadColours.has(colour) && !pale) {
+          strays.push(`${x},${y}`);
+        }
+      }
+    }
+
+    expect(strays).toEqual([]);
   });
 
   it('covers the road from its far edge to its near one, with a front row of slots', () => {
