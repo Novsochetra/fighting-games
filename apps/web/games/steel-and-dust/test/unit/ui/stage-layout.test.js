@@ -25,14 +25,13 @@ describe('stage layout', () => {
     });
   });
 
-  it('puts the screen above the touch buttons on an upright phone', () => {
+  it('stands the screen at the top of an upright phone, under the status bar, over the buttons', () => {
     const { rect, controlsBelow } = arrangeStage(
       screen(390, 844, { safe: { ...noInsets, top: 47 } }),
     );
 
     expect(controlsBelow).toBe(true);
-    expect(rect).toMatchObject({ x: 0, width: 390, height: 219 });
-    expect(rect.y).toBeGreaterThanOrEqual(47 + 56);
+    expect(rect).toEqual({ x: 0, y: 47, width: 390, height: 219 });
   });
 
   it('keeps the touch buttons over the fight on a phone held sideways', () => {
@@ -53,7 +52,9 @@ describe('stage layout', () => {
   });
 
   it('keeps the buttons over a tablet held sideways, where moving them would shrink the stage', () => {
-    expect(arrangeStage(screen(1180, 820)).controlsBelow).toBe(false);
+    const iPadAir = screen(1180, 820, { safe: { ...noInsets, top: 24, bottom: 20 } });
+
+    expect(arrangeStage(iPadAir).controlsBelow).toBe(false);
   });
 
   it('shows the game on the top half of a phone on a table, the buttons on the bottom half', () => {

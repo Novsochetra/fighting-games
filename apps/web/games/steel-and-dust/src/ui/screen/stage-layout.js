@@ -1,7 +1,6 @@
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
 
-// room above the stage for the pause button, and the touch buttons' height before the Button size
-const PAUSE_ROW = 56;
+// the touch buttons' height before the Button size
 const CONTROLS_HEIGHT = 260;
 // on a screen held sideways the touch buttons stand under the stage instead of over the fight when
 // that costs the stage at most a fifth of its width: an unfolded foldable or a big tablet
@@ -27,20 +26,20 @@ function fitted(area) {
 
 // the widest stage the space above the touch buttons holds
 function widthAboveControls(area, { safe, buttonScale }) {
-  const free = area.height - safe.top - PAUSE_ROW - safe.bottom - CONTROLS_HEIGHT * buttonScale;
+  const free = area.height - safe.top - safe.bottom - CONTROLS_HEIGHT * buttonScale;
 
   return Math.max(0, Math.min(area.width, Math.floor((free * 16) / 9)));
 }
 
-function aboveControls(area, { safe, buttonScale }, width) {
-  const height = Math.round((width * 9) / 16);
-  const room = (area.height - safe.bottom - CONTROLS_HEIGHT * buttonScale - height) / 2;
-
+// the stage stands at the top, right under the status bar, with the pause button on it: centred
+// lower down, it ran over the fold of a phone half-folded on a table in a browser that cannot tell
+// the phone is folded (Safari)
+function aboveControls(area, { safe }, width) {
   return {
     x: area.x + Math.floor((area.width - width) / 2),
-    y: area.y + Math.round(Math.max(safe.top + PAUSE_ROW, room)),
+    y: area.y + Math.round(safe.top),
     width,
-    height,
+    height: Math.round((width * 9) / 16),
   };
 }
 
