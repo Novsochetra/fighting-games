@@ -5,7 +5,9 @@
 The baked strip (tools/bake_magenta_sheet.py) paints each tile as a raised slab, its dark front
 face standing up out of the side-on road. Set flush into the road, a slab shows only its top face,
 seen from just above as the road's top is: narrower at its far edge, its sides sloping out toward
-the near one, which is its lit lip. This keeps that face and drops the front under the road. The
+the near one, which is its lit lip. This keeps that face, run on to cover the road's whole top
+from its far edge to its near one with a second row of slots in front, and drops the front under
+the road. The
 frames do not line up with each other row for row, so every frame is the resting tile's face, and
 what comes up out of its slots is put back over it: one spike, cut clean from the frame where they
 stand fully up, out of every slot, as high as each frame of the bake shows them (none, none, half
@@ -18,8 +20,14 @@ from PIL import Image
 FRAME, HEIGHT = 78, 44
 PHASES = 5
 REST, WARN, UP = 0, 1, 3
-# the top face, from the outline along its far edge to the lit lip along its near one
-FACE_TOP, LIP = 16, 34
+# the top face, from the outline along its far edge to the lit lip along its near one, run on
+# to the road's near edge: the bake's rows of it that make each row of the face, the far rim and
+# back row of slots, a strip of rim, the front row of slots, the near rim and the lip
+FACE_TOP = 16
+ROW_FROM = [*range(17, 31), 31, *range(21, 31), 33, 34]
+DEPTH = FACE_TOP + 1 + len(ROW_FROM)
+# the face's sides on its first and its last row: it is narrower at its far edge
+FAR_SIDES, NEAR_SIDES = (8, 72), (1, 76)
 # the spike that comes up out of the middle slot when they are all up: its tip's column, and for
 # each row from the tip down to the slot's floor, the columns it spans
 SPIKE_TIP = 39
@@ -40,6 +48,8 @@ SPIKE_ROWS = {
     **{row: (36, 42) for row in range(21, 29)},
 }
 SLOT_FLOOR = 28
+# the floors of the back and front rows of slots on the face
+SLOT_FLOORS = (SLOT_FLOOR, FACE_TOP + 1 + ROW_FROM.index(SLOT_FLOOR, 15))
 OUTLINE = (0x1C, 0x0B, 0x12, 255)
 # the middle column of each slot, where its spike stands, and how far down from fully up the
 # spikes stand in each frame
@@ -57,12 +67,41 @@ DUST_SHADE = (0xCF, 0xA5, 0x8A, 255)
 DUST_RIM = (0x8F, 0x62, 0x53, 255)
 
 
+def extent(pixels, y):
+    """the first and last painted columns of a row"""
+    painted = [x for x in range(FRAME) if pixels[x, y][3]]
+    return painted[0], painted[-1]
+
+
+def side_at(y):
+    """where the face's sides stand on a row of the frame, sloping out evenly from far to near"""
+    share = (y - FACE_TOP - 1) / (len(ROW_FROM) - 1)
+    (far_left, far_right), (near_left, near_right) = FAR_SIDES, NEAR_SIDES
+    return (
+        round(far_left + (near_left - far_left) * share),
+        round(far_right + (near_right - far_right) * share),
+    )
+
+
+def along(x, row_from, row_to):
+    """where column x of a source row lands on a row of the face, stretched to its sides"""
+    (left, right), (to_left, to_right) = row_from, row_to
+    return to_left + round((x - left) * (to_right - to_left) / (right - left))
+
+
 def face_of(rest):
-    """the resting tile's top face, its far edge drawn as one clean line: the bake's specks along
-    it, the grain of a raised slab's top, look like grit lying on a face set flush in the road"""
-    out = Image.new('RGBA', (FRAME, LIP + 1))
-    out.alpha_composite(rest.crop((0, FACE_TOP + 1, FRAME, LIP + 1)), (0, FACE_TOP + 1))
-    pixels = out.load()
+    """the resting tile's top face run on to the road's near edge: its far rim and back row of
+    slots, then a front row of slots, then its near rim and lip, every row stretched to sides that
+    slope out evenly, so the front row is a little wider, as nearer things are; its far edge is one
+    clean line, where the bake's specks, the grain of a raised slab's top, look like grit"""
+    out = Image.new('RGBA', (FRAME, DEPTH))
+    source, pixels = rest.load(), out.load()
+    for offset, row in enumerate(ROW_FROM):
+        y = FACE_TOP + 1 + offset
+        left, right = side_at(y)
+        src_left, src_right = extent(source, row)
+        for x in range(left, right + 1):
+            pixels[x, y] = source[along(x, (left, right), (src_left, src_right)), row]
     for x in range(FRAME):
         if pixels[x, FACE_TOP + 1][3]:
             pixels[x, FACE_TOP] = OUTLINE
@@ -78,12 +117,22 @@ def spike_of(up):
     }
 
 
-def raise_spikes(face, spike, drop):
+def slot_middles(rest, floor):
+    """the middle column of each slot on the face, in the row of slots whose floor is on `floor`"""
+    source_row = ROW_FROM[floor - FACE_TOP - 1]
+    stretch = extent(rest.load(), source_row), side_at(floor)
+    return [along(tip, *stretch) for tip in TIPS]
+
+
+def raise_spikes(face, rest, spike, drop):
+    """the back row's spikes, then the front row's in front of them"""
     pixels = face.load()
-    for tip in TIPS:
-        for (dx, y), colour in spike.items():
-            if y + drop <= SLOT_FLOOR:
-                pixels[tip + dx, y + drop] = colour
+    for floor in SLOT_FLOORS:
+        rise = floor - SLOT_FLOOR
+        for tip in slot_middles(rest, floor):
+            for (dx, y), colour in spike.items():
+                if y + drop <= SLOT_FLOOR:
+                    pixels[tip + dx, y + drop + rise] = colour
 
 
 def puff(face, warn):
@@ -99,7 +148,8 @@ def puff(face, warn):
             inside = 0 <= nx < dust.width and 0 <= ny < dust.height
             if inside and (nx, ny) not in painted:
                 pixels[nx, ny] = DUST_RIM
-    face.alpha_composite(dust, (0, DUST_DROP))
+    for floor in SLOT_FLOORS:
+        face.alpha_composite(dust, (0, DUST_DROP + floor - SLOT_FLOOR))
 
 
 def main(source, out):
@@ -112,9 +162,9 @@ def main(source, out):
         if phase == WARN:
             puff(frame, tiles[WARN])
         if phase in DROPS:
-            raise_spikes(frame, spike, DROPS[phase])
+            raise_spikes(frame, tiles[REST], spike, DROPS[phase])
         frames.append(frame)
-    strip = Image.new('RGBA', (FRAME * PHASES, LIP + 1))
+    strip = Image.new('RGBA', (FRAME * PHASES, DEPTH))
     for phase, frame in enumerate(frames):
         strip.paste(frame, (phase * FRAME, 0))
     strip.save(out)
