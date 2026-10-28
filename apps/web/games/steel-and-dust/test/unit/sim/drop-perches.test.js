@@ -13,7 +13,7 @@ describe('the perches raiders wait on to drop', () => {
   it("are a road's own trees, towers and girders, in the layer that paints them", () => {
     expect(perchesOf(onRoad('pineRidge', 0))).toMatchObject({ layer: 'near', parallax: 0.45 });
     expect(perchesOf(onRoad('oldGrove', 0))).toBeNull();
-    expect(perchesOf(onRoad('raiderCamp', 0))).toBeNull();
+    expect(perchesOf(onRoad('angkorWat', 0))).toBeNull();
   });
 
   it('are found nearest the spot asked for, among those in sight', () => {

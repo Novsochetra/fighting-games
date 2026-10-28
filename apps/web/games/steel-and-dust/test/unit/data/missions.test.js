@@ -58,6 +58,7 @@ describe('the twelve missions', () => {
       ['Pine Ridge', 'drop'],
       ['Old Grove', 'drop'],
       ['Bamboo Pass', 'drop'],
+      ['Raider Camp', 'drop'],
       ['Ember Woods', 'drop'],
       ['Firefly Hollow', 'drop'],
       ['Sandstorm Pass', 'burrow'],

@@ -640,11 +640,11 @@ length.
     `crown` (Pine Ridge's pines, Ember Woods' autumn trees) it hides in the thick of the leaves at
     `x, y`: only that crown sways, in its own layer, and as it lets go the crown's own pixels are
     laid back over it, so it drops out of the leaves (`src/render/scene/crown-cover.js`). On a
-    `ledge` (the Iron Works' derrick girder and furnace roof, the Warden's tower walkways, the Bayon's
-    lintel) it is drawn climbing up over the edge, clipped there, waiting, and crouching to spring
-    (`src/render/fx/perched-raider.js`); behind a parapet the wall's own pixels from its `wall` line
-    down are laid back over it, so it shows only between the merlons, and it springs up onto the
-    wall to leap.
+    `ledge` (the Raider Camp's lookout tower, the Iron Works' derrick girder and furnace roof, the
+    Warden's tower walkways, the Bayon's lintel) it is drawn climbing up over the edge, clipped
+    there, waiting, and crouching to spring (`src/render/fx/perched-raider.js`); behind a parapet
+    the wall's own pixels from its `wall` line down are laid back over it, so it shows only
+    between the merlons, and it springs up onto the wall to leap.
   - All of that is laid on the still screen with the shake sampled in, and before the air, so light
     shafts, motes and mist still pass in front. Leaves (the road's `ambient.leaves`, or a crown's
     `debris`) drift down and come to rest on the ground, a night road startles fireflies out of the

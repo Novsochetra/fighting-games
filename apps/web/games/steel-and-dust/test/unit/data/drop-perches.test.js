@@ -49,9 +49,9 @@ const gapsAlong = (painting, { from, to }, row) =>
   );
 
 describe('the perches raiders drop from', () => {
-  it('are on five roads, in a repeating layer as wide as its painting', () => {
+  it('are on six roads, in a repeating layer as wide as its painting', () => {
     expect(ROADS.map(([road]) => road).sort()).toEqual(
-      ['bayon', 'emberWoods', 'ironWorks', 'pineRidge', 'wardenFortress'].sort(),
+      ['bayon', 'emberWoods', 'ironWorks', 'pineRidge', 'raiderCamp', 'wardenFortress'].sort(),
     );
     for (const [road, backdrop] of ROADS) {
       const layer = backdrop.layers.find((one) => one.name === backdrop.perches.layer);

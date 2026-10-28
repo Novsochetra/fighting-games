@@ -1,3 +1,4 @@
+import { dropIn } from '../ambushes.js';
 import { contour, ledge, mound, terrace } from '../ground-shapes.js';
 
 export const RAIDER_CAMP = {
@@ -25,12 +26,13 @@ export const RAIDER_CAMP = {
     },
     {
       screens: 2,
-      // a ditch between two earthworks, with a deck across it for the spitters
+      // a ditch between two earthworks, with a deck across it for the spitters; the lookout tower
+      // stays in sight all through it, and its raiders leap off it at the hero
       ground: [...terrace(60, 180, 18, 60), ...ledge(270, 380, 14, 50)],
       platforms: [{ at: 186, width: 80, rise: 36, kind: 'planks' }],
       waves: [
         ['spitter', 'spitter', 'hound'],
-        ['shield', 'sling', 'scrapper'],
+        dropIn(['knife', 'scrapper', 'jackal']),
         ['knife', 'shield', 'spitter', 'bomber'],
       ],
     },

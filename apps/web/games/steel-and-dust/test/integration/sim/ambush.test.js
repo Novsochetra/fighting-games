@@ -142,6 +142,7 @@ describe('a bot-played run into the ambushes of every road that has one', () => 
   it("meets them waiting on the road's own trees, towers and girders", () => {
     for (const [theme, perch] of [
       ['pineRidge', 'crown'],
+      ['raiderCamp', 'ledge'],
       ['ironWorks', 'ledge'],
       ['emberWoods', 'crown'],
       ['wardenFortress', 'ledge'],

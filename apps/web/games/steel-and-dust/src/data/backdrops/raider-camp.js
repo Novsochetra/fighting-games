@@ -2,6 +2,13 @@ export const RAIDER_CAMP = {
   folder: 'raider-camp',
   groundTop: 13,
   cliff: true,
+  // the lookout tower's floor between its stakes, which raiders climb onto to drop on the hero
+  // (src/sim/hazards/drop-perches.js); the stakes' tips stand clear of the HUD
+  perches: {
+    layer: 'near',
+    tileWidth: 384,
+    spots: [{ kind: 'ledge', from: 109, to: 144, y: 92 }],
+  },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },
