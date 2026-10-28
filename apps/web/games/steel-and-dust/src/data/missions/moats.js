@@ -1,9 +1,7 @@
-import { VIEW_HEIGHT } from '../../config.js';
+import { GROUND_Y, VIEW_HEIGHT } from '../../config.js';
 
-// the water lies just under the lip of the lower bank, wherever the road it cuts through stands, so
-// the breach reads as water from the road's own height and whatever goes over the edge falls into
-// it there; any deeper and what stands behind the breach shows through at the road's height
-export const LIP_TO_WATER = 3;
+// the water lies a little below the road, under the lip of the causeway it cuts through
+export const MOAT_LEVEL = GROUND_Y + 6;
 // the bed is out of sight, so nothing ever lands on it: whatever falls in reaches the water first
 const MOAT_BED = VIEW_HEIGHT + 48;
 
@@ -12,8 +10,7 @@ export function carveMoats(zoneSpecs, zones, heights) {
   return zoneSpecs.flatMap((spec, index) =>
     (spec.moats ?? []).map(([from, to]) => {
       const left = zones[index].left;
-      const lip = Math.max(heights[left + from - 1], heights[left + to]);
-      const span = { from: left + from, to: left + to, level: lip + LIP_TO_WATER };
+      const span = { from: left + from, to: left + to, level: MOAT_LEVEL };
 
       heights.fill(MOAT_BED, span.from, span.to);
 
