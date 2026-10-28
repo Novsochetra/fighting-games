@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GROUND_Y } from '../../../src/config.js';
 import { MOAT } from '../../../src/data/moat.js';
-import { MOAT_LEVEL } from '../../../src/data/missions/moats.js';
 import { blockWall, nudge } from '../../../src/sim/fighters/terrain-motion.js';
 import { updateMoat } from '../../../src/sim/hazards/moat.js';
 import { createLootGame, piece, soundKeys, spawnEnemy } from '../../support/loot-game.js';
@@ -10,6 +9,7 @@ import { buildTerrain, useTerrain } from '../../support/terrain-game.js';
 // a breach in a level road from x 200 to 244
 const [FROM, TO] = [200, 244];
 const ROAD = buildTerrain({ moats: [[FROM, TO]] });
+const [{ level: WATER }] = ROAD.water;
 
 function moatGame() {
   const { game, sounds } = createLootGame();
@@ -21,7 +21,7 @@ function moatGame() {
 
 // a body knocked over the water, its feet just reaching it
 function fallingIn(fighter, x) {
-  return Object.assign(fighter, { x, y: MOAT_LEVEL, airborne: true, state: 'juggle', vx: 2 });
+  return Object.assign(fighter, { x, y: WATER, airborne: true, state: 'juggle', vx: 2 });
 }
 
 describe('the edge of a moat', () => {
@@ -117,7 +117,7 @@ describe('the hero or a boss in the moat', () => {
 describe('loot over the moat', () => {
   it('sinks once it comes down to the water, and the rest stays', () => {
     const { game } = moatGame();
-    const sinking = piece({ x: FROM + 20, y: MOAT_LEVEL + 1, vy: 2 });
+    const sinking = piece({ x: FROM + 20, y: WATER + 1, vy: 2 });
     const ashore = piece({ x: FROM - 20, y: GROUND_Y });
     game.loot = [sinking, ashore];
 

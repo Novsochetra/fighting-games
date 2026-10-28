@@ -17077,11 +17077,11 @@
    ],
    "world": {
     "particles": "0afa015dd9fe816c",
-    "effects": "8decbf76bb66a1e5",
-    "floaters": "7de3cf3835e6cd98",
+    "effects": "da39a3ee5e6b4b0d",
+    "floaters": "13c038cab0ff1f2d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "cb246a5491fb51d3",
+    "summons": "9c299df711e92b94",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "b533ee19254a5515"
    }
@@ -17200,7 +17200,7 @@
    "world": {
     "particles": "9adad8b3f786edbd",
     "effects": "4c6c31c8982785bf",
-    "floaters": "be1c9adb02f42fc5",
+    "floaters": "62982460a30c4136",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "29fc905e9a190259",
@@ -17322,7 +17322,7 @@
    "world": {
     "particles": "d887b202a2d6cf14",
     "effects": "da39a3ee5e6b4b0d",
-    "floaters": "4143933065264169",
+    "floaters": "2f648787e051004f",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
     "summons": "37fafbbfa9c16a0c",
@@ -17547,7 +17547,7 @@
     "floaters": "bcfedbd0af57b05d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "b9f62ac29e065608",
+    "summons": "33ebf3b768cffbed",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "b533ee19254a5515"
    }
@@ -19100,7 +19100,7 @@
     "floaters": "da39a3ee5e6b4b0d",
     "shockwaves": "da39a3ee5e6b4b0d",
     "projectiles": "da39a3ee5e6b4b0d",
-    "summons": "07b6b7d45e3b1b9d",
+    "summons": "da39a3ee5e6b4b0d",
     "pickups": "da39a3ee5e6b4b0d",
     "crates": "b533ee19254a5515"
    }
@@ -20441,231 +20441,231 @@
    "tick": 360,
    "frame": {
     "calls": 1625,
-    "digest": "8e91ea07aea76e94"
+    "digest": "ec54aced9ec286f3"
    }
   },
   {
    "tick": 480,
    "frame": {
     "calls": 1978,
-    "digest": "aca98ad8743bca1b"
+    "digest": "7f97d41ce3962a0c"
    }
   },
   {
    "tick": 600,
    "frame": {
     "calls": 1765,
-    "digest": "c9b71ba381a4ae26"
+    "digest": "9b2ea7e5c22d60da"
    }
   },
   {
    "tick": 720,
    "frame": {
     "calls": 1716,
-    "digest": "d8f4efbeadb7532e"
+    "digest": "7d904cd4ce318352"
    }
   },
   {
    "tick": 840,
    "frame": {
     "calls": 1714,
-    "digest": "e9de414b519162c2"
+    "digest": "c4736fbde7ff4da5"
    }
   },
   {
    "tick": 960,
    "frame": {
     "calls": 1701,
-    "digest": "9008312faec8540d"
+    "digest": "d3af8ee3b6e45914"
    }
   },
   {
    "tick": 1080,
    "frame": {
     "calls": 1477,
-    "digest": "bd5d6a08def22f88"
+    "digest": "8c89e0a98c0b234c"
    }
   },
   {
    "tick": 1200,
    "frame": {
     "calls": 1675,
-    "digest": "ad08cd082bf84f23"
+    "digest": "f5af6ca6bb245647"
    }
   },
   {
    "tick": 1320,
    "frame": {
     "calls": 3336,
-    "digest": "8ec96233767262c6"
+    "digest": "667296522d10ec5d"
    }
   },
   {
    "tick": 1440,
    "frame": {
     "calls": 2097,
-    "digest": "effb6e6d885556fb"
+    "digest": "f42aa06728fdb326"
    }
   },
   {
    "tick": 1560,
    "frame": {
     "calls": 1502,
-    "digest": "80bfe4415ff18c55"
+    "digest": "f9ac378f871fe867"
    }
   },
   {
    "tick": 1680,
    "frame": {
     "calls": 1608,
-    "digest": "222fcab21f2d608b"
+    "digest": "1a6f1ff7c6b2579b"
    }
   },
   {
    "tick": 1800,
    "frame": {
     "calls": 1610,
-    "digest": "d45088710d724523"
+    "digest": "86e22dcfe84c5723"
    }
   },
   {
    "tick": 1920,
    "frame": {
     "calls": 1514,
-    "digest": "1f092cff5f4f89b7"
+    "digest": "3751dd333f727465"
    }
   },
   {
    "tick": 2040,
    "frame": {
     "calls": 1607,
-    "digest": "1dc216398a78fe8a"
+    "digest": "56e1d5c866db0ba6"
    }
   },
   {
    "tick": 2160,
    "frame": {
     "calls": 1492,
-    "digest": "713471b3bc62b375"
+    "digest": "2f7f07d62879bf3a"
    }
   },
   {
    "tick": 2280,
    "frame": {
     "calls": 1525,
-    "digest": "e32a682b5b445496"
+    "digest": "cf8e37c55ca1241c"
    }
   },
   {
    "tick": 2400,
    "frame": {
     "calls": 1594,
-    "digest": "39da4e2c530eca91"
+    "digest": "3eeda79f167558c3"
    }
   },
   {
    "tick": 2520,
    "frame": {
     "calls": 1448,
-    "digest": "a9e40b42b275b2a5"
+    "digest": "e1023c22cdf74826"
    }
   },
   {
    "tick": 2640,
    "frame": {
     "calls": 1327,
-    "digest": "a5d8ab92e0e44178"
+    "digest": "b997aab63cd0f5ea"
    }
   },
   {
    "tick": 2760,
    "frame": {
     "calls": 1653,
-    "digest": "f8745aed5eb140cd"
+    "digest": "7568433489a175cb"
    }
   },
   {
    "tick": 2880,
    "frame": {
     "calls": 1238,
-    "digest": "3e5cffa6fcf02c81"
+    "digest": "f8384b0dc673b206"
    }
   },
   {
    "tick": 3000,
    "frame": {
     "calls": 1206,
-    "digest": "fd816c0c7f8f1a5d"
+    "digest": "857601c1b8458fff"
    }
   },
   {
    "tick": 3120,
    "frame": {
     "calls": 1175,
-    "digest": "753d405a3f78ce33"
+    "digest": "05f5649beaffa0dd"
    }
   },
   {
    "tick": 3240,
    "frame": {
     "calls": 2538,
-    "digest": "0cdb44fbcca407b0"
+    "digest": "bff56c4eeb4f944f"
    }
   },
   {
    "tick": 3360,
    "frame": {
     "calls": 1156,
-    "digest": "4ae598059a9f1213"
+    "digest": "401d62ea8f299b0e"
    }
   },
   {
    "tick": 3480,
    "frame": {
     "calls": 1113,
-    "digest": "c723611dec459cd7"
+    "digest": "4596241a0997af7a"
    }
   },
   {
    "tick": 3600,
    "frame": {
     "calls": 1480,
-    "digest": "e20631841687c331"
+    "digest": "2e1ddc18aac52627"
    }
   },
   {
    "tick": 3720,
    "frame": {
-    "calls": 1435,
-    "digest": "fc6f358d12b50e80"
+    "calls": 1377,
+    "digest": "b60379bbbba7010f"
    }
   },
   {
    "tick": 3840,
    "frame": {
     "calls": 2204,
-    "digest": "ed857687b3bd6bd2"
+    "digest": "c75b9431dabc4e6a"
    }
   },
   {
    "tick": 3960,
    "frame": {
     "calls": 1260,
-    "digest": "4b783a7010c60d9c"
+    "digest": "846f3b5a7d85a69e"
    }
   },
   {
    "tick": 4080,
    "frame": {
     "calls": 2178,
-    "digest": "4bb85da55374039b"
+    "digest": "d45d9f4b80019221"
    }
   },
   {
    "tick": 4200,
    "frame": {
     "calls": 1093,
-    "digest": "4a99d3e8acca0909"
+    "digest": "5c32e5741a2be03f"
    }
   },
   {
