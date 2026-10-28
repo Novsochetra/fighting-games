@@ -248,7 +248,7 @@ python3 $T course $A/ground.png course.png 8 19 270
 python3 $T place $A/near.png 768 187 '#b07a80' 0.2 48 prop-2.png:507:m course.png:549 \
   prop-0.png:555:10 prop-1.png:593:10 prop-1.png:685:10 prop-0.png:777:m:10 prop-2.png:825 \
   prop-4.png:866 prop-5.png:946 prop-6.png:922 prop-3.png:1020
-python3 $T face $A/ground.png $A/cliff.png 10 60
+python3 tools/road_body.py courses $A/ground.png $A 10 19 29 31
 ```
 
 - `back.png` (553x216) is rows 208-808 of the scene, a 3:1 band with the central tower's tip at
@@ -277,9 +277,28 @@ python3 $T face $A/ground.png $A/cliff.png 10 60
   pair that match best, so it tiles without a crossfade. Its first full row is 8, the lit top of the
   paving slabs; `groundTop` is 10 so the fighters stand on that top face. Its last row is one plain
   deep-earth colour, so the run down under a high step does not draw stripes.
-- `cliff.png` (12x64) is the ground's own columns 60-71 from the surface down, darkened to 0.75 as
-  a face turned from the light, its lip lit and its outer edge the dirt beside it: a black outline
-  there read as a drawn line down both sides of the moat.
+- `deep.png` (227x216), `face.png` (44x216), `breach.png` (32x216) and `cliff.png` (12x26) are the
+  road's body, made with `tools/road_body.py courses` from `ground.png` (`deep: { from: 20, faces:
+  true }`). Much of this road is raised 16 to 36 px, and the cross-section only reached a few dozen
+  rows under it, its last row stretched to the bottom of the screen: a flat dark void under every
+  terrace and stair, every step and both banks of the moat's breach a ruler-straight cut. Now only
+  the paving and its turf (rows 0-19) follow each step; under them the road is built level at the
+  world's rows. `deep.png` is the road's own laterite course (rows 19-28, its mortar line first)
+  laid course on course up to the highest step, each shifted along from the one under it so no
+  joint stands over another, worn quieter than the road's own, a block in eleven fallen out to the
+  dark core behind and two strangler-fig roots crawling down it; from world row 193 down it is the
+  cross-section's own course and earth, so the road at its base level is laid as before, and all of
+  it darkens and cools toward the theme's `rock` (`#4f2c3c`) down to the bottom of the screen, where
+  the fight's feet are. The paving casts a two-row shadow on the wall under it (in code).
+  `face.png` is four sets of the ends of those courses where a step cuts through them, each end
+  jutting out up to 4 px, flush or fallen back 2-3 px, with an eroded earth edge and roots under
+  the road's course; a step picks its set by where it stands. `breach.png` is the two banks of the
+  moat's breach, drawn by hand course by course (a face that runs on down out of sight is a
+  breach): blocks jutting 5 and 6 px, a block fallen out of each, the earth bulging out under one
+  and falling back under the other, roots hanging into the gap. `cliff.png` is the end of the
+  paving at a step's lip, a pixel overhanging and its end in shade, with three strands of creeper
+  in the theme's `grass` hanging off it. Before this it was the ground's own columns 60-71 darkened
+  to 0.75, the full height of a face.
 - `way-in.png` (384 wide, the last of Warden's Fortress on the left of the first screen) is kept
   from the first version: the banner tower, spiked barricade and bare pennant pole cut from
   `warden-fortress/near.png` (columns 1430-1506, 925-1000, 590-597), overgrown with one Edit (Pro
@@ -319,3 +338,9 @@ commands, because the tool has no step for them.
 - `cliff.png` (12x64) is drawn by hand in `ground.png`'s colours, the face of a sheer step: two
   courses of grey-green sandstone with moss on the lip and in the joint, a course of laterite set
   back a pixel under them, then earth with fig roots going dark, with a dark outer edge.
+- `deep.png` (128x216) is the earth under the road at the world's rows (`deep: { from: 48 }`), made
+  with `python3 tools/road_body.py earth ground.png deep.png 19 48 10`: from world row 213 down it
+  is `ground.png`'s own earth, as the road at its base level lays it, and above that its band of
+  earth with fig roots (rows 48-57) repeated upward, shifted along each time. The stone and laterite
+  (rows 0-47) still follow each step. Before it, the cross-section's last row was stretched down
+  under every raised step, a dark band striped by that row's colours.

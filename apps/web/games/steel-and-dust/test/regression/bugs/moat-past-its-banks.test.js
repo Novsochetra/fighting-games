@@ -43,7 +43,7 @@ function renderMoat() {
 function faceAt(log, x) {
   return log.findIndex(
     (call) =>
-      /^drawImage\((img\(cliff\.png\)|canvas\(12x64,)/.test(call) && call.includes(`,${x},`),
+      /^drawImage\((img\(cliff\.png\)|canvas\(12x\d+,)/.test(call) && call.includes(`,${x},`),
   );
 }
 
