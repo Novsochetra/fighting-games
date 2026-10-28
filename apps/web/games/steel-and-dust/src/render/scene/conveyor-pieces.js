@@ -8,8 +8,10 @@ const VARIANTS = 4;
 // then the drive end
 const FAR_END_BACK = 11.5;
 const FIRST_SEGMENT_BACK = 45.5;
-// a segment's plates reach this far either side of its anchor
-const HALF_PLATES = 18;
+// the belt's straight run, whose plates are seen moving, from where the far end's drum begins to
+// just past the drive end's anchor, where its gear begins
+const FAR_DRUM_BACK = 5;
+const DRIVE_GEAR_PAST = 2.5;
 
 // the belt is set in the floor, its plates as high over the feet as the road's cinders; the
 // furnace stands on the floor just past the mouth, its chute over the belt's far end
@@ -31,22 +33,24 @@ export function beltPieces(belt) {
   ];
 }
 
-// the stretch of straight belt whose plates are seen running toward the mouth
+// the stretch of straight belt whose plates are seen running toward the mouth: all of it, over
+// the far and drive ends too, so no plate there stands still beside the moving ones
 export function plateSpan(belt) {
-  const last = FIRST_SEGMENT_BACK + CONVEYOR.segment * (belt.segments - 1);
+  const driveBack = FIRST_SEGMENT_BACK + CONVEYOR.segment * belt.segments;
 
-  return { near: FIRST_SEGMENT_BACK - HALF_PLATES, far: last + HALF_PLATES };
+  return { near: FAR_DRUM_BACK, far: driveBack + DRIVE_GEAR_PAST };
 }
 
-// the plates of every segment, moved on toward the mouth by how far the belt has run; each
-// segment's plates move into the next one's place, and one more comes in at the top
+// the plates of every segment, moved on toward the mouth by how far the belt has run, and one
+// segment's more at each end over the far and drive ends; each place's plates move into the next
+// one's, and one more comes in at the top
 export function plateSlots(belt, tick) {
   const travel = tick * CONVEYOR.speed;
   const shift = Math.floor(travel / CONVEYOR.segment);
   const moved = travel - shift * CONVEYOR.segment;
 
-  return Array.from({ length: belt.segments + 1 }, (_, i) => ({
+  return Array.from({ length: belt.segments + 3 }, (_, i) => ({
     frame: (i + shift) % VARIANTS,
-    back: FIRST_SEGMENT_BACK + CONVEYOR.segment * i - moved,
+    back: FIRST_SEGMENT_BACK + CONVEYOR.segment * (i - 1) - moved,
   }));
 }

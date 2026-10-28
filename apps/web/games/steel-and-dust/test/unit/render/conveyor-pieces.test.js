@@ -89,12 +89,27 @@ describe('a conveyor belt as drawn', () => {
     );
   });
 
-  it('shows the moving plates over every segment and no further', () => {
+  it('runs its plates along the whole straight belt, from the far end’s drum to the drive gear', () => {
     const { near, far } = plateSpan(BELT);
-    const segments = beltPieces(BELT).slice(1, -1);
+    const pieces = beltPieces(BELT);
 
-    expect(near).toBe(segments[0].back - CONVEYOR.segment / 2);
-    expect(far).toBe(segments.at(-1).back + CONVEYOR.segment / 2);
+    expect(near).toBeLessThan(pieces[0].back);
+    expect(near).toBeGreaterThan(0);
+    expect(far).toBeGreaterThan(pieces.at(-1).back);
+    expect(far).toBeLessThan(pieces.at(-1).back + CONVEYOR.segment / 2);
+  });
+
+  it('has moving plates over every bit of that straight belt, whenever it is looked at', () => {
+    const { near, far } = plateSpan(BELT);
+    const reach = frameWidth * FX_SCALE * 0.45;
+
+    for (let tick = 0; tick < ONE_SEGMENT; tick++) {
+      const covered = (spot) =>
+        plateSlots(BELT, tick).some(({ back }) => Math.abs(spot - back) <= reach);
+      for (let spot = near; spot <= far; spot += 0.5) {
+        expect(covered(spot), `tick ${tick} at ${spot}`).toBe(true);
+      }
+    }
   });
 
   it('leans every plate at the same angle, along the segments as over the drive and far ends', () => {
