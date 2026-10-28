@@ -78,3 +78,13 @@ export function expireBuffer(buffer) {
     buffer.action = null;
   }
 }
+
+// the hero cannot act in a hit's freeze, so a press made on impact waits it out; aging it there let
+// the freeze eat the buffer and dropped the next move of a string
+export function ageBuffer(game) {
+  if (game.player.hitstop > 0) {
+    return;
+  }
+
+  expireBuffer(game.input.buffer);
+}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createInput } from '../../../src/sim/input/create-input.js';
-import { expireBuffer, readInput } from '../../../src/sim/input/read-input.js';
+import { ageBuffer, expireBuffer, readInput } from '../../../src/sim/input/read-input.js';
 
 function gameAt(tickCount) {
   return { tickCount, input: createInput() };
@@ -50,5 +50,21 @@ describe('readInput', () => {
     expect(buffer.action).toBe('light');
     expireBuffer(buffer);
     expect(buffer.action).toBeNull();
+  });
+
+  it('holds a press while the hero is frozen in a hit', () => {
+    const game = { input: createInput(), player: { hitstop: 9 } };
+    Object.assign(game.input.buffer, { action: 'light', ttl: 1 });
+
+    ageBuffer(game);
+    expect(game.input.buffer).toMatchObject({ action: 'light', ttl: 1 });
+  });
+
+  it('ages a press again once the hero can act', () => {
+    const game = { input: createInput(), player: { hitstop: 0 } };
+    Object.assign(game.input.buffer, { action: 'light', ttl: 1 });
+
+    ageBuffer(game);
+    expect(game.input.buffer.action).toBeNull();
   });
 });
