@@ -1,6 +1,6 @@
 import { apiNetworkFirst } from './api-cache.js';
 import { fromArcade } from './arcade-cache.js';
-import { fromGame } from './game-cache.js';
+import { fromGame, keepNewestWhole } from './game-cache.js';
 import { keepSavedFresh, saveResponse } from './game-downloads.js';
 import { offlineResponse } from './offline-page.js';
 import { routeOf } from './routes.js';
@@ -36,13 +36,20 @@ async function fromGameOrNetwork(context, { id, key }) {
 // is a play.
 const isPrefetch = (request) => request.headers?.get('Sec-Purpose')?.includes('prefetch') ?? false;
 
-// A play of a saved game brings a deploy's revision down behind it, while it plays from what it had.
+// A play opens the newest revision kept whole, and a play of a saved game brings a deploy's revision
+// down behind it, while it plays from what it had.
 function startGame(event, context, route) {
-  if (context.request.mode === 'navigate' && !isPrefetch(context.request)) {
-    event.waitUntil(keepSavedFresh(context, route.id));
+  context.activity.asked(route.id);
+
+  if (context.request.mode !== 'navigate' || isPrefetch(context.request)) {
+    return fromGameOrNetwork(context, route);
   }
 
-  return fromGameOrNetwork(context, route);
+  const opened = keepNewestWhole({ ...context, id: route.id });
+
+  event.waitUntil(opened.then(() => keepSavedFresh(context, route.id)));
+
+  return opened.then(() => fromGameOrNetwork(context, route));
 }
 
 // The response the worker gives a request, or null for one it leaves to the browser.

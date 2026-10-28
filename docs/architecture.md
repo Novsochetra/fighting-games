@@ -185,8 +185,14 @@ not kept.
   so a half download, or one across two deploys, is never played; until then it comes from the
   network as before, and offline it says so. A play saves nothing the player has not saved, but it
   keeps a saved game fresh: after a deploy that changes the game, the next play brings the new
-  revision down behind the old one, which it plays meanwhile, then lets the old go. A prefetch of a
-  game's page (the home's speculation rules) downloads nothing.
+  revision down behind the old one, which it plays meanwhile. A page plays the revision it opened on
+  to the end, even once the new one is in (the oldest whole one, `completeGame`), and the play after
+  opens the new one and lets the old go (`keepNewestWhole`), since letting it go as the new one came
+  in mixed the new revision's files into a page still loading the old. The worker works out which
+  revision a game plays once, and again only as one comes in or goes, so each of its files reads one
+  cache. A download waits while the game asks for files of its own, carrying on once it has asked
+  for none for two seconds (`game-activity.js`), so on a phone the game's own files come first. A
+  prefetch of a game's page (the home's speculation rules) downloads nothing.
 - **Saving a game** (`game-downloads.js`): the player saves a game, and removes it, with the
   arcade's buttons; a play never waits for a download. The worker answers `api/offline/<id>`: a GET
   with `saved` once a revision is whole, else `saving` with how many of its files are in (`done`,
