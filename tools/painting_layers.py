@@ -19,7 +19,8 @@
         faces turned from the light: the plinth a balustrade stands on
     python3 tools/painting_layers.py place <out> <width> <base_y> <haze #rrggbb> <amount> <colours> <piece>[:x[:m][:lift]]...
         lays pieces on a transparent strip, each one's lowest row on base_y minus lift (m mirrors
-        it), hazes the strip toward the road's air and reduces it to `colours`
+        it; one laid past the strip's right end runs on at its left, as the strip tiles), hazes the
+        strip toward the road's air and reduces it to `colours`
     python3 tools/painting_layers.py face <ground> <out> <surface_row> <x> [width=12] [shade=0.75]
         the face of a step whose high ground is on the left, from the ground's own columns under
         its surface: darkened as a face turned from the light, the lip lit and the outer edge
@@ -189,7 +190,12 @@ def place(dst, width, base_y, colour, amount, colours, *specs):
         piece = Image.open(path).convert('RGBA')
         piece = ImageOps.mirror(piece) if 'm' in flags else piece
         lift = next((int(flag) for flag in flags if flag.isdigit()), 0)
-        strip.alpha_composite(piece, (int(x), int(base_y) - lift + 1 - piece.height))
+        top = int(base_y) - lift + 1 - piece.height
+        # the strip tiles, so a piece laid past its right end runs on at its left
+        left = int(x) % int(width)
+        strip.alpha_composite(piece, (left, top))
+        if left + piece.width > int(width):
+            strip.alpha_composite(piece, (0, top), (int(width) - left, 0))
     tint = tuple(int(colour[i:i + 2], 16) for i in (1, 3, 5))
     share = float(amount)
     strip.putdata([

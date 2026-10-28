@@ -245,9 +245,9 @@ python3 $T pieces props.png prop
 python3 $T key $C/ground.webp ground-keyed.png 0.15
 python3 $T tile ground-keyed.png $A/ground.png 32 128
 python3 $T course $A/ground.png course.png 8 19 270
-python3 $T place $A/near.png 768 187 '#b07a80' 0.2 48 prop-7.png:4 prop-4.png:44 prop-6.png:128 \
-  prop-5.png:186 prop-3.png:262 prop-2.png:324:m course.png:366 prop-0.png:372:10 prop-1.png:410:10 \
-  prop-1.png:502:10 prop-0.png:594:m:10 prop-2.png:642 prop-7.png:712:m
+python3 $T place $A/near.png 768 187 '#b07a80' 0.2 48 prop-2.png:507:m course.png:549 \
+  prop-0.png:555:10 prop-1.png:593:10 prop-1.png:685:10 prop-0.png:777:m:10 prop-2.png:825 \
+  prop-4.png:866 prop-5.png:946 prop-6.png:922 prop-3.png:1020
 python3 $T face $A/ground.png $A/cliff.png 10 60
 ```
 
@@ -263,11 +263,16 @@ python3 $T face $A/ground.png $A/cliff.png 10 60
 - `near.png` (768 wide): the props sheet keyed at 0.15 (the singha a little taller than a fighter),
   cut into its eight props (naga end, balustrade run, singha, spirit house; gateway, frangipani and
   banana, ferns, broken pillar), laid out by hand and hazed 0.2 toward the moat mist (`#b07a80`).
-  Two tall accents (the gateway, the frangipani) come first, then a long low run: two singhas
-  guarding a naga balustrade with a naga at each end, so half the strip leaves the temple in view.
-  The run stands on a `course` of the road's own paving (rows 8-19 of `ground.png`): much of this
-  road is raised 16 to 36 px, and without the course the 25 px balustrade hid behind it. The
-  incense smoke rises from the spirit house's sticks at x 280, y 162.
+  Columns 274-504 are left empty: they are the ones that slide behind the moat's breach in the
+  Naga Causeway from any camera that shows it, and with the naga balustrade there it stood at the
+  road's own height in the gap and read as a bridge. Through the breach the back plate's own moat
+  shows over the water instead (`test/regression/bugs/naga-behind-the-breach.test.js`). The rest
+  holds two singhas guarding a naga balustrade with a naga at each end, then the gateway, the
+  frangipani with the ferns at their feet, and the spirit house; the broken pillars did not fit. A
+  piece laid past the strip's right end runs on at its left. The run stands on a `course` of the
+  road's own paving (rows 8-19 of `ground.png`): much of this road is raised 16 to 36 px, and
+  without the course the 25 px balustrade hid behind it. The incense smoke rises from the spirit
+  house's sticks at x 270, y 162.
 - `ground.png` (227x49) is the cross-section keyed at 0.15 and cut between columns 2 and 229, the
   pair that match best, so it tiles without a crossfade. Its first full row is 8, the lit top of the
   paving slabs; `groundTop` is 10 so the fighters stand on that top face. Its last row is one plain

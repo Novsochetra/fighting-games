@@ -25,7 +25,7 @@ export const ANGKOR_WAT = {
     { kind: 'birds', plane: 'back', period: 1500, y: 44 },
     { kind: 'glints', plane: 'back', count: 14, top: 165, bottom: 180, drift: 0.03 },
     { kind: 'motes', plane: 'back', count: 10, drift: 0.3, top: 40, bottom: 150 },
-    { kind: 'smoke', plane: 'back', emitters: [{ x: 280, y: 162 }], tileWidth: 768, drift: 0.45 },
+    { kind: 'smoke', plane: 'back', emitters: [{ x: 270, y: 162 }], tileWidth: 768, drift: 0.45 },
     { kind: 'butterflies', plane: 'back', count: 4, top: 120, bottom: 176, drift: 0.45 },
     { kind: 'leaves', plane: 'front', count: 6, drift: 1.1, wind: 0.15 },
   ],
