@@ -642,9 +642,14 @@ length.
     clear air below the vines, the trunks among them standing still; bamboo leans from far below,
     each stalk as one (`src/render/scene/canopy-rustle.js`, `canopy-columns.js`).
   - On a road with `perches` (`src/data/backdrops/<folder>.js`: spots in a repeating layer's own
-    pixels, held to the painting by `test/unit/data/drop-perches.test.js`) it waits on the one
-    nearest its spot that is in sight (`src/sim/hazards/drop-perches.js`), its mark kept under it
-    as the layer scrolls slower than the road; with none in sight it walks in as any raider does. In a
+    pixels, held to the painting by `test/unit/data/drop-perches.test.js`) it waits at the free
+    place in sight nearest its spot (`src/sim/hazards/drop-perches.js`), its mark kept under it
+    as the layer scrolls slower than the road. A crown hides one raider; a ledge stands as many as
+    have `DROP.room`, spread from end to end; and none waits behind a hammer or a face tower
+    standing on the road, nor drops under one. With no place free, the next raider waits its turn
+    on the place soonest left, climbing on `DROP.turn` ticks after the last has leapt, so a lookout
+    tower sends a wave down one after another (`src/sim/hazards/perch-turns.js`); with none in sight,
+    or its place gone out of sight by its turn, it walks in as any raider does. In a
     `crown` (Pine Ridge's pines, Ember Woods' autumn trees) it hides in the thick of the leaves at
     `x, y`: only that crown sways, in its own layer, and as it lets go the crown's own pixels are
     laid back over it, so it drops out of the leaves (`src/render/scene/crown-cover.js`). On a

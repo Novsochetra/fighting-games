@@ -6,8 +6,12 @@ import { drawPerchedRaider } from './perched-raider.js';
 const MOUND_SCALE = 0.75;
 
 // a raider waiting overhead shows as its shadow on the road under it, and itself too while it
-// waits on a ledge in sight
+// waits on a ledge in sight; one waiting its turn on a perch is not up there yet
 export function drawDropMark(painter, mark, sheets, road) {
+  if (mark.delay > 0) {
+    return;
+  }
+
   drawDropShadow(painter, mark, road.floorAt);
   if (mark.perch?.kind === 'ledge' && !mark.raider) {
     drawPerchedRaider(painter, mark, road);

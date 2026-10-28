@@ -22,6 +22,10 @@ export const DROP = {
   climb: 14,
   leapVy: -2.4,
   grit: 8,
+  // raiders on one perch stand at least this far apart; with no room left on any in sight, the
+  // next waits its turn on the one soonest free, climbing on this long after the last has leapt
+  room: 24,
+  turn: 12,
 };
 
 export const BURROW = {

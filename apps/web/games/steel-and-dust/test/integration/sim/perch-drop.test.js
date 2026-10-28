@@ -2,7 +2,8 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { PAINTED_THEMES } from '../../../src/art/painted-themes/index.js';
 import { DROP } from '../../../src/data/ambush.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
-import { startAmbush } from '../../../src/sim/stage/ambush.js';
+import { findPerch } from '../../../src/sim/hazards/drop-perches.js';
+import { pendingAmbushes, startAmbush } from '../../../src/sim/stage/ambush.js';
 import { seededRandom } from '../../support/seeded-random.js';
 import { createPlayingGame, runTicks } from '../../support/test-game.js';
 
@@ -132,5 +133,39 @@ describe('a raider waiting on a perch as the road scrolls', () => {
     expect(
       raiders(game).filter((raider) => raider.kind === 'grunt' && raider.entering),
     ).toHaveLength(1);
+  });
+});
+
+describe('a lookout tower with room for one raider on it', () => {
+  beforeEach(() => {
+    Math.random = seededRandom(5);
+  });
+  afterEach(() => {
+    Math.random = originalRandom;
+  });
+
+  it('sends a wave down it one after another, each climbing on once the last has leapt', () => {
+    let road = onRoad('raiderCamp');
+
+    for (let cameraX = 0; !findPerch(road.game, road.game.player.x); cameraX += 16) {
+      road = onRoad('raiderCamp', cameraX);
+    }
+
+    const { game } = road;
+    const leaps = [];
+
+    game.player.invincible = 99999;
+    [0, 1, 2].forEach((slot) => startAmbush(game, { kind: 'grunt', ambush: 'drop', slot }));
+    const marks = game.projectiles.filter((shot) => shot.kind === 'dropMark');
+
+    for (let tick = 1; tick < 400 && pendingAmbushes(game); tick++) {
+      runTicks(game, 1);
+      marks.forEach((mark, i) => {
+        leaps[i] ??= mark.raider ? tick : undefined;
+      });
+    }
+
+    expect(new Set(marks.map((mark) => mark.perch.layerX)).size).toBe(1);
+    expect(leaps).toEqual([DROP.warn, 2 * DROP.warn + DROP.turn, 3 * DROP.warn + 2 * DROP.turn]);
   });
 });

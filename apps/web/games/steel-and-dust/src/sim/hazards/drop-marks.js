@@ -5,7 +5,7 @@ import { onScreen } from '../fighters/arena-bounds.js';
 import { shake } from '../fx/camera-fx.js';
 import { kickLeaves, puffSoil } from '../fx/canopy-fx.js';
 import { missionOf } from '../stage/mission.js';
-import { spawnRaiderAt } from '../stage/spawn-enemy.js';
+import { spawnEnemy, spawnRaiderAt } from '../stage/spawn-enemy.js';
 import { floorBelow } from '../stage/terrain.js';
 import { dropStyle } from './drop-styles.js';
 import { perchX } from './drop-perches.js';
@@ -16,7 +16,7 @@ const FALLING = new Set(['air', 'idle', 'walk']);
 
 // the spot a raider will drop on: the first floor from the sky down, a deck or the road; under
 // the perch it waits on, if the road gives it one
-export function markDrop(game, { kind, x, perch = null }) {
+export function markDrop(game, { kind, x, perch = null, delay = 0 }) {
   game.projectiles.push({
     kind: 'dropMark',
     raiderKind: kind,
@@ -26,6 +26,7 @@ export function markDrop(game, { kind, x, perch = null }) {
     speed: 0,
     side: 'enemy',
     time: 0,
+    delay,
     perch,
     raider: null,
     hitTargets: new Set(),
@@ -68,8 +69,25 @@ function followPerch(game, mark) {
   mark.y = floorBelow(game.terrain, mark.x, -Infinity);
 }
 
+// a raider waiting its turn on a perch is not up there yet, and its shadow not grown: once the one
+// before it has leapt it climbs on, if its perch is still in sight, or walks in if not
+function waitTurn(game, mark) {
+  mark.time = 0;
+  mark.delay--;
+  followPerch(game, mark);
+  if (!mark.delay && onScreen(game, mark.x, MARGIN) !== mark.x) {
+    spawnEnemy(game, mark.raiderKind, mark.x < game.player.x ? -1 : 1);
+    mark.dead = true;
+  }
+}
+
 // the raider waits overhead while its shadow grows, then drops onto the spot
 export function holdDropMark(game, mark) {
+  if (mark.delay > 0) {
+    waitTurn(game, mark);
+    return;
+  }
+
   if (!mark.raider) {
     followPerch(game, mark);
     dropStyle(mark).wait(game, mark);

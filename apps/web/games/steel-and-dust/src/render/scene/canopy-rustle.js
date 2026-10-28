@@ -58,7 +58,8 @@ export function crownSource(mark, { cameraX }) {
   };
 }
 
-const isRustling = (shot) => shot.kind === 'dropMark' && shot.perch?.kind !== 'ledge';
+const isRustling = (shot) =>
+  shot.kind === 'dropMark' && shot.perch?.kind !== 'ledge' && !(shot.delay > 0);
 
 function sourceOf(mark, { backdrop, cameraX }) {
   if (mark.perch) {
