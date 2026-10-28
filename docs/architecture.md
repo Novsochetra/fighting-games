@@ -152,8 +152,12 @@ lets a browser keep those for a year (`immutable`) and has it check everything e
 (`no-cache`). Every file carries an `ETag`, a hash of its content (`routes/file-tags.js`), so a check
 of a file that has not changed costs a `304` and no body, even across deploys. `npm run dev`
 serves the pages and modules from Vite as they are written, with hot reload, and the as-is files from
-disk as in production. If a game's module fails to load, its page reloads itself once under a fresh
-address (`src/boot/boot-recovery.js`).
+disk as in production. If a game's module fails to load, fails to come down at all (a dropped
+connection, a phone that slept mid-load), or its load hears of no file coming in for 15 seconds (a
+request that never answers), its page reloads itself under a fresh address, each try a second
+later than the last, up to three times (`src/boot/boot-recovery.js`). The page's first script
+watches for it and loads nothing more (`src/boot/boot-watch.js`), so the loading screen's own
+modules are watched too.
 
 ## Offline
 
