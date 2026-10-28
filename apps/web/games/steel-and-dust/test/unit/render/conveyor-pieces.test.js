@@ -2,7 +2,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { CONVEYOR, beltLength } from '../../../src/data/conveyors.js';
-import { FX_SPRITES } from '../../../src/data/fx-sprites.js';
+import { FX_SCALE, FX_SPRITES } from '../../../src/data/fx-sprites.js';
 import { beltPieces, plateSlots, plateSpan } from '../../../src/render/scene/conveyor-pieces.js';
 import { readPngAlpha } from '../../support/png-alpha.js';
 
@@ -20,6 +20,9 @@ const PLATE_COLUMNS = [
   [10, 56],
 ];
 const HIGH_ROW = 9;
+// a light plate and the dark one after it, and the rows of the band of plates
+const PAIR = 24;
+const BAND = { top: 5, bottom: 19 };
 const LOW_ROW = 15;
 const MOST_LEAN = 8;
 
@@ -94,11 +97,26 @@ describe('a conveyor belt as drawn', () => {
     expect(far).toBe(segments.at(-1).back + CONVEYOR.segment / 2);
   });
 
-  it('leans every plate the same way, along the segments as over the drive and far ends', () => {
+  it('leans every plate at the same angle, along the segments as over the drive and far ends', () => {
     const leans = PLATE_COLUMNS.map((_, frame) => leanOf(frame));
 
-    for (const [frame, lean] of leans.entries()) {
-      expect(lean, `frame ${frame}`).toBeGreaterThanOrEqual(2);
+    expect(leans[0]).toBeGreaterThanOrEqual(2);
+    expect(new Set(leans).size).toBe(1);
+  });
+
+  it('gives every plate the same shape: one pair of plates over and over, from every anchor', () => {
+    const [from, to] = PLATE_COLUMNS[0];
+
+    expect((CONVEYOR.segment / FX_SCALE) % PAIR).toBe(0);
+    for (let frame = 0; frame < 4; frame++) {
+      for (let x = from; x < to - PAIR; x++) {
+        for (let y = BAND.top; y <= BAND.bottom; y++) {
+          const at = frame * frameWidth + x;
+          expect(art.colorKey(at, y), `frame ${frame} at ${x},${y}`).toBe(
+            art.colorKey(x + PAIR, y),
+          );
+        }
+      }
     }
   });
 });
