@@ -3,8 +3,8 @@ import { groundAt } from './missions/terrain.js';
 // a conveyor belt set flush in the foundry floor, carrying everything on it into the furnace at
 // its end: a raider lying on it when it gets there is fed to the fire, and the hero thrown back out
 export const CONVEYOR = {
-  // world px a tick, a heavy's walking pace: a foot soldier walks up it slowly and a heavy treads
-  // in place, and a raider knocked down near the mouth reaches it before it is back up
+  // world px a tick, a heavy's walking pace: a raider knocked down near the mouth reaches it before
+  // it is back up, and one walking up it keeps its own pace (sim/hazards/conveyors.js)
   speed: 0.5,
   // one segment of belt, and the drive end and the far end together, as they are drawn
   segment: 36,

@@ -52,10 +52,16 @@ function carriedIn(belt, hero) {
   return hero.side === 'player' && pastMouth(belt, hero.x) >= 0 && !striding;
 }
 
+// a heavy walks no faster than the belt runs, so a raider walking up it keeps its own pace rather
+// than treading in place or being carried back to the mouth; the hero outruns it and is only slowed
+function walksUpBelt(belt, fighter) {
+  return fighter.side === 'enemy' && fighter.state === 'walk' && fighter.vx * belt.direction < 0;
+}
+
 function moveOnBelt(game, belt, fighter) {
   const riding = ridesBelt(belt, fighter);
 
-  if (riding) {
+  if (riding && !walksUpBelt(belt, fighter)) {
     nudge(game.terrain, fighter, belt.direction * CONVEYOR.speed);
   }
 
