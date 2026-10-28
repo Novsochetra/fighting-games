@@ -4,7 +4,7 @@ import { VIEW_HEIGHT } from '../../config.js';
 function tileSpans(x, width, tileWidth) {
   const spans = [];
 
-  for (let drawn = 0; drawn < width; ) {
+  for (let drawn = 0; drawn < width;) {
     const sourceX = (((x + drawn) % tileWidth) + tileWidth) % tileWidth;
     const span = Math.min(width - drawn, tileWidth - sourceX);
 

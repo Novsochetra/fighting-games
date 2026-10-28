@@ -64,7 +64,7 @@ function drawTextureRun(painter, { image, top }, { run, deep, shadow }) {
   const tileWidth = image.width;
   const rows = deep ? deep.from : image.height;
   const bottom = y - top + image.height;
-  for (let drawn = 0; drawn < width; ) {
+  for (let drawn = 0; drawn < width;) {
     const sourceX = (((x + drawn) % tileWidth) + tileWidth) % tileWidth;
     const span = Math.min(width - drawn, tileWidth - sourceX);
     context.drawImage(image, sourceX, 0, span, rows, x + drawn, y - top, span, rows);

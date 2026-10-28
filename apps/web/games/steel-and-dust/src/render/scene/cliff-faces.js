@@ -62,7 +62,7 @@ function drawSlice(context, texture, step, { surfaceY, slice }) {
   const { image, top } = texture;
   const { x, width } = across(step, slice.from, slice.to);
   const height = top + slice.rows;
-  for (let drawn = 0; drawn < width; ) {
+  for (let drawn = 0; drawn < width;) {
     const sourceX = (((x + drawn) % image.width) + image.width) % image.width;
     const span = Math.min(width - drawn, image.width - sourceX);
     const destinationY = surfaceY + slice.drop - top;
