@@ -2,12 +2,18 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { FX_SCALE, FX_SPRITES } from '../../../src/data/fx-sprites.js';
+import { tileKind } from '../../../src/render/scene/spike-traps.js';
+import { createSpikeTraps } from '../../../src/sim/hazards/spike-traps.js';
 import { readPngAlpha } from '../../support/png-alpha.js';
 
 const GAME_ROOT = fileURLToPath(new URL('../../../', import.meta.url));
 const art = readPngAlpha(join(GAME_ROOT, 'assets/sprites/fx/spikeTrap.png'));
 const { frameWidth, frameHeight, anchorY } = FX_SPRITES.spikeTrap;
 const PHASE = { rest: 0, warn: 1, rise: 2, up: 3, sink: 4 };
+const PHASES = Object.keys(PHASE).length;
+const KINDS = { alone: 0, leftEnd: 1, middle: 2, rightEnd: 3 };
+// the first and last columns of a tile's line, the one it shares with the next tile in its row
+const LINE = { left: 1, right: 76 };
 // the tile's top face runs from the road line its far edge lies on down to its lit lip
 const FAR_EDGE = anchorY;
 const NEAR_EDGE = frameHeight - 1;
@@ -140,5 +146,44 @@ describe('a spike trap as drawn', () => {
 
   it('puffs its warning dust up off the face', () => {
     expect(topRow(PHASE.warn)).toBeLessThan(FAR_EDGE - 4);
+  });
+});
+
+const solidDown = (frame, x) => {
+  for (let y = FAR_EDGE; y <= NEAR_EDGE; y++) {
+    if (pixelAt(frame, x, y) === -1) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+describe('a row of spike tiles as drawn', () => {
+  it('lays its tiles as one strip: the left end, the middle and the right end', () => {
+    const row = createSpikeTraps([{ x: 400, y: 184 }]);
+    const tile = { x: 400, y: 184 };
+
+    expect(row.map((each) => tileKind(row, each))).toEqual([
+      KINDS.leftEnd,
+      KINDS.middle,
+      KINDS.rightEnd,
+    ]);
+    expect(tileKind([tile], tile)).toBe(KINDS.alone);
+    expect(FX_SPRITES.spikeTrap.frames).toBe(PHASES * Object.keys(KINDS).length);
+  });
+
+  it('runs straight down the line two tiles share, and slopes only at the row’s two ends', () => {
+    for (let phase = 0; phase < PHASES; phase++) {
+      const [leftEnd, middle, rightEnd] = [KINDS.leftEnd, KINDS.middle, KINDS.rightEnd].map(
+        (kind) => kind * PHASES + phase,
+      );
+
+      expect(solidDown(leftEnd, LINE.right), `phase ${phase}`).toBe(true);
+      expect(solidDown(middle, LINE.left) && solidDown(middle, LINE.right)).toBe(true);
+      expect(solidDown(rightEnd, LINE.left), `phase ${phase}`).toBe(true);
+      expect(solidDown(leftEnd, LINE.left)).toBe(false);
+      expect(solidDown(rightEnd, LINE.right)).toBe(false);
+    }
   });
 });

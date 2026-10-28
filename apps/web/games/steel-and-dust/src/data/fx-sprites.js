@@ -85,7 +85,7 @@ export const FX_SPRITES = {
   slagVent: { frameWidth: 46, frameHeight: 119, frames: 10, ticks: 4, anchorX: 23, anchorY: 106 },
   conveyor: { frameWidth: 80, frameHeight: 48, frames: 6, ticks: 1, anchorX: 41, anchorY: 47 },
   furnaceMouth: { frameWidth: 82, frameHeight: 75, frames: 4, ticks: 5, anchorX: 42, anchorY: 74 },
-  spikeTrap: { frameWidth: 78, frameHeight: 44, frames: 5, ticks: 1, anchorX: 39, anchorY: 16 },
+  spikeTrap: { frameWidth: 78, frameHeight: 44, frames: 20, ticks: 1, anchorX: 39, anchorY: 16 },
   templeBoulder: { frameWidth: 94, frameHeight: 91, frames: 4, ticks: 3, anchorX: 47, anchorY: 90 },
   crackedFloor: { frameWidth: 102, frameHeight: 58, frames: 4, ticks: 1, anchorX: 51, anchorY: 16 },
   faceTower: { frameWidth: 92, frameHeight: 128, frames: 4, ticks: 1, anchorX: 45, anchorY: 127 },

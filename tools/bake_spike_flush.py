@@ -28,6 +28,10 @@ ROW_FROM = [*range(17, 31), 31, *range(21, 31), 33, 34]
 DEPTH = FACE_TOP + 1 + len(ROW_FROM)
 # the face's sides on its first and its last row: it is narrower at its far edge
 FAR_SIDES, NEAR_SIDES = (8, 72), (1, 76)
+# the sheet holds the beat four times over: a tile on its own, then the left end of a row of them,
+# its middle and its right end, each joined to the tiles beside it on the line they share, so a
+# row is one strip set into the road, sloping only at its two ends
+KINDS = ((False, False), (False, True), (True, True), (True, False))
 # the spike that comes up out of the middle slot when they are all up: its tip's column, and for
 # each row from the tip down to the slot's floor, the columns it spans
 SPIKE_TIP = 39
@@ -73,14 +77,15 @@ def extent(pixels, y):
     return painted[0], painted[-1]
 
 
-def side_at(y):
-    """where the face's sides stand on a row of the frame, sloping out evenly from far to near"""
+def side_at(y, kind):
+    """where the face's sides stand on a row of the frame: an open side slopes out evenly from far
+    to near, and a side joined to the next tile in its row runs straight down the line they share"""
     share = (y - FACE_TOP - 1) / (len(ROW_FROM) - 1)
     (far_left, far_right), (near_left, near_right) = FAR_SIDES, NEAR_SIDES
-    return (
-        round(far_left + (near_left - far_left) * share),
-        round(far_right + (near_right - far_right) * share),
-    )
+    joined_left, joined_right = kind
+    left = round(far_left + (near_left - far_left) * share)
+    right = round(far_right + (near_right - far_right) * share)
+    return (near_left if joined_left else left, near_right if joined_right else right)
 
 
 def along(x, row_from, row_to):
@@ -89,7 +94,7 @@ def along(x, row_from, row_to):
     return to_left + round((x - left) * (to_right - to_left) / (right - left))
 
 
-def face_of(rest):
+def face_of(rest, kind):
     """the resting tile's top face run on to the road's near edge: its far rim and back row of
     slots, then a front row of slots, then its near rim and lip, every row stretched to sides that
     slope out evenly, so the front row is a little wider, as nearer things are; its far edge is one
@@ -98,7 +103,7 @@ def face_of(rest):
     source, pixels = rest.load(), out.load()
     for offset, row in enumerate(ROW_FROM):
         y = FACE_TOP + 1 + offset
-        left, right = side_at(y)
+        left, right = side_at(y, kind)
         src_left, src_right = extent(source, row)
         for x in range(left, right + 1):
             pixels[x, y] = source[along(x, (left, right), (src_left, src_right)), row]
@@ -117,19 +122,19 @@ def spike_of(up):
     }
 
 
-def slot_middles(rest, floor):
+def slot_middles(rest, floor, kind):
     """the middle column of each slot on the face, in the row of slots whose floor is on `floor`"""
     source_row = ROW_FROM[floor - FACE_TOP - 1]
-    stretch = extent(rest.load(), source_row), side_at(floor)
+    stretch = extent(rest.load(), source_row), side_at(floor, kind)
     return [along(tip, *stretch) for tip in TIPS]
 
 
-def raise_spikes(face, rest, spike, drop):
+def raise_spikes(face, rest, spike, drop, kind):
     """the back row's spikes, then the front row's in front of them"""
     pixels = face.load()
     for floor in SLOT_FLOORS:
         rise = floor - SLOT_FLOOR
-        for tip in slot_middles(rest, floor):
+        for tip in slot_middles(rest, floor, kind):
             for (dx, y), colour in spike.items():
                 if y + drop <= SLOT_FLOOR:
                     pixels[tip + dx, y + drop + rise] = colour
@@ -156,17 +161,15 @@ def main(source, out):
     baked = Image.open(source).convert('RGBA')
     tiles = [baked.crop((i * FRAME, 0, (i + 1) * FRAME, HEIGHT)) for i in range(PHASES)]
     spike = spike_of(tiles[UP])
-    frames = []
-    for phase in range(PHASES):
-        frame = face_of(tiles[REST])
-        if phase == WARN:
-            puff(frame, tiles[WARN])
-        if phase in DROPS:
-            raise_spikes(frame, tiles[REST], spike, DROPS[phase])
-        frames.append(frame)
-    strip = Image.new('RGBA', (FRAME * PHASES, DEPTH))
-    for phase, frame in enumerate(frames):
-        strip.paste(frame, (phase * FRAME, 0))
+    strip = Image.new('RGBA', (FRAME * PHASES * len(KINDS), DEPTH))
+    for index, kind in enumerate(KINDS):
+        for phase in range(PHASES):
+            frame = face_of(tiles[REST], kind)
+            if phase == WARN:
+                puff(frame, tiles[WARN])
+            if phase in DROPS:
+                raise_spikes(frame, tiles[REST], spike, DROPS[phase], kind)
+            strip.paste(frame, ((index * PHASES + phase) * FRAME, 0))
     strip.save(out)
 
 
