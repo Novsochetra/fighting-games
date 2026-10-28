@@ -2,65 +2,66 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { FX_SPRITES } from '../../../src/data/fx-sprites.js';
-import { SPIKE_TRAP } from '../../../src/data/spike-traps.js';
-import { tileKind } from '../../../src/render/scene/spike-traps.js';
-import { createSpikeTraps } from '../../../src/sim/hazards/spike-traps.js';
 import { readPngAlpha } from '../../support/png-alpha.js';
 
 const GAME_ROOT = fileURLToPath(new URL('../../../', import.meta.url));
 const art = readPngAlpha(join(GAME_ROOT, 'assets/sprites/fx/spikeTrap.png'));
-const { frameWidth, anchorX } = FX_SPRITES.spikeTrap;
-const PHASES = 5;
-const KINDS = { alone: 0, leftEnd: 1, middle: 2, rightEnd: 3 };
-// the rows of the slab, from its top outline down to the outline under its face
-const SLAB = { top: 16, bottom: 42 };
-// a tile's half of the line it shares with the next one, either side of its anchor
-const HALF_PITCH = SPIKE_TRAP.pitch * 2 * 0.5;
+const { frameWidth, frameHeight, anchorY } = FX_SPRITES.spikeTrap;
+const PHASE = { rest: 0, warn: 1, rise: 2, up: 3, sink: 4 };
+// the top row of the grate itself, and the middle column of each of its slots
+const GRATE_TOP = anchorY + 1;
+const SLOTS = [8, 19, 29, 40, 51];
+const SPIKE_HALF = 3;
 
-const solidDown = (frame, x) => {
-  for (let y = SLAB.top; y <= SLAB.bottom; y++) {
-    if (!art.alpha(frame * frameWidth + x, y)) {
-      return false;
+function topRow(frame, from = 0, to = frameWidth) {
+  for (let y = 0; y < frameHeight; y++) {
+    for (let x = from; x < to; x++) {
+      if (art.alpha(frame * frameWidth + x, y)) {
+        return y;
+      }
     }
   }
 
-  return true;
-};
+  return frameHeight;
+}
 
-describe('a row of spike tiles as drawn', () => {
-  it('joins its tiles into one slab: the left end, the middle and the right end', () => {
-    const row = createSpikeTraps([{ x: 400, y: 184 }]);
+// every pixel of the slot's spike over the grate, as one string to compare
+function spikeColumns(frame, slot) {
+  const pixels = [];
+  for (let y = 0; y < GRATE_TOP; y++) {
+    for (let x = slot - SPIKE_HALF; x <= slot + SPIKE_HALF; x++) {
+      const at = frame * frameWidth + x;
+      pixels.push(art.alpha(at, y) ? art.colorKey(at, y) : -1);
+    }
+  }
 
-    expect(row.map((tile) => tileKind(row, tile))).toEqual([
-      KINDS.leftEnd,
-      KINDS.middle,
-      KINDS.rightEnd,
-    ]);
+  return pixels.join(',');
+}
+
+describe('a spike trap as drawn', () => {
+  it('is a flat grate set into the road, nothing of it standing over the road line at rest', () => {
+    expect(topRow(PHASE.rest)).toBe(GRATE_TOP);
+    expect(topRow(PHASE.sink)).toBeGreaterThanOrEqual(GRATE_TOP);
   });
 
-  it('draws a tile with no neighbour on its own, sloping off at both ends', () => {
-    const tile = { x: 400, y: 184 };
-    const far = { x: 400 + SPIKE_TRAP.pitch * 2, y: 184 };
+  it('pushes the same spike up out of every slot', () => {
+    const middle = spikeColumns(PHASE.up, SLOTS[2]);
 
-    expect(tileKind([tile, far], tile)).toBe(KINDS.alone);
-  });
-
-  it('has no notch where two tiles meet: the slab runs full height to the line they share', () => {
-    for (let phase = 0; phase < PHASES; phase++) {
-      const leftEnd = KINDS.leftEnd * PHASES + phase;
-      const rightEnd = KINDS.rightEnd * PHASES + phase;
-      const middle = KINDS.middle * PHASES + phase;
-
-      expect(solidDown(leftEnd, anchorX + HALF_PITCH), `phase ${phase}`).toBe(true);
-      expect(solidDown(rightEnd, anchorX - HALF_PITCH), `phase ${phase}`).toBe(true);
-      expect(solidDown(middle, anchorX + HALF_PITCH), `phase ${phase}`).toBe(true);
-      expect(solidDown(middle, anchorX - HALF_PITCH), `phase ${phase}`).toBe(true);
+    expect(middle).toMatch(/\d{2,}/);
+    for (const slot of SLOTS) {
+      expect(spikeColumns(PHASE.up, slot), `slot at ${slot}`).toBe(middle);
     }
   });
 
-  it('keeps the sloping ends where a row begins and ends', () => {
-    expect(solidDown(KINDS.leftEnd * PHASES, anchorX - HALF_PITCH)).toBe(false);
-    expect(solidDown(KINDS.rightEnd * PHASES, anchorX + HALF_PITCH)).toBe(false);
-    expect(FX_SPRITES.spikeTrap.frames).toBe(PHASES * Object.keys(KINDS).length);
+  it('raises its spikes higher as they shoot up, and lower again as they sink back', () => {
+    const tips = [PHASE.rise, PHASE.up, PHASE.sink].map((frame) => topRow(frame));
+
+    expect(tips[1]).toBeLessThan(tips[0]);
+    expect(tips[0]).toBeLessThan(GRATE_TOP);
+    expect(tips[2]).toBeGreaterThan(tips[0]);
+  });
+
+  it('puffs its warning dust up off the grate', () => {
+    expect(topRow(PHASE.warn)).toBeLessThan(GRATE_TOP - 4);
   });
 });
