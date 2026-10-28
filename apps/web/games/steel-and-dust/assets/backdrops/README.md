@@ -186,7 +186,11 @@ tiles side by side, and every road got a cliff face. All of it is reproducible w
   (Pro) call at 16x64 with a crop of the Pine Ridge cross-section as the style image gave 16
   candidate faces (earth, stones, roots, strata, stacked stones); `cliff` picks one per forest,
   repaints it in that forest's earth by brightness rank, darkens it as a face turned from the light,
-  crumbles its outer edge and leaves its top clear so the road's own turf rolls over it:
+  crumbles its outer edge in its own earth and leaves its top clear so the road's own turf rolls
+  over it. The faces were first crumbled with a black outline, a line drawn round each face against
+  the scenery; `edge` repainted it on the four with one (Pine Ridge, Old Grove, Bamboo Pass, Ember
+  Woods) from the faces themselves, as the PixelLab candidates were not kept. The black lines of
+  Old Grove's roots stay inside its face, as its road outlines its own roots in black:
 
   | Folder            | Candidate         | Arguments after `<ground.png>` (left width skip depth turf lip shade) |
   | ----------------- | ----------------- | --------------------------------------------------------------------- |
