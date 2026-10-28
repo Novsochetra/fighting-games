@@ -16,7 +16,7 @@ import { updateProjectiles } from './hazards/projectiles.js';
 import { updateRoadHazards } from './hazards/road-hazards.js';
 import { updateShockwaves } from './hazards/shockwaves.js';
 import { updateHints } from './hints.js';
-import { expireBuffer } from './input/read-input.js';
+import { ageBuffer } from './input/read-input.js';
 import { updateLoot } from './items/loot.js';
 import { updatePickups } from './items/pickups.js';
 import { updateCamera } from './stage/camera.js';
@@ -135,7 +135,7 @@ function puffSmoke(game, { x, y }) {
 
 // during the ultimate's freeze only the hero moves
 export function simulateStep(game) {
-  expireBuffer(game.input.buffer);
+  ageBuffer(game);
   if (game.ultFreeze > 0) {
     game.ultFreeze--;
     updateFighter(game, game.player);
