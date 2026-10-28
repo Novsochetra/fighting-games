@@ -24,6 +24,18 @@ export const WARDEN_FORTRESS = {
   folder: 'warden-fortress',
   groundTop: 14,
   cliff: true,
+  // the three towers' walkways, which raiders climb up onto to drop on the hero
+  // (src/sim/hazards/drop-perches.js); a raider stands behind the merlons, whose tops are at `wall`,
+  // seen through the gaps between them down to its feet
+  perches: {
+    layer: 'near',
+    tileWidth: NEAR_WIDTH,
+    spots: [
+      { kind: 'ledge', from: 447, to: 499, y: 39, wall: 27 },
+      { kind: 'ledge', from: 1045, to: 1108, y: 88, wall: 77 },
+      { kind: 'ledge', from: 1433, to: 1503, y: 27, wall: 16 },
+    ],
+  },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: NEAR_DRIFT },

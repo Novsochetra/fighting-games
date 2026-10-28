@@ -2,6 +2,19 @@ export const EMBER_WOODS = {
   folder: 'ember-woods',
   groundTop: 5,
   cliff: true,
+  // the autumn crowns raiders hide in to drop on the hero (src/sim/hazards/drop-perches.js): each one's
+  // spread, its top, where its sway dies away, and the thick of it where a raider hides (x, y)
+  perches: {
+    layer: 'near',
+    tileWidth: 768,
+    spots: [
+      { kind: 'crown', from: 2, to: 94, top: 28, bottom: 92, x: 47, y: 66 },
+      { kind: 'crown', from: 149, to: 230, top: 29, bottom: 95, x: 189, y: 66 },
+      { kind: 'crown', from: 287, to: 379, top: 28, bottom: 92, x: 333, y: 66 },
+      { kind: 'crown', from: 386, to: 478, top: 28, bottom: 92, x: 431, y: 66 },
+      { kind: 'crown', from: 671, to: 764, top: 28, bottom: 92, x: 717, y: 66 },
+    ],
+  },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },

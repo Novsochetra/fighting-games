@@ -12,6 +12,7 @@ import { drawAmbient } from './scene/ambient/index.js';
 import { sceneLoaded } from './scene-loaded.js';
 import { backdropFor } from './scene/backdrop.js';
 import { drawCanopyRustle } from './scene/canopy-rustle.js';
+import { drawCrownCover } from './scene/crown-cover.js';
 import { drawForeground } from './scene/foreground/index.js';
 import { drawPaintedBackdrop, drawPaintedFronts } from './scene/painted-backdrop.js';
 import { scenePalette } from './scene/scene-palette.js';
@@ -44,6 +45,7 @@ export function renderFrame(game, view) {
   drawAir(painter, setLayer, scene, 'back');
   setLayer(-cameraX, true);
   drawWorld(painter, { game, view, cameraX });
+  drawCrownCover(painter, setLayer, scene);
   drawAir(painter, setLayer, scene, 'front');
   drawPaintedFronts(painter, setLayer, scene);
   setLayer(0, true);

@@ -1,5 +1,5 @@
 // a wave in a mission spec that ambushes the hero instead of walking in (src/data/ambush.js):
-// out of the trees on a forest road, out of the sand on a desert one
+// dropping out of the trees or off the towers and ironwork overhead, or bursting out of the sand
 export const dropIn = (kinds) => ({ kinds, ambush: 'drop' });
 
 export const burrowIn = (kinds) => ({ kinds, ambush: 'burrow' });

@@ -51,6 +51,15 @@ function leaf(painter, particle) {
   painter.alpha(1);
 }
 
+// a grain of grit knocked off a ledge, streaked while it falls fast, fading at the end
+function grit(painter, particle) {
+  const height = !particle.resting && particle.vy > 2 ? 2 : 1;
+
+  painter.alpha(Math.min(1, particle.life / 16));
+  painter.use(particle.color).rect(particle.x, particle.y, 1, height);
+  painter.alpha(1);
+}
+
 // a startled firefly as the road's own are drawn (ambient/fireflies.js), blinking as it drifts
 function firefly(painter, particle) {
   const pulse = Math.sin(particle.life * 0.3 + particle.phase);
@@ -71,6 +80,7 @@ const DRAW_PARTICLE = {
   mote,
   streak,
   leaf,
+  grit,
   firefly,
   ...HEAVY_PARTICLE_DRAWS,
 };

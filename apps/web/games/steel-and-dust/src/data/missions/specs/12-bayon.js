@@ -1,3 +1,4 @@
+import { dropIn } from '../ambushes.js';
 import { bank, mound, ramp, stairs } from '../ground-shapes.js';
 
 export const BAYON = {
@@ -52,7 +53,7 @@ export const BAYON = {
       ],
       waves: [
         ['vulture', 'sentry', 'tombguard', 'monk'],
-        ['ghoul', 'witch', 'assassin', 'ghoul'],
+        dropIn(['assassin', 'ghoul', 'assassin', 'ghoul']),
         ['juggernaut', 'sentry', 'monk'],
         ['shield', 'witch', 'tombguard', 'assassin'],
       ],

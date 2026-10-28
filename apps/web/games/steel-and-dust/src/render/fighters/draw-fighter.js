@@ -92,7 +92,8 @@ export function drawFighter(painter, { fighter, sheet, enemySheets, tickCount, f
   if (!fighter.joints || isBlinkedOut(fighter, tickCount)) {
     return;
   }
-  if (!isOutOfReach(fighter)) {
+  // a raider dropping from overhead has its shadow drawn on the spot it falls on (drop-shadow.js)
+  if (!isOutOfReach(fighter) && !fighter.dropping) {
     drawShadow(painter, fighter, floor);
   }
   const shakeX = hitShakeOffset(fighter);

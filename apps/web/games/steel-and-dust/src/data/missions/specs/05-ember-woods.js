@@ -1,3 +1,4 @@
+import { dropIn } from '../ambushes.js';
 import { bank, contour, ledge, mound } from '../ground-shapes.js';
 
 export const EMBER_WOODS = {
@@ -58,7 +59,7 @@ export const EMBER_WOODS = {
       waves: [
         ['sentry', 'shield', 'scorpion'],
         ['scorpion', 'scorpion', 'bomber'],
-        ['spitter', 'sentry', 'jackal'],
+        dropIn(['jackal', 'knife', 'jackal']),
         ['scorpion', 'shield', 'sentry', 'hound'],
       ],
     },

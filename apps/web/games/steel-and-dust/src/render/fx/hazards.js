@@ -131,10 +131,12 @@ export function drawProjectiles(painter, projectiles, fxSheets) {
   }
 }
 
-export function drawGroundHazards(painter, projectiles, fxSheets) {
+// `road` has what a raider waiting overhead is drawn by: what its shadow falls on in each column
+// (`floorAt`), the raiders' sheets, the camera and where the hero stands
+export function drawGroundHazards(painter, projectiles, fxSheets, road) {
   for (const shot of projectiles) {
     if (ON_GROUND.has(shot.kind)) {
-      DRAW_SHOT[shot.kind](painter, shot, fxSheets);
+      DRAW_SHOT[shot.kind](painter, shot, fxSheets, road);
     }
     GROUND_MARK[shot.kind]?.(painter, shot);
   }

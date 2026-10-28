@@ -1,3 +1,4 @@
+import { dropIn } from '../ambushes.js';
 import { contour, ledge, mound } from '../ground-shapes.js';
 
 export const PINE_RIDGE = {
@@ -57,7 +58,7 @@ export const PINE_RIDGE = {
       waves: [
         ['grunt', 'grunt', 'knife'],
         ['scrapper', 'knife'],
-        ['grunt', 'scrapper', 'grunt'],
+        dropIn(['grunt', 'knife', 'grunt']),
         ['knife', 'knife', 'scrapper', 'grunt'],
       ],
     },

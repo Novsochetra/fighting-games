@@ -23,6 +23,13 @@ export const BAYON = {
   folder: 'bayon',
   groundTop: 19,
   cliff: true,
+  // the ruined gate's lintel, short of where it is broken, which raiders climb onto to drop on
+  // the hero (src/sim/hazards/drop-perches.js); the face tower's crown is under the HUD
+  perches: {
+    layer: 'near',
+    tileWidth: 384,
+    spots: [{ kind: 'ledge', from: 92, to: 146, y: 101 }],
+  },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'near', parallax: 0.45 },

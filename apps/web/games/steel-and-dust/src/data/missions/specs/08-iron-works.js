@@ -1,3 +1,4 @@
+import { dropIn } from '../ambushes.js';
 import { mound, ramp, stairs } from '../ground-shapes.js';
 
 // the foundry past the barricade: slag heaps to fight over, iron stairs up to the gantries and
@@ -17,7 +18,7 @@ export const IRON_WORKS = {
       platforms: [{ at: 120, width: 80, rise: 32, kind: 'catwalk' }],
       waves: [
         ['stoker', 'scrapper', 'stoker'],
-        ['sentry', 'juggernaut', 'knife'],
+        dropIn(['stoker', 'knife', 'stoker']),
         ['stoker', 'stoker', 'sentry', 'scrapper'],
       ],
     },

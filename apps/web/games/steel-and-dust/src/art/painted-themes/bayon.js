@@ -11,6 +11,8 @@ export const BAYON = {
     reed: '#1b2420',
     reedLight: '#2f4030',
   },
+  // what a raider knocks loose off the ruins: grey sandstone and the dusk-lit edge
+  debris: ['#251e32', '#515360', '#767d7a', '#ca7d56'],
   ambient: {
     bat: '#1a1024',
     mist: '#9a86b4',

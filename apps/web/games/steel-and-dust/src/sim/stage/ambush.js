@@ -2,6 +2,8 @@ import { BURROW, DROP } from '../../data/ambush.js';
 import { onScreen, screenEdges } from '../fighters/arena-bounds.js';
 import { markDrop } from '../hazards/drop-marks.js';
 import { burrowAt } from '../hazards/mounds.js';
+import { findPerch, perchesOf, perchX } from '../hazards/drop-perches.js';
+import { spawnEnemy } from './spawn-enemy.js';
 
 const DROP_MARGIN = 18;
 // in gaps from the hero: beside them on either side, then right on top of them (dodge it), then
@@ -22,9 +24,28 @@ export function burrowSpot(game, slot) {
   return slot % 2 ? right - BURROW.inset : left + BURROW.inset;
 }
 
+// a road with perches has its raiders wait on the one nearest their spot; with none in sight
+// they walk in as any raider does
+function dropIn(game, { kind, slot }) {
+  const x = dropSpot(game, slot);
+
+  if (!perchesOf(game)) {
+    markDrop(game, { kind, x });
+    return;
+  }
+
+  const perch = findPerch(game, x);
+
+  if (perch) {
+    markDrop(game, { kind, x: perchX(game, perch), perch });
+  } else {
+    spawnEnemy(game, kind, slot % 2 ? 1 : -1);
+  }
+}
+
 export function startAmbush(game, { kind, ambush, slot }) {
   if (ambush === 'drop') {
-    markDrop(game, { kind, x: dropSpot(game, slot) });
+    dropIn(game, { kind, slot });
   } else {
     burrowAt(game, { kind, x: burrowSpot(game, slot) });
   }

@@ -56,6 +56,27 @@ const MOVE_PARTICLE = {
     }
   },
 
+  // a grain of grit drops fast, bounces once off what it hits and lies there till it fades
+  grit(particle, terrain) {
+    if (particle.resting) {
+      return;
+    }
+
+    const lastY = particle.y;
+
+    particle.vy = Math.min(4, particle.vy + 0.22);
+    particle.x += particle.vx;
+    particle.y += particle.vy;
+
+    const floor = floorBelow(terrain, particle.x, lastY);
+
+    if (particle.y >= floor) {
+      const bounce = { vy: particle.vy * -0.3, vx: particle.vx * 0.5, bounced: true };
+
+      Object.assign(particle, { y: floor - 1 }, particle.bounced ? { resting: true } : bounce);
+    }
+  },
+
   // a startled firefly darts off, slows and drifts upward as it settles
   firefly(particle) {
     particle.vx *= 0.96;

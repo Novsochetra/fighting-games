@@ -89,7 +89,7 @@ function playRoad(theme) {
   );
   const driver = createGameDriver(game);
   const bot = createBot(driver, { 1500: ['fill'], 4500: ['fill'] });
-  const run = { ambushes: [], offScreen: 0, leftEarly: 0, zones: 0 };
+  const run = { ambushes: [], perches: [], offScreen: 0, leftEarly: 0, zones: 0 };
 
   driver.act('play');
   for (let tick = 0; tick < 7000; tick++) {
@@ -105,6 +105,7 @@ function playRoad(theme) {
 
     for (const ambush of game.projectiles.filter((shot) => shot.time === 1 && shot.raiderKind)) {
       run.ambushes.push(ambush.kind);
+      run.perches.push(ambush.perch?.kind ?? null);
       run.offScreen += ambush.x < left || ambush.x > right ? 1 : 0;
     }
 
@@ -114,7 +115,13 @@ function playRoad(theme) {
   return run;
 }
 
-describe('a bot-played run into the ambushes of a forest and a desert road', () => {
+// how many raiders the road's ambush wave sends
+const ambushSize = (theme) =>
+  MISSIONS.find((mission) => mission.theme === theme)
+    .zones.flatMap((zone) => zone.waves)
+    .find((wave) => wave.ambush).kinds.length;
+
+describe('a bot-played run into the ambushes of every road that has one', () => {
   afterEach(() => {
     Math.random = originalRandom;
   });
@@ -125,10 +132,27 @@ describe('a bot-played run into the ambushes of a forest and a desert road', () 
       ['sandstormPass', 'mound'],
     ]) {
       const run = playRoad(theme);
-      expect(run.ambushes, theme).toEqual([kind, kind, kind]);
+      expect(run.ambushes, theme).toEqual(Array(ambushSize(theme)).fill(kind));
       expect(run.offScreen, theme).toBe(0);
       expect(run.leftEarly, theme).toBe(0);
       expect(run.zones, theme).toBeGreaterThanOrEqual(2);
+    }
+  });
+
+  it("meets them waiting on the road's own trees, towers and girders", () => {
+    for (const [theme, perch] of [
+      ['pineRidge', 'crown'],
+      ['ironWorks', 'ledge'],
+      ['emberWoods', 'crown'],
+      ['wardenFortress', 'ledge'],
+      ['bayon', 'ledge'],
+    ]) {
+      const run = playRoad(theme);
+      const size = ambushSize(theme);
+      expect(run.ambushes.slice(0, size), theme).toEqual(Array(size).fill('dropMark'));
+      expect(run.perches.slice(0, size), theme).toEqual(Array(size).fill(perch));
+      expect(run.offScreen, theme).toBe(0);
+      expect(run.leftEarly, theme).toBe(0);
     }
   });
 });

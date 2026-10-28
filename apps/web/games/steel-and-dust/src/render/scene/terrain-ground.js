@@ -90,9 +90,14 @@ function drawSheerFaces(painter, runs, { colors, texture, cliff }) {
   }
 }
 
+// the road's surface as it is drawn: under a painted cliff the turf rolls over each face's top
+export function drawnSurface(surfaceAt, { texture, cliff }) {
+  return texture?.ready && cliff?.ready ? roundedShoulders(surfaceAt) : surfaceAt;
+}
+
 export function drawTerrainGround(painter, { cameraX, colors, tick, texture, cliff, ...road }) {
   const painted = texture?.ready;
-  const surfaceAt = painted && cliff?.ready ? roundedShoulders(road.surfaceAt) : road.surfaceAt;
+  const surfaceAt = drawnSurface(road.surfaceAt, { texture, cliff });
   const runs = surfaceRuns(surfaceAt, cameraX, cameraX + VIEW_WIDTH);
   for (const run of runs) {
     if (painted) {

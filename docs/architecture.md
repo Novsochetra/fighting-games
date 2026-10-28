@@ -625,25 +625,45 @@ length.
   locked screen, or what the camera shows of a wide zone. Raiders walk in from just past it.
 - A wave in a spec may be an ambush instead (`dropIn` or `burrowIn`, `src/data/missions/ambushes.js`;
   timings in `src/data/ambush.js`), whose raiders come in mid-screen (`src/sim/stage/ambush.js`).
-  Out of the trees (Old Grove, Bamboo Pass, Firefly Hollow), each raider's spot round the hero
-  first gathers a faint shadow while the road's own painted trees rustle over it: a backdrop with a
-  `canopy` (how far down its trees reach) has the patch above the spot redrawn, layer by layer, with
-  its nearer layers swayed and sagged as one, fading to nothing at the patch's edges and foot so
-  no seam shows, on the still screen with the shake sampled in, and before the air, so light
-  shafts, motes and mist still pass in front (`src/render/scene/canopy-rustle.js`). The road's own
-  leaves (its `ambient.leaves`) drift down from the canopy and come to rest on the ground, and a
-  night road with fireflies startles some out of the branches (`src/sim/fx/canopy-fx.js`, drawn as
-  the roads' own ambient leaves and fireflies are, from the seeded `fxRandom`, so they never change
-  a fight). For its last ticks the shadow is marked red as every danger is; then the branch snaps,
-  throwing leaves, and the raider falls from above the screen with its weapon raised (the first frame
-  of its attack strip) and lands striking, in a `dropSlam` that knocks a hero still on the spot away
-  (`src/sim/hazards/drop-marks.js`), the soil puffing up in the road's own color; `rustle`,
-  `branchSnap` and a thud go with it (`src/audio/live/ambush-sounds.js`). Out of
-  the sand (Sandstorm Pass, Mirage Temple), it digs in at a screen edge and its mound crawls after
-  the hero, stops to shake, and bursts it up, throwing a hero who stayed on it
+  A drop waits overhead for `warn` ticks while its shadow gathers on the road, then falls with its
+  weapon raised (the first frame of its attack strip) and lands striking, in a `dropSlam` that
+  knocks a hero still on the spot away (`src/sim/hazards/drop-marks.js`), the soil puffing up in
+  the road's own color. What it waits on is the road's own painting:
+  - Under a `canopy` (Old Grove, Bamboo Pass, Firefly Hollow: how far down the painted trees reach)
+    it waits above the screen anywhere round the hero; the patch over the spot is redrawn layer by
+    layer, its nearer layers swayed and sagged as one, fading to nothing at the patch's edges and
+    foot so no seam shows (`src/render/scene/canopy-rustle.js`, cells in `rustle-cells.js`).
+  - On a road with `perches` (`src/data/backdrops/<folder>.js`: spots in a repeating layer's own
+    pixels, held to the painting by `test/unit/data/drop-perches.test.js`) it waits on the one
+    nearest its spot that is in sight (`src/sim/hazards/drop-perches.js`), its mark kept under it
+    as the layer scrolls slower than the road; with none in sight it walks in as any raider does. In a
+    `crown` (Pine Ridge's pines, Ember Woods' autumn trees) it hides in the thick of the leaves at
+    `x, y`: only that crown sways, in its own layer, and as it lets go the crown's own pixels are
+    laid back over it, so it drops out of the leaves (`src/render/scene/crown-cover.js`). On a
+    `ledge` (the Iron Works' derrick girder and furnace roof, the Warden's tower walkways, the Bayon's
+    lintel) it is drawn climbing up over the edge, clipped there, waiting, and crouching to spring
+    (`src/render/fx/perched-raider.js`); behind a parapet the wall's own pixels from its `wall` line
+    down are laid back over it, so it shows only between the merlons, and it springs up onto the
+    wall to leap.
+  - All of that is laid on the still screen with the shake sampled in, and before the air, so light
+    shafts, motes and mist still pass in front. Leaves (the road's `ambient.leaves`, or a crown's
+    `debris`) drift down and come to rest on the ground, a night road startles fireflies out of the
+    branches, and a ledge knocks loose grit in its road's `debris` colors that bounces once and lies
+    there (`src/sim/fx/canopy-fx.js`, `grit-fx.js`; from the seeded `fxRandom`, so they never change
+    a fight; `src/sim/hazards/drop-styles.js` picks them by what the raider waits on). `rustle`,
+    `branchSnap`, `gritTrickle`, `perchLeap`, `clank` and a thud go with it
+    (`src/audio/live/ambush-sounds.js`).
+  - The shadow multiplies what it lies on, column by column on the road as it is drawn or a deck
+    (`floorUnderSky` in `src/render/scene/ground.js`), faint and wide as the raider settles,
+    darkening as it gets ready and sharpening as it falls, until it is the raider's own shadow
+    (`src/render/fx/drop-shadow.js`; the raider draws none of its own while it drops).
+
+  Out of the sand (Sandstorm Pass, Mirage Temple), it digs in at a screen edge and its mound crawls
+  after the hero, stops to shake, and bursts it up, throwing a hero who stayed on it
   (`src/sim/hazards/mounds.js`, the mound cut from the Scorpion Queen's burrow frames). Both are
   projectiles kept inside the screen until their raider is in the fight, and a zone counts a raider
   still waiting to ambush as standing, so it never moves on without it.
+
 - A mission ends when its own boss falls (`isMissionBoss` in `src/sim/stage/mission.js`); a boss met
   earlier on its road is a mid-boss and only opens the road. The score, clock, continues, lives and
   ULT bar carry into the next mission (`enterNextMission`); the hero starts it fresh. A new run

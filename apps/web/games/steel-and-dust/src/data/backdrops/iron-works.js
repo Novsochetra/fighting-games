@@ -9,6 +9,19 @@ export const IRON_WORKS = {
   folder: 'iron-works',
   groundTop: 14,
   cliff: true,
+  // a girder halfway up the derrick and the furnace roof either side of its chimney, which raiders
+  // climb onto to drop on the hero (src/sim/hazards/drop-perches.js); the derrick's top and the water
+  // tower's are under the HUD
+  perches: {
+    layer: 'near',
+    tileWidth: NEAR.tileWidth,
+    leap: 'clank',
+    spots: [
+      { kind: 'ledge', from: 395, to: 452, y: 95 },
+      { kind: 'ledge', from: 700, to: 720, y: 97 },
+      { kind: 'ledge', from: 749, to: 775, y: 97 },
+    ],
+  },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'mouth', parallax: 0.3, once: true },

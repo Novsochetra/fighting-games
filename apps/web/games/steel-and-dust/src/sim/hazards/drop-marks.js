@@ -3,19 +3,20 @@ import { DROP } from '../../data/ambush.js';
 import { startMove } from '../fighters/actions.js';
 import { onScreen } from '../fighters/arena-bounds.js';
 import { shake } from '../fx/camera-fx.js';
-import { burstLeaves, kickLeaves, puffSoil, shedLeaf, startleFireflies } from '../fx/canopy-fx.js';
+import { kickLeaves, puffSoil } from '../fx/canopy-fx.js';
 import { missionOf } from '../stage/mission.js';
 import { spawnRaiderAt } from '../stage/spawn-enemy.js';
 import { floorBelow } from '../stage/terrain.js';
+import { dropStyle } from './drop-styles.js';
+import { perchX } from './drop-perches.js';
 
 const MARGIN = 18;
 // a raider knocked about in the air never lands its slam
 const FALLING = new Set(['air', 'idle', 'walk']);
-// the leaves rustle as the raider settles on the branch, and again as it gets ready to jump
-const RUSTLES = [1, DROP.warn - 26];
 
-// the spot a raider will drop on: the first floor from the sky down, a deck or the road
-export function markDrop(game, { kind, x }) {
+// the spot a raider will drop on: the first floor from the sky down, a deck or the road; under
+// the perch it waits on, if the road gives it one
+export function markDrop(game, { kind, x, perch = null }) {
   game.projectiles.push({
     kind: 'dropMark',
     raiderKind: kind,
@@ -25,52 +26,29 @@ export function markDrop(game, { kind, x }) {
     speed: 0,
     side: 'enemy',
     time: 0,
+    perch,
     raider: null,
     hitTargets: new Set(),
   });
 }
 
-// the road's own leaves, its soil, and its fireflies if it has them
-const roadOf = (game) => PAINTED_THEMES[missionOf(game).theme];
-
-function rustle(game, mark) {
-  const { ambient } = roadOf(game);
-
-  if (ambient.leaves && mark.time % DROP.leafEvery === 0) {
-    shedLeaf(game, { x: mark.x, colors: ambient.leaves });
-  }
-
-  if (mark.time === 1 && ambient.fireflies) {
-    startleFireflies(game, { x: mark.x, colors: ambient.fireflies });
-  }
-
-  if (RUSTLES.includes(mark.time)) {
-    game.io.sfx('rustle', false, { x: mark.x });
-  }
-}
-
-// the branch gives way and the raider drops out of the leaves, weapon raised
+// the raider lets go: out of the canopy above the screen, out of a crown, or off a ledge with a
+// leap; behind a parapet it springs up onto the wall's top first
 function release(game, mark) {
-  const raider = spawnRaiderAt(game, mark.raiderKind, { x: mark.x, y: DROP.fromY });
-  const { ambient } = roadOf(game);
+  const { perch } = mark;
+  const y = perch ? (perch.wall ?? perch.y) : DROP.fromY;
+  const raider = spawnRaiderAt(game, mark.raiderKind, { x: mark.x, y });
+  const vy = perch?.kind === 'ledge' ? DROP.leapVy : 0;
 
-  Object.assign(raider, { airborne: true, state: 'air', vx: 0, vy: 0, dropping: true });
+  Object.assign(raider, { airborne: true, state: 'air', vx: 0, vy, dropping: true });
   mark.raider = raider;
-  if (ambient.leaves) {
-    burstLeaves(game, { x: mark.x, colors: ambient.leaves });
-  }
-
-  if (ambient.fireflies) {
-    startleFireflies(game, { x: mark.x, colors: ambient.fireflies });
-  }
-
-  game.io.sfx('branchSnap', false, { x: mark.x });
+  dropStyle(mark).leave(game, mark);
 }
 
 // it lands striking, on the spot round both its sides
 function land(game, mark) {
   const { raider } = mark;
-  const { ambient, ground } = roadOf(game);
+  const { ambient, ground } = PAINTED_THEMES[missionOf(game).theme];
 
   Object.assign(mark, { x: raider.x, y: raider.y, dead: true });
   raider.dropping = false;
@@ -84,12 +62,17 @@ function land(game, mark) {
   game.io.sfx('blunt', false, { x: raider.x });
 }
 
-// the trees rustle over the spot while its shadow grows, then the raider drops onto it
+// a perch scrolls by with its layer, and the spot under it with it
+function followPerch(game, mark) {
+  mark.x = mark.perch ? perchX(game, mark.perch) : onScreen(game, mark.x, MARGIN);
+  mark.y = floorBelow(game.terrain, mark.x, -Infinity);
+}
+
+// the raider waits overhead while its shadow grows, then drops onto the spot
 export function holdDropMark(game, mark) {
   if (!mark.raider) {
-    mark.x = onScreen(game, mark.x, MARGIN);
-    mark.y = floorBelow(game.terrain, mark.x, -Infinity);
-    rustle(game, mark);
+    followPerch(game, mark);
+    dropStyle(mark).wait(game, mark);
     if (mark.time >= DROP.warn) {
       release(game, mark);
     }

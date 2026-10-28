@@ -2,6 +2,8 @@ export const WARDEN_FORTRESS = {
   ground: { sand: '#5c4458', rock: '#1c1220' },
   foreground: 'spikes',
   front: { spike: '#140a10', spikeLight: '#a8444c', chain: '#5a4048', bone: '#c8b098' },
+  // what a raider knocks loose off a tower's parapet: its dark stone and the red-lit edge
+  debris: ['#14050d', '#281a34', '#3c3240', '#863d3b'],
   ambient: {
     flame: ['#d8401c', '#ff9a3a', '#ffe7a0'],
     glow: '#ff8a3a',

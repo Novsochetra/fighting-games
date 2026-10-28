@@ -1,4 +1,4 @@
-import { hiss, thump } from './layers.js';
+import { click, hiss, metal, thump } from './layers.js';
 
 // leaves shaken in the canopy overhead: a handful of soft, airy brushes, close together
 function rustle(live, start) {
@@ -19,4 +19,34 @@ function branchSnap(live, start) {
   rustle(live, start + 0.04);
 }
 
-export const AMBUSH_SOUNDS = { rustle, branchSnap };
+// grit rattling off stone or iron as a raider climbs about on it: small ticks that fall away
+function gritTrickle(live, start) {
+  for (let i = 0; i < 6; i++) {
+    const at = start + i * 0.05 + (i % 3) * 0.012;
+
+    click(live, { start: at, volume: 0.05 * (1 - i * 0.12), frequency: 2600 + (i % 2) * 900 });
+  }
+
+  const sand = { type: 'bandpass', from: 2400, to: 1600, resonance: 1 };
+
+  hiss(live, { start, ...sand, attack: 0.01, duration: 0.25, volume: 0.012 });
+}
+
+// a raider leaping off a ledge: its feet scuffing the stone, a rush of air, the grit after it
+function perchLeap(live, start) {
+  const scuff = { type: 'bandpass', from: 900, to: 1800, resonance: 1.4 };
+  const rush = { type: 'lowpass', from: 1200, to: 500, resonance: 0.8 };
+
+  hiss(live, { start, ...scuff, attack: 0.004, duration: 0.07, volume: 0.07 });
+  hiss(live, { start: start + 0.03, ...rush, attack: 0.03, duration: 0.18, volume: 0.04 });
+  gritTrickle(live, start + 0.04);
+}
+
+// off ironwork: a boot ringing on a girder as it leaps, then the rust it knocks loose
+function clank(live, start) {
+  metal(live, { start, frequencies: [740, 1180, 1990], duration: 0.35, volume: 0.05 });
+  thump(live, { start, from: 180, to: 90, duration: 0.06, volume: 0.06 });
+  gritTrickle(live, start + 0.03);
+}
+
+export const AMBUSH_SOUNDS = { rustle, branchSnap, gritTrickle, perchLeap, clank };

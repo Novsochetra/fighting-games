@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DROP } from '../../../src/data/ambush.js';
 import {
+  crownOffset,
   drawCanopyRustle,
   rustleOffset,
   rustleStrength,
@@ -18,10 +19,20 @@ function image(name, width) {
 const BACKDROP = {
   canopy: DEPTH,
   layers: [
-    { image: image('back', 320), parallax: 0.08, ready: true },
-    { image: image('near', 384), parallax: 0.45, ready: true },
+    { name: 'back', image: image('back', 320), parallax: 0.08, ready: true },
+    { name: 'near', image: image('near', 384), parallax: 0.45, ready: true },
   ],
 };
+const CROWN = { kind: 'crown', layer: 'near', parallax: 0.45, from: 100, to: 160, top: 20 };
+const crowned = (fields) => ({
+  kind: 'dropMark',
+  x: 230,
+  perch: { ...CROWN, bottom: 90, x: 130, y: 60, shift: 0, layerX: 130 },
+  ...waiting(DROP.warn - 8),
+  ...fields,
+});
+const sourceX = (entry) => Number(entry.split(',')[1]);
+const laidX = (entry) => Number(entry.split(',')[5]);
 
 function rustled({ backdrop = BACKDROP, projectiles }) {
   const { context, log } = createRecordingContext(null);
@@ -88,5 +99,37 @@ describe('drawing the rustle', () => {
     expect(pieces.some((entry) => entry.includes('img(back)'))).toBe(true);
     expect(pieces.some((entry) => entry.includes('img(near)'))).toBe(true);
     expect(transforms).toEqual([false, true]);
+  });
+});
+
+describe('a crown a raider hides in', () => {
+  it('sways as one across its width, and stands still where it meets the trunk', () => {
+    const mark = waiting(DROP.warn - 8);
+    const near = [20, 40, 60].map((y) => crownOffset(mark, { y, top: 20, bottom: 90 }));
+
+    expect(near[0].dx || near[0].dy).toBeTruthy();
+    expect(crownOffset(mark, { y: 89, top: 20, bottom: 90 })).toEqual({ dx: 0, dy: 0 });
+  });
+
+  it('moves only that crown, in its own layer, laying the far plate back still under it', () => {
+    const { log } = rustled({ projectiles: [crowned()] });
+    const pieces = log.filter((entry) => entry.startsWith('drawImage('));
+    const near = pieces.filter((entry) => entry.includes('img(near)'));
+    const back = pieces.filter((entry) => entry.includes('img(back)'));
+    const cameraShift = Math.round(-100 * 0.45);
+    // a piece left where it was is taken from where the shake put the layer, 2 pixels over
+    const moved = near.filter((entry) => sourceX(entry) !== laidX(entry) - cameraShift - 2);
+
+    expect(near.length).toBeGreaterThan(0);
+    expect(near.every((entry) => laidX(entry) >= 100 + cameraShift - 4)).toBe(true);
+    expect(near.every((entry) => laidX(entry) < 160 + cameraShift + 4 + 10)).toBe(true);
+    expect(moved.length).toBeGreaterThan(0);
+    expect(back.length).toBe(near.length);
+  });
+
+  it('leaves a ledge still: a raider climbing onto stone or iron does not sway it', () => {
+    const ledge = crowned({ perch: { kind: 'ledge', layer: 'near', parallax: 0.45, y: 90 } });
+
+    expect(rustled({ projectiles: [ledge] }).log).toEqual([]);
   });
 });

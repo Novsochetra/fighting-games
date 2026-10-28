@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { PAINTED_THEMES } from '../../../src/art/painted-themes/index.js';
 import { VIEW_WIDTH } from '../../../src/config.js';
+import { PAINTED_BACKDROPS } from '../../../src/data/backdrops/index.js';
 import { ENEMY_SPRITES } from '../../../src/data/enemies/enemy-sprites.js';
 import { ENEMY_TYPES } from '../../../src/data/enemies/enemy-types.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
@@ -52,14 +53,28 @@ describe('the twelve missions', () => {
     }
   });
 
-  it('ambush out of the trees on three forest roads and out of the sand on two desert ones', () => {
+  it('ambush from overhead on every road with trees or towers to wait on, out of the sand on the desert ones', () => {
     expect(MISSIONS.flatMap(ambushesIn)).toEqual([
+      ['Pine Ridge', 'drop'],
       ['Old Grove', 'drop'],
       ['Bamboo Pass', 'drop'],
+      ['Ember Woods', 'drop'],
       ['Firefly Hollow', 'drop'],
       ['Sandstorm Pass', 'burrow'],
+      ['Iron Works', 'drop'],
       ['Mirage Temple', 'burrow'],
+      ["Warden's Fortress", 'drop'],
+      ['Bayon', 'drop'],
     ]);
+  });
+
+  it('drop raiders only on roads whose painting gives them a canopy or perches to wait in', () => {
+    for (const mission of MISSIONS) {
+      const drops = mission.zones.some((zone) => zone.waves.some((wave) => wave.ambush === 'drop'));
+      const backdrop = PAINTED_BACKDROPS[mission.theme];
+
+      expect(drops && !(backdrop.canopy || backdrop.perches), mission.name).toBe(false);
+    }
   });
 
   it('never ambush with a boss, nor with the wave that locks a zone', () => {

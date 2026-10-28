@@ -1,3 +1,4 @@
+import { dropIn } from '../ambushes.js';
 import { mound, ramp } from '../ground-shapes.js';
 
 // fortress stairs: a flight of walkable steps up to a landing and a flight back down
@@ -63,7 +64,7 @@ export const WARDEN_FORTRESS = {
       waves: [
         ['assassin', 'hound', 'bomber'],
         ['tombguard', 'ghoul', 'spitter'],
-        ['monk', 'vulture', 'witch'],
+        dropIn(['monk', 'assassin', 'monk']),
         ['juggernaut', 'shield', 'sentry', 'assassin'],
       ],
     },

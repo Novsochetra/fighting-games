@@ -11,6 +11,8 @@ export const IRON_WORKS = {
     chainLight: '#6e5a4a',
     molten: '#ff8a2a',
   },
+  // what a raider knocks loose off the ironwork it climbs: rust and soot, taken from its paint
+  debris: ['#342718', '#5d4235', '#84583e', '#ac7a4c'],
   ambient: {
     furnace: ['#ff7a24', '#ffd47a'],
     sparks: ['#fff4c0', '#ffb43a', '#d8501f'],

@@ -20,18 +20,22 @@ function leaf(game, { x, y, vx, vy, colors }) {
   });
 }
 
-// a leaf shaken loose from the trees over a raider about to drop
-export function shedLeaf(game, { x, colors }) {
-  const y = fxBetween(game, DROP.leafTop, DROP.leafBottom);
+// the band of the trees a raider shakes its leaves from: the canopy's own, or a crown's
+const OVERHEAD = { top: DROP.leafTop, bottom: DROP.leafBottom, spread: 16 };
 
-  leaf(game, { x: x + fxBetween(game, -16, 16), y, vx: 0, vy: 0.3, colors });
+// a leaf shaken loose from the trees over a raider about to drop
+export function shedLeaf(game, { x, colors, band = OVERHEAD }) {
+  const y = fxBetween(game, band.top, band.bottom);
+  const spread = fxBetween(game, -band.spread, band.spread);
+
+  leaf(game, { x: x + spread, y, vx: 0, vy: 0.3, colors });
 }
 
 // the leaves the branch throws out to both sides as it gives way under the raider
-export function burstLeaves(game, { x, colors }) {
+export function burstLeaves(game, { x, colors, band = OVERHEAD }) {
   for (let i = 0; i < DROP.burst; i++) {
     const side = i % 2 ? 1 : -1;
-    const y = fxBetween(game, DROP.leafTop, DROP.leafBottom / 2);
+    const y = fxBetween(game, band.top, (band.top + band.bottom) / 2);
 
     leaf(game, {
       x,
