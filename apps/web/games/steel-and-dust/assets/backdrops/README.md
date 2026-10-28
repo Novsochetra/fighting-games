@@ -338,9 +338,43 @@ commands, because the tool has no step for them.
 - `cliff.png` (12x64) is drawn by hand in `ground.png`'s colours, the face of a sheer step: two
   courses of grey-green sandstone with moss on the lip and in the joint, a course of laterite set
   back a pixel under them, then earth with fig roots going dark, with a dark outer edge.
-- `deep.png` (128x216) is the earth under the road at the world's rows (`deep: { from: 48 }`), made
-  with `python3 tools/road_body.py earth ground.png deep.png 19 48 10`: from world row 213 down it
-  is `ground.png`'s own earth, as the road at its base level lays it, and above that its band of
-  earth with fig roots (rows 48-57) repeated upward, shifted along each time. The stone and laterite
-  (rows 0-47) still follow each step. Before it, the cross-section's last row was stretched down
-  under every raised step, a dark band striped by that row's colours.
+- `deep.png` is the earth under its raised steps; see "The ground under raised steps" below.
+
+## The ground under raised steps
+
+A cross-section is laid along the road's surface, so under a step raised above the road's base
+level it ends that much higher. On most roads it ended before the bottom of the screen, and its last
+row was stretched down the rest of the way: a flat dark band under every high hill, terrace and
+stair, striped where that row was not one colour (Angkor Wat 29 rows, Warden's Fortress 18, Iron
+Works 14, Sandstorm Pass 13, Old Grove 12, the Bayon 11, Ember Woods 7, Raider Camp 5, Firefly
+Hollow 4). Each of those roads now has a `deep.png` (as wide as its `ground.png`, 216 tall) and
+`deep: { from }` in its backdrop: the cross-section's rows above `from` still follow every step, and
+under them the road's body lies at the world's own rows (`src/render/scene/deep-ground.js`). From
+the world row where the road at its base level lays row `from` on down, `deep.png` is the
+cross-section's own rows, so the road at its base level looks as it did; above that, under the
+raised ground, it is a band of the cross-section's deep earth from `from`, repeated upward, shifted
+along each time and every other one upside down, so the earth darkening with depth draws no line
+where two meet. The band starts below any stratum that would draw lines across a hill (Raider
+Camp's dark layer at row 53, Sandstorm Pass's light and dark lines at rows 42-45), which still
+follow the surface:
+
+```
+python3 tools/road_body.py earth <folder>/ground.png <folder>/deep.png <groundTop> <from> <band>
+```
+
+| Folder             | `groundTop` | `from` | band |
+| ------------------ | ----------- | ------ | ---- |
+| `old-grove/`       | 8           | 40     | 12   |
+| `raider-camp/`     | 13          | 44     | 9    |
+| `ember-woods/`     | 5           | 37     | 12   |
+| `firefly-hollow/`  | 8           | 40     | 12   |
+| `sandstorm-pass/`  | 2           | 46     | 7    |
+| `iron-works/`      | 14          | 46     | 12   |
+| `warden-fortress/` | 14          | 46     | 12   |
+| `bayon/`           | 19          | 48     | 10   |
+
+Angkor Wat's body is built of courses instead (`courses`, in its section above). Pine Ridge and
+Mirage Temple reach the bottom of the screen under their highest ground, and Bamboo Pass falls one
+row short, its last row drawn once; they keep the cross-section alone.
+`test/regression/bugs/raised-road-over-a-void.test.js` renders every road's highest ground and
+fails if any runs a row on down.

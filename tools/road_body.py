@@ -13,9 +13,10 @@ road beside it, and the faces where a step or a breach cuts through it.
         two broken banks of a breach, drawn by hand; <folder>/cliff.png: the end of the paving at a
         step's lip, with creepers hanging off it
     python3 tools/road_body.py earth <ground.png> <out> <surface_row> <from_row> <band_rows>
-        a road on earth (the Bayon): the cross-section's own rows from from_row down where the road
-        shows them, and its band of earth from from_row repeated upward under the raised ground,
-        shifted along each time
+        a road on earth (the Bayon, and the forests, camp, canyon, works and fortress whose
+        cross-sections run out under their high ground): the cross-section's own rows from
+        from_row down where the road shows them, and its band of earth from from_row repeated
+        upward under the raised ground, shifted along each time and every other one upside down
 """
 import random
 import sys
@@ -377,7 +378,10 @@ def earth(ground_path, out_path, surface_row, from_row, band_rows):
     rows_of(ground, top, start, out)
     band = ground.crop((0, start, ground.width, start + int(band_rows)))
     for k in range(1, (top + start) // band.height + 1):
-        out.paste(shifted(band, EARTH_SHIFTS[k % len(EARTH_SHIFTS)]), (0, top + start - band.height * k))
+        # every other band is turned upside down, so each meets the next on the same row and the
+        # earth darkening with depth draws no line across the hill where two bands meet
+        laid = band.transpose(Image.Transpose.FLIP_TOP_BOTTOM) if k % 2 else band
+        out.paste(shifted(laid, EARTH_SHIFTS[k % len(EARTH_SHIFTS)]), (0, top + start - band.height * k))
     out.save(out_path)
 
 

@@ -9,6 +9,8 @@ export const IRON_WORKS = {
   folder: 'iron-works',
   groundTop: 14,
   cliff: true,
+  // the deep earth under a raised step lies level with the road's, not run down from its last row
+  deep: { from: 46 },
   layers: [
     { name: 'back', parallax: 0.08 },
     { name: 'mouth', parallax: 0.3, once: true },

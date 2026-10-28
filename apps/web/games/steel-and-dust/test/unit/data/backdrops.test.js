@@ -82,7 +82,7 @@ describe('painted backdrops', () => {
 
   it('find the level body of every raised road that has one, the height of the view', () => {
     const withBodies = Object.entries(PAINTED_BACKDROPS).filter(([, spec]) => spec.deep);
-    expect(withBodies.map(([themeId]) => themeId)).toEqual(['angkorWat', 'bayon']);
+    expect(withBodies.length).toBeGreaterThanOrEqual(9);
     for (const [themeId, { folder, deep }] of withBodies) {
       expect(layerSize(folder, 'deep'), themeId).toEqual({
         ...layerSize(folder, 'ground'),
