@@ -3,7 +3,7 @@ import { fitTouchLayer } from '../screen/touch-area.js';
 import { orientationOf, shownControls, sizeOf, slotFor } from './layout-draft.js';
 import { centreOf, coverCost, fractionOf, halfExtentOf } from './layout-geometry.js';
 import { controlName, EDITOR_HTML, fillPreview, sizeLabel } from './layout-markup.js';
-import { drawPreviewPad, restPreviewStick } from './preview-pad.js';
+import { drawPreviewPad, drawPreviewShell, restPreviewStick } from './preview-pad.js';
 
 // the editor's screen: a copy of the touch layer to drag the controls on, and its toolbar
 export class LayoutView {
@@ -13,6 +13,7 @@ export class LayoutView {
     this.section = document.getElementById('m-layout');
     this.section.innerHTML = EDITOR_HTML;
     this.preview = this.section.querySelector('.layout-preview');
+    this.shell = this.section.querySelector('.layout-shell');
     fillPreview(this.preview, document.getElementById('touch'));
     this.bar = this.section.querySelector('.layout-bar');
     this.controls = [];
@@ -66,7 +67,10 @@ export class LayoutView {
 
   // the skin's controls for the way the phone is held, drawn again only when that changes
   drawControls(entries) {
-    const places = drawPreviewPad(this.preview, this.layout.padLayout(), entries);
+    const padLayout = this.layout.padLayout();
+    const places = drawPreviewPad(this.preview, padLayout, entries);
+
+    drawPreviewShell(this.shell, padLayout, this.layout.stageRect());
 
     this.controls = [...this.preview.querySelectorAll('[data-control]')];
 

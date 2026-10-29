@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { SKIN_IDS } from '../../../src/data/skins/skins.js';
 import { openMenu, openPage } from '../../support/menu-page.js';
 
 // happy-dom lays nothing out: the d-pad gets a 150px square with its centre at (140, 275), ATTACK
@@ -88,15 +89,20 @@ describe('touch skins on the real page', () => {
     expect(document.querySelector('#m-skins .skin-about').textContent).toContain('d-pad');
     expect(shown('stick')).toBeNull();
     expect(shown('dpad').className).toBe('pad-dpad dusk-dpad');
-    expect(real('stick')).not.toBeNull();
+    // the skin looked at stands for real meanwhile, and Cancel puts the picked one back
+    expect(real('dpad')).not.toBeNull();
     document.querySelector('#m-skins [data-act="back"]:not([data-skin])').click();
     expect(openMenu().id).toBe('m-settings');
     expect(page.game.settings.skin).toBe('classic');
+    expect(real('stick')).not.toBeNull();
     expect(page.saveSettings).not.toHaveBeenCalled();
 
     row('skin').querySelector('[data-act="skins"]').click();
     expect(skinName()).toBe('Classic');
     document.querySelector('#m-skins [data-skin-step="-1"]').click();
+    expect(skinName()).toBe('Clear Smoke');
+    document.querySelector('#m-skins [data-skin-step="1"]').click();
+    document.querySelector('#m-skins [data-skin-step="1"]').click();
     document.querySelector('#m-skins [data-skin="use"]').click();
     expect(openMenu().id).toBe('m-settings');
     expect(page.game.settings.skin).toBe('dusk');
@@ -109,7 +115,7 @@ describe('touch skins on the real page', () => {
     openSkins(page);
     page.key('ArrowRight');
     expect(skinName()).toBe('Dusk');
-    expect(shown('light').style.getPropertyValue('--pad-dx')).toBe('-120px');
+    expect(shown('light').style.getPropertyValue('--pad-dx')).toBe('-100px');
     holdPhone(390, 844);
     expect(shown('light').style.getPropertyValue('--pad-dx')).toBe('-78px');
     page.key('ArrowLeft');
@@ -145,10 +151,14 @@ describe('touch skins on the real page', () => {
       [...document.querySelectorAll('#m-skins .skin-dots i')].map((dot) => dot.className);
     const pad = () => document.querySelector('#m-skins .pad');
 
-    expect(dots()).toEqual(['on', '']);
+    const lit = () => dots().indexOf('on');
+
+    expect(dots()).toHaveLength(SKIN_IDS.length);
+    expect(dots().filter((dot) => dot === 'on')).toHaveLength(1);
+    expect(lit()).toBe(0);
     expect(pad().className).toBe('pad');
     page.key('ArrowRight');
-    expect(dots()).toEqual(['', 'on']);
+    expect(lit()).toBe(1);
     expect(pad().className).toBe('pad slide-a');
     expect(pad().style.getPropertyValue('--skin-slide-from')).toBe('32px');
     page.key('ArrowLeft');
@@ -175,7 +185,7 @@ describe('touch skins on the real page', () => {
     page.layout.applyTouchSettings();
     expect(real('stick')).toBeNull();
     expect(real('light').className).toBe('pad-button dusk dusk-light');
-    expect(real('light').style.getPropertyValue('--pad-dx')).toBe('-120px');
+    expect(real('light').style.getPropertyValue('--pad-dx')).toBe('-100px');
     holdPhone(390, 844);
     expect(real('light').style.getPropertyValue('--pad-dx')).toBe('-78px');
     expect(document.querySelector('#touch .pad-controls').classList.contains('pad-placed')).toBe(

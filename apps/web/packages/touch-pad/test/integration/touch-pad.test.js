@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { installTouchPad } from '../../src/install-touch-pad.js';
 import { placePad, placesOf } from '../../src/pad-place.js';
 import { renderPad } from '../../src/pad-markup.js';
+import { placeShell, renderShell } from '../../src/pad-shell.js';
 
 const STEER = { up: 'up', right: 'right', down: 'down', left: 'left' };
 const STICK = { id: 'stick', kind: 'stick', inputs: STEER, class: 'my-stick' };
@@ -244,6 +245,50 @@ describe('a touch pad drawn from a skin', () => {
     renderPad(layer, { items: [JUMP] });
 
     expect(layer.querySelector('.pad [data-control="jump"]')).toBe(pad.control('jump'));
+  });
+
+  it('measures the skin’s own places inside the safe area, and the player’s on the screen', () => {
+    const layout = { items: [{ ...JUMP, at: { x: 1, y: 1, dx: -80, dy: -90 } }] };
+    const controls = () => layer.querySelector('.pad-controls').classList;
+
+    renderPad(layer, layout);
+    placePad(layer, placesOf(layout, null), { fromSkin: true });
+    expect([controls().contains('pad-placed'), controls().contains('pad-safe')]).toEqual([
+      true,
+      true,
+    ]);
+    placePad(layer, { jump: { x: 0.5, y: 0.5, size: 1 } });
+    expect([controls().contains('pad-placed'), controls().contains('pad-safe')]).toEqual([
+      true,
+      false,
+    ]);
+    placePad(layer, null, { fromSkin: true });
+    expect(controls().contains('pad-safe')).toBe(false);
+  });
+
+  it('shapes a control as a pill when the skin gives it an aspect', () => {
+    renderPad(layer, { items: [{ ...JUMP, size: 96, aspect: 0.4 }] });
+
+    expect(control('jump').style.getPropertyValue('--pad-aspect')).toBe('0.4');
+    expect(control('jump').style.getPropertyValue('--pad-base')).toBe('96px');
+  });
+
+  it('wraps the game in a skin’s shell, with a bezel round its screen, and takes it off again', () => {
+    const shellLayer = document.createElement('div');
+    const framed = { items: [JUMP], shell: { class: 'clear clear-lotus' } };
+
+    renderShell(shellLayer, framed);
+    const shell = shellLayer.firstElementChild;
+    renderShell(shellLayer, framed);
+    placeShell(shellLayer, { x: 170, y: 50, width: 504, height: 283.5 });
+
+    expect(shellLayer.firstElementChild).toBe(shell);
+    expect(shell.className).toBe('pad-shell clear clear-lotus');
+    expect(shell.querySelector('.pad-bezel')).not.toBeNull();
+    expect(shellLayer.style.getPropertyValue('--pad-screen-x')).toBe('170px');
+    expect(shellLayer.style.getPropertyValue('--pad-screen-height')).toBe('283.5px');
+    renderShell(shellLayer, { items: [JUMP] });
+    expect(shellLayer.children).toHaveLength(0);
   });
 
   it('outlines the controls of a skin drawn for debugging', () => {

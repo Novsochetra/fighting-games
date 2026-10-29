@@ -53,11 +53,14 @@ export function placesOf(layout, custom) {
   return Object.fromEntries(placed.map(({ id, at }) => [id, { ...at, size: 1 }]));
 }
 
-// the stick stands where it rests (PadStick), so only its size is set here
-export function placePad(layer, places) {
+// the stick stands where it rests (PadStick), so only its size is set here. `fromSkin` says the
+// places are the skin's own, measured inside the safe area, not the player's
+export function placePad(layer, places, { fromSkin = false } = {}) {
   const pad = padOf(layer);
+  const controls = pad.querySelector('.pad-controls');
 
-  pad.querySelector('.pad-controls').classList.toggle('pad-placed', Boolean(places));
+  controls.classList.toggle('pad-placed', Boolean(places));
+  controls.classList.toggle('pad-safe', Boolean(places) && fromSkin);
 
   for (const control of pad.querySelectorAll('[data-control]')) {
     const vars = placeVars(places?.[control.dataset.control]);

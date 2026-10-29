@@ -5,6 +5,19 @@
   display: none;
 }
 
+/* a skin's shell stands behind the stage whenever the touch controls are on, paused too, as the
+   stage stays in its frame */
+.shell {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: none;
+}
+
+body.touch-on .shell {
+  display: block;
+}
+
 body.touch-on .touch.live {
   display: block;
 }

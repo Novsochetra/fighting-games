@@ -66,15 +66,40 @@ function stageOverControls(area, options) {
   return fits ? aboveControls(area, options, width) : null;
 }
 
+const sideOf = (frame, side) => frame[side] ?? 0;
+
+// a skin's frame keeps the stage clear of the controls beside it or under it: px inside the safe
+// area from each side, the stage at the top of what is left or in its middle
+function framedRect({ width, height, safe, view, frame }) {
+  const box = {
+    x: safe.left + sideOf(frame, 'left'),
+    y: safe.top + sideOf(frame, 'top'),
+    width: width - safe.left - safe.right - sideOf(frame, 'left') - sideOf(frame, 'right'),
+    height: height - safe.top - safe.bottom - sideOf(frame, 'top') - sideOf(frame, 'bottom'),
+  };
+  const rect = fitView(box, view);
+
+  return frame.align === 'top' ? { ...rect, y: box.y } : rect;
+}
+
 // where the stage stands, and whether the touch controls stand under it: `view` is the game's size
 // in its own pixels, `controlsHeight` the px its touch controls need under it, or null without
-// touch controls, and `hinge` a folded phone's halves (viewport-segments.js). A phone half-folded
-// on a table shows the game on its top half and the controls on the bottom half, like a handheld
-export function arrangeView({ width, height, safe, hinge, view, controlsHeight }) {
+// touch controls, `frame` a skin's frame for its screen (`framed` then), and `hinge` a folded
+// phone's halves (viewport-segments.js). A phone half-folded on a table shows the game on its top
+// half and the controls on the bottom half, like a handheld, whatever the skin's frame
+export function arrangeView({ width, height, safe, hinge, view, controlsHeight, frame }) {
   const touch = controlsHeight !== null;
 
   if (hinge?.stacked) {
     return { rect: fitView(belowTheTop(hinge.game, safe), view), controlsBelow: touch };
+  }
+
+  if (frame && touch && !hinge) {
+    return {
+      rect: framedRect({ width, height, safe, view, frame }),
+      controlsBelow: false,
+      framed: true,
+    };
   }
 
   const area = hinge?.game ?? { x: 0, y: 0, width, height };

@@ -99,9 +99,11 @@ so every layout comes out to the pixel as it did before the package, checked ove
 screens. `viewport-segments.js` reads a half-folded phone's halves (`readHinge`, `onFoldChange`),
 `safe-area.js` the notch and home bar insets, `gesture-guards.js` cancels iPhone Safari's pinch and
 double-tap zoom, long-press callouts and selection, and `fullscreen.js` goes full screen and locks a
-phone to landscape where the browser allows. Steel & Dust passes its 768x432 view and its
-controls' height (`src/ui/screen/stage-layout.js`), and keeps where the stick rests, the menus' box
-on a fold and the pause plaque, which are its own.
+phone to landscape where the browser allows. A skin's `frame` (`arrangeView`, `framed`) keeps
+the stage inside it, clear of the controls beside or under it, unless a fold or the touch controls
+being off says otherwise. Steel & Dust passes its 768x432 view and its controls' height
+(`src/ui/screen/stage-layout.js`), and keeps where the stick rests, the menus' box on a fold and
+the pause plaque, which are its own.
 
 ### Touch pad and skins
 
@@ -115,18 +117,27 @@ layout for each way the phone is held (`landscape`, `portrait`), each listing it
 - `inputs`, what it gives the game: a list for a button, which presses them all at once (a combo),
   or the input each of `up`, `right`, `down` and `left` holds for a stick or a d-pad;
 - optionally a `label`, its `class` names (the game's styles paint it), a `size` (px at the game's
-  scale 1; without it a stick is 128 and the rest 64) and `at`: its centre as fractions of the
-  touch layer, moved by `dx` and `dy` px at the game's scale 1, so a cluster anchored to a corner
-  keeps its shape from a small phone to a tablet (a stick stands by `x` and `y` alone). A layout
-  places all its controls or none; one that places none, like Steel & Dust's `classic`, leaves
-  them to the game's own styles.
+  scale 1; without it a stick is 128 and the rest 64), an `aspect` (its height over its width, for
+  a pill) and `at`: its centre as fractions of the safe area, moved by `dx` and `dy` px at the
+  game's scale 1, so a cluster anchored to a corner keeps its shape from a small phone to a tablet
+  and clears a notch (a stick stands by `x` and `y` alone). A layout places all its controls or
+  none; one that places none, like Steel & Dust's `classic`, leaves them to the game's own styles.
+
+A layout may also wrap the game in a `shell` (its `class` names), a handheld's case drawn behind
+the stage with a bezel round its screen, and keep the game's screen inside a `screen` frame: px at
+the game's scale 1 from each side of the safe area, the screen at the top of what is left or in
+its middle (`align`). `renderShell(layer, layout)` draws it in a layer the game gives it behind its
+stage, `placeShell(layer, rect)` puts the bezel round the stage, and the shell is cut open there
+(a mask), so what lies under it shows through even where a copy of it lies over everything.
 
 `renderPad(layer, layout)` draws a layout first in the touch layer, in a `.pad`: the stick in a
 `.pad-zone` of its own, the rest in `.pad-controls` after it, each with its `data-control`. The
 same layout again is left as it is, so a refit never cuts a press short, and each pad keeps its
 controls by id, as a game asks for one on every frame (`control(id)`, for states like ULT ready). `placePad(layer, places)`
 stands each control by its centre (`--pad-x`, `--pad-y`, `--pad-dx`, `--pad-dy`) and size
-(`--pad-size`): the player's own places first, else the skin's (`placesOf`). `installTouchPad(layer, options)` answers on the
+(`--pad-size`): the player's own places first, where they put them on the screen, else the skin's
+(`placesOf`), inside the safe area (`.pad-safe`, from `--pad-safe-*` where the game sets them, as
+on a folded phone's half, else the browser's insets). `installTouchPad(layer, options)` answers on the
 layer for whatever is drawn on it: a button calls `handler.press` and `handler.release` for each
 of its inputs, and the stick and the d-pad (three by three, a corner holding two directions,
 `dpad-math.js`) call `handler.steer(input, on)` as a thumb moves on them. Each press flips the
@@ -685,12 +696,18 @@ The touch controls are drawn by the touch pad (see Touch pad and skins) from a s
 `src/data/skins/`: `classic` is the controls as they always stood, placing nothing, so
 `styles/touch-buttons.css` places the buttons and the screen fit rests the stick
 (`stage-layout.js`); `dusk` (`styles/skin-dusk.css`) is glass discs lit by the dusk sky over the
-fight and a d-pad, each control hanging off a bottom corner. A player picks the skin (`skin`, one
+fight and a d-pad, each control hanging off a bottom corner; the five `clear-*` skins
+(`clear.js`, `styles/skin-clear.css`) are one handheld of see-through plastic in Lotus, Ember,
+Jade, Mekong and Smoke, its insides showing (`assets/skins/clear/`, `tools/clear_skin_insides.py`),
+the game in a bezel between two panels held sideways and at the top held upright, with the pause
+plaque in its HUD (`pausePlace`, `framed`); each control carries its shell's colour class, as it
+stands in the touch layer, not in the shell (`#shell`, behind the stage). A player picks the skin (`skin`, one
 for both ways of holding the phone) on the Skins screen, which Settings' Skin row opens
 (`src/ui/skins/`, `styles/skin-picker.css`): like the layout editor, a copy of the touch layer over
 a light dim shows the skin looked at standing as it will, held the way the phone is, at the
 player's Button size and opacity and with their own layout of it (`preview-pad.js`, which both
-share). ‹ ›, left and right, or a swipe across the screen step through the skins, each sliding in
+share), and a skin with a shell stands for real meanwhile (`layout.previewSkin`), the stage in
+its frame, until Use or any way back (the panel's `leave`). ‹ ›, left and right, or a swipe across the screen step through the skins, each sliding in
 from its side, and dots under the name tell which of how many; Use picks one and Cancel leaves.
 Settings also sets the controls' opacity (`padOpacity`, `--pad-opacity`, never the pause
 button's). The help and the first hints name the d-pad when one steers (`steersWithDpad`; the

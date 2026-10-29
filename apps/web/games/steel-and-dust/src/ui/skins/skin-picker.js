@@ -3,8 +3,9 @@ import { onFoldChange } from '../../../../../packages/screen/src/viewport-segmen
 import { SkinView } from './skin-view.js';
 
 // the Skins menu: it steps through the skins on a copy of the touch layer, so a player sees each
-// on their own screen before picking it; only Use changes the setting, and Cancel (the menus'
-// Back) just leaves
+// on their own screen before picking it. A skin with a shell moves the stage into its frame
+// meanwhile (layout.previewSkin); only Use changes the setting, and Cancel, or any way back,
+// leaves the skin as it was
 export class SkinPicker {
   constructor({ view, game, audio, layout, settingsPanel }) {
     Object.assign(this, { view, game, audio, layout, settingsPanel });
@@ -16,12 +17,18 @@ export class SkinPicker {
     this.render();
   }
 
+  // the menus' Back, by Cancel, Use, a key or the gamepad
+  leave() {
+    this.layout.previewSkin(null);
+  }
+
   // the keyboard and gamepad highlight starts on Use
   firstSelected() {
     return this.view.bar.querySelectorAll('button').length - 1;
   }
 
   render(from = 0) {
+    this.layout.previewSkin(SKIN_IDS[this.index]);
     this.view.render(SKIN_IDS[this.index], this.game.settings, from);
   }
 
@@ -34,6 +41,7 @@ export class SkinPicker {
   use() {
     this.game.settings.skin = SKIN_IDS[this.index];
     this.game.io.saveSettings(this.game.settings);
+    this.layout.previewSkin(null);
     this.layout.applyTouchSettings();
     this.settingsPanel.build();
   }

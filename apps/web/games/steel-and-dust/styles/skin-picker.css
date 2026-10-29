@@ -11,9 +11,14 @@
   touch-action: none;
 }
 
-.skin-preview {
+.skin-preview,
+.skin-shell {
   position: absolute;
   inset: 0;
+}
+
+.skin-shell {
+  pointer-events: none;
 }
 
 .skin-preview,
@@ -93,4 +98,15 @@ body.stick-hidden .skin-preview .pad-stick {
   .skin-preview .pad.slide-b {
     animation: none;
   }
+}
+
+/* the bar stands between a shell's shoulders, its words wrapping under its buttons */
+#m-skins .layout-bar {
+  max-width: min(calc(var(--menu-width, 100%) - 16px), 540px);
+}
+
+.skin-about {
+  max-width: 46ch;
+  text-align: center;
+  text-wrap: balance;
 }

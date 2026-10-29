@@ -8,11 +8,12 @@ const CONTROLS_HEIGHT = 260;
 
 const VIEW = { width: VIEW_WIDTH, height: VIEW_HEIGHT };
 
-// where the stage stands, and whether the touch buttons stand under it (packages/screen)
-export function arrangeStage({ width, height, safe, touch, buttonScale, hinge }) {
+// where the stage stands, and whether the touch buttons stand under it (packages/screen); `frame`
+// is a skin's frame for the stage, between its controls
+export function arrangeStage({ width, height, safe, touch, buttonScale, hinge, frame }) {
   const controlsHeight = touch ? CONTROLS_HEIGHT * buttonScale : null;
 
-  return arrangeView({ width, height, safe, hinge, view: VIEW, controlsHeight });
+  return arrangeView({ width, height, safe, hinge, view: VIEW, controlsHeight, frame });
 }
 
 // half the stick base in styles/touch.css, before the button size

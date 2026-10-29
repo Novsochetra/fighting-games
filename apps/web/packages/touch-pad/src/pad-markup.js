@@ -8,7 +8,7 @@ const layoutsByPad = new WeakMap();
 const controlsByPad = new WeakMap();
 const padsByLayer = new WeakMap();
 
-function element(document, tag, className) {
+export function element(document, tag, className) {
   const node = document.createElement(tag);
 
   node.className = className;
@@ -16,7 +16,7 @@ function element(document, tag, className) {
   return node;
 }
 
-const classesOf = (base, item) => (item.class ? `${base} ${item.class}` : base);
+export const classesOf = (base, item) => (item.class ? `${base} ${item.class}` : base);
 
 function buttonMarkup(document, item) {
   const button = element(document, 'button', classesOf('pad-button', item));
@@ -59,6 +59,10 @@ function controlOf(document, item) {
 
   if (item.size) {
     control.style.setProperty('--pad-base', `${item.size}px`);
+  }
+
+  if (item.aspect) {
+    control.style.setProperty('--pad-aspect', String(item.aspect));
   }
 
   return control;

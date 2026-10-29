@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { CLASSIC } from '../../../src/data/skins/classic.js';
 import { DUSK } from '../../../src/data/skins/dusk.js';
+import { SKIN_IDS } from '../../../src/data/skins/skins.js';
 import {
   createDraft,
   customised,
@@ -57,12 +58,13 @@ describe('orientation', () => {
 
 describe('the layout draft', () => {
   it('starts from the saved layouts of every skin', () => {
-    expect(createDraft(null)).toEqual({
-      [LANDSCAPE]: null,
-      [PORTRAIT]: null,
-      'dusk:landscape': null,
-      'dusk:portrait': null,
-    });
+    const draft = createDraft(null);
+
+    expect(Object.keys(draft)).toHaveLength(SKIN_IDS.length * 2);
+    expect(Object.keys(draft)).toEqual(
+      expect.arrayContaining([LANDSCAPE, PORTRAIT, 'dusk:landscape', 'clear-jade:portrait']),
+    );
+    expect(Object.values(draft).every((entries) => entries === null)).toBe(true);
     const saved = { dusk: { landscape: { light: 1 }, portrait: null } };
     expect(createDraft(saved)).toMatchObject({ 'dusk:landscape': { light: 1 }, [LANDSCAPE]: null });
   });

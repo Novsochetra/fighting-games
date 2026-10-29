@@ -69,9 +69,16 @@ describe('the original touch button layout', () => {
   });
 
   it('only places a button by its centre inside a placed layout', () => {
+    const rules = [...PAD_STYLES.matchAll(/([^{}]+)\{([^}]*)\}/g)];
+    const placing = rules
+      .filter(([, , body]) => body.includes('var(--pad-x)'))
+      .map(([, selector]) => selector.trim());
+
     expect(css).not.toContain('--pad-x');
-    expect(PAD_STYLES.match(/var\(--pad-x\)/g)).toHaveLength(1);
-    expect(PAD_STYLES).toContain('.pad-placed > .pad-button, .pad-placed > .pad-dpad {');
+    expect(placing).toEqual([
+      '.pad-placed > .pad-button, .pad-placed > .pad-dpad',
+      '.pad-safe > .pad-button, .pad-safe > .pad-dpad',
+    ]);
   });
 
   it('keeps the stick in the left 48% of the screen, as big as it was', () => {

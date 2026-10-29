@@ -2,6 +2,7 @@ export function findElements(document) {
   const byId = (id) => document.getElementById(id);
   return {
     app: byId('app'),
+    shell: byId('shell'),
     stage: byId('stage'),
     canvas: byId('game'),
     touch: byId('touch'),

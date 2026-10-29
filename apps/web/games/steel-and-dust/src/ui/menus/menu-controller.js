@@ -82,6 +82,7 @@ export class MenuController {
 
   back() {
     if (this.state.stack.length > 1) {
+      this.panels[this.top()]?.leave?.();
       this.state.stack.pop();
       this.show();
       this.audio.sfx('uiBack');

@@ -16,7 +16,8 @@
   touch-action: none;
 }
 
-.layout-preview {
+.layout-preview,
+.layout-shell {
   position: absolute;
   inset: 0;
   pointer-events: none;

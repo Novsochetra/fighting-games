@@ -10,22 +10,22 @@ const button = (id, label, at, size) => ({
   size,
 });
 
-// each control hangs off a bottom corner by px at Button size 1, so the cluster keeps its shape
-// from a small phone to a tablet, far enough in to clear a notch held sideways
+// each control hangs off a bottom corner of the safe area by px at Button size 1, so the cluster
+// keeps its shape from a small phone to a tablet, clear of a notch held sideways
 const LANDSCAPE = [
   {
     id: 'dpad',
     kind: 'dpad',
     inputs: STEER,
     class: 'dusk-dpad',
-    at: { x: 0, y: 1, dx: 140, dy: -112 },
+    at: { x: 0, y: 1, dx: 110, dy: -112 },
     size: 150,
   },
-  button('ult', 'ULT', { x: 1, y: 1, dx: -318, dy: -112 }, 62),
-  button('dash', 'DASH', { x: 1, y: 1, dx: -214, dy: -162 }, 62),
-  button('jump', 'JUMP', { x: 1, y: 1, dx: -100, dy: -198 }, 72),
-  button('heavy', 'HEAVY', { x: 1, y: 1, dx: -222, dy: -60 }, 74),
-  button('light', 'ATTACK', { x: 1, y: 1, dx: -120, dy: -92 }, 92),
+  button('ult', 'ULT', { x: 1, y: 1, dx: -298, dy: -112 }, 62),
+  button('dash', 'DASH', { x: 1, y: 1, dx: -194, dy: -162 }, 62),
+  button('jump', 'JUMP', { x: 1, y: 1, dx: -80, dy: -198 }, 72),
+  button('heavy', 'HEAVY', { x: 1, y: 1, dx: -202, dy: -60 }, 74),
+  button('light', 'ATTACK', { x: 1, y: 1, dx: -100, dy: -92 }, 92),
 ];
 
 // upright, the stage stands over the controls, which climb higher to keep a narrow screen's

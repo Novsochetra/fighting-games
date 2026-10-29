@@ -5,6 +5,10 @@ const DIRECTIONS = ['up', 'right', 'down', 'left'];
 const ORIENTATIONS = ['landscape', 'portrait'];
 
 const isName = (value) => typeof value === 'string' && value.length > 0;
+const isAbove = (value, floor) => Number.isFinite(value) && value > floor;
+const isPx = (value) => Number.isFinite(value) && value >= 0;
+const isClassNames = (value) => typeof value === 'string' && /^[\w-]+( [\w-]+)*$/.test(value);
+const SIDES = ['top', 'right', 'bottom', 'left'];
 const isFraction = (value) => Number.isFinite(value) && value >= 0 && value <= 1;
 
 function inputsProblem({ kind, inputs }) {
@@ -49,15 +53,43 @@ function itemProblems(item) {
 
   problems.push(atProblem(item));
 
-  if (item.size !== undefined && !(Number.isFinite(item.size) && item.size > 0)) {
+  if (item.size !== undefined && !isAbove(item.size, 0)) {
     problems.push('size must be px above 0');
   }
 
-  if (item.class !== undefined && !/^[\w-]+( [\w-]+)*$/.test(item.class)) {
+  if (item.aspect !== undefined && !isAbove(item.aspect, 0)) {
+    problems.push('aspect must be its height over its width, above 0');
+  }
+
+  if (item.class !== undefined && !isClassNames(item.class)) {
     problems.push('class must be class names');
   }
 
   return problems.filter(Boolean);
+}
+
+// a layout may wrap the game in a shell (`shell.class`), and keep its screen inside `screen`: px
+// at the game's scale 1 from each side, at the top of what is left or in its middle (`align`)
+function frameProblems({ shell, screen }) {
+  const problems = [];
+
+  if (shell !== undefined && !isClassNames(shell?.class)) {
+    problems.push('shell needs class names');
+  }
+
+  if (screen === undefined) {
+    return problems;
+  }
+
+  if (!SIDES.every((side) => screen[side] === undefined || isPx(screen[side]))) {
+    problems.push('screen sides must be px of 0 or more');
+  }
+
+  if (![undefined, 'top', 'center'].includes(screen.align)) {
+    problems.push('screen align must be top or center');
+  }
+
+  return problems;
 }
 
 function layoutProblems(layout) {
@@ -85,7 +117,7 @@ function layoutProblems(layout) {
     problems.push('at places all its controls or none');
   }
 
-  return problems;
+  return [...problems, ...frameProblems(layout)];
 }
 
 export function skinProblems(skin) {

@@ -21,6 +21,8 @@ const MENU_ART = [
   'assets/ui/select/card-selected.png',
   'assets/ui/select/card-crest-selected.png',
   'assets/ui/select/arrow.png',
+  // the Clear skins' insides, seen through their shells on the Skins screen and in play
+  'assets/skins/clear/insides.svg',
 ];
 
 // the loading screen's own art, which the page preloads ahead of everything else

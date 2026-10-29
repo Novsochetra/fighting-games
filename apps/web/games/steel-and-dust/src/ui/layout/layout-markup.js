@@ -1,7 +1,8 @@
 // the name of the picked control picks the next one, for a control hidden under the toolbar and for
 // keys and gamepads; Done also carries data-act="back": the editor's own click listener saves first,
 // then the menus' listener further up closes the editor the same way Cancel does
-export const EDITOR_HTML = `<div class="layout-preview" aria-hidden="true"></div>
+export const EDITOR_HTML = `<div class="layout-shell" aria-hidden="true"></div>
+  <div class="layout-preview" aria-hidden="true"></div>
   <div class="layout-bar" role="toolbar" aria-label="Button layout">
     <div class="layout-tools">
       <span class="layout-group">

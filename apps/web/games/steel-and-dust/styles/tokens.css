@@ -69,6 +69,21 @@
   --color-dusk-pressed: color-mix(in srgb, var(--color-amber) 82%, transparent);
   --color-dusk-label: var(--color-cream);
   --color-dusk-ring: color-mix(in srgb, var(--color-amber-light) 75%, transparent);
+  --color-plastic-lotus: #8e44f0;
+  --color-plastic-ember: #e0372d;
+  --color-plastic-jade: #22a35a;
+  --color-plastic-mekong: #2b62e3;
+  --color-plastic-smoke: #8d9099;
+  --color-clear-gloss: color-mix(in srgb, var(--color-white) 22%, transparent);
+  --color-clear-key: #2b2735;
+  --color-clear-key-light: #4b4559;
+  --color-clear-key-deep: #15121c;
+  --color-clear-label: #ece8f5;
+  --color-clear-well: color-mix(in srgb, var(--color-black) 24%, transparent);
+  --color-clear-groove: color-mix(in srgb, var(--color-white) 40%, transparent);
+  --color-bezel: #0d0b12;
+  --color-bezel-light: #2a2633;
+  --color-bezel-label: color-mix(in srgb, var(--color-white) 38%, transparent);
   --color-touch-ring: color-mix(in srgb, var(--color-amber-pale) 75%, transparent);
   --color-hud-plate: color-mix(in srgb, var(--color-night) 55%, transparent);
   --color-hud-shadow: #140f1a;
@@ -134,6 +149,8 @@
   --radius-md: 3px;
   --radius-xl: 8px;
   --radius-round: 50%;
+  --radius-pill: 999px;
+  --radius-bezel: 18px;
 
   --shadow-pixel-sm: 2px 2px 0 var(--color-shadow);
   --shadow-pixel-md: 4px 4px 0 var(--color-shadow);
@@ -144,6 +161,13 @@
     0 18px 60px color-mix(in srgb, var(--color-black) 60%, transparent);
   --shadow-knob: 0 0 0 3px color-mix(in srgb, var(--color-black) 25%, transparent);
   --shadow-touch-button: inset 0 -4px 0 color-mix(in srgb, var(--color-black) 25%, transparent);
+  --shadow-clear-key:
+    0 4px 0 color-mix(in srgb, var(--color-black) 45%, transparent),
+    inset 0 2px 1px color-mix(in srgb, var(--color-white) 18%, transparent);
+  --shadow-clear-shell:
+    inset 0 0 0 2px color-mix(in srgb, var(--color-white) 14%, transparent),
+    inset 0 0 48px color-mix(in srgb, var(--color-black) 38%, transparent);
+  --shadow-bezel: 0 6px 18px color-mix(in srgb, var(--color-black) 45%, transparent);
   --shadow-dusk-glass:
     0 0 10px color-mix(in srgb, var(--color-hero-ember) 22%, transparent),
     inset 0 -3px 0 color-mix(in srgb, var(--color-black) 30%, transparent);

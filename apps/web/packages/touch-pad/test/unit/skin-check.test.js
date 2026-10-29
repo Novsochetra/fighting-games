@@ -89,6 +89,43 @@ describe('checking a skin', () => {
     ]);
   });
 
+  it('takes a shell, a frame for the game’s screen, and controls shaped like pills', () => {
+    const items = [
+      { id: 'dash', kind: 'button', inputs: ['dash'], at: { x: 0, y: 0 }, aspect: 0.4 },
+    ];
+    const framed = {
+      id: 'shell',
+      name: 'Shell',
+      layouts: {
+        landscape: {
+          items,
+          shell: { class: 'clear clear-lotus' },
+          screen: { left: 170, right: 170 },
+        },
+        portrait: { items, shell: { class: 'clear' }, screen: { top: 10, align: 'top' } },
+      },
+    };
+
+    expect(skinProblems(framed)).toEqual([]);
+  });
+
+  it('names a shell with no classes, a frame off the screen and a shape with no height', () => {
+    const items = [{ id: 'dash', kind: 'button', inputs: ['dash'], aspect: 0 }];
+    const layout = { items, shell: {}, screen: { left: -4, align: 'bottom' } };
+    const problems = skinProblems({
+      id: 'x',
+      name: 'X',
+      layouts: { landscape: layout, portrait: layout },
+    });
+
+    expect(problems.filter((problem) => problem.startsWith('landscape'))).toEqual([
+      'landscape: dash: aspect must be its height over its width, above 0',
+      'landscape: shell needs class names',
+      'landscape: screen sides must be px of 0 or more',
+      'landscape: screen align must be top or center',
+    ]);
+  });
+
   it('wants a name and both ways of holding the phone', () => {
     expect(skinProblems({ id: 'x', layouts: { landscape: { items: [] } } })).toEqual([
       'a skin needs an id and a name',

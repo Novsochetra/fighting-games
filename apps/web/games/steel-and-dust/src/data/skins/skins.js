@@ -1,7 +1,8 @@
 import { CLASSIC } from './classic.js';
+import { CLEAR_SKINS } from './clear.js';
 import { DUSK } from './dusk.js';
 
-export const SKINS = { classic: CLASSIC, dusk: DUSK };
+export const SKINS = { classic: CLASSIC, dusk: DUSK, ...CLEAR_SKINS };
 
 export const SKIN_IDS = Object.keys(SKINS);
 
