@@ -53,10 +53,9 @@ export function openPage({ records, checkpoint, leaderboard, api, storage } = {}
     act('settings');
     document.querySelector(`[data-section="${id}"]`).click();
   };
-  const openLayoutEditor = () => {
+  const openSkins = () => {
     openSection('touch');
     document.querySelector('[data-k="skin"] [data-act="skins"]').click();
-    document.querySelector('#m-skins [data-act="layout"]').click();
   };
 
   return {
@@ -71,7 +70,7 @@ export function openPage({ records, checkpoint, leaderboard, api, storage } = {}
     saveLeaderboard,
     key,
     openSection,
-    openLayoutEditor,
+    openSkins,
     ui,
     audio,
     online,

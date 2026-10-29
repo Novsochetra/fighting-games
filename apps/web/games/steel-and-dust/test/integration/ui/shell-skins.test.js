@@ -115,12 +115,15 @@ describe('a skin with a shell on the real page', () => {
     expect(realShell()).toBeNull();
   });
 
-  it('shows the shell under the controls in the Button layout editor', () => {
+  it('keeps the shell under the controls while one of them is edited', () => {
     wear('clear-smoke');
-    page.openLayoutEditor();
+    page.openSkins();
+    document.querySelector('#m-skins .skin-preview [data-control="light"]').click();
 
-    expect(shellOf(document.querySelector('#m-layout .layout-shell')).className).toBe(
+    expect(document.getElementById('m-skins').classList.contains('editing')).toBe(true);
+    expect(shellOf(document.querySelector('#m-skins .skin-shell')).className).toBe(
       'pad-shell clear clear-smoke',
     );
+    expect(stage()[0]).toBeGreaterThanOrEqual(170);
   });
 });

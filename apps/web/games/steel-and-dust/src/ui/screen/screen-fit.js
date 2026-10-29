@@ -2,7 +2,7 @@ import { createSafeArea } from '../../../../../packages/screen/src/safe-area.js'
 import { onFoldChange, readHinge } from '../../../../../packages/screen/src/viewport-segments.js';
 import { placeShell, renderShell } from '../../../../../packages/touch-pad/src/pad-shell.js';
 import { buttonScale } from '../../data/settings.js';
-import { customStick, fitControls, frameOf, lookNow, padLayoutOf } from './fit-pad.js';
+import { customStick, fitControls, frameOf, padLayoutOf } from './fit-pad.js';
 import { fitMenus, menuBox } from './menu-area.js';
 import { pausePlace, placePause } from './pause-place.js';
 import { arrangeStage, stickRestPosition } from './stage-layout.js';
@@ -22,7 +22,7 @@ function screenOf(elements) {
 }
 
 // read again on every use rather than kept from the last fit, which may not have run yet when a
-// fold or a turn reaches the layout editor
+// fold or a turn reaches the Skins screen
 function hingeNow({ window, elements }) {
   return readHinge(window, screenOf(elements));
 }
@@ -59,7 +59,7 @@ function fitStage(context, safe) {
 }
 
 // in px of the stick zone, which is as tall as the touch layer: the app, or a folded phone's bottom
-// half. The app still measures while the touch layer is hidden (the layout editor places its copy
+// half. The app still measures while the touch layer is hidden (the Skins screen places its copy
 // of the stick from the title or pause menu)
 function originalStickRest({ context, safe, scale }) {
   const { elements } = context;
@@ -86,14 +86,8 @@ export function createScreenFit({ document, window, elements, game, ui }) {
   const readSafeArea = createSafeArea(document, window);
   const context = { elements, game, ui, window, hingeNow: () => hingeNow({ window, elements }) };
   const layout = {
-    // the skin's layout for the way the phone is held, which the layout editor draws too
     padLayout() {
       return padLayoutOf(context);
-    },
-    // the skin those controls are: the one looked at on the Skins screen while it is open, which
-    // the layout editor opened from there edits
-    shownSkin() {
-      return lookNow(context).skinId;
     },
     // where the stage stands now, which a copy of the shell puts its bezel round
     stageRect() {
@@ -108,7 +102,7 @@ export function createScreenFit({ document, window, elements, game, ui }) {
     originalStickRest(scale) {
       return originalStickRest({ context, safe: readSafeArea(), scale });
     },
-    // where the touch layer stands, null for the whole screen (the layout editor lays its copy there)
+    // where the touch layer stands, null for the whole screen (the Skins screen lays its copy there)
     touchArea() {
       return touchAreaOf(context.hingeNow());
     },

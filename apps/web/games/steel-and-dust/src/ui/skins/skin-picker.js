@@ -1,136 +1,127 @@
 import { keyShapesOf, SKIN_IDS, skinIdFor } from '../../data/skins/skins.js';
 import { onFoldChange } from '../../../../../packages/screen/src/viewport-segments.js';
-import { KeyChooser } from './key-chooser.js';
+import { createDraft, savedLayout } from '../layout/layout-draft.js';
+import { installLayoutDrag } from '../layout/layout-drag.js';
+import { LayoutEditor } from '../layout/layout-editor.js';
+import { installSkinClicks } from './skin-clicks.js';
 import { installSwipe } from './skin-swipe.js';
 import { SkinView } from './skin-view.js';
 
-const withShape = (keyShapes, control, shape) => {
-  const others = Object.fromEntries(Object.entries(keyShapes).filter(([id]) => id !== control));
-
-  return shape === 'pill' ? { ...others, [control]: 'pill' } : others;
-};
-
 // the Skins menu: it steps through the skins on a copy of the touch layer, so a player sees each
-// on their own screen before picking it, and a key the skin offers a pill for opens a chooser of
-// its shape. A skin with a shell moves the stage into its frame meanwhile (layout.previewSkin);
-// only Use changes the skin worn, and Cancel, or any way back, leaves it (a layout Done in the editor
-// opened from here is kept either way, as it belongs to the skin looked at). `select` (the menus')
-// moves the keyboard and gamepad highlight as the chooser opens and closes
+// on their own screen before picking it, and a press on a control edits it there (`editor`). A skin
+// with a shell moves the stage into its frame meanwhile (layout.previewSkin). The skin, its keys'
+// shapes and every skin's layout are a draft until Use saves them all; Cancel, or any way back,
+// drops it. `select` (the menus') moves the keyboard and gamepad highlight as a control is picked
+// and let go
 export class SkinPicker {
-  constructor({ view, chooser, game, audio, layout, settingsPanel }) {
-    Object.assign(this, { view, chooser, game, audio, layout, settingsPanel });
-    this.index = 0;
-    this.keyShapes = {};
+  constructor({ view, game, audio, layout, settingsPanel }) {
+    Object.assign(this, { view, game, audio, layout, settingsPanel });
+    this.state = { index: 0, keyShapes: {}, draft: createDraft(null), picked: null };
+    this.editor = new LayoutEditor({ screen: this, audio });
     this.select = () => {};
   }
 
   build() {
-    this.index = SKIN_IDS.indexOf(skinIdFor(this.game.settings));
-    this.keyShapes = keyShapesOf(this.game.settings);
+    const { settings } = this.game;
+
+    this.state = {
+      index: SKIN_IDS.indexOf(skinIdFor(settings)),
+      keyShapes: keyShapesOf(settings),
+      draft: createDraft(settings.buttonLayout),
+      picked: null,
+    };
+    this.view.bar.reset();
     this.render();
+  }
+
+  skinId() {
+    return SKIN_IDS[this.state.index];
+  }
+
+  slot() {
+    return this.view.slot(this.skinId());
   }
 
   // the menus' Back, by Cancel, Use, a key or the gamepad
   leave() {
-    this.chooser.close();
+    this.state.picked = null;
     this.layout.previewSkin(null);
   }
 
-  // Back with the chooser open closes only the chooser, the highlight back on its key
+  // Back while a control is edited only lets go of it
   backOut() {
-    if (!this.chooser.isOpen()) {
+    if (!this.state.picked) {
       return false;
     }
 
-    const key = this.view.keyFor(this.chooser.control);
+    this.editor.unpick();
 
-    this.chooser.close();
-    this.select(key);
+    return true;
+  }
+
+  // left and right step through the skins, unless they are stepping through a control's tools
+  sideways(step) {
+    if (this.state.picked) {
+      return false;
+    }
+
+    this.step(step);
 
     return true;
   }
 
   // the keyboard and gamepad highlight starts on Use
   firstSelected() {
-    return [...this.view.bar.querySelectorAll('button')].findIndex(
-      (button) => button.dataset.skin === 'use',
-    );
+    return this.view.skinTools().findIndex((button) => button.dataset.skin === 'use');
   }
 
   render(from = 0) {
-    const look = { skinId: SKIN_IDS[this.index], keyShapes: this.keyShapes };
+    const { keyShapes, draft, picked } = this.state;
+    const skinId = this.skinId();
 
-    this.chooser.close();
-    this.layout.previewSkin(look.skinId, look.keyShapes);
-    this.view.render(look, this.game.settings, from);
+    this.layout.previewSkin(skinId, keyShapes);
+    this.view.render({ skinId, keyShapes, draft, picked }, this.game.settings, from);
   }
 
   step(step) {
-    this.index = (this.index + step + SKIN_IDS.length) % SKIN_IDS.length;
+    this.state.index = (this.state.index + step + SKIN_IDS.length) % SKIN_IDS.length;
+    this.state.picked = null;
     this.audio.sfx('ui');
     this.render(step);
   }
 
-  pick(key) {
-    const shape = this.keyShapes[key.dataset.control] ?? 'round';
-
-    this.chooser.open({ key, shape });
-    this.audio.sfx('ui');
-    this.select(this.chooser.buttonFor(shape));
-  }
-
-  choose(shape) {
-    const { control } = this.chooser;
-
-    this.keyShapes = withShape(this.keyShapes, control, shape);
-    this.audio.sfx('ui');
-    this.render();
-    this.select(this.view.keyFor(control));
+  // a tap or a swipe beside the controls lets go of the one edited; with none, a swipe steps
+  // through the skins, so a drag that misses its control never changes the skin
+  beside(step) {
+    if (this.state.picked) {
+      this.editor.finish();
+    } else if (step) {
+      this.step(step);
+    }
   }
 
   use() {
-    this.game.settings.skin = SKIN_IDS[this.index];
-    this.game.settings.keyShapes = this.keyShapes;
-    this.game.io.saveSettings(this.game.settings);
+    const { settings } = this.game;
+
+    settings.skin = this.skinId();
+    settings.keyShapes = this.state.keyShapes;
+    settings.buttonLayout = savedLayout(this.state.draft);
+    this.game.io.saveSettings(settings);
     this.leave();
     this.layout.applyTouchSettings();
     this.settingsPanel.build();
   }
 }
 
-// a tap anywhere but in the chooser closes it first, so the tap lands on what it was meant for
-function onClick(picker, event) {
-  const { target } = event;
-
-  if (picker.chooser.isOpen() && !target.closest('.key-chooser')) {
-    picker.chooser.close();
-  }
-
-  const stepper = target.closest('[data-skin-step]');
-  const shape = target.closest('[data-key-shape]');
-  const key = target.closest('.skin-preview [data-pickable]');
-
-  if (stepper) {
-    picker.step(Number(stepper.dataset.skinStep));
-  } else if (shape) {
-    picker.choose(shape.dataset.keyShape);
-  } else if (key) {
-    picker.pick(key);
-  } else if (target.closest('[data-skin="use"]')) {
-    picker.use();
-  }
-}
-
 export function createSkinPicker({ window, game, audio, layout, settings }) {
-  const { document } = window;
-  const view = new SkinView({ document, layout });
-  const chooser = new KeyChooser({ document, section: view.section });
-  const picker = new SkinPicker({ view, chooser, game, audio, layout, settingsPanel: settings });
+  const view = new SkinView({ document: window.document, layout });
+  const picker = new SkinPicker({ view, game, audio, layout, settingsPanel: settings });
 
   installSwipe(view.section, picker);
-  view.section.addEventListener('click', (event) => onClick(picker, event));
+  installLayoutDrag(view.preview, picker.editor);
+  installSkinClicks(view.section, picker);
 
-  // a phone turned or folded on the screen shows the skin held the new way
+  // a phone turned or folded on the screen shows, and edits, the skin held the new way
   const redraw = () => {
     if (view.isOpen()) {
       picker.render();

@@ -33,12 +33,12 @@ function stage() {
 // the real stick, which rests on every fit, as main.js has it
 const realStick = () => document.querySelector('#touch .pad-stick');
 
-function openLayoutEditor(page) {
-  page.openLayoutEditor();
-  expect(openMenu().id).toBe('m-layout');
+function openSkins(page) {
+  page.openSkins();
+  expect(openMenu().id).toBe('m-skins');
 }
 
-const preview = () => document.querySelector('#m-layout .layout-preview');
+const preview = () => document.querySelector('#m-skins .skin-preview');
 const boxOf = ({ style }) => [style.left, style.top, style.width, style.height];
 const menuWidth = () => document.getElementById('menus').style.getPropertyValue('--menu-width');
 
@@ -114,10 +114,10 @@ describe('the page on a folded phone', () => {
     expect(document.getElementById('touch').style.top).toBe('');
   });
 
-  it("lays the button layout editor's controls where the real ones stand, as the phone folds", () => {
+  it("lays the Skins screen's controls where the real ones stand, as the phone folds", () => {
     fold(FOLD_ON_TABLE);
     holdPhone(1104, 884);
-    openLayoutEditor(page);
+    openSkins(page);
 
     expect(boxOf(preview())).toEqual(['0px', '442px', '1104px', '442px']);
 

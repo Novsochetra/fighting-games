@@ -1,40 +1,14 @@
 import { layoutOf, pillsOffered, SKIN_IDS, SKINS } from '../../data/skins/skins.js';
-import { lastOf } from '../../lib/lists.js';
-import { orientationOf, savedEntries, slotOf } from '../layout/layout-draft.js';
-import { fillPreview } from '../layout/layout-markup.js';
-import { drawPreviewPad, drawPreviewShell, restPreviewStick } from '../layout/preview-pad.js';
+import { shownControls, sizeOf, slotOf } from '../layout/layout-draft.js';
+import { controlName, fillPreview } from '../layout/layout-markup.js';
+import { PreviewControls } from '../layout/preview-controls.js';
+import { drawPreviewShell, restPreviewStick } from '../layout/preview-pad.js';
 import { fitTouchLayer } from '../screen/touch-area.js';
+import { SkinBar } from './skin-bar.js';
+import { SKINS_HTML } from './skin-markup.js';
 
-// Use also carries data-act="back": the picker's own click listener picks the skin first, then the
-// menus' listener further up closes the screen the way Cancel does
-const SKINS_HTML = `<div class="skin-shell" aria-hidden="true"></div>
-  <div class="skin-preview" aria-hidden="true"></div>
-  <div class="layout-bar" role="toolbar" aria-label="Skins">
-    <div class="layout-tools">
-      <span class="layout-group">
-        <button type="button" class="layout-step stone-btn" data-skin-step="-1" aria-label="Previous skin">‹</button>
-        <span class="skin-title">
-          <span class="skin-name"></span>
-          <span class="skin-dots" aria-hidden="true">${SKIN_IDS.map(() => '<i></i>').join('')}</span>
-        </span>
-        <button type="button" class="layout-step stone-btn" data-skin-step="1" aria-label="Next skin">›</button>
-      </span>
-      <span class="layout-group">
-        <button type="button" class="xbtn stone-btn" data-act="layout">Layout</button>
-        <button type="button" class="xbtn stone-btn" data-act="back">Cancel</button>
-        <button type="button" class="xbtn stone-btn" data-skin="use" data-act="back">Use</button>
-      </span>
-    </div>
-    <p class="layout-hint skin-about"></p>
-    <p class="layout-hint skin-shape" hidden></p>
-  </div>`;
-
-// "DASH or ULT", the keys a player may tap to pick a shape for
-const listed = (labels) =>
-  labels.length > 1 ? `${labels.slice(0, -1).join(', ')} or ${lastOf(labels)}` : labels[0];
-
-// the skins screen: a copy of the touch layer with the skin looked at standing as it will, and the
-// bar to step through the skins
+// the skins screen: a copy of the touch layer with the skin looked at standing as it will, its
+// controls there to be picked and moved, and the bar
 export class SkinView {
   constructor({ document, layout }) {
     this.layout = layout;
@@ -44,11 +18,20 @@ export class SkinView {
     this.preview = this.section.querySelector('.skin-preview');
     this.shell = this.section.querySelector('.skin-shell');
     fillPreview(this.preview, document.getElementById('touch'));
-    this.bar = this.section.querySelector('.layout-bar');
+    this.bar = new SkinBar(this.section.querySelector('.layout-bar'));
+    this.controls = new PreviewControls({ preview: this.preview, app: this.app });
   }
 
   isOpen() {
     return this.section.classList.contains('open');
+  }
+
+  slot(skinId) {
+    return slotOf(skinId, this.controls.orientation());
+  }
+
+  skinTools() {
+    return [...this.section.querySelectorAll('.skin-tools button')];
   }
 
   // the controls come in from the side the skin came from: `from` is 1 for the next skin, -1 for
@@ -62,42 +45,44 @@ export class SkinView {
     pad.classList.add(slide);
   }
 
-  // the preview's copy of a key
-  keyFor(control) {
-    return this.preview.querySelector(`[data-control="${control}"]`);
-  }
-
-  // the keys a skin offers pills for answer a tap with their chooser, and the bar says so
-  markPickable(keys) {
-    const hint = this.bar.querySelector('.skin-shape');
-    const labels = keys.map((control) => this.keyFor(control)?.textContent.trim()).filter(Boolean);
-
-    keys.forEach((control) => this.keyFor(control)?.setAttribute('data-pickable', ''));
-    hint.hidden = labels.length === 0;
-    hint.textContent = `Tap ${listed(labels)} to make it round or a pill`;
-  }
-
-  // held the way the phone is, at the player's Button size and opacity, and where the player put
-  // the controls of this skin, if they did
-  render({ skinId, keyShapes }, settings, from = 0) {
-    const skin = SKINS[skinId];
-    const orientation = orientationOf(this.app.clientWidth, this.app.clientHeight);
-    const custom = savedEntries(settings.buttonLayout, slotOf(skinId, orientation));
+  // held the way the phone is, at the player's Button size and opacity, and as the draft has the
+  // controls of this skin; the one picked stands ringed and the bar holds its tools
+  render({ skinId, keyShapes, draft, picked }, settings, from = 0) {
+    const orientation = this.controls.orientation();
     const padLayout = layoutOf(skinId, orientation, keyShapes);
+    const slot = slotOf(skinId, orientation);
 
     fitTouchLayer(this.preview, this.layout.touchArea());
     drawPreviewShell(this.shell, padLayout, this.layout.stageRect());
-    const places = drawPreviewPad(this.preview, padLayout, custom);
+    const places = this.controls.draw(padLayout, draft[slot]);
     restPreviewStick(this.preview, { places, layout: this.layout, app: this.app, settings });
-    this.markPickable(pillsOffered(skinId, orientation));
-    this.bar.querySelector('.skin-name').textContent = skin.name;
-    this.bar.querySelector('.skin-about').textContent = skin.about;
-    this.bar.querySelectorAll('.skin-dots i').forEach((dot, i) => {
-      dot.classList.toggle('on', SKIN_IDS[i] === skinId);
-    });
+    this.controls.mark(shownControls(padLayout, settings.stick), picked);
+    this.section.classList.toggle('editing', Boolean(picked));
+    this.showBar({ skinId, keyShapes, draft, slot, picked });
+    this.bar.place(this.controls.rects(), picked);
 
     if (from) {
       this.slideIn(from);
+    }
+  }
+
+  showBar({ skinId, keyShapes, draft, slot, picked }) {
+    const pills = pillsOffered(skinId, this.controls.orientation());
+    const labelOf = (control) => this.controls.controlFor(control)?.textContent.trim();
+
+    this.bar.showSkin({
+      skin: SKINS[skinId],
+      index: SKIN_IDS.indexOf(skinId),
+      custom: Boolean(draft[slot]),
+      pillLabels: pills.map(labelOf).filter(Boolean),
+    });
+
+    if (picked) {
+      this.bar.showControl({
+        name: controlName(this.controls.controlFor(picked)),
+        size: sizeOf(draft, slot, picked),
+        shape: pills.includes(picked) ? (keyShapes[picked] ?? 'round') : null,
+      });
     }
   }
 }

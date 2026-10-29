@@ -1,6 +1,8 @@
-/* the Skins menu (src/ui/skins/) lies over the paused game or the title under a light dim, as the
-   Button layout editor does, keeps the whole screen and shares its stone bar
-   (styles/layout-editor.css); its copy of the touch layer only shows, and takes no tap */
+/* the Skins menu (src/ui/skins/) lies over the paused game or the title under only a light dim
+   (`menuBackdrop`), so the controls are seen and placed against the real screen. It keeps the whole
+   screen on a folded phone too, where the other menus keep to the game's half, and lays its copy of
+   the touch layer where the real one stands (src/ui/screen/touch-area.js). Only the copy's controls
+   take a press: the rest of it lets taps and swipes through to the screen */
 #menus #m-skins {
   top: 0;
   left: 0;
@@ -11,27 +13,68 @@
   touch-action: none;
 }
 
+#menus #m-skins .skin-preview,
+#menus #m-skins .skin-preview * {
+  touch-action: none;
+}
+
 .skin-preview,
 .skin-shell {
   position: absolute;
   inset: 0;
-}
-
-.skin-shell {
   pointer-events: none;
 }
 
-.skin-preview,
 .skin-preview * {
   pointer-events: none;
 }
 
+.skin-preview [data-control] {
+  pointer-events: auto;
+  cursor: grab;
+  transition: opacity var(--duration-quick) var(--easing-standard);
+}
+
+.skin-preview .dragging {
+  cursor: grabbing;
+}
+
+/* a closing menu lets taps through at once (menus.css), and so do the controls on it */
+#m-skins:not(.open) [data-control] {
+  pointer-events: none;
+}
+
+/* the pause button only shows what the controls have to be placed around */
 .skin-preview .tb-pause {
   opacity: 0.35;
 }
 
+/* a hidden stick is neither shown nor edited, but it still stands where it would be measured */
 body.stick-hidden .skin-preview .pad-stick {
   visibility: hidden;
+}
+
+/* the control edited stands ringed and lit, and the others step back; the one the keyboard or
+   gamepad is on is ringed whole */
+.skin-preview .picked {
+  outline: 2px dashed var(--color-gold);
+  outline-offset: 4px;
+  filter: drop-shadow(0 0 6px var(--color-gold));
+}
+
+#m-skins.editing .skin-preview [data-control]:not(.picked) {
+  opacity: 0.45;
+}
+
+.skin-preview [data-editable].sel {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 4px;
+}
+
+#m-skins:not(.editing) .edit-tools,
+#m-skins.editing .skin-tools,
+#m-skins.editing .skin-about {
+  display: none;
 }
 
 /* as wide as the longest name, so the arrows stay put as the skins go by; the dots under it tell
@@ -111,68 +154,19 @@ body.stick-hidden .skin-preview .pad-stick {
   text-wrap: balance;
 }
 
-/* the keys a player may pick a shape for (skin-view.js) answer a tap, ringed so they show it, the
-   ring drawn whole for the one the keyboard or gamepad is on */
-.skin-preview [data-pickable] {
-  pointer-events: auto;
-  outline: 2px dashed color-mix(in srgb, var(--color-gold) 60%, transparent);
-  outline-offset: 4px;
-}
-
-.skin-preview [data-pickable].sel {
-  outline-style: solid;
-  outline-color: var(--color-gold);
-}
-
-.skin-shape {
+.skin-help {
   text-align: center;
 }
 
-/* a key's chooser of its shape (key-chooser.js): the bar's carved frame, small, beside the key, on
-   a plate the keys under it do not show through; the shape the key has stands lit, the other
-   dimmed until a thumb or the highlight is on it */
-.key-chooser {
-  --stone: 1;
-
-  position: absolute;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 4px;
-  border: solid var(--color-clear);
-  border-width: calc(12px * var(--stone)) calc(14px * var(--stone));
-  border-image: url('../assets/ui/hud/panel-frame.png') 12 14 / calc(12px * var(--stone))
-    calc(14px * var(--stone)) / 0 round;
-  background: var(--color-night-deep) padding-box;
-  image-rendering: pixelated;
-}
-
-.key-chooser[hidden] {
-  display: none;
-}
-
-.key-chooser-name {
-  font-family: var(--font-display);
-  font-size: var(--font-size-2xs);
-  letter-spacing: var(--tracking-wide);
-  color: var(--color-text-muted);
-}
-
-.key-chooser-shapes {
-  display: flex;
-  gap: 8px;
-}
-
-.key-chooser [aria-pressed='false']:not(.sel, :hover) {
+/* the shape the key has stands lit, the other dimmed until a thumb or the highlight is on it */
+.edit-shape [aria-pressed='false']:not(.sel, :hover) {
   opacity: 0.55;
 }
 
-/* a short screen held sideways has room above the shell's keys for the name and the switch, not
-   the words as well: they covered HEAVY on a small phone */
+/* a short screen held sideways has room above the shell's keys for the tools and one line of
+   words, not two: the skin's words as well covered HEAVY on a small phone */
 @media (orientation: landscape) and (max-height: 420px) {
-  #m-skins .layout-bar:has(.skin-shape:not([hidden])) .skin-about {
+  #m-skins .skin-about {
     display: none;
   }
 }

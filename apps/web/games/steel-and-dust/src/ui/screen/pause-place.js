@@ -26,7 +26,7 @@ export function pausePlace({ rect, controlsBelow, framed, hinge, width }) {
   };
 }
 
-// set on the app, so the Button layout editor's copy of the pause button stands there too
+// set on the app, so the Skins screen's copy of the pause button stands there too
 export function placePause(app, place) {
   app.classList.toggle('pause-in-hud', Boolean(place));
 

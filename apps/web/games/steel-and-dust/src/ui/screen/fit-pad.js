@@ -23,7 +23,7 @@ const orientationNow = (context) => {
 
 // the skin shown and the shape of its keys: those picked, or those the Skins screen shows while it
 // is open
-export const lookNow = ({ preview, game }) =>
+const lookNow = ({ preview, game }) =>
   preview ?? { skinId: skinIdFor(game.settings), keyShapes: keyShapesOf(game.settings) };
 
 export function padLayoutOf(context) {

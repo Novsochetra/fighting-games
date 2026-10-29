@@ -4,7 +4,7 @@ export function touchAreaOf(hinge) {
   return hinge?.stacked ? hinge.controls : null;
 }
 
-// places the touch layer, or the layout editor's copy of it, on that area
+// places the touch layer, or the Skins screen's copy of it, on that area
 export function fitTouchLayer(touch, area) {
   Object.assign(touch.style, {
     left: area ? `${area.x}px` : '',

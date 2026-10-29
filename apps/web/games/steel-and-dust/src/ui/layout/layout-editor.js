@@ -1,125 +1,108 @@
-import { onFoldChange } from '../../../../../packages/screen/src/viewport-segments.js';
 import {
-  createDraft,
   customised,
   moveControl,
   nextControl,
   resetLayout,
   resizeControl,
-  savedLayout,
-  shownControls,
   sizeOf,
 } from './layout-draft.js';
-import { installLayoutDrag } from './layout-drag.js';
-import { LayoutView } from './layout-view.js';
 
-const TOOLBAR_ACTIONS = {
-  next: (editor) => editor.pickNext(),
-  smaller: (editor) => editor.resize(-1),
-  bigger: (editor) => editor.resize(1),
-  reset: (editor) => editor.reset(),
-  done: (editor) => editor.save(),
+const withShape = (keyShapes, control, shape) => {
+  const others = Object.fromEntries(Object.entries(keyShapes).filter(([id]) => id !== control));
+
+  return shape === 'pill' ? { ...others, [control]: 'pill' } : others;
 };
 
-// the Button layout menu, opened from the Skins screen for the skin looked at there: it edits a
-// draft of the saved layouts, so the real touch controls only change on Done, and Cancel (the
-// menus' Back) just leaves
+// it works on the Skins screen's draft, so nothing it does is saved until Use
 export class LayoutEditor {
-  constructor({ view, game, audio, layout, skins }) {
-    Object.assign(this, { view, game, audio, layout, skins });
-    this.state = { draft: createDraft(null), picked: 'light' };
+  constructor({ screen, audio }) {
+    Object.assign(this, { screen, audio });
+    this.controls = screen.view.controls;
   }
 
-  build() {
-    this.state = { draft: createDraft(this.game.settings.buttonLayout), picked: 'light' };
-    this.view.reset();
-    this.render();
+  get state() {
+    return this.screen.state;
   }
 
-  // the keyboard and gamepad highlight starts on Done
-  firstSelected() {
-    return this.view.bar.querySelectorAll('button').length - 1;
-  }
-
-  render() {
-    this.view.render(this.state, this.game.settings);
-  }
-
-  // the first move or resize turns the skin's layout into a custom one, where the controls stand
-  customise() {
-    const slot = this.view.slot();
-    if (!this.state.draft[slot]) {
-      this.state.draft = customised(this.state.draft, slot, this.view.measureCentres());
-    }
-    return slot;
-  }
-
-  halfOf(slot, control) {
-    return this.view.halfOf(control, sizeOf(this.state.draft, slot, control));
-  }
-
+  // the highlight moves onto the bar only as editing starts, so Enter on the name keeps on
+  // stepping through the controls
   pick(control) {
-    if (this.state.picked !== control) {
-      this.state.picked = control;
-      this.audio.sfx('ui');
-      this.render();
+    const starting = !this.state.picked;
+
+    if (this.state.picked === control) {
+      return;
+    }
+
+    this.state.picked = control;
+    this.audio.sfx('ui');
+    this.screen.render();
+
+    if (starting) {
+      this.screen.select(this.screen.view.bar.doneButton());
     }
   }
 
   pickNext() {
-    const shown = shownControls(this.layout.padLayout(), this.game.settings.stick);
-    this.pick(nextControl(this.state.picked, shown));
+    this.pick(nextControl(this.state.picked, this.controls.shown));
+  }
+
+  // the highlight goes back to the control let go, for the keyboard and gamepad
+  unpick() {
+    const control = this.state.picked;
+
+    this.state.picked = null;
+    this.screen.render();
+    this.screen.select(this.controls.controlFor(control));
+  }
+
+  finish() {
+    this.audio.sfx('uiBack');
+    this.unpick();
+  }
+
+  // the first move or resize turns the skin's layout into a custom one, where the controls stand
+  customise() {
+    const slot = this.screen.slot();
+
+    if (!this.state.draft[slot]) {
+      this.state.draft = customised(this.state.draft, slot, this.controls.measureCentres());
+    }
+
+    return slot;
+  }
+
+  halfOf(slot, control) {
+    return this.controls.halfOf(control, sizeOf(this.state.draft, slot, control));
   }
 
   moveTo(control, point) {
     const slot = this.customise();
     const half = this.halfOf(slot, control);
-    const centre = this.view.pointAt(point);
+    const centre = this.controls.pointAt(point);
+
     this.state.draft = moveControl(this.state.draft, { slot, control, centre, half });
-    this.render();
+    this.screen.render();
   }
 
   resize(step) {
     const slot = this.customise();
     const control = this.state.picked;
     const half = this.halfOf(slot, control);
+
     this.state.draft = resizeControl(this.state.draft, { slot, control, step, half });
     this.audio.sfx('ui');
-    this.render();
+    this.screen.render();
+  }
+
+  shape(shape) {
+    this.state.keyShapes = withShape(this.state.keyShapes, this.state.picked, shape);
+    this.audio.sfx('ui');
+    this.screen.render();
   }
 
   reset() {
-    this.state.draft = resetLayout(this.state.draft, this.view.slot());
+    this.state.draft = resetLayout(this.state.draft, this.screen.slot());
     this.audio.sfx('ui');
-    this.render();
+    this.screen.render();
   }
-
-  save() {
-    this.game.settings.buttonLayout = savedLayout(this.state.draft);
-    this.game.io.saveSettings(this.game.settings);
-    this.layout.applyTouchSettings();
-    this.skins.render();
-  }
-}
-
-export function createLayoutEditor({ window, game, audio, layout, skins }) {
-  const view = new LayoutView({ document: window.document, layout });
-  const editor = new LayoutEditor({ view, game, audio, layout, skins });
-  installLayoutDrag(view.preview, editor);
-  view.section.addEventListener('click', (event) => {
-    const button = event.target.closest('[data-edit]');
-    if (button) {
-      TOOLBAR_ACTIONS[button.dataset.edit](editor);
-    }
-  });
-  // a phone turned while editing shows, and edits, the other orientation's layout, and a phone
-  // folded while editing moves the controls with the touch layer
-  const redraw = () => {
-    if (view.isOpen()) {
-      editor.render();
-    }
-  };
-  window.addEventListener('resize', redraw);
-  onFoldChange(window, redraw);
-  return editor;
 }

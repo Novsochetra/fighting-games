@@ -9,7 +9,7 @@ const SPOTS = { dpad: [140, 275, 150], light: [724, 298, 92] };
 const LAYER = { left: 0, top: 0, width: 844, height: 390 };
 
 function stubRect(element) {
-  if (element.classList.contains('layout-preview')) {
+  if (element.classList.contains('skin-preview')) {
     return LAYER;
   }
   const spot = SPOTS[element.dataset.control];
@@ -37,7 +37,6 @@ function pointer(target, type, [x, y]) {
 }
 
 const real = (control) => document.querySelector(`#touch [data-control="${control}"]`);
-const copy = (control) => document.querySelector(`#m-layout [data-control="${control}"]`);
 const shown = (control) => document.querySelector(`#m-skins [data-control="${control}"]`);
 const row = (key) => document.querySelector(`[data-k="${key}"]`);
 const skinName = () => document.querySelector('#m-skins .skin-name').textContent;
@@ -144,6 +143,14 @@ describe('touch skins on the real page', () => {
     pointer(document.querySelector('#m-skins [data-skin="use"]'), 'pointerdown', [700, 40]);
     pointer(section, 'pointerup', [500, 40]);
     expect(skinName()).toBe('Classic');
+    // with a control edited, a swipe beside the controls only lets go of it, so a drag that
+    // misses its control never changes the skin
+    document.querySelector('#m-skins .skin-preview [data-control="light"]').click();
+    swipe([500, 250], [380, 260]);
+    expect(section.classList.contains('editing')).toBe(false);
+    expect(skinName()).toBe('Classic');
+    swipe([500, 250], [380, 260]);
+    expect(skinName()).toBe('Dusk');
   });
 
   it('marks which skin of how many with its dots, and slides each in from its side', () => {
@@ -220,22 +227,23 @@ describe('touch skins on the real page', () => {
     expect(document.documentElement.style.getPropertyValue('--pad-opacity')).toBe('0.8');
   });
 
-  it('edits the layout of the skin looked at, not the one worn, and keeps it on Cancel', () => {
+  it('edits the layout of the skin looked at, and wears the two together on Use', () => {
     openSkins(page);
     page.key('ArrowRight');
     expect(skinName()).toBe('Dusk');
-    document.querySelector('#m-skins [data-act="layout"]').click();
-    expect(openMenu().id).toBe('m-layout');
-    expect(copy('stick')).toBeNull();
-    pointer(copy('dpad'), 'pointerdown', SPOTS.dpad);
-    pointer(copy('dpad'), 'pointerup', SPOTS.dpad);
-    expect(document.querySelector('.layout-name').textContent).toBe('D-PAD');
-    pointer(copy('light'), 'pointerdown', SPOTS.light);
-    pointer(copy('light'), 'pointermove', [500, 200]);
-    pointer(copy('light'), 'pointerup', [500, 200]);
-    document.querySelector('#m-layout [data-edit="done"]').click();
+    pointer(shown('dpad'), 'pointerdown', SPOTS.dpad);
+    pointer(shown('dpad'), 'pointerup', SPOTS.dpad);
+    expect(document.querySelector('#m-skins .layout-name').textContent).toBe('D-PAD');
+    pointer(shown('light'), 'pointerdown', SPOTS.light);
+    pointer(shown('light'), 'pointermove', [500, 200]);
+    pointer(shown('light'), 'pointerup', [500, 200]);
+    expect(Number(shown('light').style.getPropertyValue('--pad-x'))).toBeCloseTo(500 / 844, 3);
+    expect(page.game.settings.buttonLayout).toBeNull();
+    document.querySelector('#m-skins [data-edit="done"]').click();
+    document.querySelector('#m-skins [data-skin="use"]').click();
 
     const { buttonLayout } = page.game.settings;
+    expect(page.game.settings.skin).toBe('dusk');
     expect(Object.keys(buttonLayout)).toEqual(['dusk']);
     expect(buttonLayout.dusk.landscape.light.x).toBeCloseTo(500 / 844, 3);
     expect(Object.keys(buttonLayout.dusk.landscape).sort()).toEqual([
@@ -247,13 +255,21 @@ describe('touch skins on the real page', () => {
       'ult',
     ]);
     expect(real('light').style.getPropertyValue('--pad-dx')).toBe('');
+    expect(Number(real('light').style.getPropertyValue('--pad-x'))).toBeCloseTo(500 / 844, 3);
+  });
 
-    expect(openMenu().id).toBe('m-skins');
-    expect(skinName()).toBe('Dusk');
-    expect(Number(shown('light').style.getPropertyValue('--pad-x'))).toBeCloseTo(500 / 844, 3);
+  it('drops the layout of a skin looked at with the skin, on Cancel', () => {
+    openSkins(page);
+    page.key('ArrowRight');
+    pointer(shown('light'), 'pointerdown', SPOTS.light);
+    pointer(shown('light'), 'pointermove', [500, 200]);
+    pointer(shown('light'), 'pointerup', [500, 200]);
+    document.querySelector('#m-skins [data-edit="done"]').click();
     document.querySelector('#m-skins [data-act="back"]:not([data-skin])').click();
+
     expect(page.game.settings.skin).toBe('classic');
-    expect(page.game.settings.buttonLayout.dusk.landscape.light.x).toBeCloseTo(500 / 844, 3);
+    expect(page.game.settings.buttonLayout).toBeNull();
+    expect(page.saveSettings).not.toHaveBeenCalled();
     expect(real('stick')).not.toBeNull();
   });
 

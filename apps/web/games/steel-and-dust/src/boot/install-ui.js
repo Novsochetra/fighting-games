@@ -4,7 +4,6 @@ import { createSupportersFeed } from '../ui/credits/supporters-feed.js';
 import { createHelpPanel } from '../ui/help/help-panel.js';
 import { installCarouselEvents } from '../ui/heroes/carousel-events.js';
 import { createHeroPanel } from '../ui/heroes/hero-panel.js';
-import { createLayoutEditor } from '../ui/layout/layout-editor.js';
 import { installBoardEvents } from '../ui/leaderboard/board-events.js';
 import { createLeaderboardPanel } from '../ui/leaderboard/leaderboard-panel.js';
 import { createArcadeExit } from '../ui/menus/arcade-exit.js';
@@ -53,7 +52,6 @@ function createPanels({ elements, game, audio, layout, ui, window, supporters, o
     credits: createCreditsPanel({ root: elements.credits, game, feed: supporters }),
   };
   panels.skins = createSkinPicker({ window, game, audio, layout, settings: panels.section });
-  panels.layout = createLayoutEditor({ window, game, audio, layout, skins: panels.skins });
   return panels;
 }
 
@@ -75,7 +73,7 @@ export function installUi({ window, elements, game, audio, ui, pad, online }) {
   const { document } = window;
   const layout = createScreenFit({ document, window, elements, game, ui });
   ui.onTouchShownChange = () => layout.applyTouchSettings();
-  // first, so a resize or a fold refits the page before the layout editor redraws over it
+  // first, so a resize or a fold refits the page before the Skins screen redraws over it
   installScreenFit(window, layout);
   const fullscreen = createFullscreen({ document, screen: window.screen, ui });
   const supporters = createSupportersFeed((address) => window.fetch(address));

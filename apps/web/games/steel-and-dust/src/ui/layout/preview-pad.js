@@ -3,7 +3,7 @@ import { placePad, placesOf } from '../../../../../packages/touch-pad/src/pad-pl
 import { placeShell, renderShell } from '../../../../../packages/touch-pad/src/pad-shell.js';
 import { buttonScale } from '../../data/settings.js';
 
-// a copy of the touch layer (the layout editor's, the skins screen's) draws a skin's controls as
+// a copy of the touch layer (the Skins screen's) draws a skin's controls as
 // the real one does, so they look and size exactly like them; `custom` is the player's layout
 export function drawPreviewPad(preview, padLayout, custom) {
   const places = placesOf(padLayout, custom);

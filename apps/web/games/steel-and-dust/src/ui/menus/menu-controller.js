@@ -73,7 +73,8 @@ export class MenuController {
     this.highlight(false);
   }
 
-  // a panel whose items change under the highlight (the Skins screen's key chooser) puts it on one
+  // a panel whose items change under the highlight (the Skins screen, as a control is picked) puts
+  // it on one
   select(item) {
     this.state.selected = Math.max(0, this.items().indexOf(item));
     this.highlight(true);
@@ -86,7 +87,7 @@ export class MenuController {
     this.audio.sfx('uiOk');
   }
 
-  // a panel that opened something of its own (the Skins screen's key chooser) closes that first
+  // a panel busy with something of its own (the Skins screen, a control edited) ends that first
   back() {
     if (this.panels[this.top()]?.backOut?.()) {
       this.audio.sfx('uiBack');

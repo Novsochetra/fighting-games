@@ -1,77 +1,19 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { openMenu, openPage, selected } from '../../support/menu-page.js';
+import {
+  copy,
+  drag,
+  editing,
+  press,
+  screen,
+  stubRect,
+  tapBeside,
+  tool,
+  toolbarText,
+} from '../../support/skin-screen.js';
 
-// happy-dom lays nothing out, so the editor's copy of the touch layer and its controls get the rects
-// of an 800x400 screen, where each original control stands at [centre x, centre y, size]
-const LAYER = { left: 0, top: 0, width: 800, height: 400 };
-const ORIGINAL = {
-  light: [720, 320, 96],
-  heavy: [620, 340, 78],
-  jump: [740, 200, 76],
-  dash: [640, 210, 62],
-  ult: [560, 250, 56],
-  stick: [90, 300, 128],
-};
-
-function stubRect(element) {
-  if (element.classList.contains('layout-preview')) {
-    return LAYER;
-  }
-  const spot = element.closest('#m-layout') && ORIGINAL[element.dataset.control];
-  if (!spot) {
-    return { left: 0, top: 0, width: 0, height: 0 };
-  }
-  const [x, y, size] = spot;
-  return { left: x - size / 2, top: y - size / 2, width: size, height: size };
-}
-
-const copy = (control) => document.querySelector(`#m-layout [data-control="${control}"]`);
-const real = (control) => document.querySelector(`#touch [data-control="${control}"]`);
-const tool = (name) => document.querySelector(`#m-layout [data-edit="${name}"]`);
-const cancel = () => document.querySelector('#m-layout [data-act="back"]:not([data-edit])');
-const layoutButton = () => document.querySelector('#m-skins [data-act="layout"]');
-const shown = (control) => document.querySelector(`#m-skins [data-control="${control}"]`);
-const toolbarText = () =>
-  ['.layout-name', '.layout-size'].map((part) => document.querySelector(part).textContent);
-
-function pointer(target, type, x, y) {
-  target.dispatchEvent(
-    new PointerEvent(type, { bubbles: true, pointerId: 7, clientX: x, clientY: y }),
-  );
-}
-
-function drag(action, to) {
-  const [x, y] = ORIGINAL[action];
-  pointer(copy(action), 'pointerdown', x, y);
-  pointer(copy(action), 'pointermove', (x + to.x) / 2, (y + to.y) / 2);
-  pointer(copy(action), 'pointermove', to.x, to.y);
-  pointer(copy(action), 'pointerup', to.x, to.y);
-}
-
-// the page reads which way the phone is held from the app's size
-function holdPhone(width, height) {
-  const app = document.getElementById('app');
-  Object.defineProperties(app, {
-    clientWidth: { value: width, configurable: true },
-    clientHeight: { value: height, configurable: true },
-  });
-  window.dispatchEvent(new Event('resize'));
-}
-
-// the real stick, which rests on every fit, as main.js has it
-const realStick = () => ({
-  zone: document.querySelector('#touch .pad-zone'),
-  base: real('stick'),
-});
-
-function tap(action) {
-  const [x, y] = ORIGINAL[action];
-  pointer(copy(action), 'pointerdown', x, y);
-  pointer(copy(action), 'pointerup', x, y);
-}
-
-describe('the button layout editor on the real page', () => {
+describe('editing the controls on the Skins screen of the real page', () => {
   let page;
   beforeEach(() => {
     vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function rect() {
@@ -82,12 +24,14 @@ describe('the button layout editor on the real page', () => {
   });
   afterEach(() => vi.restoreAllMocks());
 
-  function openEditor() {
-    page.openLayoutEditor();
-    expect(openMenu().id).toBe('m-layout');
+  function openSkins() {
+    page.openSkins();
+    expect(openMenu().id).toBe('m-skins');
   }
 
-  it('opens from the Skins screen, which Settings offers with the skin while touch controls are on', () => {
+  const reopen = () => document.querySelector('[data-k="skin"] [data-act="skins"]').click();
+
+  it('is reached from the Skin and layout row, which Settings offers while touch controls are on', () => {
     page.game.device.coarsePointer = false;
     page.openSection('touch');
     expect(document.querySelector('[data-k="skin"]')).toBeNull();
@@ -99,168 +43,76 @@ describe('the button layout editor on the real page', () => {
     expect(document.querySelector('[data-k="skin"] .lbl').firstChild.textContent).toBe(
       'Skin and layout',
     );
-    document.querySelector('[data-k="skin"] [data-act="skins"]').click();
-    expect(layoutButton().textContent).toBe('Layout');
+    reopen();
+    expect(openMenu().id).toBe('m-skins');
+    expect(document.getElementById('m-layout')).toBeNull();
+    expect(screen().querySelector('.skin-help').textContent).toBe(
+      'Tap a control to move or resize it',
+    );
   });
 
-  it('opens from the Skins screen with Enter, starts on Done and goes back there with Escape', () => {
-    page.openSection('touch');
-    document.querySelector('[data-k="skin"] [data-act="skins"]').click();
-    page.key('ArrowUp');
-    page.key('ArrowUp');
-    expect(selected().textContent).toBe('Layout');
+  it('picks a control pressed: rings it, steps the others back and holds its tools in the bar', () => {
+    openSkins();
+    expect(editing()).toBe(false);
+
+    press('jump');
+    expect(editing()).toBe(true);
+    expect(copy('jump').classList.contains('picked')).toBe(true);
+    expect(toolbarText()).toEqual(['JUMP', '100%']);
+    expect(screen().querySelector('.edit-shape').hidden).toBe(true);
+    expect(screen().querySelector('.skin-help').textContent).toBe(
+      'Drag it to move it, and tap beside the controls when done',
+    );
+
+    press('light');
+    expect(toolbarText()).toEqual(['ATTACK', '100%']);
+    expect(copy('jump').classList.contains('picked')).toBe(false);
+
+    tapBeside();
+    expect(editing()).toBe(false);
+    expect(screen().querySelector('.picked')).toBeNull();
+    expect(screen().querySelector('.skin-name').textContent).toBe('Classic');
+    expect(page.saveSettings).not.toHaveBeenCalled();
+  });
+
+  it('moves a control dragged at once, without a press to pick it first, and Done lets go', () => {
+    openSkins();
+    drag('light', { x: 100, y: 300 });
+    expect(editing()).toBe(true);
+    expect(toolbarText()).toEqual(['ATTACK', '100%']);
+    expect(copy('light').style.getPropertyValue('--pad-x')).toBe('0.125');
+
+    tool('done').click();
+    expect(editing()).toBe(false);
+    expect(copy('light').style.getPropertyValue('--pad-x')).toBe('0.125');
+  });
+
+  it('reaches the controls and their tools with the keys, and Back lets go before it leaves', () => {
+    openSkins();
+    const highlighted = () => page.menus.items()[page.menus.state.selected];
+    expect(highlighted().dataset.skin).toBe('use');
+
+    page.menus.state.selected = page.menus.items().indexOf(copy('light'));
     page.key('Enter');
-    expect(openMenu().id).toBe('m-layout');
+    expect(editing()).toBe(true);
     expect(selected().textContent).toBe('Done');
     page.key('ArrowLeft');
-    expect(selected().textContent).toBe('Cancel');
-    page.key('ArrowRight');
-    page.key('ArrowRight');
-    expect(selected().textContent).toBe('ATTACK');
+    expect(selected().dataset.edit).toBe('bigger');
+    page.key('Enter');
+    expect(toolbarText()).toEqual(['ATTACK', '110%']);
+    page.key('ArrowLeft');
+    page.key('ArrowLeft');
+    expect(selected().dataset.edit).toBe('next');
     page.key('Enter');
     expect(toolbarText()).toEqual(['HEAVY', '100%']);
-    expect(copy('heavy').classList.contains('picked')).toBe(true);
+    expect(selected().dataset.edit).toBe('next');
+
     page.key('Escape');
     expect(openMenu().id).toBe('m-skins');
+    expect(editing()).toBe(false);
+    expect(highlighted().dataset.control).toBe('heavy');
+    page.key('Escape');
+    expect(openMenu().id).toBe('m-section');
     expect(page.saveSettings).not.toHaveBeenCalled();
-  });
-
-  it('moves and resizes buttons in a draft and puts the real ones there on Done', () => {
-    openEditor();
-    expect(toolbarText()).toEqual(['ATTACK', '100%']);
-    expect(tool('reset').disabled).toBe(true);
-    drag('light', { x: 100, y: 300 });
-    tap('jump');
-    expect(toolbarText()).toEqual(['JUMP', '100%']);
-    tool('bigger').click();
-    tool('bigger').click();
-    expect(toolbarText()).toEqual(['JUMP', '120%']);
-    expect(copy('jump').classList.contains('picked')).toBe(true);
-    expect(copy('light').style.getPropertyValue('--pad-x')).toBe('0.125');
-    expect(real('light').style.getPropertyValue('--pad-x')).toBe('');
-    expect(page.saveSettings).not.toHaveBeenCalled();
-    tool('done').click();
-    expect(openMenu().id).toBe('m-skins');
-    const { classic } = page.game.settings.buttonLayout;
-    expect(page.saveSettings).toHaveBeenCalledWith(page.game.settings);
-    expect(classic.portrait).toBeNull();
-    expect(classic.landscape).toEqual({
-      light: { x: 0.125, y: 0.75, size: 1 },
-      jump: { x: 0.925, y: 0.5, size: 1.2 },
-      heavy: { x: 0.775, y: 0.85, size: 1 },
-      dash: { x: 0.8, y: 0.525, size: 1 },
-      ult: { x: 0.7, y: 0.625, size: 1 },
-      stick: { x: 0.1125, y: 0.75, size: 1 },
-    });
-    expect(document.querySelector('#touch .pad-controls').classList.contains('pad-placed')).toBe(
-      true,
-    );
-    expect(real('light').style.getPropertyValue('--pad-x')).toBe('0.125');
-    expect(real('jump').style.getPropertyValue('--pad-size')).toBe('1.2');
-    expect(shown('light').style.getPropertyValue('--pad-x')).toBe('0.125');
-  });
-
-  it('leaves the settings untouched on Cancel', () => {
-    openEditor();
-    drag('heavy', { x: 300, y: 200 });
-    tool('smaller').click();
-    cancel().click();
-    expect(openMenu().id).toBe('m-skins');
-    expect(page.game.settings.buttonLayout).toBeNull();
-    expect(page.saveSettings).not.toHaveBeenCalled();
-    expect(document.querySelector('#touch .pad-controls').classList.contains('pad-placed')).toBe(
-      false,
-    );
-    layoutButton().click();
-    expect(copy('heavy').style.getPropertyValue('--pad-x')).toBe('');
-  });
-
-  it('keeps a layout for each orientation, and Reset brings one back to the original', () => {
-    openEditor();
-    drag('ult', { x: 400, y: 100 });
-    tool('done').click();
-    holdPhone(390, 844);
-    expect(document.querySelector('#touch .pad-controls').classList.contains('pad-placed')).toBe(
-      false,
-    );
-    layoutButton().click();
-    drag('dash', { x: 80, y: 300 });
-    tool('done').click();
-    expect(page.game.settings.buttonLayout.classic.portrait.dash).toMatchObject({
-      x: 0.1,
-      y: 0.75,
-    });
-    expect(page.game.settings.buttonLayout.classic.landscape.ult).toMatchObject({
-      x: 0.5,
-      y: 0.25,
-    });
-    expect(real('dash').style.getPropertyValue('--pad-x')).toBe('0.1');
-    layoutButton().click();
-    expect(document.querySelector('#m-layout .pad-controls').classList.contains('pad-placed')).toBe(
-      true,
-    );
-    tool('reset').click();
-    expect(document.querySelector('#m-layout .pad-controls').classList.contains('pad-placed')).toBe(
-      false,
-    );
-    tool('done').click();
-    expect(page.game.settings.buttonLayout.classic).toMatchObject({ portrait: null });
-    expect(page.game.settings.buttonLayout.classic.landscape.ult).toMatchObject({ x: 0.5 });
-    expect(real('dash').style.getPropertyValue('--pad-x')).toBe('');
-    holdPhone(844, 390);
-    layoutButton().click();
-    tool('reset').click();
-    tool('done').click();
-    expect(page.game.settings.buttonLayout).toBeNull();
-    expect(page.saveSettings).toHaveBeenLastCalledWith(
-      expect.objectContaining({ buttonLayout: null }),
-    );
-    expect(document.querySelector('#m-skins .pad-controls').classList.contains('pad-placed')).toBe(
-      false,
-    );
-  });
-
-  it('moves and resizes the stick, and the real one rests there inside its zone', () => {
-    const { zone, base } = realStick();
-    holdPhone(800, 400);
-    openEditor();
-    drag('stick', { x: 680, y: 280 });
-    expect(toolbarText()).toEqual(['STICK', '100%']);
-    expect(copy('stick').classList.contains('picked')).toBe(true);
-    tool('bigger').click();
-    tool('bigger').click();
-    expect(toolbarText()).toEqual(['STICK', '120%']);
-    expect(copy('stick').style.getPropertyValue('--pad-size')).toBe('1.2');
-    expect(base.style.getPropertyValue('--pad-size')).toBe('');
-    tool('done').click();
-    expect(page.game.settings.buttonLayout.classic.landscape.stick).toEqual({
-      x: 0.85,
-      y: 0.7,
-      size: 1.2,
-    });
-    expect(base.style.getPropertyValue('--pad-size')).toBe('1.2');
-    // the stick stands on the right, so its zone is the right half and the base rests inside it
-    expect([zone.style.left, zone.style.width]).toEqual(['400px', '400px']);
-    expect([base.style.left, base.style.top]).toEqual(['280px', '280px']);
-    layoutButton().click();
-    expect(document.querySelector('#m-layout .pad-controls').classList.contains('pad-placed')).toBe(
-      true,
-    );
-    tool('reset').click();
-    tool('done').click();
-    expect(page.game.settings.buttonLayout).toBeNull();
-    expect(base.style.getPropertyValue('--pad-size')).toBe('');
-    expect([zone.style.left, zone.style.width]).toEqual(['', '']);
-  });
-
-  it('leaves a hidden stick out of the editor', () => {
-    page.game.settings.stick = 'hidden';
-    openEditor();
-    const names = [];
-    for (let i = 0; i < 6; i++) {
-      names.push(document.querySelector('.layout-name').textContent);
-      tool('next').click();
-    }
-    expect(names).toEqual(['ATTACK', 'HEAVY', 'JUMP', 'DASH', 'ULT', 'ATTACK']);
   });
 });

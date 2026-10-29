@@ -1,8 +1,7 @@
 // the Angkor painting stays up behind the title, every panel opened over it and the hero select, so
 // moving between them never drops back to the game screen for a frame
 const SCENE_MENUS = new Set(['title', 'heroes']);
-// the button layout editor and the skins screen keep only a light dim, so the controls are seen
-// against the screen
+// the skins screen keeps only a light dim, so the controls are seen and placed against the screen
 const DIM_FOR_MENU = {
   title: 'none',
   heroes: 'none',
@@ -10,7 +9,6 @@ const DIM_FOR_MENU = {
   over: 'menu',
   clear: 'menu',
   credits: 'menu',
-  layout: 'light',
   skins: 'light',
 };
 

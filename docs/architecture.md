@@ -869,20 +869,26 @@ the game in a bezel between two panels held sideways and at the top held upright
 plaque in its HUD (`pausePlace`, `framed`); each control carries its shell's colour class, as it
 stands in the touch layer, not in the shell (`#shell`, behind the stage). A player picks the skin (`skin`, one
 for both ways of holding the phone) on the Skins screen, which Settings' Skin and layout row opens
-(`src/ui/skins/`, `styles/skin-picker.css`), where a tap on a key the skin offers a pill for
-(Clear's DASH and ULT, its `pills`, ringed and named in the bar) opens a chooser of Round or Pill
-for that key alone (`key-chooser.js`; `keyShapes`, each key round unless picked; the keyboard and
-gamepad reach those keys after the bar, the chooser's choices while it is open, and Back closes it
-first, `backOut`). `layoutOf` in `skins.js` gives the game, the Skins screen and the layout editor
-the same layout, one object for each pick, as the touch pad keeps the pad drawn for it: like the
-layout editor, a copy of the touch layer over
-a light dim shows the skin looked at standing as it will, held the way the phone is, at the
-player's Button size and opacity and with their own layout of it (`preview-pad.js`, which both
-share), and a skin with a shell stands for real meanwhile (`layout.previewSkin`), the stage in
-its frame, until Use or any way back (the panel's `leave`). ‹ ›, left and right, or a swipe across the screen step through the skins, each sliding in
-from its side, and dots under the name tell which of how many; Use picks one and Cancel leaves.
-Layout, in the bar, opens the layout editor on the skin looked at, picked or not: its Done saves
-that skin's layout, which Cancel on the Skins screen then keeps, and the screen shows it at once.
+(`src/ui/skins/`, `styles/skin-picker.css`). `layoutOf` in `skins.js` gives the game and the
+Skins screen the same layout, one object for each pick, as the touch pad keeps the pad drawn for
+it: a copy of the touch layer over a light dim shows the skin looked at standing as it will, held
+the way the phone is, at the player's Button size and opacity and with their own layout of it
+(`preview-pad.js`), and a skin with a shell stands for real meanwhile (`layout.previewSkin`), the
+stage in its frame, until Use or any way back (the panel's `leave`). ‹ ›, left and right, or a
+swipe across the screen step through the skins, each sliding in from its side, and dots under the
+name tell which of how many.
+
+The same screen edits the controls where they stand: a press on one picks it (`layout-editor.js`
+in `src/ui/layout/`) and a drag moves it at once (`layout-drag.js`), the one picked ringed and the
+others stepped back, and the bar trades the skins' tools for that control's: its name (the next
+control), its size, Round or Pill for a key the skin offers a pill for (Clear's DASH and ULT, its
+`pills`, named under the skin; `keyShapes`, each key round unless picked) and Done. Done, Back, or
+a tap or a swipe beside the controls lets go of it; a swipe steps the skins only while no control
+is picked, so a drag that misses its control never changes the skin. The keyboard and gamepad
+reach the controls after the bar, and the tools of the one picked while it is. The skin, its keys'
+shapes and every skin's layouts are one draft (`layout-draft.js`, a layout for each slot such as
+`dusk:portrait`): Use saves them all and Cancel drops them all; Reset brings the skin held this
+way back to its own layout.
 Settings also sets the controls' opacity (`padOpacity`, `--pad-opacity`, never the pause
 button's). The help and the first hints name the d-pad when one steers (`steersWithDpad`; the
 screen fit marks `game.device` on each fit, which only the drawing reads).
@@ -896,11 +902,7 @@ without them it plays as before (the same frame rate, frame times and main-threa
 measured over eight fights each). With reduced motion the controls only light up. Each press, and
 each new way the stick or the d-pad turns, ticks the phone under the thumb (the `tap` cue,
 Settings Vibration), shorter than a blow landing. `src/input/touch-actions.js` turns the pad's
-inputs into `game.input`. The controls can be moved and resized (the Skins screen's Layout). The editor is its own menu,
-`layout`, in `src/ui/layout/` with `styles/layout-editor.css`: it draws the skin again on a copy of
-the touch layer, drags its controls and works on a draft (`layout-draft.js`) of every skin's
-layouts, each in a slot (`dusk:portrait`), so only Done saves, and it edits the skin shown
-(`layout.shownSkin`, the one the Skins screen looks at). The
+inputs into `game.input`. The controls are moved and resized on the Skins screen (above). The
 setting `buttonLayout` holds, for each skin, one layout per orientation, or none for the skin's
 own: each control's centre (the five buttons and the stick or the d-pad) as fractions of the touch
 layer and a size on top of Button size, checked on load by `sanitizeButtonLayout`

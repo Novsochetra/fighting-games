@@ -3,7 +3,7 @@ const DRAG_THRESHOLD = 6;
 
 function startDrag(editor, element, event) {
   const control = element.dataset.control;
-  const centre = editor.view.centreOnScreen(control);
+  const centre = editor.controls.centreOnScreen(control);
   return {
     pointerId: event.pointerId,
     control,

@@ -18,20 +18,11 @@ function stepTab(menus, current, step, audio) {
   audio.sfx('ui');
 }
 
-// left and right step through the skins, whichever button is highlighted
-function stepSkin(menus, step) {
-  menus
-    .items()
-    .find((item) => item.dataset.skinStep === String(step))
-    ?.click();
-}
-
 // left and right change a setting or a tab there, and step through nothing else
 const NO_SIDEWAYS_STEP = new Set(['settings', 'section', 'help']);
 
 function adjust(menus, { current, step, audio }) {
-  if (menus.top() === 'skins') {
-    stepSkin(menus, step);
+  if (menus.panels[menus.top()]?.sideways?.(step)) {
     return;
   }
   if (current && isSettingRow(current)) {

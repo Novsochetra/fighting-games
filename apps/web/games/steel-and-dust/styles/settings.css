@@ -92,7 +92,7 @@
   cursor: pointer;
 }
 
-/* a row that opens an editor of its own (Button layout) has its Edit button where the arrows are */
+/* a row that opens a screen of its own (Skin and layout) has its Edit button where the arrows are */
 .stepper .xbtn {
   width: 74px;
   padding: 0;

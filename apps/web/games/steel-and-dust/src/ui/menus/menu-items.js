@@ -2,18 +2,15 @@ export function menuElement(document, id) {
   return document.getElementById(`m-${id}`);
 }
 
-// the Skins screen's bar, then the keys of the preview a player may pick a shape for; while a
-// key's chooser is open, only its choices
+// the Skins screen's bar, then the controls of its preview; while one is edited, only its tools
 function skinsItems(menu) {
-  const chooser = menu.querySelector('.key-chooser:not([hidden])');
-
-  if (chooser) {
-    return [...chooser.querySelectorAll('button')];
+  if (menu.classList.contains('editing')) {
+    return [...menu.querySelectorAll('.edit-tools .layout-group:not([hidden]) button')];
   }
 
   return [
-    ...menu.querySelectorAll('.layout-bar button'),
-    ...menu.querySelectorAll('.skin-preview [data-pickable]'),
+    ...menu.querySelectorAll('.skin-tools button'),
+    ...menu.querySelectorAll('.skin-preview [data-editable]'),
   ];
 }
 
@@ -44,9 +41,6 @@ export function navigableItems(document, top) {
   }
   if (top === 'skins') {
     return skinsItems(menu);
-  }
-  if (top === 'layout') {
-    return [...menu.querySelectorAll('.layout-bar button')];
   }
   if (top === 'credits') {
     return [menu.querySelector('.xbtn')];
