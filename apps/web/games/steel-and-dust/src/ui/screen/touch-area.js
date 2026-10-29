@@ -12,6 +12,8 @@ export function fitTouchLayer(touch, area) {
     width: area ? `${area.width}px` : '',
     height: area ? `${area.height}px` : '',
   });
-  // the status bar's inset is at the top of the screen, not of its bottom half, where pause stands
+  // the status bar's inset is at the top of the screen, not of its bottom half, where pause and a
+  // skin's controls stand
   touch.style.setProperty('--sat', area ? '0px' : '');
+  touch.style.setProperty('--pad-safe-top', area ? '0px' : '');
 }

@@ -1,5 +1,6 @@
 import { releaseAll } from '../sim/input/create-input.js';
-import { actionForKey, pressAction, releaseAction } from './key-actions.js';
+import { pressAction, releaseAction } from '../../../../packages/input/src/actions.js';
+import { actionForKey } from './key-actions.js';
 
 function hasModifier(event) {
   return event.metaKey || event.ctrlKey || event.altKey;

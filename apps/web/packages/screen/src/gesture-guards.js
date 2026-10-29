@@ -13,20 +13,21 @@ function clearSelection(window) {
 }
 
 // iPhone Safari ignores user-scalable=no, so pinch zoom, double-tap zoom, long-press callouts and
-// text selection are cancelled by hand
-export function installGestureGuards({ window, document, elements }) {
+// text selection are cancelled by hand: on the whole page, in `root` (the game's app) for the
+// long-press menu, and for every touch on the `surfaces` played on (the stage, the touch controls)
+export function installGestureGuards({ window, document, root, surfaces }) {
   const cancel = (event) => event.preventDefault();
-  elements.app.addEventListener('contextmenu', cancel);
+  root.addEventListener('contextmenu', cancel);
   for (const type of ['gesturestart', 'gesturechange', 'gestureend', 'dblclick']) {
     document.addEventListener(type, cancel, { passive: false });
   }
-  // the name field on the post panel still takes a caret and a selection
+  // a text field (a name to post) still takes a caret and a selection
   document.addEventListener('selectstart', (event) => {
-    if (!event.target?.closest?.('input')) {
+    if (!event.target?.closest?.('input, textarea')) {
       event.preventDefault();
     }
   });
-  for (const element of [elements.stage, elements.touch]) {
+  for (const element of surfaces) {
     element.addEventListener(
       'touchstart',
       (event) => {

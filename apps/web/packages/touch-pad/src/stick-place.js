@@ -1,4 +1,4 @@
-import { clamp } from '../../lib/math.js';
+import { clamp } from './clamp.js';
 
 // a thumb that lands just off the stick's rim still catches it
 const REACH = 1.5;
@@ -19,5 +19,13 @@ export function customStickPlace({ stick, layer, radius }) {
   const fromEdge = onLeft ? centre.x : layer.width - centre.x;
   const width = clamp(fromEdge + radius * REACH, layer.width / 2, layer.width);
   const left = onLeft ? 0 : layer.width - width;
+
   return { zone: { left, width }, rest: { x: centre.x - left, y: centre.y } };
+}
+
+// `span` is a placed stick's zone in px of the touch layer, or none for the zone the game's own
+// styles give it
+export function placeStickZone(zone, span) {
+  zone.style.left = span ? `${span.left}px` : '';
+  zone.style.width = span ? `${span.width}px` : '';
 }

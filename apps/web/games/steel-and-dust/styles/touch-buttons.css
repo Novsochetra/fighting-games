@@ -1,25 +1,20 @@
-.btns {
-  position: absolute;
+/* the classic skin places nothing (src/data/skins/classic.js), so its buttons stand here, each
+   centred on its point from the cluster's bottom right corner */
+.pad-controls {
   right: calc(14px + var(--sar));
   bottom: calc(14px + var(--sab));
   width: calc(258px * var(--btn));
   height: calc(232px * var(--btn));
-  pointer-events: none;
 }
 
 .tb {
-  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-round);
-  pointer-events: auto;
-  touch-action: none;
   cursor: pointer;
-  width: calc(var(--tb-base) * var(--btn) * var(--tb-size, 1));
-  height: calc(var(--tb-base) * var(--btn) * var(--tb-size, 1));
   font-family: var(--font-display);
-  font-size: calc(var(--font-size-2xs) * var(--btn) * var(--tb-size, 1));
+  font-size: calc(var(--font-size-2xs) * var(--btn) * var(--pad-size, 1));
   letter-spacing: var(--tracking-wide);
   color: var(--color-white);
   text-shadow: var(--text-shadow-pixel-xs);
@@ -27,28 +22,76 @@
   border: 2px solid var(--color-touch-border);
   box-shadow: var(--shadow-touch-button);
   translate: 50% 50%;
+  transition: scale var(--duration-normal) var(--easing-overshoot);
 }
 
+/* a press sinks at once under the thumb and lights up, and the release springs back a touch past
+   full size; only the size moves, which the compositor runs without painting the button again */
 .tb.on {
   background: var(--color-touch-pressed);
   border-color: var(--color-amber-pale);
   color: var(--color-ink);
   text-shadow: none;
   scale: 0.93;
+  transition-duration: var(--duration-instant);
+}
+
+/* each press pops a ring out of the button: the touch pad flips data-pulse on every press, so a
+   quick tap, or the next press before it ends, plays it afresh */
+.tb::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--color-touch-ring);
+  border-radius: var(--radius-round);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tb[data-pulse='a']::after {
+  animation: touch-pop-a var(--duration-touch-pop) var(--easing-out);
+}
+
+.tb[data-pulse='b']::after {
+  animation: touch-pop-b var(--duration-touch-pop) var(--easing-out);
+}
+
+@keyframes touch-pop-a {
+  from {
+    opacity: 0.8;
+    scale: 0.9;
+  }
+
+  to {
+    opacity: 0;
+    scale: 1.4;
+  }
+}
+
+@keyframes touch-pop-b {
+  from {
+    opacity: 0.8;
+    scale: 0.9;
+  }
+
+  to {
+    opacity: 0;
+    scale: 1.4;
+  }
 }
 
 .tb-atk {
-  --tb-base: 96px;
+  --pad-base: 96px;
 
   right: calc(52px * var(--btn));
   bottom: calc(52px * var(--btn));
-  font-size: calc(var(--font-size-caption) * var(--btn) * var(--tb-size, 1));
+  font-size: calc(var(--font-size-caption) * var(--btn) * var(--pad-size, 1));
   background: var(--color-touch-attack);
   border-color: var(--color-touch-attack-border);
 }
 
 .tb-heavy {
-  --tb-base: 78px;
+  --pad-base: 78px;
 
   right: calc(146px * var(--btn));
   bottom: calc(40px * var(--btn));
@@ -57,7 +100,7 @@
 }
 
 .tb-jump {
-  --tb-base: 76px;
+  --pad-base: 76px;
 
   right: calc(46px * var(--btn));
   bottom: calc(150px * var(--btn));
@@ -66,14 +109,14 @@
 }
 
 .tb-dash {
-  --tb-base: 62px;
+  --pad-base: 62px;
 
   right: calc(130px * var(--btn));
   bottom: calc(128px * var(--btn));
 }
 
 .tb-ult {
-  --tb-base: 56px;
+  --pad-base: 56px;
 
   right: calc(214px * var(--btn));
   bottom: calc(112px * var(--btn));
@@ -103,7 +146,7 @@
 
 /* upright phones are narrow: ULT moves up between JUMP and DASH so the cluster clears the stick */
 @media (orientation: portrait) {
-  .btns {
+  .pad-controls {
     height: calc(256px * var(--btn));
   }
 
@@ -113,27 +156,17 @@
   }
 }
 
-/* a custom layout (Settings, Button layout) places each button's centre anywhere on the touch layer
-   and sizes it on top of the button size; the clamp keeps it whole on a screen of any shape */
-.btns.custom {
-  inset: 0;
-  width: auto;
-  height: auto;
-}
-
-.btns.custom .tb {
-  --tb-half: calc(var(--tb-base) * var(--btn) * var(--tb-size, 1) / 2);
-
-  left: clamp(var(--tb-half), calc(var(--tb-x) * 100%), calc(100% - var(--tb-half)));
-  top: clamp(var(--tb-half), calc(var(--tb-y) * 100%), calc(100% - var(--tb-half)));
-  right: auto;
-  bottom: auto;
-  translate: -50% -50%;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .tb-ult.ready {
     animation: none;
     box-shadow: var(--shadow-ult-ready-still);
+  }
+
+  .tb {
+    transition: none;
+  }
+
+  .tb[data-pulse]::after {
+    animation: none;
   }
 }

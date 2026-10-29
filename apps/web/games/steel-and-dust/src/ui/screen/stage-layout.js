@@ -1,78 +1,19 @@
+import { arrangeView, isPortrait } from '../../../../../packages/screen/src/stage-fit.js';
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
+
+export { isPortrait };
 
 // the touch buttons' height before the Button size
 const CONTROLS_HEIGHT = 260;
-// on a screen held sideways the touch buttons stand under the stage instead of over the fight when
-// that costs the stage at most a fifth of its width: an unfolded foldable or a big tablet
-const SHRINK_FOR_CONTROLS = 0.8;
 
-export function isPortrait(width, height) {
-  return height > width * 1.05;
-}
+const VIEW = { width: VIEW_WIDTH, height: VIEW_HEIGHT };
 
-// the canvas keeps 16:9 and fills its area
-function fitted(area) {
-  const scale = Math.min(area.width / VIEW_WIDTH, area.height / VIEW_HEIGHT);
-  const width = Math.floor(VIEW_WIDTH * scale);
-  const height = Math.floor(VIEW_HEIGHT * scale);
+// where the stage stands, and whether the touch buttons stand under it (packages/screen); `frame`
+// is a skin's frame for the stage, between its controls
+export function arrangeStage({ width, height, safe, touch, buttonScale, hinge, frame }) {
+  const controlsHeight = touch ? CONTROLS_HEIGHT * buttonScale : null;
 
-  return {
-    x: area.x + Math.floor((area.width - width) / 2),
-    y: area.y + Math.floor((area.height - height) / 2),
-    width,
-    height,
-  };
-}
-
-// the widest stage the space above the touch buttons holds
-function widthAboveControls(area, { safe, buttonScale }) {
-  const free = area.height - safe.top - safe.bottom - CONTROLS_HEIGHT * buttonScale;
-
-  return Math.max(0, Math.min(area.width, Math.floor((free * 16) / 9)));
-}
-
-// the stage stands at the top, right under the status bar, with the pause button on it: centred
-// lower down, it ran over the fold of a phone half-folded on a table in a browser that cannot tell
-// the phone is folded (Safari)
-function aboveControls(area, { safe }, width) {
-  return {
-    x: area.x + Math.floor((area.width - width) / 2),
-    y: area.y + Math.round(safe.top),
-    width,
-    height: Math.round((width * 9) / 16),
-  };
-}
-
-function belowTheTop(area, safe) {
-  return { ...area, y: area.y + safe.top, height: area.height - safe.top };
-}
-
-// the stage over the touch buttons, or null to leave them over the fight; an upright screen always
-// stands it over them, as wide as the screen, as it always has
-function stageOverControls(area, options) {
-  if (isPortrait(area.width, area.height)) {
-    return aboveControls(area, options, area.width);
-  }
-
-  const width = widthAboveControls(area, options);
-  const fits = width >= fitted(area).width * SHRINK_FOR_CONTROLS;
-
-  return fits ? aboveControls(area, options, width) : null;
-}
-
-// where the stage stands, and whether the touch buttons stand under it; a phone half-folded on a
-// table shows the game on its top half and the touch controls on the bottom half, like a handheld
-export function arrangeStage({ width, height, safe, touch, buttonScale, hinge }) {
-  if (hinge?.stacked) {
-    return { rect: fitted(belowTheTop(hinge.game, safe)), controlsBelow: touch };
-  }
-
-  const area = hinge?.game ?? { x: 0, y: 0, width, height };
-  const below = touch && stageOverControls(area, { safe, buttonScale });
-
-  return below
-    ? { rect: below, controlsBelow: true }
-    : { rect: fitted(area), controlsBelow: false };
+  return arrangeView({ width, height, safe, hinge, view: VIEW, controlsHeight, frame });
 }
 
 // half the stick base in styles/touch.css, before the button size

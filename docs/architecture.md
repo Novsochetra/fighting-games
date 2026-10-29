@@ -36,8 +36,14 @@ apps/
     src/supporters/       the supporters screen and its donate sheet
     src/credits/          the credits screen: who makes the arcade, and where to find them
     src/offline/          the service worker, which keeps the arcade and each game played for offline
+    packages/
+      <name>/             code more than one game uses (input: the gamepad, keys, rumble;
+                          touch-pad: the touch controls drawn from a skin; screen: the stage fit,
+                          folds, notches, gesture guards, full screen), which knows no game;
+                          src/ and test/{unit,integration}, joined into each game
     games/
-      <game-id>/          one self-contained app: it loads nothing from outside its folder
+      <game-id>/          one self-contained app: it loads nothing from outside its folder but the
+                          packages, which the build joins into its own bundles
         game.json         catalog entry, read by the server
         index.html        the game page
         assets/           sprites, icons, manifest
@@ -58,7 +64,8 @@ look without touching the arcade or another game. The arcade knows a game only t
 `game.json` and the art it names (`cover`, `banner`, `poster`, `screenshot`); a game links back to the
 arcade only by address (`../../`).
 `test/integration/independence.test.js` fails if a game loads a file from outside its folder or the
-arcade (any of its pages or modules) loads a file from a game.
+packages, a package loads a file from outside the packages, or the arcade (any of its pages or
+modules) loads a file from a game.
 
 A game hosted on its own site, such as Morodok Angkor (`games/morodok-angkor/`, at
 `https://morodokangkor.com/`), keeps only its `game.json` and art here. Its `url` must be an `https:`
@@ -66,6 +73,83 @@ address (checked by the server, `game-entry.js`, and again by the arcade, `view-
 Play opens it there instead of `games/<id>/`. The arcade draws art pixelated, block by block; a game
 whose art is rendered, like a 3D world, sets `"pixelArt": false` and its card, tile, backdrop and
 details art stay smooth (`is-smooth`).
+
+## Shared packages
+
+What more than one game needs and no game should write again, such as reading a gamepad, lives in
+`packages/<name>/`, plain ES modules with their own tests (`packages/input/` holds the standard pad,
+its dead zones and menu repeat, pressing and letting go of an action, and a pad's rumble and a
+phone's buzz). A package knows no game: the game passes in what is its own (its actions, which keys
+and buttons give them, its haptic cues), and a package that draws reads the game's tokens, with no
+colors of its own. A game imports a package by its path (`../../../../packages/input/src/gamepad.js`),
+so nothing is installed and the browser, Vite and the tests all find it the same way.
+
+Sharing stops at the build: `npm run dev` serves `packages/` as it is written (`DEV_ONLY_AS_IS` in
+`as-is-files.js`), and the build joins what a game imports into that game's own bundles and copies
+no package into `dist/`. A game shipped, or saved for offline, still loads nothing from outside its
+folder. A change to a package reaches every game that uses it on the next build, so every game's
+tests run with the package's own (`npm run check`).
+
+### Screen
+
+`packages/screen/` fits a game to the screen it is played on. `stage-fit.js` (`arrangeView`)
+letterboxes the game's view in its own shape, and stands it over the touch controls on an upright
+phone, or on a screen held sideways when that costs the stage at most a fifth of its width (an
+unfolded foldable, not a tablet); it works the shape out in its smallest terms (768x432 is 16 to 9),
+so every layout comes out to the pixel as it did before the package, checked over 1.4 million
+screens. `viewport-segments.js` reads a half-folded phone's halves (`readHinge`, `onFoldChange`),
+`safe-area.js` the notch and home bar insets, `gesture-guards.js` cancels iPhone Safari's pinch and
+double-tap zoom, long-press callouts and selection, and `fullscreen.js` goes full screen and locks a
+phone to landscape where the browser allows. A skin's `frame` (`arrangeView`, `framed`) keeps
+the stage inside it, clear of the controls beside or under it, unless a fold or the touch controls
+being off says otherwise. Steel & Dust passes its 768x432 view and its controls' height
+(`src/ui/screen/stage-layout.js`), and keeps where the stick rests, the menus' box on a fold and
+the pause plaque, which are its own.
+
+### Touch pad and skins
+
+`packages/touch-pad/` draws a game's touch controls from a skin and answers the thumbs on them, as
+Delta's controller skins do. A skin is data the game ships (Steel & Dust's are in
+`src/data/skins/`), never code, and players cannot bring their own. It has an `id`, a `name` and a
+layout for each way the phone is held (`landscape`, `portrait`), each listing its controls:
+
+- `kind`: `button`, `dpad` or `stick` (one at most), and an `id` unique in the layout, by which a
+  player's own layout and the game's states (`ready`, `empty`) name it;
+- `inputs`, what it gives the game: a list for a button, which presses them all at once (a combo),
+  or the input each of `up`, `right`, `down` and `left` holds for a stick or a d-pad;
+- optionally a `label`, its `class` names (the game's styles paint it), a `size` (px at the game's
+  scale 1; without it a stick is 128 and the rest 64), an `aspect` (its height over its width, for
+  a pill: only for what runs the game, or a player's pick for a skin's shoulder keys, as Steel &
+  Dust's skin tests hold) and `at`: its centre as fractions of the safe area, moved by `dx` and `dy` px at the
+  game's scale 1, so a cluster anchored to a corner keeps its shape from a small phone to a tablet
+  and clears a notch (a stick stands by `x` and `y` alone). A layout places all its controls or
+  none; one that places none, like Steel & Dust's `classic`, leaves them to the game's own styles.
+
+A layout may also wrap the game in a `shell` (its `class` names), a handheld's case drawn behind
+the stage with a bezel round its screen, and keep the game's screen inside a `screen` frame: px at
+the game's scale 1 from each side of the safe area, the screen at the top of what is left or in
+its middle (`align`). `renderShell(layer, layout)` draws it in a layer the game gives it behind its
+stage, `placeShell(layer, rect)` puts the bezel round the stage, and the shell is cut open there
+(a mask), so what lies under it shows through even where a copy of it lies over everything.
+
+`renderPad(layer, layout)` draws a layout first in the touch layer, in a `.pad`: the stick in a
+`.pad-zone` of its own, the rest in `.pad-controls` after it, each with its `data-control`. The
+same layout again is left as it is, so a refit never cuts a press short, and each pad keeps its
+controls by id, as a game asks for one on every frame (`control(id)`, for states like ULT ready). `placePad(layer, places)`
+stands each control by its centre (`--pad-x`, `--pad-y`, `--pad-dx`, `--pad-dy`) and size
+(`--pad-size`): the player's own places first, where they put them on the screen, else the skin's
+(`placesOf`), inside the safe area (`.pad-safe`, from `--pad-safe-*` where the game sets them, as
+on a folded phone's half, else the browser's insets). `installTouchPad(layer, options)` answers on the
+layer for whatever is drawn on it: a button calls `handler.press` and `handler.release` for each
+of its inputs, and the stick and the d-pad (three by three, a corner holding two directions,
+`dpad-math.js`) call `handler.steer(input, on)` as a thumb moves on them. Each press flips the
+button's `data-pulse` between `a` and `b`, so a skin can play an animation of its own afresh on every
+press, even one a quick tap or the next press cuts short; the pad lets the pulse go once it has
+played or was cut off (`animationend`, `animationcancel`), as an animation plays again when the
+touch layer comes back into view, and a resumed game would pop every button pressed before. The pad's own rules
+(`pad-styles.js`, put first in the head) stand and size the controls from the game's
+`--pad-scale`, and never paint them. A game's tests check each skin it ships (`skinProblems`,
+`skin-check.js`), and `renderPad(layer, layout, { debug: true })` outlines every control and zone.
 
 ## One app
 
@@ -152,10 +236,12 @@ its module scripts loads are joined into a few bundles in the game's own `build/
 written and minified, kept to ES2021 (`es2021`), with names that change with their content; the page
 is pointed at them and the modules are left out. Steel & Dust's 925 modules, thirty imports deep, were
 about 1,150 requests a load, each through the arcade's worker, and one that failed held its start; it
-now loads three bundles. A game still loads nothing from outside its folder, and its `offline.json`
-names the bundles. Players mostly come on phones, many on Android ones that are years behind, so
-Steel & Dust runs on Chrome 85 and Safari 14: its code is ES2021 and calls no built-in newer than
-those (`.at()`, `Object.hasOwn` and `findLast` have stand-ins in its `src/lib/`), which
+now loads three bundles. The packages a game imports are joined into its bundles like its own
+modules, so a game still loads nothing from outside its folder, and its `offline.json` names the
+bundles. Players mostly come on phones, many on Android ones that are years behind, so Steel & Dust
+runs on Chrome 85 and Safari 14: its code and the packages are ES2021 and call no built-in newer than
+those (the game's `.at()`, `Object.hasOwn` and `findLast` have stand-ins in its `src/lib/`, and the
+packages, which load nothing of a game's, call none), which
 `test/regression/bugs/older-phone-built-ins.test.js` checks. Each build has a version (`build-version.js`), SemVer with the build after a `+`, as
 `1.0.0+5f272d9`: the release is the `version` in the root `package.json`, and the build is the commit
 Railway deploys (`RAILWAY_GIT_COMMIT_SHA`), else the one checked out, else the time of the build. The
@@ -700,16 +786,16 @@ One app): a push slides the screen arrived at in over the one left, and a pop pl
 
 The game keeps a strict split:
 
-| Folder        | Job                                                                 | May touch the DOM, canvas or audio? |
-| ------------- | ------------------------------------------------------------------- | ----------------------------------- |
-| `src/data/`   | tuning tables: moves, weapons, enemies, missions                    | no                                  |
-| `src/art/`    | sprite and scene colors (the only JS allowed to hold hex values)    | no                                  |
-| `src/sim/`    | the 60 Hz simulation: one `game` object in, the same object changed | no                                  |
-| `src/render/` | draws a `game` onto a 2D canvas context it is given                 | canvas only                         |
-| `src/audio/`  | synthesized sound and music, and the announcer's recorded calls     | Web Audio only                      |
-| `src/input/`  | keyboard, gamepad and touch write into `game.input`                 | yes                                 |
-| `src/ui/`     | menus, the hero carousel, settings, help, screen fit, full screen   | yes                                 |
-| `src/main.js` | wires the pieces together and runs the fixed-step loop              | yes                                 |
+| Folder        | Job                                                                    | May touch the DOM, canvas or audio? |
+| ------------- | ---------------------------------------------------------------------- | ----------------------------------- |
+| `src/data/`   | tuning tables: moves, weapons, enemies, missions                       | no                                  |
+| `src/art/`    | sprite and scene colors (the only JS allowed to hold hex values)       | no                                  |
+| `src/sim/`    | the 60 Hz simulation: one `game` object in, the same object changed    | no                                  |
+| `src/render/` | draws a `game` onto a 2D canvas context it is given                    | canvas only                         |
+| `src/audio/`  | synthesized sound and music, and the announcer's recorded calls        | Web Audio only                      |
+| `src/input/`  | keyboard, gamepad and touch write into `game.input` (`packages/input`) | yes                                 |
+| `src/ui/`     | menus, the hero carousel, settings, help, screen fit, full screen      | yes                                 |
+| `src/main.js` | wires the pieces together and runs the fixed-step loop                 | yes                                 |
 
 The menus stand on two layers shared by all of them, at the back of `#menus`: the Angkor painting
 (`.menu-scene`) and one dim (`.menu-dim`). `menuBackdrop` (`src/ui/menus/menu-backdrop.js`) sets
@@ -725,7 +811,9 @@ up from the first paint: Bokator runs along a naga balustrade before Angkor Wat 
 turning to gold behind him as files settle (its own art, in `assets/ui/loading/`, is preloaded first). The boot
 (`src/boot/start-loading.js`) loads every image the menus draw (`src/data/ui-art.js` and each hero's
 card strips) and the pixel font before the fighters' sprites, so no menu or popup shows art still on
-its way; a file that fails counts as settled and a stalled boot gives up after a time limit. In play
+its way; a file that fails counts as settled and a stalled boot gives up after a time limit. The
+skins' own art (`SKIN_ART`, which only the Skins screen and a fight in that skin draw) comes with the
+fighters' sprites, never holding the title. In play
 the same screen covers a mission's road and the picked Shade while they load (`missionWait` in
 `src/render/scene-loaded.js`), after a short grace so a cached road never flashes it. The hero select
 shows each hero from card strips of one row (`cards` in `src/data/heroes.js`): a Shade's are the
@@ -743,17 +831,57 @@ The boxes that change only now and then (the weapon, the lives, the score and th
 drawn once into a stamp of what they show (`src/render/hud/box-stamp.js`) and laid down with one
 `drawImage` a frame; drawn part by part they took most of the HUD's time.
 
-The touch buttons and the stick can be moved and resized (Settings, Button layout). The editor is its
-own menu, `layout`, in `src/ui/layout/` with `styles/layout-editor.css`: it drags a copy of the touch
-layer's controls and works on a draft (`layout-draft.js`), so only Done saves. The setting
-`buttonLayout` holds one layout per orientation, or `null` for the original one in
-`styles/touch-buttons.css` and `styles/touch.css`: each control's centre (the five buttons and the
-stick) as fractions of the touch layer and a size on top of Button size, checked on load by
-`sanitizeButtonLayout` (`src/data/button-layout.js`). `screen-fit.js` applies the layout for the way
-the phone is held on every fit: the `custom` class and `--tb-x`, `--tb-y`, `--tb-size` on each button,
-`--stick-size` on the stick, and the stick's zone, which becomes the half of the screen the stick
-stands on, widened to reach past its rim (`stick-place.js`); `layout.stickRest` gives `TouchStick`
-the custom centre to rest on. The buttons come after the zone in the page, so they stay on top of it.
+The touch controls are drawn by the touch pad (see Touch pad and skins) from a skin in
+`src/data/skins/`: `classic` is the controls as they always stood, placing nothing, so
+`styles/touch-buttons.css` places the buttons and the screen fit rests the stick
+(`stage-layout.js`); `dusk` (`styles/skin-dusk.css`) is glass discs lit by the dusk sky over the
+fight and a d-pad, each control hanging off a bottom corner; the five `clear-*` skins
+(`clear.js`, `styles/skin-clear.css`) are one handheld of see-through plastic in Lotus, Ember,
+Jade, Mekong and Smoke, its insides showing (a board, a gloss and keys painted by ChatGPT, one set
+for every colour: the board and gloss blended in with a screen blend under each colour's tint, the
+keys a little see-through so the plastic tints them, a held key swapping to its pressed art; see
+`assets/skins/README.md`, `tools/clear_skin_art.py`),
+the game in a bezel between two panels held sideways and at the top held upright, with the pause
+plaque in its HUD (`pausePlace`, `framed`); each control carries its shell's colour class, as it
+stands in the touch layer, not in the shell (`#shell`, behind the stage). A player picks the skin (`skin`, one
+for both ways of holding the phone) on the Skins screen, which Settings' Skin row opens
+(`src/ui/skins/`, `styles/skin-picker.css`), where a tap on a key the skin offers a pill for
+(Clear's DASH and ULT, its `pills`, ringed and named in the bar) opens a chooser of Round or Pill
+for that key alone (`key-chooser.js`; `keyShapes`, each key round unless picked; the keyboard and
+gamepad reach those keys after the bar, the chooser's choices while it is open, and Back closes it
+first, `backOut`). `layoutOf` in `skins.js` gives the game, the Skins screen and the layout editor
+the same layout, one object for each pick, as the touch pad keeps the pad drawn for it: like the
+layout editor, a copy of the touch layer over
+a light dim shows the skin looked at standing as it will, held the way the phone is, at the
+player's Button size and opacity and with their own layout of it (`preview-pad.js`, which both
+share), and a skin with a shell stands for real meanwhile (`layout.previewSkin`), the stage in
+its frame, until Use or any way back (the panel's `leave`). ‹ ›, left and right, or a swipe across the screen step through the skins, each sliding in
+from its side, and dots under the name tell which of how many; Use picks one and Cancel leaves.
+Settings also sets the controls' opacity (`padOpacity`, `--pad-opacity`, never the pause
+button's). The help and the first hints name the d-pad when one steers (`steersWithDpad`; the
+screen fit marks `game.device` on each fit, which only the drawing reads).
+
+A touch control answers the thumb as the arcade's buttons do: a press sinks it at once and lights
+it, a ring pops out of it (the pad's `data-pulse`), and the release springs it back a touch past
+full size; the stick's knob springs home when the thumb lets go, and a d-pad's arm sinks as the
+thumb rolls onto it. Only size and opacity move, which the compositor runs without painting the
+control again: with its colours eased too, a fight on a phone's CPU (4x slowed) lost frames, and
+without them it plays as before (the same frame rate, frame times and main-thread work as 1.2.0,
+measured over eight fights each). With reduced motion the controls only light up. Each press, and
+each new way the stick or the d-pad turns, ticks the phone under the thumb (the `tap` cue,
+Settings Vibration), shorter than a blow landing. `src/input/touch-actions.js` turns the pad's
+inputs into `game.input`. The controls can be moved and resized (Settings, Button layout). The editor is its own menu,
+`layout`, in `src/ui/layout/` with `styles/layout-editor.css`: it draws the skin again on a copy of
+the touch layer, drags its controls and works on a draft (`layout-draft.js`) of every skin's
+layouts, each in a slot (`dusk:portrait`), so only Done saves, and it edits the skin shown. The
+setting `buttonLayout` holds, for each skin, one layout per orientation, or none for the skin's
+own: each control's centre (the five buttons and the stick or the d-pad) as fractions of the touch
+layer and a size on top of Button size, checked on load by `sanitizeButtonLayout`
+(`src/data/button-layout.js`), which takes a layout saved before there were skins as the classic
+skin's.
+`screen-fit.js` draws and places the pad for the way the phone is held on every fit, and gives a
+placed stick its zone, the half of the screen it stands on, widened to reach past its rim
+(`stick-place.js` in the package); `layout.stickRest` gives the stick the centre it rests on.
 
 `sim/` reaches the outside world only through `game.io` ports
 (`sfx`, `announce`, `vibrate`, `saveRecords`, `saveHints`, `saveSettings`, `saveRun`, `saveLeaderboard`,
@@ -766,7 +894,8 @@ the cues in `src/data/haptics.js`). Each cue is written twice: a vibration patte
 rumbles of a gamepad's two motors, longer since a pad's motors take a moment to spin up. The
 ultimate's swells to full strength over its cut-in (`startUlt`) and ends before the first blow lands,
 which would cut it short; `test/unit/data/haptics.test.js` holds it inside every hero's `intro`.
-`src/platform/haptics.js` plays a cue in whatever the player used last (`ui.lastInput`): the first
+`src/platform/haptics.js` plays a cue in whatever the player used last (`ui.lastInput`), through
+`packages/input/src/rumble.js`: the first
 standard gamepad's `vibrationActuator` (Chrome, Edge and Safari on a Mac), or the phone's
 `navigator.vibrate` (Android), and nothing under a keyboard or a mouse. A pad plays one effect at a
 time, so each rumble of a cue starts when the last one ends, and a new cue cuts off the rest of the

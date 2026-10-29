@@ -1,10 +1,9 @@
 import { clamp } from '../lib/math.js';
+import { ORIENTATIONS, SKINS } from './skins/skins.js';
 
-// a custom layout places each touch control, the buttons and the stick, by its centre as fractions
-// of the touch layer, and sizes it on top of the global button size; each orientation has its own
-// layout or none
-export const BUTTON_ACTIONS = ['light', 'heavy', 'jump', 'dash', 'ult'];
-export const LAYOUT_CONTROLS = [...BUTTON_ACTIONS, 'stick'];
+// a custom layout places each touch control of a skin by its centre as fractions of the touch
+// layer, and sizes it on top of the global button size; each skin has one for each orientation,
+// or none
 export const BUTTON_SIZE = { min: 0.6, max: 1.8, step: 0.1 };
 
 // sizes are kept to one decimal so steps never drift into 1.2000000000000002
@@ -34,12 +33,15 @@ function sanitizeEntry(entry) {
   return { x: entry.x, y: entry.y, size: roundSize(entry.size) };
 }
 
-function sanitizeOrientation(value) {
+export const controlsOf = (skin, orientation) =>
+  skin.layouts[orientation].items.map((item) => item.id);
+
+function sanitizeOrientation(value, controls) {
   if (!value || typeof value !== 'object') {
     return null;
   }
   const entries = {};
-  for (const control of LAYOUT_CONTROLS) {
+  for (const control of controls) {
     entries[control] = sanitizeEntry(value[control]);
     if (!entries[control]) {
       return null;
@@ -48,11 +50,30 @@ function sanitizeOrientation(value) {
   return entries;
 }
 
-// a saved layout that is broken or missing a control falls back to the original one
+function sanitizeSkinLayout(value, skin) {
+  const [landscape, portrait] = ORIENTATIONS.map((orientation) =>
+    sanitizeOrientation(value?.[orientation], controlsOf(skin, orientation)),
+  );
+
+  return landscape || portrait ? { landscape, portrait } : null;
+}
+
+// before there were skins, the one layout saved was the classic skin's
+const isBeforeSkins = (value) =>
+  typeof value === 'object' && value !== null && ('landscape' in value || 'portrait' in value);
+
+// a saved layout that is broken or missing a control falls back to the skin's own
 export function sanitizeButtonLayout(value) {
-  const layout = {
-    landscape: sanitizeOrientation(value?.landscape),
-    portrait: sanitizeOrientation(value?.portrait),
-  };
-  return layout.landscape || layout.portrait ? layout : null;
+  const bySkin = isBeforeSkins(value) ? { classic: value } : value;
+  const layouts = {};
+
+  for (const [id, skin] of Object.entries(SKINS)) {
+    const layout = sanitizeSkinLayout(bySkin?.[id], skin);
+
+    if (layout) {
+      layouts[id] = layout;
+    }
+  }
+
+  return Object.keys(layouts).length > 0 ? layouts : null;
 }

@@ -8,10 +8,11 @@ const GAP = VITALS_BOX.x - WEAPON_BOX.width;
 // a stage over the touch buttons takes the top of the screen, so the pause button stands on it, one
 // more carved plaque of the HUD's top row, as tall as the row and just left of the score, where it
 // covers none of the fight; `pixel` is one of the game's pixels on the screen, which its frame is
-// drawn in (styles/touch.css). Over the fight (a phone held sideways) and on the bottom half of a
-// phone folded on a table it keeps the touch layer's top-right corner (styles/touch.css): null
-export function pausePlace({ rect, controlsBelow, hinge, width }) {
-  if (!controlsBelow || hinge?.stacked) {
+// drawn in (styles/touch.css); so does a stage a skin's shell frames, its controls beside it. Over
+// the fight (a phone held sideways) and on the bottom half of a phone folded on a table it keeps
+// the touch layer's top-right corner (styles/touch.css): null
+export function pausePlace({ rect, controlsBelow, framed, hinge, width }) {
+  if (!(controlsBelow || framed) || hinge?.stacked) {
     return null;
   }
 

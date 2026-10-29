@@ -19,6 +19,15 @@ describe('help text', () => {
     expect(controlsHtml({ touch: false, stick: 'float' })).toContain('drag anywhere');
   });
 
+  it('steers with the d-pad for a skin that has one', () => {
+    const touchTable = controlsHtml({ touch: true, stick: 'fixed', dpad: true }).split(
+      'Keyboard',
+    )[0];
+    expect(touchTable).toContain('press left or right on the d-pad');
+    expect(touchTable).toContain('push the d-pad up or down, then HEAVY');
+    expect(touchTable).not.toContain('stick');
+  });
+
   it('shows every move with its damage and notes', () => {
     const html = movesHtml({ weaponId: 'spear', heroId: 'moss', touch: false });
     expect(html).toContain('Cyclone');

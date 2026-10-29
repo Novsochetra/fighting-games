@@ -31,9 +31,11 @@ changing structure.
   `//` comment.
 - No `TODO` / `FIXME` comments (`no-warning-comments`). Put follow-up work in the tracker as a ticket.
 - Put logic in plain functions with unit tests. Components and route handlers stay thin.
-- Each game is independent: it loads nothing from outside its own folder, and the home page loads
-  nothing from a game (`apps/web/test/integration/independence.test.js` checks both). Never share a
-  file, token or module between the home page and a game, or between games.
+- Each game is independent: it loads nothing from outside its own folder but the shared packages
+  (`apps/web/packages/`), and the home page loads nothing from a game
+  (`apps/web/test/integration/independence.test.js` checks both). Never share a file, token or
+  module between the home page and a game, or between games: code a second game needs goes in a
+  package (see "Shared packages").
 - The home page's UI colors, type, radii, shadows and motion come from `apps/web/src/home/tokens.css`,
   and each game's from its own `games/<id>/styles/tokens.css`. No raw hex values in components
   (`local/no-raw-hex`, Stylelint). Colors painted on a game's canvas (sprites, scenery, effects, HUD)
@@ -101,6 +103,29 @@ version it now is.
 `apps/web/games/<id>/` holds `game.json` (the catalog entry), `index.html`, `assets/`, `styles/`
 (with the game's own `tokens.css`), `src/` and `test/`. Adding a folder with a valid `game.json` adds the game to the home page.
 A game hosted on its own site keeps only `game.json` (with an `https:` `url`) and `assets/` here.
+
+## Shared packages
+
+Code more than one game uses (input, controls, screen fit) is a package, `apps/web/packages/<name>/`
+with `src/` and `test/`, instead of a copy in each game (see "Shared packages" in
+`docs/architecture.md`):
+
+- it knows no game: it loads only packages, and the game passes in what is its own (its actions, its
+  key and button maps, its cues),
+- it has no colors or art of its own; what it draws reads the game's tokens,
+- a game imports it by its path (`../../../../packages/input/src/gamepad.js`), nothing installed;
+  the build joins it into the game's own bundles, so a shipped game still loads only its folder,
+- a change to it reaches every game that uses it, so it keeps its own tests and `npm run check`
+  runs every game's.
+
+A game's touch controls come from `touch-pad`, drawn from a skin the game ships in
+`src/data/skins/`: data, never code, and players never bring their own. The game's tests check
+each skin with `skinProblems` (see "Touch pad and skins" in `docs/architecture.md`). A skin's
+motion moves only size and opacity (`scale`, `transform`, `opacity`), which the compositor runs;
+its colours change at once, as eased colours cost a fight frames on a phone's CPU. Every move a
+skin draws (attack, jump, dash, a skill) is a round key, unless the player picks a pill for a key
+the skin offers one for (`pills`, picked key by key on the Skins screen); a pill is otherwise only
+for what runs the game (play, pause, settings).
 
 ## Pages of the arcade
 

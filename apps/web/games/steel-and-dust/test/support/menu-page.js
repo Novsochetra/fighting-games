@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 import { findElements } from '../../src/boot/dom-elements.js';
 import { installUi } from '../../src/boot/install-ui.js';
 import { installKeyboard } from '../../src/input/keyboard.js';
+import { installGameTouchPad } from '../../src/input/touch-actions.js';
 import { createUiState } from '../../src/ui/ui-state.js';
 import { createTestOnline } from './online-board.js';
 import { createTestGame } from './test-game.js';
@@ -42,10 +43,15 @@ export function openPage({ records, checkpoint, leaderboard, api, storage } = {}
   // a fresh target per test, so keys never reach the listeners of an earlier test's page
   const keys = new EventTarget();
   installKeyboard(keys, { game, audio, menus, ui });
+  // the touch pad answers and its stick rests on every fit, and the page is fitted, as main.js has it
+  const touchPad = installGameTouchPad({ elements, game, audio, layout });
+  layout.onFit = () => touchPad.restStick();
+  layout.applyTouchSettings();
   menus.sync();
   const key = (code) => keys.dispatchEvent(new KeyboardEvent('keydown', { code }));
   return {
     game,
+    touchPad,
     menus,
     act,
     layout,

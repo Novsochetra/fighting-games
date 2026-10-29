@@ -2,6 +2,9 @@
 // rumbles of its heavy low motor (`strong`) and its light high one (`weak`), from 0 to 1, each
 // after a `wait` in milliseconds; a pad's motors take a moment to spin up, so it rumbles longer
 export const HAPTIC_CUES = {
+  // a touch control pressed, or the stick or d-pad turned a new way: a tick under the thumb, as a
+  // phone's keyboard gives, shorter than a blow landing so the two never blur
+  tap: { phone: 4, pad: [{ ms: 20, strong: 0, weak: 0.15 }] },
   hit: { phone: 7, pad: [{ ms: 40, strong: 0, weak: 0.4 }] },
   bigHit: { phone: 18, pad: [{ ms: 90, strong: 0.45, weak: 0.7 }] },
   hurt: { phone: 40, pad: [{ ms: 150, strong: 0.9, weak: 0.3 }] },

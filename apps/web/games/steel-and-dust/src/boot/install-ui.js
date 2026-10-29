@@ -1,4 +1,4 @@
-import { canVibrate } from '../platform/haptics.js';
+import { canVibrate } from '../../../../packages/input/src/rumble.js';
 import { createCreditsPanel, installCreditsEnd } from '../ui/credits/credits-panel.js';
 import { createSupportersFeed } from '../ui/credits/supporters-feed.js';
 import { createHelpPanel } from '../ui/help/help-panel.js';
@@ -15,10 +15,14 @@ import { createNavigator, handleMenuKey } from '../ui/menus/menu-navigation.js';
 import { installPostEvents } from '../ui/post/post-events.js';
 import { createPostPanel } from '../ui/post/post-panel.js';
 import { createFullscreen, installFullscreen } from '../ui/screen/fullscreen.js';
-import { installGestureGuards, installMenuTapFix } from '../ui/screen/gesture-guards.js';
+import {
+  installGestureGuards,
+  installMenuTapFix,
+} from '../../../../packages/screen/src/gesture-guards.js';
 import { createScreenFit, installScreenFit } from '../ui/screen/screen-fit.js';
 import { createSettingsPanel } from '../ui/settings/settings-panel.js';
 import { createShare } from '../ui/share/share-run.js';
+import { createSkinPicker } from '../ui/skins/skin-picker.js';
 
 function isIos(navigator) {
   return (
@@ -37,7 +41,13 @@ function createPanels({ elements, game, audio, layout, ui, window, supporters, o
       ui,
       canVibrate: canVibrate(window),
     }),
-    help: createHelpPanel({ tabs: elements.helpTabs, body: elements.helpBody, game, ui }),
+    help: createHelpPanel({
+      tabs: elements.helpTabs,
+      body: elements.helpBody,
+      game,
+      ui,
+      layout,
+    }),
     heroes: createHeroPanel({ list: elements.heroList, game }),
     leaderboard: createLeaderboardPanel({
       list: elements.leaderboardList,
@@ -49,6 +59,7 @@ function createPanels({ elements, game, audio, layout, ui, window, supporters, o
     credits: createCreditsPanel({ root: elements.credits, game, feed: supporters }),
   };
   panels.layout = createLayoutEditor({ window, game, audio, layout, settings: panels.settings });
+  panels.skins = createSkinPicker({ window, game, audio, layout, settings: panels.settings });
   return panels;
 }
 
@@ -84,6 +95,7 @@ export function installUi({ window, elements, game, audio, ui, pad, online }) {
     padConnected: pad.connected,
   });
   const menus = new MenuController({ document, game, audio, ui, context, panels });
+  panels.skins.select = (item) => menus.select(item);
   online.onChange = () => ['leaderboard', 'post'].forEach((id) => menus.redraw(id));
   const leaveForArcade = createArcadeExit({
     location: window.location,
@@ -94,7 +106,12 @@ export function installUi({ window, elements, game, audio, ui, pad, online }) {
   const act = createMenuActions(actions);
   installMenuInput({ document, elements, menus, act, ui, panels, audio });
   installFullscreen({ window, document, fullscreen, layout });
-  installGestureGuards({ window, document, elements });
+  installGestureGuards({
+    window,
+    document,
+    root: elements.app,
+    surfaces: [elements.stage, elements.touch],
+  });
   installMenuTapFix(elements.menus);
   return { layout, fullscreen, menus, act, supporters };
 }

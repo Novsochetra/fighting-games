@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { isNearFixedStick, stickDirections } from '../../../src/input/stick-math.js';
+import {
+  isNearFixedStick,
+  stickDirections,
+} from '../../../../../packages/touch-pad/src/stick-math.js';
 
 const none = { left: false, right: false, up: false, down: false };
 

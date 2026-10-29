@@ -1,10 +1,13 @@
 import { DIFFICULTIES } from '../../data/difficulty.js';
+import { SKINS } from '../../data/skins/skins.js';
 
 const onOff = (value) => (value ? 'On' : 'Off');
 const pick = (labels) => (value) => labels[value];
+const skinName = (id) => (SKINS[id] ?? SKINS.classic).name;
+const isTouchOn = ({ isTouchOn: touchOn }) => touchOn();
 
-// `visible` gets { isTouchOn, canVibrate, settings }; a row with an `action` has a button that
-// opens that menu instead of a stepper
+// `visible` gets { isTouchOn, canVibrate, settings }; a row with an `action` has a button
+// (`actionLabel`, else Edit) that opens that menu instead of a stepper
 export const SETTINGS_SCHEMA = [
   { group: 'Sound' },
   { key: 'music', label: 'Music', range: true },
@@ -30,14 +33,14 @@ export const SETTINGS_SCHEMA = [
     options: [false, true],
     format: onOff,
     note: 'Touch: keep the button held to keep swinging',
-    visible: ({ isTouchOn }) => isTouchOn(),
+    visible: isTouchOn,
   },
   {
     key: 'haptics',
     label: 'Vibration',
     options: [false, true],
     format: onOff,
-    note: 'Rumbles the gamepad or phone you play with',
+    note: 'Rumbles the gamepad or phone you play with, and ticks as you press the touch controls',
     visible: ({ canVibrate }) => canVibrate,
   },
   { group: 'Screen' },
@@ -56,6 +59,23 @@ export const SETTINGS_SCHEMA = [
     label: 'Touch controls',
     options: ['auto', 'on', 'off'],
     format: pick({ auto: 'Auto', on: 'On', off: 'Off' }),
+  },
+  {
+    key: 'skin',
+    label: 'Skin',
+    action: 'skins',
+    actionLabel: 'Pick',
+    format: skinName,
+    note: 'See each skin on your screen and pick the one you play with',
+    visible: isTouchOn,
+  },
+  {
+    key: 'padOpacity',
+    label: 'Controls opacity',
+    options: [1, 0.8, 0.6, 0.4],
+    format: (value) => `${Math.round(value * 100)}%`,
+    note: 'Lets more of the fight show through the buttons',
+    visible: isTouchOn,
   },
   {
     key: 'stick',
@@ -82,8 +102,8 @@ export const SETTINGS_SCHEMA = [
     label: 'Button layout',
     action: 'layout',
     format: (value) => (value ? 'Custom' : 'Default'),
-    note: 'Move and resize the buttons and the stick, for each way you hold the phone',
-    visible: ({ isTouchOn }) => isTouchOn(),
+    note: 'Move and resize the controls of each skin, for each way you hold the phone',
+    visible: isTouchOn,
   },
   { group: 'Training' },
   {

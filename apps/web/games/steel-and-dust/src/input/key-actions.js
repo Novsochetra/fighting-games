@@ -31,14 +31,3 @@ export const KEY_ACTIONS = {
 export function actionForKey(code) {
   return KEY_ACTIONS[code] ?? null;
 }
-
-export function pressAction(input, action, repeat) {
-  if (!repeat) {
-    input.pressed[action] = true;
-  }
-  input.held[action] = true;
-}
-
-export function releaseAction(input, action) {
-  input.held[action] = false;
-}

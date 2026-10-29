@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { followThumb, knobOffset } from '../../../src/input/stick-math.js';
+import { followThumb, knobOffset } from '../../src/stick-math.js';
 
 describe('stick math', () => {
   it('keeps the knob on the rim', () => {

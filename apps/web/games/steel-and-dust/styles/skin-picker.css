@@ -1,0 +1,178 @@
+/* the Skins menu (src/ui/skins/) lies over the paused game or the title under a light dim, as the
+   Button layout editor does, keeps the whole screen and shares its stone bar
+   (styles/layout-editor.css); its copy of the touch layer only shows, and takes no tap */
+#menus #m-skins {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.skin-preview,
+.skin-shell {
+  position: absolute;
+  inset: 0;
+}
+
+.skin-shell {
+  pointer-events: none;
+}
+
+.skin-preview,
+.skin-preview * {
+  pointer-events: none;
+}
+
+.skin-preview .tb-pause {
+  opacity: 0.35;
+}
+
+body.stick-hidden .skin-preview .pad-stick {
+  visibility: hidden;
+}
+
+/* as wide as the longest name, so the arrows stay put as the skins go by; the dots under it tell
+   which skin of how many */
+.skin-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 8ch;
+}
+
+.skin-name {
+  font-size: var(--font-size-md);
+  color: var(--color-gold);
+}
+
+.skin-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.skin-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-round);
+  background: var(--color-text-muted);
+  opacity: 0.5;
+  transition:
+    background-color var(--duration-quick) var(--easing-standard),
+    opacity var(--duration-quick) var(--easing-standard);
+}
+
+.skin-dots i.on {
+  background: var(--color-gold);
+  opacity: 1;
+}
+
+/* the controls of the skin stepped to come in from its side (skin-view.js) */
+.skin-preview .pad.slide-a {
+  animation: skin-slide-a var(--duration-normal) var(--easing-standard);
+}
+
+.skin-preview .pad.slide-b {
+  animation: skin-slide-b var(--duration-normal) var(--easing-standard);
+}
+
+@keyframes skin-slide-a {
+  from {
+    opacity: 0;
+    translate: var(--skin-slide-from) 0;
+  }
+}
+
+@keyframes skin-slide-b {
+  from {
+    opacity: 0;
+    translate: var(--skin-slide-from) 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skin-preview .pad.slide-a,
+  .skin-preview .pad.slide-b {
+    animation: none;
+  }
+}
+
+/* the bar stands between a shell's shoulders, its words wrapping under its buttons */
+#m-skins .layout-bar {
+  max-width: min(calc(var(--menu-width, 100%) - 16px), 540px);
+}
+
+.skin-about {
+  max-width: 46ch;
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* the keys a player may pick a shape for (skin-view.js) answer a tap, ringed so they show it, the
+   ring drawn whole for the one the keyboard or gamepad is on */
+.skin-preview [data-pickable] {
+  pointer-events: auto;
+  outline: 2px dashed color-mix(in srgb, var(--color-gold) 60%, transparent);
+  outline-offset: 4px;
+}
+
+.skin-preview [data-pickable].sel {
+  outline-style: solid;
+  outline-color: var(--color-gold);
+}
+
+.skin-shape {
+  text-align: center;
+}
+
+/* a key's chooser of its shape (key-chooser.js): the bar's carved frame, small, beside the key, on
+   a plate the keys under it do not show through; the shape the key has stands lit, the other
+   dimmed until a thumb or the highlight is on it */
+.key-chooser {
+  --stone: 1;
+
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  border: solid var(--color-clear);
+  border-width: calc(12px * var(--stone)) calc(14px * var(--stone));
+  border-image: url('../assets/ui/hud/panel-frame.png') 12 14 / calc(12px * var(--stone))
+    calc(14px * var(--stone)) / 0 round;
+  background: var(--color-night-deep) padding-box;
+  image-rendering: pixelated;
+}
+
+.key-chooser[hidden] {
+  display: none;
+}
+
+.key-chooser-name {
+  font-family: var(--font-display);
+  font-size: var(--font-size-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.key-chooser-shapes {
+  display: flex;
+  gap: 8px;
+}
+
+.key-chooser [aria-pressed='false']:not(.sel, :hover) {
+  opacity: 0.55;
+}
+
+/* a short screen held sideways has room above the shell's keys for the name and the switch, not
+   the words as well: they covered HEAVY on a small phone */
+@media (orientation: landscape) and (max-height: 420px) {
+  #m-skins .layout-bar:has(.skin-shape:not([hidden])) .skin-about {
+    display: none;
+  }
+}

@@ -27,6 +27,12 @@ describe('haptic cues', () => {
     }
   });
 
+  // a press under the thumb comes just before the blow it throws lands, and must not feel like it
+  it('ticks a touch control shorter than any blow lands', () => {
+    expect(HAPTIC_CUES.tap.phone).toBeLessThan(HAPTIC_CUES.hit.phone);
+    expect(padLength(HAPTIC_CUES.tap.pad)).toBeLessThan(padLength(HAPTIC_CUES.hit.pad));
+  });
+
   // the first blow can land on the cut-in's last tick, and its rumble would cut the swell short
   it("ends the ultimate's swell within every hero's cut-in", () => {
     const { phone, pad } = HAPTIC_CUES.ultimate;

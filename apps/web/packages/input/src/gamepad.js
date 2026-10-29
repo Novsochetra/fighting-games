@@ -1,6 +1,3 @@
-const WATCHED_BUTTONS = [0, 1, 2, 3, 5, 7, 9, 8];
-export const PLAY_BUTTONS = { 0: 'jump', 2: 'light', 3: 'heavy', 1: 'dash', 5: 'ult', 7: 'ult' };
-
 export function createPadState() {
   return {
     previous: {},
@@ -17,11 +14,13 @@ export function firstStandardPad(pads) {
       return pad;
     }
   }
+
   return null;
 }
 
 export function isDown(pad, index) {
   const button = pad.buttons[index];
+
   return !!(button && (button.pressed || button.value > 0.5));
 }
 
@@ -29,6 +28,7 @@ export function isDown(pad, index) {
 export function readDirections(pad) {
   const x = pad.axes[0] || 0;
   const y = pad.axes[1] || 0;
+
   return {
     left: isDown(pad, 14) || x < -0.45,
     right: isDown(pad, 15) || x > 0.45,
@@ -37,37 +37,19 @@ export function readDirections(pad) {
   };
 }
 
-export function newPresses(pad, previous) {
+// `buttons` are the indices of the standard mapping the game listens to
+export function newPresses(pad, previous, buttons) {
   const presses = {};
-  for (const index of WATCHED_BUTTONS) {
+
+  for (const index of buttons) {
     presses[index] = isDown(pad, index) && !previous[index];
   }
+
   return presses;
 }
 
-export function rememberButtons(pad, state) {
-  for (const index of WATCHED_BUTTONS) {
+export function rememberButtons(pad, state, buttons) {
+  for (const index of buttons) {
     state.previous[index] = isDown(pad, index);
   }
-}
-
-function axis(negative, positive) {
-  if (negative) {
-    return -1;
-  }
-  return positive ? 1 : 0;
-}
-
-// menus repeat a held direction: first after 18 ticks, then every 7
-export function menuStep(state, directions, tickCount) {
-  const move = axis(directions.up, directions.down);
-  const adjust = axis(directions.left, directions.right);
-  const code = move || adjust * 10;
-  let step = null;
-  if (code && (code !== state.navDirection || tickCount >= state.navRepeatAt)) {
-    step = move ? ['move', move] : ['adjust', adjust];
-    state.navRepeatAt = tickCount + (code === state.navDirection ? 7 : 18);
-  }
-  state.navDirection = code;
-  return step;
 }

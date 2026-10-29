@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { HAPTIC_CUES } from '../../../src/data/haptics.js';
-import { canVibrate, createHaptics, rumble } from '../../../src/platform/haptics.js';
+import { createHaptics } from '../../../src/platform/haptics.js';
 
 function fakeActuator(result = 'complete') {
   return { playEffect: vi.fn(async () => result) };
@@ -64,58 +64,5 @@ describe('haptics', () => {
       createHaptics({ navigator, ui: { lastInput: 'pad' } }).play(HAPTIC_CUES.hit),
     ).not.toThrow();
     expect(() => createHaptics(bare).play(HAPTIC_CUES.hit)).not.toThrow();
-  });
-
-  it('plays each rumble of a cue after the one before it, waiting between them', async () => {
-    const actuator = fakeActuator();
-
-    await rumble(actuator, HAPTIC_CUES.bossKnockOut.pad);
-
-    expect(actuator.playEffect.mock.calls.map(([, effect]) => effect)).toEqual([
-      { startDelay: 0, duration: 140, strongMagnitude: 1, weakMagnitude: 0.7 },
-      { startDelay: 80, duration: 320, strongMagnitude: 0.8, weakMagnitude: 0.3 },
-    ]);
-  });
-
-  it('drops the rest of a cue that a newer one cut short', async () => {
-    const actuator = fakeActuator('preempted');
-
-    await rumble(actuator, HAPTIC_CUES.clear.pad);
-
-    expect(actuator.playEffect).toHaveBeenCalledTimes(1);
-  });
-
-  it('swallows a pad that refuses the effect', async () => {
-    const actuator = {
-      playEffect: () => {
-        throw new DOMException('no rumble', 'NotSupportedError');
-      },
-    };
-
-    await expect(rumble(actuator, HAPTIC_CUES.hit.pad)).resolves.toBe('unsupported');
-  });
-
-  it('offers vibration where a phone or a gamepad can give it', () => {
-    const chrome = {
-      navigator: { vibrate() {} },
-      Gamepad: { prototype: { vibrationActuator: null } },
-    };
-    const macSafari = { navigator: {}, Gamepad: { prototype: { vibrationActuator: null } } };
-
-    expect(canVibrate(chrome)).toBe(true);
-    expect(canVibrate(macSafari)).toBe(true);
-    expect(canVibrate({ navigator: {}, Gamepad: { prototype: {} } })).toBe(false);
-    expect(canVibrate({ navigator: {} })).toBe(false);
-  });
-
-  // Firefox's pads have the actuator interface for its own hapticActuators, but no rumble we play
-  it('does not offer it for a pad that only has Firefox hapticActuators', () => {
-    const firefox = {
-      navigator: {},
-      Gamepad: { prototype: { hapticActuators: [] } },
-      GamepadHapticActuator: {},
-    };
-
-    expect(canVibrate(firefox)).toBe(false);
   });
 });
