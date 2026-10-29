@@ -21,11 +21,12 @@ const TOOLBAR_ACTIONS = {
   done: (editor) => editor.save(),
 };
 
-// the Button layout menu: it edits a draft of the saved layouts, so the real touch controls only
-// change on Done, and Cancel (the menus' Back) just leaves
+// the Button layout menu, opened from the Skins screen for the skin looked at there: it edits a
+// draft of the saved layouts, so the real touch controls only change on Done, and Cancel (the
+// menus' Back) just leaves
 export class LayoutEditor {
-  constructor({ view, game, audio, layout, settingsPanel }) {
-    Object.assign(this, { view, game, audio, layout, settingsPanel });
+  constructor({ view, game, audio, layout, skins }) {
+    Object.assign(this, { view, game, audio, layout, skins });
     this.state = { draft: createDraft(null), picked: 'light' };
   }
 
@@ -46,7 +47,7 @@ export class LayoutEditor {
 
   // the first move or resize turns the skin's layout into a custom one, where the controls stand
   customise() {
-    const slot = this.view.slot(this.game.settings);
+    const slot = this.view.slot();
     if (!this.state.draft[slot]) {
       this.state.draft = customised(this.state.draft, slot, this.view.measureCentres());
     }
@@ -88,7 +89,7 @@ export class LayoutEditor {
   }
 
   reset() {
-    this.state.draft = resetLayout(this.state.draft, this.view.slot(this.game.settings));
+    this.state.draft = resetLayout(this.state.draft, this.view.slot());
     this.audio.sfx('ui');
     this.render();
   }
@@ -97,13 +98,13 @@ export class LayoutEditor {
     this.game.settings.buttonLayout = savedLayout(this.state.draft);
     this.game.io.saveSettings(this.game.settings);
     this.layout.applyTouchSettings();
-    this.settingsPanel.build();
+    this.skins.render();
   }
 }
 
-export function createLayoutEditor({ window, game, audio, layout, settings }) {
+export function createLayoutEditor({ window, game, audio, layout, skins }) {
   const view = new LayoutView({ document: window.document, layout });
-  const editor = new LayoutEditor({ view, game, audio, layout, settingsPanel: settings });
+  const editor = new LayoutEditor({ view, game, audio, layout, skins });
   installLayoutDrag(view.preview, editor);
   view.section.addEventListener('click', (event) => {
     const button = event.target.closest('[data-edit]');

@@ -2,7 +2,7 @@ import { createSafeArea } from '../../../../../packages/screen/src/safe-area.js'
 import { onFoldChange, readHinge } from '../../../../../packages/screen/src/viewport-segments.js';
 import { placeShell, renderShell } from '../../../../../packages/touch-pad/src/pad-shell.js';
 import { buttonScale } from '../../data/settings.js';
-import { customStick, fitControls, frameOf, padLayoutOf } from './fit-pad.js';
+import { customStick, fitControls, frameOf, lookNow, padLayoutOf } from './fit-pad.js';
 import { fitMenus, menuBox } from './menu-area.js';
 import { pausePlace, placePause } from './pause-place.js';
 import { arrangeStage, stickRestPosition } from './stage-layout.js';
@@ -89,6 +89,11 @@ export function createScreenFit({ document, window, elements, game, ui }) {
     // the skin's layout for the way the phone is held, which the layout editor draws too
     padLayout() {
       return padLayoutOf(context);
+    },
+    // the skin those controls are: the one looked at on the Skins screen while it is open, which
+    // the layout editor opened from there edits
+    shownSkin() {
+      return lookNow(context).skinId;
     },
     // where the stage stands now, which a copy of the shell puts its bezel round
     stageRect() {

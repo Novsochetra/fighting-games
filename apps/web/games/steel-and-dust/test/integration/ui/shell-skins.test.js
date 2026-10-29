@@ -117,8 +117,7 @@ describe('a skin with a shell on the real page', () => {
 
   it('shows the shell under the controls in the Button layout editor', () => {
     wear('clear-smoke');
-    page.openSection('touch');
-    row('buttonLayout').querySelector('[data-act="layout"]').click();
+    page.openLayoutEditor();
 
     expect(shellOf(document.querySelector('#m-layout .layout-shell')).className).toBe(
       'pad-shell clear clear-smoke',

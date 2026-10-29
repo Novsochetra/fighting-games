@@ -20,6 +20,7 @@ const SKINS_HTML = `<div class="skin-shell" aria-hidden="true"></div>
         <button type="button" class="layout-step stone-btn" data-skin-step="1" aria-label="Next skin">›</button>
       </span>
       <span class="layout-group">
+        <button type="button" class="xbtn stone-btn" data-act="layout">Layout</button>
         <button type="button" class="xbtn stone-btn" data-act="back">Cancel</button>
         <button type="button" class="xbtn stone-btn" data-skin="use" data-act="back">Use</button>
       </span>

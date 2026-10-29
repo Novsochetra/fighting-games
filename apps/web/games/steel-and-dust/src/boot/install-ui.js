@@ -52,8 +52,8 @@ function createPanels({ elements, game, audio, layout, ui, window, supporters, o
     post: createPostPanel({ root: elements.postPanel, game, online, ui }),
     credits: createCreditsPanel({ root: elements.credits, game, feed: supporters }),
   };
-  panels.layout = createLayoutEditor({ window, game, audio, layout, settings: panels.section });
   panels.skins = createSkinPicker({ window, game, audio, layout, settings: panels.section });
+  panels.layout = createLayoutEditor({ window, game, audio, layout, skins: panels.skins });
   return panels;
 }
 

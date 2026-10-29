@@ -30,6 +30,8 @@ const copy = (control) => document.querySelector(`#m-layout [data-control="${con
 const real = (control) => document.querySelector(`#touch [data-control="${control}"]`);
 const tool = (name) => document.querySelector(`#m-layout [data-edit="${name}"]`);
 const cancel = () => document.querySelector('#m-layout [data-act="back"]:not([data-edit])');
+const layoutButton = () => document.querySelector('#m-skins [data-act="layout"]');
+const shown = (control) => document.querySelector(`#m-skins [data-control="${control}"]`);
 const toolbarText = () =>
   ['.layout-name', '.layout-size'].map((part) => document.querySelector(part).textContent);
 
@@ -81,26 +83,32 @@ describe('the button layout editor on the real page', () => {
   afterEach(() => vi.restoreAllMocks());
 
   function openEditor() {
-    page.openSection('touch');
-    document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
+    page.openLayoutEditor();
     expect(openMenu().id).toBe('m-layout');
   }
 
-  it('is a Settings row only while touch controls are on', () => {
+  it('opens from the Skins screen, which Settings offers with the skin while touch controls are on', () => {
     page.game.device.coarsePointer = false;
     page.openSection('touch');
-    expect(document.querySelector('[data-k="buttonLayout"]')).toBeNull();
+    expect(document.querySelector('[data-k="skin"]')).toBeNull();
     page.act('back');
     page.act('back');
     page.game.device.coarsePointer = true;
     page.openSection('touch');
-    expect(document.querySelector('[data-k="buttonLayout"] .val').textContent).toBe('Default');
+    expect(document.querySelector('[data-k="buttonLayout"]')).toBeNull();
+    expect(document.querySelector('[data-k="skin"] .lbl').firstChild.textContent).toBe(
+      'Skin and layout',
+    );
+    document.querySelector('[data-k="skin"] [data-act="skins"]').click();
+    expect(layoutButton().textContent).toBe('Layout');
   });
 
-  it('opens from the row with Enter, starts on Done and goes back with Escape', () => {
+  it('opens from the Skins screen with Enter, starts on Done and goes back there with Escape', () => {
     page.openSection('touch');
-    const rows = [...document.querySelectorAll('.setrow')];
-    page.menus.state.selected = rows.findIndex((row) => row.dataset.k === 'buttonLayout');
+    document.querySelector('[data-k="skin"] [data-act="skins"]').click();
+    page.key('ArrowUp');
+    page.key('ArrowUp');
+    expect(selected().textContent).toBe('Layout');
     page.key('Enter');
     expect(openMenu().id).toBe('m-layout');
     expect(selected().textContent).toBe('Done');
@@ -113,7 +121,7 @@ describe('the button layout editor on the real page', () => {
     expect(toolbarText()).toEqual(['HEAVY', '100%']);
     expect(copy('heavy').classList.contains('picked')).toBe(true);
     page.key('Escape');
-    expect(openMenu().id).toBe('m-section');
+    expect(openMenu().id).toBe('m-skins');
     expect(page.saveSettings).not.toHaveBeenCalled();
   });
 
@@ -132,7 +140,7 @@ describe('the button layout editor on the real page', () => {
     expect(real('light').style.getPropertyValue('--pad-x')).toBe('');
     expect(page.saveSettings).not.toHaveBeenCalled();
     tool('done').click();
-    expect(openMenu().id).toBe('m-section');
+    expect(openMenu().id).toBe('m-skins');
     const { classic } = page.game.settings.buttonLayout;
     expect(page.saveSettings).toHaveBeenCalledWith(page.game.settings);
     expect(classic.portrait).toBeNull();
@@ -149,7 +157,7 @@ describe('the button layout editor on the real page', () => {
     );
     expect(real('light').style.getPropertyValue('--pad-x')).toBe('0.125');
     expect(real('jump').style.getPropertyValue('--pad-size')).toBe('1.2');
-    expect(document.querySelector('[data-k="buttonLayout"] .val').textContent).toBe('Custom');
+    expect(shown('light').style.getPropertyValue('--pad-x')).toBe('0.125');
   });
 
   it('leaves the settings untouched on Cancel', () => {
@@ -157,13 +165,13 @@ describe('the button layout editor on the real page', () => {
     drag('heavy', { x: 300, y: 200 });
     tool('smaller').click();
     cancel().click();
-    expect(openMenu().id).toBe('m-section');
+    expect(openMenu().id).toBe('m-skins');
     expect(page.game.settings.buttonLayout).toBeNull();
     expect(page.saveSettings).not.toHaveBeenCalled();
     expect(document.querySelector('#touch .pad-controls').classList.contains('pad-placed')).toBe(
       false,
     );
-    openEditor();
+    layoutButton().click();
     expect(copy('heavy').style.getPropertyValue('--pad-x')).toBe('');
   });
 
@@ -175,7 +183,7 @@ describe('the button layout editor on the real page', () => {
     expect(document.querySelector('#touch .pad-controls').classList.contains('pad-placed')).toBe(
       false,
     );
-    document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
+    layoutButton().click();
     drag('dash', { x: 80, y: 300 });
     tool('done').click();
     expect(page.game.settings.buttonLayout.classic.portrait.dash).toMatchObject({
@@ -187,7 +195,7 @@ describe('the button layout editor on the real page', () => {
       y: 0.25,
     });
     expect(real('dash').style.getPropertyValue('--pad-x')).toBe('0.1');
-    document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
+    layoutButton().click();
     expect(document.querySelector('#m-layout .pad-controls').classList.contains('pad-placed')).toBe(
       true,
     );
@@ -200,14 +208,16 @@ describe('the button layout editor on the real page', () => {
     expect(page.game.settings.buttonLayout.classic.landscape.ult).toMatchObject({ x: 0.5 });
     expect(real('dash').style.getPropertyValue('--pad-x')).toBe('');
     holdPhone(844, 390);
-    document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
+    layoutButton().click();
     tool('reset').click();
     tool('done').click();
     expect(page.game.settings.buttonLayout).toBeNull();
     expect(page.saveSettings).toHaveBeenLastCalledWith(
       expect.objectContaining({ buttonLayout: null }),
     );
-    expect(document.querySelector('[data-k="buttonLayout"] .val').textContent).toBe('Default');
+    expect(document.querySelector('#m-skins .pad-controls').classList.contains('pad-placed')).toBe(
+      false,
+    );
   });
 
   it('moves and resizes the stick, and the real one rests there inside its zone', () => {
@@ -232,7 +242,7 @@ describe('the button layout editor on the real page', () => {
     // the stick stands on the right, so its zone is the right half and the base rests inside it
     expect([zone.style.left, zone.style.width]).toEqual(['400px', '400px']);
     expect([base.style.left, base.style.top]).toEqual(['280px', '280px']);
-    document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
+    layoutButton().click();
     expect(document.querySelector('#m-layout .pad-controls').classList.contains('pad-placed')).toBe(
       true,
     );

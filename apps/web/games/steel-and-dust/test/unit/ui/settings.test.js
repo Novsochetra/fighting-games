@@ -88,19 +88,19 @@ describe('a section of settings', () => {
     expect(sectionHtml(section('training'), shown, settings)).toContain('Show hitboxes');
   });
 
-  it('shows the button layout only with touch controls, with an Edit button and no stepper', () => {
+  it('shows the skin and its layout as one row, only with touch controls, with Edit and no stepper', () => {
     const touchControls = section('touch');
     expect(sectionHtml(touchControls, visibility(), defaultSettings(false))).not.toContain(
-      'Button layout',
+      'data-k="skin"',
     );
     const touch = visibility({ isTouchOn: () => true });
-    const html = sectionHtml(touchControls, touch, defaultSettings(true));
-    const row = html.match(/<div class="setrow" data-k="buttonLayout">.*?<\/div>/)[0];
-    expect(row).toContain('<span class="val">Default</span>');
-    expect(row).toContain('data-act="layout">Edit</button>');
+    const html = sectionHtml(touchControls, touch, { ...defaultSettings(true), skin: 'dusk' });
+    const row = html.match(/<div class="setrow" data-k="skin">.*?<\/div>/)[0];
+    expect(row).toContain('Skin and layout');
+    expect(row).toContain('<span class="val">Dusk</span>');
+    expect(row).toContain('data-act="skins">Edit</button>');
     expect(row).not.toContain('data-d=');
-    const custom = { ...defaultSettings(true), buttonLayout: { landscape: {}, portrait: null } };
-    expect(sectionHtml(touchControls, touch, custom)).toContain('<span class="val">Custom</span>');
+    expect(html).not.toContain('Button layout');
   });
 });
 
@@ -110,8 +110,8 @@ describe('section panel', () => {
     const audio = { sfx: vi.fn() };
     const visibility = { isTouchOn: () => true, canVibrate: false, settings: game.settings };
     const panel = createSectionPanel({ game, audio, layout: {}, visibility });
-    expect(panel.change('buttonLayout', 1, true)).toBe(false);
-    expect(game.settings.buttonLayout).toBeNull();
+    expect(panel.change('skin', 1, true)).toBe(false);
+    expect(game.settings.skin).toBe('classic');
     expect(game.io.saveSettings).not.toHaveBeenCalled();
     expect(panel.change('shake', -1, false)).toBe(true);
     expect(game.settings.shake).toBe(1);

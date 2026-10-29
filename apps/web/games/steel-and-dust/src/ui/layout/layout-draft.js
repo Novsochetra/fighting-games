@@ -1,5 +1,5 @@
 import { clampCentre, steppedSize } from '../../data/button-layout.js';
-import { ORIENTATIONS, SKINS, skinIdFor } from '../../data/skins/skins.js';
+import { ORIENTATIONS, SKINS } from '../../data/skins/skins.js';
 import { isPortrait } from '../screen/stage-layout.js';
 
 // the editor works on a copy of the saved layouts, so Cancel only has to drop it; every step
@@ -12,11 +12,6 @@ export function orientationOf(width, height) {
 }
 
 export const slotOf = (skinId, orientation) => `${skinId}:${orientation}`;
-
-// the slot the editor shows: the skin picked, held the way the phone is
-export function slotFor(settings, orientation) {
-  return slotOf(skinIdFor(settings), orientation);
-}
 
 export function savedEntries(buttonLayout, slot) {
   const [skin, orientation] = slot.split(':');

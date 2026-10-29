@@ -65,11 +65,10 @@ const TOUCH_CONTROLS = [
   },
   {
     key: 'skin',
-    label: 'Skin',
+    label: 'Skin and layout',
     action: 'skins',
-    actionLabel: 'Pick',
     format: skinName,
-    note: 'See each skin on your screen and pick the one you play with',
+    note: 'Pick the skin you play with, and move or resize its controls',
     visible: isTouchOn,
   },
   {
@@ -100,14 +99,6 @@ const TOUCH_CONTROLS = [
     options: [0, 1, 2],
     format: pick(['Small', 'Medium', 'Large']),
   },
-  {
-    key: 'buttonLayout',
-    label: 'Button layout',
-    action: 'layout',
-    format: (value) => (value ? 'Custom' : 'Default'),
-    note: 'Move and resize the controls of each skin, for each way you hold the phone',
-    visible: isTouchOn,
-  },
 ];
 
 const TRAINING = [
@@ -127,8 +118,8 @@ const TRAINING = [
   },
 ];
 
-// a row's `visible` gets { isTouchOn, canVibrate, settings }; a row with an `action` has a button
-// (`actionLabel`, else Edit) that opens that menu instead of a stepper. A section's `note` names
+// a row's `visible` gets { isTouchOn, canVibrate, settings }; a row with an `action` has an Edit
+// button that opens that menu instead of a stepper. A section's `note` names
 // only rows every player sees, as the others come and go with the device
 export const SETTINGS_SECTIONS = [
   { id: 'sound', title: 'Sound', note: 'Music and sound effects', rows: SOUND },

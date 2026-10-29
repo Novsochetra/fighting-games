@@ -13,7 +13,8 @@ const withShape = (keyShapes, control, shape) => {
 // the Skins menu: it steps through the skins on a copy of the touch layer, so a player sees each
 // on their own screen before picking it, and a key the skin offers a pill for opens a chooser of
 // its shape. A skin with a shell moves the stage into its frame meanwhile (layout.previewSkin);
-// only Use changes the settings, and Cancel, or any way back, leaves them. `select` (the menus')
+// only Use changes the skin worn, and Cancel, or any way back, leaves it (a layout Done in the editor
+// opened from here is kept either way, as it belongs to the skin looked at). `select` (the menus')
 // moves the keyboard and gamepad highlight as the chooser opens and closes
 export class SkinPicker {
   constructor({ view, chooser, game, audio, layout, settingsPanel }) {

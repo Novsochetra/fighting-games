@@ -34,8 +34,7 @@ function stage() {
 const realStick = () => document.querySelector('#touch .pad-stick');
 
 function openLayoutEditor(page) {
-  page.openSection('touch');
-  document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
+  page.openLayoutEditor();
   expect(openMenu().id).toBe('m-layout');
 }
 

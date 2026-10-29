@@ -1,6 +1,6 @@
 import { BUTTON_SIZE } from '../../data/button-layout.js';
 import { fitTouchLayer } from '../screen/touch-area.js';
-import { orientationOf, shownControls, sizeOf, slotFor } from './layout-draft.js';
+import { orientationOf, shownControls, sizeOf, slotOf } from './layout-draft.js';
 import { centreOf, coverCost, fractionOf, halfExtentOf } from './layout-geometry.js';
 import { controlName, EDITOR_HTML, fillPreview, sizeLabel } from './layout-markup.js';
 import { drawPreviewPad, drawPreviewShell, restPreviewStick } from './preview-pad.js';
@@ -34,8 +34,8 @@ export class LayoutView {
   }
 
   // the skin shown for the way the phone is held, and that way
-  slot(settings) {
-    return slotFor(settings, this.orientation());
+  slot() {
+    return slotOf(this.layout.shownSkin(), this.orientation());
   }
 
   controlFor(control) {
@@ -78,7 +78,7 @@ export class LayoutView {
   }
 
   render({ draft, picked }, settings) {
-    const slot = this.slot(settings);
+    const slot = this.slot();
     const entries = draft[slot];
     this.picked = picked;
     this.shown = shownControls(this.layout.padLayout(), settings.stick);

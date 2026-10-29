@@ -76,7 +76,7 @@ export function stepHero(menus, step, audio) {
   audio.sfx('ui');
 }
 
-// a row with a button of its own (Button layout: Edit) opens it, the others cycle their value
+// a row with a button of its own (Skin and layout: Edit) opens it, the others cycle their value
 function chooseSetting(menus, row) {
   const button = row.querySelector('[data-act]');
   if (button) {

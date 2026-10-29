@@ -14,7 +14,7 @@ import {
   savedLayout,
   shownControls,
   sizeOf,
-  slotFor,
+  slotOf,
 } from '../../../src/ui/layout/layout-draft.js';
 
 const centres = {
@@ -43,11 +43,9 @@ describe('orientation', () => {
     expect(orientationOf(800, 820)).toBe('landscape');
   });
 
-  it('picks the skin chosen held the way the phone is, and its saved layout, or none', () => {
-    const settings = { skin: 'dusk' };
-    expect(slotFor(settings, 'landscape')).toBe('dusk:landscape');
-    expect(slotFor(settings, 'portrait')).toBe('dusk:portrait');
-    expect(slotFor({ skin: 'gone' }, 'landscape')).toBe(LANDSCAPE);
+  it('names a skin held the way the phone is, and finds its saved layout, or none', () => {
+    expect(slotOf('dusk', 'landscape')).toBe('dusk:landscape');
+    expect(slotOf('dusk', 'portrait')).toBe('dusk:portrait');
     const saved = { dusk: { landscape: { light: 1 }, portrait: null } };
     expect(savedEntries(saved, 'dusk:landscape')).toEqual({ light: 1 });
     expect(savedEntries(saved, 'dusk:portrait')).toBeNull();

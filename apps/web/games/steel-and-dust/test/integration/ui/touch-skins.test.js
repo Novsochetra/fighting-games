@@ -66,10 +66,10 @@ describe('touch skins on the real page', () => {
 
   afterEach(() => vi.restoreAllMocks());
 
-  it('offers a Skin row that opens the Skins screen, and the controls’ opacity, with touch on', () => {
+  it('offers a Skin and layout row that opens the Skins screen, and the controls’ opacity, with touch on', () => {
     page.openSection('touch');
     expect(row('skin').querySelector('.val').textContent).toBe('Classic');
-    expect(row('skin').querySelector('[data-act="skins"]').textContent).toBe('Pick');
+    expect(row('skin').querySelector('[data-act="skins"]').textContent).toBe('Edit');
     expect(row('padOpacity').querySelector('.val').textContent).toBe('100%');
     page.act('back');
     page.act('back');
@@ -220,11 +220,11 @@ describe('touch skins on the real page', () => {
     expect(document.documentElement.style.getPropertyValue('--pad-opacity')).toBe('0.8');
   });
 
-  it('edits Dusk’s own layout and leaves the classic one as it was', () => {
-    page.game.settings.skin = 'dusk';
-    page.layout.applyTouchSettings();
-    page.openSection('touch');
-    row('buttonLayout').querySelector('[data-act="layout"]').click();
+  it('edits the layout of the skin looked at, not the one worn, and keeps it on Cancel', () => {
+    openSkins(page);
+    page.key('ArrowRight');
+    expect(skinName()).toBe('Dusk');
+    document.querySelector('#m-skins [data-act="layout"]').click();
     expect(openMenu().id).toBe('m-layout');
     expect(copy('stick')).toBeNull();
     pointer(copy('dpad'), 'pointerdown', SPOTS.dpad);
@@ -247,6 +247,14 @@ describe('touch skins on the real page', () => {
       'ult',
     ]);
     expect(real('light').style.getPropertyValue('--pad-dx')).toBe('');
+
+    expect(openMenu().id).toBe('m-skins');
+    expect(skinName()).toBe('Dusk');
+    expect(Number(shown('light').style.getPropertyValue('--pad-x'))).toBeCloseTo(500 / 844, 3);
+    document.querySelector('#m-skins [data-act="back"]:not([data-skin])').click();
+    expect(page.game.settings.skin).toBe('classic');
+    expect(page.game.settings.buttonLayout.dusk.landscape.light.x).toBeCloseTo(500 / 844, 3);
+    expect(real('stick')).not.toBeNull();
   });
 
   it('tells a Dusk player to steer with the d-pad', () => {
