@@ -211,7 +211,9 @@ tiles side by side, and every road got a cliff face. All of it is reproducible w
   `way-in.png` layer drawn once from the start of the road (`once: true`, parallax 0.5), made with
   `wayin` from the last road's near strip as it was before this pass and hazed toward this forest's
   air: two pines from Pine Ridge in the Old Grove (`#b8ccaa`, 0.3), an Old Grove tree (its canopy
-  trimmed to a ragged edge and its floor band left behind) in Bamboo Pass (`#e1f1df`, 0.35), a
+  trimmed to a ragged edge and its floor band left behind) in Bamboo Pass (`#e1f1df`, 0.35), its
+  ends cut back into frayed slopes with `taper` (`right 126 140 154`, then `left 34 168 20`) where
+  `wayin` had left them on straight cuts through the floor band and the next tree's roots, a
   bamboo clump at the Raider Camp gate (`#d8ae84`, 0.3), the camp's crates and banner on the edge of
   Ember Woods (`#e7a35f`, 0.25) and the last autumn tree going dark in Firefly Hollow (`#3c3c74`,
   0.58).
