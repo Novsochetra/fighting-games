@@ -38,6 +38,8 @@ describe('toGameCard', () => {
       bannerSrc: 'games/steel-and-dust/assets/banner.png',
       posterSrc: 'games/steel-and-dust/assets/poster.png',
       artSrc: 'games/steel-and-dust/assets/screenshot.png',
+      trailerSrc: '',
+      trailerSmallSrc: '',
       genre: "Beat 'em up",
       meta: "Beat 'em up · 1 player · 2026",
       summary: 'A side-scrolling pixel-art brawler.',
@@ -78,6 +80,31 @@ describe('toGameCard', () => {
     expect([bare.coverSrc, bare.bannerSrc, bare.posterSrc, bare.artSrc]).toEqual(['', '', '', '']);
     expect(bare.controls).toEqual([]);
     expect(bare.meta).toBe('');
+  });
+
+  it('plays a trailer from inside the arcade, and none for a game without one', () => {
+    const trailer = 'games/steel-and-dust/assets/trailer/trailer.mp4';
+
+    expect(toGameCard(apiGame({ trailer })).trailerSrc).toBe(trailer);
+    expect(toGameCard(apiGame()).trailerSrc).toBe('');
+  });
+
+  it('plays a trailer from a CDN, and its smaller copy', () => {
+    const trailer = 'https://cdn.example.com/promo/steel-and-dust-trailer.mp4';
+    const trailerSmall = 'https://cdn.example.com/promo/steel-and-dust-trailer-480.mp4';
+    const card = toGameCard(apiGame({ trailer, trailerSmall }));
+
+    expect([card.trailerSrc, card.trailerSmallSrc]).toEqual([trailer, trailerSmall]);
+  });
+
+  it.each([
+    'http://cdn.example.com/trailer.mp4',
+    'javascript:alert(1)',
+    '//evil.example/a.mp4',
+    42,
+  ])('plays no trailer from %j, since the catalog is data', (trailer) => {
+    expect(toGameCard(apiGame({ trailer, trailerSmall: trailer })).trailerSrc).toBe('');
+    expect(toGameCard(apiGame({ trailer, trailerSmall: trailer })).trailerSmallSrc).toBe('');
   });
 
   it('opens a game hosted on its own site at its url, and keeps its rendered art smooth', () => {

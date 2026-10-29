@@ -1,31 +1,14 @@
 import { useArcadeUrl } from '../arcade/arcade-context';
 import { SheetClose } from '../arcade/SheetClose';
 import { BoardPeek } from '../leaderboard/BoardPeek';
+import { DetailsMedia } from './DetailsMedia';
 import type { GameCard } from './game-card';
 import { useHome } from './home-context';
 import { PlayIcon } from './home-icons';
 import { isPlainClick } from './input-actions.js';
-import { OfflineTag } from './OfflineTag';
 import { SaveOffline } from './SaveOffline';
 import type { Details } from './use-details';
 import { useSaveStatus } from './use-save-status';
-
-function Media({ card }: { card: GameCard | null }) {
-  const url = useArcadeUrl();
-  const art = card?.artSrc ?? '';
-
-  return (
-    <div className="sheet__media" hidden={art === ''}>
-      <img
-        className={card?.smoothArt ? 'sheet__art is-smooth' : 'sheet__art'}
-        id="details-art"
-        src={art ? url(art) : undefined}
-        alt=""
-      />
-      <OfflineTag card={card} />
-    </div>
-  );
-}
 
 function Controls({ controls }: { controls: string[] }) {
   const none = controls.length === 0;
@@ -114,7 +97,7 @@ export function DetailsSheet({ details }: { details: Details }) {
       tabIndex={-1}
       ref={dialogRef}
     >
-      <Media card={card} />
+      <DetailsMedia details={details} />
       <SheetClose id="details-close" closeRef={closeRef} />
       <div className="sheet__body">
         <Story card={card} />

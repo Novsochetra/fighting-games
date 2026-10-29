@@ -24,6 +24,7 @@ const CONTENT_TYPES = new Map([
   ['.wav', 'audio/wav'],
   ['.mp3', 'audio/mpeg'],
   ['.ogg', 'audio/ogg'],
+  ['.mp4', 'video/mp4'],
 ]);
 
 export function contentTypeFor(filePath) {

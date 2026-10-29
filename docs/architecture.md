@@ -53,6 +53,7 @@ apps/
     test/{unit,integration,regression}  the arcade's tests (support/render-arcade.tsx renders it)
 .railway/railway.ts       the Railway service's settings (docs/deploy-railway.md)
 tools/eslint-rules/       the project's own lint rules
+tools/claude-hooks/       the Claude Code hook that shows Claude each comment it adds
 docs/                     this file and deploy-railway.md
 ```
 
@@ -61,8 +62,8 @@ docs/                     this file and deploy-railway.md
 The arcade and every game are separate apps that share no file. Each has its own design tokens
 (`src/home/tokens.css`, `games/<id>/styles/tokens.css`), styles and modules, so a game can change its
 look without touching the arcade or another game. The arcade knows a game only through its
-`game.json` and the art it names (`cover`, `banner`, `poster`, `screenshot`); a game links back to the
-arcade only by address (`../../`).
+`game.json` and the art it names (`cover`, `banner`, `poster`, `screenshot`) and its trailer
+(`trailer`, see Home page); a game links back to the arcade only by address (`../../`).
 `test/integration/independence.test.js` fails if a game loads a file from outside its folder or the
 packages, a package loads a file from outside the packages, or the arcade (any of its pages or
 modules) loads a file from a game.
@@ -219,7 +220,9 @@ load.
 The arcade runs on Railway as one service: the same server sends the pages and the API, from one
 address (`docs/deploy-railway.md`). `router.js` matches an API path and its method (`HEAD` goes to
 `GET`, another method gets 405 with `Allow`); every other path is a static file, for `GET` and
-`HEAD` only.
+`HEAD` only. A file asked for in parts, as a video asks for a trailer (`Range: bytes=…`), gets just
+that part (`206`, `routes/byte-range.js`), or a `416` past its end: Safari plays no video from a
+server that answers its first question, the first two bytes, with the whole file.
 
 **Only the arcade's own pages call the API.** The server sends no CORS headers, so another site's
 script can't read an answer, and a CORS preflight (`OPTIONS`) gets 405. Every API request whose
@@ -363,7 +366,7 @@ not kept.
   visit read them before it was there. A gift sent offline fails as it always did, saying so.
 - **A game** (`game-cache.js`): a game is kept once the player saves it (see Saving a game), and
   the whole of it comes down: the build writes each game's `offline.json` (`game-files.js`), every file it may load
-  as it is played (not its screenshots, link-preview art or notes, nor a sprite that has a packed
+  as it is played (not its screenshots, link-preview art, trailer or notes, nor a sprite that has a packed
   copy of itself in `packed/`, which only the packer reads) and a revision that changes with any of
   them. Only the game's own folder comes down, so a game keeps its fonts there too (Steel & Dust's
   Silkscreen, `assets/fonts/`): a font from another site, like Google Fonts, is lost offline. Each file is checked with the server, so what the game has just loaded for itself costs a
@@ -379,7 +382,9 @@ not kept.
   revision a game plays once, and again only as one comes in or goes, so each of its files reads one
   cache. A download waits while the game asks for files of its own, carrying on once it has asked
   for none for two seconds (`game-activity.js`), so on a phone the game's own files come first. A
-  prefetch of a game's page (the home's speculation rules) downloads nothing.
+  prefetch of a game's page (the home's speculation rules) downloads nothing. A video (a trailer) is
+  left to the network (`routes.js`): it plays from the byte ranges it asks for, which the whole files
+  the worker keeps cannot answer.
 - **Saving a game** (`game-downloads.js`): the player saves a game, and removes it, with the
   arcade's buttons; a play never waits for a download. The worker answers `api/offline/<id>`: a GET
   with `saved` once a revision is whole, else `saving` with how many of its files are in (`done`,
@@ -494,6 +499,19 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   sheet of the arcade works through `use-sheet.ts` over `sheet.js`: it shows while its screen asks
   for it, Escape and a tap on the dimmed page close it with its animation, and a screen that goes
   takes its sheet down at once.
+- **Trailer** (`DetailsMedia.tsx`, `trailer-player.js`, `trailer.css`): a game's `game.json` may
+  name a trailer, an `.mp4` (MP4, H.264 and AAC, is the one kind every phone plays) in its
+  `assets/trailer/` or at an `https:` address of its own, such as a CDN (`catalog/trailer-rules.js`,
+  checked again by the arcade, `view-models.js`), and `trailerSmall`, a lighter copy of it. The small
+  copy plays on a phone (the sheet's own `max-width: 40rem`), under a data saver or on a slow network
+  (`navigator.connection`), the full one elsewhere (`trailerFor`). Steel & Dust's are on its CDN, a
+  1080p and a 360p copy. The Trailer button on the details sheet's art (the only way to it, so the entry screen
+  keeps to Play, Details and the heart) plays the trailer in place of the art, Play right under it. It starts in the tap that asked for
+  it (`flushSync`), with sound, since a browser lets sound play only then; muted where the browser
+  still refuses, or where the player turned the arcade's sound off. It shows no controls, so nothing
+  covers it: a tap on it (or Enter or Space) plays it, brings its sound back, or pauses it. It
+  stops, and stops downloading, as the sheet closes, and the sheet shows the art again the next time.
+  No save keeps it, and one on another site never passes through the worker.
 
 Opening a game plays an app-launch animation before the page changes (`src/home/launcher.js`, made
 on the first launch by `use-launcher.ts`), like

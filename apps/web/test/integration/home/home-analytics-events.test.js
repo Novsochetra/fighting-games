@@ -86,6 +86,16 @@ describe('the home page events', () => {
     ]);
   });
 
+  it('count a trailer watched, with the game', async () => {
+    const { tag } = await bootCounted(bootWithSteelAndDust);
+    click(byId('details-open'));
+    click(byId('details-trailer-open'));
+    expect(sentEvents(tag)).toEqual([
+      ['view_game_details', { game_id: 'steel-and-dust' }],
+      ['watch_trailer', { game_id: 'steel-and-dust' }],
+    ]);
+  });
+
   it('count the sound and appearance switches', async () => {
     const { tag, home } = await bootCounted();
     click(byId('sound-toggle'));

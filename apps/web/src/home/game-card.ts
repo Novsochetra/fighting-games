@@ -10,6 +10,8 @@ export interface GameCard {
   bannerSrc: string;
   posterSrc: string;
   artSrc: string;
+  trailerSrc: string;
+  trailerSmallSrc: string;
   genre: string;
   meta: string;
   summary: string;

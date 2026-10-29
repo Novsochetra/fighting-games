@@ -87,6 +87,47 @@ describe('validateGameEntry', () => {
     },
   );
 
+  it('accepts a trailer, a video of play inside the game folder', () => {
+    const entry = { ...validEntry(), trailer: 'assets/trailer/trailer.mp4' };
+    expect(validateGameEntry(entry, 'demo-game')).toEqual([]);
+  });
+
+  it('accepts a trailer on a CDN, with a smaller copy for phones', () => {
+    const entry = {
+      ...validEntry(),
+      trailer: 'https://cdn.example.com/promo/demo-trailer.mp4',
+      trailerSmall: 'https://cdn.example.com/promo/demo-trailer-480.mp4',
+    };
+    expect(validateGameEntry(entry, 'demo-game')).toEqual([]);
+  });
+
+  it.each([
+    'assets/trailer/../../../trailer.mp4',
+    'http://cdn.example.com/trailer.mp4',
+    'https://user:secret@cdn.example.com/trailer.mp4',
+    'https://cdn.example.com/trailer.webm',
+    'https://cdn.example.com/trailer.mp4.html',
+    'javascript:alert(1)//.mp4',
+    '//cdn.example.com/trailer.mp4',
+    'assets/video/trailer.mp4',
+    'trailer.mp4',
+    'assets/trailer/trailer.webm',
+    'assets/trailer/trailer.mp4.png',
+    '',
+    42,
+  ])('rejects the trailer %j', (trailer) => {
+    expect(validateGameEntry({ ...validEntry(), trailer }, 'demo-game')).toEqual([
+      '"trailer" must be an .mp4 in the game\'s assets/trailer/ folder or at an https:// address',
+    ]);
+  });
+
+  it('rejects a small copy of a trailer the game does not have', () => {
+    const entry = { ...validEntry(), trailerSmall: 'https://cdn.example.com/trailer-480.mp4' };
+    expect(validateGameEntry(entry, 'demo-game')).toEqual([
+      '"trailerSmall" needs the "trailer" it is a smaller copy of',
+    ]);
+  });
+
   it.each([['Keyboard', ''], 'Keyboard', [1]])('rejects controls %j', (controls) => {
     expect(validateGameEntry({ ...validEntry(), controls }, 'demo-game')).toEqual([
       '"controls" must be a list of non-empty strings',
@@ -197,6 +238,20 @@ describe('toCatalogGame', () => {
     expect(toCatalogGame(validEntry())).not.toHaveProperty('poster');
     const shot = toCatalogGame({ ...validEntry(), screenshot: 'shots/a.png' });
     expect(shot.screenshot).toBe('games/demo-game/shots/a.png');
+  });
+
+  it('resolves a trailer like the art, and adds none when missing', () => {
+    const game = toCatalogGame({ ...validEntry(), trailer: 'assets/trailer/trailer.mp4' });
+    expect(game.trailer).toBe('games/demo-game/assets/trailer/trailer.mp4');
+    expect(toCatalogGame(validEntry())).not.toHaveProperty('trailer');
+    expect(toCatalogGame(validEntry())).not.toHaveProperty('trailerSmall');
+  });
+
+  it('keeps a trailer on a CDN, and its small copy, where they are', () => {
+    const trailer = 'https://cdn.example.com/promo/demo-trailer.mp4';
+    const trailerSmall = 'https://cdn.example.com/promo/demo-trailer-480.mp4';
+    const game = toCatalogGame({ ...validEntry(), trailer, trailerSmall });
+    expect(game).toMatchObject({ trailer, trailerSmall });
   });
 
   it('keeps the folder path of a game hosted elsewhere, next to its url', () => {

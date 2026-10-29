@@ -4,6 +4,7 @@ export const EVENTS = {
   play: 'play_game',
   comingSoon: 'tap_coming_soon',
   details: 'view_game_details',
+  trailer: 'watch_trailer',
   favorite: 'favorite_game',
   filter: 'filter_library',
   showMore: 'show_more_games',

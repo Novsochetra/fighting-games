@@ -1,4 +1,6 @@
 import { checkLeaderboard, shownLeaderboard } from './leaderboard-rules.js';
+import { isSecureUrl } from './secure-url.js';
+import { catalogTrailers, checkTrailers } from './trailer-rules.js';
 
 const REQUIRED_TEXT_FIELDS = ['id', 'title', 'tagline', 'description', 'genre', 'players', 'cover'];
 // The cover is the square icon; banner (16:9) and poster (portrait) are the optional key art the home
@@ -49,20 +51,8 @@ function checkControls(entry) {
 }
 
 // A game hosted on its own site keeps only its game.json and art here; Play opens its url instead.
-export function isSecureGameUrl(value) {
-  if (typeof value !== 'string' || /\s/.test(value)) {
-    return false;
-  }
-  try {
-    const url = new URL(value);
-    return url.protocol === 'https:' && url.username === '' && url.password === '';
-  } catch {
-    return false;
-  }
-}
-
 function checkUrl(entry) {
-  if (entry.url === undefined || isSecureGameUrl(entry.url)) {
+  if (entry.url === undefined || isSecureUrl(entry.url)) {
     return [];
   }
   return ['"url" must be an https:// address'];
@@ -79,6 +69,7 @@ const CHECKS = [
   checkRequiredFields,
   checkId,
   checkArt,
+  checkTrailers,
   checkControls,
   checkUrl,
   checkPixelArt,
@@ -99,5 +90,7 @@ export function toCatalogGame({ leaderboard, ...entry }) {
     `${gamePath}${entry[field]}`,
   ]);
   const board = leaderboard ? { leaderboard: shownLeaderboard(leaderboard) } : {};
-  return { ...entry, ...Object.fromEntries(art), ...board, path: gamePath };
+  const trailers = catalogTrailers(entry, gamePath);
+
+  return { ...entry, ...Object.fromEntries(art), ...trailers, ...board, path: gamePath };
 }
