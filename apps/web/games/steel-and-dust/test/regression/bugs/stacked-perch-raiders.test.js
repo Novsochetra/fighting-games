@@ -13,6 +13,7 @@ import { createPlayingGame, runTicks } from '../../support/test-game.js';
 const originalRandom = Math.random;
 const HERO_X = 180;
 const PERCH_ROADS = [
+  'angkorWat',
   'raiderCamp',
   'ironWorks',
   'wardenFortress',

@@ -89,6 +89,64 @@ body.stick-hidden .stick-zone {
   color: var(--color-ink);
 }
 
+/* in the HUD's top row the pause button is one more of its plaques, drawn as the canvas draws them
+   (src/render/hud/hud-frames.js) in the game's own pixels (--pause-pixel): a dark plate 2 pixels in,
+   the score's carved frame, and two bars in the clock's sand over the HUD text's dark shadow. Only
+   its reach (::after) takes a thumb's 44px, past its edges, where nothing else answers a tap */
+.pause-in-hud .tb-pause {
+  --pause-plate: var(--color-hud-plate);
+  --pause-bars: var(--color-text);
+  --pause-bar-size: calc(3 * var(--pause-pixel)) calc(10 * var(--pause-pixel));
+  --pause-bar-left: calc(50% - 2.5 * var(--pause-pixel));
+  --pause-bar-right: calc(50% + 2.5 * var(--pause-pixel));
+  --pause-shade: var(--pause-pixel);
+
+  width: var(--pause-size);
+  height: var(--pause-size);
+  border: 0;
+  border-radius: 0;
+  color: var(--color-clear);
+  background-color: var(--color-clear);
+  background-image:
+    linear-gradient(var(--pause-bars) 0 0), linear-gradient(var(--pause-bars) 0 0),
+    linear-gradient(var(--color-hud-shadow) 0 0), linear-gradient(var(--color-hud-shadow) 0 0),
+    linear-gradient(var(--pause-plate) 0 0);
+  background-repeat: no-repeat;
+  background-position:
+    var(--pause-bar-left) 50%,
+    var(--pause-bar-right) 50%,
+    calc(var(--pause-bar-left) + var(--pause-shade)) calc(50% + var(--pause-shade)),
+    calc(var(--pause-bar-right) + var(--pause-shade)) calc(50% + var(--pause-shade)),
+    50% 50%;
+  background-size:
+    var(--pause-bar-size),
+    var(--pause-bar-size),
+    var(--pause-bar-size),
+    var(--pause-bar-size),
+    calc(100% - 4 * var(--pause-pixel)) calc(100% - 4 * var(--pause-pixel));
+}
+
+.pause-in-hud .tb-pause::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: solid var(--color-clear);
+  border-width: calc(5.5 * var(--pause-pixel)) calc(6 * var(--pause-pixel));
+  border-image: url('../assets/ui/hud/score-frame.png') 11 12 round;
+  image-rendering: pixelated;
+}
+
+.pause-in-hud .tb-pause::after {
+  content: '';
+  position: absolute;
+  inset: min(0px, (var(--pause-size) - 44px) / 2);
+}
+
+.pause-in-hud .tb-pause:active {
+  --pause-plate: var(--color-accent);
+  --pause-bars: var(--color-ink);
+}
+
 .rotate {
   display: none;
 }

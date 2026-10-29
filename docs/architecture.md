@@ -301,7 +301,11 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   tap does or how far the save has got; the button's name says it all aloud, so the tooltip and the
   tag are only for the eye. One store holds every game's status for the home screen, so the card,
   the tile and the details sheet show the same save; it asks the worker as a game first shows, every
-  half second while one saves, and again for each game back from a play. The ring and tooltip are
+  half second while one saves, again for each game back from a play, and again as the worker takes
+  the page over (`use-worker-takeover.ts`, its `controllerchange`): the arcade's first page, an
+  installed arcade's first open among them, loads before the worker is in, so its first question
+  reached the server, which has no such address. Only the answer to a game's last question counts,
+  so one from before the worker that comes back late changes nothing. The ring and tooltip are
   drawn inside the button, so a fade of the button takes them along. Where no worker answers, or for
   a game on its own site, no button shows.
 - **Details** (`DetailsSheet.tsx`, `use-details.ts`, `sheet.css`): a `<dialog>` form sheet with the whole description
@@ -672,7 +676,8 @@ length.
     on the place soonest left, climbing on `DROP.turn` ticks after the last has leapt, so a lookout
     tower sends a wave down one after another (`src/sim/hazards/perch-turns.js`); with none in sight,
     or its place gone out of sight by its turn, it walks in as any raider does. In a
-    `crown` (Pine Ridge's pines, Ember Woods' autumn trees) it hides in the thick of the leaves at
+    `crown` (Pine Ridge's pines, Ember Woods' autumn trees, the strangler fig behind Angkor Wat's
+    balustrade, wide enough to hide three) it hides in the thick of the leaves at
     `x, y`: only that crown sways, in its own layer, and as it lets go the crown's own pixels are
     laid back over it, so it drops out of the leaves (`src/render/scene/crown-cover.js`). On a
     `ledge` (the Raider Camp's lookout tower, the Iron Works' derrick girder and furnace roof, the

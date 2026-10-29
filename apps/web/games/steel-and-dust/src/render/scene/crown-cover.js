@@ -8,6 +8,8 @@ const BODY = 44;
 const HALF_WIDTH = 20;
 const COVER_TICKS = 30;
 const COVER_BELOW = 16;
+// a raider's lowest row is the one its feet stand on, so the leaves reach down through it
+const FEET_ROW = 1;
 
 const isLeavingCrown = (shot) =>
   shot.kind === 'dropMark' &&
@@ -25,7 +27,7 @@ function overBody(patch, mark, cameraX) {
     left: Math.max(patch.left, raiderX - HALF_WIDTH),
     right: Math.min(patch.right, raiderX + HALF_WIDTH),
     top: Math.max(patch.top, feet - BODY),
-    bottom: Math.min(patch.bottom, feet, mark.perch.y + COVER_BELOW),
+    bottom: Math.min(patch.bottom, feet + FEET_ROW, mark.perch.y + COVER_BELOW),
     keepStill: true,
   };
 }

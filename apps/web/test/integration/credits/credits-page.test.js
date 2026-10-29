@@ -11,6 +11,7 @@ const SOCIAL_LINKS = [
   'https://buymeacoffee.com/sochetranov',
   'https://github.com/Novsochetra',
   'https://www.facebook.com/sochetra.nov.7',
+  'https://www.facebook.com/profile.php?id=61594987526699',
 ];
 
 let screen = null;
@@ -47,6 +48,15 @@ describe('the credits page', () => {
     expect(hrefs).toEqual(SOCIAL_LINKS);
   });
 
+  it("links to Morodok Angkor's Facebook page under the maker's own", () => {
+    const [mine, morodok] = all('#social-links a')
+      .slice(2)
+      .map((link) => textOf(link));
+
+    expect(mine).toBe('Facebooksochetra.nov.7');
+    expect(morodok).toBe('Morodok AngkorFacebook page');
+  });
+
   it('opens every outside link in a new tab over https, without handing it the page', () => {
     const outside = all('a').filter(isOutside);
     expect(outside.length).toBeGreaterThan(SOCIAL_LINKS.length);
@@ -61,7 +71,7 @@ describe('the credits page', () => {
 
   it('names every row by its title, with the icons hidden from screen readers', () => {
     const rows = all('.credits-row');
-    expect(rows).toHaveLength(6);
+    expect(rows).toHaveLength(7);
     for (const row of rows) {
       expect(textOf(row.querySelector('.credits-row__title'))).not.toBe('');
       expect(row.querySelector('.credits-tile').getAttribute('aria-hidden')).toBe('true');
