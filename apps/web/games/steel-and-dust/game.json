@@ -11,7 +11,8 @@
   "banner": "assets/ui/select/bg-landscape.png",
   "poster": "assets/ui/select/bg-portrait.png",
   "screenshot": "assets/screenshots/angkor-wat.png",
-  "trailer": "assets/trailer/trailer.mp4",
+  "trailer": "https://dphwn49s8chpb.cloudfront.net/promo-videos/steel-and-dust-trailer.mp4",
+  "trailerSmall": "https://dphwn49s8chpb.cloudfront.net/promo-videos/steel-and-dust-trailer-480.mp4",
   "leaderboard": {
     "heroes": [
       { "id": "moss", "name": "Moss Shade" },

@@ -30,7 +30,9 @@ describe('GET /api/games', () => {
       banner: 'games/steel-and-dust/assets/ui/select/bg-landscape.png',
       poster: 'games/steel-and-dust/assets/ui/select/bg-portrait.png',
       screenshot: 'games/steel-and-dust/assets/screenshots/angkor-wat.png',
-      trailer: 'games/steel-and-dust/assets/trailer/trailer.mp4',
+      trailer: 'https://dphwn49s8chpb.cloudfront.net/promo-videos/steel-and-dust-trailer.mp4',
+      trailerSmall:
+        'https://dphwn49s8chpb.cloudfront.net/promo-videos/steel-and-dust-trailer-480.mp4',
     });
   });
 
@@ -54,13 +56,18 @@ describe('GET /api/games', () => {
     }
   });
 
-  it('points every trailer at a video the server sends in parts, as a player asks for it', async () => {
+  it('points every trailer at a video: in the game folder, sent in parts, or on a secure site', async () => {
     const { games } = await (await get('/api/games')).json();
-    const trailers = games.map((game) => game.trailer).filter(Boolean);
+    const trailers = games.flatMap((game) => [game.trailer, game.trailerSmall]).filter(Boolean);
 
-    expect(trailers).toContain('games/steel-and-dust/assets/trailer/trailer.mp4');
+    expect(trailers.length).toBeGreaterThan(0);
 
     for (const trailer of trailers) {
+      if (trailer.startsWith('https://')) {
+        expect(new URL(trailer).pathname, trailer).toMatch(/\.mp4$/);
+        continue;
+      }
+
       const video = await get(`/${trailer}`, { headers: { Range: 'bytes=0-1' } });
 
       expect(video.status, trailer).toBe(206);

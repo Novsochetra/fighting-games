@@ -1,5 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
-import { startTrailer, stopTrailer } from '../../../src/home/trailer-player.js';
+import {
+  PHONE_MEDIA,
+  startTrailer,
+  stopTrailer,
+  trailerFor,
+} from '../../../src/home/trailer-player.js';
 
 const SRC = 'https://arcade.test/games/demo/assets/trailer/trailer.mp4';
 
@@ -98,5 +103,48 @@ describe('stopTrailer', () => {
     expect(video.pause).toHaveBeenCalled();
     expect(video.getAttribute('src')).toBeNull();
     expect(video.load).toHaveBeenCalled();
+  });
+});
+
+const FULL = 'https://cdn.example.com/promo/trailer.mp4';
+const SMALL = 'https://cdn.example.com/promo/trailer-480.mp4';
+
+// A window as far as the choice looks: how wide its screen is, and what its connection says.
+const browser = ({ phone = false, connection } = {}) => ({
+  matchMedia: (query) => ({ matches: query === PHONE_MEDIA && phone }),
+  navigator: { connection },
+});
+
+describe('trailerFor', () => {
+  const card = { trailerSrc: FULL, trailerSmallSrc: SMALL };
+
+  it('plays the full trailer on a wide screen with a good connection', () => {
+    expect(trailerFor(card, browser())).toBe(FULL);
+    expect(trailerFor(card, browser({ connection: { effectiveType: '4g', downlink: 10 } }))).toBe(
+      FULL,
+    );
+  });
+
+  it('plays the small copy on a phone', () => {
+    expect(trailerFor(card, browser({ phone: true }))).toBe(SMALL);
+  });
+
+  it.each([
+    { saveData: true, effectiveType: '4g', downlink: 10 },
+    { effectiveType: '3g', downlink: 1.4 },
+    { effectiveType: '2g' },
+    { effectiveType: '4g', downlink: 2.5 },
+  ])('plays the small copy on a connection that is %o', (connection) => {
+    expect(trailerFor(card, browser({ connection }))).toBe(SMALL);
+  });
+
+  it('plays the only trailer a game has, whatever the screen', () => {
+    const one = { trailerSrc: FULL, trailerSmallSrc: '' };
+
+    expect(trailerFor(one, browser({ phone: true, connection: { saveData: true } }))).toBe(FULL);
+  });
+
+  it('plays the full trailer where the browser can say nothing of its screen', () => {
+    expect(trailerFor(card, { navigator: {} })).toBe(FULL);
   });
 });

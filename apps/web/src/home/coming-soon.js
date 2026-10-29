@@ -14,6 +14,7 @@ export function comingSoonCard(number) {
     posterSrc: '',
     artSrc: '',
     trailerSrc: '',
+    trailerSmallSrc: '',
     genre: 'In development',
     meta: 'New game · In development',
     summary: 'A new game is on its way to the arcade.',

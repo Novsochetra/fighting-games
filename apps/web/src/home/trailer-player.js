@@ -35,3 +35,33 @@ export function stopTrailer(video) {
   video.removeAttribute('src');
   video.load();
 }
+
+// the sheet's own breakpoint for a phone, where it rises from the bottom (sheet.css)
+export const PHONE_MEDIA = '(max-width: 40rem)';
+const SLOW_NETWORKS = new Set(['slow-2g', '2g', '3g']);
+// Chrome's estimate of the connection in Mbps tops out at 10; below this the full copy stalls
+const FULL_COPY_MBPS = 5;
+
+function isSparing({ navigator }) {
+  const connection = navigator?.connection;
+
+  if (!connection) {
+    return false;
+  }
+
+  const slow = connection.downlink !== undefined && connection.downlink < FULL_COPY_MBPS;
+
+  return connection.saveData === true || SLOW_NETWORKS.has(connection.effectiveType) || slow;
+}
+
+// The trailer's small copy, where it has one, on a phone, under a data saver or on a slow network,
+// so a trailer never costs a player more data than its screen can show; the full one elsewhere.
+export function trailerFor(card, window) {
+  if (!card.trailerSmallSrc) {
+    return card.trailerSrc;
+  }
+
+  const phone = window.matchMedia?.(PHONE_MEDIA).matches ?? false;
+
+  return phone || isSparing(window) ? card.trailerSmallSrc : card.trailerSrc;
+}

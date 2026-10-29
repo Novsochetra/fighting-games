@@ -3,7 +3,7 @@ import { useArcade, useArcadeUrl } from '../arcade/arcade-context';
 import type { GameCard } from './game-card';
 import { TrailerIcon } from './home-icons';
 import { OfflineTag } from './OfflineTag';
-import { startTrailer, stopTrailer } from './trailer-player.js';
+import { startTrailer, stopTrailer, trailerFor } from './trailer-player.js';
 import type { Details } from './use-details';
 
 const artClass = (card: GameCard, name: string) => (card.smoothArt ? `${name} is-smooth` : name);
@@ -11,8 +11,8 @@ const artClass = (card: GameCard, name: string) => (card.smoothArt ? `${name} is
 // It plays as it comes onto the page, in the tap that asked for it, and stops as it leaves.
 function TrailerVideo({ card }: { card: GameCard }) {
   const url = useArcadeUrl();
-  const { preferences } = useArcade();
-  const src = url(card.trailerSrc);
+  const { preferences, window } = useArcade();
+  const src = url(trailerFor(card, window));
   const play = useCallback(
     (video: HTMLVideoElement) => {
       startTrailer(video, { src, withSound: preferences.isSoundOn() });

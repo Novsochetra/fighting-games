@@ -31,6 +31,9 @@ export function isSecureGameUrl(value) {
 
 const playHrefOf = (game) => (isSecureGameUrl(game.url) ? game.url : game.path);
 
+// A trailer plays from inside the arcade or from a secure address of its own, such as a CDN.
+const asTrailer = (value) => (isRelativeUrl(value) || isSecureGameUrl(value) ? value : '');
+
 export function monogramOf(title) {
   const [first = ''] = Array.from(asText(title));
   return first.toLocaleUpperCase('en');
@@ -66,7 +69,8 @@ export function toGameCard(game) {
     posterSrc: asUrl(game.poster) || bannerSrc,
     // A frame of play on the card, so it shows the game rather than the key art behind it.
     artSrc: asUrl(game.screenshot) || bannerSrc,
-    trailerSrc: asUrl(game.trailer),
+    trailerSrc: asTrailer(game.trailer),
+    trailerSmallSrc: asTrailer(game.trailerSmall),
     genre: asText(game.genre),
     meta: metaLine(game),
     summary: firstSentence(game.description),

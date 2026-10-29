@@ -1,7 +1,8 @@
 // @vitest-environment happy-dom
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   boot,
+  bootWithSteelAndDust,
   byId,
   click,
   jsonReply,
@@ -18,7 +19,8 @@ const TRAILER = 'games/steel-and-dust/assets/trailer/trailer.mp4';
 // Steel & Dust with its trailer, then a game without one.
 async function bootWithTrailer(options) {
   const { games } = JSON.parse(await realCatalogJson());
-  const base = { ...games.find((game) => game.id === 'steel-and-dust'), trailer: TRAILER };
+  const steelAndDust = games.find((game) => game.id === 'steel-and-dust');
+  const base = { ...steelAndDust, trailer: TRAILER, trailerSmall: undefined };
   const plain = { ...base, id: 'plain', title: 'Plain', path: 'games/plain/', trailer: undefined };
 
   return boot(async () => jsonReply(JSON.stringify({ games: [base, plain] })), options);
@@ -32,7 +34,10 @@ beforeEach(() => {
   document.body.innerHTML = '';
 });
 
-afterEach(stopHomes);
+afterEach(() => {
+  stopHomes();
+  vi.restoreAllMocks();
+});
 
 describe('a game’s trailer', () => {
   it('has a Trailer button in the hero only for a game that has one', async () => {
@@ -113,5 +118,27 @@ describe('a game’s trailer', () => {
     expect(dialog().open).toBe(false);
     expect(video()).toBeNull();
     expect(navigate).toHaveBeenCalledWith('games/steel-and-dust/');
+  });
+});
+
+describe('Steel & Dust’s trailer, from its CDN', () => {
+  const CDN = 'https://dphwn49s8chpb.cloudfront.net/promo-videos/';
+
+  it('plays the full trailer on a wide screen', async () => {
+    await bootWithSteelAndDust();
+    click(byId('trailer-open'));
+
+    expect(video().getAttribute('src')).toBe(`${CDN}steel-and-dust-trailer.mp4`);
+  });
+
+  it('plays the small copy on a phone, so it costs a phone less data', async () => {
+    const wide = window.matchMedia.bind(window);
+    vi.spyOn(window, 'matchMedia').mockImplementation((query) =>
+      query === '(max-width: 40rem)' ? { ...wide(query), matches: true } : wide(query),
+    );
+    await bootWithSteelAndDust();
+    click(byId('trailer-open'));
+
+    expect(video().getAttribute('src')).toBe(`${CDN}steel-and-dust-trailer-480.mp4`);
   });
 });

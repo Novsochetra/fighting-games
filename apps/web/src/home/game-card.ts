@@ -10,8 +10,10 @@ export interface GameCard {
   bannerSrc: string;
   posterSrc: string;
   artSrc: string;
-  // a video of play the details sheet shows, or '' for a game without one
+  // a video of play the details sheet shows, or '' for a game without one, and a lighter copy of it
+  // for phones and slow connections, or ''
   trailerSrc: string;
+  trailerSmallSrc: string;
   genre: string;
   meta: string;
   summary: string;

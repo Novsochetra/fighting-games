@@ -398,13 +398,17 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   for it, Escape and a tap on the dimmed page close it with its animation, and a screen that goes
   takes its sheet down at once.
 - **Trailer** (`DetailsMedia.tsx`, `trailer-player.js`, `trailer.css`): a game's `game.json` may
-  name a trailer, an `.mp4` in its `assets/trailer/` (MP4, H.264 and AAC, is the one kind every phone
-  plays). The hero's Trailer, or the Trailer button on the details sheet's art, opens the sheet with
+  name a trailer, an `.mp4` (MP4, H.264 and AAC, is the one kind every phone plays) in its
+  `assets/trailer/` or at an `https:` address of its own, such as a CDN (`catalog/trailer-rules.js`,
+  checked again by the arcade, `view-models.js`), and `trailerSmall`, a lighter copy of it. The small
+  copy plays on a phone (the sheet's own `max-width: 40rem`), under a data saver or on a slow network
+  (`navigator.connection`), the full one elsewhere (`trailerFor`). Steel & Dust's are on its CDN, a
+  1080p and a 360p copy. The hero's Trailer, or the Trailer button on the details sheet's art, opens the sheet with
   the trailer playing in place of its art, Play right under it. It starts in the tap that asked for
   it (`flushSync`), with sound, since a browser lets sound play only then; muted where the browser
   still refuses, or where the player turned the arcade's sound off, and its controls unmute it. It
   stops, and stops downloading, as the sheet closes, and the sheet shows the art again the next time.
-  No save keeps it.
+  No save keeps it, and one on another site never passes through the worker.
 
 Opening a game plays an app-launch animation before the page changes (`src/home/launcher.js`, made
 on the first launch by `use-launcher.ts`), like
