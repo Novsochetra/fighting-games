@@ -1,7 +1,7 @@
 import { toArcadeDay } from '../arcade-time.js';
 
-export function presentScore({ initials, score, mission, hero, difficulty, seconds, cleared }) {
-  return { initials, score, mission, hero, difficulty, seconds, cleared };
+export function presentScore({ name, score, mission, hero, difficulty, seconds, cleared }) {
+  return { name, score, mission, hero, difficulty, seconds, cleared };
 }
 
 const presentDated = (saved) => ({ ...presentScore(saved), date: toArcadeDay(saved.createdAt) });

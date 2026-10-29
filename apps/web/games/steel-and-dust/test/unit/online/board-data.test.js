@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { readInitials, stepLetter, typedLetter } from '../../../src/online/initials.js';
+import { cleanName, nameProblem, readStoredName } from '../../../src/online/player-name.js';
 import { readBoard } from '../../../src/online/read-board.js';
 import { rankText, scoreBody } from '../../../src/online/score-body.js';
 
 const onlineRun = (extra) => ({
-  initials: 'SOK',
+  name: 'Sok Dara',
   score: 9000,
   mission: 4,
   hero: 'bokator',
@@ -20,7 +20,7 @@ describe('readBoard', () => {
     const board = readBoard({ week: [onlineRun()], allTime: [onlineRun({ cleared: true })] });
     expect(board.week).toEqual([
       {
-        initials: 'SOK',
+        name: 'Sok Dara',
         score: 9000,
         mission: 4,
         hero: 'bokator',
@@ -34,8 +34,9 @@ describe('readBoard', () => {
   });
 
   it.each([
-    ['markup for initials', { initials: '<img src=x onerror=alert(1)>' }],
-    ['lowercase initials', { initials: 'sok' }],
+    ['no name', { name: '' }],
+    ['a name as a number', { name: 42 }],
+    ['a control character in the name', { name: 'Sok\u0007' }],
     ['a hero the game lacks', { hero: '<b>ninja</b>' }],
     ['a mission past the last', { mission: 13 }],
     ['a difficulty the game lacks', { difficulty: 3 }],
@@ -53,29 +54,28 @@ describe('readBoard', () => {
   });
 });
 
-describe('initials', () => {
-  it('starts as AAA, or the letters last posted', () => {
-    expect(readInitials(null)).toEqual(['A', 'A', 'A']);
-    expect(readInitials('DAR')).toEqual(['D', 'A', 'R']);
-    expect(readInitials('da')).toEqual(['A', 'A', 'A']);
-    expect(readInitials(['D', 'A', 'R'])).toEqual(['A', 'A', 'A']);
+describe('a player name', () => {
+  it('is cleaned of extra spaces, and kept from storage only as text', () => {
+    expect(cleanName('  Sok   Dara ')).toBe('Sok Dara');
+    expect(readStoredName('Dara')).toBe('Dara');
+    expect(readStoredName({ evil: true })).toBe('');
   });
 
-  it('turns a letter round the alphabet both ways', () => {
-    expect(stepLetter('A', 1)).toBe('B');
-    expect(stepLetter('Z', 1)).toBe('A');
-    expect(stepLetter('A', -1)).toBe('Z');
+  it.each(['Sok Dara', 'សុខ ដារ៉ា', "O'Neil", 'Jean-Luc'])('takes %j', (name) => {
+    expect(nameProblem(name)).toBeNull();
   });
 
-  it('reads a typed letter from its key, and nothing else', () => {
-    expect(typedLetter('KeyQ')).toBe('Q');
-    expect(typedLetter('Digit1')).toBeNull();
-    expect(typedLetter('ArrowUp')).toBeNull();
+  it.each([
+    ['nothing', '', /Type your name/],
+    ['a name too long', 'ក'.repeat(21), /at most 20/],
+    ['markup', '<b>Sok</b>', /letters, numbers/],
+  ])('says so for %s before sending it', (_label, name, problem) => {
+    expect(nameProblem(name)).toMatch(problem);
   });
 });
 
 describe('scoreBody', () => {
-  it('sends the run with its time in whole seconds, its initials and its ticket', () => {
+  it('sends the run with its time in whole seconds, its name and its ticket', () => {
     const run = {
       score: 4200,
       mission: 3,
@@ -84,8 +84,8 @@ describe('scoreBody', () => {
       time: 3659,
       cleared: false,
     };
-    expect(scoreBody({ ...run, at: 1 }, ['S', 'O', 'K'], 'ticket')).toEqual({
-      initials: 'SOK',
+    expect(scoreBody({ ...run, at: 1 }, 'Sok Dara', 'ticket')).toEqual({
+      name: 'Sok Dara',
       score: 4200,
       mission: 3,
       hero: 'moss',

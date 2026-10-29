@@ -18,14 +18,14 @@ describe('the board API', () => {
 
   it('posts a score as JSON with the game named', async () => {
     const fetch = vi.fn(async () => answer(201, { rank: { week: 1, allTime: 1 } }));
-    await createBoardApi(fetch).postScore({ initials: 'SOK' });
+    await createBoardApi(fetch).postScore({ name: 'Sok' });
     const [address, options] = fetch.mock.calls[0];
     expect(address).toBe('../../api/leaderboard');
     expect(options).toMatchObject({
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
     });
-    expect(JSON.parse(options.body)).toEqual({ game: 'steel-and-dust', initials: 'SOK' });
+    expect(JSON.parse(options.body)).toEqual({ game: 'steel-and-dust', name: 'Sok' });
   });
 
   it('asks for a run ticket', async () => {
@@ -35,9 +35,9 @@ describe('the board API', () => {
   });
 
   it('passes on what the server says when it refuses, and a plain word when it says nothing', async () => {
-    const refused = vi.fn(async () => answer(400, { error: 'Pick other initials.' }));
+    const refused = vi.fn(async () => answer(400, { error: 'Pick another name.' }));
     await expect(createBoardApi(refused).postScore({})).rejects.toThrow(
-      new BoardRefusal('Pick other initials.'),
+      new BoardRefusal('Pick another name.'),
     );
     const broken = vi.fn(async () => ({
       ok: false,
@@ -126,18 +126,28 @@ describe('the online board', () => {
     online.startRun();
     await settle();
     expect(online.canPost(run)).toBe(true);
-    await Promise.all([online.post(run, ['S', 'O', 'K']), online.post(run, ['S', 'O', 'K'])]);
+    await Promise.all([online.post(run, ' Sok  Dara '), online.post(run, 'Sok Dara')]);
     expect(api.postScore).toHaveBeenCalledTimes(1);
     expect(online.rankOf(run)).toEqual({ week: 1, allTime: 4 });
     expect(online.canPost(run)).toBe(false);
-    expect(online.initials).toEqual(['S', 'O', 'K']);
+    expect(online.name).toBe('Sok Dara');
+    expect(api.postScore.mock.calls[0][0].name).toBe('Sok Dara');
     online.startRun();
     expect(online.rankOf(run)).toBeNull();
   });
 
+  it('says what is wrong with a name before sending it', async () => {
+    const { online, api } = clockedOnline();
+    online.startRun();
+    await settle();
+    await online.post(run, '   ');
+    expect(online.note).toBe('Type your name.');
+    expect(api.postScore).not.toHaveBeenCalled();
+  });
+
   it('posts nothing without a ticket or a run', async () => {
     const { online, api } = clockedOnline();
-    await online.post(run, ['S', 'O', 'K']);
+    await online.post(run, 'Sok');
     expect(online.canPost(null)).toBe(false);
     expect(api.postScore).not.toHaveBeenCalled();
   });

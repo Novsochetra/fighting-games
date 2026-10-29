@@ -1,11 +1,11 @@
 import { randomBytes } from 'node:crypto';
 
 const COLUMNS =
-  'id, game, initials, score, mission, hero, difficulty, play_seconds, cleared, created_at';
+  'id, game, name, score, mission, hero, difficulty, play_seconds, cleared, created_at';
 const SHOWN = 'game = $1 AND NOT hidden';
 
 const ADD = `INSERT INTO scores
-  (game, initials, score, mission, hero, difficulty, play_seconds, cleared, ticket)
+  (game, name, score, mission, hero, difficulty, play_seconds, cleared, ticket)
   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
   ON CONFLICT (ticket) DO NOTHING
   RETURNING ${COLUMNS}`;
@@ -26,7 +26,7 @@ const PING = 'SELECT 1 FROM scores LIMIT 1';
 const toScore = (row) => ({
   id: Number(row.id),
   game: row.game,
-  initials: row.initials,
+  name: row.name,
   score: row.score,
   mission: row.mission,
   hero: row.hero,
@@ -41,8 +41,8 @@ export function createPostgresScoresStore(database) {
 
   return {
     async add(run, ticket) {
-      const { game, initials, score, mission, hero, difficulty, seconds, cleared } = run;
-      const values = [game, initials, score, mission, hero, difficulty, seconds, cleared, ticket];
+      const { game, name, score, mission, hero, difficulty, seconds, cleared } = run;
+      const values = [game, name, score, mission, hero, difficulty, seconds, cleared, ticket];
       const [row] = await rowsOf(ADD, values);
 
       return row ? toScore(row) : null;

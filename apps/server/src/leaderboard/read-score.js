@@ -1,4 +1,4 @@
-import { isBlockedInitials } from './blocked-initials.js';
+import { cleanName, nameProblem } from './read-name.js';
 
 export const SCORE_LIMITS = {
   maxScore: 99_999_999,
@@ -8,19 +8,16 @@ export const SCORE_LIMITS = {
   maxTicketLength: 200,
 };
 
-const INITIALS = /^[A-Z]{3}$/;
-
 const isWholeBetween = (value, min, max) => Number.isInteger(value) && value >= min && value <= max;
 
 function fieldProblem(body, rules) {
   const { maxScore, maxSeconds, maxTicketLength } = SCORE_LIMITS;
   const checks = [
-    [typeof body.initials === 'string' && INITIALS.test(body.initials), 'Initials are 3 letters.'],
     [isWholeBetween(body.score, 1, maxScore), `A score is a whole number up to ${maxScore}.`],
     [isWholeBetween(body.mission, 1, rules.missions), 'That mission is not in this game.'],
-    [rules.heroes.includes(body.hero), 'That hero is not in this game.'],
+    [rules.heroes.some((hero) => hero.id === body.hero), 'That hero is not in this game.'],
     [
-      isWholeBetween(body.difficulty, 0, rules.difficulties - 1),
+      isWholeBetween(body.difficulty, 0, rules.difficulties.length - 1),
       'That difficulty is not in this game.',
     ],
     [
@@ -46,11 +43,9 @@ function runProblem(body, rules) {
     return 'A run that cleared every mission reached the last one.';
   }
 
-  if (body.score > (body.seconds + graceSeconds) * rules.maxPointsPerSecond) {
-    return 'That score is more than the time played could earn.';
-  }
-
-  return isBlockedInitials(body.initials) ? 'Pick other initials.' : null;
+  return body.score > (body.seconds + graceSeconds) * rules.maxPointsPerSecond
+    ? 'That score is more than the time played could earn.'
+    : null;
 }
 
 export function readScore(body, rulesByGame) {
@@ -60,16 +55,17 @@ export function readScore(body, rulesByGame) {
     return { error: 'That game has no leaderboard.' };
   }
 
-  const error = fieldProblem(body, rules) ?? runProblem(body, rules);
+  const name = cleanName(body.name);
+  const error = nameProblem(name) ?? fieldProblem(body, rules) ?? runProblem(body, rules);
 
   if (error) {
     return { error };
   }
 
-  const { game, initials, score, mission, hero, difficulty, seconds, cleared } = body;
+  const { game, score, mission, hero, difficulty, seconds, cleared } = body;
 
   return {
-    run: { game, initials, score, mission, hero, difficulty, seconds, cleared },
+    run: { game, name, score, mission, hero, difficulty, seconds, cleared },
     ticket: body.ticket,
   };
 }

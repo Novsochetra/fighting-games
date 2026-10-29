@@ -20,7 +20,7 @@ export const MIGRATIONS = [
       `CREATE TABLE scores (
         id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
         game text NOT NULL CHECK (char_length(game) <= 40),
-        initials text NOT NULL CHECK (initials ~ '^[A-Z]{3}$'),
+        name text NOT NULL CHECK (char_length(name) BETWEEN 1 AND 20 AND name !~ '[[:cntrl:]]'),
         score integer NOT NULL CHECK (score > 0),
         mission smallint NOT NULL CHECK (mission > 0),
         hero text NOT NULL CHECK (char_length(hero) <= 40),

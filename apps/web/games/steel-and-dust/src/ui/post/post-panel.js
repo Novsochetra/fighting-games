@@ -1,18 +1,7 @@
 import { escapeHtml } from '../../lib/html.js';
-import { stepLetter } from '../../online/initials.js';
+import { NAME_LIMITS } from '../../online/player-name.js';
 
-const PROMPT = 'Pick 3 letters for the online board.';
-
-function letterHtml(letter, slot) {
-  return (
-    `<div class="initial" data-slot="${slot}">` +
-    `<button type="button" class="initial-step up" data-slot="${slot}" data-d="1" ` +
-    `aria-label="Letter ${slot + 1}: next" tabindex="-1"></button>` +
-    `<span class="initial-letter">${letter}</span>` +
-    `<button type="button" class="initial-step down" data-slot="${slot}" data-d="-1" ` +
-    `aria-label="Letter ${slot + 1}: previous" tabindex="-1"></button></div>`
-  );
-}
+const PROMPT = 'Your name goes on the online board, in Khmer or English.';
 
 function runLine(run) {
   const reached = run.cleared ? 'All clear' : `Mission ${run.mission}`;
@@ -20,55 +9,67 @@ function runLine(run) {
   return `Score <b>${run.score}</b> &nbsp;·&nbsp; ${reached}`;
 }
 
-// once posted, the button takes the player to the board their run is on
+// once posted, the name is kept as posted and the button takes the player to the board
+function nameHtml(name, posted) {
+  return (
+    '<label class="post-label" for="postName">Your name</label>' +
+    `<input class="post-name" id="postName" name="name" type="text" value="${escapeHtml(name)}" ` +
+    `maxlength="${NAME_LIMITS.maxLength * 2}" autocomplete="nickname" autocapitalize="words" ` +
+    `spellcheck="false" enterkeyhint="send" placeholder="Sok Dara"${posted ? ' readonly' : ''} />`
+  );
+}
+
 function actionHtml(online, run) {
   if (online.rankOf(run)) {
-    return '<button class="mbtn primary" data-act="leaderboard">See the board</button>';
+    return '<button class="mbtn primary" type="button" data-act="leaderboard">See the board</button>';
   }
 
   const disabled = online.posting ? ' disabled' : '';
 
-  return `<button class="mbtn primary" data-act="sendScore"${disabled}>Post</button>`;
+  return `<button class="mbtn primary" type="button" data-act="sendScore"${disabled}>Post</button>`;
 }
 
-export function postHtml({ run, letters, online }) {
+export function postHtml({ run, name, online }) {
   if (!run) {
     return '';
   }
 
   return (
     `<p class="post-run">${runLine(run)}</p>` +
-    `<div class="initials" role="group" aria-label="Your initials">${letters.map(letterHtml).join('')}</div>` +
+    `<form class="post-form" novalidate>${nameHtml(name, !!online.rankOf(run))}</form>` +
     `<p class="post-note" role="status">${escapeHtml(online.note || PROMPT)}</p>` +
     `<div class="mlist">${actionHtml(online, run)}</div>`
   );
 }
 
-// the letters start as the ones last posted, so a returning player posts with one press
-export function createPostPanel({ root, game, online }) {
-  const state = { letters: [...online.initials] };
+// the field starts with the name last posted, so a returning player posts with one press; the
+// field takes the keys as the panel opens, or the first letters typed would move the menu, while a
+// touch leaves the phone's keyboard down until the player taps the field
+export function createPostPanel({ root, game, online, ui }) {
+  const state = { name: online.name };
+  const field = () => root.querySelector('.post-name');
 
   return {
     state,
 
     build() {
-      root.innerHTML = postHtml({ run: game.lastRun, letters: state.letters, online });
+      root.innerHTML = postHtml({ run: game.lastRun, name: state.name, online });
     },
 
     reset() {
-      state.letters = [...online.initials];
+      state.name = online.name;
 
       if (!online.posting) {
         online.note = '';
       }
     },
 
-    step(slot, step) {
-      state.letters[slot] = stepLetter(state.letters[slot], step);
-    },
-
-    type(slot, letter) {
-      state.letters[slot] = letter;
+    focus(index) {
+      if (index === 0 && ui.lastInput !== 'touch') {
+        field()?.focus({ preventScroll: true });
+      } else if (index !== 0) {
+        field()?.blur();
+      }
     },
 
     firstSelected: () => 0,

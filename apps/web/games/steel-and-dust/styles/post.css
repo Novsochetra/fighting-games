@@ -22,84 +22,76 @@
   color: var(--color-text);
 }
 
-/* three letters, as an arcade cabinet asks for them: each turns with the arrows over and under it */
-.initials {
-  display: flex;
-  justify-content: center;
-  gap: 14px;
+.post-form {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
   margin: 12px 0 10px;
 }
 
-.initial {
-  display: grid;
-  justify-items: center;
-  gap: 4px;
-  padding: 4px 6px;
-  border: 2px solid var(--color-clear);
+.post-label {
+  font-size: var(--font-size-2xs);
+  letter-spacing: var(--tracking-medium);
+  color: var(--color-text-muted);
 }
 
-.initial.sel {
-  border-color: var(--color-green);
-  background: color-mix(in srgb, var(--color-green) 10%, transparent);
-}
-
-.initial-letter {
-  min-width: 1.2em;
+/* a sunken stone slot the name is carved into; 16px type, or iPhone zooms the page as it is
+   tapped, and a name in Khmer falls back to the phone's own Khmer face, as the pixel font has none */
+#app .post-name {
+  inline-size: min(320px, 70vw);
+  padding: 8px 12px;
   font-family: var(--font-display);
-  font-size: calc(var(--font-size-xl) * 1.6);
-  line-height: var(--leading-none);
+  font-size: var(--font-size-md);
   text-align: center;
   color: var(--color-gold);
+  background: var(--color-night-deep);
+  border: 2px solid var(--color-line);
+  border-radius: var(--radius-md);
+  outline: none;
+  user-select: text;
+  -webkit-touch-callout: default;
 }
 
-.initial.sel .initial-letter {
+#app .post-name::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+#app .post-name:focus,
+#app .post-name.sel {
+  border-color: var(--color-green);
+  box-shadow: none;
+}
+
+#app .post-name[readonly] {
   color: var(--color-mint-light);
+  border-color: var(--color-clear);
 }
 
-/* a pixel triangle cut from a square, so the arrow needs no glyph the pixel font lacks */
-.initial-step {
-  width: 34px;
-  height: 22px;
-  padding: 0;
-  border: 0;
-  background: var(--color-amber);
-  cursor: pointer;
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-}
-
-.initial-step.down {
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
-}
-
-.initial-step:active {
-  background: var(--color-amber-light);
-}
-
-/* the panel's one button stands under the letters, as a menu's buttons stand under its title */
+/* the panel's one button stands under the name, as a menu's buttons stand under its title */
 #m-post .mlist {
   margin-inline: auto;
 }
 
-/* a phone held sideways has no room for the letters over Post, so Post stands beside them and the
-   arrows keep their size under a thumb */
+/* a phone held sideways has no room for the name over Post, so Post stands beside it */
 @media (max-height: 560px) {
   #postPanel {
     display: grid;
     grid-template-areas:
       'run run'
-      'letters post'
+      'name post'
       'note note';
     justify-content: center;
-    align-items: center;
-    column-gap: 32px;
+    align-items: end;
+    column-gap: 24px;
   }
 
   .post-run {
     grid-area: run;
   }
 
-  .initials {
-    grid-area: letters;
+  .post-form {
+    grid-area: name;
     margin: 6px 0;
   }
 
@@ -110,6 +102,6 @@
 
   #m-post .mlist {
     grid-area: post;
-    margin: 0;
+    margin: 6px 0;
   }
 }

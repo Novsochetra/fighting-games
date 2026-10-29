@@ -13,7 +13,6 @@ import { MenuController } from '../ui/menus/menu-controller.js';
 import { installMenuEvents } from '../ui/menus/menu-events.js';
 import { createNavigator, handleMenuKey } from '../ui/menus/menu-navigation.js';
 import { installPostEvents } from '../ui/post/post-events.js';
-import { handlePostKey, navigatePost } from '../ui/post/post-navigation.js';
 import { createPostPanel } from '../ui/post/post-panel.js';
 import { createFullscreen, installFullscreen } from '../ui/screen/fullscreen.js';
 import { installGestureGuards, installMenuTapFix } from '../ui/screen/gesture-guards.js';
@@ -46,25 +45,22 @@ function createPanels({ elements, game, audio, layout, ui, window, supporters, o
       online,
       isOnline: () => window.navigator.onLine !== false,
     }),
-    post: createPostPanel({ root: elements.postPanel, game, online }),
+    post: createPostPanel({ root: elements.postPanel, game, online, ui }),
     credits: createCreditsPanel({ root: elements.credits, game, feed: supporters }),
   };
   panels.layout = createLayoutEditor({ window, game, audio, layout, settings: panels.settings });
   return panels;
 }
 
-// keys, the d-pad and clicks reach the menus here; the letters of a score being posted turn first
+// keys, the d-pad and clicks reach the menus here
 function installMenuInput({ document, elements, menus, act, ui, panels, audio }) {
-  const navigateMenus = createNavigator({ menus, audio, act });
-  const navigate = (kind, step) =>
-    navigatePost(menus, { kind, step, audio }) || navigateMenus(kind, step);
+  const navigate = createNavigator({ menus, audio, act });
 
   menus.navigate = navigate;
-  menus.handleKey = (event) =>
-    handlePostKey(event, { menus, audio, ui }) || handleMenuKey(event, { menus, navigate, ui });
+  menus.handleKey = (event) => handleMenuKey(event, { menus, navigate, ui });
   installMenuEvents({ document, menus, act, ui, panels, audio });
   installBoardEvents({ root: document.getElementById('m-leaderboard'), menus, panels });
-  installPostEvents({ root: elements.postPanel, menus, audio });
+  installPostEvents({ root: elements.postPanel, menus, act });
   installCarouselEvents({ stage: elements.heroStage, menus, audio });
   installCreditsEnd({ root: elements.credits, menus });
 }

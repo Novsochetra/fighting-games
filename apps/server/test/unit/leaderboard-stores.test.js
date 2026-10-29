@@ -2,9 +2,9 @@ import { describe, expect, it, vi } from 'vitest';
 import { createBoardCache } from '../../src/leaderboard/board-cache.js';
 import { createMemoryScoresStore } from '../../src/leaderboard/memory-store.js';
 
-const run = (initials, score, extra) => ({
+const run = (name, score, extra) => ({
   game: 'brawler',
-  initials,
+  name,
   score,
   mission: 2,
   hero: 'moss',
@@ -24,7 +24,7 @@ describe('the memory scores store', () => {
 
   it('spends a ticket on one score only', async () => {
     const store = createMemoryScoresStore();
-    expect(await store.add(run('SOK', 10), 'nonce-1')).toMatchObject({ initials: 'SOK' });
+    expect(await store.add(run('SOK', 10), 'nonce-1')).toMatchObject({ name: 'SOK' });
     expect(await store.add(run('DAR', 20), 'nonce-1')).toBeNull();
   });
 
@@ -34,8 +34,8 @@ describe('the memory scores store', () => {
     await store.add(run('TIE', 300), 'b');
     const late = await store.add(run('NEW', 300), 'c');
     const board = await store.board('brawler', { weekStart: WEEK, size: 10 });
-    expect(board.week.map((saved) => saved.initials)).toEqual(['TIE', 'NEW']);
-    expect(board.allTime.map((saved) => saved.initials)).toEqual(['OLD', 'TIE', 'NEW']);
+    expect(board.week.map((saved) => saved.name)).toEqual(['TIE', 'NEW']);
+    expect(board.allTime.map((saved) => saved.name)).toEqual(['OLD', 'TIE', 'NEW']);
     expect(await store.rank(late, WEEK)).toEqual({ week: 2, allTime: 3 });
   });
 

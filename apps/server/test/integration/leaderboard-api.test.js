@@ -7,9 +7,12 @@ import { sendRequest, startTestServer } from '../support/test-server.js';
 
 const MINUTE = 60 * 1000;
 const RULES = {
-  heroes: ['moss', 'bokator'],
+  heroes: [
+    { id: 'moss', name: 'Moss Shade' },
+    { id: 'bokator', name: 'Bokator' },
+  ],
   missions: 12,
-  difficulties: 3,
+  difficulties: ['Easy', 'Normal', 'Hard'],
   maxPointsPerSecond: 500,
 };
 
@@ -69,7 +72,7 @@ async function ticket() {
 
 const run = (extra) => ({
   game: 'brawler',
-  initials: 'SOK',
+  name: 'Sok Dara',
   score: 9000,
   mission: 3,
   hero: 'moss',
@@ -100,9 +103,9 @@ describe('the leaderboard API', () => {
     const reply = await post('/api/leaderboard', run({ ticket: runTicket }));
     expect(reply.status).toBe(201);
     expect(json(reply).rank).toEqual({ week: 1, allTime: 1 });
-    expect(json(reply).score).toMatchObject({ initials: 'SOK', score: 9000 });
+    expect(json(reply).score).toMatchObject({ name: 'Sok Dara', score: 9000 });
     const { week, allTime } = json(await board());
-    expect(week).toEqual([expect.objectContaining({ initials: 'SOK', date: '2026-10-29' })]);
+    expect(week).toEqual([expect.objectContaining({ name: 'Sok Dara', date: '2026-10-29' })]);
     expect(allTime).toHaveLength(1);
   });
 
@@ -111,7 +114,7 @@ describe('the leaderboard API', () => {
     const runTicket = await ticket();
     clock.time += 5 * MINUTE;
     expect((await post('/api/leaderboard', run({ ticket: runTicket }))).status).toBe(201);
-    const again = await post('/api/leaderboard', run({ ticket: runTicket, initials: 'DAR' }));
+    const again = await post('/api/leaderboard', run({ ticket: runTicket, name: 'Dara' }));
     expect(again.status).toBe(409);
     expect(json(await board()).week).toHaveLength(1);
   });
@@ -198,10 +201,24 @@ describe('the leaderboard API, guarded', () => {
     expect((await board()).status).toBe(200);
   });
 
-  it('keeps the rules out of the games list', async () => {
+  it('names the board in the games list for the arcade, without the scoring pace', async () => {
     await start();
     const { games } = JSON.parse((await sendRequest(server.port, { path: '/api/games' })).text);
     expect(games.map((game) => game.id)).toEqual(['brawler', 'puzzle']);
-    expect(games[0]).not.toHaveProperty('leaderboard');
+    expect(games[0].leaderboard.heroes).toEqual(RULES.heroes);
+    expect(games[0].leaderboard).not.toHaveProperty('maxPointsPerSecond');
+    expect(games[1]).not.toHaveProperty('leaderboard');
+  });
+
+  it('cleans the name it stores, and takes one written in Khmer', async () => {
+    await start();
+    const runTicket = await ticket();
+    clock.time += 5 * MINUTE;
+    const reply = await post(
+      '/api/leaderboard',
+      run({ ticket: runTicket, name: '  សុខ   ដារ៉ា ' }),
+    );
+    expect(reply.status).toBe(201);
+    expect(json(await board()).week[0].name).toBe('សុខ ដារ៉ា');
   });
 });

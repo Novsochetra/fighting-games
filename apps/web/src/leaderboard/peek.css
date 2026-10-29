@@ -1,0 +1,84 @@
+/* under Play, so the way into the game stays in sight */
+.board-peek {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  gap: var(--space-2);
+  margin-block-start: var(--space-3);
+}
+
+.board-peek__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.board-peek__all {
+  font-size: var(--font-size-apple-footnote);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-tint);
+  text-decoration: none;
+}
+
+.board-peek__note {
+  margin: 0;
+  font-size: var(--font-size-apple-subheadline);
+  color: var(--color-label-muted);
+}
+
+.board-peek__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.board-peek__row {
+  --medal-top: var(--color-medal-bronze-top);
+  --medal-bottom: var(--color-medal-bronze-bottom);
+
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  font-size: var(--font-size-apple-subheadline);
+}
+
+.board-peek__row[data-medal='gold'] {
+  --medal-top: var(--color-medal-gold-top);
+  --medal-bottom: var(--color-medal-gold-bottom);
+}
+
+.board-peek__row[data-medal='silver'] {
+  --medal-top: var(--color-medal-silver-top);
+  --medal-bottom: var(--color-medal-silver-bottom);
+}
+
+.board-peek__place {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--size-medal);
+  block-size: var(--size-medal);
+  font-size: var(--font-size-apple-caption);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-on-medal);
+  background: linear-gradient(to bottom, var(--medal-top), var(--medal-bottom));
+  border-radius: var(--radius-pill);
+}
+
+.board-peek__name {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  font-weight: var(--font-weight-semibold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.board-peek__score {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-label-secondary);
+}

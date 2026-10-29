@@ -1,19 +1,33 @@
 import { describe, expect, it } from 'vitest';
 import { weekStartOf } from '../../src/arcade-time.js';
+import {
+  NAME_LIMITS as GAME_LIMITS,
+  nameProblem as gameNameProblem,
+} from '../../../web/games/steel-and-dust/src/online/player-name.js';
+import { cleanName, NAME_LIMITS, nameProblem } from '../../src/leaderboard/read-name.js';
 import { readScore, SCORE_LIMITS } from '../../src/leaderboard/read-score.js';
 import { createRunTickets, TICKET_LIMITS } from '../../src/leaderboard/run-tickets.js';
 import { serializeBoard } from '../../src/leaderboard/serialize-board.js';
 
+const HEROES = [
+  { id: 'moss', name: 'Moss Shade' },
+  { id: 'bokator', name: 'Bokator' },
+];
 const RULES = new Map([
   [
     'brawler',
-    { heroes: ['moss', 'bokator'], missions: 12, difficulties: 3, maxPointsPerSecond: 100 },
+    {
+      heroes: HEROES,
+      missions: 12,
+      difficulties: ['Easy', 'Normal', 'Hard'],
+      maxPointsPerSecond: 100,
+    },
   ],
 ]);
 
 const run = (extra) => ({
   game: 'brawler',
-  initials: 'SOK',
+  name: 'Sok Dara',
   score: 4200,
   mission: 3,
   hero: 'bokator',
@@ -30,7 +44,7 @@ describe('readScore', () => {
     expect(ticket).toBe('a-ticket');
     expect(read).toEqual({
       game: 'brawler',
-      initials: 'SOK',
+      name: 'Sok Dara',
       score: 4200,
       mission: 3,
       hero: 'bokator',
@@ -46,9 +60,12 @@ describe('readScore', () => {
 
   it.each([
     ['a game with no board', { game: 'puzzle' }, /no leaderboard/],
-    ['lowercase initials', { initials: 'sok' }, /3 letters/],
-    ['four letters', { initials: 'SOKH' }, /3 letters/],
-    ['initials with markup', { initials: '<b>' }, /3 letters/],
+    ['no name', { name: '   ' }, /Type your name/],
+    ['a name too long', { name: 'A'.repeat(21) }, /at most 20/],
+    ['markup in the name', { name: '<b>Sok</b>' }, /letters, numbers/],
+    ['a line break', { name: 'Sok\u0000Dara' }, /letters, numbers/],
+    ['a name that is a link', { name: 'win-free.xyz' }, /link/],
+    ['a name with a slur', { name: 'Fuck You' }, /another name/],
     ['no score', { score: 0 }, /whole number/],
     ['a fractional score', { score: 10.5 }, /whole number/],
     ['a score as text', { score: '4200' }, /whole number/],
@@ -64,7 +81,6 @@ describe('readScore', () => {
     ['a giant ticket', { ticket: 'x'.repeat(SCORE_LIMITS.maxTicketLength + 1) }, /ticket/],
     ['a clear short of the last mission', { cleared: true, mission: 11 }, /last one/],
     ['more points than the time could earn', { score: 36001, seconds: 300 }, /time played/],
-    ['initials that spell a slur', { initials: 'FUK' }, /other initials/],
   ])('refuses %s', (_label, extra, message) => {
     expect(readScore(run(extra), RULES).error).toMatch(message);
   });
@@ -178,7 +194,7 @@ describe('serializeBoard', () => {
     expect(json.allTime).toEqual([]);
     expect(json.week).toEqual([
       {
-        initials: 'SOK',
+        name: 'Sok Dara',
         score: 4200,
         mission: 3,
         hero: 'bokator',
@@ -188,5 +204,57 @@ describe('serializeBoard', () => {
         date: '2026-10-29',
       },
     ]);
+  });
+});
+
+describe('a player name', () => {
+  it('is cleaned of extra spaces and composed as one form', () => {
+    expect(cleanName('  Sok   Dara  ')).toBe('Sok Dara');
+    expect(cleanName('Amélie')).toBe('Amélie');
+    expect(cleanName(42)).toBe('');
+  });
+
+  it.each([
+    'Sok Dara',
+    'សុខ ដារ៉ា',
+    'Dara_07',
+    "O'Neil",
+    'Jean-Luc',
+    'Mr. Tep',
+    'Cassandra',
+    'Dickson',
+  ])('takes %j', (name) => {
+    expect(nameProblem(cleanName(name))).toBeNull();
+  });
+
+  it('counts a name by code point, as Postgres does', () => {
+    expect(nameProblem('ក'.repeat(NAME_LIMITS.maxLength))).toBeNull();
+    expect(nameProblem('ក'.repeat(NAME_LIMITS.maxLength + 1))).toMatch(/at most/);
+  });
+
+  it.each([
+    ['a tag', '<script>', /letters, numbers/],
+    ['an emoji', 'Sok 🔥', /letters, numbers/],
+    ['a web address', 'www.free-gems', /link/],
+    ['a domain', 'gems.com', /link/],
+    ['a slur', 'nigga', /another name/],
+    ['a slur spelled out with gaps', 'f u c k', /another name/],
+    ['a slur inside a word', 'fuckboy', /another name/],
+    ['a Khmer slur', 'ចុយម្ដាយ', /another name/],
+  ])('turns away %s', (_label, name, problem) => {
+    expect(nameProblem(cleanName(name))).toMatch(problem);
+  });
+});
+
+// Steel & Dust's post panel checks a name before sending it; the server has the last word, so the
+// panel must never pass a name the server would turn away for its length or its letters, nor stop
+// one it would take (the words the server blocks are its own to know)
+describe("Steel & Dust's own name check", () => {
+  it('holds the same limits as the server', () => {
+    expect(GAME_LIMITS).toEqual(NAME_LIMITS);
+
+    for (const name of ['Sok', 'សុខ ដារ៉ា', 'a'.repeat(20), 'a'.repeat(21), '<b>', 'Sok 🔥', '']) {
+      expect(gameNameProblem(name) === null, name).toBe(nameProblem(name) === null);
+    }
   });
 });

@@ -20,7 +20,7 @@ export function navigableItems(document, top) {
   }
   if (top === 'post') {
     const buttons = [...menu.querySelectorAll('.mbtn')].filter((button) => !button.hidden);
-    return [...menu.querySelectorAll('.initial'), ...buttons, menu.querySelector('.xbtn')];
+    return [...menu.querySelectorAll('.post-name'), ...buttons, menu.querySelector('.xbtn')];
   }
   if (top === 'help') {
     return [...menu.querySelectorAll('.tabs button'), menu.querySelector('.xbtn')];

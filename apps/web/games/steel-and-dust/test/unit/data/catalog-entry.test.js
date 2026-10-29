@@ -9,10 +9,12 @@ const entry = JSON.parse(readFileSync(join(import.meta.dirname, '../../../game.j
 
 // the server checks each posted score against these rules, so they must say what the game is
 describe('the leaderboard rules in game.json', () => {
-  it('name every hero, mission and difficulty the game has', () => {
-    expect(entry.leaderboard.heroes).toEqual(HEROES.map((hero) => hero.id));
+  it('name every hero, mission and difficulty the game has, as the game calls them', () => {
+    expect(entry.leaderboard.heroes).toEqual(HEROES.map(({ id, name }) => ({ id, name })));
     expect(entry.leaderboard.missions).toBe(MISSIONS.length);
-    expect(entry.leaderboard.difficulties).toBe(DIFFICULTIES.length);
+    expect(entry.leaderboard.difficulties).toEqual(
+      DIFFICULTIES.map((difficulty) => difficulty.name),
+    );
   });
 
   // a real run walks between its fights, so it scores slower than the recorded bots, which fight

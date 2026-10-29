@@ -19,7 +19,7 @@ apps/
     test/{unit,integration}
   web/                    everything the browser loads
     index.html            the arcade's page; supporters/ and credits/ hold the other two
-    vite.config.ts        the build: the three pages into dist/, the as-is files copied beside them
+    vite.config.ts        the build: the four pages into dist/, the as-is files copied beside them
     build-steps/          the build's own steps: bundle-game.js joins each game's scripts into bundles
     robots.txt            lets every crawler in and names the sitemap
     sitemap.xml           every page this server sends (see Search and link previews)
@@ -68,10 +68,11 @@ details art stay smooth (`is-smooth`).
 
 ## One app
 
-The arcade, its supporters and its credits are screens of one React app, so a tap between them
-changes the screen in the page, never through a load: on a phone's link a move to the supporters
-took about 1.3 s, 47 files coming again every time, and now shows at once. Each still has a page of
-its own on disk (`index.html`, `supporters/index.html`, `credits/index.html`), with its own title and
+The arcade, its leaderboard, its supporters and its credits are screens of one React app, so a tap
+between them changes the screen in the page, never through a load: on a phone's link a move to the
+supporters took about 1.3 s, 47 files coming again every time, and now shows at once. Each still has
+a page of its own on disk (`index.html`, `leaderboard/index.html`, `supporters/index.html`,
+`credits/index.html`), with its own title and
 link-preview tags, which a visitor can open directly, reload or share. Every page starts the same
 app, `src/main.tsx`, and names the screen it opens on (`<div id="root" data-screen="supporters">`).
 
@@ -142,7 +143,7 @@ gets 403 (`security/request-origin.js`), and a `POST` must carry an `Origin` of 
 every browser sends. A script outside a browser can write any header, so the gifts also rest on the
 rate limit and the checks below.
 
-**The build.** `npm run build` has Vite build the three pages into `dist/` (`base: './'`, so the same
+**The build.** `npm run build` has Vite build the four pages into `dist/` (`base: './'`, so the same
 files work under any path) and copy what it never touches beside them (`as-is-files.js`: the games,
 the art, `robots.txt`, `sitemap.xml` and `appearance-early.js`), then builds the service worker (see
 Offline). Each game's page is built on the way (`build-steps/bundle-game.js`): the modules each of
@@ -177,10 +178,13 @@ modules are watched too.
 ## Leaderboard API
 
 A game with an online leaderboard names in its `game.json` what a run of it can be (`leaderboard`:
-`heroes`, `missions`, `difficulties`, `maxPointsPerSecond`), checked with the rest of the entry
-(`catalog/leaderboard-rules.js`) and left out of `api/games`. The server reads those rules once, as
-the first board is asked for (`leaderboard/board-rules.js`), so it checks a score without knowing the
-game; a game with none has no board (404).
+`heroes`, each an `id` and the `name` the game calls it, `missions`, `difficulties`, their names
+easiest first, and `maxPointsPerSecond`), checked with the rest of the entry
+(`catalog/leaderboard-rules.js`). `api/games` passes the heroes, missions and difficulties on to the
+arcade, which shows the board with their names, but never the scoring pace, which is the server's
+check alone. The server reads the rules once, as the first board is asked for
+(`leaderboard/board-rules.js`), so it checks a score without knowing the game; a game with none has
+no board (404).
 
 - **Boards.** `GET /api/leaderboard?game=<id>` answers both boards at once:
 
@@ -189,7 +193,7 @@ game; a game with none has no board (404).
     "weekStart": "2026-10-26",
     "week": [
       {
-        "initials": "SOK",
+        "name": "Sok Dara",
         "score": 48210,
         "mission": 8,
         "hero": "bokator",
@@ -215,10 +219,14 @@ game; a game with none has no board (404).
   the database (`server_secrets`): the first server to start makes it and every server after reads
   the same one, so a ticket given before a deploy is good after it; without a database it lives as
   long as the server.
-- **Posting.** `POST /api/leaderboard` takes `game`, `initials`, `score`, `mission`, `hero`,
+- **Posting.** `POST /api/leaderboard` takes `game`, `name`, `score`, `mission`, `hero`,
   `difficulty`, `seconds`, `cleared` and `ticket`, and checks the whole score before writing
-  anything (`post-score.js`): three capital letters, not one of a few that spell a slur
-  (`blocked-initials.js`); whole numbers in the game's ranges; a hero it has; a clear only on the
+  anything (`post-score.js`): a name of 1 to 20 characters, counted by code point as a Khmer name
+  needs, its spaces squeezed and composed as one form (NFC), of letters of any script with their
+  marks, digits, spaces and `. ' _ -` only, so no markup, emoji or line break (`read-name.js`), not a
+  link (`www`, `.com` and the like), and with no slur in it, matched as whole words so Cassandra and
+  Dickson stay, the worst also spelled out with gaps, and Khmer inside the name
+  (`blocked-names.js`); whole numbers in the game's ranges; a hero it has; a clear only on the
   last mission; no more points than the time could earn (`maxPointsPerSecond` a second, with the
   first minute's up front, `read-score.js`); then the ticket: signed here, at most 30 days old, and
   at least as old as the time the run claims, give or take 30 seconds. Posting a made-up score
@@ -241,7 +249,7 @@ app in every browser, `npm run dev` runs without it). Morodok Angkor lives on it
 not kept.
 
 - **The arcade** (`arcade-cache.js`): the build writes the worker with the list of what it keeps
-  (vite-plugin-pwa's `injectManifest`, in `vite.config.ts`): the three pages, the built modules and
+  (vite-plugin-pwa's `injectManifest`, in `vite.config.ts`): the four pages, the built modules and
   styles, the arcade's art, `appearance-early.js` and each game's card art (`catalog-art.js`), each
   with a revision. Installing fills one cache named by that list and, once it is all in, takes over
   at once; a page open on the old build keeps what it loaded, its next load is the new one, and the
@@ -445,12 +453,12 @@ pages name that domain; every other URL stays relative. Each page served here ca
   and a game page can be loaded under a query (`boot-recovery.js`),
 - Open Graph tags and `twitter:card` `summary_large_image`, so a shared link opens into a picture.
 
-The home, supporters and credits pages share `assets/social/entry-screen.jpg`, the arcade's entry screen at
+The home, leaderboard, supporters and credits pages share `assets/social/entry-screen.jpg`, the arcade's entry screen at
 1200x630: the home page in its light appearance with Steel & Dust picked, taken in a 1200x630 window
 at 2x and scaled down. A game shares a picture of its own from its own folder (Steel & Dust's title
 screen, `games/steel-and-dust/assets/social/`). The home page also names the site for search results
 in JSON-LD (`WebSite`). `robots.txt` blocks nothing, as Google renders the home page and its list
-comes from `api/games`, and names `sitemap.xml`, which lists the home, supporters and credits pages
+comes from `api/games`, and names `sitemap.xml`, which lists the home, leaderboard, supporters and credits pages
 and every game served here, but not one on its own site. `test/integration/seo.test.js` fails when a page
 is missing from the sitemap or its tags, or its picture is not a 1200x630 JPEG the server sends.
 
@@ -465,7 +473,7 @@ still hold an older `preferences.js` after a deploy. Privacy choices at the foot
 again; a no after a yes turns storage off and clears the `_ga` cookies. `analytics.js` sends an event only while a yes
 stands. The events and their names are in `analytics-events.js`: a play (with the game and its
 source: Play, Details, a card, the keyboard or a gamepad), a tap on a teaser, Details, the heart, the
-library filters and Show more, the sound and appearance switches, each link to the supporters and
+library filters and Show more, the sound and appearance switches, each link to the leaderboard, the supporters and
 credits pages, and the install and support banners shown, taken and turned down. Each one is sent
 from where it happens, through the arcade's one `analytics` (`createArcade`). A copy run anywhere else (a laptop, the
 tests) asks nothing and sends nothing.
@@ -482,6 +490,35 @@ supporters list. On a phone the hero's buttons rise above the coffee button. The
 the button where it fits under them, as on a tall phone, where the hero stops growing and leaves room
 below its buttons, and floats above them where it does not (`coffee-note-spot.js` measures when it
 shows), so Play stays in reach. The button and note wait while a banner is up across the bottom.
+
+## Leaderboard page
+
+The arcade's own board, `leaderboard/` (`LeaderboardScreen.tsx` and the rest of `src/leaderboard/`,
+with a page of its own, `leaderboard/index.html`), is a screen pushed over the arcade like the
+supporters and the credits (see One app), so a link to it (`khmerarcade.games/leaderboard/`) can be
+shared with a picture of its own. A trophy in the top bar leads there (`#leaderboard-link`), and so
+does See all under a game's top three in its Details sheet. On a phone the top bar's four buttons
+stand closer and the arcade's name a size smaller, and below 384 px wide the logo stands alone, the
+name still read out with it (`topbar.css`).
+
+- **What it shows.** A gold light from the top and a trophy badge, then This week and All time in a
+  segmented control, then a board for every game whose catalog entry names one (`board-rules.js`
+  reads its heroes' and difficulties' names into the game's card, as `board`): the game's icon,
+  name and Play, its top three on a podium (second, first raised, third, in the medals' metals),
+  then the rest in an inset list with each run's hero, how far it got, its difficulty, score and
+  day. An empty board invites a first run, with Play.
+- **Reading it.** Each board comes from `GET api/leaderboard?game=<id>` (`leaderboard-client.js`),
+  held by TanStack Query like the arcade's other reads (`use-board.ts`); the server answers every
+  reader from one read of the database for 15 seconds, so showing the board costs nothing.
+  `read-board.js` keeps only runs made of what a run is, and a name, free text a player typed, is
+  only ever written as text, which React does. `view-model.js` gives each run its place, medal and
+  labels (numbers and days through `Intl`, the day read in UTC so the day the server dated in Phnom
+  Penh never shifts). The offline worker keeps the last answer for each game (`routes.js`), so the
+  board shows offline as it was last read.
+- **In the Details sheet.** A game with a board shows the week's top three under Play
+  (`BoardPeek.tsx`, `peek.css`), the race to join before playing; it reads the board only while the
+  sheet is open, and See all takes the sheet down as the leaderboard is pushed. Each way in counts as
+  `open_leaderboard`, with where it was opened (`top_bar` or `details`).
 
 ## Supporters page
 
@@ -721,25 +758,33 @@ Steel & Dust posts its runs to the arcade's API (`src/online/`), by address from
   one and stays off the online board. A late answer meant for a run since left is dropped.
 - **Posting.** Once a run has ended (Game over or All clear) with a score, its menu offers Post score
   online while it holds a ticket, which opens the `post` panel (`src/ui/post/`, `styles/post.css`):
-  three letters, as an arcade cabinet asks for them, starting as the ones last posted
-  (`sd_initials`). On a letter, up and down turn it (the letters wrap), left, right and OK go from
-  letter to letter and on to Post, a keyboard can type them and Backspace steps back
-  (`post-navigation.js`, before the menus' own keys), and touch turns them with the arrows over and
-  under each (`post-events.js`). Post sends the run (`score-body.js`: its time in whole seconds) with
-  its ticket, which it then spends; the panel shows where it placed (`#3 this week · #18 all time`),
-  the Game over note says `Online #3 this week`, and Post becomes See the board. A refusal the server
-  explains (initials it turns away, a run too old) is shown as it says it, and the ticket kept to try
-  again.
+  the player's name, in Khmer or English, in a field that starts with the name last posted
+  (`sd_name`), so a returning player posts with one press. The field takes the keys as the panel
+  opens, or the first letters typed would move the menu; on touch it leaves the phone's keyboard
+  down until it is tapped. While the player types, the keys go to the field, not the game or its
+  menus (`input/keyboard.js`), and Escape still backs out; the page's guard against selecting text
+  lets the field have a caret (`gesture-guards.js`). The name is kept as it is typed
+  (`post-events.js`), so a redraw never loses it, and Send on the phone's keyboard, or Enter, posts
+  it. `player-name.js` says what is wrong with a name (empty, too long, a letter it cannot hold)
+  before sending it, with the server's limits, which a server test keeps equal; the words the
+  server blocks are its own to know. Post sends the run (`score-body.js`: its time in whole seconds)
+  with its ticket, which it then spends; the panel shows where it placed
+  (`#3 this week · #18 all time`), the field keeps the name as posted, the Game over note says
+  `Online #3 this week`, and Post becomes See the board. A refusal the server explains (a name it
+  turns away, a run too old) is shown as it says it, and the ticket kept to try again. On a phone
+  held sideways Post stands beside the field.
 - **The board.** `online-board.js` holds what the menus show: the board is read as the panel opens
   (`GET api/leaderboard?game=steel-and-dust`), again only once it is 30 seconds old, a failed read
   after 10, and an answer redraws the open panel (`MenuController.redraw`). The runs are written into
-  the page, so `read-board.js` keeps only those made of what the game knows (three capital letters,
-  a hero, mission and difficulty it has, a `YYYY-MM-DD` date), and the post panel writes the server's
-  words as text (`lib/html.js`).
-- **The rules the server checks.** `game.json` names what a run can be under `leaderboard`: the hero
-  ids, how many missions and difficulties there are, and the most points a second of play can earn
-  (`maxPointsPerSecond`). `test/unit/data/catalog-entry.test.js` keeps them equal to the game's data,
-  and the pace at three times the fastest recorded run's.
+  the page, so `read-board.js` keeps only those made of what the game knows (a name with no control
+  character, a hero, mission and difficulty it has, a `YYYY-MM-DD` date), and every name, and the
+  server's words on the post panel, is written as text (`lib/html.js`). A name in Khmer falls back to
+  the phone's own Khmer face, as the pixel font has none.
+- **The rules the server checks.** `game.json` names what a run can be under `leaderboard`: the
+  heroes, each with the id and name the game gives it, how many missions there are, the
+  difficulties' names, and the most points a second of play can earn (`maxPointsPerSecond`).
+  `test/unit/data/catalog-entry.test.js` keeps them equal to the game's data, and the pace at three
+  times the fastest recorded run's.
 
 ### Sharing a run
 

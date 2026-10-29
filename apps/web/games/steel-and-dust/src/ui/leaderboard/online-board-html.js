@@ -1,3 +1,4 @@
+import { escapeHtml } from '../../lib/html.js';
 import { boardTableHtml, heroHtml, isoDayLabel, runCells } from './board-table.js';
 
 const HEADINGS = ['#', 'Score', 'Player', 'Reached', 'Difficulty', 'Time', 'Date'];
@@ -14,7 +15,8 @@ const NOTES = {
   all: 'The top runs ever posted to the online board.',
 };
 
-const whoHtml = (entry) => `<b class="board-name">${entry.initials}</b> ${heroHtml(entry.hero)}`;
+const whoHtml = (entry) =>
+  `<b class="board-name">${escapeHtml(entry.name)}</b> ${heroHtml(entry.hero)}`;
 
 // the run just posted, if it is on this board: where the server ranked it, if the run there is it
 export function onlineLatest(runs, posted, tab) {
@@ -25,7 +27,7 @@ export function onlineLatest(runs, posted, tab) {
   const at = posted.rank[RUNS_OF_TAB[tab]] - 1;
   const entry = runs[at];
 
-  return entry?.initials === posted.initials && entry.score === posted.run.score ? at : -1;
+  return entry?.name === posted.name && entry.score === posted.run.score ? at : -1;
 }
 
 export const runsOfTab = (online, tab) => online.runs?.[RUNS_OF_TAB[tab]] ?? null;

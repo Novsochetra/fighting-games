@@ -1,7 +1,7 @@
 // what the server is sent for a run that ended: its time in whole seconds, as the server counts them
-export function scoreBody(run, initials, ticket) {
+export function scoreBody(run, name, ticket) {
   return {
-    initials: initials.join(''),
+    name,
     score: run.score,
     mission: run.mission,
     hero: run.hero,

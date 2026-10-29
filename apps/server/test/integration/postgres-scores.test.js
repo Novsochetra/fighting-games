@@ -15,9 +15,9 @@ beforeEach(async () => {
 
 afterEach(() => database.close());
 
-const run = (initials, score, extra) => ({
+const run = (name, score, extra) => ({
   game: 'brawler',
-  initials,
+  name,
   score,
   mission: 4,
   hero: 'bokator',
@@ -27,8 +27,8 @@ const run = (initials, score, extra) => ({
   ...extra,
 });
 
-const datedAt = (initials, time) =>
-  database.query('UPDATE scores SET created_at = $2 WHERE initials = $1', [initials, time]);
+const datedAt = (name, time) =>
+  database.query('UPDATE scores SET created_at = $2 WHERE name = $1', [name, time]);
 
 describe('the Postgres scores store', () => {
   const WEEK = new Date('2026-10-25T17:00:00Z');
@@ -53,8 +53,8 @@ describe('the Postgres scores store', () => {
     await store.add(run('PUZ', 9999, { game: 'puzzle' }), 'd');
     await datedAt('OLD', '2026-10-20T00:00:00Z');
     const board = await store.board('brawler', { weekStart: WEEK, size: 10 });
-    expect(board.week.map((saved) => saved.initials)).toEqual(['TIE', 'NEW']);
-    expect(board.allTime.map((saved) => saved.initials)).toEqual(['OLD', 'TIE', 'NEW']);
+    expect(board.week.map((saved) => saved.name)).toEqual(['TIE', 'NEW']);
+    expect(board.allTime.map((saved) => saved.name)).toEqual(['OLD', 'TIE', 'NEW']);
     expect(await store.rank(late, WEEK)).toEqual({ week: 2, allTime: 3 });
   });
 
@@ -70,9 +70,9 @@ describe('the Postgres scores store', () => {
   it('leaves out a run the owner hid, from the boards and the ranks', async () => {
     await store.add(run('BAD', 99999), 'a');
     const fair = await store.add(run('MEY', 100), 'b');
-    await database.query("UPDATE scores SET hidden = true WHERE initials = 'BAD'");
+    await database.query("UPDATE scores SET hidden = true WHERE name = 'BAD'");
     const { allTime } = await store.board('brawler', { weekStart: WEEK, size: 10 });
-    expect(allTime.map((saved) => saved.initials)).toEqual(['MEY']);
+    expect(allTime.map((saved) => saved.name)).toEqual(['MEY']);
     expect((await store.rank(fair, new Date(0))).allTime).toBe(1);
   });
 
@@ -101,16 +101,17 @@ describe('the Postgres scores store', () => {
   });
 
   it('holds the checks in the table too', async () => {
-    const insert = (initials, score) =>
+    const insert = (name, score) =>
       database.query(
-        `INSERT INTO scores (game, initials, score, mission, hero, difficulty, play_seconds, ticket)
-         VALUES ('brawler', $1, $2, 1, 'moss', 0, 10, $1)`,
-        [initials, score],
+        `INSERT INTO scores (game, name, score, mission, hero, difficulty, play_seconds, ticket)
+         VALUES ('brawler', $1, $2, 1, 'moss', 0, 10, $3)`,
+        [name, score, `ticket-${score}-${name.length}`],
       );
-    await expect(insert('sok', 10)).rejects.toThrow(/check/);
-    await expect(insert('<b>', 10)).rejects.toThrow(/check/);
-    await expect(insert('SOK', 0)).rejects.toThrow(/check/);
-    await expect(insert('SOK', 10)).resolves.toBeDefined();
+    await expect(insert('', 10)).rejects.toThrow(/check/);
+    await expect(insert('x'.repeat(21), 11)).rejects.toThrow(/check/);
+    await expect(insert('Sok\nDara', 12)).rejects.toThrow(/check/);
+    await expect(insert('Sok', 0)).rejects.toThrow(/check/);
+    await expect(insert('សុខ ដារ៉ា', 13)).resolves.toBeDefined();
   });
 
   it('answers the health check once migrated', async () => {

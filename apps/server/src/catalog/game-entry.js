@@ -1,4 +1,4 @@
-import { checkLeaderboard } from './leaderboard-rules.js';
+import { checkLeaderboard, shownLeaderboard } from './leaderboard-rules.js';
 
 const REQUIRED_TEXT_FIELDS = ['id', 'title', 'tagline', 'description', 'genre', 'players', 'cover'];
 // The cover is the square icon; banner (16:9) and poster (portrait) are the optional key art the home
@@ -92,12 +92,12 @@ export function validateGameEntry(entry, folderName) {
   return CHECKS.flatMap((check) => check(entry, folderName));
 }
 
-// the leaderboard's rules are for the server's checks; the arcade's list has no use for them
-export function toCatalogGame({ leaderboard: _rules, ...entry }) {
+export function toCatalogGame({ leaderboard, ...entry }) {
   const gamePath = `games/${entry.id}/`;
   const art = ART_FIELDS.filter((field) => entry[field] !== undefined).map((field) => [
     field,
     `${gamePath}${entry[field]}`,
   ]);
-  return { ...entry, ...Object.fromEntries(art), path: gamePath };
+  const board = leaderboard ? { leaderboard: shownLeaderboard(leaderboard) } : {};
+  return { ...entry, ...Object.fromEntries(art), ...board, path: gamePath };
 }

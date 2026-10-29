@@ -60,7 +60,7 @@ function continueSavedAction(game, menus) {
   };
 }
 
-// the board opens on the tab the run that just ended is on; posting opens with the letters last used
+// the board opens on the tab the run that just ended is on; posting opens with the name last used
 function onlineActions({ game, menus, online, share }) {
   return {
     leaderboard() {
@@ -71,7 +71,7 @@ function onlineActions({ game, menus, online, share }) {
       menus.panels.post.reset();
       menus.open('post');
     },
-    sendScore: () => online.post(game.lastRun, [...menus.panels.post.state.letters]),
+    sendScore: () => online.post(game.lastRun, menus.panels.post.state.name),
     share: () => share(game.lastRun, online.rankOf(game.lastRun)),
   };
 }

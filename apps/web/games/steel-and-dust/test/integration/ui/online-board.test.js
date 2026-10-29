@@ -13,8 +13,18 @@ const visibleButtons = () =>
     .filter((button) => !button.hidden)
     .map((button) => button.textContent.trim());
 
-const letters = () =>
-  [...document.querySelectorAll('.initial-letter')].map((letter) => letter.textContent).join('');
+const field = () => document.querySelector('.post-name');
+
+// a name typed into the field, as the browser reports each change, then the keyboard's Send
+function typeName(name) {
+  field().value = name;
+  field().dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+const send = () =>
+  document
+    .querySelector('.post-form')
+    .dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
 
 const note = () => document.querySelector('.post-note').textContent;
 
@@ -27,17 +37,6 @@ async function endRun(page, { score = 4200 } = {}) {
   tick(page.game);
   page.menus.sync();
 }
-
-const weekRun = (initials, score) => ({
-  initials,
-  score,
-  mission: 4,
-  hero: 'ember',
-  difficulty: 1,
-  seconds: 600,
-  cleared: false,
-  date: '2026-10-28',
-});
 
 describe('posting a run to the online board', () => {
   it('asks for a ticket as a fresh run starts, and offers to post the run once it ends', async () => {
@@ -54,19 +53,17 @@ describe('posting a run to the online board', () => {
     ]);
   });
 
-  it('takes three typed letters, posts them, and shows where the run placed', async () => {
+  it('takes a typed name, posts it with Send, and shows where the run placed', async () => {
     const page = openPage();
     await endRun(page);
     page.act('post');
     expect(openMenu().id).toBe('m-post');
-    expect(letters()).toBe('AAA');
-    ['KeyS', 'KeyO', 'KeyK'].forEach(page.key);
-    expect(letters()).toBe('SOK');
-    expect(selected().textContent).toBe('Post');
-    page.key('Enter');
+    expect(field().value).toBe('');
+    typeName('  Sok   Dara ');
+    send();
     await settle();
     expect(page.boardApi.postScore).toHaveBeenCalledWith({
-      initials: 'SOK',
+      name: 'Sok Dara',
       score: 4200,
       mission: 1,
       hero: 'bokator',
@@ -77,7 +74,8 @@ describe('posting a run to the online board', () => {
     });
     expect(note()).toBe('Posted! #1 this week · #4 all time');
     expect(visibleButtons()).toEqual(['See the board']);
-    expect(page.storage.data.get('sd_initials')).toBe('"SOK"');
+    expect(field().readOnly).toBe(true);
+    expect(page.storage.data.get('sd_name')).toBe('"Sok Dara"');
     expect(page.storage.data.get('sd_ticket')).toBe('null');
     page.key('Escape');
     expect(openMenu().id).toBe('m-over');
@@ -85,53 +83,85 @@ describe('posting a run to the online board', () => {
     expect(document.getElementById('overNote').textContent).toContain('Online #1 this week');
   });
 
-  it('turns a letter with up and down, and steps between letters with left, right and OK', async () => {
+  it('takes a name written in Khmer', async () => {
     const page = openPage();
     await endRun(page);
     page.act('post');
-    page.key('ArrowUp');
-    expect(letters()).toBe('BAA');
-    page.key('ArrowDown');
-    page.key('ArrowDown');
-    expect(letters()).toBe('ZAA');
-    page.key('ArrowRight');
-    page.key('ArrowUp');
-    expect(letters()).toBe('ZBA');
-    page.key('Enter');
-    expect(selected().dataset.slot).toBe('2');
-    page.key('Backspace');
-    expect(selected().dataset.slot).toBe('1');
-    page.key('ArrowLeft');
-    page.key('ArrowLeft');
-    expect(selected().dataset.slot).toBe('0');
+    typeName('សុខ ដារ៉ា');
+    page.act('sendScore');
+    await settle();
+    expect(page.boardApi.postScore.mock.calls[0][0].name).toBe('សុខ ដារ៉ា');
   });
 
-  it('turns a letter with the arrows over and under it, for touch', async () => {
+  it('says what is wrong with a name before sending it', async () => {
     const page = openPage();
     await endRun(page);
     page.act('post');
-    document.querySelector('.initial[data-slot="2"] .initial-step.up').click();
-    document.querySelector('.initial[data-slot="2"] .initial-step.up').click();
-    document.querySelector('.initial[data-slot="0"] .initial-step.down').click();
-    expect(letters()).toBe('ZAC');
+    page.act('sendScore');
+    expect(note()).toBe('Type your name.');
+    typeName('<b>Sok</b>');
+    send();
+    expect(note()).toMatch(/letters, numbers/);
+    expect(page.boardApi.postScore).not.toHaveBeenCalled();
   });
 
-  it('opens on the letters last posted', async () => {
-    const page = openPage({ storage: memoryStorage({ sd_initials: '"DAR"' }) });
+  it('keeps the name typed when the panel draws again', async () => {
+    const page = openPage();
     await endRun(page);
     page.act('post');
-    expect(letters()).toBe('DAR');
+    typeName('Dara');
+    page.menus.redraw('post');
+    expect(field().value).toBe('Dara');
+  });
+
+  it('opens on the name last posted, so posting again is one press', async () => {
+    const page = openPage({ storage: memoryStorage({ sd_name: '"Dara"' }) });
+    await endRun(page);
+    page.act('post');
+    expect(field().value).toBe('Dara');
+    page.act('sendScore');
+    await settle();
+    expect(page.boardApi.postScore.mock.calls[0][0].name).toBe('Dara');
+  });
+
+  it('puts the keyboard in the field as the panel opens from a click, so no letter moves the menu', async () => {
+    const page = openPage();
+    await endRun(page);
+    page.ui.noteInput('mouse');
+    page.act('post');
+    expect(document.activeElement).toBe(field());
+  });
+
+  it('leaves the phone keyboard down until the field is tapped', async () => {
+    const page = openPage();
+    await endRun(page);
+    page.ui.noteInput('touch');
+    page.act('post');
+    expect(document.activeElement).not.toBe(field());
+  });
+
+  it('puts the keyboard in the field, and goes down to Post with the arrow keys', async () => {
+    const page = openPage();
+    await endRun(page);
+    page.key('ArrowDown');
+    page.act('post');
+    expect(document.activeElement).toBe(field());
+    page.menus.state.selected = 0;
+    page.key('ArrowDown');
+    expect(selected().textContent).toBe('Post');
+    expect(document.activeElement).not.toBe(field());
   });
 
   it('shows what the server says when it refuses, and keeps the ticket to try again', async () => {
     const api = fakeBoardApi();
-    api.postScore.mockRejectedValueOnce(new BoardRefusal('Pick other initials.'));
+    api.postScore.mockRejectedValueOnce(new BoardRefusal('Pick another name.'));
     const page = openPage({ api });
     await endRun(page);
     page.act('post');
+    typeName('Sok');
     page.act('sendScore');
     await settle();
-    expect(note()).toBe('Pick other initials.');
+    expect(note()).toBe('Pick another name.');
     expect(visibleButtons()).toEqual(['Post']);
     expect(page.online.canPost(page.game.lastRun)).toBe(true);
   });
@@ -142,6 +172,7 @@ describe('posting a run to the online board', () => {
     const page = openPage({ api });
     await endRun(page);
     page.act('post');
+    typeName('Sok');
     page.act('sendScore');
     await settle();
     expect(note()).toMatch(/Can't reach the online board/);
@@ -187,65 +218,9 @@ describe('posting a run to the online board', () => {
     tick(page.game);
     page.menus.sync();
     page.act('post');
+    typeName('Sok');
     page.act('sendScore');
     await settle();
     expect(page.boardApi.postScore.mock.calls[0][0].ticket).toBe('saved-ticket');
-  });
-});
-
-describe('the online leaderboard', () => {
-  const board = { weekStart: '2026-10-26', week: [weekRun('SOK', 9000)], allTime: [] };
-
-  it('opens on this week, reads the board once while it is fresh, and moves between tabs', async () => {
-    const page = openPage({ api: fakeBoardApi({ board }) });
-    page.act('leaderboard');
-    expect(page.menus.items()[page.menus.state.selected].dataset.tab).toBe('week');
-    expect(document.getElementById('leaderboardList').textContent).toContain('Loading');
-    await settle();
-    const row = document.querySelector('.board-row');
-    expect(row.textContent).toContain('SOK');
-    expect(row.textContent).toContain('Ember Shade');
-    expect(row.textContent).toContain('28 Oct');
-    page.key('ArrowRight');
-    expect(selected().dataset.tab).toBe('all');
-    expect(document.getElementById('leaderboardList').textContent).toContain('No runs posted yet');
-    page.key('ArrowRight');
-    expect(document.getElementById('leaderboardList').textContent).toContain(
-      'No runs on the board',
-    );
-    page.key('Escape');
-    page.act('leaderboard');
-    expect(page.boardApi.loadBoard).toHaveBeenCalledTimes(1);
-  });
-
-  it('marks the run just posted on the week it placed in', async () => {
-    const posted = { weekStart: '2026-10-26', week: [weekRun('SOK', 4200)], allTime: [] };
-    const page = openPage({ api: fakeBoardApi({ board: posted }) });
-    await endRun(page);
-    page.act('post');
-    ['KeyS', 'KeyO', 'KeyK', 'Enter'].forEach(page.key);
-    await settle();
-    page.act('leaderboard');
-    await settle();
-    expect(document.querySelector('.board-row.latest').textContent).toContain('SOK');
-  });
-
-  it('opens on this device for a run that ended unposted', async () => {
-    const page = openPage();
-    await endRun(page);
-    page.act('leaderboard');
-    expect(document.querySelector('[aria-selected="true"]').dataset.tab).toBe('device');
-    expect(document.querySelector('.board-row.latest').textContent).toContain('4200');
-  });
-
-  it('says so when the board cannot be read, and points to the runs kept on this device', async () => {
-    const api = fakeBoardApi();
-    api.loadBoard.mockRejectedValue(new TypeError('Failed to fetch'));
-    const page = openPage({ api });
-    page.act('leaderboard');
-    await settle();
-    expect(document.getElementById('leaderboardList').textContent).toContain(
-      "Can't reach the online board",
-    );
   });
 });

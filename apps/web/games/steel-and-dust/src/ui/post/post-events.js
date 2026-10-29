@@ -1,20 +1,13 @@
-// the arrows over and under each letter turn it, for touch and the mouse; a tap on a letter picks it
-export function installPostEvents({ root, menus, audio }) {
-  root.addEventListener('click', (event) => {
-    const stepper = event.target.closest('.initial-step');
-    const letter = event.target.closest('.initial');
-
-    if (!letter) {
-      return;
+// the name is kept as it is typed, so a redraw (Posting…) never loses it, and the phone keyboard's
+// Send, or Enter, posts it
+export function installPostEvents({ root, menus, act }) {
+  root.addEventListener('input', (event) => {
+    if (event.target.matches('.post-name')) {
+      menus.panels.post.state.name = event.target.value;
     }
-
-    menus.state.selected = Number(letter.dataset.slot);
-
-    if (stepper) {
-      menus.panels.post.step(Number(stepper.dataset.slot), Number(stepper.dataset.d));
-    }
-
-    menus.redraw('post');
-    audio.sfx('ui');
+  });
+  root.addEventListener('submit', (event) => {
+    event.preventDefault();
+    act('sendScore');
   });
 }

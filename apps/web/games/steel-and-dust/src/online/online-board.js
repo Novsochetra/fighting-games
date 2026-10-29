@@ -1,10 +1,10 @@
 import { readJson, writeJson } from '../platform/storage.js';
 import { OFFLINE_MESSAGE, BoardRefusal } from './board-api.js';
-import { readInitials } from './initials.js';
+import { cleanName, nameProblem, readStoredName } from './player-name.js';
 import { readBoard } from './read-board.js';
 import { rankText, scoreBody } from './score-body.js';
 
-const INITIALS_KEY = 'sd_initials';
+const NAME_KEY = 'sd_name';
 // the board is read when it is opened, again only once it is this old, and a failed read is tried
 // again a little sooner
 const FRESH_MS = 30 * 1000;
@@ -22,7 +22,7 @@ export function createOnlineBoard({ api, ticket, storage, now = Date.now }) {
     posting: false,
     posted: null,
     note: '',
-    initials: readInitials(readJson(storage, INITIALS_KEY, null)),
+    name: readStoredName(readJson(storage, NAME_KEY, '')),
     onChange() {},
 
     startRun() {
@@ -36,14 +36,20 @@ export function createOnlineBoard({ api, ticket, storage, now = Date.now }) {
 
     load: () => loadBoard(online, { api, now }),
 
-    async post(run, initials) {
-      if (online.posting || !online.canPost(run)) {
+    // a name the server would turn away for its length or its letters is caught here, at once
+    async post(run, typed) {
+      const name = cleanName(typed);
+      const problem = nameProblem(name);
+
+      if (online.posting || !online.canPost(run) || problem) {
+        online.note = problem ?? online.note;
+        online.onChange();
         return;
       }
 
       Object.assign(online, { posting: true, note: 'Posting…' });
       online.onChange();
-      await sendRun(online, { api, ticket, storage }, { run, initials });
+      await sendRun(online, { api, ticket, storage }, { run, name });
       online.posting = false;
       online.onChange();
     },
@@ -71,16 +77,17 @@ async function loadBoard(online, { api, now }) {
   online.onChange();
 }
 
-async function sendRun(online, { api, ticket, storage }, { run, initials }) {
+async function sendRun(online, { api, ticket, storage }, { run, name }) {
   try {
-    const answer = await api.postScore(scoreBody(run, initials, ticket.current()));
+    const answer = await api.postScore(scoreBody(run, name, ticket.current()));
+    const posted = answer.score?.name ?? name;
 
     ticket.spend();
-    writeJson(storage, INITIALS_KEY, initials.join(''));
+    writeJson(storage, NAME_KEY, posted);
     Object.assign(online, {
-      posted: { run, rank: answer.rank, initials: initials.join('') },
+      posted: { run, rank: answer.rank, name: posted },
       note: `Posted! ${rankText(answer.rank)}`,
-      initials: [...initials],
+      name: posted,
       triedAt: -Infinity,
     });
   } catch (error) {

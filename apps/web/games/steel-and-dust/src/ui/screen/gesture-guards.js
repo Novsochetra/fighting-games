@@ -20,7 +20,12 @@ export function installGestureGuards({ window, document, elements }) {
   for (const type of ['gesturestart', 'gesturechange', 'gestureend', 'dblclick']) {
     document.addEventListener(type, cancel, { passive: false });
   }
-  document.addEventListener('selectstart', cancel);
+  // the name field on the post panel still takes a caret and a selection
+  document.addEventListener('selectstart', (event) => {
+    if (!event.target?.closest?.('input')) {
+      event.preventDefault();
+    }
+  });
   for (const element of [elements.stage, elements.touch]) {
     element.addEventListener(
       'touchstart',

@@ -1,0 +1,139 @@
+/* A warm gold light falls from the top of the page, the color of the trophy. */
+.leaderboard-page {
+  --page-bar-condense-start: var(--scroll-leaderboard-condense-start);
+  --page-bar-condense-end: var(--scroll-leaderboard-condense-end);
+
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100dvh;
+  background:
+    radial-gradient(
+      ellipse 70rem 32rem at 50% -8rem,
+      var(--color-leaderboard-glow),
+      var(--color-clear) 70%
+    ),
+    var(--color-launcher-background);
+}
+
+.leaderboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  inline-size: 100%;
+  max-inline-size: calc(var(--layout-leaderboard-max-width) + 2 * var(--space-gutter));
+  margin-inline: auto;
+  padding: var(--space-4) max(var(--space-gutter), env(safe-area-inset-right))
+    max(var(--space-16), env(safe-area-inset-bottom))
+    max(var(--space-gutter), env(safe-area-inset-left));
+}
+
+.leaderboard-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: center;
+  text-align: center;
+}
+
+.trophy-badge {
+  display: grid;
+  place-items: center;
+  inline-size: var(--size-trophy-badge);
+  block-size: var(--size-trophy-badge);
+  margin-block-end: var(--space-2);
+  color: var(--color-white);
+  background: linear-gradient(
+    to bottom,
+    var(--color-trophy-badge-top),
+    var(--color-trophy-badge-bottom)
+  );
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-trophy-badge);
+}
+
+.trophy-badge .icon {
+  inline-size: 50%;
+  block-size: 50%;
+}
+
+.leaderboard-hero__title,
+.leaderboard-hero__lead {
+  margin: 0;
+}
+
+.leaderboard-hero__title {
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+}
+
+.leaderboard-hero__lead {
+  max-inline-size: 36ch;
+  font-size: var(--font-size-apple-body);
+  line-height: var(--leading-apple-body);
+  color: var(--color-label-tertiary);
+}
+
+.game-board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.game-board__header {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.game-board__icon {
+  flex: none;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  border-radius: var(--radius-icon-tile);
+  image-rendering: pixelated;
+}
+
+.game-board__title {
+  flex: 1;
+  min-inline-size: 0;
+  margin: 0;
+  font-size: var(--font-size-apple-title-3);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-tight);
+}
+
+.game-board__play {
+  flex: none;
+  padding-inline: var(--space-5);
+}
+
+.board-empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-8) var(--space-5);
+  text-align: center;
+  background: var(--color-launcher-surface);
+  border: var(--border-width-hairline) solid var(--color-launcher-separator);
+  border-radius: var(--radius-card);
+}
+
+.board-empty__title,
+.board-empty__body {
+  margin: 0;
+}
+
+.board-empty__title {
+  font-size: var(--font-size-apple-title-3);
+  font-weight: var(--font-weight-semibold);
+}
+
+.board-empty__body {
+  max-inline-size: 32ch;
+  font-size: var(--font-size-apple-subheadline);
+  line-height: var(--leading-apple-subheadline);
+  color: var(--color-label-muted);
+}

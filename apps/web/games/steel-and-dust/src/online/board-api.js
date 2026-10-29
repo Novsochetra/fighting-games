@@ -5,7 +5,7 @@ export const GAME_ID = 'steel-and-dust';
 
 export const OFFLINE_MESSAGE = "Can't reach the online board. Check your connection.";
 
-// a refusal the server explains (initials it turns away, a run too old) is shown as it says it
+// a refusal the server explains (a name it turns away, a run too old) is shown as it says it
 export class BoardRefusal extends Error {}
 
 async function readAnswer(response) {
