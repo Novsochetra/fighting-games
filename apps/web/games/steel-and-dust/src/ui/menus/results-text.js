@@ -1,6 +1,7 @@
 import { difficultyOf } from '../../data/difficulty.js';
 import { heroById } from '../../data/heroes.js';
 import { formatClock } from '../../render/hud/clock.js';
+import { heartsLeft } from '../../sim/stage/lives.js';
 import { boardPlace } from './menu-text.js';
 
 const counted = (count, one, many) => `${count} ${count === 1 ? one : many}`;
@@ -12,7 +13,7 @@ const STAT_TILES = [
   ['Best combo', (game) => counted(game.records.bestCombo, 'hit', 'hits')],
   ['Leaderboard', (game) => boardPlace(game) || '—'],
   ['Continues', (game) => game.continues],
-  ['Lives left', (game) => game.lives],
+  ['Lives left', (game) => heartsLeft(game.lives)],
   ['Difficulty', (game) => difficultyOf(game.settings).name],
 ];
 

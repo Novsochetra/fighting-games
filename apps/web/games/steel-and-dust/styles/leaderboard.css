@@ -131,3 +131,11 @@
     font-size: var(--font-size-2xs);
   }
 }
+
+/* a posted run is named by the three letters its player picked, ahead of the hero they played */
+.board-name {
+  margin-right: 6px;
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text);
+  letter-spacing: var(--tracking-medium);
+}

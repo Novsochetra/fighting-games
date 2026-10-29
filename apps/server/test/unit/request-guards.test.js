@@ -70,6 +70,33 @@ describe('clientAddressOf', () => {
     expect(clientAddressOf(request('6.6.6.6, 1.2.3.4'), { trustProxy: true })).toBe('1.2.3.4');
   });
 
+  describe('behind Cloudflare', () => {
+    const throughCloudflare = (edge, visitor) => ({
+      headers: { 'x-forwarded-for': `${visitor}, ${edge}`, 'cf-connecting-ip': visitor },
+      socket: { remoteAddress: '10.0.0.5' },
+    });
+
+    it('takes the visitor Cloudflare names, not the edge every visitor shares', () => {
+      const overIpv4 = throughCloudflare('172.70.1.1', '203.0.113.7');
+      expect(clientAddressOf(overIpv4, { trustProxy: true })).toBe('203.0.113.7');
+      const overIpv6 = throughCloudflare('2400:cb00:2049::1', '2001:db8::7');
+      expect(clientAddressOf(overIpv6, { trustProxy: true })).toBe('2001:db8::7');
+    });
+
+    it('believes no CF-Connecting-IP from an address outside Cloudflare', () => {
+      const spoofed = throughCloudflare('198.51.100.9', '203.0.113.7');
+      expect(clientAddressOf(spoofed, { trustProxy: true })).toBe('198.51.100.9');
+    });
+
+    it('keeps the edge when the header is missing or not an address', () => {
+      const missing = throughCloudflare('172.70.1.1', '');
+      missing.headers['cf-connecting-ip'] = undefined;
+      expect(clientAddressOf(missing, { trustProxy: true })).toBe('172.70.1.1');
+      const junk = throughCloudflare('172.70.1.1', 'not-an-ip');
+      expect(clientAddressOf(junk, { trustProxy: true })).toBe('172.70.1.1');
+    });
+  });
+
   it('ignores X-Forwarded-For without a trusted proxy', () => {
     expect(clientAddressOf(request('1.2.3.4'), { trustProxy: false })).toBe('10.0.0.5');
     expect(clientAddressOf(request(''), { trustProxy: true })).toBe('10.0.0.5');

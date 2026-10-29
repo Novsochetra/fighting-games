@@ -75,8 +75,8 @@ describe('a run saved on an earlier visit', () => {
     expect(visibleButtons()[0]).toBe('Continue mission 5');
     page.act('play');
     page.act('hero-moss');
-    expect(page.game).toMatchObject({ mode: 'play', missionIndex: 0, score: 0, lives: 5 });
-    expect(page.game.checkpoint).toMatchObject({ mission: 0, score: 0, lives: 5 });
+    expect(page.game).toMatchObject({ mode: 'play', missionIndex: 0, score: 0, lives: 6 });
+    expect(page.game.checkpoint).toMatchObject({ mission: 0, score: 0, lives: 6 });
   });
 
   it('is let go with the last life, and the title offers only a new game', () => {
@@ -84,7 +84,12 @@ describe('a run saved on an earlier visit', () => {
     loseSavedRun(page);
     expect(page.game.checkpoint).toBeNull();
     expect(page.saveRun).toHaveBeenLastCalledWith(null);
-    expect(visibleButtons()).toEqual(['Start from mission 1', 'Leaderboard', 'Quit to title']);
+    expect(visibleButtons()).toEqual([
+      'Start from mission 1',
+      'Share',
+      'Leaderboard',
+      'Quit to title',
+    ]);
     page.act('quit');
     page.menus.sync();
     expect(visibleButtons().slice(0, 2)).toEqual(['Play', 'Leaderboard']);
@@ -96,6 +101,7 @@ describe('the leaderboard', () => {
     const page = openPage();
     page.act('leaderboard');
     expect(openMenu().id).toBe('m-leaderboard');
+    document.querySelector('[data-tab="device"]').click();
     expect(document.getElementById('leaderboardList').textContent).toContain(
       'No runs on the board',
     );

@@ -1,3 +1,5 @@
+import { isCloudflareAddress, visitorBehindCloudflare } from './cloudflare.js';
+
 const SWEEP_AT_KEYS = 1000;
 
 export function createRateLimiter({ limit, windowMs, now = Date.now }) {
@@ -27,9 +29,15 @@ export function createRateLimiter({ limit, windowMs, now = Date.now }) {
 }
 
 // Railway's edge proxy appends the address it saw to X-Forwarded-For, so with one trusted hop the
-// last entry is the visitor; the entries before it are whatever the visitor sent.
+// last entry is who reached it; the entries before it are whatever the visitor sent. When that is a
+// Cloudflare edge, the visitor is the one Cloudflare names (cloudflare.js).
 export function clientAddressOf(request, { trustProxy }) {
   const forwarded = trustProxy ? request.headers['x-forwarded-for'] : undefined;
   const last = forwarded?.split(',').at(-1)?.trim();
+
+  if (last && isCloudflareAddress(last)) {
+    return visitorBehindCloudflare(request.headers, last);
+  }
+
   return last || request.socket.remoteAddress || 'unknown';
 }

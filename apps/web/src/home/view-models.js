@@ -1,3 +1,5 @@
+import { boardOf } from '../leaderboard/board-rules.js';
+
 // Only plain relative paths: the catalog is data, and a "javascript:" or "//host" href must never
 // become a link on the page.
 const RELATIVE_URL_PATTERN = /^[\w-][\w.-]*(?:\/[\w-][\w.-]*)*\/?$/;
@@ -70,6 +72,7 @@ export function toGameCard(game) {
     summary: firstSentence(game.description),
     description: asText(game.description),
     controls: controlsOf(game),
+    board: boardOf(game.leaderboard),
   };
 }
 

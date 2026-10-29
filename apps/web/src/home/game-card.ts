@@ -17,7 +17,14 @@ export interface GameCard {
   summary: string;
   description: string;
   controls: string[];
+  // a game with an online leaderboard (leaderboard/board-rules.js)
+  board?: GameBoard | null;
   isComingSoon?: boolean;
+}
+
+export interface GameBoard {
+  heroes: Record<string, string>;
+  difficulties: string[];
 }
 
 export type FocusZone = 'carousel' | 'library' | null;

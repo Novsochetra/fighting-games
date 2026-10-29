@@ -97,6 +97,10 @@
   --color-heart-badge-top: var(--color-apple-orange);
   --color-heart-badge-bottom: var(--color-apple-pink);
   --color-supporters-glow: rgb(255 55 95 / 20%);
+  --color-trophy-badge-top: var(--color-medal-gold-top);
+  --color-trophy-badge-bottom: var(--color-apple-orange);
+  --color-trophy: var(--color-medal-gold-bottom);
+  --color-leaderboard-glow: rgb(255 204 0 / 18%);
   --color-medal-gold-top: #ffe17a;
   --color-medal-gold-bottom: #d9a30f;
   --color-medal-silver-top: #f2f2f7;
@@ -209,6 +213,7 @@
   --layout-hero-max-height: 52rem;
   --layout-hero-min-height: 40rem;
   --layout-supporters-max-width: 52rem;
+  --layout-leaderboard-max-width: 46rem;
   --layout-credits-max-width: 40rem;
   --layout-cover-max-width: 48rem;
 
@@ -254,6 +259,7 @@
   --size-tier-gem-small: 0.8rem;
   --size-tier-gem-large: 2.75rem;
   --size-heart-badge: 4.5rem;
+  --size-trophy-badge: 4.5rem;
   --size-avatar: 2.75rem;
   --size-avatar-medium: 3.5rem;
   --size-avatar-large: 4.5rem;
@@ -296,6 +302,7 @@
   --shadow-tip: 0 10px 30px rgb(0 0 0 / 45%), inset 0 0 0 0.5px rgb(255 255 255 / 14%);
   --shadow-banner: 0 12px 36px rgb(0 0 0 / 45%), inset 0 0 0 0.5px var(--color-material-edge);
   --shadow-heart-badge: 0 14px 36px rgb(255 55 95 / 36%);
+  --shadow-trophy-badge: 0 14px 36px rgb(255 159 10 / 34%);
   --shadow-medal: 0 0 0 3px var(--color-launcher-surface);
   --text-shadow-avatar: 0 1px 2px rgb(0 0 0 / 25%);
   --shadow-maker: 0 0 0 5px var(--color-launcher-background), 0 18px 48px rgb(255 55 95 / 34%);
@@ -344,6 +351,8 @@
   --scroll-credits-condense-end: calc(var(--size-cover) + 6rem);
   --scroll-supporters-condense-start: calc(var(--size-heart-badge) + 2.5rem);
   --scroll-supporters-condense-end: calc(var(--size-heart-badge) + 5rem);
+  --scroll-leaderboard-condense-start: calc(var(--size-trophy-badge) + 2.5rem);
+  --scroll-leaderboard-condense-end: calc(var(--size-trophy-badge) + 5rem);
   --scroll-home-condense-start: 0;
   --scroll-home-condense-end: 2.5rem;
 
@@ -459,6 +468,7 @@
   --color-heart: var(--color-apple-pink-light);
   --color-heart-badge-bottom: var(--color-apple-pink-light);
   --color-supporters-glow: rgb(255 45 85 / 12%);
+  --color-leaderboard-glow: rgb(255 204 0 / 16%);
   --color-podium-glow: rgb(255 204 0 / 16%);
   --color-credits-glow: rgb(255 149 0 / 14%);
   --color-row-hover: rgb(118 118 128 / 7%);
@@ -473,6 +483,7 @@
   --shadow-sheet: 0 24px 64px rgb(0 0 0 / 22%);
   --shadow-banner: 0 10px 30px rgb(0 0 0 / 14%), inset 0 0 0 0.5px var(--color-material-edge);
   --shadow-heart-badge: 0 12px 28px rgb(255 45 85 / 28%);
+  --shadow-trophy-badge: 0 12px 28px rgb(255 159 10 / 26%);
   --shadow-maker: 0 0 0 5px var(--color-launcher-background), 0 14px 36px rgb(255 45 85 / 26%);
   --shadow-tile: inset 0 0 0 0.5px rgb(0 0 0 / 6%);
   --shadow-navigation: -8px 0 32px rgb(0 0 0 / 16%);

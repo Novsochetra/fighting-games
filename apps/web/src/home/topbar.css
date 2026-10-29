@@ -99,6 +99,32 @@
   }
 }
 
+/* With the leaderboard's trophy, four buttons share a phone's bar with the arcade's name: they stand
+   closer and the name a size smaller, and on the smallest phones the logo stands alone, the name
+   still read out with it */
+@media (max-width: 25rem) {
+  .topbar,
+  .topbar__actions {
+    gap: var(--space-2);
+  }
+
+  .topbar__title {
+    font-size: var(--font-size-apple-body);
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 24rem) {
+  .topbar__name {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 @keyframes topbar-title-condense {
   to {
     color: var(--color-label);

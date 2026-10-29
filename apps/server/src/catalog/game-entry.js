@@ -1,3 +1,5 @@
+import { checkLeaderboard, shownLeaderboard } from './leaderboard-rules.js';
+
 const REQUIRED_TEXT_FIELDS = ['id', 'title', 'tagline', 'description', 'genre', 'players', 'cover'];
 // The cover is the square icon; banner (16:9) and poster (portrait) are the optional key art the home
 // page shows behind its cards, and screenshot an optional 16:9 frame of play for the card itself.
@@ -93,6 +95,7 @@ const CHECKS = [
   checkControls,
   checkUrl,
   checkPixelArt,
+  checkLeaderboard,
 ];
 
 export function validateGameEntry(entry, folderName) {
@@ -102,11 +105,12 @@ export function validateGameEntry(entry, folderName) {
   return CHECKS.flatMap((check) => check(entry, folderName));
 }
 
-export function toCatalogGame(entry) {
+export function toCatalogGame({ leaderboard, ...entry }) {
   const gamePath = `games/${entry.id}/`;
   const files = FILE_FIELDS.filter((field) => entry[field] !== undefined).map((field) => [
     field,
     `${gamePath}${entry[field]}`,
   ]);
-  return { ...entry, ...Object.fromEntries(files), path: gamePath };
+  const board = leaderboard ? { leaderboard: shownLeaderboard(leaderboard) } : {};
+  return { ...entry, ...Object.fromEntries(files), ...board, path: gamePath };
 }

@@ -91,6 +91,20 @@ export class MenuController {
     }
   }
 
+  // a panel whose content changed under the player (a letter turned, the online board come in) is
+  // drawn again with the same item selected
+  redraw(id) {
+    if (this.top() !== id) {
+      return;
+    }
+
+    const keep = this.state.selected;
+
+    this.panels[id].build();
+    this.state.selected = keep;
+    this.highlight(this.ui.usesButtons());
+  }
+
   changeSetting(key, step, wrap) {
     if (!this.panels.settings.change(key, step, wrap)) {
       return;

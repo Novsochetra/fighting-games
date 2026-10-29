@@ -1,10 +1,11 @@
 import { COLORS } from '../../art/colors.js';
 import { HUD_COLORS } from '../../art/hud-colors.js';
-import { START_LIVES } from '../../data/player.js';
+import { START_HEARTS } from '../../data/player.js';
+import { heartsLeft } from '../../sim/stage/lives.js';
 
 const HEART_GAP = 9;
 const HEART_WIDTH = 7;
-export const LIVES_WIDTH = (START_LIVES - 1) * HEART_GAP + HEART_WIDTH;
+export const LIVES_WIDTH = (START_HEARTS - 1) * HEART_GAP + HEART_WIDTH;
 
 // a 7x6 pixel heart as [left, width] runs, one row at a time from the top
 const HEART_ROWS = [
@@ -31,9 +32,11 @@ function drawHeart(painter, { x, y, full }) {
   }
 }
 
-// a full heart for every life left and a dark one for every life lost
+// a full heart for every life still to come and a dark one for every life lost
 export function drawLives(painter, { lives, x, y }) {
-  for (let i = 0; i < START_LIVES; i++) {
-    drawHeart(painter, { x: x + i * HEART_GAP, y, full: i < lives });
+  const hearts = heartsLeft(lives);
+
+  for (let i = 0; i < START_HEARTS; i++) {
+    drawHeart(painter, { x: x + i * HEART_GAP, y, full: i < hearts });
   }
 }

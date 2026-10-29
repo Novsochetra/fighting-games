@@ -5,8 +5,23 @@ function hasModifier(event) {
   return event.metaKey || event.ctrlKey || event.altKey;
 }
 
+// a player typing their name types it: the keys go to the field, not the game or its menus, but
+// Escape still backs out of the panel
+function handleTyping(event, menus) {
+  if (event.code === 'Escape') {
+    event.target.blur();
+    menus.handleKey(event);
+  }
+}
+
+const isTyping = (event) => !!event.target?.matches?.('input, textarea');
+
 export function handleKeyDown(event, { game, menus, ui }) {
   ui.noteInput('key');
+  if (isTyping(event)) {
+    handleTyping(event, menus);
+    return;
+  }
   if (event.code === 'KeyM' && !event.repeat) {
     game.input.pressed.mute = true;
     return;

@@ -106,7 +106,7 @@ const offline = VitePWA({
   },
 });
 
-// The arcade's three pages, each with its own head for search and link previews, around one React
+// The arcade's four pages, each with its own head for search and link previews, around one React
 // app. Relative addresses (base './') keep the build working under any path, as the pages always have.
 // Vite's own files go to build/, as assets/ is the arcade's art.
 export default defineConfig({
@@ -121,6 +121,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         home: path.join(WEB_ROOT, 'index.html'),
+        leaderboard: path.join(WEB_ROOT, 'leaderboard', 'index.html'),
         supporters: path.join(WEB_ROOT, 'supporters', 'index.html'),
         credits: path.join(WEB_ROOT, 'credits', 'index.html'),
       },

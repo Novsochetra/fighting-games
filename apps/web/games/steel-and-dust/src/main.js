@@ -21,7 +21,7 @@ function createCanvas(width, height) {
 }
 
 const elements = findElements(document);
-const { game, audio, ui } = createSession({ window });
+const { game, audio, ui, online } = createSession({ window });
 const pad = { connected: false };
 const { layout, fullscreen, menus, act, supporters } = installUi({
   window,
@@ -30,6 +30,7 @@ const { layout, fullscreen, menus, act, supporters } = installUi({
   audio,
   ui,
   pad,
+  online,
 });
 const { touchStick, gamepad } = installInput({ window, elements, game, audio, ui, layout, menus });
 layout.onFit = () => touchStick.rest();

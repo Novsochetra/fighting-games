@@ -71,7 +71,8 @@ describe('Steel & Dust bundled by the build', () => {
 
       expect(problems.filter((problem) => problem.fatal)).toEqual([]);
     }
-  });
+    // it parses every bundle whole, a few seconds alone and longer while the whole suite runs
+  }, 30000);
 
   it('leaves the modules out, and its download goes by the bundles', async () => {
     const files = await readdir(gameRoot, { recursive: true });

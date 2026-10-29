@@ -7,9 +7,10 @@ import { sendRequest, startTestServer } from '../support/test-server.js';
 
 let database;
 
+// a Postgres compiled to WebAssembly takes seconds to start while the whole suite runs
 beforeEach(async () => {
   database = await createPgliteDatabase();
-});
+}, 30000);
 
 afterEach(() => database.close());
 
@@ -17,7 +18,7 @@ describe('migrate', () => {
   it('applies every migration once, then has nothing to do', async () => {
     expect(await migrate(database)).toEqual(MIGRATIONS.map((migration) => migration.name));
     expect(await migrate(database)).toEqual([]);
-    expect([...(await appliedMigrations(database))]).toEqual(['0001_supporters']);
+    expect([...(await appliedMigrations(database))]).toEqual(['0001_supporters', '0002_scores']);
   });
 
   it('leaves nothing behind when a migration fails, so the next run tries it again', async () => {

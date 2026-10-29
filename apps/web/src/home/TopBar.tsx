@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { useArcade, useArcadeUrl } from '../arcade/arcade-context';
-import { HeartIcon } from '../arcade/icons';
+import { HeartIcon, TrophyIcon } from '../arcade/icons';
+import { boardRoute } from '../leaderboard/board-route.js';
 import { EVENTS, onOff } from './analytics-events.js';
+import { useHome } from './home-context';
 
 function AppearanceToggle() {
   const { appearance, sound, analytics } = useArcade();
@@ -66,8 +68,39 @@ function SoundToggle() {
   );
 }
 
-export function TopBar() {
+// the leaderboard and the supporters, each a screen pushed over the arcade; the trophy opens the
+// board of the game in the carousel, when it has one
+function ScreenLinks() {
   const { analytics } = useArcade();
+  const { cards, selected } = useHome();
+  const shown = cards[selected];
+
+  return (
+    <>
+      <Link
+        className="glass-button trophy-link"
+        id="leaderboard-link"
+        to={boardRoute(shown?.board ? shown.id : null)}
+        aria-label="Leaderboard"
+        onClick={() => analytics.track(EVENTS.leaderboard, { placement: 'top_bar' })}
+      >
+        <TrophyIcon />
+      </Link>
+      <Link
+        className="glass-button glass-button--labeled support-link"
+        id="supporters-link"
+        to="/supporters/"
+        aria-label="Supporters"
+        onClick={() => analytics.track(EVENTS.supporters, { placement: 'top_bar' })}
+      >
+        <HeartIcon />
+        <span className="glass-button__label">Supporters</span>
+      </Link>
+    </>
+  );
+}
+
+export function TopBar() {
   const url = useArcadeUrl();
 
   return (
@@ -80,19 +113,10 @@ export function TopBar() {
           width="28"
           height="28"
         />
-        Retro Arcade
+        <span className="topbar__name">Retro Arcade</span>
       </h1>
       <div className="topbar__actions">
-        <Link
-          className="glass-button glass-button--labeled support-link"
-          id="supporters-link"
-          to="/supporters/"
-          aria-label="Supporters"
-          onClick={() => analytics.track(EVENTS.supporters, { placement: 'top_bar' })}
-        >
-          <HeartIcon />
-          <span className="glass-button__label">Supporters</span>
-        </Link>
+        <ScreenLinks />
         <AppearanceToggle />
         <SoundToggle />
       </div>

@@ -1,0 +1,107 @@
+.post-run,
+.post-note {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+.post-run {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.post-run b {
+  color: var(--color-gold);
+  font-weight: var(--font-weight-regular);
+}
+
+.post-note {
+  min-height: 2.6em;
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+}
+
+.post-form {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  margin: 12px 0 10px;
+}
+
+.post-label {
+  font-size: var(--font-size-2xs);
+  letter-spacing: var(--tracking-medium);
+  color: var(--color-text-muted);
+}
+
+/* a sunken stone slot the name is carved into; 16px type, or iPhone zooms the page as it is
+   tapped, and a name in Khmer falls back to the phone's own Khmer face, as the pixel font has none */
+#app .post-name {
+  inline-size: min(320px, 70vw);
+  padding: 8px 12px;
+  font-family: var(--font-display);
+  font-size: var(--font-size-md);
+  text-align: center;
+  color: var(--color-gold);
+  background: var(--color-night-deep);
+  border: 2px solid var(--color-line);
+  border-radius: var(--radius-md);
+  outline: none;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+
+#app .post-name::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+#app .post-name:focus,
+#app .post-name.sel {
+  border-color: var(--color-green);
+  box-shadow: none;
+}
+
+#app .post-name[readonly] {
+  color: var(--color-mint-light);
+  border-color: var(--color-clear);
+}
+
+/* the panel's one button stands under the name, as a menu's buttons stand under its title */
+#m-post .mlist {
+  margin-inline: auto;
+}
+
+/* a phone held sideways has no room for the name over Post, so Post stands beside it */
+@media (max-height: 560px) {
+  #postPanel {
+    display: grid;
+    grid-template-areas:
+      'run run'
+      'name post'
+      'note note';
+    justify-content: center;
+    align-items: end;
+    column-gap: 24px;
+  }
+
+  .post-run {
+    grid-area: run;
+  }
+
+  .post-form {
+    grid-area: name;
+    margin: 6px 0;
+  }
+
+  .post-note {
+    grid-area: note;
+    min-height: 0;
+  }
+
+  #m-post .mlist {
+    grid-area: post;
+    margin: 6px 0;
+  }
+}

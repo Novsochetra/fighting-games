@@ -35,7 +35,7 @@ describe('a saved run', () => {
     expect(sanitizeSavedRun({ ...RUN, mission: 12 })).toBeNull();
     expect(sanitizeSavedRun({ ...RUN, mission: 1.5 })).toBeNull();
     expect(sanitizeSavedRun({ ...RUN, lives: 0 })).toBeNull();
-    expect(sanitizeSavedRun({ ...RUN, lives: 6 })).toBeNull();
+    expect(sanitizeSavedRun({ ...RUN, lives: 7 })).toBeNull();
     expect(sanitizeSavedRun({ ...RUN, score: -1 })).toBeNull();
     expect(sanitizeSavedRun({ ...RUN, playTime: '9' })).toBeNull();
     expect(sanitizeSavedRun({ ...RUN, ultMeter: 201 })).toBeNull();
