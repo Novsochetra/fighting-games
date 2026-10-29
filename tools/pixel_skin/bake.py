@@ -3,8 +3,8 @@
 
     python3 tools/pixel_skin/bake.py landscape PAINTING OUT_DIR
         the shell held sideways, its window in the middle: each grip running down from the top
-        (landscape-left.webp, landscape-right.webp) and its foot (…-foot.webp), the top and the
-        bottom band reaching both ways from their ornaments (landscape-top.webp, …-bottom.webp)
+        (landscape-left.png, landscape-right.png) and its foot (…-foot.png), the top and the
+        bottom band reaching both ways from their ornaments (landscape-top.png, …-bottom.png)
     python3 tools/pixel_skin/bake.py portrait PAINTING OUT_DIR
         the shell held upright, its window at the top: the rim round the window (portrait-crown),
         the emblem under it running down (portrait-body) and the foot (portrait-foot)
@@ -119,11 +119,11 @@ def landscape(painting, out_dir):
 
     for side, grip in (('left', grip_left), ('right', grip_right)):
         head, foot = grip_pieces(grip)
-        save(head, f'{out_dir}/landscape-{side}.webp')
-        save(foot, f'{out_dir}/landscape-{side}-foot.webp')
+        save(head, f'{out_dir}/landscape-{side}.png')
+        save(foot, f'{out_dir}/landscape-{side}-foot.png')
 
-    save(long_band(band_top), f'{out_dir}/landscape-top.webp')
-    save(long_band(band_bottom), f'{out_dir}/landscape-bottom.webp')
+    save(long_band(band_top), f'{out_dir}/landscape-top.png')
+    save(long_band(band_bottom), f'{out_dir}/landscape-bottom.png')
     window_colour_of(image, window)
 
 
@@ -159,9 +159,9 @@ def portrait(painting, out_dir):
     foot_at = round(BODY_FOOT * len(body))
     carried = extended_down(body[:foot_at], rows_of(body, *BODY_SEGMENT), BODY_LENGTH)
 
-    save(crown, f'{out_dir}/portrait-crown.webp')
-    save(carried, f'{out_dir}/portrait-body.webp')
-    save(faded(body[foot_at:], 'top'), f'{out_dir}/portrait-foot.webp')
+    save(crown, f'{out_dir}/portrait-crown.png')
+    save(carried, f'{out_dir}/portrait-body.png')
+    save(faded(body[foot_at:], 'top'), f'{out_dir}/portrait-foot.png')
 
 
 def keyed(sheet):
@@ -180,7 +180,9 @@ def key_art(sheet, column, row):
     cell = sheet[top : top + height - 2 * CELL_INSET, left : left + width - 2 * CELL_INSET]
     ys, xs = np.nonzero(cell[..., 3])
 
-    return read_region(sheet, (left + xs.min(), top + ys.min(), left + xs.max() + 1, top + ys.max() + 1))
+    box = (left + xs.min(), top + ys.min(), left + xs.max() + 1, top + ys.max() + 1)
+
+    return read_region(sheet, box, square=True)
 
 
 def keys(source, out_dir):
@@ -194,7 +196,7 @@ def keys(source, out_dir):
         if canvas_of in SQUARE:
             height = width = max(height, width)
 
-        save(centred_on(arts[name], width, height), f'{out_dir}/{name}.webp')
+        save(centred_on(arts[name], width, height), f'{out_dir}/{name}.png')
 
 
 def main():

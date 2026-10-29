@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { PIXEL_SKINS } from '../../../src/data/skins/pixel.js';
+import { pngSize } from '../../support/png-size.js';
 
 const GAME = new URL('../../../', import.meta.url);
 const read = (path) => readFileSync(new URL(path, GAME), 'utf8');
@@ -10,13 +11,6 @@ const declared = (css) =>
   new Set([...css.matchAll(/(--pixel-[\w-]+|--shadow-pixel-[\w-]+):/g)].map((match) => match[1]));
 const used = (css) =>
   new Set([...css.matchAll(/var\((--(?:shadow-)?pixel-[\w-]+)/g)].map((match) => match[1]));
-
-// the size of a lossless WebP: 14 bits each of width and height, less one, after its signature
-function webpSize(path) {
-  const bits = readFileSync(new URL(path, GAME)).readUInt32LE(21);
-
-  return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1 };
-}
 
 describe('the pixel skins', () => {
   // styles/skin-pixel.css paints every pixel skin from what its own stylesheet names; one it
@@ -48,8 +42,8 @@ describe('the pixel skins', () => {
 
   it('shape their pills and size their grips as the art is', () => {
     for (const [id, skin] of Object.entries(PIXEL_SKINS)) {
-      const pill = webpSize(`assets/skins/${id}/key-pill.webp`);
-      const grip = webpSize(`assets/skins/${id}/landscape-left.webp`);
+      const pill = pngSize(new URL(`assets/skins/${id}/key-pill.png`, GAME));
+      const grip = pngSize(new URL(`assets/skins/${id}/landscape-left.png`, GAME));
       const css = read(`styles/skin-${id}.css`);
 
       expect(skin.pills.landscape[0].aspect, id).toBeCloseTo(pill.height / pill.width, 2);

@@ -8,7 +8,7 @@ const pixelSkin = (id, name, about, pillAspect) =>
   handheldSkin({ id, name, about, prefix: 'pixel', tint: id, pillAspect });
 
 export const PIXEL_SKINS = {
-  // assets/skins/sandstone/key-pill.webp is 53 by 24
+  // assets/skins/sandstone/key-pill.png is 53 by 24
   sandstone: pixelSkin(
     'sandstone',
     'Sandstone',

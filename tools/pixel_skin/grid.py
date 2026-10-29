@@ -48,31 +48,56 @@ def edge_counts(region, axis):
     return steps.sum(axis=1 - axis)
 
 
+def miss_of(counts, blocks):
+    """How far the colour changes along one axis fall from the edges of `blocks` equal blocks, on
+    average, as a share of a block."""
+    length = len(counts) + 1
+    size = length / blocks
+    offset = np.arange(1, length) % size
+
+    return (np.minimum(offset, size - offset) / size * counts).sum() / max(1, counts.sum())
+
+
+def block_range(length):
+    low, high = CELL_SIZES
+
+    return range(max(1, int(length / high)), int(length / low) + 1)
+
+
 def blocks_across(counts):
     """The whole number of blocks across a region whose edges best meet its colour changes."""
-    length = len(counts) + 1
-    boundaries = np.arange(1, length)
-    low, high = CELL_SIZES
-    best = None
-
-    for blocks in range(max(1, int(length / high)), int(length / low) + 1):
-        size = length / blocks
-        offset = boundaries % size
-        miss = (np.minimum(offset, size - offset) / size * counts).sum() / max(1, counts.sum())
-
-        if best is None or miss < best[0]:
-            best = (miss, blocks)
-
-    return best[1]
+    return min(block_range(len(counts) + 1), key=lambda blocks: miss_of(counts, blocks))
 
 
-def read_region(image, box):
-    """The pixel art in `box` of the painting, one pixel for each block it was painted as."""
+def square_blocks(region):
+    """Columns and rows of one block size, whose edges best meet the colour changes both ways.
+    Read on its own, each axis can take a grid the other does not: a round key painted 290 by
+    295 px came out 36 by 39 pixels, an oval, its blocks 8.06 by 7.56"""
+    height, width = region.shape[:2]
+    across, down = edge_counts(region, 1), edge_counts(region, 0)
+
+    def fit(columns):
+        rows = max(1, round(height * columns / width))
+
+        return miss_of(across, columns) + miss_of(down, rows), columns, rows
+
+    _, columns, rows = min(fit(columns) for columns in block_range(width))
+
+    return columns, rows
+
+
+def read_region(image, box, square=False):
+    """The pixel art in `box` of the painting, one pixel for each block it was painted as; on
+    square blocks for art whose shape shows, as a key's does."""
     left, top, right, bottom = box
     region = image[top:bottom, left:right]
     height, width = region.shape[:2]
-    columns = blocks_across(edge_counts(region, 1))
-    rows = blocks_across(edge_counts(region, 0))
+
+    if square:
+        columns, rows = square_blocks(region)
+    else:
+        columns, rows = blocks_across(edge_counts(region, 1)), blocks_across(edge_counts(region, 0))
+
     xs = ((np.arange(columns) + 0.5) * width / columns).astype(int)
     ys = ((np.arange(rows) + 0.5) * height / rows).astype(int)
     samples = [

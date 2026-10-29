@@ -62,7 +62,9 @@ our own, with no text or logos: the shell held sideways (1536×1024), the shell 
 reads each back at the size it was painted: ChatGPT's blocks drift across a painting (Sandstone's
 were 6.6 to 6.9 px sideways and 7.8 to 8 upright), so every region (a grip, a band, a key) is read
 on a grid of its own, the whole number of blocks across it that best meets its colour changes,
-one colour from the middle of each, folded into a palette of 32 shared by the shell's pieces. The
+one colour from the middle of each, folded into a palette of 32 shared by the shell's pieces. A
+key is read on square blocks, one size both ways, as its shape shows: read each way on its own,
+Sandstone's round key, painted 290 by 295 px, came out 36 by 39 pixels, an oval. The
 skins draw them a whole pixel of the art at a time (`image-rendering: pixelated`), a few hundred
 bytes to a few KB each.
 
@@ -72,13 +74,13 @@ its edge fades out in an ordered dither four pixels deep, which disappears into 
 
 | File                                  | What                                                       |
 | ------------------------------------- | ---------------------------------------------------------- |
-| `<skin>/landscape-left.webp`, `-right` | a grip, from the top down, carried on by plain stone       |
-| `<skin>/landscape-left-foot.webp`, …   | the grip's lower third, its corner ornaments, on the bottom |
-| `<skin>/landscape-top.webp`, `-bottom` | a band 640 pixels long, its ornament in the window's middle |
-| `<skin>/portrait-crown.webp`          | the rim above and beside the window, all the screen shows   |
-| `<skin>/portrait-body.webp`           | the emblem under the window, carried on by plain stone      |
-| `<skin>/portrait-foot.webp`           | the bottom corners and band, on the bottom                  |
-| `<skin>/key-*.webp`, `<skin>/dpad.webp` | the keys, a pressed key on its key's canvas               |
+| `<skin>/landscape-left.png`, `-right` | a grip, from the top down, carried on by plain stone       |
+| `<skin>/landscape-left-foot.png`, …   | the grip's lower third, its corner ornaments, on the bottom |
+| `<skin>/landscape-top.png`, `-bottom` | a band 640 pixels long, its ornament in the window's middle |
+| `<skin>/portrait-crown.png`          | the rim above and beside the window, all the screen shows   |
+| `<skin>/portrait-body.png`           | the emblem under the window, carried on by plain stone      |
+| `<skin>/portrait-foot.png`           | the bottom corners and band, on the bottom                  |
+| `<skin>/key-*.png`, `<skin>/dpad.png` | the keys, a pressed key on its key's canvas               |
 
 Held sideways each grip is as wide as the shell beside the game's screen, which sets the size of
 the art's pixel for the bands too (`--pixel-grip-pixels`, the grips' width in the art). Upright the

@@ -3,20 +3,20 @@
    the art across; upright, the game's screen has a bronze trim, as the painting's window has, and
    the body hangs from under it */
 .sandstone {
-  --pixel-landscape-left: url('../assets/skins/sandstone/landscape-left.webp');
-  --pixel-landscape-left-foot: url('../assets/skins/sandstone/landscape-left-foot.webp');
-  --pixel-landscape-right: url('../assets/skins/sandstone/landscape-right.webp');
-  --pixel-landscape-right-foot: url('../assets/skins/sandstone/landscape-right-foot.webp');
-  --pixel-landscape-top: url('../assets/skins/sandstone/landscape-top.webp');
-  --pixel-landscape-bottom: url('../assets/skins/sandstone/landscape-bottom.webp');
-  --pixel-portrait-crown: url('../assets/skins/sandstone/portrait-crown.webp');
-  --pixel-portrait-body: url('../assets/skins/sandstone/portrait-body.webp');
-  --pixel-portrait-foot: url('../assets/skins/sandstone/portrait-foot.webp');
-  --pixel-key-round: url('../assets/skins/sandstone/key-round.webp');
-  --pixel-key-round-pressed: url('../assets/skins/sandstone/key-round-pressed.webp');
-  --pixel-key-pill: url('../assets/skins/sandstone/key-pill.webp');
-  --pixel-key-pill-pressed: url('../assets/skins/sandstone/key-pill-pressed.webp');
-  --pixel-dpad: url('../assets/skins/sandstone/dpad.webp');
+  --pixel-landscape-left: url('../assets/skins/sandstone/landscape-left.png');
+  --pixel-landscape-left-foot: url('../assets/skins/sandstone/landscape-left-foot.png');
+  --pixel-landscape-right: url('../assets/skins/sandstone/landscape-right.png');
+  --pixel-landscape-right-foot: url('../assets/skins/sandstone/landscape-right-foot.png');
+  --pixel-landscape-top: url('../assets/skins/sandstone/landscape-top.png');
+  --pixel-landscape-bottom: url('../assets/skins/sandstone/landscape-bottom.png');
+  --pixel-portrait-crown: url('../assets/skins/sandstone/portrait-crown.png');
+  --pixel-portrait-body: url('../assets/skins/sandstone/portrait-body.png');
+  --pixel-portrait-foot: url('../assets/skins/sandstone/portrait-foot.png');
+  --pixel-key-round: url('../assets/skins/sandstone/key-round.png');
+  --pixel-key-round-pressed: url('../assets/skins/sandstone/key-round-pressed.png');
+  --pixel-key-pill: url('../assets/skins/sandstone/key-pill.png');
+  --pixel-key-pill-pressed: url('../assets/skins/sandstone/key-pill-pressed.png');
+  --pixel-dpad: url('../assets/skins/sandstone/dpad.png');
   --pixel-grip-pixels: 46;
   --pixel-window: var(--color-sandstone-window);
   --pixel-label: var(--color-cream);
