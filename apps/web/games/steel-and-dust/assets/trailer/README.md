@@ -28,12 +28,15 @@ through each mission with Training tools on), then cut, framed and graded frame 
 move scales the pixels up by whole multiples first, so they stay square as the camera pushes in. The
 section lines are set in the game's Silkscreen (`assets/fonts/`).
 
-The sound is the intro's own, carried through the whole trailer (it is in A minor, as the game's
-songs are, with a 120 BPM pulse in its hero select that the cuts follow): its title reveal opens each
-section and the end card, its rising sweep leads into them, bars of its hero-select pulse run under
-the heroes and the bosses, and its select burst lands on the hits, at half speed (an octave down) for
-the slow motion and the bosses, and stepping up the A minor scale through the flurry. The game's own
-hits sit underneath, and the mix is at −14 LUFS.
+The sound grows out of the intro, which plays untouched: an A drone with its fifth, a D–C–A motif,
+a 120 BPM pulse in its hero select. From there a pinpeat ensemble takes it up in A pentatonic
+(A C D E G), on the cut's own 120 BPM: roneat ek in octaves and roneat thung under it, the kong vong
+on the beat, the sralai singing the theme (begun from the intro's D–C–A), sampho leading skor thom,
+and the chhing marking time, chhap on the beat and chhing between. The intro's own sounds carry
+every section: its title reveal opens them (an octave down for the bosses), its sweep rises into
+them, its select burst lands on the lion and, slowed, on each slow motion, and the intro slowed into
+a pad lies under everything until the cut to black, where one chhing rings alone before the sweep
+brings the title back. The game's own hits sit underneath, and the mix is at −14 LUFS.
 
 The file here is the web copy, made from the 1080p master for phones on a data plan:
 
