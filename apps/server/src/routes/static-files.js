@@ -67,7 +67,6 @@ async function sendFile({ request, response, filePath, stats, cache = null }) {
   return sendBytes({ request, response, filePath, stats, headers, range });
 }
 
-// A range counts only against the file the browser holds the rest of; a changed file goes whole.
 function rangeOf(request, tag, size) {
   const ifRange = request.headers['if-range'];
 

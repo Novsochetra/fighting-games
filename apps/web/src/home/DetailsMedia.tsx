@@ -8,7 +8,6 @@ import type { Details } from './use-details';
 
 const artClass = (card: GameCard, name: string) => (card.smoothArt ? `${name} is-smooth` : name);
 
-// Enter and Space do what a tap does, as the video's own controls would have.
 function onKey(event: KeyboardEvent<HTMLVideoElement>) {
   if (event.key === 'Enter' || event.key === ' ') {
     event.preventDefault();
@@ -16,8 +15,7 @@ function onKey(event: KeyboardEvent<HTMLVideoElement>) {
   }
 }
 
-// It plays as it comes onto the page, in the tap that asked for it, and stops as it leaves. It shows
-// no controls, so nothing covers the trailer; a tap on it pauses it and plays it on.
+// Started from the ref, which runs inside the tap that mounted it: browsers let sound start only then.
 function TrailerVideo({ card }: { card: GameCard }) {
   const url = useArcadeUrl();
   const { preferences, window } = useArcade();
@@ -56,7 +54,7 @@ function TrailerButton({ card, details }: { card: GameCard; details: Details }) 
       id="details-trailer-open"
       type="button"
       aria-label={`Watch the ${card.title} trailer`}
-      onClick={() => details.watch(card, 'details')}
+      onClick={() => details.watch()}
     >
       <TrailerIcon />
       Trailer
@@ -81,7 +79,6 @@ function Art({ card }: { card: GameCard | null }) {
   );
 }
 
-// The game's frame of play, which turns into its trailer, if it has one.
 export function DetailsMedia({ details }: { details: Details }) {
   const { card, isWatching } = details;
   const trailer = card?.trailerSrc ? card : null;

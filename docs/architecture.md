@@ -338,14 +338,11 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   browser without them keeps a plain bar that scrolls away with the hero.
 - **Hero** (`Hero.tsx`, `Spotlight.tsx`, `spotlight-motion.js`, `hero.css`): the game's `banner` (its `poster`, a tall crop, on
   narrow screens) cross-fades in behind a dim, under one slow Ken Burns zoom on the whole stack. Its
-  title, genre line and first sentence rise in under the carousel, over Play, Trailer (for a game
-  that has one), Details and a heart; a
+  title, genre line and first sentence rise in under the carousel, over Play, Details and a heart; a
   swipe that lands mid-rise carries on from where the text is, so quick swipes never blink. Between
   a game and a teaser the buttons change, so they fade out, change unseen and rise back in turn
   (`use-action-row.ts`, `action-swap.js`), each on its own, since an opacity on their row would cut the glass buttons'
-  blur off from the art; so do they between a game with a trailer and one without. On a phone
-  (`max-width: 30rem`) Trailer is a round button like the heart and the pills a little narrower, so
-  the four stay on one line down to a 360px screen. The heart pops only when tapped.
+  blur off from the art. The heart pops only when tapped.
 - **Carousel** (`Carousel.tsx`, `carousel-layout.js`, `carousel-motion.js`, `carousel.css`): each card shows its game's
   `screenshot`, a frame of play, so it never repeats the key art behind it. Two Coming Soon teasers
   (`coming-soon.js`) follow the games: a dark slate with a slow sheen, a dark backdrop, and a quiet
@@ -403,8 +400,8 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   checked again by the arcade, `view-models.js`), and `trailerSmall`, a lighter copy of it. The small
   copy plays on a phone (the sheet's own `max-width: 40rem`), under a data saver or on a slow network
   (`navigator.connection`), the full one elsewhere (`trailerFor`). Steel & Dust's are on its CDN, a
-  1080p and a 360p copy. The hero's Trailer, or the Trailer button on the details sheet's art, opens the sheet with
-  the trailer playing in place of its art, Play right under it. It starts in the tap that asked for
+  1080p and a 360p copy. The Trailer button on the details sheet's art (the only way to it, so the entry screen
+  keeps to Play, Details and the heart) plays the trailer in place of the art, Play right under it. It starts in the tap that asked for
   it (`flushSync`), with sound, since a browser lets sound play only then; muted where the browser
   still refuses, or where the player turned the arcade's sound off. It shows no controls, so nothing
   covers it: a tap on it (or Enter or Space) plays it, brings its sound back, or pauses it. It

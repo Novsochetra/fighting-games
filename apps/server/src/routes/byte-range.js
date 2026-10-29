@@ -12,10 +12,8 @@ function boundedRange(start, end, size) {
   return start < size ? { start, end: Math.min(end ?? size - 1, size - 1) } : 'none';
 }
 
-// The one byte range a request asks for, as a video does (Safari plays none from a server that
-// answers its first request, bytes=0-1, with the whole file): { start, end }, 'none' when the file
-// has no such bytes (416), or null to send the whole file. Several ranges or a malformed header are
-// answered with the whole file, as HTTP allows.
+// Safari plays no video from a server that answers its first request, bytes=0-1, with the whole
+// file. Several ranges or a malformed header get the whole file, which HTTP allows.
 export function byteRangeOf(header, size) {
   const match = typeof header === 'string' ? SINGLE_RANGE.exec(header.trim()) : null;
 

@@ -11,7 +11,7 @@ const SRC = 'https://arcade.test/games/demo/assets/trailer/trailer.mp4';
 
 const refusal = (name) => Object.assign(new Error(name), { name });
 
-// A video element as far as the player touches it; play answers with each of `answers` in turn.
+// play() answers with each of `answers` in turn, then plays
 function fakeVideo(...answers) {
   const attributes = new Map();
   const video = {
@@ -142,7 +142,6 @@ describe('stopTrailer', () => {
 const FULL = 'https://cdn.example.com/promo/trailer.mp4';
 const SMALL = 'https://cdn.example.com/promo/trailer-480.mp4';
 
-// A window as far as the choice looks: how wide its screen is, and what its connection says.
 const browser = ({ phone = false, connection } = {}) => ({
   matchMedia: (query) => ({ matches: query === PHONE_MEDIA && phone }),
   navigator: { connection },

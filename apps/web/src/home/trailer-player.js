@@ -1,11 +1,9 @@
 const playing = (video) => new Promise((resolve) => resolve(video.play()));
 
-// what a browser says when it lets no sound play without a tap, unlike a play cut short by a pause
+// the autoplay refusal; an AbortError (a pause cutting the play short) must not mute the trailer
 const isSoundRefused = (error) => error?.name === 'NotAllowedError';
 
-// A trailer starts in the tap that asks for it, with sound, as a browser allows only then. A browser
-// that still refuses sound, or a player who turned the arcade's sound off, gets it muted, which a tap
-// on it undoes (tapTrailer); one that refuses even that waits for that tap to play.
+// A browser that still refuses sound gets the trailer muted rather than not playing at all.
 export function startTrailer(video, { src, withSound }) {
   if (video.getAttribute('src') !== src) {
     video.src = src;
@@ -29,8 +27,6 @@ export function startTrailer(video, { src, withSound }) {
     );
 }
 
-// The trailer shows no controls, so a tap on it does what they would: plays it if it waits, brings its
-// sound back if it plays muted, and otherwise pauses it.
 export function tapTrailer(video) {
   if (video.paused) {
     return playing(video).then(
@@ -50,14 +46,14 @@ export function tapTrailer(video) {
   return Promise.resolve('paused');
 }
 
-// Without its address the video neither plays on nor keeps downloading once the sheet lets it go.
+// pause() alone leaves the video downloading; dropping its address and loading stops that.
 export function stopTrailer(video) {
   video.pause();
   video.removeAttribute('src');
   video.load();
 }
 
-// the sheet's own breakpoint for a phone, where it rises from the bottom (sheet.css)
+// sheet.css's phone breakpoint
 export const PHONE_MEDIA = '(max-width: 40rem)';
 const SLOW_NETWORKS = new Set(['slow-2g', '2g', '3g']);
 // Chrome's estimate of the connection in Mbps tops out at 10; below this the full copy stalls
@@ -75,8 +71,6 @@ function isSparing({ navigator }) {
   return connection.saveData === true || SLOW_NETWORKS.has(connection.effectiveType) || slow;
 }
 
-// The trailer's small copy, where it has one, on a phone, under a data saver or on a slow network,
-// so a trailer never costs a player more data than its screen can show; the full one elsewhere.
 export function trailerFor(card, window) {
   if (!card.trailerSmallSrc) {
     return card.trailerSrc;

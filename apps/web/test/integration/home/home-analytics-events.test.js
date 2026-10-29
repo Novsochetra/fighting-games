@@ -86,16 +86,13 @@ describe('the home page events', () => {
     ]);
   });
 
-  it('count a trailer watched, with the game and where it was started', async () => {
+  it('count a trailer watched, with the game', async () => {
     const { tag } = await bootCounted(bootWithSteelAndDust);
-    click(byId('trailer-open'));
-    click(byId('details-close'));
     click(byId('details-open'));
     click(byId('details-trailer-open'));
     expect(sentEvents(tag)).toEqual([
-      ['watch_trailer', { game_id: 'steel-and-dust', source: 'hero' }],
       ['view_game_details', { game_id: 'steel-and-dust' }],
-      ['watch_trailer', { game_id: 'steel-and-dust', source: 'details' }],
+      ['watch_trailer', { game_id: 'steel-and-dust' }],
     ]);
   });
 

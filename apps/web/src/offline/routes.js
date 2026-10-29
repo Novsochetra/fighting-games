@@ -10,8 +10,7 @@ const SAVE = /^api\/offline\/([\w-]+)$/;
 // of a deploy (src/arcade/update-check.js), so the worker never answers it from what it keeps
 const VERSION = 'version.json';
 
-// A game's trailer, which no save keeps: a video plays from the byte ranges it asks the server for,
-// which the whole files the worker holds cannot answer.
+// The worker keeps whole files, so it cannot answer the byte ranges a video asks for.
 const isVideo = (request) => request.destination === 'video';
 
 const pathUnder = (url, scope) =>

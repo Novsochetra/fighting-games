@@ -31,7 +31,6 @@ export function isSecureGameUrl(value) {
 
 const playHrefOf = (game) => (isSecureGameUrl(game.url) ? game.url : game.path);
 
-// A trailer plays from inside the arcade or from a secure address of its own, such as a CDN.
 const asTrailer = (value) => (isRelativeUrl(value) || isSecureGameUrl(value) ? value : '');
 
 export function monogramOf(title) {

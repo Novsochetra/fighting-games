@@ -1,9 +1,7 @@
 import { isSecureUrl } from './secure-url.js';
 
-// A game's trailer, the video of play the arcade's details sheet shows: an MP4 (the one kind every
-// phone plays), either in the game's assets/trailer/, which a saved game leaves out
-// (offline/game-files.js), or at an https: address of its own, such as a CDN. trailerSmall is a
-// lighter copy of it, for phones and slow connections.
+// MP4 only, the one kind every phone plays; a local trailer only in assets/trailer/, the folder a
+// saved game leaves out (offline/game-files.js).
 export const TRAILER_FIELDS = ['trailer', 'trailerSmall'];
 const LOCAL_TRAILER = /^assets\/trailer\/[\w-][\w.-]*\.mp4$/;
 
@@ -27,7 +25,6 @@ export function checkTrailers(entry) {
   return problems;
 }
 
-// A trailer in the game's folder is found under it; one on its own site stays where it is.
 export function catalogTrailers(entry, gamePath) {
   const fields = TRAILER_FIELDS.filter((field) => entry[field] !== undefined);
 

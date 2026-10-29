@@ -25,7 +25,6 @@ export const CoffeeIcon = ({ hidden = true }: { hidden?: boolean }) => (
   </svg>
 );
 
-// a trailer: a play sign in a frame, as Apple marks a video
 export const TrailerIcon = () => (
   <svg className="icon icon--bold" viewBox="0 0 24 24" aria-hidden="true">
     <rect x="3" y="5" width="18" height="14" rx="3.5" />

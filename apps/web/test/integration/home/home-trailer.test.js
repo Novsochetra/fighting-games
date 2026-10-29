@@ -16,7 +16,6 @@ import {
 
 const TRAILER = 'games/steel-and-dust/assets/trailer/trailer.mp4';
 
-// Steel & Dust with its trailer, then a game without one.
 async function bootWithTrailer(options) {
   const { games } = JSON.parse(await realCatalogJson());
   const steelAndDust = games.find((game) => game.id === 'steel-and-dust');
@@ -30,6 +29,11 @@ const dialog = () => byId('details');
 const video = () => byId('details-trailer');
 const shows = (id) => byId(id) !== null && !byId(id).hidden;
 
+const watchTrailer = () => {
+  click(byId('details-open'));
+  click(byId('details-trailer-open'));
+};
+
 beforeEach(() => {
   document.body.innerHTML = '';
 });
@@ -40,46 +44,37 @@ afterEach(() => {
 });
 
 describe('a game’s trailer', () => {
-  it('has a Trailer button in the hero only for a game that has one', async () => {
+  it('is in the details sheet, with no button of its own on the entry screen', async () => {
     await bootWithTrailer();
-    expect(shows('trailer-open')).toBe(true);
-    expect(byId('trailer-open').getAttribute('aria-label')).toBe('Watch the Steel & Dust trailer');
+    expect(byId('trailer-open')).toBeNull();
 
-    press('ArrowRight');
-    await waitUntil(() => expect(spotlightTitle()).toBe('Plain'));
-    await waitUntil(() => expect(shows('trailer-open')).toBe(false));
-  });
-
-  it('plays in the details sheet from the hero, in place of its art', async () => {
-    await bootWithTrailer();
-    click(byId('trailer-open'));
-
-    expect(dialog().open).toBe(true);
-    expect(byId('details-title').textContent).toBe('Steel & Dust');
-    expect(video().getAttribute('src')).toBe(onPage(TRAILER));
-    expect(video().getAttribute('poster')).toBe(
-      onPage('games/steel-and-dust/assets/screenshots/angkor-wat.png'),
+    click(byId('details-open'));
+    expect(shows('details-trailer-open')).toBe(true);
+    expect(byId('details-trailer-open').getAttribute('aria-label')).toBe(
+      'Watch the Steel & Dust trailer',
     );
-    expect(video().controls).toBe(false);
-    expect(video().hasAttribute('controls')).toBe(false);
-    expect(video().muted).toBe(false);
-    expect(byId('details-art')).toBeNull();
   });
 
-  it('starts from the Trailer button on the art of the details sheet', async () => {
+  it('plays in place of the sheet’s art, with no controls over it', async () => {
     await bootWithTrailer();
     click(byId('details-open'));
     expect(byId('details-art')).not.toBeNull();
     expect(video()).toBeNull();
 
     click(byId('details-trailer-open'));
-    expect(video().getAttribute('src')).toBe(onPage(TRAILER));
     expect(dialog().open).toBe(true);
+    expect(video().getAttribute('src')).toBe(onPage(TRAILER));
+    expect(video().getAttribute('poster')).toBe(
+      onPage('games/steel-and-dust/assets/screenshots/angkor-wat.png'),
+    );
+    expect(video().hasAttribute('controls')).toBe(false);
+    expect(video().muted).toBe(false);
+    expect(byId('details-art')).toBeNull();
   });
 
   it('leaves with the sheet, which shows the art again the next time', async () => {
     await bootWithTrailer();
-    click(byId('trailer-open'));
+    watchTrailer();
     const playing = video();
 
     click(byId('details-close'));
@@ -92,9 +87,9 @@ describe('a game’s trailer', () => {
     expect(shows('details-trailer-open')).toBe(true);
   });
 
-  it('shows no controls, so a tap on it pauses it and plays it on', async () => {
+  it('pauses on a tap and plays on with the next', async () => {
     await bootWithTrailer();
-    click(byId('trailer-open'));
+    watchTrailer();
     const playing = video();
     const pause = vi.spyOn(playing, 'pause');
     const play = vi.spyOn(playing, 'play');
@@ -112,7 +107,7 @@ describe('a game’s trailer', () => {
     const { home } = await bootWithTrailer();
 
     home.preferences.setSound(false);
-    click(byId('trailer-open'));
+    watchTrailer();
 
     expect(video().muted).toBe(true);
   });
@@ -129,7 +124,7 @@ describe('a game’s trailer', () => {
 
   it('gives way to the game when Play is pressed under it', async () => {
     const { navigate } = await bootWithTrailer();
-    click(byId('trailer-open'));
+    watchTrailer();
     click(byId('details-play'));
 
     expect(dialog().open).toBe(false);
@@ -143,7 +138,7 @@ describe('Steel & Dust’s trailer, from its CDN', () => {
 
   it('plays the full trailer on a wide screen', async () => {
     await bootWithSteelAndDust();
-    click(byId('trailer-open'));
+    watchTrailer();
 
     expect(video().getAttribute('src')).toBe(`${CDN}steel-and-dust-trailer.mp4`);
   });
@@ -154,7 +149,7 @@ describe('Steel & Dust’s trailer, from its CDN', () => {
       query === '(max-width: 40rem)' ? { ...wide(query), matches: true } : wide(query),
     );
     await bootWithSteelAndDust();
-    click(byId('trailer-open'));
+    watchTrailer();
 
     expect(video().getAttribute('src')).toBe(`${CDN}steel-and-dust-trailer-480.mp4`);
   });
