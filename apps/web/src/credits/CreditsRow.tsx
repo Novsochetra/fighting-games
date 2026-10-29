@@ -65,7 +65,7 @@ export function CreditsGroup({ title, titleId, order, links, listId }: GroupProp
       </h2>
       <ul className="credits-list" id={listId}>
         {links.map((link) => (
-          <li key={link.title}>
+          <li key={link.href ?? link.screen}>
             <CreditsRow link={link} />
           </li>
         ))}
