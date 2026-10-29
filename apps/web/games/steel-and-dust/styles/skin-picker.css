@@ -110,3 +110,17 @@ body.stick-hidden .skin-preview .pad-stick {
   text-align: center;
   text-wrap: balance;
 }
+
+/* a skin that offers its shoulder keys as pills switches them under its words (skin-view.js) */
+.skin-shape {
+  margin: 0;
+  text-align: center;
+}
+
+/* a short screen held sideways has room above the shell's keys for the name and the switch, not
+   the words as well: they covered HEAVY on a small phone */
+@media (orientation: landscape) and (max-height: 420px) {
+  #m-skins .layout-bar:has(.skin-shape:not([hidden])) .skin-about {
+    display: none;
+  }
+}

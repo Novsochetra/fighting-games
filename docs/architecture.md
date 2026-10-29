@@ -118,8 +118,8 @@ layout for each way the phone is held (`landscape`, `portrait`), each listing it
   or the input each of `up`, `right`, `down` and `left` holds for a stick or a d-pad;
 - optionally a `label`, its `class` names (the game's styles paint it), a `size` (px at the game's
   scale 1; without it a stick is 128 and the rest 64), an `aspect` (its height over its width, for
-  a pill, which is only for what runs the game, never a move: Steel & Dust's skin tests hold every
-  move round) and `at`: its centre as fractions of the safe area, moved by `dx` and `dy` px at the
+  a pill: only for what runs the game, or a player's pick for a skin's shoulder keys, as Steel &
+  Dust's skin tests hold) and `at`: its centre as fractions of the safe area, moved by `dx` and `dy` px at the
   game's scale 1, so a cluster anchored to a corner keeps its shape from a small phone to a tablet
   and clears a notch (a stick stands by `x` and `y` alone). A layout places all its controls or
   none; one that places none, like Steel & Dust's `classic`, leaves them to the game's own styles.
@@ -709,7 +709,10 @@ the game in a bezel between two panels held sideways and at the top held upright
 plaque in its HUD (`pausePlace`, `framed`); each control carries its shell's colour class, as it
 stands in the touch layer, not in the shell (`#shell`, behind the stage). A player picks the skin (`skin`, one
 for both ways of holding the phone) on the Skins screen, which Settings' Skin row opens
-(`src/ui/skins/`, `styles/skin-picker.css`): like the layout editor, a copy of the touch layer over
+(`src/ui/skins/`, `styles/skin-picker.css`), which also switches the shoulder keys of a skin that
+offers pills for them (Clear's DASH and ULT, its `shapes.pill` layouts) between round and pill
+(`keyShape`, round unless picked; `layoutOf` in `skins.js` gives the game, the Skins screen and the
+layout editor the same layout): like the layout editor, a copy of the touch layer over
 a light dim shows the skin looked at standing as it will, held the way the phone is, at the
 player's Button size and opacity and with their own layout of it (`preview-pad.js`, which both
 share), and a skin with a shell stands for real meanwhile (`layout.previewSkin`), the stage in

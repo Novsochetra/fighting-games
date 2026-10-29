@@ -21,7 +21,9 @@ export function navigableItems(document, top) {
     return [...menu.querySelectorAll('.tabs button'), menu.querySelector('.xbtn')];
   }
   if (top === 'layout' || top === 'skins') {
-    return [...menu.querySelectorAll('.layout-bar button')];
+    return [...menu.querySelectorAll('.layout-bar button')].filter(
+      (button) => !button.closest('[hidden]'),
+    );
   }
   if (top === 'credits') {
     return [menu.querySelector('.xbtn')];

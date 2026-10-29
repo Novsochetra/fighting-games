@@ -1,8 +1,8 @@
 const STEER = { up: 'up', right: 'right', down: 'down', left: 'left' };
 
-// every move is a round key, DASH and ULT on the shell's shoulders as much as the face keys: a pill
-// is for what runs the game (play, pause, settings), never a move. `place` is where the key stands
-// (`at`) and how big it is (`size`)
+// every move is a round key, DASH and ULT on the shell's shoulders as much as the face keys, unless
+// the player picks pills for those two (`shapes`). `place` is where the key stands (`at`) and how
+// big it is (`size`, `aspect`)
 const control = (id, label, place) => ({
   id,
   kind: 'button',
@@ -53,12 +53,36 @@ const PORTRAIT = {
   ],
 };
 
+// DASH and ULT as pills on the shoulders, as a handheld's bumpers, shaped as their art is
+// (assets/skins/clear/key-pill.webp, 386 by 170), standing where the round keys do
+const pill = (id, label, place) => ({
+  ...control(id, label, { ...place, aspect: 0.44 }),
+  class: `clear-button clear-pill clear-${id}`,
+});
+
+// sideways the pills stand out toward the corners, clear of the Skins screen's bar on a small phone
+const SHOULDER_PILLS = {
+  landscape: [
+    pill('dash', 'DASH', { at: { x: 0, y: 0, dx: 78, dy: 36 }, size: 96 }),
+    pill('ult', 'ULT', { at: { x: 1, y: 0, dx: -78, dy: 36 }, size: 96 }),
+  ],
+  portrait: [
+    pill('dash', 'DASH', { at: { x: 0, y: 1, dx: 95, dy: -392 }, size: 104 }),
+    pill('ult', 'ULT', { at: { x: 1, y: 1, dx: -95, dy: -392 }, size: 104 }),
+  ],
+};
+
+const withPills = (layout, pills) => ({
+  ...layout,
+  items: layout.items.map((item) => pills.find((key) => key.id === item.id) ?? item),
+});
+
 const COLOURS = {
-  lotus: ['Clear Lotus', 'see-through lotus purple'],
-  ember: ['Clear Ember', 'see-through ember red'],
-  jade: ['Clear Jade', 'see-through jade green'],
-  mekong: ['Clear Mekong', 'see-through Mekong blue'],
-  smoke: ['Clear Smoke', 'see-through smoke grey'],
+  lotus: ['Clear Lotus', 'See-through lotus purple'],
+  ember: ['Clear Ember', 'See-through ember red'],
+  jade: ['Clear Jade', 'See-through jade green'],
+  mekong: ['Clear Mekong', 'See-through Mekong blue'],
+  smoke: ['Clear Smoke', 'See-through smoke grey'],
 };
 
 // the controls stand in the touch layer, not in the shell, so each carries its shell's colour too
@@ -74,10 +98,17 @@ function clearSkin(colour, [name, plastic]) {
   return {
     id: `clear-${colour}`,
     name,
-    about: `A handheld of ${plastic} plastic, its insides showing, the game in its bezel`,
+    // one line on a phone held sideways, so the bar clears the keys under it
+    about: `${plastic}, its insides showing`,
     layouts: {
       landscape: coloured(LANDSCAPE, colour),
       portrait: coloured(PORTRAIT, colour),
+    },
+    shapes: {
+      pill: {
+        landscape: coloured(withPills(LANDSCAPE, SHOULDER_PILLS.landscape), colour),
+        portrait: coloured(withPills(PORTRAIT, SHOULDER_PILLS.portrait), colour),
+      },
     },
   };
 }

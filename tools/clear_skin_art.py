@@ -13,9 +13,8 @@
         screen sits at the top and would hide the light the sideways painting puts there
     python3 tools/clear_skin_art.py keys <in> <out_dir>
         the controls, painted grey on a transparent sheet of three by two cells (the d-pad, a round
-        key up and pressed; a pill key up and pressed): the d-pad and the round keys each cut out to
-        its own WebP in out_dir, KEY_OPACITY see-through. Every move is a round key, so the pills,
-        kept for what runs the game (play, pause, settings), are not baked.
+        key up and pressed; a pill key up and pressed): each cut out to its own WebP in out_dir,
+        KEY_OPACITY see-through. The pills are DASH and ULT for a player who picks them.
         A pressed key keeps the canvas of the key up, centred, so it shows a touch smaller as it
         was painted, and a round key and the d-pad stand on square canvases, as their buttons are
 """
@@ -39,6 +38,8 @@ KEYS = {
     'dpad': ((0, 0), 'dpad'),
     'key-round': ((1, 0), 'key-round'),
     'key-round-pressed': ((2, 0), 'key-round'),
+    'key-pill': ((0, 1), 'key-pill'),
+    'key-pill-pressed': ((1, 1), 'key-pill'),
 }
 KEY_QUALITY = 85
 

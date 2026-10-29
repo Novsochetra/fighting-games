@@ -12,6 +12,7 @@ export function defaultSettings(coarsePointer) {
     buttonSize: 1,
     buttonLayout: null,
     skin: 'classic',
+    keyShape: 'round',
     padOpacity: 1,
     stick: 'fixed',
     padHidesTouch: true,

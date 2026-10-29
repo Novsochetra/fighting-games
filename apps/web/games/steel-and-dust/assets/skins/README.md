@@ -18,6 +18,7 @@ sheet. `tools/clear_skin_art.py` baked them to these files:
 | `clear/gloss-portrait.webp`    | the same light, upright  | (turned)   | 439×720  |
 | `clear/dpad.webp`              | the d-pad                | 399×394    | 403×403  |
 | `clear/key-round*.webp`        | a round key, up, pressed | 259×267    | 271×271  |
+| `clear/key-pill*.webp`         | a pill key, up, pressed  | 384×168    | 386×170  |
 
 The shell lays the board and the light over its plastic with a screen blend, so the black drops
 out and only the light is left, and each colour's tint over the board colours it. One set of art
@@ -31,14 +32,14 @@ sits at the top and would hide the light the sideways painting puts there, so th
 the same light turned a quarter clockwise.
 
 The keys were painted grey on a transparent sheet, three by two: the d-pad, a round key up and
-pressed, a pill key up and pressed. The bake cuts out the d-pad and the round keys; a pressed key
-keeps its key's canvas, so it shows a touch smaller and flatter, as painted. The sheet's keys were
-at alpha 252 with specks of alpha 1 to 3 over the empty sheet, so the bake makes the keys solid
-and drops the specks, then leaves them 82% opaque: each shell's plastic shows through and tints
-them its own colour, as one set of keys serves all five. Every move is a round key, DASH and ULT
-too: a pill is for what runs the game (play, pause, settings), so the sheet's pills are not baked
-until something like that needs them. The d-pad's arms are 37.5% of it across, where the pad's own
-arms are a third, so the shade on a held arm is sized to the art's (`styles/skin-clear.css`).
+pressed, a pill key up and pressed. The bake cuts out each; a pressed key keeps its key's canvas, so
+it shows a touch smaller and flatter, as painted. The sheet's keys were at alpha 252 with specks of
+alpha 1 to 3 over the empty sheet, so the bake makes the keys solid and drops the specks, then
+leaves them 82% opaque: each shell's plastic shows through and tints them its own colour, as one set
+of keys serves all five. Every move is a round key, unless a player picks pills for DASH and ULT on
+the Skins screen (`shapes.pill` in `clear.js`), shaped as their art is (`aspect: 0.44`). The d-pad's
+arms are 37.5% of it across, where the pad's own arms are a third, so the shade on a held arm is
+sized to the art's (`styles/skin-clear.css`).
 
 None of this holds the title: the menus never draw it, so it comes once the menu art is in
 (`SKIN_ART`, `src/data/ui-art.js`).

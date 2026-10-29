@@ -1,4 +1,4 @@
-import { SKIN_IDS, SKINS } from '../../data/skins/skins.js';
+import { layoutOf, offersKeyShapes, SKIN_IDS, SKINS } from '../../data/skins/skins.js';
 import { orientationOf, savedEntries, slotOf } from '../layout/layout-draft.js';
 import { fillPreview } from '../layout/layout-markup.js';
 import { drawPreviewPad, drawPreviewShell, restPreviewStick } from '../layout/preview-pad.js';
@@ -24,7 +24,16 @@ const SKINS_HTML = `<div class="skin-shell" aria-hidden="true"></div>
       </span>
     </div>
     <p class="layout-hint skin-about"></p>
+    <p class="skin-shape" hidden>
+      <button type="button" class="xbtn stone-btn" data-skin-shape></button>
+    </p>
   </div>`;
+
+const SHAPE_LABELS = { round: 'Round keys', pill: 'Pill keys' };
+const SHAPE_NAMES = {
+  round: 'DASH and ULT are round keys; switch to pills',
+  pill: 'DASH and ULT are pills; switch to round keys',
+};
 
 // the skins screen: a copy of the touch layer with the skin looked at standing as it will, and the
 // bar to step through the skins
@@ -55,17 +64,29 @@ export class SkinView {
     pad.classList.add(slide);
   }
 
+  // a skin that offers its shoulder keys as pills shows which they are, and switches them
+  renderShape(skinId, keyShape) {
+    const row = this.bar.querySelector('.skin-shape');
+    const button = row.querySelector('button');
+
+    row.hidden = !offersKeyShapes(skinId);
+    button.textContent = SHAPE_LABELS[keyShape];
+    button.setAttribute('aria-label', SHAPE_NAMES[keyShape]);
+  }
+
   // held the way the phone is, at the player's Button size and opacity, and where the player put
   // the controls of this skin, if they did
-  render(skinId, settings, from = 0) {
+  render({ skinId, keyShape }, settings, from = 0) {
     const skin = SKINS[skinId];
     const orientation = orientationOf(this.app.clientWidth, this.app.clientHeight);
     const custom = savedEntries(settings.buttonLayout, slotOf(skinId, orientation));
+    const padLayout = layoutOf(skinId, orientation, keyShape);
 
     fitTouchLayer(this.preview, this.layout.touchArea());
-    drawPreviewShell(this.shell, skin.layouts[orientation], this.layout.stageRect());
-    const places = drawPreviewPad(this.preview, skin.layouts[orientation], custom);
+    drawPreviewShell(this.shell, padLayout, this.layout.stageRect());
+    const places = drawPreviewPad(this.preview, padLayout, custom);
     restPreviewStick(this.preview, { places, layout: this.layout, app: this.app, settings });
+    this.renderShape(skinId, keyShape);
     this.bar.querySelector('.skin-name').textContent = skin.name;
     this.bar.querySelector('.skin-about').textContent = skin.about;
     this.bar.querySelectorAll('.skin-dots i').forEach((dot, i) => {

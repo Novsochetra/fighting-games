@@ -1,11 +1,11 @@
-import { SKIN_IDS, skinIdFor } from '../../data/skins/skins.js';
+import { keyShapeOf, SKIN_IDS, skinIdFor } from '../../data/skins/skins.js';
 import { onFoldChange } from '../../../../../packages/screen/src/viewport-segments.js';
 import { SkinView } from './skin-view.js';
 
 // the Skins menu: it steps through the skins on a copy of the touch layer, so a player sees each
-// on their own screen before picking it. A skin with a shell moves the stage into its frame
-// meanwhile (layout.previewSkin); only Use changes the setting, and Cancel, or any way back,
-// leaves the skin as it was
+// on their own screen before picking it, and switches the shoulder keys of a skin that offers it
+// between round and pill. A skin with a shell moves the stage into its frame meanwhile
+// (layout.previewSkin); only Use changes the settings, and Cancel, or any way back, leaves them
 export class SkinPicker {
   constructor({ view, game, audio, layout, settingsPanel }) {
     Object.assign(this, { view, game, audio, layout, settingsPanel });
@@ -14,6 +14,7 @@ export class SkinPicker {
 
   build() {
     this.index = SKIN_IDS.indexOf(skinIdFor(this.game.settings));
+    this.keyShape = keyShapeOf(this.game.settings);
     this.render();
   }
 
@@ -24,12 +25,16 @@ export class SkinPicker {
 
   // the keyboard and gamepad highlight starts on Use
   firstSelected() {
-    return this.view.bar.querySelectorAll('button').length - 1;
+    return [...this.view.bar.querySelectorAll('button')].findIndex(
+      (button) => button.dataset.skin === 'use',
+    );
   }
 
   render(from = 0) {
-    this.layout.previewSkin(SKIN_IDS[this.index]);
-    this.view.render(SKIN_IDS[this.index], this.game.settings, from);
+    const look = { skinId: SKIN_IDS[this.index], keyShape: this.keyShape };
+
+    this.layout.previewSkin(look.skinId, look.keyShape);
+    this.view.render(look, this.game.settings, from);
   }
 
   step(step) {
@@ -38,8 +43,15 @@ export class SkinPicker {
     this.render(step);
   }
 
+  switchShape() {
+    this.keyShape = this.keyShape === 'pill' ? 'round' : 'pill';
+    this.audio.sfx('ui');
+    this.render();
+  }
+
   use() {
     this.game.settings.skin = SKIN_IDS[this.index];
+    this.game.settings.keyShape = this.keyShape;
     this.game.io.saveSettings(this.game.settings);
     this.layout.previewSkin(null);
     this.layout.applyTouchSettings();
@@ -94,6 +106,8 @@ export function createSkinPicker({ window, game, audio, layout, settings }) {
 
     if (stepper) {
       picker.step(Number(stepper.dataset.skinStep));
+    } else if (event.target.closest('[data-skin-shape]')) {
+      picker.switchShape();
     } else if (event.target.closest('[data-skin="use"]')) {
       picker.use();
     }

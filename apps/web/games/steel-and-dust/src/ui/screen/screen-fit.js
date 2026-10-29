@@ -94,9 +94,10 @@ export function createScreenFit({ document, window, elements, game, ui }) {
     stageRect() {
       return context.stageRect;
     },
-    // the Skins screen shows the skin looked at as if picked (null for the one picked)
-    previewSkin(skinId) {
-      context.previewSkin = skinId ? () => skinId : null;
+    // the Skins screen shows the skin looked at, with its shoulder keys in the shape looked at, as
+    // if picked (null for the ones picked)
+    previewSkin(skinId, keyShape = 'round') {
+      context.preview = skinId ? { skinId, keyShape } : null;
       layout.fit();
     },
     originalStickRest(scale) {
