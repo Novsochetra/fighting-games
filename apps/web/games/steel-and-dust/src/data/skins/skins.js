@@ -13,24 +13,43 @@ export function skinIdFor(settings) {
   return Object.hasOwn(SKINS, settings.skin) ? settings.skin : 'classic';
 }
 
-// every move is a round key, unless the player picks pills for a skin's shoulder keys where it
-// offers them (`shapes`, Clear's DASH and ULT); a pill is otherwise only for what runs the game
-export const KEY_SHAPES = ['round', 'pill'];
+// every move is a round key, unless the player picks a pill for a key the skin offers one for
+// (`pills`, Clear's DASH and ULT), key by key; a pill is otherwise only for what runs the game
+export const keyShapesOf = (settings) =>
+  Object.fromEntries(
+    Object.entries(settings.keyShapes ?? {}).filter(([, shape]) => shape === 'pill'),
+  );
 
-export const keyShapeOf = (settings) =>
-  KEY_SHAPES.includes(settings.keyShape) ? settings.keyShape : 'round';
+// the keys of a skin held one way that the player may have as pills
+export const pillsOffered = (skinId, orientation) =>
+  (SKINS[skinId].pills?.[orientation] ?? []).map((pill) => pill.id);
 
-export const offersKeyShapes = (skinId) => Boolean(SKINS[skinId].shapes);
+// the touch pad keeps the pad it drew for the same layout, so each pick of pills is one layout,
+// made once, and a fit hands the pad the one it has
+const pilledLayouts = new Map();
 
-// a skin's layout held one way, with its shoulder keys in the shape picked if it offers it
-export function layoutOf(skinId, orientation, keyShape) {
-  const skin = SKINS[skinId];
+// a skin's layout held one way, each key it offers a pill for in the shape picked for it
+export function layoutOf(skinId, orientation, keyShapes = {}) {
+  const layout = SKINS[skinId].layouts[orientation];
+  const offered = SKINS[skinId].pills?.[orientation] ?? [];
+  const pills = offered.filter((pill) => keyShapes[pill.id] === 'pill');
+  const key = [skinId, orientation, ...pills.map((pill) => pill.id)].join(':');
 
-  return skin.shapes?.[keyShape]?.[orientation] ?? skin.layouts[orientation];
+  if (pills.length === 0) {
+    return layout;
+  }
+
+  if (!pilledLayouts.has(key)) {
+    const items = layout.items.map((item) => pills.find((pill) => pill.id === item.id) ?? item);
+
+    pilledLayouts.set(key, { ...layout, items });
+  }
+
+  return pilledLayouts.get(key);
 }
 
 export function skinLayoutFor(settings, orientation) {
-  return layoutOf(skinIdFor(settings), orientation, keyShapeOf(settings));
+  return layoutOf(skinIdFor(settings), orientation, keyShapesOf(settings));
 }
 
 export const steersWithDpad = (padLayout) => padLayout.items.some((item) => item.kind === 'dpad');

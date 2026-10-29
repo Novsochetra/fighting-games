@@ -111,10 +111,62 @@ body.stick-hidden .skin-preview .pad-stick {
   text-wrap: balance;
 }
 
-/* a skin that offers its shoulder keys as pills switches them under its words (skin-view.js) */
+/* the keys a player may pick a shape for (skin-view.js) answer a tap, ringed so they show it, the
+   ring drawn whole for the one the keyboard or gamepad is on */
+.skin-preview [data-pickable] {
+  pointer-events: auto;
+  outline: 2px dashed color-mix(in srgb, var(--color-gold) 60%, transparent);
+  outline-offset: 4px;
+}
+
+.skin-preview [data-pickable].sel {
+  outline-style: solid;
+  outline-color: var(--color-gold);
+}
+
 .skin-shape {
-  margin: 0;
   text-align: center;
+}
+
+/* a key's chooser of its shape (key-chooser.js): the bar's carved frame, small, beside the key, on
+   a plate the keys under it do not show through; the shape the key has stands lit, the other
+   dimmed until a thumb or the highlight is on it */
+.key-chooser {
+  --stone: 1;
+
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  border: solid var(--color-clear);
+  border-width: calc(12px * var(--stone)) calc(14px * var(--stone));
+  border-image: url('../assets/ui/hud/panel-frame.png') 12 14 / calc(12px * var(--stone))
+    calc(14px * var(--stone)) / 0 round;
+  background: var(--color-night-deep) padding-box;
+  image-rendering: pixelated;
+}
+
+.key-chooser[hidden] {
+  display: none;
+}
+
+.key-chooser-name {
+  font-family: var(--font-display);
+  font-size: var(--font-size-2xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+}
+
+.key-chooser-shapes {
+  display: flex;
+  gap: 8px;
+}
+
+.key-chooser [aria-pressed='false']:not(.sel, :hover) {
+  opacity: 0.55;
 }
 
 /* a short screen held sideways has room above the shell's keys for the name and the switch, not

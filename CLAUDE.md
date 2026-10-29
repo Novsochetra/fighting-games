@@ -122,9 +122,9 @@ A game's touch controls come from `touch-pad`, drawn from a skin the game ships 
 each skin with `skinProblems` (see "Touch pad and skins" in `docs/architecture.md`). A skin's
 motion moves only size and opacity (`scale`, `transform`, `opacity`), which the compositor runs;
 its colours change at once, as eased colours cost a fight frames on a phone's CPU. Every move a
-skin draws (attack, jump, dash, a skill) is a round key, unless the player picks pills for its
-shoulder keys where the skin offers them (`shapes`, switched on the Skins screen); a pill is
-otherwise only for what runs the game (play, pause, settings).
+skin draws (attack, jump, dash, a skill) is a round key, unless the player picks a pill for a key
+the skin offers one for (`pills`, picked key by key on the Skins screen); a pill is otherwise only
+for what runs the game (play, pause, settings).
 
 ## Pages of the arcade
 

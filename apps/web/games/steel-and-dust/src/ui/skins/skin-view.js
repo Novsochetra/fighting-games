@@ -1,4 +1,4 @@
-import { layoutOf, offersKeyShapes, SKIN_IDS, SKINS } from '../../data/skins/skins.js';
+import { layoutOf, pillsOffered, SKIN_IDS, SKINS } from '../../data/skins/skins.js';
 import { orientationOf, savedEntries, slotOf } from '../layout/layout-draft.js';
 import { fillPreview } from '../layout/layout-markup.js';
 import { drawPreviewPad, drawPreviewShell, restPreviewStick } from '../layout/preview-pad.js';
@@ -24,16 +24,12 @@ const SKINS_HTML = `<div class="skin-shell" aria-hidden="true"></div>
       </span>
     </div>
     <p class="layout-hint skin-about"></p>
-    <p class="skin-shape" hidden>
-      <button type="button" class="xbtn stone-btn" data-skin-shape></button>
-    </p>
+    <p class="layout-hint skin-shape" hidden></p>
   </div>`;
 
-const SHAPE_LABELS = { round: 'Round keys', pill: 'Pill keys' };
-const SHAPE_NAMES = {
-  round: 'DASH and ULT are round keys; switch to pills',
-  pill: 'DASH and ULT are pills; switch to round keys',
-};
+// "DASH or ULT", the keys a player may tap to pick a shape for
+const listed = (labels) =>
+  labels.length > 1 ? `${labels.slice(0, -1).join(', ')} or ${labels.at(-1)}` : labels[0];
 
 // the skins screen: a copy of the touch layer with the skin looked at standing as it will, and the
 // bar to step through the skins
@@ -64,29 +60,34 @@ export class SkinView {
     pad.classList.add(slide);
   }
 
-  // a skin that offers its shoulder keys as pills shows which they are, and switches them
-  renderShape(skinId, keyShape) {
-    const row = this.bar.querySelector('.skin-shape');
-    const button = row.querySelector('button');
+  // the preview's copy of a key
+  keyFor(control) {
+    return this.preview.querySelector(`[data-control="${control}"]`);
+  }
 
-    row.hidden = !offersKeyShapes(skinId);
-    button.textContent = SHAPE_LABELS[keyShape];
-    button.setAttribute('aria-label', SHAPE_NAMES[keyShape]);
+  // the keys a skin offers pills for answer a tap with their chooser, and the bar says so
+  markPickable(keys) {
+    const hint = this.bar.querySelector('.skin-shape');
+    const labels = keys.map((control) => this.keyFor(control)?.textContent.trim()).filter(Boolean);
+
+    keys.forEach((control) => this.keyFor(control)?.setAttribute('data-pickable', ''));
+    hint.hidden = labels.length === 0;
+    hint.textContent = `Tap ${listed(labels)} to make it round or a pill`;
   }
 
   // held the way the phone is, at the player's Button size and opacity, and where the player put
   // the controls of this skin, if they did
-  render({ skinId, keyShape }, settings, from = 0) {
+  render({ skinId, keyShapes }, settings, from = 0) {
     const skin = SKINS[skinId];
     const orientation = orientationOf(this.app.clientWidth, this.app.clientHeight);
     const custom = savedEntries(settings.buttonLayout, slotOf(skinId, orientation));
-    const padLayout = layoutOf(skinId, orientation, keyShape);
+    const padLayout = layoutOf(skinId, orientation, keyShapes);
 
     fitTouchLayer(this.preview, this.layout.touchArea());
     drawPreviewShell(this.shell, padLayout, this.layout.stageRect());
     const places = drawPreviewPad(this.preview, padLayout, custom);
     restPreviewStick(this.preview, { places, layout: this.layout, app: this.app, settings });
-    this.renderShape(skinId, keyShape);
+    this.markPickable(pillsOffered(skinId, orientation));
     this.bar.querySelector('.skin-name').textContent = skin.name;
     this.bar.querySelector('.skin-about').textContent = skin.about;
     this.bar.querySelectorAll('.skin-dots i').forEach((dot, i) => {

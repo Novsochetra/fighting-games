@@ -69,6 +69,7 @@ export function installUi({ window, elements, game, audio, ui, pad }) {
     padConnected: pad.connected,
   });
   const menus = new MenuController({ document, game, audio, ui, context, panels });
+  panels.skins.select = (item) => menus.select(item);
   const leaveForArcade = createArcadeExit({
     location: window.location,
     history: window.history,

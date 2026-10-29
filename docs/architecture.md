@@ -709,10 +709,13 @@ the game in a bezel between two panels held sideways and at the top held upright
 plaque in its HUD (`pausePlace`, `framed`); each control carries its shell's colour class, as it
 stands in the touch layer, not in the shell (`#shell`, behind the stage). A player picks the skin (`skin`, one
 for both ways of holding the phone) on the Skins screen, which Settings' Skin row opens
-(`src/ui/skins/`, `styles/skin-picker.css`), which also switches the shoulder keys of a skin that
-offers pills for them (Clear's DASH and ULT, its `shapes.pill` layouts) between round and pill
-(`keyShape`, round unless picked; `layoutOf` in `skins.js` gives the game, the Skins screen and the
-layout editor the same layout): like the layout editor, a copy of the touch layer over
+(`src/ui/skins/`, `styles/skin-picker.css`), where a tap on a key the skin offers a pill for
+(Clear's DASH and ULT, its `pills`, ringed and named in the bar) opens a chooser of Round or Pill
+for that key alone (`key-chooser.js`; `keyShapes`, each key round unless picked; the keyboard and
+gamepad reach those keys after the bar, the chooser's choices while it is open, and Back closes it
+first, `backOut`). `layoutOf` in `skins.js` gives the game, the Skins screen and the layout editor
+the same layout, one object for each pick, as the touch pad keeps the pad drawn for it: like the
+layout editor, a copy of the touch layer over
 a light dim shows the skin looked at standing as it will, held the way the phone is, at the
 player's Button size and opacity and with their own layout of it (`preview-pad.js`, which both
 share), and a skin with a shell stands for real meanwhile (`layout.previewSkin`), the stage in

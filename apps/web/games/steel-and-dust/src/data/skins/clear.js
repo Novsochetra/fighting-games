@@ -1,8 +1,8 @@
 const STEER = { up: 'up', right: 'right', down: 'down', left: 'left' };
 
 // every move is a round key, DASH and ULT on the shell's shoulders as much as the face keys, unless
-// the player picks pills for those two (`shapes`). `place` is where the key stands (`at`) and how
-// big it is (`size`, `aspect`)
+// the player picks a pill for either of those two (`pills`). `place` is where the key stands (`at`)
+// and how big it is (`size`, `aspect`)
 const control = (id, label, place) => ({
   id,
   kind: 'button',
@@ -72,11 +72,6 @@ const SHOULDER_PILLS = {
   ],
 };
 
-const withPills = (layout, pills) => ({
-  ...layout,
-  items: layout.items.map((item) => pills.find((key) => key.id === item.id) ?? item),
-});
-
 const COLOURS = {
   lotus: ['Clear Lotus', 'See-through lotus purple'],
   ember: ['Clear Ember', 'See-through ember red'],
@@ -86,13 +81,14 @@ const COLOURS = {
 };
 
 // the controls stand in the touch layer, not in the shell, so each carries its shell's colour too
-function coloured(layout, colour) {
-  return {
-    ...layout,
-    shell: { class: `clear clear-${colour}` },
-    items: layout.items.map((item) => ({ ...item, class: `${item.class} clear-${colour}` })),
-  };
-}
+const colouredItems = (items, colour) =>
+  items.map((item) => ({ ...item, class: `${item.class} clear-${colour}` }));
+
+const coloured = (layout, colour) => ({
+  ...layout,
+  shell: { class: `clear clear-${colour}` },
+  items: colouredItems(layout.items, colour),
+});
 
 function clearSkin(colour, [name, plastic]) {
   return {
@@ -104,11 +100,9 @@ function clearSkin(colour, [name, plastic]) {
       landscape: coloured(LANDSCAPE, colour),
       portrait: coloured(PORTRAIT, colour),
     },
-    shapes: {
-      pill: {
-        landscape: coloured(withPills(LANDSCAPE, SHOULDER_PILLS.landscape), colour),
-        portrait: coloured(withPills(PORTRAIT, SHOULDER_PILLS.portrait), colour),
-      },
+    pills: {
+      landscape: colouredItems(SHOULDER_PILLS.landscape, colour),
+      portrait: colouredItems(SHOULDER_PILLS.portrait, colour),
     },
   };
 }

@@ -5,7 +5,7 @@ import {
   placeStickZone,
 } from '../../../../../packages/touch-pad/src/stick-place.js';
 import { buttonScale } from '../../data/settings.js';
-import { keyShapeOf, layoutOf, skinIdFor, steersWithDpad } from '../../data/skins/skins.js';
+import { keyShapesOf, layoutOf, skinIdFor, steersWithDpad } from '../../data/skins/skins.js';
 import { orientationOf, savedEntries, slotOf } from '../layout/layout-draft.js';
 import { STICK_RADIUS } from './stage-layout.js';
 import { touchAreaOf } from './touch-area.js';
@@ -21,15 +21,15 @@ const orientationNow = (context) => {
   return orientationOf(width, height);
 };
 
-// the skin shown and the shape of its shoulder keys: those picked, or those the Skins screen shows
-// while it is open
+// the skin shown and the shape of its keys: those picked, or those the Skins screen shows while it
+// is open
 const lookNow = ({ preview, game }) =>
-  preview ?? { skinId: skinIdFor(game.settings), keyShape: keyShapeOf(game.settings) };
+  preview ?? { skinId: skinIdFor(game.settings), keyShapes: keyShapesOf(game.settings) };
 
 export function padLayoutOf(context) {
-  const { skinId, keyShape } = lookNow(context);
+  const { skinId, keyShapes } = lookNow(context);
 
-  return layoutOf(skinId, orientationNow(context), keyShape);
+  return layoutOf(skinId, orientationNow(context), keyShapes);
 }
 
 function customLayout(context) {

@@ -2,6 +2,21 @@ export function menuElement(document, id) {
   return document.getElementById(`m-${id}`);
 }
 
+// the Skins screen's bar, then the keys of the preview a player may pick a shape for; while a
+// key's chooser is open, only its choices
+function skinsItems(menu) {
+  const chooser = menu.querySelector('.key-chooser:not([hidden])');
+
+  if (chooser) {
+    return [...chooser.querySelectorAll('button')];
+  }
+
+  return [
+    ...menu.querySelectorAll('.layout-bar button'),
+    ...menu.querySelectorAll('.skin-preview [data-pickable]'),
+  ];
+}
+
 // what arrow keys and the d-pad step through in the open menu
 export function navigableItems(document, top) {
   if (!top) {
@@ -20,10 +35,11 @@ export function navigableItems(document, top) {
   if (top === 'help') {
     return [...menu.querySelectorAll('.tabs button'), menu.querySelector('.xbtn')];
   }
-  if (top === 'layout' || top === 'skins') {
-    return [...menu.querySelectorAll('.layout-bar button')].filter(
-      (button) => !button.closest('[hidden]'),
-    );
+  if (top === 'skins') {
+    return skinsItems(menu);
+  }
+  if (top === 'layout') {
+    return [...menu.querySelectorAll('.layout-bar button')];
   }
   if (top === 'credits') {
     return [menu.querySelector('.xbtn')];

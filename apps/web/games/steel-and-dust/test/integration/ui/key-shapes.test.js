@@ -13,15 +13,18 @@ function holdPhone(width, height) {
 }
 
 const row = (key) => document.querySelector(`[data-k="${key}"]`);
-const switcher = () => document.querySelector('#m-skins [data-skin-shape]');
+const preview = () => document.querySelector('#m-skins .skin-preview');
+const chooser = () => document.querySelector('#m-skins .key-chooser');
 const shapeOf = (root, control) =>
   root.querySelector(`[data-control="${control}"]`).classList.contains('clear-pill')
     ? 'pill'
     : 'round';
 const played = (control) => shapeOf(document.getElementById('touch'), control);
-const previewed = (control) => shapeOf(document.querySelector('#m-skins .skin-preview'), control);
+const previewed = (control) => shapeOf(preview(), control);
+const tapKey = (control) => preview().querySelector(`[data-control="${control}"]`).click();
+const choose = (shape) => chooser().querySelector(`[data-key-shape="${shape}"]`).click();
 
-describe("a skin's shoulder keys, round or pill, on the real page", () => {
+describe("a skin's keys, round or pill, picked key by key on the real page", () => {
   let page;
 
   beforeEach(() => {
@@ -48,64 +51,111 @@ describe("a skin's shoulder keys, round or pill, on the real page", () => {
     expect(openMenu().id).toBe('m-skins');
   }
 
-  it('starts round, and switches DASH and ULT to pills on the Skins screen as it plays', () => {
+  it('opens a chooser for a key tapped, and makes that key alone a pill as it plays', () => {
     openSkins('clear-lotus');
-    expect(page.game.settings.keyShape).toBe('round');
-    expect(switcher().textContent).toBe('Round keys');
-    expect([played('dash'), played('ult'), previewed('dash')]).toEqual(['round', 'round', 'round']);
+    expect(['dash', 'ult'].map(played)).toEqual(['round', 'round']);
 
-    switcher().click();
+    tapKey('dash');
 
-    expect(switcher().textContent).toBe('Pill keys');
-    expect([played('dash'), played('ult'), previewed('ult')]).toEqual(['pill', 'pill', 'pill']);
-    expect(['heavy', 'light', 'jump'].map(played)).toEqual(['round', 'round', 'round']);
-    expect(page.game.settings.keyShape).toBe('round');
+    expect(chooser().hidden).toBe(false);
+    expect(chooser().textContent).toContain('DASH');
+    expect(chooser().querySelector('[aria-pressed="true"]').dataset.keyShape).toBe('round');
+
+    choose('pill');
+
+    expect(chooser().hidden).toBe(true);
+    expect([played('dash'), played('ult'), previewed('dash')]).toEqual(['pill', 'round', 'pill']);
+    expect(page.game.settings.keyShapes).toEqual({});
+
+    tapKey('dash');
+    expect(chooser().querySelector('[aria-pressed="true"]').dataset.keyShape).toBe('pill');
+    choose('round');
+    expect(played('dash')).toBe('round');
   });
 
-  it('keeps the pills only on Use, and leaves the keys round on Cancel', () => {
+  it('keeps the shapes picked only on Use, and none on Cancel', () => {
     openSkins('clear-jade');
-    switcher().click();
+    tapKey('ult');
+    choose('pill');
     document.querySelector('#m-skins [data-act="back"]:not([data-skin])').click();
-    expect(played('dash')).toBe('round');
-    expect(page.game.settings.keyShape).toBe('round');
+    expect(played('ult')).toBe('round');
+    expect(page.game.settings.keyShapes).toEqual({});
 
     row('skin').querySelector('[data-act="skins"]').click();
-    expect(switcher().textContent).toBe('Round keys');
-    switcher().click();
+    tapKey('ult');
+    choose('pill');
     document.querySelector('#m-skins [data-skin="use"]').click();
 
-    expect(page.game.settings.keyShape).toBe('pill');
+    expect(page.game.settings.keyShapes).toEqual({ ult: 'pill' });
     expect(page.saveSettings).toHaveBeenLastCalledWith(
-      expect.objectContaining({ skin: 'clear-jade', keyShape: 'pill' }),
+      expect.objectContaining({ skin: 'clear-jade', keyShapes: { ult: 'pill' } }),
     );
-    expect([played('dash'), played('ult')]).toEqual(['pill', 'pill']);
+    expect([played('dash'), played('ult')]).toEqual(['round', 'pill']);
   });
 
-  it('shows the switch only for a skin that offers pills, and starts the highlight on Use', () => {
-    openSkins('classic');
-    const onUse = () => page.menus.items()[page.menus.state.selected];
+  it('offers only the keys a skin has pills for, and names them in the bar', () => {
+    openSkins('clear-smoke');
+    const pickable = () => [...preview().querySelectorAll('[data-pickable]')];
+    const hint = document.querySelector('#m-skins .skin-shape');
 
-    expect(switcher().closest('[hidden]')).not.toBeNull();
-    expect(page.menus.items()).not.toContain(switcher());
-    expect(onUse().dataset.skin).toBe('use');
+    expect(pickable().map((key) => key.dataset.control)).toEqual(['dash', 'ult']);
+    expect(hint.hidden).toBe(false);
+    expect(hint.textContent).toBe('Tap DASH or ULT to make it round or a pill');
 
+    tapKey('light');
+    expect(chooser().hidden).toBe(true);
+
+    document.querySelector('#m-skins [data-skin-step="1"]').click();
+    expect(pickable()).toEqual([]);
+    expect(hint.hidden).toBe(true);
+  });
+
+  it('lets the keyboard reach the keys and the chooser, and Back close only the chooser', () => {
+    openSkins('clear-ember');
+    const highlighted = () => page.menus.items()[page.menus.state.selected];
+
+    expect(highlighted().dataset.skin).toBe('use');
+    expect(
+      page.menus
+        .items()
+        .map((item) => item.dataset.control)
+        .slice(-2),
+    ).toEqual(['dash', 'ult']);
+
+    tapKey('dash');
+    expect(page.menus.items()).toEqual([...chooser().querySelectorAll('button')]);
+    expect(highlighted().dataset.keyShape).toBe('round');
+
+    page.menus.back();
+
+    expect(openMenu().id).toBe('m-skins');
+    expect(chooser().hidden).toBe(true);
+    expect(highlighted().dataset.control).toBe('dash');
+  });
+
+  it('closes the chooser for a step to another skin, a turn of the phone, or a tap beside it', () => {
+    openSkins('clear-lotus');
+    tapKey('dash');
+    document.querySelector('#m-skins .skin-shell').click();
+    expect(chooser().hidden).toBe(true);
+
+    tapKey('dash');
+    holdPhone(390, 844);
+    expect(chooser().hidden).toBe(true);
+
+    tapKey('ult');
     document.querySelector('#m-skins [data-skin-step="-1"]').click();
-
-    expect(switcher().closest('[hidden]')).toBeNull();
-    expect(page.menus.items()).toContain(switcher());
+    expect(chooser().hidden).toBe(true);
   });
 
   it('plays the pills held upright too, and round keys for a shape it does not know', () => {
     holdPhone(390, 844);
-    Object.assign(page.game.settings, { skin: 'clear-mekong', keyShape: 'pill' });
+    Object.assign(page.game.settings, { skin: 'clear-mekong', keyShapes: { dash: 'pill' } });
     page.layout.applyTouchSettings();
-    expect([played('dash'), played('ult')]).toEqual(['pill', 'pill']);
+    expect([played('dash'), played('ult')]).toEqual(['pill', 'round']);
 
-    page.game.settings.keyShape = 'square';
+    page.game.settings.keyShapes = { dash: 'square', ult: 'pill', light: 'pill' };
     page.layout.applyTouchSettings();
-    expect(played('dash')).toBe('round');
-
-    openSkins('clear-mekong');
-    expect(switcher().textContent).toBe('Round keys');
+    expect([played('dash'), played('ult'), played('light')]).toEqual(['round', 'pill', 'round']);
   });
 });
