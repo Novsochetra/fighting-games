@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Bake a pixel-art skin from ChatGPT's paintings (assets/skins/README.md, "Pixel skins").
 
-    python3 tools/pixel_skin/bake.py landscape PAINTING OUT_DIR [--block N] [--frame]
+    python3 tools/pixel_skin/bake.py landscape PAINTING OUT_DIR [--block N] [--frame] [--clear BOX]…
         the shell held sideways, its window in the middle: each grip running down from the top
         (landscape-left.png, landscape-right.png) and its foot (…-foot.png), the top and the
         bottom band reaching both ways from their ornaments (landscape-top.png, …-bottom.png)
     python3 tools/pixel_skin/bake.py portrait PAINTING OUT_DIR [--block N] [--trim ROWS] [--frame]
+                                                      [--clear BOX]…
         the shell held upright, its window at the top: the rim round the window (portrait-crown),
         the emblem under it running down (portrait-body) and the foot (portrait-foot)
     python3 tools/pixel_skin/bake.py keys SHEET OUT_DIR
@@ -101,6 +102,27 @@ def long_band(band, length):
     return extended_left(right, left_segment, length)
 
 
+def cleared(image, boxes):
+    """The painting with each box covered by plain shell from beside it, the plainest neighbour of
+    its size: an LED, screws or a speaker painted where the keys stand show round them"""
+    out = image.copy()
+    height_of, width_of = image.shape[:2]
+
+    for left, top, right, bottom in boxes:
+        width, height = right - left, bottom - top
+        sources = [(left, top - height), (left, bottom), (left - width, top), (right, top)]
+        inside = [(x, y) for x, y in sources
+                  if x >= 0 and y >= 0 and x + width <= width_of and y + height <= height_of]
+        x, y = min(inside, key=lambda at: image[at[1] : at[1] + height, at[0] : at[0] + width].std())
+        out[top:bottom, left:right] = image[y : y + height, x : x + width]
+
+    return out
+
+
+def box_of(text):
+    return tuple(int(value) for value in text.split(','))
+
+
 def window_of(image, seed, frame):
     window = window_box(image, seed)
 
@@ -178,11 +200,17 @@ def main():
                              'whose blocks are no one size (grid.py, read_painted)')
     parser.add_argument('--trim', type=int, default=WINDOW_TRIM,
                         help='rows of the painted frame under the upright window to leave out')
+    parser.add_argument('--clear', type=box_of, action='append', default=[], metavar='X0,Y0,X1,Y1',
+                        help='cover this box of the painting with plain shell from beside it, for a '
+                             'detail painted where the keys stand (an LED, screws, a speaker)')
     parser.add_argument('--frame', action='store_true',
                         help='the window takes in the frame round the black, a screen\'s bezel, '
                              'so the grips are the shell alone and no key stands on the bezel')
     args = parser.parse_args()
     image = load(args.source, 'RGBA' if args.command == 'keys' else 'RGB')
+
+    if args.clear:
+        image = cleared(image, args.clear)
 
     if args.command == 'keys':
         bake_keys(image, args.out_dir)

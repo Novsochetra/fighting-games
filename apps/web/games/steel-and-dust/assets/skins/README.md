@@ -113,8 +113,11 @@ screen has the window's bronze trim (`--shadow-sandstone-bezel`). Its bands are 
 
 ### Retro Grey
 
-Grey plastic, a purple bezel round the screen with an LED, two screws and a speaker grille, red
-round keys and grey pills slanting 19 degrees, as a 1989 handheld's start and select. Baked as
+Grey plastic, a purple bezel round the screen, red round keys and grey pills slanting 19 degrees,
+as a 1989 handheld's start and select. Its painting had an LED, two screws and a speaker grille on
+the plastic, where the d-pad and the keys stand, and they showed round them, so the bake covers
+each with plain plastic from beside it, the plainest neighbour of its size (`--clear`, a box of the
+painting each). Baked as
 painted (`--block 2`, its grips 116 of those pixels across and its bands 1624 long). Its bezel
 belongs to the window (`--frame`, the window taken out over the colour round the black to where it
 ends): left in the grips, it made their inner 46 px purple, and the d-pad, HEAVY and the pills
@@ -126,7 +129,7 @@ the bake leaves out the bezel's outline under the window too (`--trim 5`), as
 under the label at the size of the art's box (`--pixel-pill-art-*`).
 
 ```bash
-python3 tools/pixel_skin/bake.py landscape shell-sideways.png apps/web/games/steel-and-dust/assets/skins/retro --block 2 --frame
-python3 tools/pixel_skin/bake.py portrait shell-upright.png apps/web/games/steel-and-dust/assets/skins/retro --block 2 --frame --trim 5
+python3 tools/pixel_skin/bake.py landscape shell-sideways.png apps/web/games/steel-and-dust/assets/skins/retro --block 2 --frame --clear 43,60,100,119 --clear 42,891,170,943 --clear 1325,764,1516,966
+python3 tools/pixel_skin/bake.py portrait shell-upright.png apps/web/games/steel-and-dust/assets/skins/retro --block 2 --frame --trim 5 --clear 48,1417,200,1476 --clear 734,1258,996,1510
 python3 tools/pixel_skin/bake.py keys keys.png apps/web/games/steel-and-dust/assets/skins/retro
 ```
