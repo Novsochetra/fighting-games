@@ -26,9 +26,14 @@ The first 6.6 seconds are the intro made for the game. The rest is the game itse
 in Chromium (tab capture, with the game's own sound, while an autopilot drove `window.__steelAndDust`
 through each mission with Training tools on), then cut, framed and graded frame by frame: every camera
 move scales the pixels up by whole multiples first, so they stay square as the camera pushes in. The
-section lines are set in the game's Silkscreen (`assets/fonts/`). The score and sound design (impacts,
-taiko, braams, a chiptune lead in C♯ minor at 120 BPM, whooshes, risers) were synthesized to the cut,
-with the game's own hits underneath, and the mix brought to −14 LUFS.
+section lines are set in the game's Silkscreen (`assets/fonts/`).
+
+The sound is the intro's own, carried through the whole trailer (it is in A minor, as the game's
+songs are, with a 120 BPM pulse in its hero select that the cuts follow): its title reveal opens each
+section and the end card, its rising sweep leads into them, bars of its hero-select pulse run under
+the heroes and the bosses, and its select burst lands on the hits, at half speed (an octave down) for
+the slow motion and the bosses, and stepping up the A minor scale through the flurry. The game's own
+hits sit underneath, and the mix is at −14 LUFS.
 
 The file here is the web copy, made from the 1080p master for phones on a data plan:
 
