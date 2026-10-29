@@ -15,6 +15,7 @@ import { createFullscreen, installFullscreen } from '../ui/screen/fullscreen.js'
 import { installGestureGuards, installMenuTapFix } from '../ui/screen/gesture-guards.js';
 import { createScreenFit, installScreenFit } from '../ui/screen/screen-fit.js';
 import { createSettingsPanel } from '../ui/settings/settings-panel.js';
+import { createSkinPicker } from '../ui/skins/skin-picker.js';
 
 function isIos(navigator) {
   return (
@@ -45,6 +46,7 @@ function createPanels({ elements, game, audio, layout, ui, window, supporters })
     credits: createCreditsPanel({ root: elements.credits, game, feed: supporters }),
   };
   panels.layout = createLayoutEditor({ window, game, audio, layout, settings: panels.settings });
+  panels.skins = createSkinPicker({ window, game, audio, layout, settings: panels.settings });
   return panels;
 }
 

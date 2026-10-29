@@ -17,6 +17,7 @@ const QUIET_ACTIONS = new Set([
   'help',
   'settings',
   'layout',
+  'skins',
   'leaderboard',
   'credits',
   'play',
@@ -59,6 +60,23 @@ function continueSavedAction(game, menus) {
   };
 }
 
+// the actions that only open a panel over the menu, and the panel each opens
+const PANEL_ACTIONS = {
+  leaderboard: 'leaderboard',
+  credits: 'credits',
+  help: 'help',
+  settings: 'settings',
+  layout: 'layout',
+  skins: 'skins',
+  continue: 'heroes',
+};
+
+function panelActions(menus) {
+  return Object.fromEntries(
+    Object.entries(PANEL_ACTIONS).map(([action, panel]) => [action, () => menus.open(panel)]),
+  );
+}
+
 export function createMenuActions({ game, audio, ui, fullscreen, menus, leaveForArcade }) {
   const begin = () => {
     if (ui.isTouchOn() && fullscreen.supported && !fullscreen.isActive()) {
@@ -68,19 +86,14 @@ export function createMenuActions({ game, audio, ui, fullscreen, menus, leaveFor
   };
   const actions = {
     ...heroActions(game, begin),
+    ...panelActions(menus),
     play: playAction(game, menus),
     continueSaved: continueSavedAction(game, menus),
-    leaderboard: () => menus.open('leaderboard'),
-    credits: () => menus.open('credits'),
     again: () => playFromStart(game),
     resume: () => resumePlay(game),
-    help: () => menus.open('help'),
-    settings: () => menus.open('settings'),
-    layout: () => menus.open('layout'),
     fullscreen: () => fullscreen.toggle(),
     restart: () => restartRun(game),
     quit: () => quitToTitle(game),
-    continue: () => menus.open('heroes'),
     back: () => menus.back(),
     weapon() {
       cycleWeapon(game);

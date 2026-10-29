@@ -50,5 +50,6 @@ const PORTRAIT = [
 export const DUSK = {
   id: 'dusk',
   name: 'Dusk',
+  about: 'A d-pad and glass buttons lit by the dusk sky, over the fight',
   layouts: { landscape: { items: LANDSCAPE }, portrait: { items: PORTRAIT } },
 };

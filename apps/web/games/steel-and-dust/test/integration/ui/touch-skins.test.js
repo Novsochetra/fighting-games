@@ -37,10 +37,18 @@ function pointer(target, type, [x, y]) {
 
 const real = (control) => document.querySelector(`#touch [data-control="${control}"]`);
 const copy = (control) => document.querySelector(`#m-layout [data-control="${control}"]`);
+const shown = (control) => document.querySelector(`#m-skins [data-control="${control}"]`);
 const row = (key) => document.querySelector(`[data-k="${key}"]`);
+const skinName = () => document.querySelector('#m-skins .skin-name').textContent;
 
 function step(key) {
   row(key).querySelector('[data-d="1"]').click();
+}
+
+function openSkins(page) {
+  page.act('settings');
+  row('skin').querySelector('[data-act="skins"]').click();
+  expect(openMenu().id).toBe('m-skins');
 }
 
 describe('touch skins on the real page', () => {
@@ -57,40 +65,89 @@ describe('touch skins on the real page', () => {
 
   afterEach(() => vi.restoreAllMocks());
 
-  it('offers a skin for each way the phone is held, and the controls’ opacity, with touch on', () => {
+  it('offers a Skin row that opens the Skins screen, and the controls’ opacity, with touch on', () => {
     page.act('settings');
-    expect(row('skinLandscape').querySelector('.val').textContent).toBe('Classic');
-    expect(row('skinPortrait').querySelector('.val').textContent).toBe('Classic');
+    expect(row('skin').querySelector('.val').textContent).toBe('Classic');
+    expect(row('skin').querySelector('[data-act="skins"]').textContent).toBe('Pick');
     expect(row('padOpacity').querySelector('.val').textContent).toBe('100%');
     page.act('back');
     page.game.device.coarsePointer = false;
     page.act('settings');
-    expect(row('skinLandscape')).toBeNull();
+    expect(row('skin')).toBeNull();
     expect(row('padOpacity')).toBeNull();
   });
 
-  it('draws Dusk’s d-pad held sideways and keeps the classic stick upright', () => {
-    page.act('settings');
-    step('skinLandscape');
-    expect(row('skinLandscape').querySelector('.val').textContent).toBe('Dusk');
-    expect(page.game.settings.skinLandscape).toBe('dusk');
+  it('shows each skin on the screen before it is picked, and only Use picks it', () => {
+    openSkins(page);
+    expect(skinName()).toBe('Classic');
+    expect(shown('stick')).not.toBeNull();
+    // the keyboard and gamepad highlight starts on Use
+    expect(page.menus.items()[page.menus.state.selected].textContent).toBe('Use');
+    document.querySelector('#m-skins [data-skin-step="1"]').click();
+    expect(skinName()).toBe('Dusk');
+    expect(document.querySelector('#m-skins .skin-about').textContent).toContain('d-pad');
+    expect(shown('stick')).toBeNull();
+    expect(shown('dpad').className).toBe('pad-dpad dusk-dpad');
+    expect(real('stick')).not.toBeNull();
+    document.querySelector('#m-skins [data-act="back"]:not([data-skin])').click();
+    expect(openMenu().id).toBe('m-settings');
+    expect(page.game.settings.skin).toBe('classic');
+    expect(page.saveSettings).not.toHaveBeenCalled();
+
+    row('skin').querySelector('[data-act="skins"]').click();
+    expect(skinName()).toBe('Classic');
+    document.querySelector('#m-skins [data-skin-step="-1"]').click();
+    document.querySelector('#m-skins [data-skin="use"]').click();
+    expect(openMenu().id).toBe('m-settings');
+    expect(page.game.settings.skin).toBe('dusk');
+    expect(page.saveSettings).toHaveBeenCalledWith(page.game.settings);
+    expect(real('dpad')).not.toBeNull();
+    expect(row('skin').querySelector('.val').textContent).toBe('Dusk');
+  });
+
+  it('steps with the arrow keys, shows the skin held the new way, and leaves with Escape', () => {
+    openSkins(page);
+    page.key('ArrowRight');
+    expect(skinName()).toBe('Dusk');
+    expect(shown('light').style.getPropertyValue('--pad-dx')).toBe('-120px');
+    holdPhone(390, 844);
+    expect(shown('light').style.getPropertyValue('--pad-dx')).toBe('-78px');
+    page.key('ArrowLeft');
+    expect(skinName()).toBe('Classic');
+    page.key('Escape');
+    expect(openMenu().id).toBe('m-settings');
+    expect(page.game.settings.skin).toBe('classic');
+  });
+
+  it('shows a skin where the player moved its controls', () => {
+    const { light } = { light: { x: 0.5, y: 0.5, size: 1.2 } };
+    page.game.settings.buttonLayout = {
+      dusk: {
+        landscape: { light, heavy: light, jump: light, dash: light, ult: light, dpad: light },
+        portrait: null,
+      },
+    };
+    openSkins(page);
+    page.key('ArrowRight');
+    expect(shown('light').style.getPropertyValue('--pad-x')).toBe('0.5');
+    expect(shown('light').style.getPropertyValue('--pad-size')).toBe('1.2');
+  });
+
+  it('draws the skin picked both ways the phone is held, each its own layout', () => {
+    page.game.settings.skin = 'dusk';
+    page.layout.applyTouchSettings();
     expect(real('stick')).toBeNull();
-    expect(real('dpad').className).toBe('pad-dpad dusk-dpad');
     expect(real('light').className).toBe('pad-button dusk dusk-light');
     expect(real('light').style.getPropertyValue('--pad-dx')).toBe('-120px');
+    holdPhone(390, 844);
+    expect(real('light').style.getPropertyValue('--pad-dx')).toBe('-78px');
     expect(document.querySelector('#touch .pad-controls').classList.contains('pad-placed')).toBe(
       true,
-    );
-    holdPhone(390, 844);
-    expect(real('dpad')).toBeNull();
-    expect(real('stick').className).toBe('pad-stick classic-stick');
-    expect(document.querySelector('#touch .pad-controls').classList.contains('pad-placed')).toBe(
-      false,
     );
   });
 
   it('steers the fighter with the d-pad and fights with Dusk’s buttons', () => {
-    page.game.settings.skinLandscape = 'dusk';
+    page.game.settings.skin = 'dusk';
     page.layout.applyTouchSettings();
     const { held, pressed, autoAttack } = page.game.input;
     const holding = (...keys) => keys.filter((key) => held[key]);
@@ -116,7 +173,7 @@ describe('touch skins on the real page', () => {
   });
 
   it('edits Dusk’s own layout and leaves the classic one as it was', () => {
-    page.game.settings.skinLandscape = 'dusk';
+    page.game.settings.skin = 'dusk';
     page.layout.applyTouchSettings();
     page.act('settings');
     row('buttonLayout').querySelector('[data-act="layout"]').click();
@@ -145,7 +202,7 @@ describe('touch skins on the real page', () => {
   });
 
   it('tells a Dusk player to steer with the d-pad', () => {
-    page.game.settings.skinLandscape = 'dusk';
+    page.game.settings.skin = 'dusk';
     page.act('help');
     expect(document.getElementById('helpBody').textContent).toContain(
       'press left or right on the d-pad',

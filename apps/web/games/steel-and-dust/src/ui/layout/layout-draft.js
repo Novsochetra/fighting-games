@@ -11,9 +11,11 @@ export function orientationOf(width, height) {
   return isPortrait(width, height) ? 'portrait' : 'landscape';
 }
 
-// the slot the editor shows: the skin picked for the way the phone is held
+export const slotOf = (skinId, orientation) => `${skinId}:${orientation}`;
+
+// the slot the editor shows: the skin picked, held the way the phone is
 export function slotFor(settings, orientation) {
-  return `${skinIdFor(settings, orientation)}:${orientation}`;
+  return slotOf(skinIdFor(settings), orientation);
 }
 
 export function savedEntries(buttonLayout, slot) {
@@ -23,7 +25,7 @@ export function savedEntries(buttonLayout, slot) {
 }
 
 const SLOTS = Object.keys(SKINS).flatMap((skin) =>
-  ORIENTATIONS.map((orientation) => `${skin}:${orientation}`),
+  ORIENTATIONS.map((orientation) => slotOf(skin, orientation)),
 );
 
 export function createDraft(buttonLayout) {

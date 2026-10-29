@@ -3,19 +3,17 @@ import { DUSK } from './dusk.js';
 
 export const SKINS = { classic: CLASSIC, dusk: DUSK };
 
+export const SKIN_IDS = Object.keys(SKINS);
+
 export const ORIENTATIONS = ['landscape', 'portrait'];
 
-// each way of holding the phone has a skin of its own, as Delta's controller skins have
-export const SKIN_SETTINGS = { landscape: 'skinLandscape', portrait: 'skinPortrait' };
-
-export function skinIdFor(settings, orientation) {
-  const id = settings[SKIN_SETTINGS[orientation]];
-
-  return Object.hasOwn(SKINS, id) ? id : 'classic';
+// one skin for both ways of holding the phone, each with a layout for each way
+export function skinIdFor(settings) {
+  return Object.hasOwn(SKINS, settings.skin) ? settings.skin : 'classic';
 }
 
 export function skinLayoutFor(settings, orientation) {
-  return SKINS[skinIdFor(settings, orientation)].layouts[orientation];
+  return SKINS[skinIdFor(settings)].layouts[orientation];
 }
 
 export const steersWithDpad = (padLayout) => padLayout.items.some((item) => item.kind === 'dpad');

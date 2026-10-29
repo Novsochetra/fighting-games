@@ -6,17 +6,8 @@ const pick = (labels) => (value) => labels[value];
 const skinName = (id) => (SKINS[id] ?? SKINS.classic).name;
 const isTouchOn = ({ isTouchOn: touchOn }) => touchOn();
 
-const skinRow = (key, label) => ({
-  key,
-  label,
-  options: Object.keys(SKINS),
-  format: skinName,
-  note: 'Classic: a stick and round buttons. Dusk: a d-pad and glass buttons over the fight',
-  visible: isTouchOn,
-});
-
-// `visible` gets { isTouchOn, canVibrate, settings }; a row with an `action` has a button that
-// opens that menu instead of a stepper
+// `visible` gets { isTouchOn, canVibrate, settings }; a row with an `action` has a button
+// (`actionLabel`, else Edit) that opens that menu instead of a stepper
 export const SETTINGS_SCHEMA = [
   { group: 'Sound' },
   { key: 'music', label: 'Music', range: true },
@@ -69,8 +60,15 @@ export const SETTINGS_SCHEMA = [
     options: ['auto', 'on', 'off'],
     format: pick({ auto: 'Auto', on: 'On', off: 'Off' }),
   },
-  skinRow('skinLandscape', 'Skin held sideways'),
-  skinRow('skinPortrait', 'Skin held upright'),
+  {
+    key: 'skin',
+    label: 'Skin',
+    action: 'skins',
+    actionLabel: 'Pick',
+    format: skinName,
+    note: 'See each skin on your screen and pick the one you play with',
+    visible: isTouchOn,
+  },
   {
     key: 'padOpacity',
     label: 'Controls opacity',

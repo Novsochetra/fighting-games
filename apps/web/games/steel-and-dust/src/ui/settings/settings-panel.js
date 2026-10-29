@@ -13,7 +13,7 @@ function valueHtml(definition, settings) {
 function controlHtml(definition, settings) {
   const value = `<span class="val">${valueHtml(definition, settings)}</span>`;
   if (definition.action) {
-    return `<span class="stepper">${value}<button type="button" class="xbtn stone-btn" data-act="${definition.action}">Edit</button></span>`;
+    return `<span class="stepper">${value}<button type="button" class="xbtn stone-btn" data-act="${definition.action}">${definition.actionLabel ?? 'Edit'}</button></span>`;
   }
   return (
     '<span class="stepper"><button type="button" class="stone-btn" data-d="-1" aria-label="Less">‹</button>' +
@@ -47,8 +47,6 @@ const AFTER_CHANGE = {
   touch: ({ layout }) => layout.applyTouchSettings(),
   buttonSize: ({ layout }) => layout.applyTouchSettings(),
   stick: ({ layout }) => layout.applyTouchSettings(),
-  skinLandscape: ({ layout }) => layout.applyTouchSettings(),
-  skinPortrait: ({ layout }) => layout.applyTouchSettings(),
   padOpacity: ({ layout }) => layout.applyTouchSettings(),
   padHidesTouch: ({ layout }) => layout.applyTouchSettings(),
   difficulty: ({ game }) => refreshAttackTokens(game),

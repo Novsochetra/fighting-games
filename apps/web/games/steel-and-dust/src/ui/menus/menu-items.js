@@ -20,7 +20,7 @@ export function navigableItems(document, top) {
   if (top === 'help') {
     return [...menu.querySelectorAll('.tabs button'), menu.querySelector('.xbtn')];
   }
-  if (top === 'layout') {
+  if (top === 'layout' || top === 'skins') {
     return [...menu.querySelectorAll('.layout-bar button')];
   }
   if (top === 'credits') {

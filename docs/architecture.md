@@ -665,9 +665,13 @@ The touch controls are drawn by the touch pad (see Touch pad and skins) from a s
 `src/data/skins/`: `classic` is the controls as they always stood, placing nothing, so
 `styles/touch-buttons.css` places the buttons and the screen fit rests the stick
 (`stage-layout.js`); `dusk` (`styles/skin-dusk.css`) is glass discs lit by the dusk sky over the
-fight and a d-pad, each control hanging off a bottom corner. Settings picks a skin for each way the
-phone is held (`skinLandscape`, `skinPortrait`), as Delta does, and the controls' opacity
-(`padOpacity`, `--pad-opacity`, never the pause button's). The help and the first hints name the
+fight and a d-pad, each control hanging off a bottom corner. A player picks the skin (`skin`, one
+for both ways of holding the phone) on the Skins screen, which Settings' Skin row opens
+(`src/ui/skins/`, `styles/skin-picker.css`): like the layout editor, a copy of the touch layer over
+a light dim shows the skin looked at standing as it will, held the way the phone is, at the
+player's Button size and opacity and with their own layout of it (`preview-pad.js`, which both
+share). ‹ ›, left and right step through the skins; Use picks one and Cancel leaves. Settings also
+sets the controls' opacity (`padOpacity`, `--pad-opacity`, never the pause button's). The help and the first hints name the
 d-pad when one steers (`steersWithDpad`; the screen fit marks `game.device` on each fit, which only
 the drawing reads). `src/input/touch-actions.js` turns the pad's inputs into `game.input`. The
 controls can be moved and resized (Settings, Button layout). The editor is its own menu,

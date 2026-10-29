@@ -17,5 +17,6 @@ const LAYOUT = { items: CONTROLS };
 export const CLASSIC = {
   id: 'classic',
   name: 'Classic',
+  about: 'The stick and round buttons Steel & Dust began with',
   layouts: { landscape: LAYOUT, portrait: LAYOUT },
 };
