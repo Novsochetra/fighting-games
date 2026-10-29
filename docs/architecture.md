@@ -143,11 +143,14 @@ files work under any path) and copy what it never touches beside them (`as-is-fi
 the art, `robots.txt`, `sitemap.xml` and `appearance-early.js`), then builds the service worker (see
 Offline). Each game's page is built on the way (`build-steps/bundle-game.js`): the modules each of
 its module scripts loads are joined into a few bundles in the game's own `build/` folder, as they are
-written (`esnext`) and minified, with names that change with their content; the page is pointed at
-them and the modules are left out. Steel & Dust's 925 modules, thirty imports deep, were about 1,150
-requests a load, each through the arcade's worker, and one that failed held its start; it now loads
-three bundles. A game still loads nothing from outside its folder, and its `offline.json` names the
-bundles. Each build has a version (`build-version.js`), SemVer with the build after a `+`, as
+written and minified, kept to ES2021 (`es2021`), with names that change with their content; the page
+is pointed at them and the modules are left out. Steel & Dust's 925 modules, thirty imports deep, were
+about 1,150 requests a load, each through the arcade's worker, and one that failed held its start; it
+now loads three bundles. A game still loads nothing from outside its folder, and its `offline.json`
+names the bundles. Players mostly come on phones, many on Android ones that are years behind, so
+Steel & Dust runs on Chrome 85 and Safari 14: its code is ES2021 and calls no built-in newer than
+those (`.at()`, `Object.hasOwn` and `findLast` have stand-ins in its `src/lib/`), which
+`test/regression/bugs/older-phone-built-ins.test.js` checks. Each build has a version (`build-version.js`), SemVer with the build after a `+`, as
 `1.0.0+5f272d9`: the release is the `version` in the root `package.json`, and the build is the commit
 Railway deploys (`RAILWAY_GIT_COMMIT_SHA`), else the one checked out, else the time of the build. The
 release is raised by hand, in the commit that ships the change: MAJOR for a change that breaks what a

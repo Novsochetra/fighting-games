@@ -1,3 +1,5 @@
+import { lastOf } from '../../lib/lists.js';
+
 // the pieces a zone's `ground` is built from, as [offset, rise] points from the zone's left wall;
 // each one starts and ends on the road, so they chain one after another
 
@@ -78,7 +80,7 @@ export function contour(from, legs) {
 // same steps the other way, so a dais built of rises no taller than a step can be walked over
 export function dais(from, steps) {
   const points = stairs(from, steps).slice(0, -1);
-  let x = points.at(-1)[0];
+  let x = lastOf(points)[0];
   for (const [width, rise] of steps.slice(0, -1).reverse()) {
     points.push([x, rise], [x + width, rise]);
     x += width;

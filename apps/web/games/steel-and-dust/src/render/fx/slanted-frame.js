@@ -1,4 +1,5 @@
 import { FX_SCALE, FX_SPRITES } from '../../data/fx-sprites.js';
+import { lastOf } from '../../lib/lists.js';
 import { clamp } from '../../lib/math.js';
 import { PIXEL, snap } from './fine-pixels.js';
 
@@ -9,7 +10,7 @@ import { PIXEL, snap } from './fine-pixels.js';
 const QUARTER = Math.PI / 2;
 
 function addColumn(runs, { column, source, drop }) {
-  const last = runs.at(-1);
+  const last = lastOf(runs);
   if (last && last.drop === drop && last.left + last.width === column * PIXEL) {
     last.width += PIXEL;
     last.sourceEnd = source + 1;

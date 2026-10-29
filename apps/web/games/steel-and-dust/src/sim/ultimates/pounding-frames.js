@@ -1,4 +1,5 @@
 import { POUNDING_LION } from '../../data/ultimates/pounding-lion.js';
+import { lastOf } from '../../lib/lists.js';
 import { COIL_FRAME } from './lion-gather.js';
 import { FISTS_ROW, rushFrame, WAKE_AT } from './rush-timing.js';
 
@@ -40,7 +41,7 @@ function frameIn(frames, since) {
     }
     left -= ticks;
   }
-  return [...frames.at(-1)[0], FISTS_ROW];
+  return [...lastOf(frames)[0], FISTS_ROW];
 }
 
 // his frames, all from his bare-hand strips: the salute through the cut-in, the fist that slams the

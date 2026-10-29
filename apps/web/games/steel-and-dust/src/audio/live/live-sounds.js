@@ -1,3 +1,4 @@
+import { hasOwn } from '../../lib/objects.js';
 import { AMBUSH_SOUNDS } from './ambush-sounds.js';
 import { BAYON_SOUNDS } from './bayon-sounds.js';
 import { BOSS_SOUNDS } from './boss-sounds.js';
@@ -34,5 +35,5 @@ export const LIVE_SOUNDS = {
 };
 
 export function isLiveSound(key) {
-  return Object.hasOwn(LIVE_SOUNDS, key);
+  return hasOwn(LIVE_SOUNDS, key);
 }

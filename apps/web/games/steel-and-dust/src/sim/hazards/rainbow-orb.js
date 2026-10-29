@@ -1,4 +1,5 @@
 import { FX_COLORS } from '../../art/fx-colors.js';
+import { findLast } from '../../lib/lists.js';
 import { addSparks } from '../fx/particles.js';
 
 // the top of the hand she raises in the Rainbow Naga's frames 1-3, [ahead, up] from her feet in her
@@ -42,7 +43,7 @@ export function conjureOrb(game, boss, move) {
 }
 
 export function spinOrb(game, orb) {
-  const step = orb.steps.findLast(([at]) => at <= orb.time);
+  const step = findLast(orb.steps, ([at]) => at <= orb.time);
   [, orb.x, orb.y] = step;
   const colors = FX_COLORS.rainbow;
   if (orb.time < orb.burstAt && orb.time % SPARK_EVERY === 0) {
