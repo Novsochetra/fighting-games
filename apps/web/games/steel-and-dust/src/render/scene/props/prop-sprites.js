@@ -1,5 +1,6 @@
 import { RENDER_SCALE } from '../../../config.js';
 import { PROP_SPRITES } from '../../../data/prop-sprites.js';
+import { hasOwn } from '../../../lib/objects.js';
 
 const DIRECTORY = 'assets/sprites/props/';
 
@@ -17,7 +18,7 @@ export function loadPropSprites({ createImage, baseUrl }) {
 }
 
 export function isSpriteProp(kind) {
-  return Object.hasOwn(PROP_SPRITES, kind);
+  return hasOwn(PROP_SPRITES, kind);
 }
 
 export function drawPropSprite(painter, sheets, { kind, x, y }) {

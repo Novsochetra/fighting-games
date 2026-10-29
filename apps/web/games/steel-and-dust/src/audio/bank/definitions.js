@@ -1,3 +1,4 @@
+import { hasOwn } from '../../lib/objects.js';
 import { ARMOR_SOUNDS } from './armor.js';
 import { CRASH_SOUNDS } from './crashes.js';
 import { DASH_SOUNDS } from './dashes.js';
@@ -42,5 +43,5 @@ export const SOUND_TAKES = Object.fromEntries(
 );
 
 export function isBankSound(key) {
-  return Object.hasOwn(SOUND_DEFINITIONS, key);
+  return hasOwn(SOUND_DEFINITIONS, key);
 }

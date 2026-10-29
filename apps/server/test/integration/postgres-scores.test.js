@@ -6,11 +6,12 @@ import { createPgliteDatabase } from '../support/pglite-database.js';
 let database;
 let store;
 
+// a Postgres compiled to WebAssembly takes seconds to start while the whole suite runs
 beforeEach(async () => {
   database = await createPgliteDatabase();
   await migrate(database);
   store = createPostgresScoresStore(database);
-});
+}, 30000);
 
 afterEach(() => database.close());
 

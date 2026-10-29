@@ -1,3 +1,4 @@
+import { lastOf } from '../../../lib/lists.js';
 import { dropIn } from '../ambushes.js';
 import { mound, ramp } from '../ground-shapes.js';
 
@@ -10,7 +11,7 @@ function flight(from, { step, rises, landing }) {
     x += step;
   }
   x += landing;
-  points.push([x, rises.at(-1)]);
+  points.push([x, lastOf(rises)]);
   for (const rise of rises.slice(0, -1).reverse()) {
     points.push([x, rise], [x + step, rise]);
     x += step;

@@ -1,3 +1,5 @@
+import { hasOwn } from '../../../lib/objects.js';
+
 // the cut of an iai draw runs flat ahead, except where the move rises (the launchers) or drops
 const STRIKE_ANGLE = { UK: -1.25, LLK: -1.1, AK: 0.7, ADK: 0.55 };
 const FLAT_ANGLE = -0.06;
@@ -11,7 +13,7 @@ const NO_HITBOX = [4, -28, 20, 12];
 // from just ahead of the body to a little past the reach; its cold flash opens where it starts
 export function strikeLineOf(fighter, move) {
   const [left, top, width, height] = move.hitbox ?? NO_HITBOX;
-  const tilted = Object.hasOwn(STRIKE_ANGLE, move.id);
+  const tilted = hasOwn(STRIKE_ANGLE, move.id);
   const angle = tilted ? STRIKE_ANGLE[move.id] : FLAT_ANGLE;
   const dx = Math.cos(angle) * fighter.facing;
   const dy = Math.sin(angle);

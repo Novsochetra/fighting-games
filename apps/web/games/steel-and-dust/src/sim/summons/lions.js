@@ -1,4 +1,5 @@
 import { FX_COLORS } from '../../art/fx-colors.js';
+import { lastOf } from '../../lib/lists.js';
 import { randomBetween } from '../../lib/math.js';
 import { shake } from '../fx/camera-fx.js';
 import { addDust, addSparks } from '../fx/particles.js';
@@ -114,7 +115,7 @@ export function updateLion(game, lion) {
     return;
   }
   const time = lion.time - lion.appear;
-  const end = lion.flight.at(-1)[0];
+  const end = lastOf(lion.flight)[0];
   if (time > end) {
     lion.fade = (time - end) / FADE_TICKS;
     lion.done = lion.fade >= 1;

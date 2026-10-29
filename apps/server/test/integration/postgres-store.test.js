@@ -7,9 +7,10 @@ import { sendRequest, startTestServer } from '../support/test-server.js';
 
 let database;
 
+// a Postgres compiled to WebAssembly takes seconds to start while the whole suite runs
 beforeEach(async () => {
   database = await createPgliteDatabase();
-});
+}, 30000);
 
 afterEach(() => database.close());
 

@@ -1,5 +1,6 @@
 import { POUNDING_LION } from '../../data/ultimates/pounding-lion.js';
 import { WEAPONS } from '../../data/weapons/index.js';
+import { lastOf } from '../../lib/lists.js';
 
 const { rushAt, rush, zipTicks, windTicks } = POUNDING_LION;
 // he rushes bare-handed, whatever he holds: his strips' fists row
@@ -8,12 +9,12 @@ const ZIP_FRAME = ['dash', 2, FISTS_ROW];
 
 // each blow of the rush: when its zip starts, when it strikes and when the next zip takes over
 export const RUSH_BLOWS = rush.reduce((blows, { sprite, ticks }) => {
-  const start = blows.length ? blows.at(-1).end : rushAt;
+  const start = blows.length ? lastOf(blows).end : rushAt;
   blows.push({ sprite, start, strikeAt: start + zipTicks + windTicks, end: start + ticks });
   return blows;
 }, []);
 
-export const RUSH_END = RUSH_BLOWS.at(-1).end;
+export const RUSH_END = lastOf(RUSH_BLOWS).end;
 // the zip back to where he started, then the echoes wake
 export const WAKE_AT = RUSH_END + zipTicks;
 

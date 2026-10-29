@@ -1,5 +1,6 @@
 import { THOUSAND_CUTS } from '../../data/ultimates/thousand-cuts.js';
 import { WEAPONS } from '../../data/weapons/index.js';
+import { lastOf } from '../../lib/lists.js';
 
 const { passesAt, passes, windTicks, crossTicks } = THOUSAND_CUTS;
 // he cuts with the dav, whatever he holds: his strips' sword row
@@ -10,14 +11,14 @@ export const STILL_FRAME = ['slash1', 4, SWORD_ROW];
 // each pass: when he starts winding up, when he crosses, when the cut lands (halfway across) and when
 // the next pass takes over
 export const PASSES = passes.reduce((list, { sprite, ticks }) => {
-  const start = list.length ? list.at(-1).end : passesAt;
+  const start = list.length ? lastOf(list).end : passesAt;
   const crossAt = start + windTicks;
   const cutAt = crossAt + crossTicks / 2;
   list.push({ sprite, start, crossAt, cutAt, end: start + ticks });
   return list;
 }, []);
 
-export const PASSES_END = PASSES.at(-1).end;
+export const PASSES_END = lastOf(PASSES).end;
 
 export function passAt(time) {
   return PASSES.findIndex(({ start, end }) => time >= start && time < end);
