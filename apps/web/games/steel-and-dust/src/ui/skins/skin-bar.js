@@ -18,11 +18,11 @@ export class SkinBar {
     this.root.classList.remove('low');
   }
 
-  showSkin({ skin, index, custom, pillLabels }) {
+  showSkin({ skin, index, custom, offersPills }) {
     this.field('.skin-name').textContent = skin.name;
     this.field('.skin-about').textContent = skin.about;
     this.field('[data-skin="reset"]').disabled = !custom;
-    this.field('.skin-help').textContent = browseHint(pillLabels);
+    this.field('.skin-help').textContent = browseHint(offersPills);
     this.root.querySelectorAll('.skin-dots i').forEach((dot, i) => {
       dot.classList.toggle('on', i === index);
     });

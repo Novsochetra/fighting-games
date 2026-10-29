@@ -1,5 +1,4 @@
 import { SKIN_IDS } from '../../data/skins/skins.js';
-import { lastOf } from '../../lib/lists.js';
 
 // Use also carries data-act="back": the picker's own click listener saves first, then the menus'
 // listener further up closes the screen the way Cancel does. The bar holds the skins' tools and,
@@ -41,14 +40,10 @@ export const SKINS_HTML = `<div class="skin-shell" aria-hidden="true"></div>
     <p class="layout-hint skin-help"></p>
   </div>`;
 
-// "DASH or ULT"
-const listed = (labels) =>
-  labels.length > 1 ? `${labels.slice(0, -1).join(', ')} or ${lastOf(labels)}` : labels[0];
-
-export function browseHint(pillLabels) {
-  const pills = pillLabels.length > 0 ? `, or make ${listed(pillLabels)} a pill` : '';
-
-  return `Tap a control to move or resize it${pills}`;
-}
+// a skin that offers pills says so, its Round and Pill only showing once a key is picked
+export const browseHint = (offersPills) =>
+  offersPills
+    ? 'Tap a control to move, resize or reshape it'
+    : 'Tap a control to move or resize it';
 
 export const EDIT_HINT = 'Drag it to move it, and tap beside the controls when done';

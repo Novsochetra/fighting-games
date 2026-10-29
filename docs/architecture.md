@@ -120,8 +120,8 @@ layout for each way the phone is held (`landscape`, `portrait`), each listing it
   or the input each of `up`, `right`, `down` and `left` holds for a stick or a d-pad;
 - optionally a `label`, its `class` names (the game's styles paint it), a `size` (px at the game's
   scale 1; without it a stick is 128 and the rest 64), an `aspect` (its height over its width, for
-  a pill: only for what runs the game, or a player's pick for a skin's shoulder keys, as Steel &
-  Dust's skin tests hold) and `at`: its centre as fractions of the safe area, moved by `dx` and `dy` px at the
+  a pill: only for what runs the game, or a player's pick for a key the skin offers one for, as
+  Steel & Dust's skin tests hold) and `at`: its centre as fractions of the safe area, moved by `dx` and `dy` px at the
   game's scale 1, so a cluster anchored to a corner keeps its shape from a small phone to a tablet
   and clears a notch (a stick stands by `x` and `y` alone). A layout places all its controls or
   none; one that places none, like Steel & Dust's `classic`, leaves them to the game's own styles.
@@ -881,8 +881,9 @@ name tell which of how many.
 The same screen edits the controls where they stand: a press on one picks it (`layout-editor.js`
 in `src/ui/layout/`) and a drag moves it at once (`layout-drag.js`), the one picked ringed and the
 others stepped back, and the bar trades the skins' tools for that control's: its name (the next
-control), its size, Round or Pill for a key the skin offers a pill for (Clear's DASH and ULT, its
-`pills`, named under the skin; `keyShapes`, each key round unless picked) and Done. Done, Back, or
+control), its size, Round or Pill for a key the skin offers a pill for (every key of a Clear skin,
+its `pills`, each placed so that no mix of round keys and pills touches or runs onto the bezel;
+`keyShapes`, each key round unless picked) and Done. Done, Back, or
 a tap or a swipe beside the controls lets go of it; a swipe steps the skins only while no control
 is picked, so a drag that misses its control never changes the skin. The keyboard and gamepad
 reach the controls after the bar, and the tools of the one picked while it is. The skin, its keys'

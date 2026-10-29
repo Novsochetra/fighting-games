@@ -15,7 +15,7 @@ export function skinIdFor(settings) {
 }
 
 // every move is a round key, unless the player picks a pill for a key the skin offers one for
-// (`pills`, Clear's DASH and ULT), key by key; a pill is otherwise only for what runs the game
+// (`pills`, every key of a Clear skin), key by key; a pill is otherwise only for what runs the game
 export const keyShapesOf = (settings) =>
   Object.fromEntries(
     Object.entries(settings.keyShapes ?? {}).filter(([, shape]) => shape === 'pill'),

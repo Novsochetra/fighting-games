@@ -36,8 +36,8 @@ pressed, a pill key up and pressed. The bake cuts out each; a pressed key keeps 
 it shows a touch smaller and flatter, as painted. The sheet's keys were at alpha 252 with specks of
 alpha 1 to 3 over the empty sheet, so the bake makes the keys solid and drops the specks, then
 leaves them 82% opaque: each shell's plastic shows through and tints them its own colour, as one set
-of keys serves all five. Every move is a round key, unless a player picks a pill for DASH or ULT,
-key by key, on the Skins screen (`pills` in `clear.js`), shaped as their art is (`aspect: 0.44`).
+of keys serves all five. Every move is a round key, unless a player picks a pill for it, key by
+key, on the Skins screen (`pills` in `clear.js`), shaped as their art is (`aspect: 0.44`).
 The d-pad's arms are 37.5% of it across, where the pad's own arms are a third, so the shade on a
 held arm is sized to the art's (`styles/skin-clear.css`).
 

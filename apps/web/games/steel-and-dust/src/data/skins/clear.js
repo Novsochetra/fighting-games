@@ -1,8 +1,8 @@
 const STEER = { up: 'up', right: 'right', down: 'down', left: 'left' };
 
 // every move is a round key, DASH and ULT on the shell's shoulders as much as the face keys, unless
-// the player picks a pill for either of those two (`pills`). `place` is where the key stands (`at`)
-// and how big it is (`size`, `aspect`)
+// the player picks a pill for it (`pills`), key by key. `place` is where the key stands (`at`) and
+// how big it is (`size`, `aspect`)
 const control = (id, label, place) => ({
   id,
   kind: 'button',
@@ -53,22 +53,30 @@ const PORTRAIT = {
   ],
 };
 
-// DASH and ULT as pills on the shoulders, as a handheld's bumpers, shaped as their art is
-// (assets/skins/clear/key-pill.webp, 386 by 170), standing where the round keys do
+// a key as a pill, shaped as its art is (assets/skins/clear/key-pill.webp, 386 by 170): DASH and ULT
+// as a handheld's bumpers on the shoulders, the face keys a staggered column of capsules
 const pill = (id, label, place) => ({
   ...control(id, label, { ...place, aspect: 0.44 }),
   class: `clear-button clear-pill clear-${id}`,
 });
 
-// sideways the pills stand out toward the corners, clear of the Skins screen's bar on a small phone
-const SHOULDER_PILLS = {
+// each pill stands where its round key does, moved and sized so that no mix of round keys and
+// pills touches, nor runs onto the bezel (test/unit/data/skins.test.js); sideways the shoulder pills
+// stand out toward the corners, clear of the Skins screen's bar on a small phone
+const PILLS = {
   landscape: [
     pill('dash', 'DASH', { at: { x: 0, y: 0, dx: 78, dy: 36 }, size: 96 }),
     pill('ult', 'ULT', { at: { x: 1, y: 0, dx: -78, dy: 36 }, size: 96 }),
+    pill('heavy', 'HEAVY', { at: { x: 1, y: 1, dx: -119, dy: -224 }, size: 74 }),
+    pill('jump', 'JUMP', { at: { x: 1, y: 1, dx: -108, dy: -112 }, size: 96 }),
+    pill('light', 'ATTACK', { at: { x: 1, y: 1, dx: -56, dy: -176 }, size: 92 }),
   ],
   portrait: [
     pill('dash', 'DASH', { at: { x: 0, y: 1, dx: 95, dy: -392 }, size: 104 }),
     pill('ult', 'ULT', { at: { x: 1, y: 1, dx: -95, dy: -392 }, size: 104 }),
+    pill('heavy', 'HEAVY', { at: { x: 1, y: 1, dx: -146, dy: -326 }, size: 92 }),
+    pill('jump', 'JUMP', { at: { x: 1, y: 1, dx: -128, dy: -192 }, size: 100 }),
+    pill('light', 'ATTACK', { at: { x: 1, y: 1, dx: -74, dy: -264 }, size: 100 }),
   ],
 };
 
@@ -101,8 +109,8 @@ function clearSkin(colour, [name, plastic]) {
       portrait: coloured(PORTRAIT, colour),
     },
     pills: {
-      landscape: colouredItems(SHOULDER_PILLS.landscape, colour),
-      portrait: colouredItems(SHOULDER_PILLS.portrait, colour),
+      landscape: colouredItems(PILLS.landscape, colour),
+      portrait: colouredItems(PILLS.portrait, colour),
     },
   };
 }

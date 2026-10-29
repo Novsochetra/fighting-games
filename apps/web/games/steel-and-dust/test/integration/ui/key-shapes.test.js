@@ -12,6 +12,7 @@ function holdPhone(width, height) {
   window.dispatchEvent(new Event('resize'));
 }
 
+const KEYS = ['light', 'heavy', 'jump', 'dash', 'ult'];
 const row = (key) => document.querySelector(`[data-k="${key}"]`);
 const screen = () => document.getElementById('m-skins');
 const preview = () => screen().querySelector('.skin-preview');
@@ -103,20 +104,49 @@ describe("a skin's keys, round or pill, picked key by key on the real page", () 
     expect([played('dash'), played('ult')]).toEqual(['round', 'pill']);
   });
 
-  it('offers a shape only for the keys a skin has pills for, and names them under the skin', () => {
+  it('offers a shape for every key of a Clear skin, none for its d-pad or a skin with no pills', () => {
     openSkins('clear-smoke');
     const help = () => screen().querySelector('.skin-help').textContent;
 
-    expect(help()).toBe('Tap a control to move or resize it, or make DASH or ULT a pill');
+    expect(help()).toBe('Tap a control to move, resize or reshape it');
 
-    tapKey('light');
+    for (const key of KEYS) {
+      tapKey(key);
+      expect(shapes().hidden, key).toBe(false);
+    }
+
+    tapKey('dpad');
     expect(shapes().hidden).toBe(true);
-    tapKey('dash');
-    expect(shapes().hidden).toBe(false);
 
     done();
     screen().querySelector('[data-skin-step="1"]').click();
     expect(help()).toBe('Tap a control to move or resize it');
+    tapKey('light');
+    expect(shapes().hidden).toBe(true);
+  });
+
+  it('turns any key a pill and back again, and plays each as picked once used', () => {
+    openSkins('clear-lotus');
+
+    for (const key of ['light', 'heavy', 'jump']) {
+      tapKey(key);
+      choose('pill');
+      expect(previewed(key), key).toBe('pill');
+    }
+
+    done();
+    screen().querySelector('[data-skin="use"]').click();
+    expect(page.game.settings.keyShapes).toEqual({ light: 'pill', heavy: 'pill', jump: 'pill' });
+    expect(KEYS.map(played)).toEqual(['pill', 'pill', 'pill', 'round', 'round']);
+
+    row('skin').querySelector('[data-act="skins"]').click();
+    tapKey('light');
+    expect(lit()).toBe('pill');
+    choose('round');
+    done();
+    screen().querySelector('[data-skin="use"]').click();
+    expect(page.game.settings.keyShapes).toEqual({ heavy: 'pill', jump: 'pill' });
+    expect(KEYS.map(played)).toEqual(['round', 'pill', 'pill', 'round', 'round']);
   });
 
   it('lets the keyboard reach every key and its shape, and Back let go of the key', () => {
@@ -180,8 +210,8 @@ describe("a skin's keys, round or pill, picked key by key on the real page", () 
     page.layout.applyTouchSettings();
     expect([played('dash'), played('ult')]).toEqual(['pill', 'round']);
 
-    page.game.settings.keyShapes = { dash: 'square', ult: 'pill', light: 'pill' };
+    page.game.settings.keyShapes = { dash: 'square', ult: 'pill', light: 'pill', jump: 'round' };
     page.layout.applyTouchSettings();
-    expect([played('dash'), played('ult'), played('light')]).toEqual(['round', 'pill', 'round']);
+    expect(KEYS.map(played)).toEqual(['pill', 'round', 'round', 'round', 'pill']);
   });
 });

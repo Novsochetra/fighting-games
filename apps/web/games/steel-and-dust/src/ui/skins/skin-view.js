@@ -68,13 +68,12 @@ export class SkinView {
 
   showBar({ skinId, keyShapes, draft, slot, picked }) {
     const pills = pillsOffered(skinId, this.controls.orientation());
-    const labelOf = (control) => this.controls.controlFor(control)?.textContent.trim();
 
     this.bar.showSkin({
       skin: SKINS[skinId],
       index: SKIN_IDS.indexOf(skinId),
       custom: Boolean(draft[slot]),
-      pillLabels: pills.map(labelOf).filter(Boolean),
+      offersPills: pills.length > 0,
     });
 
     if (picked) {
