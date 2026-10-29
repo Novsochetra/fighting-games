@@ -6,16 +6,17 @@ changing structure.
 
 ## Commands
 
-| Command              | What it runs                                                       |
-| -------------------- | ------------------------------------------------------------------ |
-| `npm run dev`        | the server on http://localhost:8765 with Vite, reloading on change |
-| `npm run check`      | lint, format, types, every test and the build; run it before done  |
-| `npm run lint`       | ESLint and Stylelint                                               |
-| `npm run format`     | Prettier, writes files                                             |
-| `npm run typecheck`  | TypeScript over the arcade (`tsconfig.json`)                       |
-| `npm test`           | all Vitest projects: `unit`, `integration`, `regression`           |
-| `npm run build`      | the arcade into `dist/`, which `npm start` and Railway serve       |
-| `npm run db:migrate` | applies new migrations to the Postgres at `DATABASE_URL`           |
+| Command                 | What it runs                                                                 |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| `npm run dev`           | the server on http://localhost:8765 with Vite, reloading on change           |
+| `npm run check`         | lint, format, types, every test and the build; run it before done            |
+| `npm run lint`          | ESLint and Stylelint                                                         |
+| `npm run format`        | Prettier, writes files                                                       |
+| `npm run typecheck`     | TypeScript over the arcade (`tsconfig.json`)                                 |
+| `npm test`              | all Vitest projects: `unit`, `integration`, `regression`                     |
+| `npm run build`         | the arcade into `dist/`, which `npm start` and Railway serve                 |
+| `npm run db:migrate`    | applies new migrations to the Postgres at `DATABASE_URL`                     |
+| `npm run storage:check` | uploads one small file to the S3 bucket and reads it back through CloudFront |
 
 ## Coding
 

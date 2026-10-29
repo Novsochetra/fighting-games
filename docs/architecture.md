@@ -13,6 +13,7 @@ apps/
       db/                 the Postgres pool, the migrations and their runner (migrate-cli.js)
       routes/             the API's routes, and app-files.js: the build, or Vite as you write (dev)
       security/           the same-site check and the rate limit for the API
+      storage/            files in S3, sent from CloudFront (see File storage); no route uses it yet
       supporters/         reading a gift, the Postgres and in-memory stores, the JSON they send
       as-is-files.js      what the arcade sends as it is, past Vite: the games, the art, robots.txt…
       build-version.js    the version each build of the arcade carries (see A new build)
@@ -240,6 +241,23 @@ no board (404).
 The scores live in one `scores` table (`0002_scores` in `db/migrations.js`) with the table's own
 checks, an index for the all-time board (`game, score DESC, id`) and one for the week's
 (`game, created_at`), both without hidden rows.
+
+## File storage
+
+The server can keep files in S3 and send them from CloudFront (`src/storage/`), for a game that needs
+to keep pictures; no route uses it yet. It is on once `S3_BUCKET` is set, with `AWS_REGION` and
+`CLOUDFRONT_URL` (an `https:` address), and signs in with the AWS key in `AWS_ACCESS_KEY_ID` and
+`AWS_SECRET_ACCESS_KEY` (on a Mac, the one in `~/.aws`). `putFile` takes a key, the file and its
+type, and answers the file's CloudFront address.
+
+- A key is letters, digits, `. _ -` and `/`, with no part that starts with a dot, at most 300
+  characters (`file-keys.js`), so it is its own address and cannot climb out of its folder.
+- CloudFront and browsers keep a file a year (`immutable`), so it never changes under its key: S3
+  refuses a second put of a key (`If-None-Match: *`, 412), and a new version goes up under a new name.
+- The bucket is private. Only CloudFront reads it, and the server's AWS user may only add files
+  (`docs/deploy-railway.md`, File storage).
+
+`npm run storage:check` puts a small file under `checks/` and reads it back through CloudFront.
 
 ## Offline
 
