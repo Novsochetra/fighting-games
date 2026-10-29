@@ -74,6 +74,21 @@ describe('checking a skin', () => {
     ]);
   });
 
+  it('takes px offsets from a control’s anchor, but not for the stick', () => {
+    const problems = skinProblems(
+      skin([
+        { id: 'jump', kind: 'button', inputs: ['jump'], at: { x: 1, y: 1, dx: -100, dy: 'up' } },
+        { id: 'stick', kind: 'stick', inputs: STEER, at: { x: 0, y: 1, dx: 120 } },
+        { id: 'light', kind: 'button', inputs: ['light'], at: { x: 1, y: 1, dx: -120, dy: -90 } },
+      ]),
+    );
+
+    expect(problems.filter((problem) => problem.startsWith('landscape'))).toEqual([
+      'landscape: jump: dx and dy must be px',
+      'landscape: stick: a stick stands by x and y alone',
+    ]);
+  });
+
   it('wants a name and both ways of holding the phone', () => {
     expect(skinProblems({ id: 'x', layouts: { landscape: { items: [] } } })).toEqual([
       'a skin needs an id and a name',

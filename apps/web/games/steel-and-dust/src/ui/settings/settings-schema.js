@@ -1,7 +1,19 @@
 import { DIFFICULTIES } from '../../data/difficulty.js';
+import { SKINS } from '../../data/skins/skins.js';
 
 const onOff = (value) => (value ? 'On' : 'Off');
 const pick = (labels) => (value) => labels[value];
+const skinName = (id) => (SKINS[id] ?? SKINS.classic).name;
+const isTouchOn = ({ isTouchOn: touchOn }) => touchOn();
+
+const skinRow = (key, label) => ({
+  key,
+  label,
+  options: Object.keys(SKINS),
+  format: skinName,
+  note: 'Classic: a stick and round buttons. Dusk: a d-pad and glass buttons over the fight',
+  visible: isTouchOn,
+});
 
 // `visible` gets { isTouchOn, canVibrate, settings }; a row with an `action` has a button that
 // opens that menu instead of a stepper
@@ -30,7 +42,7 @@ export const SETTINGS_SCHEMA = [
     options: [false, true],
     format: onOff,
     note: 'Touch: keep the button held to keep swinging',
-    visible: ({ isTouchOn }) => isTouchOn(),
+    visible: isTouchOn,
   },
   {
     key: 'haptics',
@@ -57,6 +69,16 @@ export const SETTINGS_SCHEMA = [
     options: ['auto', 'on', 'off'],
     format: pick({ auto: 'Auto', on: 'On', off: 'Off' }),
   },
+  skinRow('skinLandscape', 'Skin held sideways'),
+  skinRow('skinPortrait', 'Skin held upright'),
+  {
+    key: 'padOpacity',
+    label: 'Controls opacity',
+    options: [1, 0.8, 0.6, 0.4],
+    format: (value) => `${Math.round(value * 100)}%`,
+    note: 'Lets more of the fight show through the buttons',
+    visible: isTouchOn,
+  },
   {
     key: 'stick',
     label: 'Joystick',
@@ -82,8 +104,8 @@ export const SETTINGS_SCHEMA = [
     label: 'Button layout',
     action: 'layout',
     format: (value) => (value ? 'Custom' : 'Default'),
-    note: 'Move and resize the buttons and the stick, for each way you hold the phone',
-    visible: ({ isTouchOn }) => isTouchOn(),
+    note: 'Move and resize the controls of each skin, for each way you hold the phone',
+    visible: isTouchOn,
   },
   { group: 'Training' },
   {

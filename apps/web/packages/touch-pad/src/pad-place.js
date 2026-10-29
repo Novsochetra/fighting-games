@@ -1,9 +1,18 @@
 import { itemOf, padOf } from './pad-markup.js';
 
-const NO_PLACE = { '--pad-x': null, '--pad-y': null, '--pad-size': null };
+const NO_PLACE = {
+  '--pad-x': null,
+  '--pad-y': null,
+  '--pad-dx': null,
+  '--pad-dy': null,
+  '--pad-size': null,
+};
 
-// a place is a control's centre as fractions of the touch layer, and its size on top of the
-// game's own scale (its Button size); these keep it whole on a screen of any shape
+const px = (offset) => (offset ? `${offset}px` : null);
+
+// a place is a control's centre as fractions of the touch layer, moved by `dx` and `dy` px at the
+// game's scale 1, so a cluster anchored to a corner keeps its shape on a screen of any shape, and
+// its size on top of that scale (its Button size); the pad's rules keep it whole on the layer
 export function placeVars(place) {
   if (!place) {
     return NO_PLACE;
@@ -12,6 +21,8 @@ export function placeVars(place) {
   return {
     '--pad-x': String(place.x),
     '--pad-y': String(place.y),
+    '--pad-dx': px(place.dx),
+    '--pad-dy': px(place.dy),
     '--pad-size': String(place.size),
   };
 }
@@ -39,7 +50,7 @@ export function placesOf(layout, custom) {
     return null;
   }
 
-  return Object.fromEntries(placed.map(({ id, at }) => [id, { x: at.x, y: at.y, size: 1 }]));
+  return Object.fromEntries(placed.map(({ id, at }) => [id, { ...at, size: 1 }]));
 }
 
 // the stick stands where it rests (PadStick), so only its size is set here

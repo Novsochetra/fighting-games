@@ -28,8 +28,10 @@ export function fillPreview(preview, touch) {
   preview.append(pause);
 }
 
+const UNLABELLED = { stick: 'STICK', dpad: 'D-PAD' };
+
 export function controlName(element) {
-  return element.dataset.control === 'stick' ? 'STICK' : element.textContent;
+  return UNLABELLED[element.dataset.control] ?? element.textContent;
 }
 
 export function sizeLabel(size) {

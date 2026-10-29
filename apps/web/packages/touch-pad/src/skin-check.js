@@ -19,6 +19,25 @@ function inputsProblem({ kind, inputs }) {
     : `a ${kind} needs an input for up, right, down and left`;
 }
 
+const isOffset = (value) => value === undefined || Number.isFinite(value);
+
+// a stick rests by its centre alone (its zone is the half of the layer it stands on)
+function atProblem({ at, kind }) {
+  if (!at) {
+    return null;
+  }
+
+  if (!isFraction(at.x) || !isFraction(at.y)) {
+    return 'at must be fractions of the layer';
+  }
+
+  if (!isOffset(at.dx) || !isOffset(at.dy)) {
+    return 'dx and dy must be px';
+  }
+
+  return kind === 'stick' && (at.dx || at.dy) ? 'a stick stands by x and y alone' : null;
+}
+
 function itemProblems(item) {
   const problems = [];
 
@@ -28,9 +47,7 @@ function itemProblems(item) {
 
   problems.push(inputsProblem(item));
 
-  if (item.at && !(isFraction(item.at.x) && isFraction(item.at.y))) {
-    problems.push('at must be fractions of the layer');
-  }
+  problems.push(atProblem(item));
 
   if (item.size !== undefined && !(Number.isFinite(item.size) && item.size > 0)) {
     problems.push('size must be px above 0');

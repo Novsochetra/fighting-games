@@ -61,6 +61,13 @@
   --color-touch-ult-ready: color-mix(in srgb, var(--color-gold) 90%, transparent);
   --color-touch-pause: color-mix(in srgb, var(--color-panel) 55%, transparent);
   --color-touch-pause-border: color-mix(in srgb, var(--color-sand) 35%, transparent);
+  --color-dusk-glass: color-mix(in srgb, var(--color-dusk) 50%, transparent);
+  --color-dusk-glow: color-mix(in srgb, var(--color-hero-ember) 26%, transparent);
+  --color-dusk-rim: color-mix(in srgb, var(--color-amber-light) 50%, transparent);
+  --color-dusk-rim-attack: color-mix(in srgb, var(--color-hero-ember) 90%, transparent);
+  --color-dusk-rim-jump: color-mix(in srgb, var(--color-hero-blue) 80%, transparent);
+  --color-dusk-pressed: color-mix(in srgb, var(--color-amber) 82%, transparent);
+  --color-dusk-label: var(--color-cream);
   --color-hud-plate: color-mix(in srgb, var(--color-night) 55%, transparent);
   --color-hud-shadow: #140f1a;
 
@@ -135,6 +142,9 @@
     0 18px 60px color-mix(in srgb, var(--color-black) 60%, transparent);
   --shadow-knob: 0 0 0 3px color-mix(in srgb, var(--color-black) 25%, transparent);
   --shadow-touch-button: inset 0 -4px 0 color-mix(in srgb, var(--color-black) 25%, transparent);
+  --shadow-dusk-glass:
+    0 0 10px color-mix(in srgb, var(--color-hero-ember) 22%, transparent),
+    inset 0 -3px 0 color-mix(in srgb, var(--color-black) 30%, transparent);
   --shadow-ult-ready: 0 0 0 6px color-mix(in srgb, var(--color-gold) 45%, transparent);
   --shadow-ult-ready-still: 0 0 0 4px color-mix(in srgb, var(--color-gold) 45%, transparent);
 

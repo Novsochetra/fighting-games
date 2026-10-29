@@ -33,8 +33,10 @@ export const PAD_STYLES = `
 }
 .pad-placed > .pad-button, .pad-placed > .pad-dpad {
   --pad-half: calc(var(--pad-diameter) / 2);
-  left: clamp(var(--pad-half), calc(var(--pad-x) * 100%), calc(100% - var(--pad-half)));
-  top: clamp(var(--pad-half), calc(var(--pad-y) * 100%), calc(100% - var(--pad-half)));
+  --pad-left: calc(var(--pad-x) * 100% + var(--pad-dx, 0px) * var(--pad-scale, 1));
+  --pad-top: calc(var(--pad-y) * 100% + var(--pad-dy, 0px) * var(--pad-scale, 1));
+  left: clamp(var(--pad-half), var(--pad-left), calc(100% - var(--pad-half)));
+  top: clamp(var(--pad-half), var(--pad-top), calc(100% - var(--pad-half)));
   right: auto;
   bottom: auto;
   translate: -50% -50%;

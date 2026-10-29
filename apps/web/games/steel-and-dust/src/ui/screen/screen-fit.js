@@ -5,8 +5,8 @@ import {
   placeStickZone,
 } from '../../../../../packages/touch-pad/src/stick-place.js';
 import { buttonScale } from '../../data/settings.js';
-import { skinLayout } from '../../data/skins/skins.js';
-import { layoutForScreen, orientationOf } from '../layout/layout-draft.js';
+import { skinLayoutFor, steersWithDpad } from '../../data/skins/skins.js';
+import { orientationOf, savedEntries, slotFor } from '../layout/layout-draft.js';
 import { fitMenus, menuBox } from './menu-area.js';
 import { pausePlace, placePause } from './pause-place.js';
 import { createSafeArea } from './safe-area.js';
@@ -20,6 +20,7 @@ function applyTouchClasses(document, { game, ui }) {
   classList.toggle('stick-fixed', game.settings.stick === 'fixed');
   classList.toggle('stick-hidden', game.settings.stick === 'hidden');
   document.documentElement.style.setProperty('--btn', String(buttonScale(game.settings)));
+  document.documentElement.style.setProperty('--pad-opacity', String(game.settings.padOpacity));
 }
 
 function screenOf(elements) {
@@ -55,16 +56,17 @@ function fitStage({ elements, game, ui, window, safe }) {
   });
 }
 
-function controlsLayout({ elements, game }) {
-  return layoutForScreen(
-    game.settings.buttonLayout,
-    elements.app.clientWidth,
-    elements.app.clientHeight,
-  );
+const orientationNow = ({ elements }) =>
+  orientationOf(elements.app.clientWidth, elements.app.clientHeight);
+
+function controlsLayout(context) {
+  const { settings } = context.game;
+
+  return savedEntries(settings.buttonLayout, slotFor(settings, orientationNow(context)));
 }
 
-function padLayoutOf({ elements }) {
-  return skinLayout(orientationOf(elements.app.clientWidth, elements.app.clientHeight));
+function padLayoutOf(context) {
+  return skinLayoutFor(context.game.settings, orientationNow(context));
 }
 
 // the player's layout for the way the phone is held, else the skin's places, else none
@@ -84,7 +86,11 @@ function customStick(context, scale) {
 
 function fitControls(context) {
   const { elements, game } = context;
-  const zone = renderPad(elements.touch, padLayoutOf(context)).querySelector('.pad-zone');
+  const padLayout = padLayoutOf(context);
+  const zone = renderPad(elements.touch, padLayout).querySelector('.pad-zone');
+
+  // the hints name what steers (overlays.js)
+  game.device.steersWithDpad = steersWithDpad(padLayout);
 
   placePad(elements.touch, placesFor(context));
 

@@ -2,6 +2,7 @@ export const HINTS = {
   move: {
     keys: 'A D or arrows move   J attack   K heavy',
     touch: 'stick moves   ATTACK fights   HEAVY hits hard',
+    dpad: 'd-pad moves   ATTACK fights   HEAVY hits hard',
   },
   crate: {
     keys: 'break crates for food',
@@ -15,6 +16,7 @@ export const HINTS = {
   launch: {
     keys: 'down or up + K launches raiders',
     touch: 'stick up or down + HEAVY launches',
+    dpad: 'd-pad up or down + HEAVY launches',
   },
   dash: {
     keys: 'shift or double tap to dash through hits',

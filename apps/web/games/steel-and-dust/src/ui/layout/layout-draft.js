@@ -1,46 +1,52 @@
-import {
-  BUTTON_ACTIONS,
-  clampCentre,
-  LAYOUT_CONTROLS,
-  steppedSize,
-} from '../../data/button-layout.js';
+import { clampCentre, steppedSize } from '../../data/button-layout.js';
+import { ORIENTATIONS, SKINS, skinIdFor } from '../../data/skins/skins.js';
 import { isPortrait } from '../screen/stage-layout.js';
 
 // the editor works on a copy of the saved layouts, so Cancel only has to drop it; every step
-// returns a new draft. A control is one of the buttons or the stick
+// returns a new draft. A draft holds a layout, or null for the skin's own, for each slot: a skin
+// held one way ('dusk:portrait'), so a player's layouts for every skin come through an edit. A
+// control is one of a skin's buttons, its stick or its d-pad
 
 export function orientationOf(width, height) {
   return isPortrait(width, height) ? 'portrait' : 'landscape';
 }
 
-export function layoutForScreen(buttonLayout, width, height) {
-  return buttonLayout?.[orientationOf(width, height)] ?? null;
+// the slot the editor shows: the skin picked for the way the phone is held
+export function slotFor(settings, orientation) {
+  return `${skinIdFor(settings, orientation)}:${orientation}`;
 }
 
+export function savedEntries(buttonLayout, slot) {
+  const [skin, orientation] = slot.split(':');
+
+  return buttonLayout?.[skin]?.[orientation] ?? null;
+}
+
+const SLOTS = Object.keys(SKINS).flatMap((skin) =>
+  ORIENTATIONS.map((orientation) => `${skin}:${orientation}`),
+);
+
 export function createDraft(buttonLayout) {
-  return {
-    landscape: buttonLayout?.landscape ?? null,
-    portrait: buttonLayout?.portrait ?? null,
-  };
+  return Object.fromEntries(SLOTS.map((slot) => [slot, savedEntries(buttonLayout, slot)]));
 }
 
 // four decimals place a centre to a tenth of a pixel on any phone and keep the save short
 const roundFraction = (value) => Math.round(value * 10000) / 10000;
 
 // editing starts from where the original controls stand: `centres` is measured on screen
-export function customised(draft, orientation, centres) {
-  if (draft[orientation]) {
+export function customised(draft, slot, centres) {
+  if (draft[slot]) {
     return draft;
   }
   const entries = {};
   for (const [control, centre] of Object.entries(centres)) {
     entries[control] = { x: roundFraction(centre.x), y: roundFraction(centre.y), size: 1 };
   }
-  return { ...draft, [orientation]: entries };
+  return { ...draft, [slot]: entries };
 }
 
-function withEntry(draft, orientation, control, entry) {
-  return { ...draft, [orientation]: { ...draft[orientation], [control]: entry } };
+function withEntry(draft, slot, control, entry) {
+  return { ...draft, [slot]: { ...draft[slot], [control]: entry } };
 }
 
 function placed(entry, centre, half) {
@@ -50,37 +56,57 @@ function placed(entry, centre, half) {
 }
 
 // `half` is the control's half width and height at size 1, as fractions of the layer
-export function moveControl(draft, { orientation, control, centre, half }) {
-  const entry = draft[orientation][control];
-  return withEntry(draft, orientation, control, placed(entry, centre, half));
+export function moveControl(draft, { slot, control, centre, half }) {
+  const entry = draft[slot][control];
+  return withEntry(draft, slot, control, placed(entry, centre, half));
 }
 
 // a control that grows near an edge is pushed back onto the screen
-export function resizeControl(draft, { orientation, control, step, half }) {
-  const entry = draft[orientation][control];
+export function resizeControl(draft, { slot, control, step, half }) {
+  const entry = draft[slot][control];
   const resized = { ...entry, size: steppedSize(entry.size, step) };
-  return withEntry(draft, orientation, control, placed(resized, entry, half));
+  return withEntry(draft, slot, control, placed(resized, entry, half));
 }
 
-export function resetLayout(draft, orientation) {
-  return { ...draft, [orientation]: null };
+export function resetLayout(draft, slot) {
+  return { ...draft, [slot]: null };
+}
+
+// the order the controls are picked in, whatever order a skin draws them in
+const PICK_ORDER = ['light', 'heavy', 'jump', 'dash', 'ult', 'dpad', 'stick'];
+
+function pickRank(control) {
+  const rank = PICK_ORDER.indexOf(control);
+
+  return rank === -1 ? PICK_ORDER.length : rank;
 }
 
 // a hidden stick (Settings, Joystick) is neither shown nor edited
-export function shownControls(stickMode) {
-  return stickMode === 'hidden' ? BUTTON_ACTIONS : LAYOUT_CONTROLS;
+export function shownControls(padLayout, stickMode) {
+  return padLayout.items
+    .filter((item) => item.kind !== 'stick' || stickMode !== 'hidden')
+    .map((item) => item.id)
+    .sort((first, second) => pickRank(first) - pickRank(second));
 }
 
 export function nextControl(control, shown) {
   return shown[(shown.indexOf(control) + 1) % shown.length];
 }
 
-export function sizeOf(draft, orientation, control) {
-  return draft[orientation]?.[control].size ?? 1;
+export function sizeOf(draft, slot, control) {
+  return draft[slot]?.[control].size ?? 1;
 }
 
 export function savedLayout(draft) {
-  return draft.landscape || draft.portrait
-    ? { landscape: draft.landscape, portrait: draft.portrait }
-    : null;
+  const layouts = {};
+
+  for (const [slot, entries] of Object.entries(draft)) {
+    const [skin, orientation] = slot.split(':');
+
+    if (entries) {
+      layouts[skin] = { landscape: null, portrait: null, ...layouts[skin], [orientation]: entries };
+    }
+  }
+
+  return Object.keys(layouts).length > 0 ? layouts : null;
 }

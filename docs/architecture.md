@@ -100,15 +100,17 @@ layout for each way the phone is held (`landscape`, `portrait`), each listing it
 - `inputs`, what it gives the game: a list for a button, which presses them all at once (a combo),
   or the input each of `up`, `right`, `down` and `left` holds for a stick or a d-pad;
 - optionally a `label`, its `class` names (the game's styles paint it), a `size` (px at the game's
-  scale 1; without it a stick is 128 and the rest 64) and `at` (its centre as fractions of the
-  touch layer). A layout places all its controls or none; one that places none, like Steel & Dust's
-  `classic`, leaves them to the game's own styles.
+  scale 1; without it a stick is 128 and the rest 64) and `at`: its centre as fractions of the
+  touch layer, moved by `dx` and `dy` px at the game's scale 1, so a cluster anchored to a corner
+  keeps its shape from a small phone to a tablet (a stick stands by `x` and `y` alone). A layout
+  places all its controls or none; one that places none, like Steel & Dust's `classic`, leaves
+  them to the game's own styles.
 
 `renderPad(layer, layout)` draws a layout first in the touch layer, in a `.pad`: the stick in a
 `.pad-zone` of its own, the rest in `.pad-controls` after it, each with its `data-control`. The
 same layout again is left as it is, so a refit never cuts a press short. `placePad(layer, places)`
-stands each control by its centre (`--pad-x`, `--pad-y`) and size (`--pad-size`): the player's
-own places first, else the skin's (`placesOf`). `installTouchPad(layer, options)` answers on the
+stands each control by its centre (`--pad-x`, `--pad-y`, `--pad-dx`, `--pad-dy`) and size
+(`--pad-size`): the player's own places first, else the skin's (`placesOf`). `installTouchPad(layer, options)` answers on the
 layer for whatever is drawn on it: a button calls `handler.press` and `handler.release` for each
 of its inputs, and the stick and the d-pad (three by three, a corner holding two directions,
 `dpad-math.js`) call `handler.steer(input, on)` as a thumb moves on them. The pad's own rules
@@ -662,13 +664,21 @@ drawn once into a stamp of what they show (`src/render/hud/box-stamp.js`) and la
 The touch controls are drawn by the touch pad (see Touch pad and skins) from a skin in
 `src/data/skins/`: `classic` is the controls as they always stood, placing nothing, so
 `styles/touch-buttons.css` places the buttons and the screen fit rests the stick
-(`stage-layout.js`). `src/input/touch-actions.js` turns their inputs into `game.input`. The buttons
-and the stick can be moved and resized (Settings, Button layout). The editor is its own menu,
+(`stage-layout.js`); `dusk` (`styles/skin-dusk.css`) is glass discs lit by the dusk sky over the
+fight and a d-pad, each control hanging off a bottom corner. Settings picks a skin for each way the
+phone is held (`skinLandscape`, `skinPortrait`), as Delta does, and the controls' opacity
+(`padOpacity`, `--pad-opacity`, never the pause button's). The help and the first hints name the
+d-pad when one steers (`steersWithDpad`; the screen fit marks `game.device` on each fit, which only
+the drawing reads). `src/input/touch-actions.js` turns the pad's inputs into `game.input`. The
+controls can be moved and resized (Settings, Button layout). The editor is its own menu,
 `layout`, in `src/ui/layout/` with `styles/layout-editor.css`: it draws the skin again on a copy of
-the touch layer, drags its controls and works on a draft (`layout-draft.js`), so only Done saves.
-The setting `buttonLayout` holds one layout per orientation, or `null` for the skin's own: each
-control's centre (the five buttons and the stick) as fractions of the touch layer and a size on top
-of Button size, checked on load by `sanitizeButtonLayout` (`src/data/button-layout.js`).
+the touch layer, drags its controls and works on a draft (`layout-draft.js`) of every skin's
+layouts, each in a slot (`dusk:portrait`), so only Done saves, and it edits the skin shown. The
+setting `buttonLayout` holds, for each skin, one layout per orientation, or none for the skin's
+own: each control's centre (the five buttons and the stick or the d-pad) as fractions of the touch
+layer and a size on top of Button size, checked on load by `sanitizeButtonLayout`
+(`src/data/button-layout.js`), which takes a layout saved before there were skins as the classic
+skin's.
 `screen-fit.js` draws and places the pad for the way the phone is held on every fit, and gives a
 placed stick its zone, the half of the screen it stands on, widened to reach past its rim
 (`stick-place.js` in the package); `layout.stickRest` gives the stick the centre it rests on.

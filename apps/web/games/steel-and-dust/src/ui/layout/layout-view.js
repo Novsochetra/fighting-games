@@ -3,7 +3,7 @@ import { placePad, placesOf } from '../../../../../packages/touch-pad/src/pad-pl
 import { BUTTON_SIZE } from '../../data/button-layout.js';
 import { buttonScale } from '../../data/settings.js';
 import { fitTouchLayer } from '../screen/touch-area.js';
-import { orientationOf, shownControls, sizeOf } from './layout-draft.js';
+import { orientationOf, shownControls, sizeOf, slotFor } from './layout-draft.js';
 import { centreOf, coverCost, fractionOf, halfExtentOf } from './layout-geometry.js';
 import { controlName, EDITOR_HTML, fillPreview, sizeLabel } from './layout-markup.js';
 
@@ -32,6 +32,11 @@ export class LayoutView {
 
   orientation() {
     return orientationOf(this.app.clientWidth, this.app.clientHeight);
+  }
+
+  // the skin shown for the way the phone is held, and that way
+  slot(settings) {
+    return slotFor(settings, this.orientation());
   }
 
   controlFor(control) {
@@ -74,16 +79,17 @@ export class LayoutView {
   }
 
   render({ draft, picked }, settings) {
-    const entries = draft[this.orientation()];
+    const slot = this.slot(settings);
+    const entries = draft[slot];
     this.picked = picked;
-    this.shown = shownControls(settings.stick);
+    this.shown = shownControls(this.layout.padLayout(), settings.stick);
     fitTouchLayer(this.preview, this.layout.touchArea());
     const places = this.drawControls(entries);
     for (const element of this.controls) {
       element.classList.toggle('picked', element.dataset.control === picked);
     }
     this.placeStick(places, settings);
-    this.showValues(picked, sizeOf(draft, this.orientation(), picked), !!entries);
+    this.showValues(picked, sizeOf(draft, slot, picked), !!entries);
     this.placeToolbar();
   }
 

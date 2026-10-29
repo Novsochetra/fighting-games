@@ -2,6 +2,7 @@ import { COLORS } from '../../art/colors.js';
 import { HERO_THEMES } from '../../art/hero-themes.js';
 import { GROUND_Y, VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
 import { heroById } from '../../data/heroes.js';
+import { HINTS } from '../../data/hints.js';
 import { HUD_BOTTOM } from '../hud/top-bar.js';
 import { drawText, textWidth } from '../text/draw-text.js';
 import { drawMissionWipe } from './mission-wipe.js';
@@ -15,10 +16,19 @@ function hintOpacity(time) {
   return time > 220 ? (240 - time) / 20 : 1;
 }
 
+// a touch player steering with a skin's d-pad reads of the d-pad (the screen fit marks it)
+function hintText(hint, device) {
+  if (!device.touchUsed && !device.coarsePointer) {
+    return hint.keys;
+  }
+
+  return (device.steersWithDpad && HINTS[hint.id]?.dpad) || hint.touch;
+}
+
 // a tip for new players, just under the HUD and clear of the action
 function drawHint(painter, game) {
   const { hint, device } = game;
-  const text = (device.touchUsed || device.coarsePointer ? hint.touch : hint.keys).toUpperCase();
+  const text = hintText(hint, device).toUpperCase();
   const width = textWidth(text, 1);
   const alpha = hintOpacity(hint.time);
   const y = HUD_BOTTOM + 8;

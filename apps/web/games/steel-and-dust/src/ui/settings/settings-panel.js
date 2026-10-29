@@ -47,6 +47,9 @@ const AFTER_CHANGE = {
   touch: ({ layout }) => layout.applyTouchSettings(),
   buttonSize: ({ layout }) => layout.applyTouchSettings(),
   stick: ({ layout }) => layout.applyTouchSettings(),
+  skinLandscape: ({ layout }) => layout.applyTouchSettings(),
+  skinPortrait: ({ layout }) => layout.applyTouchSettings(),
+  padOpacity: ({ layout }) => layout.applyTouchSettings(),
   padHidesTouch: ({ layout }) => layout.applyTouchSettings(),
   difficulty: ({ game }) => refreshAttackTokens(game),
   // turned on, it gives a taste of what a blow feels like

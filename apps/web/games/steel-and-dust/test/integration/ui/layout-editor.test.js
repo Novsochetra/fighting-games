@@ -132,10 +132,10 @@ describe('the button layout editor on the real page', () => {
     expect(page.saveSettings).not.toHaveBeenCalled();
     tool('done').click();
     expect(openMenu().id).toBe('m-settings');
-    const { buttonLayout } = page.game.settings;
+    const { classic } = page.game.settings.buttonLayout;
     expect(page.saveSettings).toHaveBeenCalledWith(page.game.settings);
-    expect(buttonLayout.portrait).toBeNull();
-    expect(buttonLayout.landscape).toEqual({
+    expect(classic.portrait).toBeNull();
+    expect(classic.landscape).toEqual({
       light: { x: 0.125, y: 0.75, size: 1 },
       jump: { x: 0.925, y: 0.5, size: 1.2 },
       heavy: { x: 0.775, y: 0.85, size: 1 },
@@ -177,8 +177,14 @@ describe('the button layout editor on the real page', () => {
     document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
     drag('dash', { x: 80, y: 300 });
     tool('done').click();
-    expect(page.game.settings.buttonLayout.portrait.dash).toMatchObject({ x: 0.1, y: 0.75 });
-    expect(page.game.settings.buttonLayout.landscape.ult).toMatchObject({ x: 0.5, y: 0.25 });
+    expect(page.game.settings.buttonLayout.classic.portrait.dash).toMatchObject({
+      x: 0.1,
+      y: 0.75,
+    });
+    expect(page.game.settings.buttonLayout.classic.landscape.ult).toMatchObject({
+      x: 0.5,
+      y: 0.25,
+    });
     expect(real('dash').style.getPropertyValue('--pad-x')).toBe('0.1');
     document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
     expect(document.querySelector('#m-layout .pad-controls').classList.contains('pad-placed')).toBe(
@@ -189,8 +195,8 @@ describe('the button layout editor on the real page', () => {
       false,
     );
     tool('done').click();
-    expect(page.game.settings.buttonLayout).toMatchObject({ portrait: null });
-    expect(page.game.settings.buttonLayout.landscape.ult).toMatchObject({ x: 0.5 });
+    expect(page.game.settings.buttonLayout.classic).toMatchObject({ portrait: null });
+    expect(page.game.settings.buttonLayout.classic.landscape.ult).toMatchObject({ x: 0.5 });
     expect(real('dash').style.getPropertyValue('--pad-x')).toBe('');
     holdPhone(844, 390);
     document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
@@ -216,7 +222,11 @@ describe('the button layout editor on the real page', () => {
     expect(copy('stick').style.getPropertyValue('--pad-size')).toBe('1.2');
     expect(base.style.getPropertyValue('--pad-size')).toBe('');
     tool('done').click();
-    expect(page.game.settings.buttonLayout.landscape.stick).toEqual({ x: 0.85, y: 0.7, size: 1.2 });
+    expect(page.game.settings.buttonLayout.classic.landscape.stick).toEqual({
+      x: 0.85,
+      y: 0.7,
+      size: 1.2,
+    });
     expect(base.style.getPropertyValue('--pad-size')).toBe('1.2');
     // the stick stands on the right, so its zone is the right half and the base rests inside it
     expect([zone.style.left, zone.style.width]).toEqual(['400px', '400px']);

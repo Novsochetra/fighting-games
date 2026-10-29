@@ -8,9 +8,18 @@ describe('placing the controls', () => {
     expect(placeVars({ x: 0.25, y: 0.5, size: 1.2 })).toEqual({
       '--pad-x': '0.25',
       '--pad-y': '0.5',
+      '--pad-dx': null,
+      '--pad-dy': null,
       '--pad-size': '1.2',
     });
-    expect(placeVars(null)).toEqual({ '--pad-x': null, '--pad-y': null, '--pad-size': null });
+    expect(placeVars(null)['--pad-x']).toBeNull();
+  });
+
+  it('moves a control anchored to a corner by px at the game’s scale', () => {
+    expect(placeVars({ x: 1, y: 1, dx: -120, dy: -90, size: 1 })).toMatchObject({
+      '--pad-dx': '-120px',
+      '--pad-dy': '-90px',
+    });
   });
 
   it('places the controls where the skin puts them, at size 1', () => {
