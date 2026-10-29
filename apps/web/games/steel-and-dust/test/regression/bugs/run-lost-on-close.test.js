@@ -34,7 +34,7 @@ describe('a run closed part way through', () => {
     const storage = memoryStorage();
     playToMission(openGame(storage), 5);
     const reopened = openGame(storage);
-    expect(reopened.checkpoint).toMatchObject({ mission: 4, score: 4000, lives: 5 });
+    expect(reopened.checkpoint).toMatchObject({ mission: 4, score: 4000, lives: 6 });
     resumeCheckpoint(reopened);
     startPlay(reopened);
     expect(reopened).toMatchObject({ mode: 'play', missionIndex: 4, score: 4000, playTime: 2400 });
@@ -47,6 +47,6 @@ describe('a run closed part way through', () => {
     playToMission(game, 3);
     fall(game);
     expect(game.mode).toBe('over');
-    expect(openGame(storage).checkpoint).toMatchObject({ mission: 2, lives: 4 });
+    expect(openGame(storage).checkpoint).toMatchObject({ mission: 2, lives: 5 });
   });
 });

@@ -3,6 +3,7 @@ import { expect, vi } from 'vitest';
 import { routeOf } from '../../src/arcade/screens.ts';
 import { realCatalogJson } from './home-harness.js';
 import { renderArcade, unmountArcade, waitUntil } from './render-arcade.tsx';
+import { sampleBoard } from './leaderboard-harness.js';
 import { samplePayload } from './supporters-harness.js';
 
 export const ORIGIN = new URL('/', window.location.href).href;
@@ -13,8 +14,13 @@ const reply = (body, status = 200) => ({
   json: async () => JSON.parse(body),
 });
 
-// Stands in for the server's API: the real catalog and a sample list of supporters.
+// Stands in for the server's API: the real catalog, a sample list of supporters and a sample board.
 export function arcadeFetch() {
+  const answers = {
+    '/api/supporters': () => JSON.stringify(samplePayload()),
+    '/api/leaderboard': () => JSON.stringify(sampleBoard()),
+  };
+
   return vi.fn(async (url) => {
     const { pathname } = new URL(url, window.location.href);
 
@@ -22,9 +28,7 @@ export function arcadeFetch() {
       return reply(await realCatalogJson());
     }
 
-    return pathname === '/api/supporters'
-      ? reply(JSON.stringify(samplePayload()))
-      : reply('{}', 404);
+    return answers[pathname] ? reply(answers[pathname]()) : reply('{}', 404);
   });
 }
 

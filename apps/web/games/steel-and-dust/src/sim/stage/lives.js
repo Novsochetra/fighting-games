@@ -6,3 +6,9 @@ export function loseLife(game) {
 export function hasLivesLeft(game) {
   return game.lives > 0;
 }
+
+// a heart is a try still to come, as a spare life is in an arcade, so the life being played has
+// none and a hero with no hearts left plays on, on the last life
+export function heartsLeft(lives) {
+  return Math.max(0, lives - 1);
+}

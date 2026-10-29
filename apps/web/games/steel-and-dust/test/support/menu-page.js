@@ -6,20 +6,24 @@ import { installUi } from '../../src/boot/install-ui.js';
 import { installKeyboard } from '../../src/input/keyboard.js';
 import { installGameTouchPad } from '../../src/input/touch-actions.js';
 import { createUiState } from '../../src/ui/ui-state.js';
+import { createTestOnline } from './online-board.js';
 import { createTestGame } from './test-game.js';
 
 // happy-dom swaps the global URL for one that ignores file: bases, so the path is joined by hand
 const PAGE = readFileSync(join(import.meta.dirname, '../../index.html'), 'utf8');
 
-// a run saved on an earlier visit and the board kept so far come in as `checkpoint` and `leaderboard`
-export function openPage({ records, checkpoint, leaderboard } = {}) {
+// a run saved on an earlier visit and the board kept so far come in as `checkpoint` and `leaderboard`;
+// the online board answers through `api` (online-board.js) and keeps its ticket in `storage`
+export function openPage({ records, checkpoint, leaderboard, api, storage } = {}) {
   document.body.innerHTML = PAGE.match(/<body>([\s\S]*)<\/body>/)[1];
   document.body.className = '';
   const saveSettings = vi.fn();
   const saveRun = vi.fn();
   const saveLeaderboard = vi.fn();
+  const tested = createTestOnline({ ...(api && { api }), ...(storage && { storage }) });
+  const { online } = tested;
   const game = createTestGame({
-    io: { saveSettings, saveRun, saveLeaderboard },
+    io: { saveSettings, saveRun, saveLeaderboard, runStarted: () => online.startRun() },
     records,
     checkpoint,
     leaderboard,
@@ -34,6 +38,7 @@ export function openPage({ records, checkpoint, leaderboard } = {}) {
     audio,
     ui,
     pad: { connected: false },
+    online,
   });
   // a fresh target per test, so keys never reach the listeners of an earlier test's page
   const keys = new EventTarget();
@@ -57,6 +62,9 @@ export function openPage({ records, checkpoint, leaderboard } = {}) {
     key,
     ui,
     audio,
+    online,
+    boardApi: tested.api,
+    storage: tested.storage,
   };
 }
 

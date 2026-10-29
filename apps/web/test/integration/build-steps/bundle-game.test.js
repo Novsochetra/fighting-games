@@ -1,6 +1,7 @@
 import { cp, mkdtemp, readdir, readFile, rm, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { Linter } from 'eslint';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { bundleGame, entriesOf } from '../../../build-steps/bundle-game.js';
 import { offlineListOf } from '../../../../server/src/offline/game-files.js';
@@ -60,6 +61,18 @@ describe('Steel & Dust bundled by the build', () => {
       }
     }
   });
+
+  it('keeps every bundle to ES2021, which phones on Chrome 85 and Safari 14 read', async () => {
+    const linter = new Linter();
+    const config = [{ languageOptions: { ecmaVersion: 2021, sourceType: 'module' } }];
+
+    for (const bundle of await readdir(path.join(gameRoot, 'build'))) {
+      const problems = linter.verify(await read(`build/${bundle}`), config, { filename: bundle });
+
+      expect(problems.filter((problem) => problem.fatal)).toEqual([]);
+    }
+    // it parses every bundle whole, a few seconds alone and longer while the whole suite runs
+  }, 30000);
 
   it('leaves the modules out, and its download goes by the bundles', async () => {
     const files = await readdir(gameRoot, { recursive: true });

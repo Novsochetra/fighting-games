@@ -12,6 +12,7 @@ export function findElements(document) {
     helpTabs: byId('helpTabs'),
     helpBody: byId('helpBody'),
     leaderboardList: byId('leaderboardList'),
+    postPanel: byId('postPanel'),
     credits: byId('m-credits'),
     heroStage: byId('heroStage'),
     heroList: byId('heroList'),

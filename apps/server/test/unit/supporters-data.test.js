@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { onRailway, railwayProblem, withRailwayDefaults } from '../../src/railway.js';
 import { DONATION_LIMITS, readDonation, toCents } from '../../src/supporters/read-donation.js';
+import { toArcadeDay } from '../../src/arcade-time.js';
 import {
   presentSupporter,
   serializeSupporters,
-  toArcadeDay,
 } from '../../src/supporters/serialize-supporters.js';
 import { tierOfCents } from '../../src/supporters/tiers.js';
 

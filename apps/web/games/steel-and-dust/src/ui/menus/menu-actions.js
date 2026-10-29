@@ -19,6 +19,7 @@ const QUIET_ACTIONS = new Set([
   'layout',
   'skins',
   'leaderboard',
+  'post',
   'credits',
   'play',
   'continue',
@@ -60,24 +61,37 @@ function continueSavedAction(game, menus) {
   };
 }
 
-// the actions that only open a panel over the menu, and the panel each opens
-const PANEL_ACTIONS = {
-  leaderboard: 'leaderboard',
-  credits: 'credits',
-  help: 'help',
-  settings: 'settings',
-  layout: 'layout',
-  skins: 'skins',
-  continue: 'heroes',
-};
-
-function panelActions(menus) {
-  return Object.fromEntries(
-    Object.entries(PANEL_ACTIONS).map(([action, panel]) => [action, () => menus.open(panel)]),
-  );
+// the board opens on the tab the run that just ended is on; posting opens with the name last used
+function onlineActions({ game, menus, online, share }) {
+  return {
+    leaderboard() {
+      menus.panels.leaderboard.chooseTab();
+      menus.open('leaderboard');
+    },
+    post() {
+      menus.panels.post.reset();
+      menus.open('post');
+    },
+    sendScore: () => online.post(game.lastRun, menus.panels.post.state.name),
+    share: () => share(game.lastRun, online.rankOf(game.lastRun)),
+  };
 }
 
-export function createMenuActions({ game, audio, ui, fullscreen, menus, leaveForArcade }) {
+// the buttons that open a panel over the menu, or close the one on top
+function panelActions(menus) {
+  return {
+    credits: () => menus.open('credits'),
+    help: () => menus.open('help'),
+    settings: () => menus.open('settings'),
+    layout: () => menus.open('layout'),
+    skins: () => menus.open('skins'),
+    continue: () => menus.open('heroes'),
+    back: () => menus.back(),
+  };
+}
+
+export function createMenuActions(services) {
+  const { game, audio, ui, fullscreen, menus, leaveForArcade } = services;
   const begin = () => {
     if (ui.isTouchOn() && fullscreen.supported && !fullscreen.isActive()) {
       fullscreen.enter();
@@ -86,15 +100,15 @@ export function createMenuActions({ game, audio, ui, fullscreen, menus, leaveFor
   };
   const actions = {
     ...heroActions(game, begin),
-    ...panelActions(menus),
     play: playAction(game, menus),
     continueSaved: continueSavedAction(game, menus),
+    ...onlineActions(services),
+    ...panelActions(menus),
     again: () => playFromStart(game),
     resume: () => resumePlay(game),
     fullscreen: () => fullscreen.toggle(),
     restart: () => restartRun(game),
     quit: () => quitToTitle(game),
-    back: () => menus.back(),
     weapon() {
       cycleWeapon(game);
       menus.refresh();

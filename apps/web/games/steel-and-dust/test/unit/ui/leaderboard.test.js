@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { dayLabel, leaderboardHtml } from '../../../src/ui/leaderboard/leaderboard-panel.js';
+import { dayLabel } from '../../../src/ui/leaderboard/board-table.js';
+import { leaderboardHtml } from '../../../src/ui/leaderboard/device-board-html.js';
 import { continueSavedLabel, overNoteHtml } from '../../../src/ui/menus/menu-text.js';
 
 const AT = new Date(2026, 9, 24, 21, 30).getTime();

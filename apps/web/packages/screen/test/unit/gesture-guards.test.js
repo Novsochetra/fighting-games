@@ -34,4 +34,22 @@ describe('gesture guards', () => {
       false,
     ]);
   });
+
+  // a name typed to post a run needs its caret and a selection, as nothing else on the page does
+  it('lets a text field take a selection, and cancels one anywhere else', () => {
+    document.body.innerHTML = '<div id="app"><p id="words">Steel</p><input id="name" /></div>';
+    const root = document.getElementById('app');
+
+    installGestureGuards({ window, document, root, surfaces: [] });
+
+    const selecting = (id) => {
+      const event = new Event('selectstart', { bubbles: true, cancelable: true });
+
+      document.getElementById(id).dispatchEvent(event);
+
+      return event.defaultPrevented;
+    };
+
+    expect([selecting('words'), selecting('name')]).toEqual([true, false]);
+  });
 });

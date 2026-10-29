@@ -6,19 +6,36 @@ import { createApiRoutes } from './routes/api-routes.js';
 import { createStaticHandler } from './routes/static-files.js';
 import { isFromOtherSite } from './security/request-origin.js';
 import { splitRequestTarget } from './static-path.js';
+import { createMemoryScoresStore } from './leaderboard/memory-store.js';
 import { createMemorySupportersStore } from './supporters/memory-store.js';
+
+// without a database (a laptop, the tests) what is sent is kept in memory until the server stops
+function storesOrMemory({ supporters, scores }) {
+  return {
+    supporters: supporters ?? createMemorySupportersStore(),
+    scores: scores ?? createMemoryScoresStore(),
+  };
+}
 
 export function createArcadeServer({
   webRoot = WEB_ROOT,
   gamesRoot = GAMES_ROOT,
-  supporters = createMemorySupportersStore(),
   trustProxy = false,
-  limiter,
+  limiters,
+  now = Date.now,
   warn = console.warn,
   logError = console.error,
   serveFiles,
+  ...stores
 } = {}) {
-  const routes = createApiRoutes({ gamesRoot, supporters, trustProxy, limiter, warn, logError });
+  const routes = createApiRoutes({
+    gamesRoot,
+    stores: storesOrMemory(stores),
+    trustProxy,
+    limiters,
+    log: { warn, logError },
+    now,
+  });
   const serveStatic = serveFiles ?? createStaticHandler({ webRoot });
   return http.createServer((request, response) => {
     dispatch({ request, response, routes, serveStatic }).catch((error) => {

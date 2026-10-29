@@ -1,4 +1,5 @@
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
+import { lastOf } from '../../lib/lists.js';
 import { STEP_UP } from '../../sim/stage/terrain.js';
 import { drawCliffFaces, roundedShoulders } from './cliff-faces.js';
 import { drawDeepRun } from './deep-ground.js';
@@ -12,7 +13,7 @@ export function surfaceRuns(surfaceAt, from, to) {
   const runs = [];
   for (let x = from; x < to; x++) {
     const y = surfaceAt(x);
-    const last = runs.at(-1);
+    const last = lastOf(runs);
     if (last && last.y === y) {
       last.width++;
     } else {

@@ -2,6 +2,10 @@
   color: var(--color-heart);
 }
 
+.trophy-link .icon {
+  color: var(--color-trophy);
+}
+
 /* On a phone the top bar has room for the heart alone; its aria-label still names it. */
 @media (max-width: 37.5rem) {
   .support-link {

@@ -125,6 +125,63 @@ describe('validateGameEntry', () => {
   });
 });
 
+describe('the leaderboard rules', () => {
+  const rules = (extra) => ({
+    heroes: [
+      { id: 'moss', name: 'Moss Shade' },
+      { id: 'bokator', name: 'Bokator' },
+    ],
+    missions: 12,
+    difficulties: ['Easy', 'Normal', 'Hard'],
+    maxPointsPerSecond: 1000,
+    ...extra,
+  });
+  const check = (leaderboard) => validateGameEntry({ ...validEntry(), leaderboard }, 'demo-game');
+
+  it('accepts a game that names its heroes, missions, difficulties and scoring pace', () => {
+    expect(check(rules())).toEqual([]);
+  });
+
+  it.each([
+    ['not an object', ['moss'], /must be an object/],
+    ['no heroes', rules({ heroes: [] }), /heroes/],
+    [
+      'a hero listed twice',
+      rules({
+        heroes: [
+          { id: 'moss', name: 'A' },
+          { id: 'moss', name: 'B' },
+        ],
+      }),
+      /heroes/,
+    ],
+    ['a hero id with spaces', rules({ heroes: [{ id: 'moss shade', name: 'Moss' }] }), /heroes/],
+    ['a hero with no name', rules({ heroes: [{ id: 'moss', name: ' ' }] }), /heroes/],
+    ['heroes as bare ids', rules({ heroes: ['moss'] }), /heroes/],
+    ['no missions', rules({ missions: 0 }), /missions/],
+    ['part of a mission', rules({ missions: 1.5 }), /missions/],
+    ['ten difficulties', rules({ difficulties: Array(10).fill('Hard') }), /difficulties/],
+    ['difficulties as a count', rules({ difficulties: 3 }), /difficulties/],
+    ['no scoring pace', rules({ maxPointsPerSecond: 0 }), /maxPointsPerSecond/],
+    ['a scoring pace as text', rules({ maxPointsPerSecond: '1000' }), /maxPointsPerSecond/],
+  ])('rejects rules with %s', (_label, leaderboard, problem) => {
+    expect(check(leaderboard)).toEqual([expect.stringMatching(problem)]);
+  });
+
+  it('hands the arcade the heroes, missions and difficulties, but not the scoring pace', () => {
+    const { leaderboard } = toCatalogGame({ ...validEntry(), leaderboard: rules() });
+    expect(leaderboard).toEqual({
+      heroes: [
+        { id: 'moss', name: 'Moss Shade' },
+        { id: 'bokator', name: 'Bokator' },
+      ],
+      missions: 12,
+      difficulties: ['Easy', 'Normal', 'Hard'],
+    });
+    expect(toCatalogGame(validEntry())).not.toHaveProperty('leaderboard');
+  });
+});
+
 describe('toCatalogGame', () => {
   it('adds the game path and resolves the cover relative to the site root', () => {
     const game = toCatalogGame(validEntry());

@@ -1,5 +1,6 @@
 import { useArcadeUrl } from '../arcade/arcade-context';
 import { SheetClose } from '../arcade/SheetClose';
+import { BoardPeek } from '../leaderboard/BoardPeek';
 import type { GameCard } from './game-card';
 import { useHome } from './home-context';
 import { PlayIcon } from './home-icons';
@@ -122,6 +123,7 @@ export function DetailsSheet({ details }: { details: Details }) {
           <PlayLink card={card} onPlay={play} />
           <SaveOffline status={save.status} onTap={tapSave} />
         </div>
+        <BoardPeek card={card} isOpen={details.isOpen} onLeave={finish} />
       </div>
     </dialog>
   );

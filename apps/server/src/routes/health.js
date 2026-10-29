@@ -1,10 +1,10 @@
 import { sendJson } from '../http-responses.js';
 
 // Railway sends traffic to a new deploy only once this answers 200.
-export function createHealthHandler({ supporters, logError }) {
+export function createHealthHandler({ stores, logError }) {
   return async function serveHealth(_request, response) {
     try {
-      await supporters.ping();
+      await Promise.all(stores.map((store) => store.ping()));
       sendJson(response, { status: 200, json: '{"ok":true}' });
     } catch (error) {
       logError(error);

@@ -1,3 +1,4 @@
+import { hasOwn } from '../../lib/objects.js';
 import { CLASSIC } from './classic.js';
 import { CLEAR_SKINS } from './clear.js';
 import { DUSK } from './dusk.js';
@@ -10,7 +11,7 @@ export const ORIENTATIONS = ['landscape', 'portrait'];
 
 // one skin for both ways of holding the phone, each with a layout for each way
 export function skinIdFor(settings) {
-  return Object.hasOwn(SKINS, settings.skin) ? settings.skin : 'classic';
+  return hasOwn(SKINS, settings.skin) ? settings.skin : 'classic';
 }
 
 // every move is a round key, unless the player picks a pill for a key the skin offers one for

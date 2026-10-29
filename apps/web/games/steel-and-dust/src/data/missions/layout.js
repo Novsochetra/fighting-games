@@ -1,4 +1,5 @@
 import { VIEW_WIDTH } from '../../config.js';
+import { lastOf } from '../../lib/lists.js';
 import { layoutRoadProps } from './hazards-layout.js';
 import { layoutProps } from './props-layout.js';
 import { groundAt, layoutTerrain } from './terrain.js';
@@ -67,7 +68,7 @@ function layoutCrates(zones, items, terrain) {
 // turns a mission's list of zones into places on the road
 export function layoutMission(spec, index) {
   const zones = layoutZones(spec, index + 1);
-  const length = zones.at(-1).right;
+  const length = lastOf(zones).right;
   const terrain = layoutTerrain(spec.zones, zones, length);
   return {
     ...spec,

@@ -1,4 +1,5 @@
 import { layoutOf, pillsOffered, SKIN_IDS, SKINS } from '../../data/skins/skins.js';
+import { lastOf } from '../../lib/lists.js';
 import { orientationOf, savedEntries, slotOf } from '../layout/layout-draft.js';
 import { fillPreview } from '../layout/layout-markup.js';
 import { drawPreviewPad, drawPreviewShell, restPreviewStick } from '../layout/preview-pad.js';
@@ -29,7 +30,7 @@ const SKINS_HTML = `<div class="skin-shell" aria-hidden="true"></div>
 
 // "DASH or ULT", the keys a player may tap to pick a shape for
 const listed = (labels) =>
-  labels.length > 1 ? `${labels.slice(0, -1).join(', ')} or ${labels.at(-1)}` : labels[0];
+  labels.length > 1 ? `${labels.slice(0, -1).join(', ')} or ${lastOf(labels)}` : labels[0];
 
 // the skins screen: a copy of the touch layer with the skin looked at standing as it will, and the
 // bar to step through the skins

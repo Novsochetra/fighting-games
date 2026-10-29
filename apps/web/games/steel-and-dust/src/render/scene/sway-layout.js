@@ -1,3 +1,4 @@
+import { lastOf } from '../../lib/lists.js';
 import { GIVE_STEPS, playMix, stillMix } from './held-sway.js';
 
 // layouts kept for a road's trees at once: the patch the raiders shake, the cover over each one
@@ -26,7 +27,7 @@ function columnGroups(columns, width) {
   const groups = [];
 
   for (let i = 0; i < width; i++) {
-    const last = groups.at(-1);
+    const last = lastOf(groups);
 
     if (last && columns.every((gives) => gives[i] === gives[last.from])) {
       last.width++;

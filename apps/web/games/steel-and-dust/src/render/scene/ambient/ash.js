@@ -1,4 +1,5 @@
 import { VIEW_HEIGHT } from '../../../config.js';
+import { lastOf } from '../../../lib/lists.js';
 import { CYCLE_WIDTH, TAU, isOnScreen, scrollX, trait, twoFrame, wrapX } from './motion.js';
 
 const SALT = 21000;
@@ -39,7 +40,7 @@ function drawCinder(painter, flake, color) {
 // soot and ash sifting down out of the smog, tumbling as it falls, now and then a live cinder
 export function drawAsh(painter, { effect, tick, cameraX, colors }) {
   const flakes = colors.ash.slice(0, -1);
-  const cinder = colors.ash.at(-1);
+  const cinder = lastOf(colors.ash);
   for (let i = 0; i < effect.count; i++) {
     const flake = flakeAt(i, { effect, tick, cameraX });
     if (!isOnScreen(flake.x, flake.y, 2)) {

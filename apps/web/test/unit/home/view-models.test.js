@@ -43,7 +43,21 @@ describe('toGameCard', () => {
       summary: 'A side-scrolling pixel-art brawler.',
       description: 'A side-scrolling pixel-art brawler. Pick a hero and fight.',
       controls: ['Keyboard', 'Gamepad', 'Touch'],
+      board: null,
     });
+  });
+
+  it("names a game's board: its heroes and difficulties as the game calls them", () => {
+    const leaderboard = {
+      heroes: [{ id: 'moss', name: 'Moss Shade' }, { id: 'bad', name: '' }, null],
+      missions: 12,
+      difficulties: ['Easy', 'Normal', 'Hard'],
+    };
+    expect(toGameCard(apiGame({ leaderboard })).board).toEqual({
+      heroes: { moss: 'Moss Shade' },
+      difficulties: ['Easy', 'Normal', 'Hard'],
+    });
+    expect(toGameCard(apiGame({ leaderboard: { heroes: 'all' } })).board).toBeNull();
   });
 
   it('falls back from the screenshot or the poster to the banner, then to the cover', () => {

@@ -10,6 +10,7 @@ const SILENT_IO = {
   saveSettings() {},
   saveRun() {},
   saveLeaderboard() {},
+  runStarted() {},
   setMuted() {},
   now: () => 0,
 };

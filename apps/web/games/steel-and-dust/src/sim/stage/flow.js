@@ -29,11 +29,17 @@ function announceMission(game) {
   saveCheckpoint(game);
 }
 
-// the road is set up before the hero is picked, so the hero takes up its own weapon only now
+// the road is set up before the hero is picked, so the hero takes up its own weapon only now; a
+// run that starts from nothing asks for its ticket to the online board, which a saved run has
 export function startPlay(game) {
   takeOwnWeapon(game, game.player);
   game.mode = 'play';
   game.hint = null;
+
+  if (game.playTime === 0 && !game.settings.training) {
+    game.io.runStarted();
+  }
+
   announceMission(game);
 }
 

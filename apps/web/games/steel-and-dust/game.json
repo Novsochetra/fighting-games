@@ -10,5 +10,19 @@
   "cover": "assets/icons/icon-512.png",
   "banner": "assets/ui/select/bg-landscape.png",
   "poster": "assets/ui/select/bg-portrait.png",
-  "screenshot": "assets/screenshots/angkor-wat.png"
+  "screenshot": "assets/screenshots/angkor-wat.png",
+  "leaderboard": {
+    "heroes": [
+      { "id": "moss", "name": "Moss Shade" },
+      { "id": "firefly", "name": "Firefly Shade" },
+      { "id": "antler", "name": "Antler Spirit Shade" },
+      { "id": "blue", "name": "Blue Shade" },
+      { "id": "ember", "name": "Ember Shade" },
+      { "id": "bokator", "name": "Bokator" },
+      { "id": "angkor", "name": "Angkor Warrior" }
+    ],
+    "missions": 12,
+    "difficulties": ["Easy", "Normal", "Hard"],
+    "maxPointsPerSecond": 1000
+  }
 }

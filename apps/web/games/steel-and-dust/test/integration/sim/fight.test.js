@@ -166,35 +166,35 @@ describe('a fight, with every system running', () => {
     expect(game.player.state).not.toBe('ko');
   });
 
-  it('takes a life for every fall and ends the run for good after the fifth', () => {
+  it('takes a life for every fall and ends the run for good after the sixth', () => {
     const game = createPlayingGame();
-    expect(game.lives).toBe(5);
-    for (let lives = 4; lives > 0; lives--) {
+    expect(game.lives).toBe(6);
+    for (let lives = 5; lives > 0; lives--) {
       fall(game);
       expect(game).toMatchObject({ mode: 'over', lives });
       continueRun(game);
       expect(game.mode).toBe('play');
     }
     fall(game);
-    expect(game).toMatchObject({ mode: 'over', lives: 0, continues: 4 });
+    expect(game).toMatchObject({ mode: 'over', lives: 0, continues: 5 });
     continueRun(game);
     continueAs(game, 'blue');
-    expect(game).toMatchObject({ mode: 'over', lives: 0, continues: 4 });
+    expect(game).toMatchObject({ mode: 'over', lives: 0, continues: 5 });
     expect(game.settings.hero).toBe('moss');
   });
 
-  it('carries the lives into the next mission, gives none back on a restart and five on a new run', () => {
+  it('carries the lives into the next mission, gives none back on a restart and six on a new run', () => {
     const game = createPlayingGame();
     fall(game);
     continueRun(game);
     fall(game);
     continueRun(game);
     enterNextMission(game);
-    expect(game).toMatchObject({ missionIndex: 1, lives: 3 });
+    expect(game).toMatchObject({ missionIndex: 1, lives: 4 });
     restartRun(game);
-    expect(game).toMatchObject({ missionIndex: 1, lives: 3, mode: 'play' });
+    expect(game).toMatchObject({ missionIndex: 1, lives: 4, mode: 'play' });
     playFromStart(game);
-    expect(game).toMatchObject({ missionIndex: 0, lives: 5, continues: 0, mode: 'play' });
+    expect(game).toMatchObject({ missionIndex: 0, lives: 6, continues: 0, mode: 'play' });
   });
 
   function felledBoss(game, kind) {

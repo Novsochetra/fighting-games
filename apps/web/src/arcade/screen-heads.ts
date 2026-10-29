@@ -15,6 +15,12 @@ export const SCREEN_HEADS: Record<ScreenId, ScreenHead> = {
       'Free retro games inspired by Cambodia, right in your browser: fight to the temples of Angkor in Steel & Dust, or explore them in Morodok Angkor.',
     canonical: 'https://www.khmerarcade.games/',
   },
+  leaderboard: {
+    title: 'Leaderboard · Retro Arcade',
+    description:
+      'The best runs in Retro Arcade this week and of all time. Post yours from Steel & Dust and climb the board.',
+    canonical: 'https://www.khmerarcade.games/leaderboard/',
+  },
   supporters: {
     title: 'Supporters · Retro Arcade',
     description: 'The people who keep every game in the arcade free to play.',

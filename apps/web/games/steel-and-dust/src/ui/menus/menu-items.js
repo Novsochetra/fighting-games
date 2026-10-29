@@ -30,7 +30,12 @@ export function navigableItems(document, top) {
     return [...menu.querySelectorAll('.hero-card'), menu.querySelector('.xbtn')];
   }
   if (top === 'leaderboard') {
-    return [...menu.querySelectorAll('.board-row'), menu.querySelector('.xbtn')];
+    const rows = menu.querySelectorAll('.tabs button, .board-row');
+    return [...rows, menu.querySelector('.xbtn')];
+  }
+  if (top === 'post') {
+    const buttons = [...menu.querySelectorAll('.mbtn')].filter((button) => !button.hidden);
+    return [...menu.querySelectorAll('.post-name'), ...buttons, menu.querySelector('.xbtn')];
   }
   if (top === 'help') {
     return [...menu.querySelectorAll('.tabs button'), menu.querySelector('.xbtn')];
