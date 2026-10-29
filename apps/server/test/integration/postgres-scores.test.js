@@ -81,6 +81,24 @@ describe('the Postgres scores store', () => {
     expect(await createPostgresScoresStore(database).secret()).toBe(first);
   });
 
+  // every value goes to Postgres as a bound parameter, never spliced into the SQL, so these are
+  // stored and matched as plain text
+  it('stores SQL in a value as text, and runs none of it', async () => {
+    const drop = "x'); DROP TABLE scores; --";
+    const saved = await store.add(run('SOK', 100, { game: drop, hero: drop }), "n'; --");
+    expect(saved).toMatchObject({ game: drop, hero: drop });
+    const { rows } = await database.query("SELECT to_regclass('scores') AS found");
+    expect(rows[0].found).toBe('scores');
+    expect((await store.board(drop, { weekStart: WEEK, size: 10 })).allTime).toHaveLength(1);
+  });
+
+  it('matches a game name that tries to widen the query as one name, finding nothing', async () => {
+    await store.add(run('SOK', 100), 'a');
+    const sneaky = "brawler' OR '1'='1";
+    const board = await store.board(sneaky, { weekStart: new Date(0), size: 10 });
+    expect(board).toEqual({ week: [], allTime: [] });
+  });
+
   it('holds the checks in the table too', async () => {
     const insert = (initials, score) =>
       database.query(

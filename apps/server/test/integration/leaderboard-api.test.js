@@ -184,6 +184,20 @@ describe('the leaderboard API, guarded', () => {
     expect(reply.headers.allow).toBe('GET, POST, HEAD');
   });
 
+  it('turns SQL away before it reaches the database', async () => {
+    await start();
+    const sneaky = encodeURIComponent("brawler' OR '1'='1");
+    expect(
+      (await sendRequest(server.port, { path: `/api/leaderboard?game=${sneaky}` })).status,
+    ).toBe(404);
+    const runTicket = await ticket();
+    clock.time += 5 * MINUTE;
+    const drop = "moss'); DROP TABLE scores; --";
+    const reply = await post('/api/leaderboard', run({ ticket: runTicket, hero: drop }));
+    expect(reply.status).toBe(400);
+    expect((await board()).status).toBe(200);
+  });
+
   it('keeps the rules out of the games list', async () => {
     await start();
     const { games } = JSON.parse((await sendRequest(server.port, { path: '/api/games' })).text);
