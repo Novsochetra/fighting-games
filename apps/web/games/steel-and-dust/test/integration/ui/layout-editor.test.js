@@ -81,23 +81,24 @@ describe('the button layout editor on the real page', () => {
   afterEach(() => vi.restoreAllMocks());
 
   function openEditor() {
-    page.act('settings');
+    page.openSection('touch');
     document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
     expect(openMenu().id).toBe('m-layout');
   }
 
   it('is a Settings row only while touch controls are on', () => {
     page.game.device.coarsePointer = false;
-    page.act('settings');
+    page.openSection('touch');
     expect(document.querySelector('[data-k="buttonLayout"]')).toBeNull();
     page.act('back');
+    page.act('back');
     page.game.device.coarsePointer = true;
-    page.act('settings');
+    page.openSection('touch');
     expect(document.querySelector('[data-k="buttonLayout"] .val').textContent).toBe('Default');
   });
 
   it('opens from the row with Enter, starts on Done and goes back with Escape', () => {
-    page.act('settings');
+    page.openSection('touch');
     const rows = [...document.querySelectorAll('.setrow')];
     page.menus.state.selected = rows.findIndex((row) => row.dataset.k === 'buttonLayout');
     page.key('Enter');
@@ -112,7 +113,7 @@ describe('the button layout editor on the real page', () => {
     expect(toolbarText()).toEqual(['HEAVY', '100%']);
     expect(copy('heavy').classList.contains('picked')).toBe(true);
     page.key('Escape');
-    expect(openMenu().id).toBe('m-settings');
+    expect(openMenu().id).toBe('m-section');
     expect(page.saveSettings).not.toHaveBeenCalled();
   });
 
@@ -131,7 +132,7 @@ describe('the button layout editor on the real page', () => {
     expect(real('light').style.getPropertyValue('--pad-x')).toBe('');
     expect(page.saveSettings).not.toHaveBeenCalled();
     tool('done').click();
-    expect(openMenu().id).toBe('m-settings');
+    expect(openMenu().id).toBe('m-section');
     const { classic } = page.game.settings.buttonLayout;
     expect(page.saveSettings).toHaveBeenCalledWith(page.game.settings);
     expect(classic.portrait).toBeNull();
@@ -156,7 +157,7 @@ describe('the button layout editor on the real page', () => {
     drag('heavy', { x: 300, y: 200 });
     tool('smaller').click();
     cancel().click();
-    expect(openMenu().id).toBe('m-settings');
+    expect(openMenu().id).toBe('m-section');
     expect(page.game.settings.buttonLayout).toBeNull();
     expect(page.saveSettings).not.toHaveBeenCalled();
     expect(document.querySelector('#touch .pad-controls').classList.contains('pad-placed')).toBe(

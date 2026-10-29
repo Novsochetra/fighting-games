@@ -10,7 +10,8 @@
   margin-top: 0;
 }
 
-.setrow {
+.setrow,
+.setlink {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
@@ -21,11 +22,13 @@
   font-family: var(--font-display);
 }
 
-.setrow:nth-child(even) {
+.setrow:nth-child(even),
+.setlink:nth-child(even) {
   background: var(--color-row-stripe);
 }
 
-.setrow.sel {
+.setrow.sel,
+.setlink.sel {
   border-color: var(--color-green);
   background: color-mix(in srgb, var(--color-green) 10%, transparent);
 }
@@ -34,11 +37,45 @@
   font-size: var(--font-size-sm);
 }
 
-.setrow .lbl small {
+.setrow .lbl small,
+.setlink .lbl small {
   display: block;
   margin-top: 3px;
   color: var(--color-text-muted);
   font-size: var(--font-size-2xs);
+}
+
+.setlink {
+  width: 100%;
+  padding-block: 12px;
+  background: none;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.setlink .lbl {
+  font-size: var(--font-size-md);
+  letter-spacing: var(--tracking-wide);
+}
+
+.setlink .lbl small {
+  margin-top: 5px;
+  letter-spacing: normal;
+}
+
+.setlink .go {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  font-size: var(--font-size-lg);
+}
+
+.setlink:hover .go,
+.setlink.sel .go {
+  color: var(--color-mint-light);
+  filter: drop-shadow(0 0 4px var(--color-green));
 }
 
 .stepper {

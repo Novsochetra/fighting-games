@@ -6,13 +6,12 @@ const pick = (labels) => (value) => labels[value];
 const skinName = (id) => (SKINS[id] ?? SKINS.classic).name;
 const isTouchOn = ({ isTouchOn: touchOn }) => touchOn();
 
-// `visible` gets { isTouchOn, canVibrate, settings }; a row with an `action` has a button
-// (`actionLabel`, else Edit) that opens that menu instead of a stepper
-export const SETTINGS_SCHEMA = [
-  { group: 'Sound' },
+const SOUND = [
   { key: 'music', label: 'Music', range: true },
   { key: 'sfx', label: 'Sound effects', range: true },
-  { group: 'Gameplay' },
+];
+
+const GAMEPLAY = [
   {
     key: 'difficulty',
     label: 'Difficulty',
@@ -43,7 +42,9 @@ export const SETTINGS_SCHEMA = [
     note: 'Rumbles the gamepad or phone you play with, and ticks as you press the touch controls',
     visible: ({ canVibrate }) => canVibrate,
   },
-  { group: 'Screen' },
+];
+
+const SCREEN = [
   {
     key: 'shake',
     label: 'Screen shake',
@@ -53,7 +54,9 @@ export const SETTINGS_SCHEMA = [
   },
   { key: 'flash', label: 'Flashes', options: [false, true], format: onOff },
   { key: 'numbers', label: 'Damage numbers', options: [false, true], format: onOff },
-  { group: 'Touch controls' },
+];
+
+const TOUCH_CONTROLS = [
   {
     key: 'touch',
     label: 'Touch controls',
@@ -105,7 +108,9 @@ export const SETTINGS_SCHEMA = [
     note: 'Move and resize the controls of each skin, for each way you hold the phone',
     visible: isTouchOn,
   },
-  { group: 'Training' },
+];
+
+const TRAINING = [
   {
     key: 'training',
     label: 'Training tools',
@@ -121,6 +126,19 @@ export const SETTINGS_SCHEMA = [
     visible: ({ settings }) => settings.training,
   },
 ];
+
+// a row's `visible` gets { isTouchOn, canVibrate, settings }; a row with an `action` has a button
+// (`actionLabel`, else Edit) that opens that menu instead of a stepper. A section's `note` names
+// only rows every player sees, as the others come and go with the device
+export const SETTINGS_SECTIONS = [
+  { id: 'sound', title: 'Sound', note: 'Music and sound effects', rows: SOUND },
+  { id: 'gameplay', title: 'Gameplay', note: 'Difficulty and auto-aim', rows: GAMEPLAY },
+  { id: 'screen', title: 'Screen', note: 'Shake, flashes and damage numbers', rows: SCREEN },
+  { id: 'touch', title: 'Touch controls', note: 'Joystick and buttons', rows: TOUCH_CONTROLS },
+  { id: 'training', title: 'Training', note: 'Weapon swaps and hitboxes', rows: TRAINING },
+];
+
+export const SETTINGS_SCHEMA = SETTINGS_SECTIONS.flatMap((section) => section.rows);
 
 // steppers clamp; Enter / A cycles round to the first option again
 export function steppedValue(definition, current, { step, wrap }) {

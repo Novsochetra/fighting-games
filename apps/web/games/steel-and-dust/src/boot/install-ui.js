@@ -20,7 +20,8 @@ import {
   installMenuTapFix,
 } from '../../../../packages/screen/src/gesture-guards.js';
 import { createScreenFit, installScreenFit } from '../ui/screen/screen-fit.js';
-import { createSettingsPanel } from '../ui/settings/settings-panel.js';
+import { installSettingsEvents } from '../ui/settings/settings-events.js';
+import { createSettingsPanels } from '../ui/settings/settings-panel.js';
 import { createShare } from '../ui/share/share-run.js';
 import { createSkinPicker } from '../ui/skins/skin-picker.js';
 
@@ -33,14 +34,7 @@ function isIos(navigator) {
 
 function createPanels({ elements, game, audio, layout, ui, window, supporters, online }) {
   const panels = {
-    settings: createSettingsPanel({
-      list: elements.settingsList,
-      game,
-      audio,
-      layout,
-      ui,
-      canVibrate: canVibrate(window),
-    }),
+    ...createSettingsPanels({ elements, game, audio, layout, ui, canVibrate: canVibrate(window) }),
     help: createHelpPanel({
       tabs: elements.helpTabs,
       body: elements.helpBody,
@@ -58,8 +52,8 @@ function createPanels({ elements, game, audio, layout, ui, window, supporters, o
     post: createPostPanel({ root: elements.postPanel, game, online, ui }),
     credits: createCreditsPanel({ root: elements.credits, game, feed: supporters }),
   };
-  panels.layout = createLayoutEditor({ window, game, audio, layout, settings: panels.settings });
-  panels.skins = createSkinPicker({ window, game, audio, layout, settings: panels.settings });
+  panels.layout = createLayoutEditor({ window, game, audio, layout, settings: panels.section });
+  panels.skins = createSkinPicker({ window, game, audio, layout, settings: panels.section });
   return panels;
 }
 
@@ -70,6 +64,7 @@ function installMenuInput({ document, elements, menus, act, ui, panels, audio })
   menus.navigate = navigate;
   menus.handleKey = (event) => handleMenuKey(event, { menus, navigate, ui });
   installMenuEvents({ document, menus, act, ui, panels, audio });
+  installSettingsEvents({ elements, menus });
   installBoardEvents({ root: document.getElementById('m-leaderboard'), menus, panels });
   installPostEvents({ root: elements.postPanel, menus, act });
   installCarouselEvents({ stage: elements.heroStage, menus, audio });

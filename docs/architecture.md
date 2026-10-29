@@ -838,6 +838,12 @@ shows each hero from card strips of one row (`cards` in `src/data/heroes.js`): a
 sword row of its idle and win strips, cut out by `tools/pack_hero_strips.py` (`cutFrom`), and the
 Khmer fighters' are drawn for them (`tools/hero_cards`).
 
+Settings lists its sections (Sound, Gameplay, Screen, Touch controls, Training), and each opens its
+rows on a screen of its own, the `section` menu, titled with the section's name: `SETTINGS_SECTIONS`
+in `src/ui/settings/settings-schema.js` holds them, `settings-panel.js` draws the list and
+`section-panel.js` one section's rows. Back from a section lands on Settings with that section still
+highlighted, so a pad player goes on from where they were.
+
 The menus and the HUD share one carved-sandstone kit in `assets/ui/` (see its README): nine-slice
 frames for the hero cards, the settings panel and the HUD panels, which the HUD draws with
 `src/render/nine-slice.js`.

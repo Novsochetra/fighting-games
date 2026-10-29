@@ -47,7 +47,7 @@ function step(key) {
 }
 
 function openSkins(page) {
-  page.act('settings');
+  page.openSection('touch');
   row('skin').querySelector('[data-act="skins"]').click();
   expect(openMenu().id).toBe('m-skins');
 }
@@ -67,13 +67,14 @@ describe('touch skins on the real page', () => {
   afterEach(() => vi.restoreAllMocks());
 
   it('offers a Skin row that opens the Skins screen, and the controls’ opacity, with touch on', () => {
-    page.act('settings');
+    page.openSection('touch');
     expect(row('skin').querySelector('.val').textContent).toBe('Classic');
     expect(row('skin').querySelector('[data-act="skins"]').textContent).toBe('Pick');
     expect(row('padOpacity').querySelector('.val').textContent).toBe('100%');
     page.act('back');
+    page.act('back');
     page.game.device.coarsePointer = false;
-    page.act('settings');
+    page.openSection('touch');
     expect(row('skin')).toBeNull();
     expect(row('padOpacity')).toBeNull();
   });
@@ -92,7 +93,7 @@ describe('touch skins on the real page', () => {
     // the skin looked at stands for real meanwhile, and Cancel puts the picked one back
     expect(real('dpad')).not.toBeNull();
     document.querySelector('#m-skins [data-act="back"]:not([data-skin])').click();
-    expect(openMenu().id).toBe('m-settings');
+    expect(openMenu().id).toBe('m-section');
     expect(page.game.settings.skin).toBe('classic');
     expect(real('stick')).not.toBeNull();
     expect(page.saveSettings).not.toHaveBeenCalled();
@@ -104,7 +105,7 @@ describe('touch skins on the real page', () => {
     document.querySelector('#m-skins [data-skin-step="1"]').click();
     document.querySelector('#m-skins [data-skin-step="1"]').click();
     document.querySelector('#m-skins [data-skin="use"]').click();
-    expect(openMenu().id).toBe('m-settings');
+    expect(openMenu().id).toBe('m-section');
     expect(page.game.settings.skin).toBe('dusk');
     expect(page.saveSettings).toHaveBeenCalledWith(page.game.settings);
     expect(real('dpad')).not.toBeNull();
@@ -121,7 +122,7 @@ describe('touch skins on the real page', () => {
     page.key('ArrowLeft');
     expect(skinName()).toBe('Classic');
     page.key('Escape');
-    expect(openMenu().id).toBe('m-settings');
+    expect(openMenu().id).toBe('m-section');
     expect(page.game.settings.skin).toBe('classic');
   });
 
@@ -213,7 +214,7 @@ describe('touch skins on the real page', () => {
   });
 
   it('fades the controls to the opacity picked, but not the pause button', () => {
-    page.act('settings');
+    page.openSection('touch');
     step('padOpacity');
     expect(page.game.settings.padOpacity).toBe(0.8);
     expect(document.documentElement.style.getPropertyValue('--pad-opacity')).toBe('0.8');
@@ -222,7 +223,7 @@ describe('touch skins on the real page', () => {
   it('edits Dusk’s own layout and leaves the classic one as it was', () => {
     page.game.settings.skin = 'dusk';
     page.layout.applyTouchSettings();
-    page.act('settings');
+    page.openSection('touch');
     row('buttonLayout').querySelector('[data-act="layout"]').click();
     expect(openMenu().id).toBe('m-layout');
     expect(copy('stick')).toBeNull();

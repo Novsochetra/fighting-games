@@ -49,6 +49,11 @@ export function openPage({ records, checkpoint, leaderboard, api, storage } = {}
   layout.applyTouchSettings();
   menus.sync();
   const key = (code) => keys.dispatchEvent(new KeyboardEvent('keydown', { code }));
+  const openSection = (id) => {
+    act('settings');
+    document.querySelector(`[data-section="${id}"]`).click();
+  };
+
   return {
     game,
     touchPad,
@@ -60,6 +65,7 @@ export function openPage({ records, checkpoint, leaderboard, api, storage } = {}
     saveRun,
     saveLeaderboard,
     key,
+    openSection,
     ui,
     audio,
     online,

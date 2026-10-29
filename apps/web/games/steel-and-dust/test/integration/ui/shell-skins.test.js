@@ -98,7 +98,7 @@ describe('a skin with a shell on the real page', () => {
   it('moves the game into a shell looked at on the Skins screen, and back on Cancel', () => {
     const letterboxed = stage();
 
-    page.act('settings');
+    page.openSection('touch');
     row('skin').querySelector('[data-act="skins"]').click();
     while (skinName() !== 'Clear Lotus') {
       document.querySelector('#m-skins [data-skin-step="1"]').click();
@@ -109,7 +109,7 @@ describe('a skin with a shell on the real page', () => {
       'pad-shell clear clear-lotus',
     );
     document.querySelector('#m-skins [data-act="back"]:not([data-skin])').click();
-    expect(openMenu().id).toBe('m-settings');
+    expect(openMenu().id).toBe('m-section');
     expect(page.game.settings.skin).toBe('classic');
     expect(stage()).toEqual(letterboxed);
     expect(realShell()).toBeNull();
@@ -117,7 +117,7 @@ describe('a skin with a shell on the real page', () => {
 
   it('shows the shell under the controls in the Button layout editor', () => {
     wear('clear-smoke');
-    page.act('settings');
+    page.openSection('touch');
     row('buttonLayout').querySelector('[data-act="layout"]').click();
 
     expect(shellOf(document.querySelector('#m-layout .layout-shell')).className).toBe(

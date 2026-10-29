@@ -1,75 +1,43 @@
-import { refreshAttackTokens } from '../../sim/fighters/tokens.js';
-import { buzz } from '../../sim/fx/haptics.js';
-import { SETTINGS_SCHEMA, steppedValue } from './settings-schema.js';
+import { createSectionPanel } from './section-panel.js';
+import { SETTINGS_SECTIONS } from './settings-schema.js';
 
-function valueHtml(definition, settings) {
-  const value = settings[definition.key];
-  if (definition.range) {
-    return `${value}%<span class="meter"><i style="width:${value}%"></i></span>`;
-  }
-  return definition.format(value);
-}
-
-function controlHtml(definition, settings) {
-  const value = `<span class="val">${valueHtml(definition, settings)}</span>`;
-  if (definition.action) {
-    return `<span class="stepper">${value}<button type="button" class="xbtn stone-btn" data-act="${definition.action}">${definition.actionLabel ?? 'Edit'}</button></span>`;
-  }
+function linkHtml({ id, title, note }) {
   return (
-    '<span class="stepper"><button type="button" class="stone-btn" data-d="-1" aria-label="Less">‹</button>' +
-    `${value}<button type="button" class="stone-btn" data-d="1" aria-label="More">›</button></span>`
+    `<button type="button" class="setlink" data-section="${id}">` +
+    `<span class="lbl">${title}<small>${note}</small></span>` +
+    '<span class="go stone-btn" aria-hidden="true">›</span></button>'
   );
 }
 
-function rowHtml(definition, settings) {
-  const note = definition.note ? `<small>${definition.note}</small>` : '';
-  return (
-    `<div class="setrow" data-k="${definition.key}"><span class="lbl">${definition.label}${note}</span>` +
-    `${controlHtml(definition, settings)}</div>`
-  );
+export function settingsHtml() {
+  return SETTINGS_SECTIONS.map(linkHtml).join('');
 }
 
-export function settingsHtml(visibility, settings) {
-  return SETTINGS_SCHEMA.filter(
-    (definition) => !definition.visible || definition.visible(visibility),
-  )
-    .map((definition) =>
-      definition.group
-        ? `<div class="group stone-band">${definition.group}</div>`
-        : rowHtml(definition, settings),
-    )
-    .join('');
-}
-
-const AFTER_CHANGE = {
-  music: ({ audio }) => audio.syncVolumes(),
-  sfx: ({ audio }) => audio.syncVolumes(),
-  touch: ({ layout }) => layout.applyTouchSettings(),
-  buttonSize: ({ layout }) => layout.applyTouchSettings(),
-  stick: ({ layout }) => layout.applyTouchSettings(),
-  padOpacity: ({ layout }) => layout.applyTouchSettings(),
-  padHidesTouch: ({ layout }) => layout.applyTouchSettings(),
-  difficulty: ({ game }) => refreshAttackTokens(game),
-  // turned on, it gives a taste of what a blow feels like
-  haptics: ({ game }) => buzz(game, 'bigHit'),
-};
-
-export function createSettingsPanel({ list, game, audio, layout, ui, canVibrate }) {
+// back on Settings, the highlight stays on the section just left, so a pad player goes on from
+// where they were
+export function createSettingsPanels({ elements, game, audio, layout, ui, canVibrate }) {
   const visibility = { isTouchOn: ui.isTouchOn, canVibrate, settings: game.settings };
-  return {
+  const state = { section: SETTINGS_SECTIONS[0] };
+  const settings = {
     build() {
-      list.innerHTML = settingsHtml(visibility, game.settings);
+      elements.settingsSections.innerHTML = settingsHtml();
     },
-    change(key, step, wrap) {
-      const definition = SETTINGS_SCHEMA.find((entry) => entry.key === key);
-      if (!definition || definition.action) {
-        return false;
-      }
-      game.settings[key] = steppedValue(definition, game.settings[key], { step, wrap });
-      game.io.saveSettings(game.settings);
-      audio.sfx('ui');
-      AFTER_CHANGE[key]?.({ audio, layout, game });
-      return true;
+
+    pick(id) {
+      state.section = SETTINGS_SECTIONS.find((entry) => entry.id === id) ?? state.section;
     },
+
+    firstSelected: () => SETTINGS_SECTIONS.indexOf(state.section),
   };
+  const section = createSectionPanel({
+    list: elements.sectionRows,
+    title: elements.sectionTitle,
+    game,
+    audio,
+    layout,
+    visibility,
+    section: () => state.section,
+  });
+
+  return { settings, section };
 }

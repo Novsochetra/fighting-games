@@ -11,7 +11,6 @@ sizes by keeping the most common color in each block, snapped to one palette and
 | `kit/`      | `panel.png`, `panel-crest.png`, `panel-foot.png`, `stone-button.png` | `styles/stone.css`          |
 | `kit/`      | `title-crest.png`, `title-rule.png`                                  | `styles/stone-menus.css`    |
 | `kit/`      | `button.png`, `button-primary.png`: the menu buttons                 | `styles/stone-menus.css`    |
-| `settings/` | `lotus-band.png`: the frieze after a settings group's name           | `styles/stone.css`          |
 | `loading/`  | `bg.png` (384×216, Angkor Wat at dusk from the causeway), `naga-*.png` (each piece's stone look over its gold one), `bokator-run.png` (8 frames of 76×59), `dust.png` (5 frames of 32×18) | `styles/loading*.css` |
 | `hud/`      | `panel-frame.png`, `score-frame.png`                                 | `src/data/hud-frames.js`    |
 | `hud/`      | `panel-frame.png`: the button layout editor's toolbar                | `styles/layout-editor.css`  |
@@ -29,7 +28,6 @@ image pixels (top, right, bottom, left):
 | `kit/panel.png`             | 46, 40, 50, 40 |
 | `kit/stone-button.png`      | 8, 8, 8, 8     |
 | `kit/button*.png`           | 0, 24, 0, 22   |
-| `settings/lotus-band.png`   | 0, 10, 0, 14   |
 | `hud/panel-frame.png`       | 12, 14, 12, 14 |
 | `hud/score-frame.png`       | 11, 12, 11, 12 |
 

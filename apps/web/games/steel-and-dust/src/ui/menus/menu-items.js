@@ -17,28 +17,30 @@ function skinsItems(menu) {
   ];
 }
 
+const ITEMS_BEFORE_BACK = {
+  settings: '.setlink',
+  section: '.setrow',
+  heroes: '.hero-card',
+  leaderboard: '.tabs button, .board-row',
+  help: '.tabs button',
+};
+
 // what arrow keys and the d-pad step through in the open menu
 export function navigableItems(document, top) {
   if (!top) {
     return [];
   }
+
   const menu = menuElement(document, top);
-  if (top === 'settings') {
-    return [...menu.querySelectorAll('.setrow'), menu.querySelector('.xbtn')];
+  const selector = ITEMS_BEFORE_BACK[top];
+
+  if (selector) {
+    return [...menu.querySelectorAll(selector), menu.querySelector('.xbtn')];
   }
-  if (top === 'heroes') {
-    return [...menu.querySelectorAll('.hero-card'), menu.querySelector('.xbtn')];
-  }
-  if (top === 'leaderboard') {
-    const rows = menu.querySelectorAll('.tabs button, .board-row');
-    return [...rows, menu.querySelector('.xbtn')];
-  }
+
   if (top === 'post') {
     const buttons = [...menu.querySelectorAll('.mbtn')].filter((button) => !button.hidden);
     return [...menu.querySelectorAll('.post-name'), ...buttons, menu.querySelector('.xbtn')];
-  }
-  if (top === 'help') {
-    return [...menu.querySelectorAll('.tabs button'), menu.querySelector('.xbtn')];
   }
   if (top === 'skins') {
     return skinsItems(menu);

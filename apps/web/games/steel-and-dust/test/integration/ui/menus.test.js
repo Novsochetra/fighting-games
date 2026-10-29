@@ -40,15 +40,57 @@ describe('game menus on the real page', () => {
     expect(openMenu().id).toBe('m-title');
   });
 
-  it('changes and saves a setting with the arrow keys', () => {
-    page.act('settings');
+  it('opens each section of Settings on a screen of its own, and changes a setting with the keys', () => {
+    key('ArrowDown');
+    key('ArrowDown');
+    key('ArrowDown');
+    key('Enter');
     expect(openMenu().id).toBe('m-settings');
-    const rows = [...document.querySelectorAll('.setrow')];
-    page.menus.state.selected = rows.findIndex((row) => row.dataset.k === 'difficulty');
+    const sections = [...openMenu().querySelectorAll('.setlink')];
+    expect(sections.map((link) => link.dataset.section)).toEqual([
+      'sound',
+      'gameplay',
+      'screen',
+      'touch',
+      'training',
+    ]);
+    expect(openMenu().querySelector('.setrow')).toBeNull();
+
+    key('ArrowDown');
+    key('Enter');
+    expect(openMenu().id).toBe('m-section');
+    expect(document.getElementById('sectionTitle').textContent).toBe('Gameplay');
+    expect([...openMenu().querySelectorAll('.setrow')].map((row) => row.dataset.k)).toEqual([
+      'difficulty',
+      'aim',
+    ]);
+    expect(selected().dataset.k).toBe('difficulty');
     key('ArrowRight');
     expect(page.game.settings.difficulty).toBe(2);
     expect(page.saveSettings).toHaveBeenCalledWith(page.game.settings);
     expect(document.querySelector('[data-k="difficulty"] .val').textContent).toBe('Hard');
+
+    key('Escape');
+    expect(openMenu().id).toBe('m-settings');
+    expect(selected().dataset.section).toBe('gameplay');
+    key('Escape');
+    expect(openMenu().id).toBe('m-title');
+  });
+
+  it('opens a section of Settings with a tap, from the pause menu too', () => {
+    page.act('hero-moss');
+    page.game.mode = 'pause';
+    page.menus.sync();
+    page.act('settings');
+    document.querySelector('[data-section="sound"]').click();
+    expect(openMenu().id).toBe('m-section');
+    expect(document.getElementById('sectionTitle').textContent).toBe('Sound');
+    document.querySelector('[data-k="music"] [data-d="-1"]').click();
+    expect(page.game.settings.music).toBe(50);
+    expect(page.audio.syncVolumes).toHaveBeenCalled();
+    page.act('back');
+    page.act('back');
+    expect(openMenu().id).toBe('m-pause');
   });
 
   it('asks which hero to play, then starts the run with the one picked', () => {
@@ -107,7 +149,7 @@ describe('game menus on the real page', () => {
   it('lets a phone hide its joystick, and its touch controls step aside for a gamepad', () => {
     const classes = document.body.classList;
     page.game.device.coarsePointer = true;
-    page.act('settings');
+    page.openSection('touch');
     page.menus.changeSetting('stick', 1, false);
     page.menus.changeSetting('stick', 1, false);
     expect(page.game.settings.stick).toBe('hidden');

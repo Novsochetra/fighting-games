@@ -29,14 +29,6 @@ export function installMenuEvents({ document, menus, act, ui, panels, audio }) {
       audio.sfx('ui');
     }
   });
-  document.getElementById('settingsList').addEventListener('click', (event) => {
-    const stepper = event.target.closest('button[data-d]');
-    if (stepper) {
-      const row = stepper.closest('.setrow');
-      menus.state.selected = menus.items().indexOf(row);
-      menus.changeSetting(row.dataset.k, Number(stepper.dataset.d), false);
-    }
-  });
   document
     .getElementById('m-help')
     .addEventListener('click', (event) => handleHelpClick(event, { menus, panels, audio }));

@@ -67,22 +67,6 @@
   translate: 0 1px;
 }
 
-.stone-band {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--color-gold);
-}
-
-.stone-band::after {
-  content: '';
-  flex: 1;
-  height: 26px;
-  border: 0 solid var(--color-clear);
-  border-image: url('../assets/ui/settings/lotus-band.png') 0 10 0 14 fill / 0 20px 0 28px / 0 round;
-  image-rendering: pixelated;
-}
-
 @media (max-height: 600px), (max-width: 640px) {
   .stone-panel {
     --stone: 1;

@@ -46,7 +46,7 @@ describe("a skin's keys, round or pill, picked key by key on the real page", () 
   function openSkins(skin) {
     page.game.settings.skin = skin;
     page.layout.applyTouchSettings();
-    page.act('settings');
+    page.openSection('touch');
     row('skin').querySelector('[data-act="skins"]').click();
     expect(openMenu().id).toBe('m-skins');
   }

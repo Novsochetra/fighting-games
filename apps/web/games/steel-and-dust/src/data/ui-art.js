@@ -13,7 +13,6 @@ const MENU_ART = [
   'assets/ui/kit/panel-crest.png',
   'assets/ui/kit/panel-foot.png',
   'assets/ui/kit/stone-button.png',
-  'assets/ui/settings/lotus-band.png',
   'assets/ui/hud/panel-frame.png',
   'assets/ui/hud/score-frame.png',
   'assets/ui/select/card.png',

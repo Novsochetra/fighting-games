@@ -26,6 +26,9 @@ function stepSkin(menus, step) {
     ?.click();
 }
 
+// left and right change a setting or a tab there, and step through nothing else
+const NO_SIDEWAYS_STEP = new Set(['settings', 'section', 'help']);
+
 function adjust(menus, { current, step, audio }) {
   if (menus.top() === 'skins') {
     stepSkin(menus, step);
@@ -41,7 +44,7 @@ function adjust(menus, { current, step, audio }) {
   }
   if (menus.top() === 'heroes') {
     stepHero(menus, step, audio);
-  } else if (menus.top() !== 'settings' && menus.top() !== 'help') {
+  } else if (!NO_SIDEWAYS_STEP.has(menus.top())) {
     move(menus, step, audio);
   }
 }

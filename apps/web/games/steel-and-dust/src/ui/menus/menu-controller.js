@@ -116,11 +116,11 @@ export class MenuController {
   }
 
   changeSetting(key, step, wrap) {
-    if (!this.panels.settings.change(key, step, wrap)) {
+    if (!this.panels.section.change(key, step, wrap)) {
       return;
     }
     const keep = this.state.selected;
-    this.panels.settings.build();
+    this.panels.section.build();
     this.state.selected = keep;
     this.highlight(this.ui.usesButtons());
     if (!this.ui.usesButtons()) {
