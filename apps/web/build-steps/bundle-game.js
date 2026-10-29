@@ -17,8 +17,11 @@ export const pointAtBundles = (page, bundles) =>
 const nameOf = (entry) => entry.replace(/\.js$/, '').replaceAll('/', '-');
 const fromRoot = (root, file) => path.relative(root, file).split(path.sep).join('/');
 
-// The game's code as it is written (esnext, so no syntax is rewritten), only minified and joined,
-// with names that change with their content, so a page never pairs with another build's bundle.
+// The game's code as it is written, only minified and joined, with names that change with their
+// content, so a page never pairs with another build's bundle. It keeps to ES2021, as the game's own
+// code does, so the minifier never writes syntax that phones on Chrome 85 or Safari 14 can't read.
+const GAME_TARGET = 'es2021';
+
 async function buildBundles({ sourceRoot, outDir, entries }) {
   const { output } = await build({
     configFile: false,
@@ -28,7 +31,7 @@ async function buildBundles({ sourceRoot, outDir, entries }) {
     build: {
       outDir,
       emptyOutDir: true,
-      target: 'esnext',
+      target: GAME_TARGET,
       modulePreload: false,
       reportCompressedSize: false,
       // a game is one app, so most of it in one bundle is meant (Steel & Dust's is about 750 kB)
