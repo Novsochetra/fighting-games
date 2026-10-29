@@ -1,17 +1,14 @@
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import {
-  addedComments,
-  changesOf,
-  committedRevision,
-  isReviewed,
-  reviewRequest,
-} from './added-comments.js';
+import { addedComments, changesOf, isCommit, isReviewed, reviewRequest } from './added-comments.js';
 
 // Claude Code runs this after each edit and each Bash command (.claude/settings.json) and shows
 // Claude what it prints. A commit is reviewed too, as Bash can edit a file without the Edit tool.
 const root = process.env.CLAUDE_PROJECT_DIR ?? process.cwd();
+
+// A commit the command made is seconds old; an older one means the commit failed and made none.
+const FRESH_SECONDS = 120;
 
 function git(...args) {
   try {
@@ -43,6 +40,12 @@ function reviewCommit(revision) {
   });
 }
 
+function freshCommit() {
+  const age = Date.now() / 1000 - Number(git('log', '-1', '--format=%ct'));
+
+  return age <= FRESH_SECONDS ? git('rev-parse', '--short', 'HEAD').trim() : null;
+}
+
 function reviewTool(toolName, toolInput, revision) {
   if (revision) {
     return reviewCommit(revision);
@@ -51,8 +54,8 @@ function reviewTool(toolName, toolInput, revision) {
   return toolName === 'Bash' ? [] : reviewEdit(toolInput);
 }
 
-function review({ tool_name: toolName, tool_input: toolInput = {}, tool_response: response }) {
-  const revision = toolName === 'Bash' ? committedRevision(response?.stdout) : null;
+function review({ tool_name: toolName, tool_input: toolInput = {} }) {
+  const revision = toolName === 'Bash' && isCommit(toolInput.command) ? freshCommit() : null;
   const subject = revision ? `Commit ${revision}` : 'This edit';
   const found = reviewTool(toolName, toolInput, revision);
   const commentsByFile = found.filter(([, comments]) => comments.length > 0);

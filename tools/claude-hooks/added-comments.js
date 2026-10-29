@@ -1,7 +1,7 @@
 const SOURCE_FILE = /\.(?:[cm]?[jt]sx?|css)$/;
 const NOT_OURS = /(?:^|\/)(?:node_modules|dist|coverage|\.claude)\//;
 const COMMENT = /(?:^|[\s{])(\/\/.*|\/\*.*?(?:\*\/|$))/;
-const COMMIT_LINE = /^\[\S+(?: \([^)]+\))? ([0-9a-f]{7,40})\] /m;
+const GIT_COMMIT = /\bgit\b.*\bcommit\b/;
 
 // A directive tells a tool what to do; it is not the explanation CLAUDE.md asks a comment to be.
 const DIRECTIVE =
@@ -10,7 +10,7 @@ const DIRECTIVE =
 export const isReviewed = (file) =>
   SOURCE_FILE.test(file) && !NOT_OURS.test(file) && !file.startsWith('..');
 
-export const committedRevision = (output) => COMMIT_LINE.exec(output ?? '')?.[1] ?? null;
+export const isCommit = (command) => GIT_COMMIT.test(command ?? '');
 
 function commentsIn(text = '') {
   return text

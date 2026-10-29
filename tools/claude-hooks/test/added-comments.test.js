@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   addedComments,
   changesOf,
-  committedRevision,
+  isCommit,
   isReviewed,
   reviewRequest,
 } from '../added-comments.js';
@@ -62,17 +62,15 @@ describe('changesOf', () => {
   });
 });
 
-describe('committedRevision', () => {
-  it('reads the commit git just made from what it printed', () => {
-    expect(committedRevision('[claude/x 6c2ac8d] Take the button off\n 3 files changed')).toBe(
-      '6c2ac8d',
-    );
-    expect(committedRevision('[main (root-commit) 1a2b3c4] First')).toBe('1a2b3c4');
+describe('isCommit', () => {
+  it('knows a command that commits', () => {
+    expect(isCommit('git add -A && git commit -q -F - <<EOF')).toBe(true);
+    expect(isCommit('git -c user.name=x commit -m "a"')).toBe(true);
   });
 
-  it('finds none in a command that made no commit', () => {
-    expect(committedRevision('nothing to commit, working tree clean')).toBeNull();
-    expect(committedRevision(undefined)).toBeNull();
+  it('knows a command that does not', () => {
+    expect(isCommit('git status --short')).toBe(false);
+    expect(isCommit(undefined)).toBe(false);
   });
 });
 
