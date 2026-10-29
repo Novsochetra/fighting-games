@@ -66,6 +66,24 @@ describe('a skin with a shell on the real page', () => {
     );
   });
 
+  it('lays a pixel shell round the game, its controls carrying the skin, either way held', () => {
+    wear('sandstone');
+    const [left, , width] = stage();
+
+    expect(left).toBeGreaterThanOrEqual(170);
+    expect(left + width).toBeLessThanOrEqual(844 - 170);
+    expect(realShell().className).toBe('pad-shell pixel sandstone');
+    expect(document.querySelector('#touch [data-control="light"]').className).toBe(
+      'pad-button pixel-button pixel-light sandstone',
+    );
+    expect(document.querySelector('#touch [data-control="dpad"]').className).toContain(
+      'pixel-dpad sandstone',
+    );
+    holdPhone(390, 844);
+    expect(stage()).toEqual([14, 16, 362, 203]);
+    expect(realShell().querySelector('.pad-bezel')).not.toBeNull();
+  });
+
   it('stands the game at the top of the shell held upright', () => {
     wear('clear-ember');
     holdPhone(390, 844);

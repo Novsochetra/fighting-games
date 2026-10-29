@@ -843,7 +843,13 @@ keys a little see-through so the plastic tints them, a held key swapping to its 
 `assets/skins/README.md`, `tools/clear_skin_art.py`),
 the game in a bezel between two panels held sideways and at the top held upright, with the pause
 plaque in its HUD (`pausePlace`, `framed`); each control carries its shell's colour class, as it
-stands in the touch layer, not in the shell (`#shell`, behind the stage). A player picks the skin (`skin`, one
+stands in the touch layer, not in the shell (`#shell`, behind the stage). The pixel skins
+(`pixel.js`, `sandstone`) are handhelds ChatGPT painted as pixel art, read back at the size they
+were painted (`tools/pixel_skin/`) and drawn a whole pixel of the art at a time: `styles/skin-pixel.css`
+lays each shell from long pieces anchored to the screen's edges, fading into each other in a
+dither, from the art and colours its own stylesheet names (`styles/skin-sandstone.css`). Every
+handheld, Clear or pixel, frames the game and stands its controls on its panels as the others do
+(`handheld.js`, `handheldSkin`), dressed in its own classes. A player picks the skin (`skin`, one
 for both ways of holding the phone) on the Skins screen, which Settings' Skin row opens
 (`src/ui/skins/`, `styles/skin-picker.css`), where a tap on a key the skin offers a pill for
 (Clear's DASH and ULT, its `pills`, ringed and named in the bar) opens a chooser of Round or Pill

@@ -43,12 +43,13 @@ describe('the skins Steel & Dust ships', () => {
     }
   });
 
-  it('offer pills for DASH and ULT alone, each layout with them one the pad can draw', () => {
+  it('offer pills for DASH and ULT alone, on every handheld, each layout with them one the pad can draw', () => {
     const offering = Object.values(SKINS).filter((skin) => skin.pills);
 
     expect(offering.map((skin) => skin.id)).toEqual(
-      Object.keys(SKINS).filter((id) => id.startsWith('clear-')),
+      Object.keys(SKINS).filter((id) => SKINS[id].layouts.landscape.shell),
     );
+    expect(offering.map((skin) => skin.id)).toContain('sandstone');
 
     for (const skin of offering) {
       const pick = { dash: 'pill', ult: 'pill' };

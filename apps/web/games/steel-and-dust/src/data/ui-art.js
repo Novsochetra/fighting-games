@@ -36,9 +36,27 @@ export const LOADER_ART = [
 // the loading screen's own art goes first, so it is up before the menus' art starts coming in
 export const UI_ART = [...LOADER_ART, ...MENU_ART];
 
-// the Clear skins' board and gloss, either way up, and their keys, round or pill, up and pressed:
-// only the Skins screen and a fight in one of them draw these, so they come once the menu art is
-// in (boot/start-loading.js), not holding the title for every player
+// the Sandstone shell's pieces, either way up, and its keys
+const SANDSTONE_ART = [
+  'assets/skins/sandstone/landscape-left.webp',
+  'assets/skins/sandstone/landscape-left-foot.webp',
+  'assets/skins/sandstone/landscape-right.webp',
+  'assets/skins/sandstone/landscape-right-foot.webp',
+  'assets/skins/sandstone/landscape-top.webp',
+  'assets/skins/sandstone/landscape-bottom.webp',
+  'assets/skins/sandstone/portrait-crown.webp',
+  'assets/skins/sandstone/portrait-body.webp',
+  'assets/skins/sandstone/portrait-foot.webp',
+  'assets/skins/sandstone/key-round.webp',
+  'assets/skins/sandstone/key-round-pressed.webp',
+  'assets/skins/sandstone/key-pill.webp',
+  'assets/skins/sandstone/key-pill-pressed.webp',
+  'assets/skins/sandstone/dpad.webp',
+];
+
+// the Clear skins' board and gloss, either way up, and their keys, round or pill, up and pressed,
+// then Sandstone's: only the Skins screen and a fight in one of them draw these, so they come once
+// the menu art is in (boot/start-loading.js), not holding the title for every player
 export const SKIN_ART = [
   'assets/skins/clear/insides-landscape.webp',
   'assets/skins/clear/insides-portrait.webp',
@@ -49,4 +67,5 @@ export const SKIN_ART = [
   'assets/skins/clear/key-pill.webp',
   'assets/skins/clear/key-pill-pressed.webp',
   'assets/skins/clear/dpad.webp',
+  ...SANDSTONE_ART,
 ];

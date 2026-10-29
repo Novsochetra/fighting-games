@@ -25,10 +25,15 @@ describe('the menu art list', () => {
     expect([...UI_ART, ...SKIN_ART].sort()).toEqual(drawn);
   });
 
-  it("keeps the skins' own art apart, each file there, both ways up", () => {
+  it("keeps the skins' own art apart, each file there, each skin's both ways up", () => {
+    const folders = Map.groupBy(SKIN_ART, (file) => file.split('/')[2]);
+
+    expect([...folders.keys()]).toEqual(['clear', 'sandstone']);
     expect(SKIN_ART.filter((file) => UI_ART.includes(file))).toEqual([]);
-    expect(SKIN_ART.filter((file) => file.includes('-landscape.'))).toHaveLength(2);
-    expect(SKIN_ART.filter((file) => file.includes('-portrait.'))).toHaveLength(2);
+    for (const [folder, files] of folders) {
+      expect(files.filter((file) => file.includes('landscape')).length, folder).toBeGreaterThan(1);
+      expect(files.filter((file) => file.includes('portrait')).length, folder).toBeGreaterThan(1);
+    }
     for (const file of SKIN_ART) {
       expect(existsSync(new URL(file, GAME)), file).toBe(true);
     }
