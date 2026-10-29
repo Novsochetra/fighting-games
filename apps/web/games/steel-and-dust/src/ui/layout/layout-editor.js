@@ -1,4 +1,4 @@
-import { onFoldChange } from '../screen/viewport-segments.js';
+import { onFoldChange } from '../../../../../packages/screen/src/viewport-segments.js';
 import {
   createDraft,
   customised,

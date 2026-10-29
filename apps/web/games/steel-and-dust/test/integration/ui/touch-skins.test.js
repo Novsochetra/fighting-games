@@ -119,6 +119,43 @@ describe('touch skins on the real page', () => {
     expect(page.game.settings.skin).toBe('classic');
   });
 
+  it('flips skins with a swipe across the screen, not with a short drag or one up the screen', () => {
+    const section = document.getElementById('m-skins');
+    const swipe = (from, to) => {
+      pointer(section, 'pointerdown', from);
+      pointer(section, 'pointerup', to);
+    };
+
+    openSkins(page);
+    swipe([500, 250], [380, 260]);
+    expect(skinName()).toBe('Dusk');
+    swipe([300, 250], [320, 250]);
+    swipe([300, 300], [250, 120]);
+    expect(skinName()).toBe('Dusk');
+    swipe([300, 250], [420, 240]);
+    expect(skinName()).toBe('Classic');
+    pointer(document.querySelector('#m-skins [data-skin="use"]'), 'pointerdown', [700, 40]);
+    pointer(section, 'pointerup', [500, 40]);
+    expect(skinName()).toBe('Classic');
+  });
+
+  it('marks which skin of how many with its dots, and slides each in from its side', () => {
+    openSkins(page);
+    const dots = () =>
+      [...document.querySelectorAll('#m-skins .skin-dots i')].map((dot) => dot.className);
+    const pad = () => document.querySelector('#m-skins .pad');
+
+    expect(dots()).toEqual(['on', '']);
+    expect(pad().className).toBe('pad');
+    page.key('ArrowRight');
+    expect(dots()).toEqual(['', 'on']);
+    expect(pad().className).toBe('pad slide-a');
+    expect(pad().style.getPropertyValue('--skin-slide-from')).toBe('32px');
+    page.key('ArrowLeft');
+    expect(pad().className).toBe('pad slide-b');
+    expect(pad().style.getPropertyValue('--skin-slide-from')).toBe('-32px');
+  });
+
   it('shows a skin where the player moved its controls', () => {
     const { light } = { light: { x: 0.5, y: 0.5, size: 1.2 } };
     page.game.settings.buttonLayout = {

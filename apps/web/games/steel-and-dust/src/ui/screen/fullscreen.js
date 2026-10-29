@@ -1,59 +1,32 @@
+import {
+  createFullscreen as createPageFullscreen,
+  installFullscreen as installPageFullscreen,
+} from '../../../../../packages/screen/src/fullscreen.js';
+
+// phones lock to landscape in full screen where the browser allows it, and the menus' full screen
+// buttons ([data-fs]) say which way they go, or hide where there is none
 export function createFullscreen({ document, screen, ui }) {
-  const root = document.documentElement;
-  const request = root.requestFullscreen || root.webkitRequestFullscreen;
-  const current = () => document.fullscreenElement || document.webkitFullscreenElement;
-
-  // phones also lock to landscape where the browser allows it
-  function lockLandscape() {
-    if (ui.isTouchOn() && screen?.orientation?.lock) {
-      screen.orientation.lock('landscape').catch(() => {});
-    }
-  }
-
-  function enter() {
-    if (!request) {
-      return;
-    }
-    try {
-      const pending = request.call(root, { navigationUI: 'hide' });
-      pending?.then?.(lockLandscape).catch(() => {});
-    } catch {
-      return;
-    }
-  }
-
-  function toggle() {
-    if (current()) {
-      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
-    } else {
-      enter();
-    }
-  }
+  const fullscreen = createPageFullscreen({ document, screen, lockLandscape: ui.isTouchOn });
 
   function refreshLabels() {
     for (const button of document.querySelectorAll('[data-fs]')) {
-      button.hidden = !request;
-      button.textContent = current() ? 'Exit full screen' : 'Full screen';
+      button.hidden = !fullscreen.supported;
+      button.textContent = fullscreen.isActive() ? 'Exit full screen' : 'Full screen';
     }
   }
 
-  return { supported: !!request, isActive: () => !!current(), enter, toggle, refreshLabels };
+  return { ...fullscreen, refreshLabels };
 }
 
+// the page fits itself again once the browser has settled into full screen or out of it
 export function installFullscreen({ window, document, fullscreen, layout }) {
-  const changed = () => {
-    fullscreen.refreshLabels();
-    window.setTimeout(layout.fit, 60);
-  };
-  document.addEventListener('fullscreenchange', changed);
-  document.addEventListener('webkitfullscreenchange', changed);
-  window.addEventListener(
-    'keydown',
-    (event) => {
-      if (event.code === 'KeyF' && !event.repeat && !event.ctrlKey && !event.metaKey) {
-        fullscreen.toggle();
-      }
+  installPageFullscreen({
+    window,
+    document,
+    fullscreen,
+    changed: () => {
+      fullscreen.refreshLabels();
+      window.setTimeout(layout.fit, 60);
     },
-    true,
-  );
+  });
 }

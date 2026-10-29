@@ -40,7 +40,7 @@ export const SETTINGS_SCHEMA = [
     label: 'Vibration',
     options: [false, true],
     format: onOff,
-    note: 'Rumbles the gamepad or phone you play with',
+    note: 'Rumbles the gamepad or phone you play with, and ticks as you press the touch controls',
     visible: ({ canVibrate }) => canVibrate,
   },
   { group: 'Screen' },

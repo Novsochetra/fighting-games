@@ -91,6 +91,7 @@ describe('a touch pad drawn from a skin', () => {
   it('presses every input of a button and lets them go together', () => {
     pointer(control('super'), 'pointerdown', SPOTS.super);
     expect(control('super').classList.contains('on')).toBe(true);
+    expect(control('super').dataset.pulse).toBe('a');
     pointer(control('super'), 'pointerup', SPOTS.super);
     pointer(control('super'), 'lostpointercapture', SPOTS.super);
 
@@ -101,6 +102,43 @@ describe('a touch pad drawn from a skin', () => {
       ['release', 'light'],
     ]);
     expect(control('super').classList.contains('on')).toBe(false);
+  });
+
+  it('flips a button’s pulse on every press, so a skin can play it afresh', () => {
+    const pulses = [];
+
+    for (let i = 0; i < 3; i++) {
+      pointer(control('jump'), 'pointerdown', SPOTS.jump);
+      pulses.push(control('jump').dataset.pulse);
+      pointer(control('jump'), 'pointerup', SPOTS.jump);
+    }
+
+    expect(pulses).toEqual(['a', 'b', 'a']);
+  });
+
+  it('lets a pulse go once it has played or was cut off, so a hidden pad never replays it', () => {
+    const settled = (type, pseudoElement) => {
+      pointer(control('jump'), 'pointerdown', SPOTS.jump);
+      pointer(control('jump'), 'pointerup', SPOTS.jump);
+      const event = Object.assign(new Event(type, { bubbles: true }), { pseudoElement });
+      control('jump').dispatchEvent(event);
+      return control('jump').dataset.pulse;
+    };
+
+    expect(settled('animationend', '::after')).toBeUndefined();
+    expect(settled('animationcancel', '::after')).toBeUndefined();
+    expect(settled('animationend', '')).toBe('a');
+  });
+
+  it('finds a control by its id without searching the page, until the pad is drawn again', () => {
+    const jump = pad.control('jump');
+
+    expect(jump).toBe(control('jump'));
+    expect(pad.control('nothing')).toBeUndefined();
+    renderPad(layer, { items: [JUMP] });
+    expect(pad.control('jump')).not.toBe(jump);
+    expect(pad.control('jump')).toBe(control('jump'));
+    expect(pad.control('super')).toBeUndefined();
   });
 
   it('rolls a thumb over the d-pad from up to a corner to right, then lets go', () => {
@@ -199,6 +237,13 @@ describe('a touch pad drawn from a skin', () => {
     placePad(layer, null);
     expect(control('jump').style.getPropertyValue('--pad-x')).toBe('');
     expect(layer.querySelector('.pad-controls').classList.contains('pad-placed')).toBe(false);
+  });
+
+  it('draws the pad again in a layer that was emptied', () => {
+    layer.replaceChildren();
+    renderPad(layer, { items: [JUMP] });
+
+    expect(layer.querySelector('.pad [data-control="jump"]')).toBe(pad.control('jump'));
   });
 
   it('outlines the controls of a skin drawn for debugging', () => {

@@ -3,6 +3,10 @@ import { installPadStyles } from './pad-styles.js';
 const DIRECTIONS = ['up', 'right', 'down', 'left'];
 const itemsByControl = new WeakMap();
 const layoutsByPad = new WeakMap();
+// a game asks for a control on every frame (its states, like ULT ready), so each pad keeps its
+// controls by id, and each layer its pad
+const controlsByPad = new WeakMap();
+const padsByLayer = new WeakMap();
 
 function element(document, tag, className) {
   const node = document.createElement(tag);
@@ -62,8 +66,7 @@ function controlOf(document, item) {
 
 export const itemOf = (control) => itemsByControl.get(control);
 
-export const padOf = (layer) =>
-  [...layer.children].find((child) => child.classList.contains('pad'));
+export const padOf = (layer) => padsByLayer.get(layer);
 
 // the stick stands in a zone of its own, the half of the screen a thumb grabs it in; the other
 // controls stand together, after it, so they stay on top of it
@@ -71,9 +74,12 @@ function fill(pad, layout) {
   const { ownerDocument: document } = pad;
   const controls = element(document, 'div', 'pad-controls');
   const zones = [];
+  const byId = new Map();
 
   for (const item of layout.items) {
     const control = controlOf(document, item);
+
+    byId.set(item.id, control);
 
     if (item.kind === 'stick') {
       const zone = element(document, 'div', 'pad-zone');
@@ -86,6 +92,7 @@ function fill(pad, layout) {
   }
 
   pad.replaceChildren(...zones, controls);
+  controlsByPad.set(pad, byId);
 }
 
 // draws a skin's layout for the way the phone is held on `layer` (the touch layer, or the layout
@@ -95,10 +102,11 @@ export function renderPad(layer, layout, { debug = false } = {}) {
   const document = layer.ownerDocument;
   let pad = padOf(layer);
 
-  if (!pad) {
+  if (pad?.parentNode !== layer) {
     installPadStyles(document);
     pad = element(document, 'div', 'pad');
     layer.prepend(pad);
+    padsByLayer.set(layer, pad);
   }
 
   pad.classList.toggle('pad-debug', debug);
@@ -111,4 +119,4 @@ export function renderPad(layer, layout, { debug = false } = {}) {
   return pad;
 }
 
-export const controlIn = (layer, id) => padOf(layer)?.querySelector(`[data-control="${id}"]`);
+export const controlIn = (layer, id) => controlsByPad.get(padOf(layer))?.get(id);

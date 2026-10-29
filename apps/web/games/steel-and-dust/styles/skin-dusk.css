@@ -18,13 +18,35 @@
   );
   border: 2px solid var(--color-dusk-rim);
   box-shadow: var(--shadow-dusk-glass);
+  transition: scale var(--duration-normal) var(--easing-overshoot);
 }
 
+/* pressed and let go as the classic buttons are (styles/touch-buttons.css), whose keyframes the
+   ring shares */
 .dusk.on {
   background: var(--color-dusk-pressed);
   color: var(--color-ink);
   text-shadow: none;
   scale: 0.93;
+  transition-duration: var(--duration-instant);
+}
+
+.dusk::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--color-dusk-ring);
+  border-radius: var(--radius-round);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dusk[data-pulse='a']::after {
+  animation: touch-pop-a var(--duration-touch-pop) var(--easing-out);
+}
+
+.dusk[data-pulse='b']::after {
+  animation: touch-pop-b var(--duration-touch-pop) var(--easing-out);
 }
 
 .dusk-light {
@@ -65,11 +87,13 @@
   background: var(--color-dusk-glass);
 }
 
+/* an arm sinks at once as the thumb rolls onto it, and springs back as it rolls off */
 .dusk-dpad .pad-arm {
   border: 2px solid var(--color-dusk-rim);
   border-radius: var(--radius-xl);
   background: radial-gradient(circle, var(--color-dusk-glow), var(--color-dusk-glass) 75%);
   box-shadow: var(--shadow-dusk-glass);
+  transition: scale var(--duration-normal) var(--easing-overshoot);
 }
 
 .dusk-dpad .pad-arm::after {
@@ -102,11 +126,22 @@
 .dusk-dpad[data-pressed~='down'] .pad-arm[data-direction='down'],
 .dusk-dpad[data-pressed~='left'] .pad-arm[data-direction='left'] {
   background: var(--color-dusk-pressed);
+  scale: 0.94;
+  transition-duration: var(--duration-instant);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .dusk-ult.ready {
     animation: none;
     box-shadow: var(--shadow-ult-ready-still);
+  }
+
+  .dusk,
+  .dusk-dpad .pad-arm {
+    transition: none;
+  }
+
+  .dusk[data-pulse]::after {
+    animation: none;
   }
 }

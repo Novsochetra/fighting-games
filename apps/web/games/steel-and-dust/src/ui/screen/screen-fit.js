@@ -9,10 +9,10 @@ import { skinLayoutFor, steersWithDpad } from '../../data/skins/skins.js';
 import { orientationOf, savedEntries, slotFor } from '../layout/layout-draft.js';
 import { fitMenus, menuBox } from './menu-area.js';
 import { pausePlace, placePause } from './pause-place.js';
-import { createSafeArea } from './safe-area.js';
+import { createSafeArea } from '../../../../../packages/screen/src/safe-area.js';
 import { arrangeStage, STICK_RADIUS, stickRestPosition } from './stage-layout.js';
 import { fitTouchLayer, touchAreaOf } from './touch-area.js';
-import { onFoldChange, readHinge } from './viewport-segments.js';
+import { onFoldChange, readHinge } from '../../../../../packages/screen/src/viewport-segments.js';
 
 function applyTouchClasses(document, { game, ui }) {
   const { classList } = document.body;

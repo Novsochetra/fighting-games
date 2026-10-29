@@ -1,13 +1,16 @@
 import { installTouchPad } from '../../../../packages/touch-pad/src/install-touch-pad.js';
 import { buttonScale } from '../data/settings.js';
+import { buzz } from '../sim/fx/haptics.js';
 import { pause } from '../sim/stage/flow.js';
 
 // what the touch pad's controls do in the game: a button presses its action as a key does, and
-// the stick holds a direction, as it only steers (JUMP and DASH have buttons)
+// the stick holds a direction, as it only steers (JUMP and DASH have buttons). Each press and each
+// new direction ticks under the thumb (Settings, Vibration)
 export function createTouchActions({ game, audio }) {
   return {
     press(action) {
       audio.unlock();
+      buzz(game, 'tap');
       game.input.pressed[action] = true;
       game.input.held[action] = true;
 
@@ -27,6 +30,10 @@ export function createTouchActions({ game, audio }) {
 
     steer(direction, on) {
       game.input.held[direction] = on;
+
+      if (on) {
+        buzz(game, 'tap');
+      }
     },
   };
 }

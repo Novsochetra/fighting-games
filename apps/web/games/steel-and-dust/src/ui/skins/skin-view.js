@@ -1,4 +1,4 @@
-import { SKINS } from '../../data/skins/skins.js';
+import { SKIN_IDS, SKINS } from '../../data/skins/skins.js';
 import { orientationOf, savedEntries, slotOf } from '../layout/layout-draft.js';
 import { fillPreview } from '../layout/layout-markup.js';
 import { drawPreviewPad, restPreviewStick } from '../layout/preview-pad.js';
@@ -11,7 +11,10 @@ const SKINS_HTML = `<div class="skin-preview" aria-hidden="true"></div>
     <div class="layout-tools">
       <span class="layout-group">
         <button type="button" class="layout-step stone-btn" data-skin-step="-1" aria-label="Previous skin">‹</button>
-        <span class="skin-name"></span>
+        <span class="skin-title">
+          <span class="skin-name"></span>
+          <span class="skin-dots" aria-hidden="true">${SKIN_IDS.map(() => '<i></i>').join('')}</span>
+        </span>
         <button type="button" class="layout-step stone-btn" data-skin-step="1" aria-label="Next skin">›</button>
       </span>
       <span class="layout-group">
@@ -39,9 +42,20 @@ export class SkinView {
     return this.section.classList.contains('open');
   }
 
+  // the controls come in from the side the skin came from: `from` is 1 for the next skin, -1 for
+  // the one before. Two classes take turns, so a quick second step plays it afresh
+  slideIn(from) {
+    const pad = this.preview.querySelector('.pad');
+    const slide = pad.classList.contains('slide-a') ? 'slide-b' : 'slide-a';
+
+    pad.classList.remove('slide-a', 'slide-b');
+    pad.style.setProperty('--skin-slide-from', `${from * 32}px`);
+    pad.classList.add(slide);
+  }
+
   // held the way the phone is, at the player's Button size and opacity, and where the player put
   // the controls of this skin, if they did
-  render(skinId, settings) {
+  render(skinId, settings, from = 0) {
     const skin = SKINS[skinId];
     const orientation = orientationOf(this.app.clientWidth, this.app.clientHeight);
     const custom = savedEntries(settings.buttonLayout, slotOf(skinId, orientation));
@@ -51,5 +65,12 @@ export class SkinView {
     restPreviewStick(this.preview, { places, layout: this.layout, app: this.app, settings });
     this.bar.querySelector('.skin-name').textContent = skin.name;
     this.bar.querySelector('.skin-about').textContent = skin.about;
+    this.bar.querySelectorAll('.skin-dots i').forEach((dot, i) => {
+      dot.classList.toggle('on', SKIN_IDS[i] === skinId);
+    });
+
+    if (from) {
+      this.slideIn(from);
+    }
   }
 }

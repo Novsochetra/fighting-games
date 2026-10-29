@@ -8,6 +8,7 @@
   height: 100%;
   padding: 0;
   overflow: hidden;
+  touch-action: none;
 }
 
 .skin-preview {
@@ -28,10 +29,68 @@ body.stick-hidden .skin-preview .pad-stick {
   visibility: hidden;
 }
 
-/* as wide as the longest name, so the arrows stay put as the skins go by */
-.skin-name {
+/* as wide as the longest name, so the arrows stay put as the skins go by; the dots under it tell
+   which skin of how many */
+.skin-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
   min-width: 8ch;
-  text-align: center;
+}
+
+.skin-name {
   font-size: var(--font-size-md);
   color: var(--color-gold);
+}
+
+.skin-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.skin-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-round);
+  background: var(--color-text-muted);
+  opacity: 0.5;
+  transition:
+    background-color var(--duration-quick) var(--easing-standard),
+    opacity var(--duration-quick) var(--easing-standard);
+}
+
+.skin-dots i.on {
+  background: var(--color-gold);
+  opacity: 1;
+}
+
+/* the controls of the skin stepped to come in from its side (skin-view.js) */
+.skin-preview .pad.slide-a {
+  animation: skin-slide-a var(--duration-normal) var(--easing-standard);
+}
+
+.skin-preview .pad.slide-b {
+  animation: skin-slide-b var(--duration-normal) var(--easing-standard);
+}
+
+@keyframes skin-slide-a {
+  from {
+    opacity: 0;
+    translate: var(--skin-slide-from) 0;
+  }
+}
+
+@keyframes skin-slide-b {
+  from {
+    opacity: 0;
+    translate: var(--skin-slide-from) 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skin-preview .pad.slide-a,
+  .skin-preview .pad.slide-b {
+    animation: none;
+  }
 }

@@ -22,14 +22,62 @@
   border: 2px solid var(--color-touch-border);
   box-shadow: var(--shadow-touch-button);
   translate: 50% 50%;
+  transition: scale var(--duration-normal) var(--easing-overshoot);
 }
 
+/* a press sinks at once under the thumb and lights up, and the release springs back a touch past
+   full size; only the size moves, which the compositor runs without painting the button again */
 .tb.on {
   background: var(--color-touch-pressed);
   border-color: var(--color-amber-pale);
   color: var(--color-ink);
   text-shadow: none;
   scale: 0.93;
+  transition-duration: var(--duration-instant);
+}
+
+/* each press pops a ring out of the button: the touch pad flips data-pulse on every press, so a
+   quick tap, or the next press before it ends, plays it afresh */
+.tb::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--color-touch-ring);
+  border-radius: var(--radius-round);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tb[data-pulse='a']::after {
+  animation: touch-pop-a var(--duration-touch-pop) var(--easing-out);
+}
+
+.tb[data-pulse='b']::after {
+  animation: touch-pop-b var(--duration-touch-pop) var(--easing-out);
+}
+
+@keyframes touch-pop-a {
+  from {
+    opacity: 0.8;
+    scale: 0.9;
+  }
+
+  to {
+    opacity: 0;
+    scale: 1.4;
+  }
+}
+
+@keyframes touch-pop-b {
+  from {
+    opacity: 0.8;
+    scale: 0.9;
+  }
+
+  to {
+    opacity: 0;
+    scale: 1.4;
+  }
 }
 
 .tb-atk {
@@ -112,5 +160,13 @@
   .tb-ult.ready {
     animation: none;
     box-shadow: var(--shadow-ult-ready-still);
+  }
+
+  .tb {
+    transition: none;
+  }
+
+  .tb[data-pulse]::after {
+    animation: none;
   }
 }

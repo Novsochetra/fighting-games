@@ -68,6 +68,8 @@
   --color-dusk-rim-jump: color-mix(in srgb, var(--color-hero-blue) 80%, transparent);
   --color-dusk-pressed: color-mix(in srgb, var(--color-amber) 82%, transparent);
   --color-dusk-label: var(--color-cream);
+  --color-dusk-ring: color-mix(in srgb, var(--color-amber-light) 75%, transparent);
+  --color-touch-ring: color-mix(in srgb, var(--color-amber-pale) 75%, transparent);
   --color-hud-plate: color-mix(in srgb, var(--color-night) 55%, transparent);
   --color-hud-shadow: #140f1a;
 
@@ -157,6 +159,7 @@
   --duration-fast: 120ms;
   --duration-quick: 150ms;
   --duration-normal: 200ms;
+  --duration-touch-pop: 300ms;
   --duration-slow: 450ms;
   --duration-logo: 600ms;
   --duration-pulse: 800ms;

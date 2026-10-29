@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { hingeOf, onFoldChange, readHinge } from '../../../src/ui/screen/viewport-segments.js';
+import { hingeOf, onFoldChange, readHinge } from '../../src/viewport-segments.js';
 
 const rect = (x, y, width, height) => ({ x, y, width, height });
 const FOLD = { width: 1104, height: 884 };

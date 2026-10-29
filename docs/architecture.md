@@ -37,7 +37,8 @@ apps/
     src/offline/          the service worker, which keeps the arcade and each game played for offline
     packages/
       <name>/             code more than one game uses (input: the gamepad, keys, rumble;
-                          touch-pad: the touch controls drawn from a skin), which knows no game;
+                          touch-pad: the touch controls drawn from a skin; screen: the stage fit,
+                          folds, notches, gesture guards, full screen), which knows no game;
                           src/ and test/{unit,integration}, joined into each game
     games/
       <game-id>/          one self-contained app: it loads nothing from outside its folder but the
@@ -88,6 +89,20 @@ no package into `dist/`. A game shipped, or saved for offline, still loads nothi
 folder. A change to a package reaches every game that uses it on the next build, so every game's
 tests run with the package's own (`npm run check`).
 
+### Screen
+
+`packages/screen/` fits a game to the screen it is played on. `stage-fit.js` (`arrangeView`)
+letterboxes the game's view in its own shape, and stands it over the touch controls on an upright
+phone, or on a screen held sideways when that costs the stage at most a fifth of its width (an
+unfolded foldable, not a tablet); it works the shape out in its smallest terms (768x432 is 16 to 9),
+so every layout comes out to the pixel as it did before the package, checked over 1.4 million
+screens. `viewport-segments.js` reads a half-folded phone's halves (`readHinge`, `onFoldChange`),
+`safe-area.js` the notch and home bar insets, `gesture-guards.js` cancels iPhone Safari's pinch and
+double-tap zoom, long-press callouts and selection, and `fullscreen.js` goes full screen and locks a
+phone to landscape where the browser allows. Steel & Dust passes its 768x432 view and its
+controls' height (`src/ui/screen/stage-layout.js`), and keeps where the stick rests, the menus' box
+on a fold and the pause plaque, which are its own.
+
 ### Touch pad and skins
 
 `packages/touch-pad/` draws a game's touch controls from a skin and answers the thumbs on them, as
@@ -108,12 +123,17 @@ layout for each way the phone is held (`landscape`, `portrait`), each listing it
 
 `renderPad(layer, layout)` draws a layout first in the touch layer, in a `.pad`: the stick in a
 `.pad-zone` of its own, the rest in `.pad-controls` after it, each with its `data-control`. The
-same layout again is left as it is, so a refit never cuts a press short. `placePad(layer, places)`
+same layout again is left as it is, so a refit never cuts a press short, and each pad keeps its
+controls by id, as a game asks for one on every frame (`control(id)`, for states like ULT ready). `placePad(layer, places)`
 stands each control by its centre (`--pad-x`, `--pad-y`, `--pad-dx`, `--pad-dy`) and size
 (`--pad-size`): the player's own places first, else the skin's (`placesOf`). `installTouchPad(layer, options)` answers on the
 layer for whatever is drawn on it: a button calls `handler.press` and `handler.release` for each
 of its inputs, and the stick and the d-pad (three by three, a corner holding two directions,
-`dpad-math.js`) call `handler.steer(input, on)` as a thumb moves on them. The pad's own rules
+`dpad-math.js`) call `handler.steer(input, on)` as a thumb moves on them. Each press flips the
+button's `data-pulse` between `a` and `b`, so a skin can play an animation of its own afresh on every
+press, even one a quick tap or the next press cuts short; the pad lets the pulse go once it has
+played or was cut off (`animationend`, `animationcancel`), as an animation plays again when the
+touch layer comes back into view, and a resumed game would pop every button pressed before. The pad's own rules
 (`pad-styles.js`, put first in the head) stand and size the controls from the game's
 `--pad-scale`, and never paint them. A game's tests check each skin it ships (`skinProblems`,
 `skin-check.js`), and `renderPad(layer, layout, { debug: true })` outlines every control and zone.
@@ -670,11 +690,22 @@ for both ways of holding the phone) on the Skins screen, which Settings' Skin ro
 (`src/ui/skins/`, `styles/skin-picker.css`): like the layout editor, a copy of the touch layer over
 a light dim shows the skin looked at standing as it will, held the way the phone is, at the
 player's Button size and opacity and with their own layout of it (`preview-pad.js`, which both
-share). ‹ ›, left and right step through the skins; Use picks one and Cancel leaves. Settings also
-sets the controls' opacity (`padOpacity`, `--pad-opacity`, never the pause button's). The help and the first hints name the
-d-pad when one steers (`steersWithDpad`; the screen fit marks `game.device` on each fit, which only
-the drawing reads). `src/input/touch-actions.js` turns the pad's inputs into `game.input`. The
-controls can be moved and resized (Settings, Button layout). The editor is its own menu,
+share). ‹ ›, left and right, or a swipe across the screen step through the skins, each sliding in
+from its side, and dots under the name tell which of how many; Use picks one and Cancel leaves.
+Settings also sets the controls' opacity (`padOpacity`, `--pad-opacity`, never the pause
+button's). The help and the first hints name the d-pad when one steers (`steersWithDpad`; the
+screen fit marks `game.device` on each fit, which only the drawing reads).
+
+A touch control answers the thumb as the arcade's buttons do: a press sinks it at once and lights
+it, a ring pops out of it (the pad's `data-pulse`), and the release springs it back a touch past
+full size; the stick's knob springs home when the thumb lets go, and a d-pad's arm sinks as the
+thumb rolls onto it. Only size and opacity move, which the compositor runs without painting the
+control again: with its colours eased too, a fight on a phone's CPU (4x slowed) lost frames, and
+without them it plays as before (the same frame rate, frame times and main-thread work as 1.2.0,
+measured over eight fights each). With reduced motion the controls only light up. Each press, and
+each new way the stick or the d-pad turns, ticks the phone under the thumb (the `tap` cue,
+Settings Vibration), shorter than a blow landing. `src/input/touch-actions.js` turns the pad's
+inputs into `game.input`. The controls can be moved and resized (Settings, Button layout). The editor is its own menu,
 `layout`, in `src/ui/layout/` with `styles/layout-editor.css`: it draws the skin again on a copy of
 the touch layer, drags its controls and works on a draft (`layout-draft.js`) of every skin's
 layouts, each in a slot (`dusk:portrait`), so only Done saves, and it edits the skin shown. The

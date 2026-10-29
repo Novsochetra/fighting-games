@@ -12,7 +12,10 @@ import { MenuController } from '../ui/menus/menu-controller.js';
 import { installMenuEvents } from '../ui/menus/menu-events.js';
 import { createNavigator, handleMenuKey } from '../ui/menus/menu-navigation.js';
 import { createFullscreen, installFullscreen } from '../ui/screen/fullscreen.js';
-import { installGestureGuards, installMenuTapFix } from '../ui/screen/gesture-guards.js';
+import {
+  installGestureGuards,
+  installMenuTapFix,
+} from '../../../../packages/screen/src/gesture-guards.js';
 import { createScreenFit, installScreenFit } from '../ui/screen/screen-fit.js';
 import { createSettingsPanel } from '../ui/settings/settings-panel.js';
 import { createSkinPicker } from '../ui/skins/skin-picker.js';
@@ -79,7 +82,12 @@ export function installUi({ window, elements, game, audio, ui, pad }) {
   installCarouselEvents({ stage: elements.heroStage, menus, audio });
   installCreditsEnd({ root: elements.credits, menus });
   installFullscreen({ window, document, fullscreen, layout });
-  installGestureGuards({ window, document, elements });
+  installGestureGuards({
+    window,
+    document,
+    root: elements.app,
+    surfaces: [elements.stage, elements.touch],
+  });
   installMenuTapFix(elements.menus);
   return { layout, fullscreen, menus, act, supporters };
 }

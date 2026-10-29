@@ -20,6 +20,15 @@ function press(event, { handler, stick, dpad }) {
   }
 }
 
+// a pulse (data-pulse, pad-buttons.js) that has played, or was cut off as the touch layer hid, is
+// let go: an animation plays again when what it is on comes back into view, so a resumed game
+// would pop every button pressed before the pause at once
+function settlePulse(event) {
+  if (event.pseudoElement && event.target.dataset?.pulse) {
+    delete event.target.dataset.pulse;
+  }
+}
+
 function release(event, { handler, stick, dpad }) {
   const button = closest(event, '.pad-button');
 
@@ -47,6 +56,10 @@ export function installTouchPad(layer, { handler, stickMode, stickRest }) {
 
   for (const type of ENDS) {
     layer.addEventListener(type, (event) => release(event, parts));
+  }
+
+  for (const type of ['animationend', 'animationcancel']) {
+    layer.addEventListener(type, settlePulse);
   }
 
   return {
