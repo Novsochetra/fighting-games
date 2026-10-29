@@ -16,12 +16,13 @@ function heartColors(lives) {
 }
 
 describe('the lives on the HUD', () => {
-  it('draws a full heart for every life left and a dark one for every life lost', () => {
-    expect(heartColors(3)).toEqual([FULL, FULL, FULL, LOST, LOST]);
-    expect(heartColors(5)).toEqual([FULL, FULL, FULL, FULL, FULL]);
+  it('draws a full heart for every life still to come and a dark one for every life lost', () => {
+    expect(heartColors(4)).toEqual([FULL, FULL, FULL, LOST, LOST]);
+    expect(heartColors(6)).toEqual([FULL, FULL, FULL, FULL, FULL]);
   });
 
-  it('draws every heart dark once the last life is gone', () => {
+  it('draws every heart dark on the last life and once it is gone', () => {
+    expect(heartColors(1)).toEqual([LOST, LOST, LOST, LOST, LOST]);
     expect(heartColors(0)).toEqual([LOST, LOST, LOST, LOST, LOST]);
   });
 });

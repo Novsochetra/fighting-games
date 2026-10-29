@@ -27,6 +27,10 @@
         builds a one-off layer for the start of a road from pieces of the last mission's near strip:
         each piece (columns x0 to x1 from row y0 down) is set at column `at` with its lowest solid
         row on base_y, and all of it is hazed toward this forest's air
+    python3 tools/backdrop_layers.py taper <in> <out> <left|right> <x_top> <y_top> <x_foot>
+        cuts one end of a one-off layer back into a frayed slope, from column x_top on row y_top
+        down to column x_foot on its lowest solid row, so a piece cut out of a strip settles on the
+        road like a mound instead of standing on a straight edge
     python3 tools/backdrop_layers.py near <out> <base_y> <haze #rrggbb> <amount> <in>...
         rolls each transparent near painting so its widest see-through gap sits on its edges,
         drops its lowest solid row to base_y, joins them side by side and hazes them toward the
@@ -175,6 +179,26 @@ def wayin(dst, base_y, colour, amount, *pieces):
         part = Image.open(path).convert('RGBA').crop((int(x0), int(y0), int(x1), HEIGHT))
         out.alpha_composite(part, (int(at), int(base_y) - lowest_solid_row(part)))
     haze(out, colour, float(amount)).save(dst)
+
+
+# how far each row of a tapered end steps back in, so it frays like turf instead of a ruled line
+FRAY = [0, 1, 0, 2, 1, 0, 1, 3, 0, 1, 2, 0]
+
+
+def taper(src, dst, side, x_top, y_top, x_foot):
+    im = Image.open(src).convert('RGBA')
+    px = im.load()
+    x_top, y_top, x_foot = int(x_top), int(y_top), int(x_foot)
+    foot = lowest_solid_row(im)
+    inward = 1 if side == 'left' else -1
+    for y in range(y_top, foot + 1):
+        # steep under the piece and spreading at its foot, as a bank of earth settles
+        spread = ((y - y_top) / max(1, foot - y_top)) ** 2
+        edge = round(x_top + (x_foot - x_top) * spread) + inward * FRAY[y % len(FRAY)]
+        for x in range(im.width):
+            if (x - edge) * inward < 0:
+                px[x, y] = (0, 0, 0, 0)
+    im.save(dst)
 
 
 def widest_gap_centre(im):
@@ -433,6 +457,7 @@ if __name__ == '__main__':
         'groundhaze': groundhaze,
         'vary': vary,
         'wayin': wayin,
+        'taper': taper,
         'cliff': cliff,
         'edge': edge,
         'unblend': unblend,

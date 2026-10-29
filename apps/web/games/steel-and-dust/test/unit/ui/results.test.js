@@ -4,7 +4,7 @@ import { clearResultsHtml } from '../../../src/ui/menus/results-text.js';
 const cleared = (more) => ({
   missionIndex: 11,
   score: 186420,
-  lives: 3,
+  lives: 4,
   playTime: 60 * 60 * 47 + 60 * 17,
   continues: 2,
   records: { bestCombo: 48 },

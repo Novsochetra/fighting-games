@@ -75,8 +75,8 @@ describe('a run saved on an earlier visit', () => {
     expect(visibleButtons()[0]).toBe('Continue mission 5');
     page.act('play');
     page.act('hero-moss');
-    expect(page.game).toMatchObject({ mode: 'play', missionIndex: 0, score: 0, lives: 5 });
-    expect(page.game.checkpoint).toMatchObject({ mission: 0, score: 0, lives: 5 });
+    expect(page.game).toMatchObject({ mode: 'play', missionIndex: 0, score: 0, lives: 6 });
+    expect(page.game.checkpoint).toMatchObject({ mission: 0, score: 0, lives: 6 });
   });
 
   it('is let go with the last life, and the title offers only a new game', () => {

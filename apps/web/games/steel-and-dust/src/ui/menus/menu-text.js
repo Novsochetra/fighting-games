@@ -1,6 +1,6 @@
 import { rankOf } from '../../data/leaderboard.js';
 import { WEAPONS } from '../../data/weapons/index.js';
-import { hasLivesLeft } from '../../sim/stage/lives.js';
+import { hasLivesLeft, heartsLeft } from '../../sim/stage/lives.js';
 
 function titleTip({ ui, fullscreen, isIos, padConnected }) {
   if (ui.isTouchOn()) {
@@ -37,7 +37,7 @@ function livesLeftHtml(lives) {
   if (lives === 1) {
     return '<b>last life</b>';
   }
-  return lives > 0 ? `lives left <b>${lives}</b>` : '<b>no lives left</b>';
+  return lives > 0 ? `lives left <b>${heartsLeft(lives)}</b>` : '<b>no lives left</b>';
 }
 
 export function boardPlace(game) {

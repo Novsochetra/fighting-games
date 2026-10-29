@@ -893,13 +893,17 @@ length.
   earlier on its road is a mid-boss and only opens the road. The score, clock, continues, lives and
   ULT bar carry into the next mission (`enterNextMission`); the hero starts it fresh. A new run
   starts at mission 1; there is no mission select.
-- A run has five lives (`START_LIVES` in `src/data/player.js`), shown as hearts on the hero's
-  panel (`src/render/hud/lives.js`). Every fall costs one (`loseLife` in `src/sim/stage/lives.js`)
+- A run starts with five hearts (`START_HEARTS` in `src/data/player.js`) on the hero's panel
+  (`src/render/hud/lives.js`). A heart is a life still to come, as a spare life is in an arcade, so
+  a run has six lives (`START_LIVES`): the hearts and the one being played (`heartsLeft` in
+  `src/sim/stage/lives.js`), and a hero with no hearts left plays on, on the last life. Every fall
+  costs one (`loseLife` in `src/sim/stage/lives.js`)
   and nothing gives one back: not a continue, a restart of the mission or a new mission. While lives
   are left, a fallen hero continues where they fell, as any Shade: Continue opens the Shade list,
   and `continueAs` (`src/sim/stage/flow.js`) brings the hero back as the one picked, keeping the
-  run. The last fall is Game over: the defeat menu offers only Start from mission 1, a new run with
-  five lives, the Leaderboard and Quit.
+  run. The fall with no hearts left is Game over: the defeat menu offers only Start from mission 1,
+  a new run with five hearts, Post score online (while the run holds its ticket), Share, the
+  Leaderboard and Quit.
 - A run is saved as each mission starts (`saveCheckpoint`, `src/sim/stage/checkpoint.js`, kept in
   `localStorage` as `sd_run`): the mission and what the run carries into it, the score, clock,
   continues, lives and ULT bar. Closing the game costs at most the mission being played, and never
