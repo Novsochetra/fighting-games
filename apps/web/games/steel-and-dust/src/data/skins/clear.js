@@ -10,8 +10,12 @@ const control = (id, label, place) => ({
   ...place,
 });
 
-// DASH and ULT are pills on the shell's shoulders, as a handheld's bumpers
-const pill = (id, label, at) => control(id, label, { at, size: 104, aspect: 0.38 });
+// DASH and ULT are pills on the shell's shoulders, as a handheld's bumpers, shaped as their art is
+// (assets/skins/clear/key-pill.webp, 386 by 170)
+const pill = (id, label, at) => ({
+  ...control(id, label, { at, size: 104, aspect: 0.44 }),
+  class: `clear-button clear-pill clear-${id}`,
+});
 
 // held sideways the game sits in the middle of the shell, in a bezel between two panels: the d-pad
 // in the left one, ATTACK, JUMP and HEAVY in the right, each hung off a corner of the safe area

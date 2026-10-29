@@ -1,7 +1,7 @@
 // every image the menus' stylesheets draw: the stone kit and the title painting for either way up
 // (the hero cards' strips are named by the heroes table, ui/loading/boot-art.js); the loading screen
-// holds the title until all of it is in (test/unit/data/ui-art.test.js keeps UI_ART in step with
-// the stylesheets)
+// holds the title until all of it is in (test/unit/data/ui-art.test.js keeps UI_ART and SKIN_ART in
+// step with the stylesheets)
 const MENU_ART = [
   'assets/ui/select/bg-landscape.png',
   'assets/ui/select/bg-portrait.png',
@@ -21,8 +21,6 @@ const MENU_ART = [
   'assets/ui/select/card-selected.png',
   'assets/ui/select/card-crest-selected.png',
   'assets/ui/select/arrow.png',
-  // the Clear skins' insides, seen through their shells on the Skins screen and in play
-  'assets/skins/clear/insides.svg',
 ];
 
 // the loading screen's own art, which the page preloads ahead of everything else
@@ -37,3 +35,18 @@ export const LOADER_ART = [
 
 // the loading screen's own art goes first, so it is up before the menus' art starts coming in
 export const UI_ART = [...LOADER_ART, ...MENU_ART];
+
+// the Clear skins' board and gloss, either way up, and their keys, up and pressed: only the Skins
+// screen and a fight in one of them draw these, so they come once the menu art is in
+// (boot/start-loading.js), not holding the title for every player
+export const SKIN_ART = [
+  'assets/skins/clear/insides-landscape.webp',
+  'assets/skins/clear/insides-portrait.webp',
+  'assets/skins/clear/gloss-landscape.webp',
+  'assets/skins/clear/gloss-portrait.webp',
+  'assets/skins/clear/key-round.webp',
+  'assets/skins/clear/key-round-pressed.webp',
+  'assets/skins/clear/key-pill.webp',
+  'assets/skins/clear/key-pill-pressed.webp',
+  'assets/skins/clear/dpad.webp',
+];

@@ -1,6 +1,6 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { UI_ART } from '../../../src/data/ui-art.js';
+import { SKIN_ART, UI_ART } from '../../../src/data/ui-art.js';
 
 const GAME = new URL('../../../', import.meta.url);
 const STYLES = new URL('styles/', GAME);
@@ -22,6 +22,15 @@ describe('the menu art list', () => {
   it('holds every image the stylesheets draw, so the loading screen waits for all of it', () => {
     const drawn = [...new Set(stylesheetImages())].sort();
     expect(drawn.length).toBeGreaterThan(10);
-    expect([...UI_ART].sort()).toEqual(drawn);
+    expect([...UI_ART, ...SKIN_ART].sort()).toEqual(drawn);
+  });
+
+  it("keeps the skins' own art apart, each file there, both ways up", () => {
+    expect(SKIN_ART.filter((file) => UI_ART.includes(file))).toEqual([]);
+    expect(SKIN_ART.filter((file) => file.includes('-landscape.'))).toHaveLength(2);
+    expect(SKIN_ART.filter((file) => file.includes('-portrait.'))).toHaveLength(2);
+    for (const file of SKIN_ART) {
+      expect(existsSync(new URL(file, GAME)), file).toBe(true);
+    }
   });
 });

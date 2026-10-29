@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { BOOT_TIMING } from '../../../src/boot/start-loading.js';
-import { LOADER_ART } from '../../../src/data/ui-art.js';
+import { LOADER_ART, SKIN_ART } from '../../../src/data/ui-art.js';
 import { missionWait } from '../../../src/render/scene-loaded.js';
 import { bootArt } from '../../../src/ui/loading/boot-art.js';
 import { LOADER_TIMING } from '../../../src/ui/loading/loader-gate.js';
@@ -74,6 +74,18 @@ describe('the loading screen on the real page', () => {
     expect(loader.classList.contains('done')).toBe(true);
     loader.dispatchEvent(new Event('transitionend'));
     expect(loader.hidden).toBe(true);
+  });
+
+  it("asks for the skins' own art only once the menu art is in, and lifts without it", async () => {
+    const page = openBootPage();
+    await settle();
+    expect(page.images.waiting().filter((src) => SKIN_ART.includes(src))).toEqual([]);
+    page.images.loadAll();
+    await settle();
+    expect(page.images.waiting()).toEqual(SKIN_ART);
+    await bootThrough({ ...page, images: { loadAll() {} } });
+    expect(page.loader.hidden).toBe(true);
+    expect(page.images.waiting()).toEqual(SKIN_ART);
   });
 
   it('never lifts before the game has built its title, however fast the art is', async () => {

@@ -3,7 +3,9 @@
 // inside the safe area (.pad-safe), clear of a notch or a home bar, from --pad-safe-* where the
 // game sets them (a folded phone's half has no status bar), else the browser's own insets; a
 // player's places are where they put them on the screen. A shell is cut open where the game's
-// screen stands, so what is under it shows there even when a copy of it lies over everything. A game's stylesheets come as
+// screen stands, so what is under it shows there even when a copy of it lies over everything. A
+// button starts bare of the browser's own border, padding and margin, so a skin that draws no
+// border of its own gets none, rather than the browser's white outset rim. A game's stylesheets come as
 // files the build does not bundle, so the pad brings its own rules in its module, first in the
 // head, where a game's rules of the same weight come after them and win.
 export const PAD_STYLES = `
@@ -34,6 +36,11 @@ export const PAD_STYLES = `
   --pad-diameter: calc(var(--pad-base, 64px) * var(--pad-scale, 1) * var(--pad-size, 1));
   pointer-events: auto;
   touch-action: none;
+}
+.pad-button {
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 .pad-placed > .pad-button, .pad-placed > .pad-dpad {
   --pad-half: calc(var(--pad-diameter) / 2);

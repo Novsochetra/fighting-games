@@ -674,7 +674,9 @@ up from the first paint: Bokator runs along a naga balustrade before Angkor Wat 
 turning to gold behind him as files settle (its own art, in `assets/ui/loading/`, is preloaded first). The boot
 (`src/boot/start-loading.js`) loads every image the menus draw (`src/data/ui-art.js` and each hero's
 card strips) and the pixel font before the fighters' sprites, so no menu or popup shows art still on
-its way; a file that fails counts as settled and a stalled boot gives up after a time limit. In play
+its way; a file that fails counts as settled and a stalled boot gives up after a time limit. The
+skins' own art (`SKIN_ART`, which only the Skins screen and a fight in that skin draw) comes with the
+fighters' sprites, never holding the title. In play
 the same screen covers a mission's road and the picked Shade while they load (`missionWait` in
 `src/render/scene-loaded.js`), after a short grace so a cached road never flashes it. The hero select
 shows each hero from card strips of one row (`cards` in `src/data/heroes.js`): a Shade's are the
@@ -698,7 +700,10 @@ The touch controls are drawn by the touch pad (see Touch pad and skins) from a s
 (`stage-layout.js`); `dusk` (`styles/skin-dusk.css`) is glass discs lit by the dusk sky over the
 fight and a d-pad, each control hanging off a bottom corner; the five `clear-*` skins
 (`clear.js`, `styles/skin-clear.css`) are one handheld of see-through plastic in Lotus, Ember,
-Jade, Mekong and Smoke, its insides showing (`assets/skins/clear/`, `tools/clear_skin_insides.py`),
+Jade, Mekong and Smoke, its insides showing (a board, a gloss and keys painted by ChatGPT, one set
+for every colour: the board and gloss blended in with a screen blend under each colour's tint, the
+keys a little see-through so the plastic tints them, a held key swapping to its pressed art; see
+`assets/skins/README.md`, `tools/clear_skin_art.py`),
 the game in a bezel between two panels held sideways and at the top held upright, with the pause
 plaque in its HUD (`pausePlace`, `framed`); each control carries its shell's colour class, as it
 stands in the touch layer, not in the shell (`#shell`, behind the stage). A player picks the skin (`skin`, one
