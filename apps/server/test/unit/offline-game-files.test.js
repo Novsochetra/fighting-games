@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { offlineListOf, playedFilesOf } from '../../src/offline/game-files.js';
+import { GAMES_ROOT } from '../../src/paths.js';
 
 let gameRoot;
 
@@ -50,5 +51,14 @@ describe('the files a game is played with', () => {
     await writeGame({ 'src/main.js': 'new code' });
     expect((await offlineListOf(gameRoot)).revision).not.toBe(before.revision);
     expect(before.revision).toMatch(/^[0-9a-f]{16}$/);
+  });
+});
+
+describe('Steel & Dust saved offline', () => {
+  it('leaves its trailer to the network, megabytes the game never plays', async () => {
+    const files = await playedFilesOf(path.join(GAMES_ROOT, 'steel-and-dust'));
+
+    expect(files).toContain('index.html');
+    expect(files.filter((file) => file.startsWith('assets/trailer/'))).toEqual([]);
   });
 });

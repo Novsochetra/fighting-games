@@ -30,6 +30,7 @@ describe('GET /api/games', () => {
       banner: 'games/steel-and-dust/assets/ui/select/bg-landscape.png',
       poster: 'games/steel-and-dust/assets/ui/select/bg-portrait.png',
       screenshot: 'games/steel-and-dust/assets/screenshots/angkor-wat.png',
+      trailer: 'games/steel-and-dust/assets/trailer/trailer.mp4',
     });
   });
 
@@ -50,6 +51,20 @@ describe('GET /api/games', () => {
       const art = await get(`/${artPath}`);
       expect(art.status, artPath).toBe(200);
       expect(art.headers.get('content-type')).toMatch(/^image\//);
+    }
+  });
+
+  it('points every trailer at a video the server sends in parts, as a player asks for it', async () => {
+    const { games } = await (await get('/api/games')).json();
+    const trailers = games.map((game) => game.trailer).filter(Boolean);
+
+    expect(trailers).toContain('games/steel-and-dust/assets/trailer/trailer.mp4');
+
+    for (const trailer of trailers) {
+      const video = await get(`/${trailer}`, { headers: { Range: 'bytes=0-1' } });
+
+      expect(video.status, trailer).toBe(206);
+      expect(video.headers.get('content-type')).toBe('video/mp4');
     }
   });
 
