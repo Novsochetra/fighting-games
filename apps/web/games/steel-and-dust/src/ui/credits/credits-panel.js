@@ -1,7 +1,7 @@
 import { creditLines } from './credit-lines.js';
 import { rollPath } from './roll-path.js';
 
-// the logo wears the title's carved crest and rule
+// the logo line wears the title's logo art
 const CLASS_FOR_KIND = { logo: 'logo credits-logo' };
 
 // a line's second part, and the link it ends on (the supporters page)

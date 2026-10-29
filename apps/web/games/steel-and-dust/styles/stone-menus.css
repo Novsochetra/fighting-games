@@ -59,12 +59,19 @@
   align-items: center;
 }
 
-.logo,
 .mtitle.good {
   color: var(--color-gold);
 }
 
-.logo::before,
+/* tools/steel_dust_logo.py draws the logo at this size, so the two change together */
+.logo::before {
+  content: '';
+  width: min(calc(var(--stone, 2) * 160px), 88vw);
+  aspect-ratio: 160 / 79;
+  background: url('../assets/ui/logo/logo.png') 0 0 / 100% 100%;
+  image-rendering: pixelated;
+}
+
 .mtitle::before {
   content: '';
   width: calc(var(--stone, 2) * 53px);
@@ -74,7 +81,6 @@
   image-rendering: pixelated;
 }
 
-.logo::after,
 .mtitle::after {
   content: '';
   width: min(calc(var(--stone, 2) * 162px), 82vw);
@@ -82,6 +88,13 @@
   margin-top: 0.3em;
   background: url('../assets/ui/kit/title-rule.png') 0 0 / 100% 100%;
   image-rendering: pixelated;
+}
+
+/* a big screen would leave the logo small over the painting, so it draws it at 3x */
+@media (min-height: 820px) and (min-width: 600px) {
+  .logo {
+    --stone: 3;
+  }
 }
 
 /* short screens have no room for that much stone, so they draw it at 1x */

@@ -9,6 +9,7 @@ const MENU_ART = [
   'assets/ui/select/bg-portrait.png',
   'assets/ui/kit/button.png',
   'assets/ui/kit/button-primary.png',
+  'assets/ui/logo/logo.png',
   'assets/ui/kit/title-crest.png',
   'assets/ui/kit/title-rule.png',
   'assets/ui/kit/panel.png',

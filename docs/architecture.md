@@ -841,6 +841,9 @@ Khmer fighters' are drawn for them (`tools/hero_cards`).
 The menus and the HUD share one carved-sandstone kit in `assets/ui/` (see its README): nine-slice
 frames for the hero cards, the settings panel and the HUD panels, which the HUD draws with
 `src/render/nine-slice.js`.
+The title's logo (`assets/ui/logo/logo.png`) is pixel art drawn by `tools/steel_dust_logo.py`, not
+lettered in the font: STEEL in chrome over a sword, & DUST in sandstone kicking up dust. The heading
+keeps the name as text, unseen, so screen readers still read it.
 The HUD sits along the top (`src/render/hud/top-bar.js`): the weapon box (icon, name and hits left)
 with the lives in a small box under it, health over the ULT gauge beside it, the clock in the middle
 (with the wave under it while the camera is locked on a zone), and the score and best combo flush

@@ -28,6 +28,13 @@ describe('game menus on the real page', () => {
     expect(document.querySelector('[data-act="arcade"]')).not.toBeNull();
   });
 
+  it('heads the title with the logo, its name kept in the heading for screen readers', () => {
+    const logo = openMenu().querySelector('h1.logo');
+
+    expect(logo.firstChild.textContent).toBe('Steel & Dust');
+    expect(logo.querySelector('span').textContent).toBe('pixel brawler');
+  });
+
   it('moves the highlight with the arrow keys and opens How to play with Enter', () => {
     key('ArrowDown');
     expect(selected().textContent).toBe('Leaderboard');

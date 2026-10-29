@@ -81,16 +81,15 @@
   background-color: var(--color-backdrop-strong);
 }
 
+/* the logo art stands in for the name, which stays in the heading, unseen, for screen readers */
 .logo {
   font-family: var(--font-display);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-game-logo);
+  font-size: var(--font-size-logo-name);
   line-height: var(--leading-logo);
   margin: 0;
   text-align: center;
-  letter-spacing: var(--tracking-slight);
-  color: var(--color-accent);
-  text-shadow: var(--text-shadow-logo);
+  color: var(--color-clear);
 }
 
 .menu.enter .logo {
@@ -99,11 +98,11 @@
 
 .logo span {
   display: block;
-  font-size: var(--font-size-logo-tagline);
+  font-size: max(var(--font-size-xs), calc(var(--stone, 2) * var(--font-size-logo-tagline)));
   color: var(--color-text);
   letter-spacing: var(--tracking-widest);
   text-shadow: var(--text-shadow-pixel-sm);
-  margin-top: 0.35em;
+  margin-top: 0.6em;
 }
 
 @keyframes logo-in {
