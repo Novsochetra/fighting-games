@@ -43,6 +43,32 @@ def window_box(image, seed):
     return left + 1, top + 1, right, bottom
 
 
+def reach(line, start, step, near=40):
+    """How far along `line` from `start` the colour at `start` holds, `step` by `step`."""
+    colour = line[start].astype(int)
+    at = start
+
+    while 0 <= at + step < len(line) and np.abs(line[at + step].astype(int) - colour).sum() < near:
+        at += step
+
+    return at
+
+
+def framed_box(window_box_found, image):
+    """The window with the frame round it, out to where the frame's colour ends: a screen's bezel
+    belongs to the window, not to the grips beside it, or the keys would stand on it. The frame is
+    read a few px out from the black, past the blend between them"""
+    left, top, right, bottom = window_box_found
+    row, column = image[(top + bottom) // 2], image[:, (left + right) // 2]
+
+    return (
+        reach(row, left - 4, -1),
+        reach(column, top - 4, -1),
+        reach(row, right + 3, 1) + 1,
+        reach(column, bottom + 3, 1) + 1,
+    )
+
+
 def edge_counts(region, axis):
     """How many colour changes fall on each boundary between two pixels along `axis` (1 for x)."""
     steps = np.abs(np.diff(region[..., :3].astype(int), axis=axis)).sum(axis=2) > EDGE

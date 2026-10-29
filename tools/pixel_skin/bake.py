@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Bake a pixel-art skin from ChatGPT's paintings (assets/skins/README.md, "Pixel skins").
 
-    python3 tools/pixel_skin/bake.py landscape PAINTING OUT_DIR [--block N]
+    python3 tools/pixel_skin/bake.py landscape PAINTING OUT_DIR [--block N] [--frame]
         the shell held sideways, its window in the middle: each grip running down from the top
         (landscape-left.png, landscape-right.png) and its foot (…-foot.png), the top and the
         bottom band reaching both ways from their ornaments (landscape-top.png, …-bottom.png)
-    python3 tools/pixel_skin/bake.py portrait PAINTING OUT_DIR [--block N] [--trim ROWS]
+    python3 tools/pixel_skin/bake.py portrait PAINTING OUT_DIR [--block N] [--trim ROWS] [--frame]
         the shell held upright, its window at the top: the rim round the window (portrait-crown),
         the emblem under it running down (portrait-body) and the foot (portrait-foot)
     python3 tools/pixel_skin/bake.py keys SHEET OUT_DIR
@@ -24,7 +24,7 @@ from PIL import Image
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from pixel_skin.grid import content_box, read_painted, read_region, window_box  # noqa: E402
+from pixel_skin.grid import content_box, framed_box, read_painted, read_region, window_box  # noqa: E402
 from pixel_skin.keys import bake_keys  # noqa: E402
 from pixel_skin.pieces import extended_down, extended_left, extended_right, faded, folded, save  # noqa: E402
 
@@ -101,9 +101,15 @@ def long_band(band, length):
     return extended_left(right, left_segment, length)
 
 
-def landscape(image, out_dir, block=None):
+def window_of(image, seed, frame):
+    window = window_box(image, seed)
+
+    return framed_box(window, image) if frame else window
+
+
+def landscape(image, out_dir, block=None, frame=False):
     left, top, right, bottom = content_box(image)
-    window = window_box(image, (image.shape[1] // 2, image.shape[0] // 2))
+    window = window_of(image, (image.shape[1] // 2, image.shape[0] // 2), frame)
     window_left, window_top, window_right, window_bottom = window
     boxes = [
         (left, top, window_left, bottom),
@@ -140,9 +146,9 @@ def crown_of(top, sides, window_colour):
     return crown
 
 
-def portrait(image, out_dir, block=None, trim=WINDOW_TRIM):
+def portrait(image, out_dir, block=None, trim=WINDOW_TRIM, frame=False):
     left, top, right, bottom = content_box(image)
-    window = window_box(image, (image.shape[1] // 2, image.shape[0] // 6))
+    window = window_of(image, (image.shape[1] // 2, image.shape[0] // 6), frame)
     window_left, window_top, window_right, window_bottom = window
     boxes = [
         (left, top, right, window_top),
@@ -172,15 +178,18 @@ def main():
                              'whose blocks are no one size (grid.py, read_painted)')
     parser.add_argument('--trim', type=int, default=WINDOW_TRIM,
                         help='rows of the painted frame under the upright window to leave out')
+    parser.add_argument('--frame', action='store_true',
+                        help='the window takes in the frame round the black, a screen\'s bezel, '
+                             'so the grips are the shell alone and no key stands on the bezel')
     args = parser.parse_args()
     image = load(args.source, 'RGBA' if args.command == 'keys' else 'RGB')
 
     if args.command == 'keys':
         bake_keys(image, args.out_dir)
     elif args.command == 'landscape':
-        landscape(image, args.out_dir, args.block)
+        landscape(image, args.out_dir, args.block, args.frame)
     else:
-        portrait(image, args.out_dir, args.block, args.trim)
+        portrait(image, args.out_dir, args.block, args.trim, args.frame)
 
 
 if __name__ == '__main__':

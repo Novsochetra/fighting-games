@@ -115,15 +115,18 @@ screen has the window's bronze trim (`--shadow-sandstone-bezel`). Its bands are 
 
 Grey plastic, a purple bezel round the screen with an LED, two screws and a speaker grille, red
 round keys and grey pills slanting 19 degrees, as a 1989 handheld's start and select. Baked as
-painted (`--block 2`, its grips 154 of those pixels across), upright leaving out the 33 rows of
-the painted bezel under the window (`--trim 33`), which `--shadow-retro-bezel` draws round the game's
-screen instead, deeper under it. Its keys read on 10 px blocks. A slanting pill's key is the pill
-along itself, 34 by 14 pixels, turned as it slants (`--pixel-pill-tilt`), so its label, ring and
-touch lie along it, and its art is turned back level under the label at the size of the art's box
-(`--pixel-pill-art-*`).
+painted (`--block 2`, its grips 116 of those pixels across and its bands 1624 long). Its bezel
+belongs to the window (`--frame`, the window taken out over the colour round the black to where it
+ends): left in the grips, it made their inner 46 px purple, and the d-pad, HEAVY and the pills
+stood on it. So held sideways the game sits in the bezel's purple (`--pixel-window`), and upright
+the bake leaves out the bezel's outline under the window too (`--trim 5`), as
+`--shadow-retro-bezel` draws the bezel round the game's screen, deeper under it. Its keys read on
+10 px blocks. A slanting pill's key is the pill along itself, 34 by 14 pixels, turned as it slants
+(`--pixel-pill-tilt`), so its label, ring and touch lie along it, and its art is turned back level
+under the label at the size of the art's box (`--pixel-pill-art-*`).
 
 ```bash
-python3 tools/pixel_skin/bake.py landscape shell-sideways.png apps/web/games/steel-and-dust/assets/skins/retro --block 2
-python3 tools/pixel_skin/bake.py portrait shell-upright.png apps/web/games/steel-and-dust/assets/skins/retro --block 2 --trim 33
+python3 tools/pixel_skin/bake.py landscape shell-sideways.png apps/web/games/steel-and-dust/assets/skins/retro --block 2 --frame
+python3 tools/pixel_skin/bake.py portrait shell-upright.png apps/web/games/steel-and-dust/assets/skins/retro --block 2 --frame --trim 5
 python3 tools/pixel_skin/bake.py keys keys.png apps/web/games/steel-and-dust/assets/skins/retro
 ```

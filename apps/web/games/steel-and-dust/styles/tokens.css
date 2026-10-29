@@ -81,7 +81,6 @@
   --color-sandstone-trim: #af763f;
   --color-sandstone-trim-dark: #30271a;
   --color-sandstone-held: color-mix(in srgb, var(--color-black) 38%, transparent);
-  --color-retro-window: #000000;
   --color-retro-bezel: #4a4355;
   --color-retro-outline: #151517;
   --color-retro-held: color-mix(in srgb, var(--color-black) 40%, transparent);

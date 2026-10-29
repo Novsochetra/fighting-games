@@ -23,6 +23,22 @@ describe('the handheld skins', () => {
     }
   });
 
+  // a key reaching past its panel stands on the bezel round the game, or on the game itself; a
+  // pill may be turned to a slant, so it is measured at its widest, corner to corner
+  it('keep every control held sideways on its panel, clear of the game’s screen', () => {
+    for (const skin of [CLEAR_SKINS['clear-lotus'], ...Object.values(PIXEL_SKINS)]) {
+      const { screen, items } = skin.layouts.landscape;
+      const widest = (item) => (item.aspect ? Math.hypot(1, item.aspect) : 1) * item.size;
+      const reach = (item) => Math.abs(item.at.dx) + widest(item) / 2;
+
+      for (const item of [...items, ...skin.pills.landscape]) {
+        const panel = item.at.x === 0 ? screen.left : screen.right;
+
+        expect(reach(item), `${skin.id} ${item.id}`).toBeLessThanOrEqual(panel);
+      }
+    }
+  });
+
   it('dress the shell and each control in the skin’s own classes, its pills shaped as its art', () => {
     const { layouts, pills } = PIXEL_SKINS.sandstone;
 
