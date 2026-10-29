@@ -650,7 +650,8 @@ length.
     on the place soonest left, climbing on `DROP.turn` ticks after the last has leapt, so a lookout
     tower sends a wave down one after another (`src/sim/hazards/perch-turns.js`); with none in sight,
     or its place gone out of sight by its turn, it walks in as any raider does. In a
-    `crown` (Pine Ridge's pines, Ember Woods' autumn trees) it hides in the thick of the leaves at
+    `crown` (Pine Ridge's pines, Ember Woods' autumn trees, the strangler fig behind Angkor Wat's
+    balustrade, wide enough to hide three) it hides in the thick of the leaves at
     `x, y`: only that crown sways, in its own layer, and as it lets go the crown's own pixels are
     laid back over it, so it drops out of the leaves (`src/render/scene/crown-cover.js`). On a
     `ledge` (the Raider Camp's lookout tower, the Iron Works' derrick girder and furnace roof, the

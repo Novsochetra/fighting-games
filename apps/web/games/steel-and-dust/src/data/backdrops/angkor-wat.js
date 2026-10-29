@@ -10,6 +10,19 @@ export const ANGKOR_WAT = {
   // is built level: laterite courses up to the highest step and earth under the road's own course,
   // their ends staggered and broken where a step or the breach cuts through them
   deep: { from: 20, faces: true },
+  // the strangler fig behind the naga balustrade, gripping its shrine, which raiders climb into to
+  // drop on the hero (src/sim/hazards/drop-perches.js): its crown's spread, its top, where its sway
+  // dies away at the tips of its hanging roots, and three places in the thick of it where a raider
+  // hides (x, y), as the crown is wide enough to hide a wave and in sight as one comes
+  perches: {
+    layer: 'near',
+    tileWidth: 768,
+    spots: [
+      { kind: 'crown', from: 615, to: 753, top: 8, bottom: 120, x: 650, y: 72 },
+      { kind: 'crown', from: 615, to: 753, top: 8, bottom: 120, x: 682, y: 76 },
+      { kind: 'crown', from: 615, to: 753, top: 8, bottom: 120, x: 714, y: 70 },
+    ],
+  },
   layers: [
     { name: 'back', parallax: 0.03 },
     { name: 'near', parallax: 0.45 },

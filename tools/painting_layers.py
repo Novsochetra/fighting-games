@@ -21,6 +21,10 @@
         lays pieces on a transparent strip, each one's lowest row on base_y minus lift (m mirrors
         it; one laid past the strip's right end runs on at its left, as the strip tiles), hazes the
         strip toward the road's air and reduces it to `colours`
+    python3 tools/painting_layers.py behind <strip> <in> <x> <base_y> <height> <haze #rrggbb> <amount>
+        lays a ChatGPT pixel-art prop, drawn on its grey and white checkerboard, behind what the strip
+        already has, its lowest row on base_y: hazed as `place` hazes, `height` rows tall, each
+        pixel the most common of the strip's own colours in its cell, so the strip keeps its colours
     python3 tools/painting_layers.py face <ground> <out> <surface_row> <x> [width=12] [shade=0.75]
         the face of a step whose high ground is on the left, from the ground's own columns under
         its surface: darkened as a face turned from the light, the lip lit and the outer edge
@@ -205,6 +209,73 @@ def place(dst, width, base_y, colour, amount, colours, *specs):
     reduce(strip, colours).save(dst)
 
 
+# ChatGPT draws its pixel art on a grey and white checkerboard instead of the flat magenta asked for:
+# the squares are light and colourless, and the painting is neither
+def is_checker(r, g, b):
+    return max(r, g, b) > 196 and max(r, g, b) - min(r, g, b) < 22
+
+
+def lab(rgb):
+    linear = [c / 255 for c in rgb]
+    linear = [((c + 0.055) / 1.055) ** 2.4 if c > 0.04045 else c / 12.92 for c in linear]
+    r, g, b = linear
+    xyz = (
+        (0.4124 * r + 0.3576 * g + 0.1805 * b) / 0.95047,
+        0.2126 * r + 0.7152 * g + 0.0722 * b,
+        (0.0193 * r + 0.1192 * g + 0.9505 * b) / 1.08883,
+    )
+    fx, fy, fz = (c ** (1 / 3) if c > 0.008856 else 7.787 * c + 16 / 116 for c in xyz)
+    return 116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)
+
+
+# its grid is uneven, a cell 5.9 pixels wide in one corner and 6.1 in another, so it is not sampled
+# on a grid: each pixel of the prop is the colour most of its cell comes to, never a blend
+def pixelate(src, palette, height, tint, share):
+    im = Image.open(src).convert('RGB')
+    px = im.load()
+    inside = [(x, y) for y in range(im.height) for x in range(im.width) if not is_checker(*px[x, y])]
+    left, top = min(x for x, _ in inside), min(y for _, y in inside)
+    right, bottom = max(x for x, _ in inside) + 1, max(y for _, y in inside) + 1
+    scale = (bottom - top) / height
+    width = round((right - left) / scale)
+    labs = [lab(c) for c in palette]
+    snapped = {}
+
+    def nearest(rgb):
+        if rgb not in snapped:
+            hazed = lab(tuple(c + (t - c) * share for c, t in zip(rgb, tint)))
+            snapped[rgb] = min(range(len(palette)), key=lambda i: sum((a - b) ** 2 for a, b in zip(hazed, labs[i])))
+        return snapped[rgb]
+
+    out = Image.new('RGBA', (width, height))
+    for ty in range(height):
+        for tx in range(width):
+            cell = [
+                px[x, y]
+                for y in range(top + round(ty * scale), top + round((ty + 1) * scale))
+                for x in range(left + round(tx * scale), left + round((tx + 1) * scale))
+            ]
+            painted = [nearest(c) for c in cell if not is_checker(*c)]
+            if len(painted) * 2 >= len(cell):
+                out.putpixel((tx, ty), palette[max(set(painted), key=painted.count)] + (255,))
+    return out
+
+
+def behind(strip_path, src, x, base_y, height, colour, amount):
+    strip = Image.open(strip_path).convert('RGBA')
+    palette = sorted({p[:3] for p in pixels(strip) if p[3]})
+    tint = tuple(int(colour[i:i + 2], 16) for i in (1, 3, 5))
+    prop = pixelate(src, palette, int(height), tint, float(amount))
+    print('prop', prop.size)
+    laid = Image.new('RGBA', strip.size)
+    top = int(base_y) + 1 - prop.height
+    laid.alpha_composite(prop, (int(x) % strip.width, top))
+    if int(x) % strip.width + prop.width > strip.width:
+        laid.alpha_composite(prop, (0, top), (strip.width - int(x) % strip.width, 0))
+    laid.alpha_composite(strip)
+    laid.save(strip_path)
+
+
 def face(ground, dst, surface_row, x, width='12', shade='0.75'):
     im = Image.open(ground).convert('RGBA')
     width, top = int(width), int(surface_row)
@@ -234,4 +305,5 @@ if __name__ == '__main__':
         'course': course,
         'place': place,
         'face': face,
+        'behind': behind,
     }[command](*args)

@@ -249,6 +249,7 @@ python3 $T place $A/near.png 768 187 '#b07a80' 0.2 48 prop-2.png:507:m course.pn
   prop-0.png:555:10 prop-1.png:593:10 prop-1.png:685:10 prop-0.png:777:m:10 prop-2.png:825 \
   prop-4.png:866 prop-5.png:946 prop-6.png:922 prop-3.png:1020
 python3 tools/road_body.py courses $A/ground.png $A 10 19 29 31
+python3 $T behind $A/near.png $C/fig.webp 610 187 180 '#b07a80' 0.2
 ```
 
 - `back.png` (553x216) is rows 208-808 of the scene, a 3:1 band with the central tower's tip at
@@ -273,6 +274,14 @@ python3 tools/road_body.py courses $A/ground.png $A 10 19 29 31
   road's own paving (rows 8-19 of `ground.png`): much of this road is raised 16 to 36 px, and
   without the course the 25 px balustrade hid behind it. The incense smoke rises from the spirit
   house's sticks at x 270, y 162.
+- The strangler fig behind the naga balustrade (columns 610-753, its crown rows 8-95) is a ChatGPT
+  pixel-art painting (`fig.webp`, made from the fig prompt in the prompts file), laid last by
+  `behind`, behind what the strip already has: the checkerboard ChatGPT drew it on keyed out, hazed
+  as the props were, 180 rows tall, each pixel the most common of the strip's own colours in its
+  cell. Its grid is uneven, a cell 5.9 pixels wide in one corner and 6.1 in another, so it is not
+  sampled on a grid. The rail and the balusters stand in front of its roots and shrine, and it
+  keeps out of the columns behind the breach. Raiders hide in three places in its crown and drop on
+  the hero in the Gallery of Bas-Reliefs, where it is in sight as the zone opens.
 - `ground.png` (227x49) is the cross-section keyed at 0.15 and cut between columns 2 and 229, the
   pair that match best, so it tiles without a crossfade. Its first full row is 8, the lit top of the
   paving slabs; `groundTop` is 10 so the fighters stand on that top face. Its last row is one plain

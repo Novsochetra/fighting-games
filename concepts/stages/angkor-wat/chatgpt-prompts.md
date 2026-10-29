@@ -82,6 +82,26 @@ Same style, palette and light. A side-view cross-section of the road the fighter
 From top to bottom: a thin fringe of short grass and tiny ferns poking above the surface; the walking surface, worn flat sandstone paving slabs seen edge-on with a level top line; one course of rough reddish laterite blocks; then dark reddish earth with a few roots and buried stones, darker toward the bottom. The left and right ends must match so the strip can repeat. Flat side view, no perspective, no top-down view.
 ```
 
+## The strangler fig (a perch for raiders)
+
+Asked for later, in a new chat, with four pictures attached: the road as it is, its ruins and
+plants with roots from another road, a dense crown from another road, and a layout guide (160x188,
+the crown solid where a raider hides, the trunk and stones in the middle 48 px).
+
+```
+Pixel art game asset for a 2D side-scrolling beat 'em up. Draw a huge strangler fig tree growing out
+of fallen sandstone temple blocks, its pale roots gripping and splitting the stones, like Ta Prohm at
+Angkor. A broad, rounded, dense crown of small leaves; inside it, a block 44 px wide and 52 px tall
+must be solid leaves. A few thin aerial roots hang from the crown's underside. Seen straight from the
+side. Hard pixels only. The sun rises behind and to the left: warm golden rims on the upper-left
+edges, the rest muted and hazy. Leaves #3c2a33 #463740 #524b47 #635d48 #756144 #867050, rims #af874a
+#ca9659; stone and roots #533736 #5f454d #604a5e #6a4d47 #745757 #7d5649 #957451. Background: one flat
+solid magenta #FF00FF.
+```
+
+It came back as pixel art on a drawn grey and white checkerboard instead of magenta, at about six
+pixels to its cell but not on one even grid, with a whole ruined shrine at its foot: `fig.webp`.
+
 ## Fixing a result in the same chat
 
 - Temple too big or too high: "Make the temple smaller and lower, with more empty sky above it and
@@ -92,6 +112,6 @@ From top to bottom: a thin fringe of short grass and tiny ferns poking above the
 
 ## The results
 
-The three paintings these prompts gave are in `chatgpt/` beside this file (`back.webp`,
-`near-props.webp`, `ground.webp`). How they were baked into the road, command by command, is in the
+The paintings these prompts gave are in `chatgpt/` beside this file (`back.webp`,
+`near-props.webp`, `ground.webp`, and later `fig.webp`). How they were baked into the road, command by command, is in the
 Angkor Wat section of `apps/web/games/steel-and-dust/assets/backdrops/README.md`.

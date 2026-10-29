@@ -65,6 +65,7 @@ describe('the twelve missions', () => {
       ['Iron Works', 'drop'],
       ['Mirage Temple', 'burrow'],
       ["Warden's Fortress", 'drop'],
+      ['Angkor Wat', 'drop'],
       ['Bayon', 'drop'],
     ]);
   });

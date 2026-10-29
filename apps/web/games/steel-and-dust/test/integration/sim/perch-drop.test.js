@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { PAINTED_THEMES } from '../../../src/art/painted-themes/index.js';
 import { DROP } from '../../../src/data/ambush.js';
+import { PAINTED_BACKDROPS } from '../../../src/data/backdrops/index.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { findPerch } from '../../../src/sim/hazards/drop-perches.js';
 import { pendingAmbushes, startAmbush } from '../../../src/sim/stage/ambush.js';
@@ -167,5 +168,36 @@ describe('a lookout tower with room for one raider on it', () => {
 
     expect(new Set(marks.map((mark) => mark.perch.layerX)).size).toBe(1);
     expect(leaps).toEqual([DROP.warn, 2 * DROP.warn + DROP.turn, 3 * DROP.warn + 2 * DROP.turn]);
+  });
+});
+
+describe('the strangler fig behind the Angkor balustrade', () => {
+  beforeEach(() => {
+    Math.random = seededRandom(5);
+  });
+  afterEach(() => {
+    Math.random = originalRandom;
+  });
+
+  it('hides a wave in its crown, a raider in each place, shaking down its own leaves', () => {
+    // the crown's middle in the middle of the screen
+    const [middle] = PAINTED_BACKDROPS.angkorWat.perches.spots.slice(1);
+    const { game } = onRoad('angkorWat', Math.round((middle.x - 192) / 0.45));
+
+    const { debris } = PAINTED_THEMES.angkorWat;
+
+    game.player.invincible = 99999;
+    [0, 1, 2].forEach((slot) => startAmbush(game, { kind: 'monk', ambush: 'drop', slot }));
+    const marks = game.projectiles.filter((shot) => shot.kind === 'dropMark');
+
+    expect(marks.map((mark) => mark.perch?.kind)).toEqual(['crown', 'crown', 'crown']);
+    expect(new Set(marks.map((mark) => mark.perch.spot)).size).toBe(3);
+    runTicks(game, DROP.warn - 1);
+    const leaves = particles(game, 'leaf');
+
+    expect(leaves.length).toBeGreaterThan(10);
+    expect(leaves.every((leaf) => debris.includes(leaf.color))).toBe(true);
+    runTicks(game, 1);
+    expect(marks.map((mark) => mark.raider?.y)).toEqual(marks.map((mark) => mark.perch.y));
   });
 });

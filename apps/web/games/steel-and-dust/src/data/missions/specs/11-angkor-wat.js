@@ -1,3 +1,4 @@
+import { dropIn } from '../ambushes.js';
 import { bank, ramp, stairs } from '../ground-shapes.js';
 
 export const ANGKOR_WAT = {
@@ -64,7 +65,8 @@ export const ANGKOR_WAT = {
         { at: 1010, width: 80, rise: 26, kind: 'lintel' },
       ],
       waves: [
-        ['tombguard', 'witch', 'monk', 'vulture'],
+        // the strangler fig behind the balustrade is in sight as the gallery opens
+        dropIn(['assassin', 'monk', 'assassin']),
         ['assassin', 'sentry', 'shield', 'spitter'],
         ['monk', 'spitter', 'juggernaut', 'vulture'],
         ['tombguard', 'sentry', 'assassin', 'witch'],

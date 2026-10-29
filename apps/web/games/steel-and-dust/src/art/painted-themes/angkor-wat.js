@@ -9,4 +9,6 @@ export const ANGKOR_WAT = {
     butterflies: ['#ffd78a', '#f3997e', '#beaad2'],
     leaves: ['#fae6a3', '#ffd78a', '#f5fbf7'],
   },
+  // the fig's own leaves, shaken loose by a raider waiting in its crown
+  debris: ['#806150', '#957452', '#ca9659', '#e09b54'],
 };
