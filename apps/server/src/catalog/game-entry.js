@@ -2,6 +2,10 @@ const REQUIRED_TEXT_FIELDS = ['id', 'title', 'tagline', 'description', 'genre', 
 // The cover is the square icon; banner (16:9) and poster (portrait) are the optional key art the home
 // page shows behind its cards, and screenshot an optional 16:9 frame of play for the card itself.
 export const ART_FIELDS = ['cover', 'banner', 'poster', 'screenshot'];
+// An optional video of play the arcade's details sheet shows. It stays in assets/trailer/, which a
+// saved game leaves out (offline/game-files.js), and is an MP4: the one kind every phone plays.
+const FILE_FIELDS = [...ART_FIELDS, 'trailer'];
+const TRAILER_PATTERN = /^assets\/trailer\/[\w-][\w.-]*\.mp4$/;
 const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const RELATIVE_FILE_PATTERN = /^[\w-][\w.-]*(?:\/[\w-][\w.-]*)*$/;
 
@@ -38,6 +42,14 @@ function checkArtPath(entry, field) {
 
 const checkArt = (entry) => ART_FIELDS.flatMap((field) => checkArtPath(entry, field));
 
+function checkTrailer({ trailer }) {
+  const isVideo = typeof trailer === 'string' && TRAILER_PATTERN.test(trailer);
+
+  return trailer === undefined || isVideo
+    ? []
+    : ['"trailer" must be an .mp4 file in the game\'s assets/trailer/ folder'];
+}
+
 function checkControls(entry) {
   if (entry.controls === undefined) {
     return [];
@@ -73,7 +85,15 @@ function checkPixelArt(entry) {
   return ['"pixelArt" must be true or false'];
 }
 
-const CHECKS = [checkRequiredFields, checkId, checkArt, checkControls, checkUrl, checkPixelArt];
+const CHECKS = [
+  checkRequiredFields,
+  checkId,
+  checkArt,
+  checkTrailer,
+  checkControls,
+  checkUrl,
+  checkPixelArt,
+];
 
 export function validateGameEntry(entry, folderName) {
   if (!isPlainObject(entry)) {
@@ -84,9 +104,9 @@ export function validateGameEntry(entry, folderName) {
 
 export function toCatalogGame(entry) {
   const gamePath = `games/${entry.id}/`;
-  const art = ART_FIELDS.filter((field) => entry[field] !== undefined).map((field) => [
+  const files = FILE_FIELDS.filter((field) => entry[field] !== undefined).map((field) => [
     field,
     `${gamePath}${entry[field]}`,
   ]);
-  return { ...entry, ...Object.fromEntries(art), path: gamePath };
+  return { ...entry, ...Object.fromEntries(files), path: gamePath };
 }

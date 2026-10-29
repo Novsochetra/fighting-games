@@ -63,6 +63,15 @@ describe('routeOf', () => {
     expect(routeOf(get('version.json?seen=1'), SCOPE)).toEqual({ kind: 'pass' });
   });
 
+  it('leaves a trailer to the network, which answers the parts of it a video asks for', () => {
+    const trailer = {
+      ...get('games/steel-and-dust/assets/trailer/trailer.mp4'),
+      destination: 'video',
+    };
+
+    expect(routeOf(trailer, SCOPE)).toEqual({ kind: 'pass' });
+  });
+
   it('follows the arcade to whatever path it is served from', () => {
     const scope = 'https://example.com/arcade/';
 

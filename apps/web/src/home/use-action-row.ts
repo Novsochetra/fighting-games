@@ -9,13 +9,19 @@ interface RowState {
   rises: number;
 }
 
-const modeOf = (card: GameCard) => (card.isComingSoon ? 'soon' : 'game');
+const modeOf = (card: GameCard) => {
+  if (card.isComingSoon) {
+    return 'soon';
+  }
 
-// Moving between a game and a teaser changes which buttons show. Swapped in one frame, Play jumped
-// across the row and the others blinked out, so the row fades out, changes unseen, and rises back.
-// Each button fades on its own: an opacity on their row would cut the glass buttons' blur off from
-// the art behind them. Swipes that land while it fades are folded into the one change. Returns the
-// card the row shows.
+  return card.trailerSrc ? 'game-with-trailer' : 'game';
+};
+
+// Moving between a game and a teaser, or a game with a trailer and one without, changes which
+// buttons show. Swapped in one frame, Play jumped across the row and the others blinked out, so the
+// row fades out, changes unseen, and rises back. Each button fades on its own: an opacity on their
+// row would cut the glass buttons' blur off from the art behind them. Swipes that land while it
+// fades are folded into the one change. Returns the card the row shows.
 export function useActionRow(card: GameCard, animate: boolean, row: RefObject<HTMLElement | null>) {
   const [state, setState] = useState<RowState>({ shown: card, fading: false, rises: 0 });
   const latest = useRef(card);

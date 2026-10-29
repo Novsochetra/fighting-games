@@ -12,6 +12,7 @@ describe('contentTypeFor', () => {
     ['assets/manifest.webmanifest', 'application/manifest+json; charset=utf-8'],
     ['assets/fonts/pixel.woff2', 'font/woff2'],
     ['favicon.ico', 'image/x-icon'],
+    ['games/demo/assets/trailer/trailer.mp4', 'video/mp4'],
     ['robots.txt', 'text/plain; charset=utf-8'],
     ['sitemap.xml', 'application/xml; charset=utf-8'],
   ])('serves %s as %s', (filePath, expected) => {

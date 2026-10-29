@@ -99,6 +99,8 @@ version it now is.
 
 `apps/web/games/<id>/` holds `game.json` (the catalog entry), `index.html`, `assets/`, `styles/`
 (with the game's own `tokens.css`), `src/` and `test/`. Adding a folder with a valid `game.json` adds the game to the home page.
+A trailer is an `.mp4` (H.264 and AAC) in `assets/trailer/`, named by `game.json`'s `trailer`; the
+home page offers it beside Play, and no offline save keeps it.
 A game hosted on its own site keeps only `game.json` (with an `https:` `url`) and `assets/` here.
 
 ## Pages of the arcade

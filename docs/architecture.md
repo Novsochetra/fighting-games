@@ -54,8 +54,8 @@ docs/                     this file and deploy-railway.md
 The arcade and every game are separate apps that share no file. Each has its own design tokens
 (`src/home/tokens.css`, `games/<id>/styles/tokens.css`), styles and modules, so a game can change its
 look without touching the arcade or another game. The arcade knows a game only through its
-`game.json` and the art it names (`cover`, `banner`, `poster`, `screenshot`); a game links back to the
-arcade only by address (`../../`).
+`game.json` and the art it names (`cover`, `banner`, `poster`, `screenshot`) and its trailer
+(`trailer`, see Home page); a game links back to the arcade only by address (`../../`).
 `test/integration/independence.test.js` fails if a game loads a file from outside its folder or the
 arcade (any of its pages or modules) loads a file from a game.
 
@@ -129,7 +129,9 @@ load.
 The arcade runs on Railway as one service: the same server sends the pages and the API, from one
 address (`docs/deploy-railway.md`). `router.js` matches an API path and its method (`HEAD` goes to
 `GET`, another method gets 405 with `Allow`); every other path is a static file, for `GET` and
-`HEAD` only.
+`HEAD` only. A file asked for in parts, as a video asks for a trailer (`Range: bytes=…`), gets just
+that part (`206`, `routes/byte-range.js`), or a `416` past its end: Safari plays no video from a
+server that answers its first question, the first two bytes, with the whole file.
 
 **Only the arcade's own pages call the API.** The server sends no CORS headers, so another site's
 script can't read an answer, and a CORS preflight (`OPTIONS`) gets 405. Every API request whose
@@ -188,7 +190,7 @@ not kept.
   visit read them before it was there. A gift sent offline fails as it always did, saying so.
 - **A game** (`game-cache.js`): a game is kept once the player saves it (see Saving a game), and
   the whole of it comes down: the build writes each game's `offline.json` (`game-files.js`), every file it may load
-  as it is played (not its screenshots, link-preview art or notes, nor a sprite that has a packed
+  as it is played (not its screenshots, link-preview art, trailer or notes, nor a sprite that has a packed
   copy of itself in `packed/`, which only the packer reads) and a revision that changes with any of
   them. Only the game's own folder comes down, so a game keeps its fonts there too (Steel & Dust's
   Silkscreen, `assets/fonts/`): a font from another site, like Google Fonts, is lost offline. Each file is checked with the server, so what the game has just loaded for itself costs a
@@ -204,7 +206,9 @@ not kept.
   revision a game plays once, and again only as one comes in or goes, so each of its files reads one
   cache. A download waits while the game asks for files of its own, carrying on once it has asked
   for none for two seconds (`game-activity.js`), so on a phone the game's own files come first. A
-  prefetch of a game's page (the home's speculation rules) downloads nothing.
+  prefetch of a game's page (the home's speculation rules) downloads nothing. A video (a trailer) is
+  left to the network (`routes.js`): it plays from the byte ranges it asks for, which the whole files
+  the worker keeps cannot answer.
 - **Saving a game** (`game-downloads.js`): the player saves a game, and removes it, with the
   arcade's buttons; a play never waits for a download. The worker answers `api/offline/<id>`: a GET
   with `saved` once a revision is whole, else `saving` with how many of its files are in (`done`,
@@ -263,11 +267,14 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   browser without them keeps a plain bar that scrolls away with the hero.
 - **Hero** (`Hero.tsx`, `Spotlight.tsx`, `spotlight-motion.js`, `hero.css`): the game's `banner` (its `poster`, a tall crop, on
   narrow screens) cross-fades in behind a dim, under one slow Ken Burns zoom on the whole stack. Its
-  title, genre line and first sentence rise in under the carousel, over Play, Details and a heart; a
+  title, genre line and first sentence rise in under the carousel, over Play, Trailer (for a game
+  that has one), Details and a heart; a
   swipe that lands mid-rise carries on from where the text is, so quick swipes never blink. Between
   a game and a teaser the buttons change, so they fade out, change unseen and rise back in turn
   (`use-action-row.ts`, `action-swap.js`), each on its own, since an opacity on their row would cut the glass buttons'
-  blur off from the art. The heart pops only when tapped.
+  blur off from the art; so do they between a game with a trailer and one without. On a phone
+  (`max-width: 30rem`) Trailer is a round button like the heart and the pills a little narrower, so
+  the four stay on one line down to a 360px screen. The heart pops only when tapped.
 - **Carousel** (`Carousel.tsx`, `carousel-layout.js`, `carousel-motion.js`, `carousel.css`): each card shows its game's
   `screenshot`, a frame of play, so it never repeats the key art behind it. Two Coming Soon teasers
   (`coming-soon.js`) follow the games: a dark slate with a slow sheen, a dark backdrop, and a quiet
@@ -319,6 +326,14 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   sheet of the arcade works through `use-sheet.ts` over `sheet.js`: it shows while its screen asks
   for it, Escape and a tap on the dimmed page close it with its animation, and a screen that goes
   takes its sheet down at once.
+- **Trailer** (`DetailsMedia.tsx`, `trailer-player.js`, `trailer.css`): a game's `game.json` may
+  name a trailer, an `.mp4` in its `assets/trailer/` (MP4, H.264 and AAC, is the one kind every phone
+  plays). The hero's Trailer, or the Trailer button on the details sheet's art, opens the sheet with
+  the trailer playing in place of its art, Play right under it. It starts in the tap that asked for
+  it (`flushSync`), with sound, since a browser lets sound play only then; muted where the browser
+  still refuses, or where the player turned the arcade's sound off, and its controls unmute it. It
+  stops, and stops downloading, as the sheet closes, and the sheet shows the art again the next time.
+  No save keeps it.
 
 Opening a game plays an app-launch animation before the page changes (`src/home/launcher.js`, made
 on the first launch by `use-launcher.ts`), like

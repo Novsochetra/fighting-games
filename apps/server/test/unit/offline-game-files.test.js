@@ -23,6 +23,7 @@ beforeEach(async () => {
     'assets/sprites/heroes/angkor/card_idle.png': 'card',
     'assets/screenshots/angkor-wat.png': 'shot',
     'assets/social/title-screen.jpg': 'preview',
+    'assets/trailer/trailer.mp4': 'video',
     'assets/sprites/README.md': 'notes',
     'test/unit/main.test.js': 'test',
   });

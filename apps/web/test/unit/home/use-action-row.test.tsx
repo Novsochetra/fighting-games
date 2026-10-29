@@ -104,6 +104,19 @@ describe('useActionRow', () => {
     expect(animations).toEqual([]);
   });
 
+  it('fades the buttons out and back between a game with a trailer and one without', async () => {
+    const row = showRow(game);
+
+    row.show({ ...card('with-trailer'), trailerSrc: 'games/demo/assets/trailer/trailer.mp4' });
+
+    expect(row.shown()).toBe('game');
+    expect(animations).toHaveLength(3);
+
+    await finishAll();
+
+    expect(row.shown()).toBe('with-trailer');
+  });
+
   it('fades the buttons out, swaps them unseen, then rises the new ones back in turn', async () => {
     const row = showRow(game);
 

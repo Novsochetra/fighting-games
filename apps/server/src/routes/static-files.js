@@ -4,6 +4,7 @@ import path from 'node:path';
 import { contentTypeFor } from '../content-types.js';
 import { BASE_HEADERS, sendNotFound, sendRedirect } from '../http-responses.js';
 import { resolveStaticTarget, splitRequestTarget } from '../static-path.js';
+import { byteRangeOf } from './byte-range.js';
 import { matchesTag, tagOf } from './file-tags.js';
 
 // A file named by its content (isImmutable) never changes, so a browser keeps it for a year without
@@ -44,23 +45,53 @@ async function serveDirectory({ request, response, target, query }) {
 
 async function sendFile({ request, response, filePath, stats, cache = null }) {
   const tag = await tagOf(filePath, stats);
-  const headers = { ...BASE_HEADERS, ...(cache && { 'Cache-Control': cache }), ETag: tag };
+  const headers = {
+    ...BASE_HEADERS,
+    ...(cache && { 'Cache-Control': cache }),
+    ETag: tag,
+    'Accept-Ranges': 'bytes',
+  };
 
   if (matchesTag(request.headers['if-none-match'], tag)) {
     response.writeHead(304, headers);
     return response.end();
   }
 
-  response.writeHead(200, {
+  const range = rangeOf(request, tag, stats.size);
+
+  if (range === 'none') {
+    response.writeHead(416, { ...headers, 'Content-Range': `bytes */${stats.size}` });
+    return response.end();
+  }
+
+  return sendBytes({ request, response, filePath, stats, headers, range });
+}
+
+// A range counts only against the file the browser holds the rest of; a changed file goes whole.
+function rangeOf(request, tag, size) {
+  const ifRange = request.headers['if-range'];
+
+  return ifRange === undefined || ifRange === tag ? byteRangeOf(request.headers.range, size) : null;
+}
+
+function sendBytes({ request, response, filePath, stats, headers, range }) {
+  const part = range && { 'Content-Range': `bytes ${range.start}-${range.end}/${stats.size}` };
+
+  response.writeHead(range ? 206 : 200, {
     ...headers,
+    ...part,
     'Content-Type': contentTypeFor(filePath),
-    'Content-Length': stats.size,
+    'Content-Length': range ? range.end - range.start + 1 : stats.size,
   });
+
   if (request.method === 'HEAD') {
     return response.end();
   }
-  const stream = createReadStream(filePath);
+
+  const stream = createReadStream(filePath, range ?? {});
+
   stream.on('error', () => response.destroy());
+
   return stream.pipe(response);
 }
 

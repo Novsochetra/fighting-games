@@ -10,6 +10,10 @@ const SAVE = /^api\/offline\/([\w-]+)$/;
 // of a deploy (src/arcade/update-check.js), so the worker never answers it from what it keeps
 const VERSION = 'version.json';
 
+// A game's trailer, which no save keeps: a video plays from the byte ranges it asks the server for,
+// which the whole files the worker holds cannot answer.
+const isVideo = (request) => request.destination === 'video';
+
 const pathUnder = (url, scope) =>
   url.pathname.slice(scope.pathname.length).replace(/(^|\/)index\.html$/, '$1');
 
@@ -45,7 +49,7 @@ export function routeOf(request, scopeUrl) {
     return { kind: 'save', id: save[1] };
   }
 
-  if (!isOurs || request.method !== 'GET' || path === VERSION) {
+  if (!isOurs || request.method !== 'GET' || path === VERSION || isVideo(request)) {
     return { kind: 'pass' };
   }
 

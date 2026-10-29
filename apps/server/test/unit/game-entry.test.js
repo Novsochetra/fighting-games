@@ -87,6 +87,26 @@ describe('validateGameEntry', () => {
     },
   );
 
+  it('accepts a trailer, a video of play inside the game folder', () => {
+    const entry = { ...validEntry(), trailer: 'assets/trailer/trailer.mp4' };
+    expect(validateGameEntry(entry, 'demo-game')).toEqual([]);
+  });
+
+  it.each([
+    'assets/trailer/../../../trailer.mp4',
+    'https://example.com/trailer.mp4',
+    'assets/video/trailer.mp4',
+    'trailer.mp4',
+    'assets/trailer/trailer.webm',
+    'assets/trailer/trailer.mp4.png',
+    '',
+    42,
+  ])('rejects the trailer %j', (trailer) => {
+    expect(validateGameEntry({ ...validEntry(), trailer }, 'demo-game')).toEqual([
+      '"trailer" must be an .mp4 file in the game\'s assets/trailer/ folder',
+    ]);
+  });
+
   it.each([['Keyboard', ''], 'Keyboard', [1]])('rejects controls %j', (controls) => {
     expect(validateGameEntry({ ...validEntry(), controls }, 'demo-game')).toEqual([
       '"controls" must be a list of non-empty strings',
@@ -140,6 +160,12 @@ describe('toCatalogGame', () => {
     expect(toCatalogGame(validEntry())).not.toHaveProperty('poster');
     const shot = toCatalogGame({ ...validEntry(), screenshot: 'shots/a.png' });
     expect(shot.screenshot).toBe('games/demo-game/shots/a.png');
+  });
+
+  it('resolves a trailer like the art, and adds none when missing', () => {
+    const game = toCatalogGame({ ...validEntry(), trailer: 'assets/trailer/trailer.mp4' });
+    expect(game.trailer).toBe('games/demo-game/assets/trailer/trailer.mp4');
+    expect(toCatalogGame(validEntry())).not.toHaveProperty('trailer');
   });
 
   it('keeps the folder path of a game hosted elsewhere, next to its url', () => {

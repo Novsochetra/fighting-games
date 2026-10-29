@@ -1,0 +1,25 @@
+/* A game's trailer, in place of the frame of play at the top of its details sheet. */
+.sheet__media {
+  position: relative;
+}
+
+.sheet__trailer {
+  position: absolute;
+  inset: 0;
+  inline-size: fit-content;
+  margin: auto;
+}
+
+.sheet__video {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  background: var(--color-card-blank);
+  outline: none;
+}
+
+.sheet__video.is-smooth {
+  image-rendering: auto;
+}

@@ -15,6 +15,7 @@ const card = (overrides: Partial<GameCard> = {}): GameCard => ({
   bannerSrc: 'games/steel-and-dust/assets/ui/select/bg-landscape.png',
   posterSrc: 'games/steel-and-dust/assets/ui/select/bg-portrait.png',
   artSrc: 'games/steel-and-dust/assets/screenshots/angkor-wat.png',
+  trailerSrc: '',
   genre: "Beat 'em up",
   meta: '',
   summary: '',

@@ -12,4 +12,10 @@ describe('the card art the arcade keeps offline', () => {
     expect(new Set(urls).size).toBe(urls.length);
     expect(entries.every((entry) => /^[0-9a-f]{16}$/.test(entry.revision))).toBe(true);
   });
+
+  it('leaves out the trailers, megabytes no one has asked to watch', async () => {
+    const entries = await catalogArtEntries({ webRoot: WEB_ROOT, gamesRoot: GAMES_ROOT });
+
+    expect(entries.filter((entry) => entry.url.endsWith('.mp4'))).toEqual([]);
+  });
 });

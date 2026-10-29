@@ -57,6 +57,32 @@
   fill: currentcolor;
 }
 
+/* On a phone the Trailer button is round, like the heart, and the pills a little narrower, so the
+   four buttons stay on one line down to a 360px screen. */
+@media (max-width: 30rem) {
+  .spotlight__actions {
+    gap: var(--space-2);
+  }
+
+  .spotlight__actions .pill-button {
+    padding-inline: var(--space-5);
+  }
+
+  .spotlight__actions .spotlight__trailer {
+    inline-size: var(--size-pill-button);
+    padding-inline: 0;
+  }
+
+  .spotlight__trailer .icon {
+    inline-size: var(--size-icon-large);
+    block-size: var(--size-icon-large);
+  }
+
+  .spotlight__trailer-label {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .favorite__heart {
     transition: none;

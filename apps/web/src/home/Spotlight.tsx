@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, type MouseEvent, type RefObject } from 'react'
 import { useArcade, useArcadeUrl } from '../arcade/arcade-context';
 import type { GameCard } from './game-card';
 import { useHome } from './home-context';
-import { PlayIcon } from './home-icons';
+import { PlayIcon, TrailerIcon } from './home-icons';
 import { isPlainClick } from './input-actions.js';
 import { riseText } from './spotlight-motion.js';
 import { useActionRow } from './use-action-row';
@@ -49,6 +49,26 @@ function PlayLink({ card }: { card: GameCard }) {
   );
 }
 
+// The trailer plays in the details sheet, in place of its art; shown for a game that has one.
+function WatchTrailer({ card, selected }: { card: GameCard; selected: GameCard }) {
+  const home = useHome();
+
+  return (
+    <button
+      className="pill-button pill-button--glass spotlight__trailer"
+      id="trailer-open"
+      type="button"
+      aria-haspopup="dialog"
+      aria-label={`Watch the ${selected.title} trailer`}
+      hidden={Boolean(card.isComingSoon) || !card.trailerSrc}
+      onClick={() => home.details.watch(selected, 'hero')}
+    >
+      <TrailerIcon />
+      <span className="spotlight__trailer-label">Trailer</span>
+    </button>
+  );
+}
+
 function Actions({ card, selected }: { card: GameCard; selected: GameCard }) {
   const home = useHome();
   const { preferences } = useArcade();
@@ -57,6 +77,7 @@ function Actions({ card, selected }: { card: GameCard; selected: GameCard }) {
   return (
     <>
       <PlayLink card={card} />
+      <WatchTrailer card={card} selected={selected} />
       <button
         className="pill-button pill-button--glass"
         id="details-open"
