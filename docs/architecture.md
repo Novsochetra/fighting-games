@@ -149,7 +149,12 @@ press, even one a quick tap or the next press cuts short; the pad lets the pulse
 played or was cut off (`animationend`, `animationcancel`), as an animation plays again when the
 touch layer comes back into view, and a resumed game would pop every button pressed before. The pad's own rules
 (`pad-styles.js`, put first in the head) stand and size the controls from the game's
-`--pad-scale`, and never paint them. A game's tests check each skin it ships (`skinProblems`,
+`--pad-scale`, and never paint them. A control's offsets from its corner grow with that scale as
+much as its size does, and the screen between the corners does not, so controls anchored to
+opposite edges close in on each other as it grows: `roomyScale` (`pad-room.js`) finds the largest
+scale, up to the one a player wants, at which a skin's own places keep every control, in each shape
+it may take, a gap from the others, whole on the layer and clear of what the game keeps out (a
+shell's bezel round its screen). A game's tests check each skin it ships (`skinProblems`,
 `skin-check.js`), and `renderPad(layer, layout, { debug: true })` outlines every control and zone.
 
 ## One app
@@ -909,6 +914,13 @@ own: each control's centre (the five buttons and the stick or the d-pad) as frac
 layer and a size on top of Button size, checked on load by `sanitizeButtonLayout`
 (`src/data/button-layout.js`), which takes a layout saved before there were skins as the classic
 skin's.
+Button size is the most the controls grow: each fit draws them at `padScaleOf` (`pad-scale.js`),
+the player's size or as near it as the skin's own places have room for on that screen, every key
+round and as a pill, 12 px apart and off a Clear shell's bezel, and sets `--btn` to it, which the
+stage's frame and the stick's rest take too. Small and Medium fit every phone from 360 px wide;
+Large grows a Clear skin's keys to 1.2 on a large phone and less on a smaller one, where at 1.2
+JUMP stood on the d-pad held upright and HEAVY ran into ULT held sideways, and Dusk's d-pad, which
+stood on HEAVY and DASH on a 360 px phone held upright even at Medium, steps back to clear them.
 `screen-fit.js` draws and places the pad for the way the phone is held on every fit, and gives a
 placed stick its zone, the half of the screen it stands on, widened to reach past its rim
 (`stick-place.js` in the package); `layout.stickRest` gives the stick the centre it rests on.

@@ -25,6 +25,17 @@ export const keyShapesOf = (settings) =>
 export const pillsOffered = (skinId, orientation) =>
   (SKINS[skinId].pills?.[orientation] ?? []).map((pill) => pill.id);
 
+// each control of a skin held one way in every shape it may take, round and a pill where offered,
+// so how much room the skin has does not change with a key's shape
+export function shapesOf(skinId, orientation) {
+  const offered = SKINS[skinId].pills?.[orientation] ?? [];
+
+  return SKINS[skinId].layouts[orientation].items.map((item) => [
+    item,
+    ...offered.filter((pill) => pill.id === item.id),
+  ]);
+}
+
 // the touch pad keeps the pad it drew for the same layout, so each pick of pills is one layout,
 // made once, and a fit hands the pad the one it has
 const pilledLayouts = new Map();

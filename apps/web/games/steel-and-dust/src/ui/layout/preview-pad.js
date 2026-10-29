@@ -1,7 +1,6 @@
 import { renderPad } from '../../../../../packages/touch-pad/src/pad-markup.js';
 import { placePad, placesOf } from '../../../../../packages/touch-pad/src/pad-place.js';
 import { placeShell, renderShell } from '../../../../../packages/touch-pad/src/pad-shell.js';
-import { buttonScale } from '../../data/settings.js';
 
 // a copy of the touch layer (the Skins screen's) draws a skin's controls as
 // the real one does, so they look and size exactly like them; `custom` is the player's layout
@@ -26,7 +25,7 @@ export function drawPreviewShell(layer, padLayout, stageRect) {
 
 // the buttons place themselves through CSS; the stick rests where the screen fit puts the real
 // one: at its placed centre on the touch layer, or where the original one rests
-export function restPreviewStick(preview, { places, layout, app, settings }) {
+export function restPreviewStick(preview, { places, layout, app }) {
   const stick = preview.querySelector('.pad-stick');
 
   if (!stick) {
@@ -36,7 +35,7 @@ export function restPreviewStick(preview, { places, layout, app, settings }) {
   const layer = layout.touchArea() ?? { width: app.clientWidth, height: app.clientHeight };
   const rest = places?.stick
     ? { x: places.stick.x * layer.width, y: places.stick.y * layer.height }
-    : layout.originalStickRest(buttonScale(settings));
+    : layout.originalStickRest(layout.padScale());
 
   stick.style.left = `${rest.x}px`;
   stick.style.top = `${rest.y}px`;

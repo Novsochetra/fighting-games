@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { skinProblems } from '../../../../../packages/touch-pad/src/skin-check.js';
-import { BUTTON_SCALES } from '../../../src/data/settings.js';
-import { keyShapesOf, layoutOf, pillsOffered, SKINS } from '../../../src/data/skins/skins.js';
+import {
+  keyShapesOf,
+  layoutOf,
+  pillsOffered,
+  shapesOf,
+  SKINS,
+} from '../../../src/data/skins/skins.js';
 
 // what a touch control can give the fighter: a direction it holds, or a button's action
 const INPUTS = new Set(['up', 'right', 'down', 'left', 'light', 'heavy', 'jump', 'dash', 'ult']);
@@ -9,102 +14,6 @@ const INPUTS = new Set(['up', 'right', 'down', 'left', 'light', 'heavy', 'jump',
 const KEYS = ['light', 'heavy', 'jump', 'dash', 'ult'];
 
 const inputsOf = (item) => (Array.isArray(item.inputs) ? item.inputs : Object.values(item.inputs));
-
-// a control on a screen [width, height] at a Button size's scale, which grows the keys and their
-// offsets from the screen's edges alike (the pad's CSS): a round key or a pill is the line its ends
-// sweep along (none for a round key) and their radius; the d-pad is its square
-function outlineOf(item, [width, height], scale) {
-  const across = item.size * scale;
-  const down = across * (item.aspect ?? 1);
-  const x = item.at.x * width + item.at.dx * scale;
-  const y = item.at.y * height + item.at.dy * scale;
-  const radius = item.kind === 'dpad' ? 0 : Math.min(across, down) / 2;
-  const box = {
-    left: x - across / 2,
-    right: x + across / 2,
-    top: y - down / 2,
-    bottom: y + down / 2,
-  };
-  const sweep =
-    item.kind === 'dpad'
-      ? box
-      : { left: box.left + radius, right: box.right - radius, top: y, bottom: y };
-
-  return { id: item.id, box, sweep, radius };
-}
-
-const apart = (low, high) => Math.max(0, low - high);
-
-function gapBetween(first, second) {
-  const across = Math.max(
-    apart(first.sweep.left, second.sweep.right),
-    apart(second.sweep.left, first.sweep.right),
-  );
-  const down = Math.max(
-    apart(first.sweep.top, second.sweep.bottom),
-    apart(second.sweep.top, first.sweep.bottom),
-  );
-
-  return Math.hypot(across, down) - first.radius - second.radius;
-}
-
-function tightestGap(shapes) {
-  return Math.min(
-    ...shapes.flatMap((shape, i) => shapes.slice(i + 1).map((other) => gapBetween(shape, other))),
-  );
-}
-
-// the bezel round the game's screen (styles/skin-clear.css), which grows with Button size
-const BEZEL = 12;
-
-// held sideways the shell's panels either side of the game's bezel hold the controls: DASH and the
-// d-pad the left one, the rest the right; upright the game stands above them all
-function outside(shapes, { layout, orientation, scale }, [width, height]) {
-  const panel = {
-    left: [0, (layout.screen.left - BEZEL) * scale],
-    right: [width - (layout.screen.right - BEZEL) * scale, width],
-  };
-  const sideOf = (id) => (id === 'dash' || id === 'dpad' ? 'left' : 'right');
-  const inPanel = ({ id, box }) =>
-    orientation === 'portrait' ||
-    (box.left >= panel[sideOf(id)][0] && box.right <= panel[sideOf(id)][1]);
-  const onScreen = ({ box }) =>
-    box.left >= 0 && box.top >= 0 && box.right <= width && box.bottom <= height;
-
-  return shapes.filter((shape) => !onScreen(shape) || !inPanel(shape)).map((shape) => shape.id);
-}
-
-function expectRoomFor({ layout, orientation, screen, where }) {
-  const [small, medium, large] = BUTTON_SCALES;
-  const round = SKINS['clear-jade'].layouts[orientation];
-  const shapes = (items, scale) => items.map((item) => outlineOf(item, screen, scale));
-
-  for (const scale of [small, medium]) {
-    const placed = { layout, orientation, scale };
-
-    expect(tightestGap(shapes(layout.items, scale)), where).toBeGreaterThan(12 * scale);
-    expect(outside(shapes(layout.items, scale), placed, screen), where).toEqual([]);
-  }
-
-  expect(tightestGap(shapes(layout.items, large)), where).toBeGreaterThanOrEqual(
-    Math.min(12 * large, tightestGap(shapes(round.items, large))) - 0.01,
-  );
-}
-
-const PHONES = {
-  landscape: [
-    [667, 375],
-    [740, 360],
-    [844, 390],
-    [932, 430],
-  ],
-  portrait: [
-    [360, 740],
-    [375, 667],
-    [390, 844],
-    [430, 932],
-  ],
-};
 
 describe('the skins Steel & Dust ships', () => {
   it('are each a skin the touch pad can draw', () => {
@@ -197,22 +106,15 @@ describe('the skins Steel & Dust ships', () => {
     expect([keyShapesOf({}), keyShapesOf({ keyShapes: null })]).toEqual([{}, {}]);
   });
 
-  // any key of a Clear skin may be round or a pill on its own, so each of the 32 mixes is checked
-  // on small and large phones: at Small and Medium no two controls come closer than a thumb tells
-  // apart, nor leave the screen or, held sideways, their panel beside the game. Large crowds the
-  // shell's round keys on its own on these phones, so there a pill only keeps from crowding them more
-  it('keep every control clear of the others in any mix of round keys and pills', () => {
-    for (const [orientation, screens] of Object.entries(PHONES)) {
-      for (let mix = 0; mix < 2 ** KEYS.length; mix++) {
-        const pick = Object.fromEntries(
-          KEYS.filter((_, i) => mix & (1 << i)).map((key) => [key, 'pill']),
-        );
-        const layout = layoutOf('clear-jade', orientation, pick);
+  it('list each control in every shape it may take, for the room a skin has', () => {
+    const clear = shapesOf('clear-mekong', 'portrait');
+    const kindsOf = (shapes) => shapes.map((item) => item.aspect ?? 1);
 
-        for (const screen of screens) {
-          expectRoomFor({ layout, orientation, screen, where: `${screen} ${Object.keys(pick)}` });
-        }
-      }
-    }
+    expect(clear.map((shapes) => shapes[0].id)).toEqual(
+      SKINS['clear-mekong'].layouts.portrait.items.map((item) => item.id),
+    );
+    expect(clear.find(([item]) => item.id === 'dpad')).toHaveLength(1);
+    expect(kindsOf(clear.find(([item]) => item.id === 'light'))).toEqual([1, 0.44]);
+    expect(shapesOf('dusk', 'landscape').every((shapes) => shapes.length === 1)).toBe(true);
   });
 });

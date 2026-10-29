@@ -1,5 +1,4 @@
 import { installTouchPad } from '../../../../packages/touch-pad/src/install-touch-pad.js';
-import { buttonScale } from '../data/settings.js';
 import { buzz } from '../sim/fx/haptics.js';
 import { pause } from '../sim/stage/flow.js';
 
@@ -43,7 +42,7 @@ export function installGameTouchPad({ elements, game, audio, layout }) {
   return installTouchPad(elements.touch, {
     handler: createTouchActions({ game, audio }),
     stickMode: () => game.settings.stick,
-    stickRest: () => layout.stickRest(buttonScale(game.settings)),
+    stickRest: () => layout.stickRest(layout.padScale()),
   });
 }
 

@@ -1,8 +1,8 @@
 import { createSafeArea } from '../../../../../packages/screen/src/safe-area.js';
 import { onFoldChange, readHinge } from '../../../../../packages/screen/src/viewport-segments.js';
 import { placeShell, renderShell } from '../../../../../packages/touch-pad/src/pad-shell.js';
-import { buttonScale } from '../../data/settings.js';
 import { customStick, fitControls, frameOf, padLayoutOf } from './fit-pad.js';
+import { padScaleOf } from './pad-scale.js';
 import { fitMenus, menuBox } from './menu-area.js';
 import { pausePlace, placePause } from './pause-place.js';
 import { arrangeStage, stickRestPosition } from './stage-layout.js';
@@ -13,7 +13,6 @@ function applyTouchClasses(document, { game, ui }) {
   classList.toggle('touch-on', ui.showsTouchControls());
   classList.toggle('stick-fixed', game.settings.stick === 'fixed');
   classList.toggle('stick-hidden', game.settings.stick === 'hidden');
-  document.documentElement.style.setProperty('--btn', String(buttonScale(game.settings)));
   document.documentElement.style.setProperty('--pad-opacity', String(game.settings.padOpacity));
 }
 
@@ -29,10 +28,9 @@ function hingeNow({ window, elements }) {
 
 // a skin with a shell keeps the stage inside its frame, between its controls, behind its bezel
 function fitStage(context, safe) {
-  const { elements, game, ui } = context;
+  const { elements, ui, padScale: scale } = context;
   const hinge = context.hingeNow();
   const screen = screenOf(elements);
-  const scale = buttonScale(game.settings);
   const padLayout = padLayoutOf(context);
   const arranged = arrangeStage({
     ...screen,
@@ -82,6 +80,14 @@ function originalStickRest({ context, safe, scale }) {
   });
 }
 
+// the controls' scale first, as the stage's frame grows with it
+function fitPage(document, context, safe) {
+  context.padScale = padScaleOf(context, safe);
+  document.documentElement.style.setProperty('--btn', String(context.padScale));
+  fitStage(context, safe);
+  fitControls(context);
+}
+
 export function createScreenFit({ document, window, elements, game, ui }) {
   const readSafeArea = createSafeArea(document, window);
   const context = { elements, game, ui, window, hingeNow: () => hingeNow({ window, elements }) };
@@ -109,9 +115,11 @@ export function createScreenFit({ document, window, elements, game, ui }) {
     stickRest(scale) {
       return customStick(context, scale)?.rest ?? layout.originalStickRest(scale);
     },
+    padScale() {
+      return context.padScale;
+    },
     fit() {
-      fitStage(context, readSafeArea());
-      fitControls(context);
+      fitPage(document, context, readSafeArea());
       layout.onFit?.();
     },
     applyTouchSettings() {

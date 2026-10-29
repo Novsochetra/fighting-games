@@ -98,6 +98,7 @@ const TOUCH_CONTROLS = [
     label: 'Button size',
     options: [0, 1, 2],
     format: pick(['Small', 'Medium', 'Large']),
+    note: 'Large grows them as far as your screen has room for',
   },
 ];
 

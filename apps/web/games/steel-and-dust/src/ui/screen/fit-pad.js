@@ -4,18 +4,17 @@ import {
   customStickPlace,
   placeStickZone,
 } from '../../../../../packages/touch-pad/src/stick-place.js';
-import { buttonScale } from '../../data/settings.js';
 import { keyShapesOf, layoutOf, skinIdFor, steersWithDpad } from '../../data/skins/skins.js';
 import { orientationOf, savedEntries, slotOf } from '../layout/layout-draft.js';
 import { STICK_RADIUS } from './stage-layout.js';
 import { touchAreaOf } from './touch-area.js';
 
-const screenOf = ({ elements }) => ({
+export const screenOf = ({ elements }) => ({
   width: elements.app.clientWidth,
   height: elements.app.clientHeight,
 });
 
-const orientationNow = (context) => {
+export const orientationNow = (context) => {
   const { width, height } = screenOf(context);
 
   return orientationOf(width, height);
@@ -23,7 +22,7 @@ const orientationNow = (context) => {
 
 // the skin shown and the shape of its keys: those picked, or those the Skins screen shows while it
 // is open
-const lookNow = ({ preview, game }) =>
+export const lookNow = ({ preview, game }) =>
   preview ?? { skinId: skinIdFor(game.settings), keyShapes: keyShapesOf(game.settings) };
 
 export function padLayoutOf(context) {
@@ -85,6 +84,6 @@ export function fitControls(context) {
   placePad(elements.touch, placesFor(context), { fromSkin: !customLayout(context) });
 
   if (zone) {
-    placeStickZone(zone, customStick(context, buttonScale(game.settings))?.zone);
+    placeStickZone(zone, customStick(context, context.padScale)?.zone);
   }
 }

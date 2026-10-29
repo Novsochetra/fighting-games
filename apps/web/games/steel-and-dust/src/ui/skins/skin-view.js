@@ -55,7 +55,7 @@ export class SkinView {
     fitTouchLayer(this.preview, this.layout.touchArea());
     drawPreviewShell(this.shell, padLayout, this.layout.stageRect());
     const places = this.controls.draw(padLayout, draft[slot]);
-    restPreviewStick(this.preview, { places, layout: this.layout, app: this.app, settings });
+    restPreviewStick(this.preview, { places, layout: this.layout, app: this.app });
     this.controls.mark(shownControls(padLayout, settings.stick), picked);
     this.section.classList.toggle('editing', Boolean(picked));
     this.showBar({ skinId, keyShapes, draft, slot, picked });
