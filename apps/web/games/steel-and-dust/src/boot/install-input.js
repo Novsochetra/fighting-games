@@ -1,8 +1,7 @@
 import { installAudioUnlock } from '../audio/index.js';
 import { createGamepadReader } from '../input/gamepad.js';
 import { installKeyboard } from '../input/keyboard.js';
-import { installPauseButton, installTouchButtons } from '../input/touch-buttons.js';
-import { installTouchStick, TouchStick } from '../input/touch-stick.js';
+import { installGameTouchPad, installPauseButton } from '../input/touch-actions.js';
 import { pause } from '../sim/stage/flow.js';
 
 function installPointerTracking(window, { game, audio, ui, layout }) {
@@ -32,14 +31,8 @@ export function installInput({ window, elements, game, audio, ui, layout, menus 
   elements.canvas.addEventListener('pointerdown', () =>
     elements.canvas.focus({ preventScroll: true }),
   );
-  const touchStick = new TouchStick({
-    elements: { zone: elements.stickZone, base: elements.stickBase, knob: elements.stickKnob },
-    game,
-    layout,
-  });
-  installTouchStick(touchStick, { zone: elements.stickZone, base: elements.stickBase });
-  installTouchButtons(elements.touchButtons, { game, audio });
+  const touchPad = installGameTouchPad({ elements, game, audio, layout });
   installPauseButton(elements.pauseButton, { game, audio });
   const gamepad = createGamepadReader({ navigator: window.navigator, game, menus, ui });
-  return { touchStick, gamepad };
+  return { touchPad, gamepad };
 }

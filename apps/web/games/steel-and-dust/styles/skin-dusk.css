@@ -1,0 +1,147 @@
+/* Dusk (src/data/skins/dusk.js): glass discs lit by the dusk sky, over the fight, and a d-pad. The
+   touch pad stands and sizes them; this only paints them */
+.dusk {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-round);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: calc(var(--font-size-2xs) * var(--btn) * var(--pad-size, 1));
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-dusk-label);
+  text-shadow: var(--text-shadow-pixel-xs);
+  background: radial-gradient(
+    circle at 50% 25%,
+    var(--color-dusk-glow),
+    var(--color-dusk-glass) 70%
+  );
+  border: 2px solid var(--color-dusk-rim);
+  box-shadow: var(--shadow-dusk-glass);
+  transition: scale var(--duration-normal) var(--easing-overshoot);
+}
+
+/* pressed and let go as the classic buttons are (styles/touch-buttons.css), whose keyframes the
+   ring shares */
+.dusk.on {
+  background: var(--color-dusk-pressed);
+  color: var(--color-ink);
+  text-shadow: none;
+  scale: 0.93;
+  transition-duration: var(--duration-instant);
+}
+
+.dusk::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--color-dusk-ring);
+  border-radius: var(--radius-round);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dusk[data-pulse='a']::after {
+  animation: touch-pop-a var(--duration-touch-pop) var(--easing-out);
+}
+
+.dusk[data-pulse='b']::after {
+  animation: touch-pop-b var(--duration-touch-pop) var(--easing-out);
+}
+
+.dusk-light {
+  font-size: calc(var(--font-size-caption) * var(--btn) * var(--pad-size, 1));
+  border-color: var(--color-dusk-rim-attack);
+}
+
+.dusk-jump {
+  border-color: var(--color-dusk-rim-jump);
+}
+
+.dusk-ult {
+  color: var(--color-text-muted);
+}
+
+.dusk-ult.ready {
+  color: var(--color-ink);
+  background: var(--color-touch-ult-ready);
+  border-color: var(--color-cream);
+  text-shadow: none;
+  animation: ult-ready var(--duration-pulse) var(--easing-step-2) infinite;
+}
+
+/* heavy spends the bar: with too little left it greys out, as the press would do nothing */
+.dusk-heavy.empty {
+  color: var(--color-text-muted);
+  border-color: var(--color-dusk-rim);
+}
+
+/* a cross of four glass arms round a centre; the pressed arms light up, a corner lighting two */
+.dusk-dpad::before {
+  content: '';
+  position: absolute;
+  left: 33.33%;
+  top: 33.33%;
+  width: 33.34%;
+  height: 33.34%;
+  background: var(--color-dusk-glass);
+}
+
+/* an arm sinks at once as the thumb rolls onto it, and springs back as it rolls off */
+.dusk-dpad .pad-arm {
+  border: 2px solid var(--color-dusk-rim);
+  border-radius: var(--radius-xl);
+  background: radial-gradient(circle, var(--color-dusk-glow), var(--color-dusk-glass) 75%);
+  box-shadow: var(--shadow-dusk-glass);
+  transition: scale var(--duration-normal) var(--easing-overshoot);
+}
+
+.dusk-dpad .pad-arm::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border: calc(7px * var(--btn) * var(--pad-size, 1)) solid var(--color-clear);
+  border-bottom-color: var(--color-dusk-label);
+  translate: -50% -75%;
+}
+
+.dusk-dpad .pad-arm[data-direction='right']::after {
+  rotate: 90deg;
+  translate: -25% -50%;
+}
+
+.dusk-dpad .pad-arm[data-direction='down']::after {
+  rotate: 180deg;
+  translate: -50% -25%;
+}
+
+.dusk-dpad .pad-arm[data-direction='left']::after {
+  rotate: 270deg;
+  translate: -75% -50%;
+}
+
+.dusk-dpad[data-pressed~='up'] .pad-arm[data-direction='up'],
+.dusk-dpad[data-pressed~='right'] .pad-arm[data-direction='right'],
+.dusk-dpad[data-pressed~='down'] .pad-arm[data-direction='down'],
+.dusk-dpad[data-pressed~='left'] .pad-arm[data-direction='left'] {
+  background: var(--color-dusk-pressed);
+  scale: 0.94;
+  transition-duration: var(--duration-instant);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dusk-ult.ready {
+    animation: none;
+    box-shadow: var(--shadow-ult-ready-still);
+  }
+
+  .dusk,
+  .dusk-dpad .pad-arm {
+    transition: none;
+  }
+
+  .dusk[data-pulse]::after {
+    animation: none;
+  }
+}

@@ -1,22 +1,30 @@
 import { keycap as key, table } from './key-label.js';
 
-function touchRows(stick) {
+function runRow(stick, dpad) {
+  if (dpad) {
+    return 'press left or right on the d-pad';
+  }
+
+  return stick === 'fixed'
+    ? 'drag the stick in the bottom-left corner'
+    : 'drag anywhere on the left half of the screen';
+}
+
+// `dpad` is a skin that steers with a d-pad (Settings, Skin) instead of the stick
+function touchRows(stick, dpad) {
+  const steer = dpad ? 'd-pad' : 'stick';
+
   return [
-    [
-      'Run',
-      stick === 'fixed'
-        ? 'drag the stick in the bottom-left corner'
-        : 'drag anywhere on the left half of the screen',
-    ],
+    ['Run', runRow(stick, dpad)],
     ['ATTACK', 'light attack; hold it to keep the combo going'],
     ['HEAVY', 'heavy attack, uses a little ULT bar; hold to charge, let go to release'],
-    ['JUMP', 'jump; push the stick sideways to jump that way'],
+    ['JUMP', `jump; push the ${steer} sideways to jump that way`],
     ['DASH', 'quick invincible dash, works once in the air'],
-    ['Launcher', 'push the stick up or down, then HEAVY'],
-    ['Low sweep', 'push the stick down, then ATTACK'],
-    ['Rising strike', 'push the stick up, then ATTACK'],
-    ['Air pogo', 'in the air, stick down + ATTACK'],
-    ['Air dive', 'in the air, stick down + HEAVY'],
+    ['Launcher', `push the ${steer} up or down, then HEAVY`],
+    ['Low sweep', `push the ${steer} down, then ATTACK`],
+    ['Rising strike', `push the ${steer} up, then ATTACK`],
+    ['Air pogo', `in the air, ${steer} down + ATTACK`],
+    ['Air dive', `in the air, ${steer} down + HEAVY`],
     ['ULT', 'glows when half the bar is full'],
     ['Pause', 'II in the top corner'],
   ];
@@ -47,8 +55,8 @@ const PAD_ROWS = [
   ['Pause', 'Start'],
 ];
 
-export function controlsHtml({ touch, stick }) {
-  const touchTable = table('Touch', touchRows(stick));
+export function controlsHtml({ touch, stick, dpad = false }) {
+  const touchTable = table('Touch', touchRows(stick, dpad));
   const keys = table('Keyboard', KEY_ROWS);
   const pad = table('Gamepad', PAD_ROWS);
   return touch ? touchTable + keys + pad : keys + pad + touchTable;

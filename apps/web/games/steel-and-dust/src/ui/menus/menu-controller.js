@@ -73,6 +73,12 @@ export class MenuController {
     this.highlight(false);
   }
 
+  // a panel whose items change under the highlight (the Skins screen's key chooser) puts it on one
+  select(item) {
+    this.state.selected = Math.max(0, this.items().indexOf(item));
+    this.highlight(true);
+  }
+
   open(id) {
     this.panels[id].build();
     this.state.stack.push(id);
@@ -80,8 +86,12 @@ export class MenuController {
     this.audio.sfx('uiOk');
   }
 
+  // a panel that opened something of its own (the Skins screen's key chooser) closes that first
   back() {
-    if (this.state.stack.length > 1) {
+    if (this.panels[this.top()]?.backOut?.()) {
+      this.audio.sfx('uiBack');
+    } else if (this.state.stack.length > 1) {
+      this.panels[this.top()]?.leave?.();
       this.state.stack.pop();
       this.show();
       this.audio.sfx('uiBack');

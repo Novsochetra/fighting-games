@@ -18,7 +18,19 @@ function stepTab(menus, current, step, audio) {
   audio.sfx('ui');
 }
 
+// left and right step through the skins, whichever button is highlighted
+function stepSkin(menus, step) {
+  menus
+    .items()
+    .find((item) => item.dataset.skinStep === String(step))
+    ?.click();
+}
+
 function adjust(menus, { current, step, audio }) {
+  if (menus.top() === 'skins') {
+    stepSkin(menus, step);
+    return;
+  }
   if (current && isSettingRow(current)) {
     menus.changeSetting(current.dataset.k, step, false);
     return;

@@ -1,0 +1,229 @@
+/* Clear (src/data/skins/clear.js): a handheld of see-through plastic in five colours, its insides
+   showing (assets/skins/clear/, see assets/skins/README.md), the game in a bezel. The touch pad
+   stands the shell, the bezel and the controls; this only paints them. Each colour's class sets
+   the plastic, on the shell and on its controls alike */
+.clear {
+  --clear-gloss: url('../assets/skins/clear/gloss-landscape.webp');
+  --clear-insides: url('../assets/skins/clear/insides-landscape.webp');
+}
+
+@media (orientation: portrait) {
+  .clear {
+    --clear-gloss: url('../assets/skins/clear/gloss-portrait.webp');
+    --clear-insides: url('../assets/skins/clear/insides-portrait.webp');
+  }
+}
+
+.clear-lotus {
+  --clear-plastic: var(--color-plastic-lotus);
+}
+
+.clear-ember {
+  --clear-plastic: var(--color-plastic-ember);
+}
+
+.clear-jade {
+  --clear-plastic: var(--color-plastic-jade);
+}
+
+.clear-mekong {
+  --clear-plastic: var(--color-plastic-mekong);
+}
+
+.clear-smoke {
+  --clear-plastic: var(--color-plastic-smoke);
+}
+
+/* light on the tinted plastic, over the board, over the plastic's own depth; the art is drawn
+   light on black, so a screen blend drops its black and keeps only the light */
+.pad-shell.clear {
+  background:
+    var(--clear-gloss) center / 100% 100% no-repeat,
+    linear-gradient(
+      color-mix(in srgb, var(--clear-plastic) 52%, var(--color-clear)),
+      color-mix(
+        in srgb,
+        color-mix(in srgb, var(--clear-plastic) 70%, var(--color-black)) 62%,
+        var(--color-clear)
+      )
+    ),
+    var(--clear-insides) center / cover no-repeat,
+    color-mix(in srgb, var(--clear-plastic) 28%, var(--color-night-deep));
+  background-blend-mode: screen, normal, screen;
+  box-shadow: var(--shadow-clear-shell);
+}
+
+/* the bezel is a frame round the game's screen, a little deeper below it for the game's name, and
+   see-through in the middle, so the stage shows in it, or on the Skins screen whatever is behind */
+.clear .pad-bezel {
+  --bezel: calc(12px * var(--btn));
+  --bezel-chin: calc(var(--bezel) + 14px);
+
+  box-sizing: content-box;
+  margin: calc(var(--bezel) * -1);
+  border: var(--bezel) solid var(--color-bezel);
+  border-top-color: var(--color-bezel-light);
+  border-bottom-width: var(--bezel-chin);
+  border-radius: var(--radius-bezel);
+  box-shadow: var(--shadow-bezel);
+}
+
+.clear .pad-bezel::after {
+  content: 'STEEL & DUST';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(3px - var(--bezel-chin));
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: var(--font-size-2xs);
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-bezel-label);
+}
+
+/* the keys are our art (assets/skins/clear/key-*.webp), grey plastic a little see-through, so the
+   shell's colour shows in them; a round key's radius, and a pill's, round the shadow and the press
+   ring alike */
+.clear-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: calc(var(--font-size-2xs) * var(--btn) * var(--pad-size, 1));
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-clear-label);
+  background: url('../assets/skins/clear/key-round.webp') center / 100% 100% no-repeat;
+  box-shadow: var(--shadow-clear-key);
+  transition: scale var(--duration-normal) var(--easing-overshoot);
+}
+
+.clear-pill {
+  background-image: url('../assets/skins/clear/key-pill.webp');
+}
+
+.clear-light {
+  font-size: calc(var(--font-size-caption) * var(--btn) * var(--pad-size, 1));
+}
+
+/* pressed in as the art draws it and let go as the classic buttons are (styles/touch-buttons.css),
+   whose ring keyframes they share */
+/* a held key sits down on the plastic, so it casts no shadow; its art is smaller than the key up */
+.clear-button.on {
+  background-image: url('../assets/skins/clear/key-round-pressed.webp');
+  box-shadow: none;
+  scale: 0.95;
+  transition-duration: var(--duration-instant);
+}
+
+.clear-pill.on {
+  background-image: url('../assets/skins/clear/key-pill-pressed.webp');
+}
+
+.clear-button::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid color-mix(in srgb, var(--clear-plastic) 60%, var(--color-white));
+  border-radius: var(--radius-pill);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.clear-button[data-pulse='a']::after {
+  animation: touch-pop-a var(--duration-touch-pop) var(--easing-out);
+}
+
+.clear-button[data-pulse='b']::after {
+  animation: touch-pop-b var(--duration-touch-pop) var(--easing-out);
+}
+
+.clear-ult.ready {
+  color: var(--color-touch-ult-ready);
+  animation: ult-ready var(--duration-pulse) var(--easing-step-2) infinite;
+}
+
+/* heavy spends the bar: with too little left it greys out, as the press would do nothing */
+.clear-heavy.empty {
+  color: var(--color-text-muted);
+}
+
+/* the d-pad's art over a well moulded into the plastic; the art stands on ::after, as the d-pad's own
+   background would lie under the well, and its arms over the art to show which is held */
+.clear-dpad::before {
+  content: '';
+  position: absolute;
+  inset: -12%;
+  border-radius: var(--radius-round);
+  background: var(--color-clear-well);
+  box-shadow: var(--shadow-clear-well);
+}
+
+.clear-dpad::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('../assets/skins/clear/dpad.webp') center / 100% 100% no-repeat;
+  filter: drop-shadow(var(--shadow-clear-dpad));
+}
+
+.clear-dpad .pad-arm {
+  z-index: 1;
+}
+
+/* a held arm tips into the plastic, its end in shade: the shade covers the art's arm, 37.5% of the
+   d-pad across where the pad's own arms are a third, and is rounded at its end as the art is */
+.clear-dpad .pad-arm[data-direction='up'] {
+  --clear-arm-end: to top;
+
+  left: 31.25%;
+  width: 37.5%;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.clear-dpad .pad-arm[data-direction='right'] {
+  --clear-arm-end: to right;
+
+  top: 31.25%;
+  height: 37.5%;
+  border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
+}
+
+.clear-dpad .pad-arm[data-direction='down'] {
+  --clear-arm-end: to bottom;
+
+  left: 31.25%;
+  width: 37.5%;
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+}
+
+.clear-dpad .pad-arm[data-direction='left'] {
+  --clear-arm-end: to left;
+
+  top: 31.25%;
+  height: 37.5%;
+  border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+}
+
+.clear-dpad[data-pressed~='up'] .pad-arm[data-direction='up'],
+.clear-dpad[data-pressed~='right'] .pad-arm[data-direction='right'],
+.clear-dpad[data-pressed~='down'] .pad-arm[data-direction='down'],
+.clear-dpad[data-pressed~='left'] .pad-arm[data-direction='left'] {
+  background: linear-gradient(var(--clear-arm-end), transparent, var(--color-clear-held) 70%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clear-ult.ready {
+    animation: none;
+    box-shadow: var(--shadow-ult-ready-still);
+  }
+
+  .clear-button {
+    transition: none;
+  }
+
+  .clear-button[data-pulse]::after {
+    animation: none;
+  }
+}

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { menuBox } from '../../../src/ui/screen/menu-area.js';
 import { arrangeStage } from '../../../src/ui/screen/stage-layout.js';
-import { hingeOf } from '../../../src/ui/screen/viewport-segments.js';
+import { hingeOf } from '../../../../../packages/screen/src/viewport-segments.js';
 
 // Bug: on a Surface Duo the hinge ran down the middle of the fight and through the title menu's
 // buttons, on a Galaxy Z Fold folded on a table the fold cut the road off the sky, and on an

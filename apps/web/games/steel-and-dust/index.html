@@ -78,6 +78,9 @@
     <link rel="stylesheet" href="styles/hero-scene.css" />
     <link rel="stylesheet" href="styles/touch.css" />
     <link rel="stylesheet" href="styles/touch-buttons.css" />
+    <link rel="stylesheet" href="styles/skin-dusk.css" />
+    <link rel="stylesheet" href="styles/skin-clear.css" />
+    <link rel="stylesheet" href="styles/skin-picker.css" />
     <link rel="stylesheet" href="styles/layout-editor.css" />
     <link rel="stylesheet" href="styles/loading.css" />
     <link rel="stylesheet" href="styles/loading-naga.css" />
@@ -114,6 +117,7 @@
     </div>
 
     <div id="app">
+      <div class="shell" id="shell" aria-hidden="true"></div>
       <div id="stage">
         <canvas
           id="game"
@@ -125,16 +129,6 @@
       </div>
 
       <div class="touch live" id="touch" aria-hidden="true">
-        <div class="stick-zone" id="stickZone">
-          <div class="stick-base" id="stickBase"><div class="stick-knob" id="stickKnob"></div></div>
-        </div>
-        <div class="btns">
-          <button class="tb tb-ult" data-action="ult" tabindex="-1">ULT</button>
-          <button class="tb tb-dash" data-action="dash" tabindex="-1">DASH</button>
-          <button class="tb tb-jump" data-action="jump" tabindex="-1">JUMP</button>
-          <button class="tb tb-heavy" data-action="heavy" tabindex="-1">HEAVY</button>
-          <button class="tb tb-atk" data-action="light" tabindex="-1">ATTACK</button>
-        </div>
         <button class="tb-pause" id="pauseBtn" tabindex="-1" aria-label="Pause">II</button>
       </div>
 
@@ -273,6 +267,7 @@
         </section>
 
         <section class="menu sub" id="m-layout" aria-label="Button layout"></section>
+        <section class="menu sub" id="m-skins" aria-label="Skins"></section>
       </div>
     </div>
   </body>

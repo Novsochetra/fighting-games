@@ -1,3 +1,4 @@
+import { SKIN_ART } from '../data/ui-art.js';
 import { bootArt } from '../ui/loading/boot-art.js';
 import { loadFonts } from '../ui/loading/fonts.js';
 import { createLoader } from '../ui/loading/loader.js';
@@ -23,11 +24,18 @@ export function startLoading(window, timing = BOOT_TIMING) {
     loader.bootProgress(fraction, clock()),
   );
   settleWithin(everything, timing.giveUpMs, setTimer).then(() => loader.bootDone());
+  const spritesMayStart = settleWithin(Promise.all(art), timing.spritesAfterMs, setTimer);
+  // with the fighters, never holding the title: only the Skins screen and a skin's fight draw it
+  const skinArt = spritesMayStart.then(() =>
+    SKIN_ART.map((url) => loadImage(url, () => new window.Image())),
+  );
+
   return {
     loader,
-    // the images stay referenced, so the browser keeps them at hand for the menus
+    // the images stay referenced, so the browser keeps them at hand for the menus and the skins
     art,
-    spritesMayStart: settleWithin(Promise.all(art), timing.spritesAfterMs, setTimer),
+    skinArt,
+    spritesMayStart,
     appReady,
   };
 }

@@ -1,6 +1,5 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { TouchStick } from '../../../src/input/touch-stick.js';
 import { openMenu, openPage } from '../../support/menu-page.js';
 
 const rect = (x, y, width, height) => ({ x, y, width, height });
@@ -31,15 +30,8 @@ function stage() {
   return rect(...[left, top, width, height].map(parseFloat));
 }
 
-// the real stick rests on every fit, as main.js has it
-function installStick(page) {
-  const byId = (id) => document.getElementById(id);
-  const elements = { zone: byId('stickZone'), base: byId('stickBase'), knob: byId('stickKnob') };
-  const stick = new TouchStick({ elements, game: page.game, layout: page.layout });
-  page.layout.onFit = () => stick.rest();
-
-  return elements.base;
-}
+// the real stick, which rests on every fit, as main.js has it
+const realStick = () => document.querySelector('#touch .pad-stick');
 
 function openLayoutEditor(page) {
   page.act('settings');
@@ -86,7 +78,7 @@ describe('the page on a folded phone', () => {
   });
 
   it('keeps the stick, the buttons and pause on the bottom half of a Fold on a table', () => {
-    const stick = installStick(page);
+    const stick = realStick();
 
     fold(FOLD_ON_TABLE);
     holdPhone(1104, 884);

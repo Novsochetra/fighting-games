@@ -2,12 +2,14 @@ import {
   createPadState,
   firstStandardPad,
   isDown,
-  menuStep,
   newPresses,
-  PLAY_BUTTONS,
   readDirections,
   rememberButtons,
-} from './gamepad-state.js';
+} from '../../../../packages/input/src/gamepad.js';
+import { menuStep } from '../../../../packages/input/src/menu-repeat.js';
+
+const WATCHED_BUTTONS = [0, 1, 2, 3, 5, 7, 9, 8];
+const PLAY_BUTTONS = { 0: 'jump', 2: 'light', 3: 'heavy', 1: 'dash', 5: 'ult', 7: 'ult' };
 
 function releaseDirections(state, held) {
   for (const key of Object.keys(state.directions)) {
@@ -83,7 +85,7 @@ export function createGamepadReader({ navigator, game, menus, ui }) {
       }
       state.connected = true;
       const directions = readDirections(pad);
-      const presses = newPresses(pad, state.previous);
+      const presses = newPresses(pad, state.previous, WATCHED_BUTTONS);
       if (Object.values(presses).some(Boolean) || Object.values(directions).some(Boolean)) {
         ui.noteInput('pad');
       }
@@ -93,7 +95,7 @@ export function createGamepadReader({ navigator, game, menus, ui }) {
       } else {
         driveFighter(state, context);
       }
-      rememberButtons(pad, state);
+      rememberButtons(pad, state, WATCHED_BUTTONS);
     },
   };
 }

@@ -7,8 +7,16 @@ import { describe, expect, it } from 'vitest';
 // (`.at()` is not a function), older than 93 its sounds threw (Object.hasOwn), and older than 97 the
 // rainbow orb would stop the fight (findLast). Its bundles keep to ES2021, which Chrome 85 and
 // Safari 14 read, so the code keeps to the built-ins those browsers have as well.
-const SOURCE = path.join(import.meta.dirname, '../../../src');
-const files = readdirSync(SOURCE, { recursive: true }).filter((file) => file.endsWith('.js'));
+// the shared packages the game imports are joined into its bundles, so they are held to the same
+const SOURCES = {
+  src: path.join(import.meta.dirname, '../../../src'),
+  packages: path.join(import.meta.dirname, '../../../../../packages'),
+};
+const sourceFiles = (name) =>
+  readdirSync(SOURCES[name], { recursive: true })
+    .filter((file) => file.endsWith('.js') && (name === 'src' || file.includes(`src${path.sep}`)))
+    .map((file) => ({ name, file }));
+const files = [...sourceFiles('src'), ...sourceFiles('packages')];
 
 const NEWER_METHODS = {
   at: 'Chrome 92 and Safari 15.4',
@@ -53,16 +61,17 @@ const CONFIG = [
   },
 ];
 
-const problems = files.flatMap((file) =>
+const problems = files.flatMap(({ name, file }) =>
   linter
-    .verify(readFileSync(path.join(SOURCE, file), 'utf8'), CONFIG, { filename: file })
-    .map((problem) => ({ ...problem, where: `src/${file}:${problem.line}` })),
+    .verify(readFileSync(path.join(SOURCES[name], file), 'utf8'), CONFIG, { filename: file })
+    .map((problem) => ({ ...problem, where: `${name}/${file}:${problem.line}` })),
 );
 const listed = (found) => found.map((problem) => `${problem.where} ${problem.message}`);
 
 describe('the game on an older phone', () => {
-  it('is written in ES2021, as its bundles are', () => {
+  it('is written in ES2021, as its bundles are, and so are the packages it imports', () => {
     expect(files.length).toBeGreaterThan(500);
+    expect(files.filter(({ name }) => name === 'packages').length).toBeGreaterThan(10);
     expect(listed(problems.filter((problem) => problem.fatal))).toEqual([]);
   });
 

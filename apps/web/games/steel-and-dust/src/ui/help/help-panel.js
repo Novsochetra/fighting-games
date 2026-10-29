@@ -1,3 +1,4 @@
+import { steersWithDpad } from '../../data/skins/skins.js';
 import { controlsHtml } from './controls.js';
 import { movesHtml } from './moves.js';
 import { soundTestHtml } from './sound-test.js';
@@ -10,10 +11,11 @@ const TABS = [
   ['sounds', 'Sounds'],
 ];
 
-function bodyHtml(state, game, ui) {
+function bodyHtml(state, { game, ui, layout }) {
   const touch = ui.isTouchOn();
   const bodies = {
-    controls: () => controlsHtml({ touch, stick: game.settings.stick }),
+    controls: () =>
+      controlsHtml({ touch, stick: game.settings.stick, dpad: steersWithDpad(layout.padLayout()) }),
     moves: () => movesHtml({ weaponId: state.weapon, heroId: game.settings.hero, touch }),
     tips: tipsHtml,
     sounds: soundTestHtml,
@@ -21,7 +23,7 @@ function bodyHtml(state, game, ui) {
   return bodies[state.tab]();
 }
 
-export function createHelpPanel({ tabs, body, game, ui }) {
+export function createHelpPanel({ tabs, body, game, ui, layout }) {
   const state = { tab: 'controls', weapon: 'fists' };
   return {
     state,
@@ -30,7 +32,7 @@ export function createHelpPanel({ tabs, body, game, ui }) {
         ([id, label]) =>
           `<button type="button" role="tab" data-tab="${id}" aria-selected="${id === state.tab}">${label}</button>`,
       ).join('');
-      body.innerHTML = bodyHtml(state, game, ui);
+      body.innerHTML = bodyHtml(state, { game, ui, layout });
     },
   };
 }

@@ -96,6 +96,51 @@ Then click **Deploy** on the staged changes (or push a commit), and watch **Depl
 - From another site the API refuses: in the browser console on any other page,
   `fetch('https://<name>.up.railway.app/api/supporters')` fails with a CORS error.
 
+## File storage (S3 and CloudFront)
+
+The server can put files in the S3 bucket `fighting-games-arcade-files` (Singapore,
+`ap-southeast-1`), which CloudFront sends from `https://dphwn49s8chpb.cloudfront.net`
+(`apps/server/src/storage/`). No route uses it yet. The bucket is private: all four Block Public
+Access settings are on, its policy lets only the CloudFront distribution `E1MCQTXMG16EJB` read it
+(Origin Access Control), and versioning keeps every old copy. A key is written once, since CloudFront
+and browsers keep a file a year: put a new version under a new name (`hero-v2.png`).
+
+The server signs in as its own AWS user, which may only add files to this bucket:
+
+1. AWS Console → **IAM** → **Users** → **Create user** `arcade-server`, without console access, and
+   no permissions yet.
+2. The user → **Permissions** → **Add permissions** → **Create inline policy** → **JSON**, paste this,
+   and name it `arcade-files-put`:
+
+   ```json
+   {
+     "Version": "2012-10-17",
+     "Statement": [
+       {
+         "Effect": "Allow",
+         "Action": "s3:PutObject",
+         "Resource": "arn:aws:s3:::fighting-games-arcade-files/*"
+       }
+     ]
+   }
+   ```
+
+3. The user → **Security credentials** → **Create access key** → **Application running outside
+   AWS**. Copy both values now: AWS shows the secret once.
+4. Railway → the arcade service → **Variables** → **Raw Editor**, add these and save (it deploys
+   again):
+
+   ```bash
+   AWS_ACCESS_KEY_ID=<the access key ID>
+   AWS_SECRET_ACCESS_KEY=<the secret access key>
+   AWS_REGION=ap-southeast-1
+   S3_BUCKET=fighting-games-arcade-files
+   CLOUDFRONT_URL=https://dphwn49s8chpb.cloudfront.net
+   ```
+
+5. Check it with Railway's variables, from a linked repo folder: `railway run npm run storage:check`.
+   It uploads `checks/storage-check-<time>.txt` and prints `CloudFront sends it: <address>`.
+
 ## Hide a fake gift
 
 No one can check that money arrived, so a gift may be fake. Hide it (it stays in the table, off the

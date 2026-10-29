@@ -17,6 +17,7 @@ const QUIET_ACTIONS = new Set([
   'help',
   'settings',
   'layout',
+  'skins',
   'leaderboard',
   'post',
   'credits',
@@ -83,6 +84,7 @@ function panelActions(menus) {
     help: () => menus.open('help'),
     settings: () => menus.open('settings'),
     layout: () => menus.open('layout'),
+    skins: () => menus.open('skins'),
     continue: () => menus.open('heroes'),
     back: () => menus.back(),
   };

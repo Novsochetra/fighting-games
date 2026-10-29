@@ -10,8 +10,17 @@ export const AS_IS = [
   'src/home/appearance-early.js',
 ];
 
-export const isServedAsIs = (pathname) =>
-  AS_IS.some((entry) => pathname === `/${entry}` || pathname.startsWith(`/${entry}/`));
+// The packages the games share: the build joins them into each game's own bundles, so only
+// npm run dev, which serves a game's modules as they are written, sends them.
+export const DEV_ONLY_AS_IS = ['packages'];
+
+const isUnder = (entries, pathname) =>
+  entries.some((entry) => pathname === `/${entry}` || pathname.startsWith(`/${entry}/`));
+
+export const isServedAsIs = (pathname) => isUnder(AS_IS, pathname);
+
+export const isServedAsIsInDev = (pathname) =>
+  isServedAsIs(pathname) || isUnder(DEV_ONLY_AS_IS, pathname);
 
 // Where Vite puts the modules and stylesheets it builds, each named by its content.
 export const BUILD_FOLDER = 'build';

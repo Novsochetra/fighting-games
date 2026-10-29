@@ -1,4 +1,4 @@
-import { onFoldChange } from '../screen/viewport-segments.js';
+import { onFoldChange } from '../../../../../packages/screen/src/viewport-segments.js';
 import {
   createDraft,
   customised,
@@ -44,17 +44,17 @@ export class LayoutEditor {
     this.view.render(this.state, this.game.settings);
   }
 
-  // the first move or resize turns the original layout into a custom one, where the controls stand
+  // the first move or resize turns the skin's layout into a custom one, where the controls stand
   customise() {
-    const orientation = this.view.orientation();
-    if (!this.state.draft[orientation]) {
-      this.state.draft = customised(this.state.draft, orientation, this.view.measureCentres());
+    const slot = this.view.slot(this.game.settings);
+    if (!this.state.draft[slot]) {
+      this.state.draft = customised(this.state.draft, slot, this.view.measureCentres());
     }
-    return orientation;
+    return slot;
   }
 
-  halfOf(orientation, control) {
-    return this.view.halfOf(control, sizeOf(this.state.draft, orientation, control));
+  halfOf(slot, control) {
+    return this.view.halfOf(control, sizeOf(this.state.draft, slot, control));
   }
 
   pick(control) {
@@ -66,28 +66,29 @@ export class LayoutEditor {
   }
 
   pickNext() {
-    this.pick(nextControl(this.state.picked, shownControls(this.game.settings.stick)));
+    const shown = shownControls(this.layout.padLayout(), this.game.settings.stick);
+    this.pick(nextControl(this.state.picked, shown));
   }
 
   moveTo(control, point) {
-    const orientation = this.customise();
-    const half = this.halfOf(orientation, control);
+    const slot = this.customise();
+    const half = this.halfOf(slot, control);
     const centre = this.view.pointAt(point);
-    this.state.draft = moveControl(this.state.draft, { orientation, control, centre, half });
+    this.state.draft = moveControl(this.state.draft, { slot, control, centre, half });
     this.render();
   }
 
   resize(step) {
-    const orientation = this.customise();
+    const slot = this.customise();
     const control = this.state.picked;
-    const half = this.halfOf(orientation, control);
-    this.state.draft = resizeControl(this.state.draft, { orientation, control, step, half });
+    const half = this.halfOf(slot, control);
+    this.state.draft = resizeControl(this.state.draft, { slot, control, step, half });
     this.audio.sfx('ui');
     this.render();
   }
 
   reset() {
-    this.state.draft = resetLayout(this.state.draft, this.view.orientation());
+    this.state.draft = resetLayout(this.state.draft, this.view.slot(this.game.settings));
     this.audio.sfx('ui');
     this.render();
   }

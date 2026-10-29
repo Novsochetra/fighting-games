@@ -16,7 +16,8 @@
   touch-action: none;
 }
 
-.layout-preview {
+.layout-preview,
+.layout-shell {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -48,8 +49,14 @@
   pointer-events: none;
 }
 
+/* the copy's stick zone stays at the layer's corner, so the stick stands in px of the layer, and
+   lets every tap through to the controls */
+.layout-preview .pad-zone {
+  pointer-events: none;
+}
+
 /* a hidden stick is neither shown nor edited, but it still stands where it would be measured */
-body.stick-hidden .layout-preview .stick-base {
+body.stick-hidden .layout-preview .pad-stick {
   visibility: hidden;
 }
 
