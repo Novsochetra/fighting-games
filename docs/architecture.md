@@ -118,7 +118,8 @@ layout for each way the phone is held (`landscape`, `portrait`), each listing it
   or the input each of `up`, `right`, `down` and `left` holds for a stick or a d-pad;
 - optionally a `label`, its `class` names (the game's styles paint it), a `size` (px at the game's
   scale 1; without it a stick is 128 and the rest 64), an `aspect` (its height over its width, for
-  a pill) and `at`: its centre as fractions of the safe area, moved by `dx` and `dy` px at the
+  a pill, which is only for what runs the game, never a move: Steel & Dust's skin tests hold every
+  move round) and `at`: its centre as fractions of the safe area, moved by `dx` and `dy` px at the
   game's scale 1, so a cluster anchored to a corner keeps its shape from a small phone to a tablet
   and clears a notch (a stick stands by `x` and `y` alone). A layout places all its controls or
   none; one that places none, like Steel & Dust's `classic`, leaves them to the game's own styles.

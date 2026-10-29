@@ -46,7 +46,5 @@ export const SKIN_ART = [
   'assets/skins/clear/gloss-portrait.webp',
   'assets/skins/clear/key-round.webp',
   'assets/skins/clear/key-round-pressed.webp',
-  'assets/skins/clear/key-pill.webp',
-  'assets/skins/clear/key-pill-pressed.webp',
   'assets/skins/clear/dpad.webp',
 ];

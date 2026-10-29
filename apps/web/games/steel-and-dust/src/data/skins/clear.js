@@ -1,6 +1,8 @@
 const STEER = { up: 'up', right: 'right', down: 'down', left: 'left' };
 
-// `place` is where the control stands (`at`) and how big it is (`size`, `aspect`)
+// every move is a round key, DASH and ULT on the shell's shoulders as much as the face keys: a pill
+// is for what runs the game (play, pause, settings), never a move. `place` is where the key stands
+// (`at`) and how big it is (`size`)
 const control = (id, label, place) => ({
   id,
   kind: 'button',
@@ -8,13 +10,6 @@ const control = (id, label, place) => ({
   label,
   class: `clear-button clear-${id}`,
   ...place,
-});
-
-// DASH and ULT are pills on the shell's shoulders, as a handheld's bumpers, shaped as their art is
-// (assets/skins/clear/key-pill.webp, 386 by 170)
-const pill = (id, label, at) => ({
-  ...control(id, label, { at, size: 104, aspect: 0.44 }),
-  class: `clear-button clear-pill clear-${id}`,
 });
 
 // held sideways the game sits in the middle of the shell, in a bezel between two panels: the d-pad
@@ -30,8 +25,8 @@ const LANDSCAPE = {
       at: { x: 0, y: 1, dx: 92, dy: -140 },
       size: 128,
     },
-    pill('dash', 'DASH', { x: 0, y: 0, dx: 85, dy: 36 }),
-    pill('ult', 'ULT', { x: 1, y: 0, dx: -85, dy: 36 }),
+    control('dash', 'DASH', { at: { x: 0, y: 0, dx: 85, dy: 48 }, size: 64 }),
+    control('ult', 'ULT', { at: { x: 1, y: 0, dx: -85, dy: 48 }, size: 64 }),
     control('heavy', 'HEAVY', { at: { x: 1, y: 1, dx: -122, dy: -228 }, size: 62 }),
     control('jump', 'JUMP', { at: { x: 1, y: 1, dx: -114, dy: -112 }, size: 70 }),
     control('light', 'ATTACK', { at: { x: 1, y: 1, dx: -50, dy: -178 }, size: 76 }),
@@ -50,8 +45,8 @@ const PORTRAIT = {
       at: { x: 0, y: 1, dx: 95, dy: -230 },
       size: 140,
     },
-    pill('dash', 'DASH', { x: 0, y: 1, dx: 95, dy: -392 }),
-    pill('ult', 'ULT', { x: 1, y: 1, dx: -95, dy: -392 }),
+    control('dash', 'DASH', { at: { x: 0, y: 1, dx: 95, dy: -390 }, size: 62 }),
+    control('ult', 'ULT', { at: { x: 1, y: 1, dx: -95, dy: -390 }, size: 62 }),
     control('heavy', 'HEAVY', { at: { x: 1, y: 1, dx: -150, dy: -318 }, size: 66 }),
     control('jump', 'JUMP', { at: { x: 1, y: 1, dx: -140, dy: -195 }, size: 76 }),
     control('light', 'ATTACK', { at: { x: 1, y: 1, dx: -70, dy: -262 }, size: 84 }),

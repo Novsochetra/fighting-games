@@ -27,4 +27,18 @@ describe('the skins Steel & Dust ships', () => {
       }
     }
   });
+
+  // a pill is for what runs the game (play, pause, settings); every button a skin draws is a move
+  it('draw every move as a round key, never a pill', () => {
+    for (const skin of Object.values(SKINS)) {
+      for (const layout of Object.values(skin.layouts)) {
+        const pills = layout.items.filter((item) => (item.aspect ?? 1) !== 1);
+
+        expect(
+          pills.map((item) => `${skin.id} ${item.id}`),
+          skin.id,
+        ).toEqual([]);
+      }
+    }
+  });
 });

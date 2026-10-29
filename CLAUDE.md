@@ -121,7 +121,9 @@ A game's touch controls come from `touch-pad`, drawn from a skin the game ships 
 `src/data/skins/`: data, never code, and players never bring their own. The game's tests check
 each skin with `skinProblems` (see "Touch pad and skins" in `docs/architecture.md`). A skin's
 motion moves only size and opacity (`scale`, `transform`, `opacity`), which the compositor runs;
-its colours change at once, as eased colours cost a fight frames on a phone's CPU.
+its colours change at once, as eased colours cost a fight frames on a phone's CPU. Every move a
+skin draws (attack, jump, dash, a skill) is a round key; a pill is only for what runs the game
+(play, pause, settings).
 
 ## Pages of the arcade
 

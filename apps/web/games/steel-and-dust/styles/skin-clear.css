@@ -82,13 +82,13 @@
 }
 
 /* the keys are our art (assets/skins/clear/key-*.webp), grey plastic a little see-through, so the
-   shell's colour shows in them; a pill's radius rounds the round key's square and the shoulders'
-   box alike, for the shadow and the press ring */
+   shell's colour shows in them; every key is round, its radius rounding the shadow and the press
+   ring */
 .clear-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-round);
   cursor: pointer;
   font-family: var(--font-display);
   font-size: calc(var(--font-size-2xs) * var(--btn) * var(--pad-size, 1));
@@ -97,10 +97,6 @@
   background: url('../assets/skins/clear/key-round.webp') center / 100% 100% no-repeat;
   box-shadow: var(--shadow-clear-key);
   transition: scale var(--duration-normal) var(--easing-overshoot);
-}
-
-.clear-pill {
-  background-image: url('../assets/skins/clear/key-pill.webp');
 }
 
 .clear-light {
@@ -117,16 +113,12 @@
   transition-duration: var(--duration-instant);
 }
 
-.clear-pill.on {
-  background-image: url('../assets/skins/clear/key-pill-pressed.webp');
-}
-
 .clear-button::after {
   content: '';
   position: absolute;
   inset: -2px;
   border: 2px solid color-mix(in srgb, var(--clear-plastic) 60%, var(--color-white));
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-round);
   opacity: 0;
   pointer-events: none;
 }
