@@ -54,7 +54,7 @@ describe('the credits page', () => {
       .map((link) => textOf(link));
 
     expect(mine).toBe('Facebooksochetra.nov.7');
-    expect(morodok).toBe('FacebookMorodok Angkor');
+    expect(morodok).toBe('Morodok AngkorFacebook page');
   });
 
   it('opens every outside link in a new tab over https, without handing it the page', () => {

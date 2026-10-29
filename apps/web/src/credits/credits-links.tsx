@@ -70,8 +70,8 @@ export const FIND_ME: CreditsLink[] = [
     href: 'https://www.facebook.com/sochetra.nov.7',
   },
   {
-    title: 'Facebook',
-    detail: 'Morodok Angkor',
+    title: 'Morodok Angkor',
+    detail: 'Facebook page',
     tile: 'facebook',
     icon: FACEBOOK,
     href: 'https://www.facebook.com/profile.php?id=61594987526699',
