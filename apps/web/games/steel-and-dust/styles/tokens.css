@@ -61,6 +61,8 @@
   --color-touch-ult-ready: color-mix(in srgb, var(--color-gold) 90%, transparent);
   --color-touch-pause: color-mix(in srgb, var(--color-panel) 55%, transparent);
   --color-touch-pause-border: color-mix(in srgb, var(--color-sand) 35%, transparent);
+  --color-hud-plate: color-mix(in srgb, var(--color-night) 55%, transparent);
+  --color-hud-shadow: #140f1a;
 
   --color-surface-page-edge: var(--color-night-deep);
   --color-surface-page-glow: var(--color-dusk);

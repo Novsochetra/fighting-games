@@ -39,8 +39,9 @@ flat, a Fold's near-square screen puts the touch buttons under the game instead 
 an upright phone does.
 
 Wherever the touch buttons stand under the game (an upright phone, an unfolded Fold), the game
-stands at the top of the screen, right under the status bar, and pause stands on it, in the HUD's
-top row beside the score. So a phone half-folded on a table in a browser that cannot see the fold
+stands at the top of the screen, right under the status bar, and pause stands on it, one more carved
+plaque of the HUD's top row, as tall as the row and beside the score, still taking a thumb's 44px to
+press. So a phone half-folded on a table in a browser that cannot see the fold
 (Safari has no Viewport Segments API) still shows the whole game on its top half.
 
 ## Settings

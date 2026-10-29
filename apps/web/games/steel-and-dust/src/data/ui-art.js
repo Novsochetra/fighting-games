@@ -15,6 +15,7 @@ const MENU_ART = [
   'assets/ui/kit/stone-button.png',
   'assets/ui/settings/lotus-band.png',
   'assets/ui/hud/panel-frame.png',
+  'assets/ui/hud/score-frame.png',
   'assets/ui/select/card.png',
   'assets/ui/select/card-crest.png',
   'assets/ui/select/card-selected.png',

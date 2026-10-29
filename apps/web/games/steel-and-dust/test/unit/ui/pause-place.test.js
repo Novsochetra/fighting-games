@@ -2,14 +2,14 @@ import { describe, expect, it } from 'vitest';
 import { VIEW_WIDTH } from '../../../src/config.js';
 import { clockPlaque } from '../../../src/render/hud/clock.js';
 import { SCORE_BOX } from '../../../src/render/hud/score.js';
+import { VITALS_BOX, WEAPON_BOX } from '../../../src/render/hud/top-bar.js';
 import { pausePlace, placePause } from '../../../src/ui/screen/pause-place.js';
 
 const rect = (x, y, width, height) => ({ x, y, width, height });
-const PAUSE_SIZE = 44;
 
-// the pause button's box on the screen, from where the screen fit places it
+// the pause button's plaque on the screen, from where the screen fit places it
 function pauseBox(place, width) {
-  return rect(width - place.right - PAUSE_SIZE, place.top, PAUSE_SIZE, PAUSE_SIZE);
+  return rect(width - place.right - place.size, place.top, place.size, place.size);
 }
 
 // a box of the HUD, drawn in the game's pixels, as it shows on the stage
@@ -29,12 +29,14 @@ const apart = (one, other) =>
 
 function fakeApp() {
   const properties = new Map();
+  const classes = new Set();
   const style = {
     setProperty: (name, value) => properties.set(name, value),
     removeProperty: (name) => properties.delete(name),
   };
+  const classList = { toggle: (name, on) => (on ? classes.add(name) : classes.delete(name)) };
 
-  return { style, properties };
+  return { style, classList, properties, classes };
 }
 
 describe('the pause button', () => {
@@ -71,29 +73,41 @@ describe('the pause button', () => {
     });
   }
 
-  it('centres on the HUD row where the row is taller than the button', () => {
-    const stage = rect(0, 0, 1104, 621);
-    const row = onStage(SCORE_BOX, stage);
-    const box = pauseBox(
-      pausePlace({ rect: stage, controlsBelow: true, hinge: null, width: 1104 }),
-      1104,
-    );
+  for (const [phone, stage, width] of [
+    ['an iPhone 15', rect(0, 0, 393, 221), 393],
+    ['an iPhone SE', rect(0, 20, 375, 211), 375],
+    ['an unfolded Fold', rect(0, 0, 1104, 621), 1104],
+  ]) {
+    it(`is one more plaque of the HUD's top row on ${phone}, as tall as the row`, () => {
+      const score = onStage(SCORE_BOX, stage);
+      const gap = (VITALS_BOX.x - WEAPON_BOX.width) * (stage.width / VIEW_WIDTH);
+      const box = pauseBox(
+        pausePlace({ rect: stage, controlsBelow: true, hinge: null, width }),
+        width,
+      );
 
-    expect(Math.abs(box.y + box.height / 2 - (row.y + row.height / 2))).toBeLessThanOrEqual(1);
-  });
+      expect(box.y).toBe(score.y);
+      expect(Math.abs(box.height - score.height)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(score.x - (box.x + box.width) - gap)).toBeLessThanOrEqual(0.5);
+    });
+  }
 
   it('is set on the app, and taken off for the corner', () => {
     const app = fakeApp();
 
-    placePause(app, { top: 59, right: 99 });
+    placePause(app, { top: 59, right: 99, size: 30, pixel: 1.5 });
 
     expect(Object.fromEntries(app.properties)).toEqual({
       '--pause-top': '59px',
       '--pause-right': '99px',
+      '--pause-size': '30px',
+      '--pause-pixel': '1.5px',
     });
+    expect([...app.classes]).toEqual(['pause-in-hud']);
 
     placePause(app, null);
 
     expect(app.properties.size).toBe(0);
+    expect(app.classes.size).toBe(0);
   });
 });
