@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { boardRoute, pickedGame } from '../../../src/leaderboard/board-route.js';
 import { formatClock, formatDay, formatScore } from '../../../src/leaderboard/format.js';
 import { boardPath, fetchBoard } from '../../../src/leaderboard/leaderboard-client.js';
 import { readBoard } from '../../../src/leaderboard/read-board.js';
@@ -89,5 +90,19 @@ describe('fetchBoard', () => {
   it('fails on an answer that is not one', async () => {
     const fetchFn = vi.fn(async () => ({ ok: false, status: 503, json: async () => ({}) }));
     await expect(fetchBoard(fetchFn, 'api/leaderboard?game=x')).rejects.toThrow(/503/);
+  });
+});
+
+describe("a game's board address", () => {
+  it('names the game, or none', () => {
+    expect(boardRoute('steel-and-dust')).toBe('/leaderboard/?game=steel-and-dust');
+    expect(boardRoute(null)).toBe('/leaderboard/');
+  });
+
+  it('picks the game asked for, or else the first with a board', () => {
+    const games = [{ id: 'a' }, { id: 'b' }];
+    expect(pickedGame(games, 'b')).toBe(games[1]);
+    expect(pickedGame(games, 'zzz')).toBe(games[0]);
+    expect(pickedGame([], 'a')).toBeNull();
   });
 });

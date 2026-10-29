@@ -496,17 +496,27 @@ shows), so Play stays in reach. The button and note wait while a banner is up ac
 The arcade's own board, `leaderboard/` (`LeaderboardScreen.tsx` and the rest of `src/leaderboard/`,
 with a page of its own, `leaderboard/index.html`), is a screen pushed over the arcade like the
 supporters and the credits (see One app), so a link to it (`khmerarcade.games/leaderboard/`) can be
-shared with a picture of its own. A trophy in the top bar leads there (`#leaderboard-link`), and so
-does See all under a game's top three in its Details sheet. On a phone the top bar's four buttons
+shared with a picture of its own. A trophy in the top bar leads there (`#leaderboard-link`), on the
+board of the game in the carousel when it has one, and so does See all under a game's top three in
+its Details sheet, on that game's board. On a phone the top bar's four buttons
 stand closer and the arcade's name a size smaller, and below 384 px wide the logo stands alone, the
 name still read out with it (`topbar.css`).
 
 - **What it shows.** A gold light from the top and a trophy badge, then This week and All time in a
-  segmented control, then a board for every game whose catalog entry names one (`board-rules.js`
-  reads its heroes' and difficulties' names into the game's card, as `board`): the game's icon,
-  name and Play, its top three on a podium (second, first raised, third, in the medals' metals),
-  then the rest in an inset list with each run's hero, how far it got, its difficulty, score and
-  day. An empty board invites a first run, with Play.
+  segmented control, then one game's board (a game has one when its catalog entry names it:
+  `board-rules.js` reads its heroes' and difficulties' names into the game's card, as `board`): the
+  game's icon, name and Play, its top three on a podium (second, first raised, third, in the medals'
+  metals), then the rest in an inset list with each run's hero, how far it got, its difficulty,
+  score and day. An empty board invites a first run, with Play.
+- **One game at a time.** With more than one game with a board, a row of them over the period picks
+  whose board shows, like the App Store's categories, the picked one filled in the tint; a phone
+  scrolls the row (`GamePicker.tsx`). With one game there is nothing to pick, so the row waits until
+  a second game names a board. The game is in the address, `leaderboard/?game=<id>`
+  (`board-route.js`), so a game's own board can be shared; one the address does not name, or names
+  without a board, opens on the first. The screen reads the game from the address as it comes in and
+  keeps it (`use-picked-game.ts`), since as Back slides it away the address is already the arcade's;
+  a pick rewrites the address in place, so Back still leads to the arcade, and only the picked
+  game's board is read. A pick counts as `pick_leaderboard_game`, with the game.
 - **Reading it.** Each board comes from `GET api/leaderboard?game=<id>` (`leaderboard-client.js`),
   held by TanStack Query like the arcade's other reads (`use-board.ts`); the server answers every
   reader from one read of the database for 15 seconds, so showing the board costs nothing.

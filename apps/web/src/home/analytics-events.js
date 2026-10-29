@@ -15,6 +15,7 @@ export const EVENTS = {
   supportShown: 'support_banner_shown',
   supportDismiss: 'support_dismiss',
   leaderboard: 'open_leaderboard',
+  leaderboardGame: 'pick_leaderboard_game',
   supporters: 'open_supporters',
   credits: 'open_credits',
   coffee: 'open_coffee_sheet',

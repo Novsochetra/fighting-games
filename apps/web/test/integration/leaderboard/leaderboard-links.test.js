@@ -19,6 +19,8 @@ describe('the way to the leaderboard', () => {
     await homeLoaded();
     const trophy = byId('leaderboard-link');
     expect(trophy.getAttribute('aria-label')).toBe('Leaderboard');
+    // the carousel opens on Morodok Angkor, which has no board
+    expect(new URL(trophy.href).search).toBe('');
     tap(trophy);
     await changed();
     expect(showing()).toEqual(['leaderboard']);
@@ -31,6 +33,8 @@ describe('the way to the leaderboard', () => {
     await waitUntil(() => expect(texts('.board-peek__name')).toHaveLength(3));
     expect(texts('#details-board-title')).toEqual(['Top this week']);
     expect(texts('.board-peek__name')).toEqual(['Sok Dara', 'សុខ ដារ៉ា', 'Mey']);
+    expect(new URL(byId('details-board-all').href).search).toBe('?game=steel-and-dust');
+    expect(new URL(byId('leaderboard-link').href).search).toBe('?game=steel-and-dust');
     tap(byId('details-board-all'));
     await changed();
     expect(byId('details').open).toBe(false);

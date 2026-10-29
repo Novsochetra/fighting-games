@@ -137,3 +137,45 @@
   line-height: var(--leading-apple-subheadline);
   color: var(--color-label-muted);
 }
+
+/* a row of the games with a board, the picked one filled in; a phone scrolls it sideways */
+.game-picker {
+  display: flex;
+  gap: var(--space-2);
+  max-inline-size: 100%;
+  padding: var(--space-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.game-picker__game {
+  display: flex;
+  flex: none;
+  gap: var(--space-2);
+  align-items: center;
+  padding: var(--space-1) var(--space-4) var(--space-1) var(--space-1);
+  font: inherit;
+  font-size: var(--font-size-apple-subheadline);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-label);
+  cursor: pointer;
+  background: var(--color-chip);
+  border: 0;
+  border-radius: var(--radius-pill);
+}
+
+.game-picker__game[aria-pressed='true'] {
+  color: var(--color-white);
+  background: var(--color-tint);
+}
+
+.game-picker__icon {
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  border-radius: var(--radius-pill);
+  image-rendering: pixelated;
+}
+
+.game-picker__icon.is-smooth {
+  image-rendering: auto;
+}

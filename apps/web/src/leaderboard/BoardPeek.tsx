@@ -4,6 +4,7 @@ import { useArcade } from '../arcade/arcade-context';
 import { EVENTS } from '../home/analytics-events.js';
 import type { GameBoard, GameCard } from '../home/game-card';
 import type { BoardView } from './BoardParts';
+import { boardRoute } from './board-route.js';
 import { useBoard } from './use-board';
 import { boardView, PODIUM_SIZE } from './view-model.js';
 import './peek.css';
@@ -74,7 +75,7 @@ export function BoardPeek({ card, isOpen, onLeave }: PeekProps) {
         <Link
           className="board-peek__all"
           id="details-board-all"
-          to="/leaderboard/"
+          to={boardRoute(card.id)}
           onClick={() => {
             analytics.track(EVENTS.leaderboard, { placement: 'details' });
             onLeave();

@@ -27,15 +27,21 @@ export const sampleBoard = () => ({
 
 const reply = (body, status = 200) => ({ ok: status === 200, status, json: async () => body });
 
-async function catalogOf(only) {
-  const catalog = JSON.parse(await realCatalogJson());
+// a second game with a board, as Steel & Dust's copy, for the tests that pick between games
+export const SECOND_GAME = { id: 'temple-run', title: 'Temple Run' };
 
-  return only ? { games: catalog.games.filter((game) => game.id === only) } : catalog;
+async function catalogOf({ only, second }) {
+  const { games } = JSON.parse(await realCatalogJson());
+  const steel = games.find((game) => game.id === 'steel-and-dust');
+  const copy = { ...steel, ...SECOND_GAME, path: `games/${SECOND_GAME.id}/` };
+  const shown = only ? games.filter((game) => game.id === only) : games;
+
+  return { games: second ? [...shown, copy] : shown };
 }
 
-// Stands in for the server: the real catalog (or one game of it), and each game's board as the test
-// sets it.
-export function boardFetch({ board = sampleBoard(), status = 200, only } = {}) {
+// Stands in for the server: the real catalog (or one game of it, or with a second board game), and
+// each game's board as the test sets it, by its id.
+export function boardFetch({ board = sampleBoard(), boards = {}, status = 200, ...catalog } = {}) {
   const asked = [];
   const fetchFn = async (url) => {
     const target = new URL(url, window.location.href);
@@ -43,10 +49,14 @@ export function boardFetch({ board = sampleBoard(), status = 200, only } = {}) {
     asked.push(`${target.pathname}${target.search}`);
 
     if (target.pathname === '/api/games') {
-      return reply(await catalogOf(only));
+      return reply(await catalogOf(catalog));
     }
 
-    return target.pathname === '/api/leaderboard' ? reply(board, status) : reply({}, 404);
+    const game = target.searchParams.get('game');
+
+    return target.pathname === '/api/leaderboard'
+      ? reply(boards[game] ?? board, status)
+      : reply({}, 404);
   };
 
   return { fetchFn, asked };
@@ -57,11 +67,11 @@ export const byId = (id) => document.getElementById(id);
 export const texts = (selector) =>
   [...document.querySelectorAll(selector)].map((element) => element.textContent.trim());
 
-// Opens the arcade on the leaderboard and waits for Steel & Dust's board, or its notice, to show.
-export async function openLeaderboard(fetchFn, options = {}) {
-  const page = renderArcade({ path: '/leaderboard/', fetch: fetchFn, ...options });
+// Opens the arcade on the leaderboard and waits for a game's board, or its notice, to show.
+export async function openLeaderboard(fetchFn, { path = '/leaderboard/', ...options } = {}) {
+  const page = renderArcade({ path, fetch: fetchFn, ...options });
 
-  await waitUntil(() => expect(byId('board-steel-and-dust-title')).not.toBeNull());
+  await waitUntil(() => expect(document.querySelector('.game-board__title')).not.toBeNull());
 
   return page;
 }

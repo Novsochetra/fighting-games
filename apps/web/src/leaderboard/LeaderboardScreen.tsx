@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useArcade } from '../arcade/arcade-context';
 import { TrophyIcon } from '../arcade/icons';
 import { Notice } from '../arcade/Notice';
@@ -7,7 +7,9 @@ import { Segmented } from '../arcade/Segmented';
 import { useArriveDrawn } from '../arcade/use-arrive-drawn';
 import { useCatalog } from '../home/use-catalog';
 import { GameBoard } from './GameBoard';
+import { GamePicker } from './GamePicker';
 import type { Period } from './use-board';
+import { usePickedGame } from './use-picked-game';
 import './board.css';
 import './leaderboard.css';
 
@@ -22,13 +24,14 @@ const PERIODS = [
 // The places and rows that rise in as a board comes in (board.css).
 export const LEADERBOARD_ENTRANCES = ['board-rise'];
 
-function LeaderboardHero({
-  period,
-  onPeriod,
-}: {
+interface HeroProps {
   period: Period;
   onPeriod: (next: Period) => void;
-}) {
+  // the row that picks the game, over the period
+  children: ReactNode;
+}
+
+function LeaderboardHero({ period, onPeriod, children }: HeroProps) {
   return (
     <section className="leaderboard-hero" aria-labelledby="leaderboard-title">
       <span className="trophy-badge" aria-hidden="true">
@@ -41,6 +44,7 @@ function LeaderboardHero({
         The best runs posted from the games. Finish a run, post your name and climb the board. A new
         week starts every Monday.
       </p>
+      {children}
       <Segmented
         id="board-period"
         label="Which board"
@@ -52,13 +56,15 @@ function LeaderboardHero({
   );
 }
 
-// Every game with an online board, this week's or every run's, like a leaderboard in Game Center.
+// A game's online board, this week's or every run's, like a leaderboard in Game Center; with more
+// than one game, a row of them picks whose board shows.
 export function LeaderboardScreen() {
   const { sound } = useArcade();
   const [period, setPeriod] = useState<Period>('week');
   const { query, cards, phase } = useCatalog();
   const screen = useArriveDrawn<HTMLDivElement>(LEADERBOARD_ENTRANCES);
   const games = cards.filter((card) => card.board);
+  const { game, pick } = usePickedGame(games);
   const waiting = phase === 'loading' || phase === 'error';
 
   return (
@@ -71,7 +77,9 @@ export function LeaderboardScreen() {
             setPeriod(next);
             sound.play('switch');
           }}
-        />
+        >
+          <GamePicker games={games} picked={game?.id ?? null} onPick={pick} />
+        </LeaderboardHero>
         <Notice
           idPrefix="leaderboard"
           tone={phase === 'error' ? 'error' : 'loading'}
@@ -79,9 +87,7 @@ export function LeaderboardScreen() {
           hidden={!waiting}
           onRetry={() => query.refetch()}
         />
-        {games.map((game) => (
-          <GameBoard key={game.id} game={game} period={period} />
-        ))}
+        {game ? <GameBoard key={game.id} game={game} period={period} /> : null}
       </main>
     </div>
   );
