@@ -167,7 +167,7 @@ describe('game menus on the real page', () => {
     expect(document.getElementById('overNote').textContent).toContain('no lives left');
     expect(visibleButtons()).toEqual(['Start from mission 1', 'Leaderboard', 'Quit to title']);
     key('Enter');
-    expect(page.game).toMatchObject({ mode: 'play', missionIndex: 0, lives: 5, score: 0 });
+    expect(page.game).toMatchObject({ mode: 'play', missionIndex: 0, lives: 6, score: 0 });
   });
 
   it('lets a fallen hero pick another Shade to continue as, or go back to the defeat menu', () => {
