@@ -11,7 +11,6 @@ const SRC = 'https://arcade.test/games/demo/assets/trailer/trailer.mp4';
 
 const refusal = (name) => Object.assign(new Error(name), { name });
 
-// play() answers with each of `answers` in turn, then plays
 function fakeVideo(...answers) {
   const attributes = new Map();
   const video = {

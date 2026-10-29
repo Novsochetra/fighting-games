@@ -24,10 +24,14 @@ changing structure.
   split code instead of raising limits.
 - Put code where it belongs (see `docs/architecture.md`). No god objects, god functions or god files.
 - No comments that say what code does. Only write a comment to explain **why** something non-obvious
-  is done (workarounds, platform quirks, security reasons).
+  is done (workarounds, platform quirks, security reasons). If deleting the comment loses nothing a
+  reader can't get from the names and the code, delete it: `// the URL must be https` over
+  `isSecureUrl` goes; `// Safari plays no video unless its bytes=0-1 gets a 206` stays.
 - Lint enforces this for `/** */` and `/* */` blocks in app and package source (`local/no-jsdoc-blocks`
   in `eslint.config.js`) and for section banners (`local/no-banner-comments`): write a why as a short
   `//` comment.
+- A Claude Code hook (`.claude/settings.json`, `tools/claude-hooks/`) shows Claude each comment an
+  edit or a commit adds, so it deletes the what-comments before going on.
 - No `TODO` / `FIXME` comments (`no-warning-comments`). Put follow-up work in the tracker as a ticket.
 - Put logic in plain functions with unit tests. Components and route handlers stay thin.
 - Each game is independent: it loads nothing from outside its own folder, and the home page loads

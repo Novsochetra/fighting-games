@@ -1,9 +1,8 @@
 const playing = (video) => new Promise((resolve) => resolve(video.play()));
 
-// the autoplay refusal; an AbortError (a pause cutting the play short) must not mute the trailer
+// AbortError, from a pause cutting play() short, refuses no sound and must not mute the trailer
 const isSoundRefused = (error) => error?.name === 'NotAllowedError';
 
-// A browser that still refuses sound gets the trailer muted rather than not playing at all.
 export function startTrailer(video, { src, withSound }) {
   if (video.getAttribute('src') !== src) {
     video.src = src;

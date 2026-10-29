@@ -35,7 +35,7 @@ apps/server/   Node HTTP server: the games, supporters and health API, and the a
 apps/web/      everything the browser loads: the arcade (a React and TypeScript app with its home,
                supporters and credits screens, built by Vite) and the games, each game with its own
                tokens
-tools/         the project's own ESLint rules
+tools/         the project's own ESLint rules and Claude Code hook
 docs/          architecture notes
 ```
 

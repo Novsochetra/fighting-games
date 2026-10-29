@@ -46,6 +46,7 @@ apps/
     test/{unit,integration,regression}  the arcade's tests (support/render-arcade.tsx renders it)
 .railway/railway.ts       the Railway service's settings (docs/deploy-railway.md)
 tools/eslint-rules/       the project's own lint rules
+tools/claude-hooks/       the Claude Code hook that shows Claude each comment it adds
 docs/                     this file and deploy-railway.md
 ```
 
