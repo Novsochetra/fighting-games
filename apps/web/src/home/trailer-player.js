@@ -4,8 +4,8 @@ const playing = (video) => new Promise((resolve) => resolve(video.play()));
 const isSoundRefused = (error) => error?.name === 'NotAllowedError';
 
 // A trailer starts in the tap that asks for it, with sound, as a browser allows only then. A browser
-// that still refuses sound, or a player who turned the arcade's sound off, gets it muted, which its
-// controls undo; one that refuses even that leaves its play button to the player.
+// that still refuses sound, or a player who turned the arcade's sound off, gets it muted, which a tap
+// on it undoes (tapTrailer); one that refuses even that waits for that tap to play.
 export function startTrailer(video, { src, withSound }) {
   if (video.getAttribute('src') !== src) {
     video.src = src;
@@ -27,6 +27,27 @@ export function startTrailer(video, { src, withSound }) {
       () => true,
       () => false,
     );
+}
+
+// The trailer shows no controls, so a tap on it does what they would: plays it if it waits, brings its
+// sound back if it plays muted, and otherwise pauses it.
+export function tapTrailer(video) {
+  if (video.paused) {
+    return playing(video).then(
+      () => 'playing',
+      () => 'paused',
+    );
+  }
+
+  if (video.muted) {
+    video.muted = false;
+
+    return Promise.resolve('sound');
+  }
+
+  video.pause();
+
+  return Promise.resolve('paused');
 }
 
 // Without its address the video neither plays on nor keeps downloading once the sheet lets it go.

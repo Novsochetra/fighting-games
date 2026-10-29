@@ -3,6 +3,7 @@ import {
   PHONE_MEDIA,
   startTrailer,
   stopTrailer,
+  tapTrailer,
   trailerFor,
 } from '../../../src/home/trailer-player.js';
 
@@ -90,6 +91,38 @@ describe('startTrailer', () => {
     await startTrailer(video, { src: SRC, withSound: true });
 
     expect(setSrc).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('tapTrailer', () => {
+  const at = (video, { paused, muted }) => Object.assign(video, { paused, muted });
+
+  it('plays a trailer that waits', async () => {
+    const video = at(fakeVideo(), { paused: true, muted: false });
+
+    expect(await tapTrailer(video)).toBe('playing');
+    expect(video.play).toHaveBeenCalled();
+  });
+
+  it('brings back the sound of a trailer playing muted, and plays on', async () => {
+    const video = at(fakeVideo(), { paused: false, muted: true });
+
+    expect(await tapTrailer(video)).toBe('sound');
+    expect(video.muted).toBe(false);
+    expect(video.pause).not.toHaveBeenCalled();
+  });
+
+  it('pauses a trailer playing with sound', async () => {
+    const video = at(fakeVideo(), { paused: false, muted: false });
+
+    expect(await tapTrailer(video)).toBe('paused');
+    expect(video.pause).toHaveBeenCalled();
+  });
+
+  it('stays paused where the browser will not play it', async () => {
+    const video = at(fakeVideo('NotAllowedError'), { paused: true, muted: false });
+
+    expect(await tapTrailer(video)).toBe('paused');
   });
 });
 

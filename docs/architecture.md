@@ -406,7 +406,8 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   1080p and a 360p copy. The hero's Trailer, or the Trailer button on the details sheet's art, opens the sheet with
   the trailer playing in place of its art, Play right under it. It starts in the tap that asked for
   it (`flushSync`), with sound, since a browser lets sound play only then; muted where the browser
-  still refuses, or where the player turned the arcade's sound off, and its controls unmute it. It
+  still refuses, or where the player turned the arcade's sound off. It shows no controls, so nothing
+  covers it: a tap on it (or Enter or Space) plays it, brings its sound back, or pauses it. It
   stops, and stops downloading, as the sheet closes, and the sheet shows the art again the next time.
   No save keeps it, and one on another site never passes through the worker.
 

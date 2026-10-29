@@ -1,14 +1,23 @@
-import { useCallback } from 'react';
+import { useCallback, type KeyboardEvent } from 'react';
 import { useArcade, useArcadeUrl } from '../arcade/arcade-context';
 import type { GameCard } from './game-card';
 import { TrailerIcon } from './home-icons';
 import { OfflineTag } from './OfflineTag';
-import { startTrailer, stopTrailer, trailerFor } from './trailer-player.js';
+import { startTrailer, stopTrailer, tapTrailer, trailerFor } from './trailer-player.js';
 import type { Details } from './use-details';
 
 const artClass = (card: GameCard, name: string) => (card.smoothArt ? `${name} is-smooth` : name);
 
-// It plays as it comes onto the page, in the tap that asked for it, and stops as it leaves.
+// Enter and Space do what a tap does, as the video's own controls would have.
+function onKey(event: KeyboardEvent<HTMLVideoElement>) {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    tapTrailer(event.currentTarget);
+  }
+}
+
+// It plays as it comes onto the page, in the tap that asked for it, and stops as it leaves. It shows
+// no controls, so nothing covers the trailer; a tap on it pauses it and plays it on.
 function TrailerVideo({ card }: { card: GameCard }) {
   const url = useArcadeUrl();
   const { preferences, window } = useArcade();
@@ -29,9 +38,12 @@ function TrailerVideo({ card }: { card: GameCard }) {
       id="details-trailer"
       poster={card.artSrc ? url(card.artSrc) : undefined}
       aria-label={`${card.title} trailer`}
-      controls
+      tabIndex={0}
       playsInline
+      disablePictureInPicture
       preload="auto"
+      onClick={(event) => tapTrailer(event.currentTarget)}
+      onKeyDown={onKey}
       ref={play}
     />
   );

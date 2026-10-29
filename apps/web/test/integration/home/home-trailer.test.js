@@ -60,7 +60,8 @@ describe('a game’s trailer', () => {
     expect(video().getAttribute('poster')).toBe(
       onPage('games/steel-and-dust/assets/screenshots/angkor-wat.png'),
     );
-    expect(video().controls).toBe(true);
+    expect(video().controls).toBe(false);
+    expect(video().hasAttribute('controls')).toBe(false);
     expect(video().muted).toBe(false);
     expect(byId('details-art')).toBeNull();
   });
@@ -89,6 +90,22 @@ describe('a game’s trailer', () => {
     click(byId('details-open'));
     expect(byId('details-art')).not.toBeNull();
     expect(shows('details-trailer-open')).toBe(true);
+  });
+
+  it('shows no controls, so a tap on it pauses it and plays it on', async () => {
+    await bootWithTrailer();
+    click(byId('trailer-open'));
+    const playing = video();
+    const pause = vi.spyOn(playing, 'pause');
+    const play = vi.spyOn(playing, 'play');
+
+    Object.defineProperty(playing, 'paused', { configurable: true, value: false });
+    click(playing);
+    expect(pause).toHaveBeenCalled();
+
+    Object.defineProperty(playing, 'paused', { configurable: true, value: true });
+    click(playing);
+    expect(play).toHaveBeenCalled();
   });
 
   it('plays muted for a player who turned the arcade’s sound off', async () => {
