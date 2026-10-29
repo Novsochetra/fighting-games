@@ -117,6 +117,10 @@ with `src/` and `test/`, instead of a copy in each game (see "Shared packages" i
 - a change to it reaches every game that uses it, so it keeps its own tests and `npm run check`
   runs every game's.
 
+A game's touch controls come from `touch-pad`, drawn from a skin the game ships in
+`src/data/skins/`: data, never code, and players never bring their own. The game's tests check
+each skin with `skinProblems` (see "Touch pad and skins" in `docs/architecture.md`).
+
 ## Pages of the arcade
 
 A page of the arcade that is not a game (like `credits/` and `supporters/`) is a screen of the one

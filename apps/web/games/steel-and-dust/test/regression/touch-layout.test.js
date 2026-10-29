@@ -1,5 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { PAD_STYLES } from '../../../../packages/touch-pad/src/pad-styles.js';
+import { CLASSIC } from '../../src/data/skins/classic.js';
 import { STICK_RADIUS } from '../../src/ui/screen/stage-layout.js';
 
 const css = readFileSync(new URL('../../styles/touch-buttons.css', import.meta.url), 'utf8');
@@ -22,22 +24,41 @@ const ORIGINAL = {
   '.tb-ult': [56, 214, 112],
 };
 
+// the classic skin draws the controls the touch pad (packages/touch-pad) stands and sizes, and
+// leaves where they stand to styles/touch-buttons.css
 describe('the original touch button layout', () => {
+  it('draws the stick and the five buttons, named and in their order', () => {
+    const { landscape, portrait } = CLASSIC.layouts;
+
+    expect(portrait).toBe(landscape);
+    expect(landscape.items.map(({ id, label, class: names }) => [id, label, names])).toEqual([
+      ['stick', undefined, 'classic-stick'],
+      ['ult', 'ULT', 'tb tb-ult'],
+      ['dash', 'DASH', 'tb tb-dash'],
+      ['jump', 'JUMP', 'tb tb-jump'],
+      ['heavy', 'HEAVY', 'tb tb-heavy'],
+      ['light', 'ATTACK', 'tb tb-atk'],
+    ]);
+    expect(landscape.items.some((item) => item.at)).toBe(false);
+  });
+
   it('keeps every button where it was and as big as it was', () => {
     for (const [selector, [size, right, bottom]] of Object.entries(ORIGINAL)) {
       const rule = ruleOf(selector);
-      expect(rule).toContain(`--tb-base: ${size}px;`);
+      expect(rule).toContain(`--pad-base: ${size}px;`);
       expect(rule).toContain(`right: calc(${right}px * var(--btn));`);
       expect(rule).toContain(`bottom: calc(${bottom}px * var(--btn));`);
     }
   });
 
   it('anchors the cluster bottom right and centres each button on its point', () => {
-    expect(ruleOf('.btns')).toContain('right: calc(14px + var(--sar));');
-    expect(ruleOf('.btns')).toContain('bottom: calc(14px + var(--sab));');
-    const button = ruleOf('.tb');
-    expect(button).toContain('width: calc(var(--tb-base) * var(--btn) * var(--tb-size, 1));');
-    expect(button).toContain('translate: 50% 50%;');
+    expect(ruleOf('.pad-controls')).toContain('right: calc(14px + var(--sar));');
+    expect(ruleOf('.pad-controls')).toContain('bottom: calc(14px + var(--sab));');
+    expect(ruleOf(':root', stickCss)).toContain('--pad-scale: var(--btn);');
+    expect(PAD_STYLES).toContain(
+      '--pad-diameter: calc(var(--pad-base, 64px) * var(--pad-scale, 1) * var(--pad-size, 1));',
+    );
+    expect(ruleOf('.tb')).toContain('translate: 50% 50%;');
     expect(ruleOf('.tb.on')).toContain('scale: 0.93;');
   });
 
@@ -47,23 +68,22 @@ describe('the original touch button layout', () => {
     expect(ruleOf('.tb-ult', portrait)).toContain('bottom: calc(212px * var(--btn));');
   });
 
-  it('only places a button by its custom centre inside a custom layout', () => {
-    expect(css.match(/var\(--tb-x\)/g)).toHaveLength(1);
-    expect(ruleOf('.btns.custom .tb')).toContain('var(--tb-x)');
+  it('only places a button by its centre inside a placed layout', () => {
+    expect(css).not.toContain('--pad-x');
+    expect(PAD_STYLES.match(/var\(--pad-x\)/g)).toHaveLength(1);
+    expect(PAD_STYLES).toContain('.pad-placed > .pad-button, .pad-placed > .pad-dpad {');
   });
 
   it('keeps the stick in the left 48% of the screen, as big as it was', () => {
-    const zone = ruleOf('.stick-zone', stickCss);
+    const zone = ruleOf('.pad-zone', stickCss);
     expect(zone).toContain('left: 0;');
     expect(zone).toContain('width: 48%;');
-    const base = ruleOf('.stick-base', stickCss);
-    expect(base).toContain('--stick: calc(var(--btn) * var(--stick-size, 1));');
-    expect(base).toContain('width: calc(128px * var(--stick));');
-    expect(base).toContain('margin: calc(-64px * var(--stick)) 0 0 calc(-64px * var(--stick));');
-    const knob = ruleOf('.stick-knob', stickCss);
-    expect(knob).toContain('width: calc(56px * var(--stick));');
-    expect(knob).toContain('margin: calc(-28px * var(--stick)) 0 0 calc(-28px * var(--stick));');
-    // the rest position and a custom stick's zone are worked out from the same radius
+    // 128px across, its knob 56px (0.4375 of it), centred on where it rests, times the Button size
+    expect(PAD_STYLES).toContain(
+      '--pad-diameter: calc(var(--pad-base, 128px) * var(--pad-scale, 1) * var(--pad-size, 1));',
+    );
+    expect(PAD_STYLES).toContain('width: calc(var(--pad-diameter) * 0.4375);');
+    // the rest position and a placed stick's zone are worked out from the same radius
     expect(STICK_RADIUS).toBe(64);
   });
 });

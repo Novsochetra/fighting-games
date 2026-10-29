@@ -31,8 +31,8 @@ const { layout, fullscreen, menus, act, supporters } = installUi({
   ui,
   pad,
 });
-const { touchStick, gamepad } = installInput({ window, elements, game, audio, ui, layout, menus });
-layout.onFit = () => touchStick.rest();
+const { touchPad, gamepad } = installInput({ window, elements, game, audio, ui, layout, menus });
+layout.onFit = () => touchPad.restStick();
 const titleScene = installTitleScene(window);
 let view = null;
 let clock = null;
@@ -41,13 +41,16 @@ function syncDom() {
   if (menus.sync()) {
     elements.touch.classList.toggle('live', game.mode === 'play');
     if (game.mode === 'play') {
-      touchStick.rest();
+      touchPad.restStick();
     }
   }
   supporters.followRun(game);
   const playing = game.mode === 'play';
-  elements.ultButton.classList.toggle('ready', ultReady(game) && playing && !isFightOver(game));
-  elements.heavyButton.classList.toggle('empty', !canAffordHeavy(game) && playing);
+  // a skin may have no such button, and the pad is drawn again when the skin changes
+  touchPad
+    .control('ult')
+    ?.classList.toggle('ready', ultReady(game) && playing && !isFightOver(game));
+  touchPad.control('heavy')?.classList.toggle('empty', !canAffordHeavy(game) && playing);
 }
 
 // a frame that runs several ticks offsets each tick's sounds, so they keep their spacing

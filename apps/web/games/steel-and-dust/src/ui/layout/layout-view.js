@@ -1,7 +1,8 @@
+import { renderPad } from '../../../../../packages/touch-pad/src/pad-markup.js';
+import { placePad, placesOf } from '../../../../../packages/touch-pad/src/pad-place.js';
 import { BUTTON_SIZE } from '../../data/button-layout.js';
 import { buttonScale } from '../../data/settings.js';
 import { fitTouchLayer } from '../screen/touch-area.js';
-import { applyButtonLayout } from './apply-button-layout.js';
 import { orientationOf, shownControls, sizeOf } from './layout-draft.js';
 import { centreOf, coverCost, fractionOf, halfExtentOf } from './layout-geometry.js';
 import { controlName, EDITOR_HTML, fillPreview, sizeLabel } from './layout-markup.js';
@@ -16,7 +17,7 @@ export class LayoutView {
     this.preview = this.section.querySelector('.layout-preview');
     fillPreview(this.preview, document.getElementById('touch'));
     this.bar = this.section.querySelector('.layout-bar');
-    this.controls = [...this.preview.querySelectorAll('[data-control]')];
+    this.controls = [];
   }
 
   isOpen() {
@@ -60,16 +61,28 @@ export class LayoutView {
     );
   }
 
+  // the skin's controls for the way the phone is held, drawn again only when that changes
+  drawControls(entries) {
+    const padLayout = this.layout.padLayout();
+    const places = placesOf(padLayout, entries);
+
+    renderPad(this.preview, padLayout);
+    placePad(this.preview, places);
+    this.controls = [...this.preview.querySelectorAll('[data-control]')];
+
+    return places;
+  }
+
   render({ draft, picked }, settings) {
     const entries = draft[this.orientation()];
     this.picked = picked;
     this.shown = shownControls(settings.stick);
     fitTouchLayer(this.preview, this.layout.touchArea());
-    applyButtonLayout(this.preview, entries);
+    const places = this.drawControls(entries);
     for (const element of this.controls) {
       element.classList.toggle('picked', element.dataset.control === picked);
     }
-    this.placeStick(entries, settings);
+    this.placeStick(places, settings);
     this.showValues(picked, sizeOf(draft, this.orientation(), picked), !!entries);
     this.placeToolbar();
   }
@@ -84,13 +97,18 @@ export class LayoutView {
   }
 
   // the buttons place themselves through CSS; the stick rests where the screen fit puts the
-  // original one, or at its custom centre on the touch layer
-  placeStick(entries, settings) {
+  // original one, or at its placed centre on the touch layer
+  placeStick(places, settings) {
     const stick = this.controlFor('stick');
+
+    if (!stick) {
+      return;
+    }
+
     const screen = { width: this.app.clientWidth, height: this.app.clientHeight };
     const layer = this.layout.touchArea() ?? screen;
-    const rest = entries
-      ? { x: entries.stick.x * layer.width, y: entries.stick.y * layer.height }
+    const rest = places
+      ? { x: places.stick.x * layer.width, y: places.stick.y * layer.height }
       : this.layout.originalStickRest(buttonScale(settings));
     stick.style.left = `${rest.x}px`;
     stick.style.top = `${rest.y}px`;

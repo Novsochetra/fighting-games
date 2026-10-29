@@ -1,6 +1,5 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { TouchStick } from '../../../src/input/touch-stick.js';
 import { openMenu, openPage, selected } from '../../support/menu-page.js';
 
 // happy-dom lays nothing out, so the editor's copy of the touch layer and its controls get the rects
@@ -28,7 +27,7 @@ function stubRect(element) {
 }
 
 const copy = (control) => document.querySelector(`#m-layout [data-control="${control}"]`);
-const real = (action) => document.querySelector(`#touch .tb[data-action="${action}"]`);
+const real = (control) => document.querySelector(`#touch [data-control="${control}"]`);
 const tool = (name) => document.querySelector(`#m-layout [data-edit="${name}"]`);
 const cancel = () => document.querySelector('#m-layout [data-act="back"]:not([data-edit])');
 const toolbarText = () =>
@@ -58,14 +57,11 @@ function holdPhone(width, height) {
   window.dispatchEvent(new Event('resize'));
 }
 
-// the real stick rests on every fit, as main.js has it
-function installStick(page) {
-  const byId = (id) => document.getElementById(id);
-  const elements = { zone: byId('stickZone'), base: byId('stickBase'), knob: byId('stickKnob') };
-  const stick = new TouchStick({ elements, game: page.game, layout: page.layout });
-  page.layout.onFit = () => stick.rest();
-  return elements;
-}
+// the real stick, which rests on every fit, as main.js has it
+const realStick = () => ({
+  zone: document.querySelector('#touch .pad-zone'),
+  base: real('stick'),
+});
 
 function tap(action) {
   const [x, y] = ORIGINAL[action];
@@ -131,8 +127,8 @@ describe('the button layout editor on the real page', () => {
     tool('bigger').click();
     expect(toolbarText()).toEqual(['JUMP', '120%']);
     expect(copy('jump').classList.contains('picked')).toBe(true);
-    expect(copy('light').style.getPropertyValue('--tb-x')).toBe('0.125');
-    expect(real('light').style.getPropertyValue('--tb-x')).toBe('');
+    expect(copy('light').style.getPropertyValue('--pad-x')).toBe('0.125');
+    expect(real('light').style.getPropertyValue('--pad-x')).toBe('');
     expect(page.saveSettings).not.toHaveBeenCalled();
     tool('done').click();
     expect(openMenu().id).toBe('m-settings');
@@ -147,9 +143,11 @@ describe('the button layout editor on the real page', () => {
       ult: { x: 0.7, y: 0.625, size: 1 },
       stick: { x: 0.1125, y: 0.75, size: 1 },
     });
-    expect(document.querySelector('#touch .btns').classList.contains('custom')).toBe(true);
-    expect(real('light').style.getPropertyValue('--tb-x')).toBe('0.125');
-    expect(real('jump').style.getPropertyValue('--tb-size')).toBe('1.2');
+    expect(document.querySelector('#touch .pad-controls').classList.contains('pad-placed')).toBe(
+      true,
+    );
+    expect(real('light').style.getPropertyValue('--pad-x')).toBe('0.125');
+    expect(real('jump').style.getPropertyValue('--pad-size')).toBe('1.2');
     expect(document.querySelector('[data-k="buttonLayout"] .val').textContent).toBe('Custom');
   });
 
@@ -161,9 +159,11 @@ describe('the button layout editor on the real page', () => {
     expect(openMenu().id).toBe('m-settings');
     expect(page.game.settings.buttonLayout).toBeNull();
     expect(page.saveSettings).not.toHaveBeenCalled();
-    expect(document.querySelector('#touch .btns').classList.contains('custom')).toBe(false);
+    expect(document.querySelector('#touch .pad-controls').classList.contains('pad-placed')).toBe(
+      false,
+    );
     openEditor();
-    expect(copy('heavy').style.getPropertyValue('--tb-x')).toBe('');
+    expect(copy('heavy').style.getPropertyValue('--pad-x')).toBe('');
   });
 
   it('keeps a layout for each orientation, and Reset brings one back to the original', () => {
@@ -171,21 +171,27 @@ describe('the button layout editor on the real page', () => {
     drag('ult', { x: 400, y: 100 });
     tool('done').click();
     holdPhone(390, 844);
-    expect(document.querySelector('#touch .btns').classList.contains('custom')).toBe(false);
+    expect(document.querySelector('#touch .pad-controls').classList.contains('pad-placed')).toBe(
+      false,
+    );
     document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
     drag('dash', { x: 80, y: 300 });
     tool('done').click();
     expect(page.game.settings.buttonLayout.portrait.dash).toMatchObject({ x: 0.1, y: 0.75 });
     expect(page.game.settings.buttonLayout.landscape.ult).toMatchObject({ x: 0.5, y: 0.25 });
-    expect(real('dash').style.getPropertyValue('--tb-x')).toBe('0.1');
+    expect(real('dash').style.getPropertyValue('--pad-x')).toBe('0.1');
     document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
-    expect(document.querySelector('#m-layout .btns').classList.contains('custom')).toBe(true);
+    expect(document.querySelector('#m-layout .pad-controls').classList.contains('pad-placed')).toBe(
+      true,
+    );
     tool('reset').click();
-    expect(document.querySelector('#m-layout .btns').classList.contains('custom')).toBe(false);
+    expect(document.querySelector('#m-layout .pad-controls').classList.contains('pad-placed')).toBe(
+      false,
+    );
     tool('done').click();
     expect(page.game.settings.buttonLayout).toMatchObject({ portrait: null });
     expect(page.game.settings.buttonLayout.landscape.ult).toMatchObject({ x: 0.5 });
-    expect(real('dash').style.getPropertyValue('--tb-x')).toBe('');
+    expect(real('dash').style.getPropertyValue('--pad-x')).toBe('');
     holdPhone(844, 390);
     document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
     tool('reset').click();
@@ -198,7 +204,7 @@ describe('the button layout editor on the real page', () => {
   });
 
   it('moves and resizes the stick, and the real one rests there inside its zone', () => {
-    const { zone, base } = installStick(page);
+    const { zone, base } = realStick();
     holdPhone(800, 400);
     openEditor();
     drag('stick', { x: 680, y: 280 });
@@ -207,20 +213,22 @@ describe('the button layout editor on the real page', () => {
     tool('bigger').click();
     tool('bigger').click();
     expect(toolbarText()).toEqual(['STICK', '120%']);
-    expect(copy('stick').style.getPropertyValue('--stick-size')).toBe('1.2');
-    expect(base.style.getPropertyValue('--stick-size')).toBe('');
+    expect(copy('stick').style.getPropertyValue('--pad-size')).toBe('1.2');
+    expect(base.style.getPropertyValue('--pad-size')).toBe('');
     tool('done').click();
     expect(page.game.settings.buttonLayout.landscape.stick).toEqual({ x: 0.85, y: 0.7, size: 1.2 });
-    expect(base.style.getPropertyValue('--stick-size')).toBe('1.2');
+    expect(base.style.getPropertyValue('--pad-size')).toBe('1.2');
     // the stick stands on the right, so its zone is the right half and the base rests inside it
     expect([zone.style.left, zone.style.width]).toEqual(['400px', '400px']);
     expect([base.style.left, base.style.top]).toEqual(['280px', '280px']);
     document.querySelector('[data-k="buttonLayout"] [data-act="layout"]').click();
-    expect(document.querySelector('#m-layout .btns').classList.contains('custom')).toBe(true);
+    expect(document.querySelector('#m-layout .pad-controls').classList.contains('pad-placed')).toBe(
+      true,
+    );
     tool('reset').click();
     tool('done').click();
     expect(page.game.settings.buttonLayout).toBeNull();
-    expect(base.style.getPropertyValue('--stick-size')).toBe('');
+    expect(base.style.getPropertyValue('--pad-size')).toBe('');
     expect([zone.style.left, zone.style.width]).toEqual(['', '']);
   });
 

@@ -1,7 +1,12 @@
+import { renderPad } from '../../../../../packages/touch-pad/src/pad-markup.js';
+import { placePad, placesOf } from '../../../../../packages/touch-pad/src/pad-place.js';
+import {
+  customStickPlace,
+  placeStickZone,
+} from '../../../../../packages/touch-pad/src/stick-place.js';
 import { buttonScale } from '../../data/settings.js';
-import { applyButtonLayout, applyStickZone } from '../layout/apply-button-layout.js';
-import { layoutForScreen } from '../layout/layout-draft.js';
-import { customStickPlace } from '../layout/stick-place.js';
+import { skinLayout } from '../../data/skins/skins.js';
+import { layoutForScreen, orientationOf } from '../layout/layout-draft.js';
 import { fitMenus, menuBox } from './menu-area.js';
 import { pausePlace, placePause } from './pause-place.js';
 import { createSafeArea } from './safe-area.js';
@@ -58,9 +63,18 @@ function controlsLayout({ elements, game }) {
   );
 }
 
-// the stick of the custom layout for the way the phone is held, placed on the touch layer
+function padLayoutOf({ elements }) {
+  return skinLayout(orientationOf(elements.app.clientWidth, elements.app.clientHeight));
+}
+
+// the player's layout for the way the phone is held, else the skin's places, else none
+function placesFor(context) {
+  return placesOf(padLayoutOf(context), controlsLayout(context));
+}
+
+// a placed stick on the touch layer
 function customStick(context, scale) {
-  const stick = controlsLayout(context)?.stick;
+  const stick = placesFor(context)?.stick;
   if (!stick) {
     return null;
   }
@@ -70,8 +84,13 @@ function customStick(context, scale) {
 
 function fitControls(context) {
   const { elements, game } = context;
-  applyButtonLayout(elements.touch, controlsLayout(context));
-  applyStickZone(elements.stickZone, customStick(context, buttonScale(game.settings))?.zone);
+  const zone = renderPad(elements.touch, padLayoutOf(context)).querySelector('.pad-zone');
+
+  placePad(elements.touch, placesFor(context));
+
+  if (zone) {
+    placeStickZone(zone, customStick(context, buttonScale(game.settings))?.zone);
+  }
 }
 
 // in px of the stick zone, which is as tall as the touch layer: the app, or a folded phone's bottom
@@ -102,6 +121,10 @@ export function createScreenFit({ document, window, elements, game, ui }) {
   const readSafeArea = createSafeArea(document, window);
   const context = { elements, game, window };
   const layout = {
+    // the skin's layout for the way the phone is held, which the layout editor draws too
+    padLayout() {
+      return padLayoutOf(context);
+    },
     originalStickRest(scale) {
       return originalStickRest({ context, safe: readSafeArea(), scale });
     },

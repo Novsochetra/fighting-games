@@ -36,8 +36,9 @@ apps/
     src/credits/          the credits screen: who makes the arcade, and where to find them
     src/offline/          the service worker, which keeps the arcade and each game played for offline
     packages/
-      <name>/             code more than one game uses (input: the gamepad, keys, rumble), which
-                          knows no game; src/ and test/{unit,integration}, joined into each game
+      <name>/             code more than one game uses (input: the gamepad, keys, rumble;
+                          touch-pad: the touch controls drawn from a skin), which knows no game;
+                          src/ and test/{unit,integration}, joined into each game
     games/
       <game-id>/          one self-contained app: it loads nothing from outside its folder but the
                           packages, which the build joins into its own bundles
@@ -64,6 +65,13 @@ arcade only by address (`../../`).
 packages, a package loads a file from outside the packages, or the arcade (any of its pages or
 modules) loads a file from a game.
 
+A game hosted on its own site, such as Morodok Angkor (`games/morodok-angkor/`, at
+`https://morodokangkor.com/`), keeps only its `game.json` and art here. Its `url` must be an `https:`
+address (checked by the server, `game-entry.js`, and again by the arcade, `view-models.js`), and
+Play opens it there instead of `games/<id>/`. The arcade draws art pixelated, block by block; a game
+whose art is rendered, like a 3D world, sets `"pixelArt": false` and its card, tile, backdrop and
+details art stay smooth (`is-smooth`).
+
 ## Shared packages
 
 What more than one game needs and no game should write again, such as reading a gamepad, lives in
@@ -80,12 +88,33 @@ no package into `dist/`. A game shipped, or saved for offline, still loads nothi
 folder. A change to a package reaches every game that uses it on the next build, so every game's
 tests run with the package's own (`npm run check`).
 
-A game hosted on its own site, such as Morodok Angkor (`games/morodok-angkor/`, at
-`https://morodokangkor.com/`), keeps only its `game.json` and art here. Its `url` must be an `https:`
-address (checked by the server, `game-entry.js`, and again by the arcade, `view-models.js`), and
-Play opens it there instead of `games/<id>/`. The arcade draws art pixelated, block by block; a game
-whose art is rendered, like a 3D world, sets `"pixelArt": false` and its card, tile, backdrop and
-details art stay smooth (`is-smooth`).
+### Touch pad and skins
+
+`packages/touch-pad/` draws a game's touch controls from a skin and answers the thumbs on them, as
+Delta's controller skins do. A skin is data the game ships (Steel & Dust's are in
+`src/data/skins/`), never code, and players cannot bring their own. It has an `id`, a `name` and a
+layout for each way the phone is held (`landscape`, `portrait`), each listing its controls:
+
+- `kind`: `button`, `dpad` or `stick` (one at most), and an `id` unique in the layout, by which a
+  player's own layout and the game's states (`ready`, `empty`) name it;
+- `inputs`, what it gives the game: a list for a button, which presses them all at once (a combo),
+  or the input each of `up`, `right`, `down` and `left` holds for a stick or a d-pad;
+- optionally a `label`, its `class` names (the game's styles paint it), a `size` (px at the game's
+  scale 1; without it a stick is 128 and the rest 64) and `at` (its centre as fractions of the
+  touch layer). A layout places all its controls or none; one that places none, like Steel & Dust's
+  `classic`, leaves them to the game's own styles.
+
+`renderPad(layer, layout)` draws a layout first in the touch layer, in a `.pad`: the stick in a
+`.pad-zone` of its own, the rest in `.pad-controls` after it, each with its `data-control`. The
+same layout again is left as it is, so a refit never cuts a press short. `placePad(layer, places)`
+stands each control by its centre (`--pad-x`, `--pad-y`) and size (`--pad-size`): the player's
+own places first, else the skin's (`placesOf`). `installTouchPad(layer, options)` answers on the
+layer for whatever is drawn on it: a button calls `handler.press` and `handler.release` for each
+of its inputs, and the stick and the d-pad (three by three, a corner holding two directions,
+`dpad-math.js`) call `handler.steer(input, on)` as a thumb moves on them. The pad's own rules
+(`pad-styles.js`, put first in the head) stand and size the controls from the game's
+`--pad-scale`, and never paint them. A game's tests check each skin it ships (`skinProblems`,
+`skin-check.js`), and `renderPad(layer, layout, { debug: true })` outlines every control and zone.
 
 ## One app
 
@@ -630,17 +659,19 @@ The boxes that change only now and then (the weapon, the lives, the score and th
 drawn once into a stamp of what they show (`src/render/hud/box-stamp.js`) and laid down with one
 `drawImage` a frame; drawn part by part they took most of the HUD's time.
 
-The touch buttons and the stick can be moved and resized (Settings, Button layout). The editor is its
-own menu, `layout`, in `src/ui/layout/` with `styles/layout-editor.css`: it drags a copy of the touch
-layer's controls and works on a draft (`layout-draft.js`), so only Done saves. The setting
-`buttonLayout` holds one layout per orientation, or `null` for the original one in
-`styles/touch-buttons.css` and `styles/touch.css`: each control's centre (the five buttons and the
-stick) as fractions of the touch layer and a size on top of Button size, checked on load by
-`sanitizeButtonLayout` (`src/data/button-layout.js`). `screen-fit.js` applies the layout for the way
-the phone is held on every fit: the `custom` class and `--tb-x`, `--tb-y`, `--tb-size` on each button,
-`--stick-size` on the stick, and the stick's zone, which becomes the half of the screen the stick
-stands on, widened to reach past its rim (`stick-place.js`); `layout.stickRest` gives `TouchStick`
-the custom centre to rest on. The buttons come after the zone in the page, so they stay on top of it.
+The touch controls are drawn by the touch pad (see Touch pad and skins) from a skin in
+`src/data/skins/`: `classic` is the controls as they always stood, placing nothing, so
+`styles/touch-buttons.css` places the buttons and the screen fit rests the stick
+(`stage-layout.js`). `src/input/touch-actions.js` turns their inputs into `game.input`. The buttons
+and the stick can be moved and resized (Settings, Button layout). The editor is its own menu,
+`layout`, in `src/ui/layout/` with `styles/layout-editor.css`: it draws the skin again on a copy of
+the touch layer, drags its controls and works on a draft (`layout-draft.js`), so only Done saves.
+The setting `buttonLayout` holds one layout per orientation, or `null` for the skin's own: each
+control's centre (the five buttons and the stick) as fractions of the touch layer and a size on top
+of Button size, checked on load by `sanitizeButtonLayout` (`src/data/button-layout.js`).
+`screen-fit.js` draws and places the pad for the way the phone is held on every fit, and gives a
+placed stick its zone, the half of the screen it stands on, widened to reach past its rim
+(`stick-place.js` in the package); `layout.stickRest` gives the stick the centre it rests on.
 
 `sim/` reaches the outside world only through `game.io` ports
 (`sfx`, `announce`, `vibrate`, `saveRecords`, `saveHints`, `saveSettings`, `saveRun`, `saveLeaderboard`,
