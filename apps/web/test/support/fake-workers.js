@@ -15,7 +15,7 @@ export function createFakeWorkers({ hasNewBuild = true } = {}) {
   };
 
   return {
-    workers: { getRegistration: vi.fn(async () => registration) },
+    workers: Object.assign(new EventTarget(), { getRegistration: vi.fn(async () => registration) }),
     registration,
     // the new build all in and its worker in charge ('activated'), or given up ('redundant')
     settle(state = 'activated') {

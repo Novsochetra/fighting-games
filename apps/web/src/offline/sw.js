@@ -1,5 +1,6 @@
 import { keepApiReads } from './api-cache.js';
 import { dropOtherArcades, keepArcade } from './arcade-cache.js';
+import { createGameActivity } from './game-activity.js';
 import { createDownloads } from './game-downloads.js';
 import { respondTo } from './respond.js';
 
@@ -7,8 +8,10 @@ import { respondTo } from './respond.js';
 // the worker (apps/web/vite.config.ts).
 const manifest = self.__WB_MANIFEST;
 const downloads = createDownloads();
+const activity = createGameActivity();
 
 const services = () => ({
+  activity,
   caches,
   downloads,
   fetch: (request) => fetch(request),

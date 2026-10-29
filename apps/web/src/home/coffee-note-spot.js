@@ -17,6 +17,13 @@ export const fitsBesideButton = ({ buttonBottom, noteHeight, actionsBottom, gap 
 // Its height is read untransformed, since it pops in from a smaller scale.
 export function placeCoffeeNote({ note, button, actions, document }) {
   note.dataset.spot = 'beside';
+
+  // the hero's buttons come with the game list, so before it is in, or when it fails, there are
+  // none for the note to cover
+  if (!actions) {
+    return;
+  }
+
   const fits = fitsBesideButton({
     buttonBottom: button.getBoundingClientRect().bottom,
     noteHeight: note.offsetHeight,

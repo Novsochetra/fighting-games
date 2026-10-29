@@ -152,6 +152,20 @@ describe('a raider on the belt', () => {
     expect(raider.x).toBeGreaterThan(MOUTH);
   });
 
+  it('walking up it keeps its own pace; standing on it, it is carried toward the mouth', () => {
+    const { game } = beltGame();
+    const walking = Object.assign(spawnEnemy(game, 'juggernaut', MOUTH - 60), {
+      state: 'walk',
+      vx: -0.45,
+    });
+    const standing = Object.assign(spawnEnemy(game, 'juggernaut', MOUTH - 90), { state: 'idle' });
+
+    run(game, 10);
+
+    expect(walking.x).toBe(MOUTH - 60);
+    expect(standing.x).toBeCloseTo(MOUTH - 90 + 10 * CONVEYOR.speed);
+  });
+
   it('knocked out already just burns, for no more score', () => {
     const { game } = beltGame();
     const raider = Object.assign(spawnEnemy(game, 'grunt', MOUTH), { state: 'ko' });
@@ -211,6 +225,15 @@ describe('the hero on the belt', () => {
     run(game, 2);
 
     expect(game.player.state).toBe('juggle');
+  });
+
+  it('running up the belt is still slowed by it', () => {
+    const { game } = beltGame();
+    Object.assign(game.player, { x: START + 60, state: 'run', vx: -2.5 });
+
+    run(game, 10);
+
+    expect(game.player.x).toBeCloseTo(START + 60 + 10 * CONVEYOR.speed);
   });
 
   it('striding off the end of the belt himself walks past the mouth', () => {

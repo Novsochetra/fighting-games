@@ -22,7 +22,9 @@ export function createDownloads() {
       const progress = { done: 0, total: 0, failed: false, removed: false };
       const entry = { progress };
 
-      entry.finished = downloadGame({ ...context, id, progress }).then(
+      const untilQuiet = () => context.activity.untilQuiet(id);
+
+      entry.finished = downloadGame({ ...context, id, progress, untilQuiet }).then(
         () => downloads.get(id) === entry && downloads.delete(id),
         () => {
           progress.failed = true;

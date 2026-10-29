@@ -57,7 +57,7 @@ function levelChange(terrain, before, raider) {
 }
 
 function playRun() {
-  Math.random = seededRandom(31);
+  Math.random = seededRandom(7);
   const game = useTerrain(createScenarioGame('moss', MISSION), raggedTerrain(MISSIONS[MISSION]));
   const driver = createGameDriver(game);
   // the hero takes up his fists (w1, a training key): the raiders live long enough under them to

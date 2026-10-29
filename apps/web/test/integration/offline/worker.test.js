@@ -1,69 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { keepApiReads } from '../../../src/offline/api-cache.js';
-import { keepArcade } from '../../../src/offline/arcade-cache.js';
-import { createDownloads } from '../../../src/offline/game-downloads.js';
-import { respondTo } from '../../../src/offline/respond.js';
-import { fakeCaches, fakeNetwork } from '../../support/fake-caches.js';
-
-// The arcade's worker as a browser runs it (src/offline/sw.js), answering requests from what it
-// keeps and from a network that can go away.
-const SCOPE = 'https://arcade.test/';
-const GAME = `${SCOPE}games/steel-and-dust/`;
-const SAVE = 'api/offline/steel-and-dust';
-const MANIFEST = [
-  { url: 'index.html', revision: 'a1' },
-  { url: 'supporters/index.html', revision: 'b1' },
-  { url: 'build/main-3f9a.js', revision: null },
-  // a game's card art, which the arcade keeps with its own files (catalog-art.js)
-  { url: 'games/steel-and-dust/assets/screenshots/angkor-wat.png', revision: 'c1' },
-];
-
-const gameAt = (revision, files) => ({
-  [`${GAME}offline.json`]: JSON.stringify({ revision, files: Object.keys(files) }),
-  ...Object.fromEntries(Object.entries(files).map(([file, body]) => [`${GAME}${file}`, body])),
-});
-
-const server = () => ({
-  [`${SCOPE}index.html`]: 'the arcade',
-  [`${SCOPE}supporters/index.html`]: 'the supporters',
-  [`${SCOPE}build/main-3f9a.js`]: 'the app',
-  [`${SCOPE}api/games`]: '{"games":[]}',
-  [`${GAME}assets/screenshots/angkor-wat.png`]: 'the card art',
-  ...gameAt('r1', { 'index.html': 'steel & dust 1', 'src/main.js': 'game 1' }),
-});
-
-async function startWorker(files = server()) {
-  const caches = fakeCaches();
-  const network = fakeNetwork(files);
-  const services = {
-    caches,
-    downloads: createDownloads(),
-    fetch: network.fetch,
-    manifest: MANIFEST,
-    scope: SCOPE,
-  };
-
-  // as the worker installs (sw.js)
-  await Promise.all([keepArcade(services), keepApiReads(services)]);
-
-  const request = async (path, { mode = 'cors', method = 'GET', headers = new Headers() } = {}) => {
-    const waits = [];
-    const event = {
-      request: { url: `${SCOPE}${path}`, mode, method, headers },
-      waitUntil: (promise) => waits.push(promise),
-    };
-    const response = await respondTo(event, services);
-
-    await Promise.all(waits);
-
-    return response;
-  };
-
-  return { caches, network, files, request, open: (path) => request(path, { mode: 'navigate' }) };
-}
-
-const text = async (response) => (await response).text();
-const json = async (response) => (await response).json();
+import {
+  caught,
+  GAME,
+  gameAt,
+  json,
+  remove,
+  SAVE,
+  SCOPE,
+  save,
+  server,
+  startWorker,
+  text,
+} from '../../support/offline-worker.js';
 
 describe('the arcade offline', () => {
   it('opens its pages from the build it keeps, with any query or fragment', async () => {
@@ -112,11 +60,6 @@ describe('the arcade offline', () => {
   });
 });
 
-const save = (worker) => worker.request(SAVE, { method: 'POST' });
-const remove = (worker) => worker.request(SAVE, { method: 'DELETE' });
-const caught = async (worker) =>
-  (await worker.caches.keys()).filter((name) => name.startsWith('game-'));
-
 describe('a game offline', () => {
   it('plays from the network, and saves nothing the player has not saved', async () => {
     const worker = await startWorker();
@@ -138,6 +81,22 @@ describe('a game offline', () => {
 
     expect(await text(worker.open('games/steel-and-dust/?from=arcade'))).toBe('steel & dust 1');
     expect(await text(worker.request('games/steel-and-dust/src/main.js'))).toBe('game 1');
+  });
+
+  it('reads each file of a game it plays from the one revision it plays, and nothing more', async () => {
+    const worker = await startWorker();
+
+    await save(worker);
+    Object.assign(worker.files, gameAt('r2', { 'index.html': 'steel & dust 2' }));
+    await worker.open('games/steel-and-dust/');
+    const reads = [];
+    const { keys, match } = worker.caches;
+
+    worker.caches.keys = () => reads.push('keys') && keys();
+    worker.caches.match = (key, options) => reads.push(options?.cacheName) && match(key, options);
+
+    expect(await text(worker.request('games/steel-and-dust/src/main.js'))).toBe('game 1');
+    expect(reads).toEqual(['game-steel-and-dust@r1']);
   });
 
   it('plays from the network until all of it is in, never from half a download', async () => {
@@ -163,7 +122,25 @@ describe('a game offline', () => {
     );
 
     expect(await text(worker.open('games/steel-and-dust/'))).toBe('steel & dust 1');
+    expect(await text(worker.request('games/steel-and-dust/src/main.js'))).toBe('game 1');
+    expect(await caught(worker)).toEqual(['game-steel-and-dust@r1', 'game-steel-and-dust@r2']);
+    expect(await text(worker.open('games/steel-and-dust/'))).toBe('steel & dust 2');
     expect(await text(worker.request('games/steel-and-dust/src/main.js'))).toBe('game 2');
+    expect(await caught(worker)).toEqual(['game-steel-and-dust@r2']);
+  });
+
+  it('lets a download left half done go once a whole revision comes in', async () => {
+    const worker = await startWorker();
+    const mainJs = worker.files[`${GAME}src/main.js`];
+
+    delete worker.files[`${GAME}src/main.js`];
+    await save(worker);
+    Object.assign(
+      worker.files,
+      gameAt('r2', { 'index.html': 'steel & dust 2', 'src/main.js': mainJs }),
+    );
+    await save(worker);
+
     expect(await caught(worker)).toEqual(['game-steel-and-dust@r2']);
   });
 

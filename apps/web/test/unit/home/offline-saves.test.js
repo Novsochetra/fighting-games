@@ -89,6 +89,35 @@ describe('the home screen’s saves for offline', () => {
     expect(store.statusOf('steel-and-dust')).toBeNull();
   });
 
+  it('asks every game it has asked about again, one whose first answer is on its way too', async () => {
+    const page = setUp({ 'offline/steel-and-dust': { state: 'not-saved' } });
+
+    page.store.look('steel-and-dust');
+    page.store.refreshAll();
+    await flush();
+
+    expect(page.asked).toEqual(['GET offline/steel-and-dust', 'GET offline/steel-and-dust']);
+  });
+
+  it('keeps the answer to its last question when an earlier one comes back after it', async () => {
+    const answers = [];
+    const store = createSaveStore({
+      fetch: () => new Promise((resolve) => answers.push(resolve)),
+      addressOf: (id) => `offline/${id}`,
+      setTimer: () => null,
+      clearTimer: () => {},
+    });
+
+    store.look('steel-and-dust');
+    store.refreshAll();
+    answers[1](new Response(JSON.stringify({ state: 'saved' })));
+    await flush();
+    answers[0](new Response('Not found', { status: 404 }));
+    await flush();
+
+    expect(store.statusOf('steel-and-dust')).toEqual({ state: 'saved', percent: 100 });
+  });
+
   it('stops asking once the home screen has gone, and asks every game again when back', async () => {
     const page = setUp({ 'offline/steel-and-dust': { state: 'saving', done: 0, total: 4 } });
 

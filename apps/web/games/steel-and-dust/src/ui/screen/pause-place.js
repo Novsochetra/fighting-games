@@ -1,36 +1,39 @@
 import { VIEW_WIDTH } from '../../config.js';
 import { SCORE_BOX } from '../../render/hud/score.js';
-import { TOP_BAR_HEIGHT } from '../../render/hud/top-bar.js';
+import { TOP_BAR_HEIGHT, VITALS_BOX, WEAPON_BOX } from '../../render/hud/top-bar.js';
 
-// the pause button's side in styles/touch.css, and the room it leaves the score
-const PAUSE_SIZE = 44;
-const GAP = 8;
+// the room the HUD leaves between two plaques of its top row, in the game's pixels
+const GAP = VITALS_BOX.x - WEAPON_BOX.width;
 
-// a stage over the touch buttons takes the top of the screen, so the pause button stands on it, in
-// the HUD's top row just left of the score, where it covers none of the fight. Over the fight (a
-// phone held sideways) and on the bottom half of a phone folded on a table it keeps the touch
-// layer's top-right corner (styles/touch.css): null
+// a stage over the touch buttons takes the top of the screen, so the pause button stands on it, one
+// more carved plaque of the HUD's top row, as tall as the row and just left of the score, where it
+// covers none of the fight; `pixel` is one of the game's pixels on the screen, which its frame is
+// drawn in (styles/touch.css). Over the fight (a phone held sideways) and on the bottom half of a
+// phone folded on a table it keeps the touch layer's top-right corner (styles/touch.css): null
 export function pausePlace({ rect, controlsBelow, hinge, width }) {
   if (!controlsBelow || hinge?.stacked) {
     return null;
   }
 
-  const scale = rect.width / VIEW_WIDTH;
-  const scoreWidth = Math.round((VIEW_WIDTH - SCORE_BOX.x) * scale);
+  const pixel = rect.width / VIEW_WIDTH;
 
   return {
-    top: rect.y + Math.max(0, Math.round((TOP_BAR_HEIGHT * scale - PAUSE_SIZE) / 2)),
-    right: width - rect.x - rect.width + scoreWidth + GAP,
+    top: Math.round(rect.y),
+    right: Math.round(width - rect.x - (SCORE_BOX.x - GAP) * pixel),
+    size: Math.round(TOP_BAR_HEIGHT * pixel),
+    pixel,
   };
 }
 
 // set on the app, so the Button layout editor's copy of the pause button stands there too
 export function placePause(app, place) {
-  for (const side of ['top', 'right']) {
+  app.classList.toggle('pause-in-hud', Boolean(place));
+
+  for (const name of ['top', 'right', 'size', 'pixel']) {
     if (place) {
-      app.style.setProperty(`--pause-${side}`, `${place[side]}px`);
+      app.style.setProperty(`--pause-${name}`, `${place[name]}px`);
     } else {
-      app.style.removeProperty(`--pause-${side}`);
+      app.style.removeProperty(`--pause-${name}`);
     }
   }
 }

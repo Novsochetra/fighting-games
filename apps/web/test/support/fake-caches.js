@@ -40,20 +40,35 @@ export function fakeCaches() {
       return caches.get(name);
     },
 
+    // as the browser's: in the cache named, or in each one in turn, and it makes none
+    async match(key, { cacheName, ...options } = {}) {
+      const named = cacheName === undefined ? [...caches.values()] : [caches.get(cacheName)];
+
+      for (const cache of named.filter(Boolean)) {
+        const found = await cache.match(key, options);
+
+        if (found) {
+          return found;
+        }
+      }
+
+      return undefined;
+    },
+
     keys: async () => [...caches.keys()],
     delete: async (name) => caches.delete(name),
   };
 }
 
 // The server's answers by address, and a network that can go away, or hold its answers until the
-// test lets `hold` settle.
-export function fakeNetwork(files) {
+// test lets `hold` settle; each request is noted with the time on the test's clock, if it has one.
+export function fakeNetwork(files, clock = { now: 0 }) {
   const network = { online: true, requests: [], hold: null };
 
   network.fetch = async (request) => {
     const address = addressOf(request, { ignoreSearch: true });
 
-    network.requests.push({ address, cache: request.cache });
+    network.requests.push({ address, cache: request.cache, at: clock.now });
     await network.hold;
 
     if (!network.online) {

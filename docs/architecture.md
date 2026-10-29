@@ -3,7 +3,8 @@
 A small retro arcade: a Node server, the arcade itself (a React app with its home, supporters and
 credits screens), and one folder per game. The arcade is TypeScript and React, built by Vite; its
 logic stays in plain modules (`.js`, tested on their own), which the components call. The games are
-their own apps of native ES modules, which Vite never touches.
+their own apps of native ES modules, written and run in development as they are, which the build
+only joins into a few bundles per game (see The build).
 
 ```
 apps/
@@ -19,6 +20,7 @@ apps/
   web/                    everything the browser loads
     index.html            the arcade's page; supporters/ and credits/ hold the other two
     vite.config.ts        the build: the three pages into dist/, the as-is files copied beside them
+    build-steps/          the build's own steps: bundle-game.js joins each game's scripts into bundles
     robots.txt            lets every crawler in and names the sitemap
     sitemap.xml           every page this server sends (see Search and link previews)
     assets/               the arcade's icons and manifest (tools/arcade_icons.py draws the icons),
@@ -139,7 +141,13 @@ rate limit and the checks below.
 **The build.** `npm run build` has Vite build the three pages into `dist/` (`base: './'`, so the same
 files work under any path) and copy what it never touches beside them (`as-is-files.js`: the games,
 the art, `robots.txt`, `sitemap.xml` and `appearance-early.js`), then builds the service worker (see
-Offline). Each build has a version (`build-version.js`), SemVer with the build after a `+`, as
+Offline). Each game's page is built on the way (`build-steps/bundle-game.js`): the modules each of
+its module scripts loads are joined into a few bundles in the game's own `build/` folder, as they are
+written (`esnext`) and minified, with names that change with their content; the page is pointed at
+them and the modules are left out. Steel & Dust's 925 modules, thirty imports deep, were about 1,150
+requests a load, each through the arcade's worker, and one that failed held its start; it now loads
+three bundles. A game still loads nothing from outside its folder, and its `offline.json` names the
+bundles. Each build has a version (`build-version.js`), SemVer with the build after a `+`, as
 `1.0.0+5f272d9`: the release is the `version` in the root `package.json`, and the build is the commit
 Railway deploys (`RAILWAY_GIT_COMMIT_SHA`), else the one checked out, else the time of the build. The
 release is raised by hand, in the commit that ships the change: MAJOR for a change that breaks what a
@@ -152,8 +160,12 @@ lets a browser keep those for a year (`immutable`) and has it check everything e
 (`no-cache`). Every file carries an `ETag`, a hash of its content (`routes/file-tags.js`), so a check
 of a file that has not changed costs a `304` and no body, even across deploys. `npm run dev`
 serves the pages and modules from Vite as they are written, with hot reload, and the as-is files from
-disk as in production. If a game's module fails to load, its page reloads itself once under a fresh
-address (`src/boot/boot-recovery.js`).
+disk as in production, each game's modules unbundled. If a game's module fails to load, fails to come down at all (a dropped
+connection, a phone that slept mid-load), or its load hears of no file coming in for 15 seconds (a
+request that never answers), its page reloads itself under a fresh address, each try a second
+later than the last, up to three times (`src/boot/boot-recovery.js`). The page's first script
+watches for it and loads nothing more (`src/boot/boot-watch.js`), so the loading screen's own
+modules are watched too.
 
 ## Offline
 
@@ -178,11 +190,18 @@ not kept.
   them. Only the game's own folder comes down, so a game keeps its fonts there too (Steel & Dust's
   Silkscreen, `assets/fonts/`): a font from another site, like Google Fonts, is lost offline. Each file is checked with the server, so what the game has just loaded for itself costs a
   `304`. A game is played from its download only once every file of one revision is in, marked last,
-  so a half download, or one across two deploys, is never played; until then it comes from the
-  network as before, and offline it says so. A play saves nothing the player has not saved, but it
+  so a half download, or one across two deploys, is never played: the list is read again before the
+  mark, and a deploy that landed meanwhile has its own revision brought down instead. Until then it
+  comes from the network as before, and offline it says so. A play saves nothing the player has not saved, but it
   keeps a saved game fresh: after a deploy that changes the game, the next play brings the new
-  revision down behind the old one, which it plays meanwhile, then lets the old go. A prefetch of a
-  game's page (the home's speculation rules) downloads nothing.
+  revision down behind the old one, which it plays meanwhile. A page plays the revision it opened on
+  to the end, even once the new one is in (the oldest whole one, `completeGame`), and the play after
+  opens the new one and lets the old go (`keepNewestWhole`), since letting it go as the new one came
+  in mixed the new revision's files into a page still loading the old. The worker works out which
+  revision a game plays once, and again only as one comes in or goes, so each of its files reads one
+  cache. A download waits while the game asks for files of its own, carrying on once it has asked
+  for none for two seconds (`game-activity.js`), so on a phone the game's own files come first. A
+  prefetch of a game's page (the home's speculation rules) downloads nothing.
 - **Saving a game** (`game-downloads.js`): the player saves a game, and removes it, with the
   arcade's buttons; a play never waits for a download. The worker answers `api/offline/<id>`: a GET
   with `saved` once a revision is whole, else `saving` with how many of its files are in (`done`,
@@ -279,7 +298,11 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   tap does or how far the save has got; the button's name says it all aloud, so the tooltip and the
   tag are only for the eye. One store holds every game's status for the home screen, so the card,
   the tile and the details sheet show the same save; it asks the worker as a game first shows, every
-  half second while one saves, and again for each game back from a play. The ring and tooltip are
+  half second while one saves, again for each game back from a play, and again as the worker takes
+  the page over (`use-worker-takeover.ts`, its `controllerchange`): the arcade's first page, an
+  installed arcade's first open among them, loads before the worker is in, so its first question
+  reached the server, which has no such address. Only the answer to a game's last question counts,
+  so one from before the worker that comes back late changes nothing. The ring and tooltip are
   drawn inside the button, so a fade of the button takes them along. Where no worker answers, or for
   a game on its own site, no button shows.
 - **Details** (`DetailsSheet.tsx`, `use-details.ts`, `sheet.css`): a `<dialog>` form sheet with the whole description

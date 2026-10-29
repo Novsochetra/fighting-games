@@ -105,7 +105,7 @@ describe('the page on a folded phone', () => {
 
     expect([app.getPropertyValue('--pause-top'), app.getPropertyValue('--pause-right')]).toEqual([
       '0px',
-      '94px',
+      '88px',
     ]);
 
     fold(FLIP_ON_TABLE);
