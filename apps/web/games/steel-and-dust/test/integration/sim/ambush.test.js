@@ -140,6 +140,8 @@ describe('a bot-played run into the ambushes of every road that has one', () => 
     }
   });
 
+  // six bot-played roads: about 4 s alone, past the 5 s default when the whole suite shares the
+  // machine's cores
   it("meets them waiting on the road's own trees, towers and girders", () => {
     for (const [theme, perch] of [
       ['pineRidge', 'crown'],
@@ -156,5 +158,5 @@ describe('a bot-played run into the ambushes of every road that has one', () => 
       expect(run.offScreen, theme).toBe(0);
       expect(run.leftEarly, theme).toBe(0);
     }
-  });
+  }, 20000);
 });
