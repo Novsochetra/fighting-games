@@ -1,5 +1,5 @@
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, rmSync, utimesSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -22,12 +22,11 @@ function runHook(payload, projectDir = root) {
 
 const contextOf = ({ output }) => JSON.parse(output).hookSpecificOutput.additionalContext;
 
-function commitIn(repo, file, text, committedAt = new Date().toISOString()) {
+function commitIn(repo, file, text) {
   writeFileSync(path.join(repo, file), text);
   execFileSync('git', ['add', file], { cwd: repo });
   execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', 'commit', '-qm', 'change'], {
     cwd: repo,
-    env: { ...process.env, GIT_COMMITTER_DATE: committedAt },
   });
 }
 
@@ -36,7 +35,7 @@ function scratchRepo() {
 
   scratchRepos.push(repo);
   execFileSync('git', ['init', '-q'], { cwd: repo });
-  commitIn(repo, 'a.js', '// kept\nconst a = 1;\n', '2020-01-01T00:00:00Z');
+  commitIn(repo, 'a.js', '// kept\nconst a = 1;\n');
 
   return repo;
 }
@@ -81,10 +80,12 @@ describe('the comment review hook, after a commit', () => {
     );
   });
 
-  it('says nothing when the commit failed, leaving an old one at HEAD', () => {
+  it('says nothing when the commit failed, leaving HEAD where it moved minutes ago', () => {
     const repo = scratchRepo();
+    const minutesAgo = new Date(Date.now() - 5 * 60_000);
 
-    commitIn(repo, 'a.js', '// kept\n// sets a\nconst a = 2;\n', '2020-01-02T00:00:00Z');
+    commitIn(repo, 'a.js', '// kept\n// sets a\nconst a = 2;\n');
+    utimesSync(path.join(repo, '.git/logs/HEAD'), minutesAgo, minutesAgo);
 
     expect(commitRun(repo)).toEqual({ status: 0, output: '' });
   });

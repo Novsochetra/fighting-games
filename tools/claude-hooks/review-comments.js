@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { addedComments, changesOf, isCommit, isReviewed, reviewRequest } from './added-comments.js';
 
@@ -7,8 +7,8 @@ import { addedComments, changesOf, isCommit, isReviewed, reviewRequest } from '.
 // Claude what it prints. A commit is reviewed too, as Bash can edit a file without the Edit tool.
 const root = process.env.CLAUDE_PROJECT_DIR ?? process.cwd();
 
-// A commit the command made is seconds old; an older one means the commit failed and made none.
-const FRESH_SECONDS = 120;
+// A commit the command made moved HEAD seconds ago; an older move means the commit failed.
+const FRESH_SECONDS = 30;
 
 function git(...args) {
   try {
@@ -40,10 +40,24 @@ function reviewCommit(revision) {
   });
 }
 
-function freshCommit() {
-  const age = Date.now() / 1000 - Number(git('log', '-1', '--format=%ct'));
+// git dates a commit, and its reflog entry, when the command starts, before a pre-commit check
+// that can take minutes, so when HEAD moved is read off the reflog file's change time instead.
+function secondsSinceHeadMoved() {
+  try {
+    const reflog = path.resolve(root, git('rev-parse', '--git-path', 'logs/HEAD').trim());
 
-  return age <= FRESH_SECONDS ? git('rev-parse', '--short', 'HEAD').trim() : null;
+    return (Date.now() - statSync(reflog).mtimeMs) / 1000;
+  } catch {
+    return Infinity;
+  }
+}
+
+function freshCommit() {
+  const movedByCommit = git('log', '-g', '-1', '--format=%gs').startsWith('commit');
+
+  return movedByCommit && secondsSinceHeadMoved() <= FRESH_SECONDS
+    ? git('rev-parse', '--short', 'HEAD').trim()
+    : null;
 }
 
 function reviewTool(toolName, toolInput, revision) {
