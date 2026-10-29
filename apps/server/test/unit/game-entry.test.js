@@ -125,6 +125,41 @@ describe('validateGameEntry', () => {
   });
 });
 
+describe('the leaderboard rules', () => {
+  const rules = (extra) => ({
+    heroes: ['moss', 'bokator'],
+    missions: 12,
+    difficulties: 3,
+    maxPointsPerSecond: 1000,
+    ...extra,
+  });
+  const check = (leaderboard) => validateGameEntry({ ...validEntry(), leaderboard }, 'demo-game');
+
+  it('accepts a game that names its heroes, missions, difficulties and scoring pace', () => {
+    expect(check(rules())).toEqual([]);
+  });
+
+  it.each([
+    ['not an object', ['moss'], /must be an object/],
+    ['no heroes', rules({ heroes: [] }), /heroes/],
+    ['a hero named twice', rules({ heroes: ['moss', 'moss'] }), /heroes/],
+    ['a hero id with spaces', rules({ heroes: ['moss shade'] }), /heroes/],
+    ['no missions', rules({ missions: 0 }), /missions/],
+    ['part of a mission', rules({ missions: 1.5 }), /missions/],
+    ['ten difficulties', rules({ difficulties: 10 }), /difficulties/],
+    ['no scoring pace', rules({ maxPointsPerSecond: 0 }), /maxPointsPerSecond/],
+    ['a scoring pace as text', rules({ maxPointsPerSecond: '1000' }), /maxPointsPerSecond/],
+  ])('rejects rules with %s', (_label, leaderboard, problem) => {
+    expect(check(leaderboard)).toEqual([expect.stringMatching(problem)]);
+  });
+
+  it('leaves the rules out of the arcade list, which has no use for them', () => {
+    expect(toCatalogGame({ ...validEntry(), leaderboard: rules() })).not.toHaveProperty(
+      'leaderboard',
+    );
+  });
+});
+
 describe('toCatalogGame', () => {
   it('adds the game path and resolves the cover relative to the site root', () => {
     const game = toCatalogGame(validEntry());

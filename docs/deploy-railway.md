@@ -19,7 +19,7 @@ password never goes in the repo.
 | Build      | `npm run build && NPM_CONFIG_PRODUCTION= npm prune --omit=dev` | Vite builds the arcade into `dist/`, which the server sends; then the build, test and lint tools go. Railpack sets `NPM_CONFIG_PRODUCTION=false`. |
 | Pre-deploy | `node apps/server/src/db/migrate-cli.js`                       | Applies new migrations before the new server starts. If one fails, the deploy stops and the old server keeps serving.                             |
 | Start      | `node apps/server/src/main.js`                                 | Node itself, not `npm start`, so it gets Railway's SIGTERM.                                                                                       |
-| Health     | `GET /api/health` must answer 200 within 120 s                 | It reads the supporters table, so a database that is down or never migrated keeps traffic on the old server.                                      |
+| Health     | `GET /api/health` must answer 200 within 120 s                 | It reads the supporters and scores tables, so a database that is down or never migrated keeps traffic on the old server.                          |
 | Stop       | SIGTERM, then SIGKILL after 15 s                               | The old server takes no new requests, finishes the ones under way, then closes the database pool.                                                 |
 | Region     | `asia-southeast1-eqsg3a` (Singapore), 1 copy                   | Closest to Cambodia. Keep one copy: the rate limit lives in the server's memory, so a second copy would not see the first one's.                  |
 
@@ -81,10 +81,10 @@ railway config apply
 
 Then click **Deploy** on the staged changes (or push a commit), and watch **Deployments** → the new one:
 
-- Pre-deploy logs: `Migrating railway on postgres.railway.internal:5432`, `Applied 0001_supporters`
-  (later deploys: `Up to date.`).
+- Pre-deploy logs: `Migrating railway on postgres.railway.internal:5432`,
+  `Applied 0001_supporters, 0002_scores` (later deploys: `Up to date.`).
 - Deploy logs: `Arcade running at http://localhost:8765/` and
-  `Supporters in Postgres railway on postgres.railway.internal:5432`.
+  `Supporters and scores in Postgres railway on postgres.railway.internal:5432`.
 - It turns **Active** once `/api/health` answers. Open `https://<name>.up.railway.app/api/health`:
   `{"ok":true}`.
 
@@ -106,6 +106,16 @@ UPDATE supporters SET hidden = true WHERE id = 42;
 ```
 
 Show it again with `hidden = false`.
+
+## Hide a cheated score
+
+A score is checked against the game's rules and the time its run took, but a patient cheat can still
+post one that looks real. Hide it the same way, from the `scores` table (the boards drop it within
+15 seconds):
+
+```sql
+UPDATE scores SET hidden = true WHERE id = 42;
+```
 
 ## Run against Postgres on your Mac
 

@@ -10,5 +10,11 @@
   "cover": "assets/icons/icon-512.png",
   "banner": "assets/ui/select/bg-landscape.png",
   "poster": "assets/ui/select/bg-portrait.png",
-  "screenshot": "assets/screenshots/angkor-wat.png"
+  "screenshot": "assets/screenshots/angkor-wat.png",
+  "leaderboard": {
+    "heroes": ["moss", "firefly", "antler", "blue", "ember", "bokator", "angkor"],
+    "missions": 12,
+    "difficulties": 3,
+    "maxPointsPerSecond": 1000
+  }
 }

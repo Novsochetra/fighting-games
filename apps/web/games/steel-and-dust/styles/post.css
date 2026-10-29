@@ -1,0 +1,115 @@
+.post-run,
+.post-note {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+.post-run {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.post-run b {
+  color: var(--color-gold);
+  font-weight: var(--font-weight-regular);
+}
+
+.post-note {
+  min-height: 2.6em;
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+}
+
+/* three letters, as an arcade cabinet asks for them: each turns with the arrows over and under it */
+.initials {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin: 12px 0 10px;
+}
+
+.initial {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border: 2px solid var(--color-clear);
+}
+
+.initial.sel {
+  border-color: var(--color-green);
+  background: color-mix(in srgb, var(--color-green) 10%, transparent);
+}
+
+.initial-letter {
+  min-width: 1.2em;
+  font-family: var(--font-display);
+  font-size: calc(var(--font-size-xl) * 1.6);
+  line-height: var(--leading-none);
+  text-align: center;
+  color: var(--color-gold);
+}
+
+.initial.sel .initial-letter {
+  color: var(--color-mint-light);
+}
+
+/* a pixel triangle cut from a square, so the arrow needs no glyph the pixel font lacks */
+.initial-step {
+  width: 34px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  background: var(--color-amber);
+  cursor: pointer;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.initial-step.down {
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+.initial-step:active {
+  background: var(--color-amber-light);
+}
+
+/* the panel's one button stands under the letters, as a menu's buttons stand under its title */
+#m-post .mlist {
+  margin-inline: auto;
+}
+
+/* a phone held sideways has no room for the letters over Post, so Post stands beside them and the
+   arrows keep their size under a thumb */
+@media (max-height: 560px) {
+  #postPanel {
+    display: grid;
+    grid-template-areas:
+      'run run'
+      'letters post'
+      'note note';
+    justify-content: center;
+    align-items: center;
+    column-gap: 32px;
+  }
+
+  .post-run {
+    grid-area: run;
+  }
+
+  .initials {
+    grid-area: letters;
+    margin: 6px 0;
+  }
+
+  .post-note {
+    grid-area: note;
+    min-height: 0;
+  }
+
+  #m-post .mlist {
+    grid-area: post;
+    margin: 0;
+  }
+}

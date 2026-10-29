@@ -67,6 +67,7 @@
     <link rel="stylesheet" href="styles/settings.css" />
     <link rel="stylesheet" href="styles/help.css" />
     <link rel="stylesheet" href="styles/leaderboard.css" />
+    <link rel="stylesheet" href="styles/post.css" />
     <link rel="stylesheet" href="styles/credits.css" />
     <link rel="stylesheet" href="styles/results.css" />
     <link rel="stylesheet" href="styles/stone.css" />
@@ -182,6 +183,8 @@
             </button>
             <button class="mbtn primary" data-act="continue" id="continueBtn">Continue</button>
             <button class="mbtn" data-act="restart" id="restartMissionBtn">Restart mission</button>
+            <button class="mbtn" data-act="post" id="overPostBtn" hidden>Post score online</button>
+            <button class="mbtn" data-act="share" id="overShareBtn" hidden>Share</button>
             <button class="mbtn" data-act="leaderboard" id="overBoardBtn" hidden>
               Leaderboard
             </button>
@@ -195,6 +198,10 @@
             <div class="results-card" id="clearStats"></div>
             <div class="mlist">
               <button class="mbtn primary" data-act="again">Play again</button>
+              <button class="mbtn" data-act="post" id="clearPostBtn" hidden>
+                Post score online
+              </button>
+              <button class="mbtn" data-act="share" id="clearShareBtn" hidden>Share</button>
               <button class="mbtn" data-act="leaderboard">Leaderboard</button>
               <button class="mbtn" data-act="credits">Credits</button>
               <button class="mbtn" data-act="quit">Title</button>
@@ -252,6 +259,16 @@
               <button class="xbtn stone-btn" data-act="back">Back</button>
             </header>
             <div class="scroll" id="leaderboardList"></div>
+          </div>
+        </section>
+
+        <section class="menu sub" id="m-post" aria-label="Post your score">
+          <div class="box stone-panel">
+            <header>
+              <h2>Post your score</h2>
+              <button class="xbtn stone-btn" data-act="back">Back</button>
+            </header>
+            <div class="scroll" id="postPanel"></div>
           </div>
         </section>
 

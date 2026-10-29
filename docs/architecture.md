@@ -124,7 +124,11 @@ load.
    arcade is, for the credits that roll once its last mission is clear: as the game loads, and again
    as its last boss falls, so a gift made during the run is named. It shares no code with the arcade
    to read it (`games/steel-and-dust/src/ui/credits/`).
-5. `GET /api/health` answers `{"ok":true}` once the supporters table answers (Railway's health check).
+5. Steel & Dust reads and posts its online leaderboard: `GET /api/leaderboard?game=<id>`,
+   `POST /api/leaderboard/tickets` as a run starts and `POST /api/leaderboard` as one is posted (see
+   Leaderboard API).
+6. `GET /api/health` answers `{"ok":true}` once the supporters and scores tables answer (Railway's
+   health check).
 
 The arcade runs on Railway as one service: the same server sends the pages and the API, from one
 address (`docs/deploy-railway.md`). `router.js` matches an API path and its method (`HEAD` goes to
@@ -166,6 +170,65 @@ request that never answers), its page reloads itself under a fresh address, each
 later than the last, up to three times (`src/boot/boot-recovery.js`). The page's first script
 watches for it and loads nothing more (`src/boot/boot-watch.js`), so the loading screen's own
 modules are watched too.
+
+## Leaderboard API
+
+A game with an online leaderboard names in its `game.json` what a run of it can be (`leaderboard`:
+`heroes`, `missions`, `difficulties`, `maxPointsPerSecond`), checked with the rest of the entry
+(`catalog/leaderboard-rules.js`) and left out of `api/games`. The server reads those rules once, as
+the first board is asked for (`leaderboard/board-rules.js`), so it checks a score without knowing the
+game; a game with none has no board (404).
+
+- **Boards.** `GET /api/leaderboard?game=<id>` answers both boards at once:
+
+  ```json
+  {
+    "weekStart": "2026-10-26",
+    "week": [
+      {
+        "initials": "SOK",
+        "score": 48210,
+        "mission": 8,
+        "hero": "bokator",
+        "difficulty": 1,
+        "seconds": 1500,
+        "cleared": false,
+        "date": "2026-10-28"
+      }
+    ],
+    "allTime": []
+  }
+  ```
+
+  the ten best runs since Monday at midnight in Phnom Penh (`weekStartOf`, `arcade-time.js`) and
+  ever, a tie ranked by who got there first. Every player who opens the board reads the same rows,
+  so the server answers from one read of the database for 15 seconds, readers who come while it is
+  under way wait on that same read, and a score that changes either board drops it at once
+  (`board-cache.js`).
+
+- **Tickets.** A score cannot be checked move by move, so each run starts with
+  `POST /api/leaderboard/tickets`, which answers a ticket the server signs (HMAC-SHA256) with the
+  time it gave it and a random nonce (`run-tickets.js`). It costs no write. The secret is kept in
+  the database (`server_secrets`): the first server to start makes it and every server after reads
+  the same one, so a ticket given before a deploy is good after it; without a database it lives as
+  long as the server.
+- **Posting.** `POST /api/leaderboard` takes `game`, `initials`, `score`, `mission`, `hero`,
+  `difficulty`, `seconds`, `cleared` and `ticket`, and checks the whole score before writing
+  anything (`post-score.js`): three capital letters, not one of a few that spell a slur
+  (`blocked-initials.js`); whole numbers in the game's ranges; a hero it has; a clear only on the
+  last mission; no more points than the time could earn (`maxPointsPerSecond` a second, with the
+  first minute's up front, `read-score.js`); then the ticket: signed here, at most 30 days old, and
+  at least as old as the time the run claims, give or take 30 seconds. Posting a made-up score
+  means waiting out the time it claims. The ticket's nonce is stored with the score, unique, so a
+  ticket is spent once (409). It answers 201 with where the run placed, this week and all time.
+- **Guards.** Tickets and scores come only from the arcade's own pages (an `Origin` of its own host),
+  as gifts do, in JSON of at most 2 KB; a visitor gets 30 tickets and 10 scores in 10 minutes. A
+  cheat's score is hidden, not deleted, with `UPDATE scores SET hidden = true WHERE id = …`
+  (`docs/deploy-railway.md`).
+
+The scores live in one `scores` table (`0002_scores` in `db/migrations.js`) with the table's own
+checks, an index for the all-time board (`game, score DESC, id`) and one for the week's
+(`game, created_at`), both without hidden rows.
 
 ## Offline
 
@@ -487,9 +550,12 @@ three steps (`DonateSheet.tsx`, its steps in `DonateForm.tsx` and `DonateSteps.t
 
 The server reads the gift again (`read-donation.js`): it squeezes spaces, drops control characters,
 counts a name's characters as Postgres does (by code point, as a Khmer name needs), and holds the
-table's own checks. It takes 5 gifts per visitor in 10 minutes (`security/rate-limit.js`; behind
-Railway's proxy, the visitor is the last `X-Forwarded-For` entry), bodies of at most 2 KB, and JSON
-only. A fake gift is hidden, not deleted, with
+table's own checks. It takes 5 gifts per visitor in 10 minutes (`security/rate-limit.js`), bodies
+of at most 2 KB, and JSON only. Behind Railway's proxy the visitor is the last `X-Forwarded-For`
+entry; the arcade's domain is proxied by Cloudflare, though, so that entry is a Cloudflare edge,
+shared by every visitor it serves, and then the visitor is the one Cloudflare names in
+`CF-Connecting-IP` (`security/cloudflare.js`). That header is believed only from Cloudflare's own
+addresses, as anyone reaching Railway directly could write it too. A fake gift is hidden, not deleted, with
 `UPDATE supporters SET hidden = true WHERE id = …` (`docs/deploy-railway.md`).
 
 `readSupporters` (`read-supporters.js`) checks the list: an entry needs an amount above zero, an empty
@@ -623,7 +689,8 @@ the custom centre to rest on. The buttons come after the zone in the page, so th
 
 `sim/` reaches the outside world only through `game.io` ports
 (`sfx`, `announce`, `vibrate`, `saveRecords`, `saveHints`, `saveSettings`, `saveRun`, `saveLeaderboard`,
-`setMuted`, and `now` for the day a run ends), so it runs in Node tests unchanged.
+`setMuted`, `now` for the day a run ends, and `runStarted` for a run's online ticket), so it runs in
+Node tests unchanged.
 
 The hero's blows landing, the hero being hit, a knockout, an ultimate firing, a weapon or gem picked
 up and a mission cleared each send a haptic cue through `vibrate` (`buzz` in `src/sim/fx/haptics.js`,
@@ -637,6 +704,51 @@ standard gamepad's `vibrationActuator` (Chrome, Edge and Safari on a Mac), or th
 time, so each rumble of a cue starts when the last one ends, and a new cue cuts off the rest of the
 one playing. Safari on iPhone and iPad can do neither, so Settings shows Vibration only where one of
 them exists (`canVibrate`); turning it on plays a blow's cue as a taste.
+
+### Online leaderboard
+
+Steel & Dust posts its runs to the arcade's API (`src/online/`), by address from its page
+(`../../api/leaderboard`), as its credits read the supporters; it shares no code with the arcade.
+
+- **A ticket per run.** A run that starts from nothing (Play, Start from mission 1, Restart mission;
+  not a training run) calls `game.io.runStarted` (`startPlay`), and `run-ticket.js` asks the server
+  for a ticket (`POST api/leaderboard/tickets`) and keeps it in `localStorage` as `sd_ticket`. Only
+  one run is saved at a time and each new run asks for a new ticket, so the ticket kept is always the
+  saved run's, and a run picked up on a later visit can still post. Offline, the run plays on without
+  one and stays off the online board. A late answer meant for a run since left is dropped.
+- **Posting.** Once a run has ended (Game over or All clear) with a score, its menu offers Post score
+  online while it holds a ticket, which opens the `post` panel (`src/ui/post/`, `styles/post.css`):
+  three letters, as an arcade cabinet asks for them, starting as the ones last posted
+  (`sd_initials`). On a letter, up and down turn it (the letters wrap), left, right and OK go from
+  letter to letter and on to Post, a keyboard can type them and Backspace steps back
+  (`post-navigation.js`, before the menus' own keys), and touch turns them with the arrows over and
+  under each (`post-events.js`). Post sends the run (`score-body.js`: its time in whole seconds) with
+  its ticket, which it then spends; the panel shows where it placed (`#3 this week · #18 all time`),
+  the Game over note says `Online #3 this week`, and Post becomes See the board. A refusal the server
+  explains (initials it turns away, a run too old) is shown as it says it, and the ticket kept to try
+  again.
+- **The board.** `online-board.js` holds what the menus show: the board is read as the panel opens
+  (`GET api/leaderboard?game=steel-and-dust`), again only once it is 30 seconds old, a failed read
+  after 10, and an answer redraws the open panel (`MenuController.redraw`). The runs are written into
+  the page, so `read-board.js` keeps only those made of what the game knows (three capital letters,
+  a hero, mission and difficulty it has, a `YYYY-MM-DD` date), and the post panel writes the server's
+  words as text (`lib/html.js`).
+- **The rules the server checks.** `game.json` names what a run can be under `leaderboard`: the hero
+  ids, how many missions and difficulties there are, and the most points a second of play can earn
+  (`maxPointsPerSecond`). `test/unit/data/catalog-entry.test.js` keeps them equal to the game's data,
+  and the pace at three times the fastest recorded run's.
+
+### Sharing a run
+
+Share, on the Game over and All clear menus of a run with a score, shares a picture of it
+(`src/ui/share/`): a 1200x630 card, the select screen's painting in whole pixels under a band of
+night, the hero's first win frame in their own glow, and in the pixel font the game, the hero, the
+score, how far the run got, its place this week once posted, and the arcade's address (colors in
+`src/art/share-colors.js`). A share sheet opens only straight from a tap, so the card is drawn ahead,
+600 ms after the menu comes in (`share.prepare`), and again once the run is posted. The phone's share
+sheet gets the card and the words (`I reached mission 8 of Steel & Dust as Bokator with 48,210
+points. Can you beat me?`) with the game's canonical address; a browser that shares only words shares
+those, and one that cannot share at all saves the card.
 
 ### Missions
 
@@ -743,7 +855,11 @@ length.
   Leaderboard panel (`src/ui/leaderboard/`, `styles/leaderboard.css`) opens from the title, the Game
   over menu and the All clear screen and marks the run that just ended. A save or board read back
   from storage is checked first (`sanitizeSavedRun`, `sanitizeLeaderboard`): one it cannot use loads
-  as no save and an empty board. GitHub Pages has no server, so the board is the device's own.
+  as no save and an empty board. The panel has three tabs: This week and All time, the arcade's
+  online board (see Online leaderboard), and This device, the board above; it opens on This week,
+  or on This device for a run that just ended unposted, or offline.
+- A run that ended can be posted to the online board, and shared. See Online leaderboard and
+  Sharing a run below.
 - A mission ends and the next begins the way the arcade run-and-guns do it. A mission's title
   card (a `stamp` banner: "Mission 2" as it starts, "Mission complete" or "All clear" as its boss
   falls) stamps in a letter at a time (`src/render/hud/title-card.js`, the letters in

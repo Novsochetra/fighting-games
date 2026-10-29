@@ -18,6 +18,7 @@ const QUIET_ACTIONS = new Set([
   'settings',
   'layout',
   'leaderboard',
+  'post',
   'credits',
   'play',
   'continue',
@@ -59,7 +60,36 @@ function continueSavedAction(game, menus) {
   };
 }
 
-export function createMenuActions({ game, audio, ui, fullscreen, menus, leaveForArcade }) {
+// the board opens on the tab the run that just ended is on; posting opens with the letters last used
+function onlineActions({ game, menus, online, share }) {
+  return {
+    leaderboard() {
+      menus.panels.leaderboard.chooseTab();
+      menus.open('leaderboard');
+    },
+    post() {
+      menus.panels.post.reset();
+      menus.open('post');
+    },
+    sendScore: () => online.post(game.lastRun, [...menus.panels.post.state.letters]),
+    share: () => share(game.lastRun, online.rankOf(game.lastRun)),
+  };
+}
+
+// the buttons that open a panel over the menu, or close the one on top
+function panelActions(menus) {
+  return {
+    credits: () => menus.open('credits'),
+    help: () => menus.open('help'),
+    settings: () => menus.open('settings'),
+    layout: () => menus.open('layout'),
+    continue: () => menus.open('heroes'),
+    back: () => menus.back(),
+  };
+}
+
+export function createMenuActions(services) {
+  const { game, audio, ui, fullscreen, menus, leaveForArcade } = services;
   const begin = () => {
     if (ui.isTouchOn() && fullscreen.supported && !fullscreen.isActive()) {
       fullscreen.enter();
@@ -70,18 +100,13 @@ export function createMenuActions({ game, audio, ui, fullscreen, menus, leaveFor
     ...heroActions(game, begin),
     play: playAction(game, menus),
     continueSaved: continueSavedAction(game, menus),
-    leaderboard: () => menus.open('leaderboard'),
-    credits: () => menus.open('credits'),
+    ...onlineActions(services),
+    ...panelActions(menus),
     again: () => playFromStart(game),
     resume: () => resumePlay(game),
-    help: () => menus.open('help'),
-    settings: () => menus.open('settings'),
-    layout: () => menus.open('layout'),
     fullscreen: () => fullscreen.toggle(),
     restart: () => restartRun(game),
     quit: () => quitToTitle(game),
-    continue: () => menus.open('heroes'),
-    back: () => menus.back(),
     weapon() {
       cycleWeapon(game);
       menus.refresh();

@@ -165,7 +165,12 @@ describe('game menus on the real page', () => {
     expect(document.getElementById('overTitle').textContent).toBe('Game over');
     expect(document.getElementById('overNote').textContent).toContain('Mission 3');
     expect(document.getElementById('overNote').textContent).toContain('no lives left');
-    expect(visibleButtons()).toEqual(['Start from mission 1', 'Leaderboard', 'Quit to title']);
+    expect(visibleButtons()).toEqual([
+      'Start from mission 1',
+      'Share',
+      'Leaderboard',
+      'Quit to title',
+    ]);
     key('Enter');
     expect(page.game).toMatchObject({ mode: 'play', missionIndex: 0, lives: 5, score: 0 });
   });

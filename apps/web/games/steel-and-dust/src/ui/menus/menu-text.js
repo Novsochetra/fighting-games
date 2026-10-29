@@ -51,10 +51,15 @@ function boardPlaceHtml(game) {
   return place ? `<br><span class="keep">Leaderboard <b>${place}</b></span>` : '';
 }
 
-export function overNoteHtml(game) {
+// the place the online board gave the run, once it is posted
+function onlinePlaceHtml(rank) {
+  return rank ? `<br><span class="keep">Online <b>#${rank.week}</b> this week</span>` : '';
+}
+
+export function overNoteHtml(game, onlineRank = null) {
   const mission = `Mission <b>${game.missionIndex + 1}</b>`;
   const note = `${mission} &nbsp;·&nbsp; score <b>${game.score}</b> &nbsp;·&nbsp; ${livesLeftHtml(game.lives)}`;
-  return note + boardPlaceHtml(game);
+  return note + boardPlaceHtml(game) + onlinePlaceHtml(onlineRank);
 }
 
 export function weaponButtonLabel(game) {
