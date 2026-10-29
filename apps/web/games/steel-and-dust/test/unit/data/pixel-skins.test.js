@@ -40,14 +40,32 @@ describe('the pixel skins', () => {
     }
   });
 
-  it('shape their pills and size their grips as the art is', () => {
-    for (const [id, skin] of Object.entries(PIXEL_SKINS)) {
-      const pill = pngSize(new URL(`assets/skins/${id}/key-pill.png`, GAME));
+  it('size their grips and bands as the art is', () => {
+    for (const id of Object.keys(PIXEL_SKINS)) {
       const grip = pngSize(new URL(`assets/skins/${id}/landscape-left.png`, GAME));
+      const band = pngSize(new URL(`assets/skins/${id}/landscape-top.png`, GAME));
       const css = read(`styles/skin-${id}.css`);
 
-      expect(skin.pills.landscape[0].aspect, id).toBeCloseTo(pill.height / pill.width, 2);
       expect(css, id).toContain(`--pixel-grip-pixels: ${grip.width};`);
+      expect(css, id).toContain(`--pixel-band-pixels: ${band.width};`);
+    }
+  });
+
+  // a pill's key is the pill along itself, turned as it slants; its art's box, drawn round it,
+  // must keep the art's own shape, or the pill shows squashed
+  it('shape their pills as the art is, level or slanting', () => {
+    for (const [id, skin] of Object.entries(PIXEL_SKINS)) {
+      const pill = pngSize(new URL(`assets/skins/${id}/key-pill.png`, GAME));
+      const css = read(`styles/skin-${id}.css`);
+      const percent = (name) =>
+        Number(css.match(new RegExp(`--pixel-pill-art-${name}: ([\\d.]+)%;`))[1]) / 100;
+      const { aspect } = skin.pills.landscape[0];
+
+      expect(percent('width') / (percent('height') * aspect), id).toBeCloseTo(
+        pill.width / pill.height,
+        1,
+      );
+      expect(css, id).toMatch(/--pixel-pill-tilt: -?\d+deg;/);
     }
   });
 });

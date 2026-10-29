@@ -103,11 +103,13 @@ def centred_on(art, width, height):
 
 
 def save(art, path):
-    """`art` as an indexed PNG: the pieces have a short palette, each colour stored once."""
+    """`art` as an indexed PNG: the pieces have a short palette, each colour stored once. Always
+    8 bits a pixel, as the game's tests read its art (test/support/png-alpha.js), even where a
+    palette of 16 colours or fewer would pack in 4"""
     rgba = opaque(art)
     rgba[rgba[..., 3] == 0] = 0
     colours, index = np.unique(rgba.reshape(-1, 4), axis=0, return_inverse=True)
     image = Image.fromarray(index.reshape(rgba.shape[:2]).astype(np.uint8), 'P')
     image.putpalette(colours[:, :3].flatten().tolist())
-    image.save(path, format='PNG', optimize=True, transparency=bytes(colours[:, 3].tolist()))
+    image.save(path, format='PNG', optimize=True, bits=8, transparency=bytes(colours[:, 3].tolist()))
     print(f'{path}: {art.shape[1]}x{art.shape[0]}')

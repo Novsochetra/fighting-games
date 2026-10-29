@@ -1,0 +1,32 @@
+/* Retro Grey (src/data/skins/pixel.js): a grey plastic handheld, a purple bezel round its screen and
+   red keys (assets/skins/retro/), painted by styles/skin-pixel.css. Its painting keeps no one size
+   of pixel, so it was baked as painted, every 2 by 2 px one pixel: its grips are 154 of those
+   across and its bands 2156 long. Upright, the game's screen has the bezel, deeper under it, as the
+   painting's has; its start and select pills slant 19 degrees, 34 by 21 pixels round a pill 34 by
+   14 */
+.retro {
+  --pixel-landscape-left: url('../assets/skins/retro/landscape-left.png');
+  --pixel-landscape-left-foot: url('../assets/skins/retro/landscape-left-foot.png');
+  --pixel-landscape-right: url('../assets/skins/retro/landscape-right.png');
+  --pixel-landscape-right-foot: url('../assets/skins/retro/landscape-right-foot.png');
+  --pixel-landscape-top: url('../assets/skins/retro/landscape-top.png');
+  --pixel-landscape-bottom: url('../assets/skins/retro/landscape-bottom.png');
+  --pixel-portrait-crown: url('../assets/skins/retro/portrait-crown.png');
+  --pixel-portrait-body: url('../assets/skins/retro/portrait-body.png');
+  --pixel-portrait-foot: url('../assets/skins/retro/portrait-foot.png');
+  --pixel-key-round: url('../assets/skins/retro/key-round.png');
+  --pixel-key-round-pressed: url('../assets/skins/retro/key-round-pressed.png');
+  --pixel-key-pill: url('../assets/skins/retro/key-pill.png');
+  --pixel-key-pill-pressed: url('../assets/skins/retro/key-pill-pressed.png');
+  --pixel-dpad: url('../assets/skins/retro/dpad.png');
+  --pixel-grip-pixels: 154;
+  --pixel-band-pixels: 2156;
+  --pixel-pill-tilt: -19deg;
+  --pixel-pill-art-width: 101%;
+  --pixel-pill-art-height: 149%;
+  --pixel-window: var(--color-retro-window);
+  --pixel-label: var(--color-cream);
+  --pixel-held: var(--color-retro-held);
+  --pixel-chin: 30px;
+  --shadow-pixel-bezel: var(--shadow-retro-bezel);
+}

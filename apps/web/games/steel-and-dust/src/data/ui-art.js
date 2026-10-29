@@ -1,3 +1,5 @@
+import { PIXEL_SKINS } from './skins/pixel.js';
+
 // every image the menus' stylesheets draw: the stone kit and the title painting for either way up
 // (the hero cards' strips are named by the heroes table, ui/loading/boot-art.js); the loading screen
 // holds the title until all of it is in (test/unit/data/ui-art.test.js keeps UI_ART and SKIN_ART in
@@ -36,27 +38,30 @@ export const LOADER_ART = [
 // the loading screen's own art goes first, so it is up before the menus' art starts coming in
 export const UI_ART = [...LOADER_ART, ...MENU_ART];
 
-// the Sandstone shell's pieces, either way up, and its keys
-const SANDSTONE_ART = [
-  'assets/skins/sandstone/landscape-left.png',
-  'assets/skins/sandstone/landscape-left-foot.png',
-  'assets/skins/sandstone/landscape-right.png',
-  'assets/skins/sandstone/landscape-right-foot.png',
-  'assets/skins/sandstone/landscape-top.png',
-  'assets/skins/sandstone/landscape-bottom.png',
-  'assets/skins/sandstone/portrait-crown.png',
-  'assets/skins/sandstone/portrait-body.png',
-  'assets/skins/sandstone/portrait-foot.png',
-  'assets/skins/sandstone/key-round.png',
-  'assets/skins/sandstone/key-round-pressed.png',
-  'assets/skins/sandstone/key-pill.png',
-  'assets/skins/sandstone/key-pill-pressed.png',
-  'assets/skins/sandstone/dpad.png',
+// each pixel skin's shell pieces, either way up, and its keys
+const PIXEL_PIECES = [
+  'landscape-left',
+  'landscape-left-foot',
+  'landscape-right',
+  'landscape-right-foot',
+  'landscape-top',
+  'landscape-bottom',
+  'portrait-crown',
+  'portrait-body',
+  'portrait-foot',
+  'key-round',
+  'key-round-pressed',
+  'key-pill',
+  'key-pill-pressed',
+  'dpad',
 ];
+const PIXEL_ART = Object.keys(PIXEL_SKINS).flatMap((skin) =>
+  PIXEL_PIECES.map((piece) => `assets/skins/${skin}/${piece}.png`),
+);
 
 // the Clear skins' board and gloss, either way up, and their keys, round or pill, up and pressed,
-// then Sandstone's: only the Skins screen and a fight in one of them draw these, so they come once
-// the menu art is in (boot/start-loading.js), not holding the title for every player
+// then the pixel skins': only the Skins screen and a fight in one of them draw these, so they come
+// once the menu art is in (boot/start-loading.js), not holding the title for every player
 export const SKIN_ART = [
   'assets/skins/clear/insides-landscape.webp',
   'assets/skins/clear/insides-portrait.webp',
@@ -67,5 +72,5 @@ export const SKIN_ART = [
   'assets/skins/clear/key-pill.webp',
   'assets/skins/clear/key-pill-pressed.webp',
   'assets/skins/clear/dpad.webp',
-  ...SANDSTONE_ART,
+  ...PIXEL_ART,
 ];

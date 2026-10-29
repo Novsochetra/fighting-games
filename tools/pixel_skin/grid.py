@@ -7,12 +7,14 @@ whose edges best meet where its colours change, and one colour is read from the 
 block, a 3x3 median against the painting's grain.
 """
 import numpy as np
+from PIL import Image
 
 # a colour change this big between two neighbouring pixels is the edge of a block
 EDGE = 90
-# blocks are 6 to 9 px in every painting so far; half or twice a block falls outside this, so
-# the fit never takes a grid of half blocks, which meets every edge as well as the true one
-CELL_SIZES = (5.0, 11.0)
+# blocks are 6.6 to 10 px in every painting so far; half or twice a block falls outside this, so
+# the fit never takes a grid of half blocks, which meets every edge as well as the true one (from
+# 5 px up, the grey handheld's 10 px blocks read as twice as many)
+CELL_SIZES = (6.0, 12.0)
 DARK = 45
 
 
@@ -107,3 +109,14 @@ def read_region(image, box, square=False):
     ]
 
     return np.median(np.stack(samples), axis=0).astype(np.uint8)
+
+
+def read_painted(image, box, block):
+    """The art in `box` as painted, every `block` by `block` px averaged into one pixel, for a
+    painting whose blocks are no one size: the grey handheld's LED is blocks of 6.5 px, its keys 10,
+    and any one grid would square some of them off"""
+    left, top, right, bottom = box
+    region = Image.fromarray(np.ascontiguousarray(image[top:bottom, left:right]))
+    size = (max(1, round(region.width / block)), max(1, round(region.height / block)))
+
+    return np.asarray(region.resize(size, Image.BOX))

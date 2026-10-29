@@ -28,7 +28,7 @@ describe('the menu art list', () => {
   it("keeps the skins' own art apart, each file there, each skin's both ways up", () => {
     const folders = Map.groupBy(SKIN_ART, (file) => file.split('/')[2]);
 
-    expect([...folders.keys()]).toEqual(['clear', 'sandstone']);
+    expect([...folders.keys()]).toEqual(['clear', 'sandstone', 'retro']);
     expect(SKIN_ART.filter((file) => UI_ART.includes(file))).toEqual([]);
     for (const [folder, files] of folders) {
       expect(files.filter((file) => file.includes('landscape')).length, folder).toBeGreaterThan(1);

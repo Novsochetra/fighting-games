@@ -64,7 +64,9 @@ were 6.6 to 6.9 px sideways and 7.8 to 8 upright), so every region (a grip, a ba
 on a grid of its own, the whole number of blocks across it that best meets its colour changes,
 one colour from the middle of each, folded into a palette of 32 shared by the shell's pieces. A
 key is read on square blocks, one size both ways, as its shape shows: read each way on its own,
-Sandstone's round key, painted 290 by 295 px, came out 36 by 39 pixels, an oval. The
+Sandstone's round key, painted 290 by 295 px, came out 36 by 39 pixels, an oval. A painting whose
+blocks are no one size (Retro Grey's LED is blocks of 6.5 px, its keys 10) is read as painted
+instead, `--block 2` making every 2 by 2 px one pixel: any one grid would square some of it off. The
 skins draw them a whole pixel of the art at a time (`image-rendering: pixelated`), a few hundred
 bytes to a few KB each.
 
@@ -76,14 +78,15 @@ its edge fades out in an ordered dither four pixels deep, which disappears into 
 | ------------------------------------- | ---------------------------------------------------------- |
 | `<skin>/landscape-left.png`, `-right` | a grip, from the top down, carried on by plain stone       |
 | `<skin>/landscape-left-foot.png`, …   | the grip's lower third, its corner ornaments, on the bottom |
-| `<skin>/landscape-top.png`, `-bottom` | a band 640 pixels long, its ornament in the window's middle |
+| `<skin>/landscape-top.png`, `-bottom` | a band 14 grips long, its ornament in the window's middle  |
 | `<skin>/portrait-crown.png`          | the rim above and beside the window, all the screen shows   |
 | `<skin>/portrait-body.png`           | the emblem under the window, carried on by plain stone      |
 | `<skin>/portrait-foot.png`           | the bottom corners and band, on the bottom                  |
 | `<skin>/key-*.png`, `<skin>/dpad.png` | the keys, a pressed key on its key's canvas               |
 
 Held sideways each grip is as wide as the shell beside the game's screen, which sets the size of
-the art's pixel for the bands too (`--pixel-grip-pixels`, the grips' width in the art). Upright the
+the art's pixel for the bands too (`--pixel-grip-pixels`, the grips' width in the art, and
+`--pixel-band-pixels`, the bands' length). Upright the
 game's screen is wider than the painting's window, so the painting's own trim under the window is
 dropped, the screen has a trim of its own (`--shadow-pixel-bezel`) and the body hangs under it
 (`--pixel-chin`). The plain stone that carries a grip or the body on is a stretch of the painting
@@ -106,4 +109,21 @@ python3 tools/pixel_skin/bake.py keys keys.png apps/web/games/steel-and-dust/ass
 
 Carved Angkor sandstone with bronze trim and moss in its corners, a lotus on each band and a lotus
 and temple tower under the window upright. Its grips are 46 pixels across; upright the game's
-screen has the window's bronze trim (`--shadow-sandstone-bezel`).
+screen has the window's bronze trim (`--shadow-sandstone-bezel`). Its bands are 644 pixels long.
+
+### Retro Grey
+
+Grey plastic, a purple bezel round the screen with an LED, two screws and a speaker grille, red
+round keys and grey pills slanting 19 degrees, as a 1989 handheld's start and select. Baked as
+painted (`--block 2`, its grips 154 of those pixels across), upright leaving out the 33 rows of
+the painted bezel under the window (`--trim 33`), which `--shadow-retro-bezel` draws round the game's
+screen instead, deeper under it. Its keys read on 10 px blocks. A slanting pill's key is the pill
+along itself, 34 by 14 pixels, turned as it slants (`--pixel-pill-tilt`), so its label, ring and
+touch lie along it, and its art is turned back level under the label at the size of the art's box
+(`--pixel-pill-art-*`).
+
+```bash
+python3 tools/pixel_skin/bake.py landscape shell-sideways.png apps/web/games/steel-and-dust/assets/skins/retro --block 2
+python3 tools/pixel_skin/bake.py portrait shell-upright.png apps/web/games/steel-and-dust/assets/skins/retro --block 2 --trim 33
+python3 tools/pixel_skin/bake.py keys keys.png apps/web/games/steel-and-dust/assets/skins/retro
+```

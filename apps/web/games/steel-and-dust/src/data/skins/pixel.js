@@ -15,4 +15,6 @@ export const PIXEL_SKINS = {
     'Carved Angkor sandstone, moss in its corners',
     0.45,
   ),
+  // its pills slant, each 34 by 14 along itself (styles/skin-retro.css)
+  retro: pixelSkin('retro', 'Retro Grey', 'Grey plastic, a purple bezel and red keys', 0.42),
 };

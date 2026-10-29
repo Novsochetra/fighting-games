@@ -8,13 +8,13 @@
   /* one pixel of the art: a grip fills the shell beside the game's screen */
   --pixel-size: calc(var(--pad-screen-x) / var(--pixel-grip-pixels));
   --pixel-middle: calc(var(--pad-screen-x) + var(--pad-screen-width) / 2);
-  --pixel-band-left: calc(var(--pixel-middle) - 320 * var(--pixel-size));
+  --pixel-band-length: calc(var(--pixel-band-pixels) * var(--pixel-size));
+  --pixel-band-left: calc(var(--pixel-middle) - var(--pixel-band-length) / 2);
 
-  /* the bands are 640 pixels long, their ornaments in the middle of the window */
+  /* the bands, their ornaments in the middle of the window */
   background:
-    var(--pixel-landscape-top) var(--pixel-band-left) 0 / calc(640 * var(--pixel-size)) auto
-      no-repeat,
-    var(--pixel-landscape-bottom) var(--pixel-band-left) 100% / calc(640 * var(--pixel-size)) auto
+    var(--pixel-landscape-top) var(--pixel-band-left) 0 / var(--pixel-band-length) auto no-repeat,
+    var(--pixel-landscape-bottom) var(--pixel-band-left) 100% / var(--pixel-band-length) auto
       no-repeat,
     var(--pixel-window);
   image-rendering: pixelated;
@@ -91,8 +91,25 @@
   transition: scale var(--duration-normal) var(--easing-overshoot);
 }
 
+/* a pill may be painted slanting (--pixel-pill-tilt), as a handheld's start and select keys are:
+   the key turns to it, so its label, its ring and where it answers lie along the pill, and its art
+   is turned back level under the label, at the size of the art's box (--pixel-pill-art-*) */
 .pixel-pill {
-  background-image: var(--pixel-key-pill);
+  rotate: var(--pixel-pill-tilt);
+  background: none;
+}
+
+.pixel-pill::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: var(--pixel-pill-art-width);
+  height: var(--pixel-pill-art-height);
+  translate: -50% -50%;
+  rotate: calc(-1 * var(--pixel-pill-tilt));
+  background: var(--pixel-key-pill) center / 100% 100% no-repeat;
 }
 
 .pixel-light {
@@ -108,6 +125,10 @@
 }
 
 .pixel-pill.on {
+  background: none;
+}
+
+.pixel-pill.on::before {
   background-image: var(--pixel-key-pill-pressed);
 }
 
