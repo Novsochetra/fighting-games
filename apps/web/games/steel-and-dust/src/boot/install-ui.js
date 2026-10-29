@@ -1,4 +1,4 @@
-import { canVibrate } from '../platform/haptics.js';
+import { canVibrate } from '../../../../packages/input/src/rumble.js';
 import { createCreditsPanel, installCreditsEnd } from '../ui/credits/credits-panel.js';
 import { createSupportersFeed } from '../ui/credits/supporters-feed.js';
 import { createHelpPanel } from '../ui/help/help-panel.js';

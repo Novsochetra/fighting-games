@@ -1,10 +1,12 @@
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { GAMES_ROOT, WEB_ROOT } from '../../../server/src/paths.js';
+import { GAMES_ROOT, PACKAGES_ROOT, WEB_ROOT } from '../../../server/src/paths.js';
 
 // Each game is its own app: it brings its own tokens, styles, modules and assets, and the home page
-// knows a game only through its game.json. A shared file would tie every game to the arcade.
+// knows a game only through its game.json. A shared file would tie every game to the arcade. What
+// the games share (the controls, the gamepad) is a package of its own, which knows no game, and
+// which the build joins into each game's bundles, so a game shipped still loads only its folder.
 const SOURCE_FILE = /\.(js|ts|tsx|css|html)$/;
 const MODULE_REFERENCE = /(?:\bfrom|\bimport)\s*\(?\s*['"]([^'"]+)['"]/g;
 
@@ -51,15 +53,31 @@ async function referencesLeaving(files, isInside) {
 
 const isWithin = (root) => (target) => target === root || target.startsWith(`${root}${path.sep}`);
 
+async function folderNames(root) {
+  const entries = await readdir(root, { withFileTypes: true });
+
+  return entries
+    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
+    .map((entry) => entry.name);
+}
+
 describe('games and the home page stay independent', () => {
-  it('lets each game load only files from its own folder', async () => {
-    const gameIds = (await readdir(GAMES_ROOT, { withFileTypes: true }))
-      .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
-      .map((entry) => entry.name);
+  it('lets each game load only files from its own folder and the shared packages', async () => {
+    const gameIds = await folderNames(GAMES_ROOT);
     expect(gameIds.length).toBeGreaterThan(0);
     for (const id of gameIds) {
       const root = path.join(GAMES_ROOT, id);
-      expect(await referencesLeaving(await listFiles(root), isWithin(root))).toEqual([]);
+      const isAllowed = (target) => isWithin(root)(target) || isWithin(PACKAGES_ROOT)(target);
+      expect(await referencesLeaving(await listFiles(root), isAllowed)).toEqual([]);
+    }
+  });
+
+  it('keeps every package from loading a game or the arcade, as every game may load it', async () => {
+    const names = await folderNames(PACKAGES_ROOT);
+    expect(names.length).toBeGreaterThan(0);
+    for (const name of names) {
+      const files = await listFiles(path.join(PACKAGES_ROOT, name));
+      expect(await referencesLeaving(files, isWithin(PACKAGES_ROOT))).toEqual([]);
     }
   });
 

@@ -35,8 +35,12 @@ apps/
     src/supporters/       the supporters screen and its donate sheet
     src/credits/          the credits screen: who makes the arcade, and where to find them
     src/offline/          the service worker, which keeps the arcade and each game played for offline
+    packages/
+      <name>/             code more than one game uses (input: the gamepad, keys, rumble), which
+                          knows no game; src/ and test/{unit,integration}, joined into each game
     games/
-      <game-id>/          one self-contained app: it loads nothing from outside its folder
+      <game-id>/          one self-contained app: it loads nothing from outside its folder but the
+                          packages, which the build joins into its own bundles
         game.json         catalog entry, read by the server
         index.html        the game page
         assets/           sprites, icons, manifest
@@ -57,7 +61,24 @@ look without touching the arcade or another game. The arcade knows a game only t
 `game.json` and the art it names (`cover`, `banner`, `poster`, `screenshot`); a game links back to the
 arcade only by address (`../../`).
 `test/integration/independence.test.js` fails if a game loads a file from outside its folder or the
-arcade (any of its pages or modules) loads a file from a game.
+packages, a package loads a file from outside the packages, or the arcade (any of its pages or
+modules) loads a file from a game.
+
+## Shared packages
+
+What more than one game needs and no game should write again, such as reading a gamepad, lives in
+`packages/<name>/`, plain ES modules with their own tests (`packages/input/` holds the standard pad,
+its dead zones and menu repeat, pressing and letting go of an action, and a pad's rumble and a
+phone's buzz). A package knows no game: the game passes in what is its own (its actions, which keys
+and buttons give them, its haptic cues), and a package that draws reads the game's tokens, with no
+colors of its own. A game imports a package by its path (`../../../../packages/input/src/gamepad.js`),
+so nothing is installed and the browser, Vite and the tests all find it the same way.
+
+Sharing stops at the build: `npm run dev` serves `packages/` as it is written (`DEV_ONLY_AS_IS` in
+`as-is-files.js`), and the build joins what a game imports into that game's own bundles and copies
+no package into `dist/`. A game shipped, or saved for offline, still loads nothing from outside its
+folder. A change to a package reaches every game that uses it on the next build, so every game's
+tests run with the package's own (`npm run check`).
 
 A game hosted on its own site, such as Morodok Angkor (`games/morodok-angkor/`, at
 `https://morodokangkor.com/`), keeps only its `game.json` and art here. Its `url` must be an `https:`
@@ -146,8 +167,8 @@ its module scripts loads are joined into a few bundles in the game's own `build/
 written (`esnext`) and minified, with names that change with their content; the page is pointed at
 them and the modules are left out. Steel & Dust's 925 modules, thirty imports deep, were about 1,150
 requests a load, each through the arcade's worker, and one that failed held its start; it now loads
-three bundles. A game still loads nothing from outside its folder, and its `offline.json` names the
-bundles. Each build has a version (`build-version.js`), SemVer with the build after a `+`, as
+three bundles. The packages a game imports are joined into its bundles like its own modules, so a
+game still loads nothing from outside its folder, and its `offline.json` names the bundles. Each build has a version (`build-version.js`), SemVer with the build after a `+`, as
 `1.0.0+5f272d9`: the release is the `version` in the root `package.json`, and the build is the commit
 Railway deploys (`RAILWAY_GIT_COMMIT_SHA`), else the one checked out, else the time of the build. The
 release is raised by hand, in the commit that ships the change: MAJOR for a change that breaks what a
@@ -566,16 +587,16 @@ One app): a push slides the screen arrived at in over the one left, and a pop pl
 
 The game keeps a strict split:
 
-| Folder        | Job                                                                 | May touch the DOM, canvas or audio? |
-| ------------- | ------------------------------------------------------------------- | ----------------------------------- |
-| `src/data/`   | tuning tables: moves, weapons, enemies, missions                    | no                                  |
-| `src/art/`    | sprite and scene colors (the only JS allowed to hold hex values)    | no                                  |
-| `src/sim/`    | the 60 Hz simulation: one `game` object in, the same object changed | no                                  |
-| `src/render/` | draws a `game` onto a 2D canvas context it is given                 | canvas only                         |
-| `src/audio/`  | synthesized sound and music, and the announcer's recorded calls     | Web Audio only                      |
-| `src/input/`  | keyboard, gamepad and touch write into `game.input`                 | yes                                 |
-| `src/ui/`     | menus, the hero carousel, settings, help, screen fit, full screen   | yes                                 |
-| `src/main.js` | wires the pieces together and runs the fixed-step loop              | yes                                 |
+| Folder        | Job                                                                    | May touch the DOM, canvas or audio? |
+| ------------- | ---------------------------------------------------------------------- | ----------------------------------- |
+| `src/data/`   | tuning tables: moves, weapons, enemies, missions                       | no                                  |
+| `src/art/`    | sprite and scene colors (the only JS allowed to hold hex values)       | no                                  |
+| `src/sim/`    | the 60 Hz simulation: one `game` object in, the same object changed    | no                                  |
+| `src/render/` | draws a `game` onto a 2D canvas context it is given                    | canvas only                         |
+| `src/audio/`  | synthesized sound and music, and the announcer's recorded calls        | Web Audio only                      |
+| `src/input/`  | keyboard, gamepad and touch write into `game.input` (`packages/input`) | yes                                 |
+| `src/ui/`     | menus, the hero carousel, settings, help, screen fit, full screen      | yes                                 |
+| `src/main.js` | wires the pieces together and runs the fixed-step loop                 | yes                                 |
 
 The menus stand on two layers shared by all of them, at the back of `#menus`: the Angkor painting
 (`.menu-scene`) and one dim (`.menu-dim`). `menuBackdrop` (`src/ui/menus/menu-backdrop.js`) sets
@@ -631,7 +652,8 @@ the cues in `src/data/haptics.js`). Each cue is written twice: a vibration patte
 rumbles of a gamepad's two motors, longer since a pad's motors take a moment to spin up. The
 ultimate's swells to full strength over its cut-in (`startUlt`) and ends before the first blow lands,
 which would cut it short; `test/unit/data/haptics.test.js` holds it inside every hero's `intro`.
-`src/platform/haptics.js` plays a cue in whatever the player used last (`ui.lastInput`): the first
+`src/platform/haptics.js` plays a cue in whatever the player used last (`ui.lastInput`), through
+`packages/input/src/rumble.js`: the first
 standard gamepad's `vibrationActuator` (Chrome, Edge and Safari on a Mac), or the phone's
 `navigator.vibrate` (Android), and nothing under a keyboard or a mouse. A pad plays one effect at a
 time, so each rumble of a cue starts when the last one ends, and a new cue cuts off the rest of the
