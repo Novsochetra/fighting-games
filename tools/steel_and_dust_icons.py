@@ -6,9 +6,11 @@
 Reads concepts/logo/steel-and-dust.webp (the logo drawn on magenta), keys the magenta out and writes
 every size the game's page and manifest name to apps/web/games/steel-and-dust/assets/icons/ (or OUT_DIR):
   icon-32.png                  the logo alone on a see-through square, for the browser tab
-  icon-192.png, icon-512.png   the logo on the dusk sky, full bleed, for desktops and the arcade's leaderboard
+  icon-192.png, icon-512.png   the logo before Angkor Wat at dusk, full bleed, for desktops and the arcade's leaderboard
   icon-maskable-512.png        the same, the logo inside Android's safe circle
   apple-touch-icon.png         180 x 180 full bleed; iOS rounds the corners itself
+The dusk is the loading screen's painting, a sun going down behind the logo's towers, drawn a block
+of BLOCK icon pixels at a time like the game's own art.
 """
 import os
 import sys
@@ -17,15 +19,29 @@ import numpy as np
 from PIL import Image
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+GAME = os.path.join(REPO, 'apps', 'web', 'games', 'steel-and-dust')
 SOURCE = os.path.join(REPO, 'concepts', 'logo', 'steel-and-dust.webp')
-OUT_DIR = os.path.join(REPO, 'apps', 'web', 'games', 'steel-and-dust', 'assets', 'icons')
+OUT_DIR = os.path.join(GAME, 'assets', 'icons')
+PAINTING = os.path.join(GAME, 'assets', 'ui', 'loading', 'bg.png')
 
-# The sky of the title screen: night above, the sun going down behind Angkor below.
-SKY = ((0.0, (21, 17, 28)), (0.45, (31, 22, 40)), (0.8, (120, 46, 30)), (1.0, (232, 104, 34)))
+PAINTING_SQUARE = (84, 0, 300, 216)
+BLOCK = 4
 FULL_BLEED_FIT = 0.92
 # Android crops a maskable icon to any shape inside the circle of 80% of its width.
 SAFE_RADIUS = 0.4
 FRINGE_PASSES = 4
+
+# Where the sun sits, in shares of the logo's box: behind the middle tower's face.
+SUN_IN_LOGO = (0.5, 0.3)
+# Outermost first: radius in shares of the logo's width, colour, and how much of the dusk it covers.
+SUN_GLOW = (
+    (0.46, (224, 83, 61), 0.22),
+    (0.38, (236, 120, 52), 0.3),
+    (0.3, (242, 163, 58), 0.45),
+    (0.23, (250, 190, 100), 0.85),
+    (0.17, (255, 214, 140), 1.0),
+)
+RAYS, RAY_COLOUR, RAY_SHARE, RAY_STEPS = 12, (242, 163, 58), 0.16, 4
 
 
 def neighbours_of(mask):
@@ -63,18 +79,58 @@ def shrink(logo, scale):
     return logo.convert('RGBa').resize(size, Image.LANCZOS).convert('RGBA')
 
 
-def sky(size):
-    stops, colours = zip(*SKY)
-    rows = np.linspace(0, 1, size)
-    column = np.stack([np.interp(rows, stops, [c[i] for c in colours]) for i in range(3)], axis=1)
-    rgb = np.repeat(column[:, None, :], size, axis=1).round().astype(np.uint8)
-
-    return Image.fromarray(rgb).convert('RGBA')
+def tinted(pixels, colour, share):
+    return pixels + share[..., None] * (np.array(colour, dtype=float) - pixels)
 
 
-def centred(logo, backdrop, scale):
+def block_grid(cells, sun):
+    ys, xs = np.mgrid[0:cells, 0:cells] + 0.5
+    return xs - sun[0], ys - sun[1]
+
+
+def sun_rays(pixels, sun):
+    across, down = block_grid(len(pixels), sun)
+    lit = np.floor((np.arctan2(down, across) + np.pi) / np.pi * RAYS) % 2 == 0
+    fade = np.clip(1 - np.hypot(across, down) / (len(pixels) * 0.8), 0, 1)
+
+    return tinted(pixels, RAY_COLOUR, lit * np.floor(fade * RAY_STEPS) / RAY_STEPS * RAY_SHARE)
+
+
+def sun_glow(pixels, sun, logo_width):
+    distance = np.hypot(*block_grid(len(pixels), sun))
+    for radius, colour, share in SUN_GLOW:
+        pixels = tinted(pixels, colour, (distance <= radius * logo_width) * share)
+
+    return pixels
+
+
+def dusk(size, logo_box):
+    cells = size // BLOCK
+    left, top, width, height = (value / BLOCK for value in logo_box)
+    sun = (left + SUN_IN_LOGO[0] * width, top + SUN_IN_LOGO[1] * height)
+    painting = Image.open(PAINTING).convert('RGB').crop(PAINTING_SQUARE).resize((cells, cells), Image.BOX)
+    pixels = sun_glow(sun_rays(np.asarray(painting, dtype=float), sun), sun, width)
+
+    return Image.fromarray(pixels.round().astype(np.uint8)).resize((size, size), Image.NEAREST).convert('RGBA')
+
+
+def placed(logo, size, scale):
     art = shrink(logo, scale)
-    backdrop.alpha_composite(art, ((backdrop.width - art.width) // 2, (backdrop.height - art.height) // 2))
+    return art, ((size - art.width) // 2, (size - art.height) // 2)
+
+
+def on_clear(logo, size):
+    art, spot = placed(logo, size, fit_scale(logo, size, 1))
+    backdrop = Image.new('RGBA', (size, size))
+    backdrop.alpha_composite(art, spot)
+
+    return backdrop
+
+
+def on_dusk(logo, size, scale):
+    art, spot = placed(logo, size, scale)
+    backdrop = dusk(size, (*spot, art.width, art.height))
+    backdrop.alpha_composite(art, spot)
 
     return backdrop
 
@@ -96,15 +152,16 @@ def few_colours(image):
 
 
 def icons(logo):
-    clear = lambda size: Image.new('RGBA', (size, size))
-    full_bleed = lambda size: few_colours(centred(logo, sky(size), fit_scale(logo, size, FULL_BLEED_FIT)))
+    # The smaller sizes are the 512 shrunk, so each is the same picture rather than a dusk of finer blocks.
+    full_bleed = on_dusk(logo, 512, fit_scale(logo, 512, FULL_BLEED_FIT))
+    shrunk = lambda size: few_colours(full_bleed.resize((size, size), Image.LANCZOS))
 
     return {
-        'icon-32.png': centred(logo, clear(32), fit_scale(logo, 32, 1)),
-        'icon-192.png': full_bleed(192),
-        'icon-512.png': full_bleed(512),
-        'icon-maskable-512.png': few_colours(centred(logo, sky(512), safe_scale(logo, 512))),
-        'apple-touch-icon.png': full_bleed(180),
+        'icon-32.png': on_clear(logo, 32),
+        'icon-192.png': shrunk(192),
+        'icon-512.png': few_colours(full_bleed),
+        'icon-maskable-512.png': few_colours(on_dusk(logo, 512, safe_scale(logo, 512))),
+        'apple-touch-icon.png': shrunk(180),
     }
 
 
