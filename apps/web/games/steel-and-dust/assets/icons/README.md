@@ -12,7 +12,7 @@ nagas, over the title. The logo is drawn on magenta (`concepts/logo/steel-and-du
 | `icon-maskable-512.png` | 512×512 | the same, the logo inside the circle Android may crop to | the manifest                          |
 | `apple-touch-icon.png`  | 180×180 | the same; iOS rounds the corners itself                  | `index.html`, an iPhone's home screen |
 
-The dusk behind the logo is the loading screen's painting (`ui/loading/bg.png`), with a sun going
-down behind the logo's towers, drawn in blocks of 4 pixels like the game's own art. The arcade's
-leaderboard shows the `cover` beside the game's name. Run
-`python3 tools/steel_and_dust_icons.py` again after the logo changes.
+The dusk behind the logo is the hero select's painting of Angkor Wat through the palms
+(`ui/select/bg-portrait.png`), darkened, with a sun going down behind the logo's towers, drawn in
+blocks of 4 pixels like the game's own art. The arcade's leaderboard shows the `cover` beside the
+game's name. Run `python3 tools/steel_and_dust_icons.py` again after the logo changes.

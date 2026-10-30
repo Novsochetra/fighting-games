@@ -9,8 +9,8 @@ every size the game's page and manifest name to apps/web/games/steel-and-dust/as
   icon-192.png, icon-512.png   the logo before Angkor Wat at dusk, full bleed, for desktops and the arcade's leaderboard
   icon-maskable-512.png        the same, the logo inside Android's safe circle
   apple-touch-icon.png         180 x 180 full bleed; iOS rounds the corners itself
-The dusk is the loading screen's painting, a sun going down behind the logo's towers, drawn a block
-of BLOCK icon pixels at a time like the game's own art.
+The dusk is the hero select's painting of Angkor Wat through the palms, a sun going down behind the
+logo's towers, drawn a block of BLOCK icon pixels at a time like the game's own art.
 """
 import os
 import sys
@@ -22,9 +22,11 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GAME = os.path.join(REPO, 'apps', 'web', 'games', 'steel-and-dust')
 SOURCE = os.path.join(REPO, 'concepts', 'logo', 'steel-and-dust.webp')
 OUT_DIR = os.path.join(GAME, 'assets', 'icons')
-PAINTING = os.path.join(GAME, 'assets', 'ui', 'loading', 'bg.png')
+PAINTING = os.path.join(GAME, 'assets', 'ui', 'select', 'bg-portrait.png')
 
-PAINTING_SQUARE = (84, 0, 300, 216)
+PAINTING_SQUARE = (0, 0, 216, 216)
+# Its sunset is as bright as the logo's gold, which would sink into it.
+PAINTING_SHADE = 0.72
 BLOCK = 4
 FULL_BLEED_FIT = 0.92
 # Android crops a maskable icon to any shape inside the circle of 80% of its width.
@@ -109,7 +111,8 @@ def dusk(size, logo_box):
     left, top, width, height = (value / BLOCK for value in logo_box)
     sun = (left + SUN_IN_LOGO[0] * width, top + SUN_IN_LOGO[1] * height)
     painting = Image.open(PAINTING).convert('RGB').crop(PAINTING_SQUARE).resize((cells, cells), Image.BOX)
-    pixels = sun_glow(sun_rays(np.asarray(painting, dtype=float), sun), sun, width)
+    shaded = np.asarray(painting, dtype=float) * PAINTING_SHADE
+    pixels = sun_glow(sun_rays(shaded, sun), sun, width)
 
     return Image.fromarray(pixels.round().astype(np.uint8)).resize((size, size), Image.NEAREST).convert('RGBA')
 
