@@ -58,6 +58,7 @@ describe('the Postgres supporters store', () => {
     const insert = (name, cents) =>
       database.query('INSERT INTO supporters (name, amount_cents) VALUES ($1, $2)', [name, cents]);
     await expect(insert('Mey', 0)).rejects.toThrow(/check/);
+    await expect(insert('Mey', 1)).resolves.toBeDefined();
     await expect(insert('Mey', 1000001)).rejects.toThrow(/check/);
     await expect(insert('x'.repeat(41), 100)).rejects.toThrow(/check/);
     await expect(insert('ក'.repeat(40), 100)).resolves.toBeDefined();

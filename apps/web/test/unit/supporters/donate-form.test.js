@@ -13,13 +13,18 @@ describe('readAmount', () => {
     ['$12.50', 12.5],
     ['1,000', 1000],
     [' 7.5 ', 7.5],
+    ['0.50', 0.5],
+    ['0.01', 0.01],
   ])('reads %j as %s', (typed, amount) => {
     expect(readAmount(typed)).toBe(amount);
   });
 
-  it.each(['', '0.99', '10000.01', '1.005', 'five', '-3', '1e3'])('refuses %j', (typed) => {
-    expect(readAmount(typed)).toBeNull();
-  });
+  it.each(['', '0', '0.00', '0.001', '10000.01', '1.005', 'five', '-3', '1e3'])(
+    'refuses %j',
+    (typed) => {
+      expect(readAmount(typed)).toBeNull();
+    },
+  );
 });
 
 describe('readDonationForm', () => {

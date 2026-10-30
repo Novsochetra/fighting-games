@@ -707,13 +707,14 @@ records it in `schema_migrations`; `npm run db:migrate` does the same against an
 three steps (`DonateSheet.tsx`, its steps in `DonateForm.tsx` and `DonateSteps.tsx`, the flow in
 `use-donate-flow.ts`, `donate.css`, and the dialog through `use-sheet.ts`, as every sheet):
 
-1. An amount (four quick ones, or any from $1 to $10,000 in dollars and cents), a name (empty gives
-   anonymously) and a message. `donate-form.js` checks them, with the server's limits; a test keeps
-   the two equal. As the amount changes, its tier shows under it (`tiers.js`): Bronze from $1,
-   Silver from $5, Gold from $10 and Diamond from $25, one for each quick amount, with how much more
-   reaches the next. A tier is a cut gem drawn in CSS (`tier.css`), in the podium's metals and a
-   diamond blue with a glint; it pops when the tier changes. The server names each listed gift's tier
-   from the same steps, and has the last word; a test keeps the sheet's steps equal to the server's.
+1. An amount (four quick ones, or any from $0.01 to $10,000 in dollars and cents), a name (empty
+   gives anonymously) and a message. `donate-form.js` checks them, with the server's limits; a test
+   keeps the two equal. As the amount changes, its tier shows under it (`tiers.js`): Bronze under
+   $5, Silver from $5, Gold from $10 and Diamond from $25, one for each quick amount, with how much
+   more reaches the next. A tier is a cut gem drawn in CSS (`tier.css`), in the podium's metals and
+   a diamond blue with a glint; it pops when the tier changes. The server names each listed gift's
+   tier from the same steps, and has the last word; a test keeps the sheet's steps equal to the
+   server's.
 2. The KHQR code (`assets/donate/khqr.jpg`, Wing Bank, NOV SOCHETRA) and the amount to send with any
    bank app that scans KHQR. A phone can't scan its own screen, so Save the code downloads it for
    the bank app's scan-from-photo. No one can see whether money arrived, so I sent it is the gift;
@@ -872,29 +873,37 @@ keys a little see-through so the plastic tints them, a held key swapping to its 
 `assets/skins/README.md`, `tools/clear_skin_art.py`),
 the game in a bezel between two panels held sideways and at the top held upright, with the pause
 plaque in its HUD (`pausePlace`, `framed`); each control carries its shell's colour class, as it
-stands in the touch layer, not in the shell (`#shell`, behind the stage). A player picks the skin (`skin`, one
-for both ways of holding the phone) on the Skins screen, which Settings' Skin and layout row opens
-(`src/ui/skins/`, `styles/skin-picker.css`). `layoutOf` in `skins.js` gives the game and the
-Skins screen the same layout, one object for each pick, as the touch pad keeps the pad drawn for
-it: a copy of the touch layer over a light dim shows the skin looked at standing as it will, held
-the way the phone is, at the player's Button size and opacity and with their own layout of it
-(`preview-pad.js`), and a skin with a shell stands for real meanwhile (`layout.previewSkin`), the
-stage in its frame, until Use or any way back (the panel's `leave`). ‹ ›, left and right, or a
+stands in the touch layer, not in the shell (`#shell`, behind the stage). The pixel skins
+(`pixel.js`, `sandstone` and `retro`) are handhelds ChatGPT painted as pixel art, read back at the size they
+were painted (`tools/pixel_skin/`) and drawn a whole pixel of the art at a time: `styles/skin-pixel.css`
+lays each shell from long pieces anchored to the screen's edges, fading into each other in a
+dither, from the art and colours its own stylesheet names (`styles/skin-sandstone.css`,
+`styles/skin-retro.css`), a pill turned to the slant it was painted at. Every
+handheld, Clear or pixel, frames the game and stands its controls on its panels as the others do
+(`handheld.js`, `handheldSkin`), dressed in its own classes, and names the bezel its stylesheet
+draws round the game's screen (`bezel`), which its controls stay off. A player picks the skin
+(`skin`, one for both ways of holding the phone) on the Skins screen, which Settings' Skin and
+layout row opens (`src/ui/skins/`, `styles/skin-picker.css`). `layoutOf` in `skins.js` gives the
+game and the Skins screen the same layout, one object for each pick, as the touch pad keeps the pad
+drawn for it: a copy of the touch layer over a light dim shows the skin looked at standing as it
+will, held the way the phone is, at the player's Button size and opacity and with their own layout
+of it (`preview-pad.js`), and a skin with a shell stands for real meanwhile (`layout.previewSkin`),
+the stage in its frame, until Use or any way back (the panel's `leave`). ‹ ›, left and right, or a
 swipe across the screen step through the skins, each sliding in from its side, and dots under the
 name tell which of how many.
 
 The same screen edits the controls where they stand: a press on one picks it (`layout-editor.js`
 in `src/ui/layout/`) and a drag moves it at once (`layout-drag.js`), the one picked ringed and the
 others stepped back, and the bar trades the skins' tools for that control's: its name (the next
-control), its size, Round or Pill for a key the skin offers a pill for (every key of a Clear skin,
-its `pills`, each placed so that no mix of round keys and pills touches or runs onto the bezel;
-`keyShapes`, each key round unless picked) and Done. Done, Back, or
-a tap or a swipe beside the controls lets go of it; a swipe steps the skins only while no control
-is picked, so a drag that misses its control never changes the skin. The keyboard and gamepad
-reach the controls after the bar, and the tools of the one picked while it is. The skin, its keys'
-shapes and every skin's layouts are one draft (`layout-draft.js`, a layout for each slot such as
-`dusk:portrait`): Use saves them all and Cancel drops them all; Reset brings the skin held this
-way back to its own layout.
+control), its size, Round or Pill for a key the skin offers a pill for (its `pills`: a handheld's
+DASH and ULT, and every key of a Clear one, `pillKeys`, each placed so that no mix of round keys and
+pills touches or runs onto the bezel; `keyShapes`, each key round unless picked) and Done. Done,
+Back, or a tap or a swipe beside the controls lets go of it; a swipe steps the skins only while no
+control is picked, so a drag that misses its control never changes the skin. The keyboard and
+gamepad reach the controls after the bar, and the tools of the one picked while it is. The skin,
+its keys' shapes and every skin's layouts are one draft (`layout-draft.js`, a layout for each slot
+such as `dusk:portrait`): Use saves them all and Cancel drops them all; Reset brings the skin held
+this way back to its own layout.
 Settings also sets the controls' opacity (`padOpacity`, `--pad-opacity`, never the pause
 button's). The help and the first hints name the d-pad when one steers (`steersWithDpad`; the
 screen fit marks `game.device` on each fit, which only the drawing reads).
@@ -916,7 +925,7 @@ layer and a size on top of Button size, checked on load by `sanitizeButtonLayout
 skin's.
 Button size is the most the controls grow: each fit draws them at `padScaleOf` (`pad-scale.js`),
 the player's size or as near it as the skin's own places have room for on that screen, every key
-round and as a pill, 12 px apart and off a Clear shell's bezel, and sets `--btn` to it, which the
+round and as a pill, 12 px apart and off a handheld's bezel, and sets `--btn` to it, which the
 stage's frame and the stick's rest take too. Small and Medium fit every phone from 360 px wide;
 Large grows a Clear skin's keys to 1.2 on a large phone and less on a smaller one, where at 1.2
 JUMP stood on the d-pad held upright and HEAVY ran into ULT held sideways, and Dusk's d-pad, which

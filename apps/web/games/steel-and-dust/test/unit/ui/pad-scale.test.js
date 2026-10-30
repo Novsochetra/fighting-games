@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { BUTTON_SCALES } from '../../../src/data/settings.js';
 import { layoutOf, SKINS } from '../../../src/data/skins/skins.js';
-import { BEZEL, padScaleOf } from '../../../src/ui/screen/pad-scale.js';
+import { padScaleOf } from '../../../src/ui/screen/pad-scale.js';
 import { outlinesOn, PHONES, tightestGap } from '../../support/control-room.js';
 
 const KEYS = ['light', 'heavy', 'jump', 'dash', 'ult'];
@@ -27,7 +27,7 @@ const MIXES = Array.from({ length: 2 ** KEYS.length }, (_, mix) =>
   Object.fromEntries(KEYS.filter((key, i) => mix & (1 << i)).map((key) => [key, 'pill'])),
 );
 
-const CASES = ['clear-jade', 'dusk'].flatMap((skin) =>
+const CASES = ['clear-jade', 'sandstone', 'retro', 'dusk'].flatMap((skin) =>
   Object.entries(PHONES).flatMap(([orientation, phones]) =>
     phones.flatMap((phone) =>
       [0, 1, 2].map((buttonSize) => ({ skin, orientation, phone, buttonSize })),
@@ -40,12 +40,14 @@ const CASES = ['clear-jade', 'dusk'].flatMap((skin) =>
 function offTheBezel(outlines, { skin, orientation, phone: [width] }, scale) {
   const { screen } = SKINS[skin].layouts[orientation];
 
-  if (!SKINS[skin].pills || orientation === 'portrait') {
+  const { bezel } = SKINS[skin];
+
+  if (!bezel || orientation === 'portrait') {
     return true;
   }
 
-  const leftEdge = (screen.left - BEZEL.side) * scale;
-  const rightEdge = width - (screen.right - BEZEL.side) * scale;
+  const leftEdge = (screen.left - bezel.side) * scale;
+  const rightEdge = width - (screen.right - bezel.side) * scale;
 
   return outlines.every(({ id, box }) =>
     id === 'dash' || id === 'dpad' ? box.right <= leftEdge : box.left >= rightEdge,
@@ -126,10 +128,18 @@ describe('the scale the touch controls are drawn at', () => {
     }
   });
 
-  it("keeps the controls off the bezel a Clear skin's stylesheet draws", () => {
-    const css = readFileSync(join(import.meta.dirname, '../../../styles/skin-clear.css'), 'utf8');
+  it("keeps the controls off the bezel each handheld's stylesheet draws", () => {
+    const css = (name) => readFileSync(join(import.meta.dirname, '../../../styles', name), 'utf8');
+    const handhelds = Object.values(SKINS).filter((skin) => skin.layouts.landscape.shell);
+    const clear = SKINS['clear-jade'].bezel;
 
-    expect(css).toContain(`--bezel: calc(${BEZEL.side}px * var(--btn));`);
-    expect(css).toContain(`--bezel-chin: calc(var(--bezel) + ${BEZEL.name}px);`);
+    expect(handhelds.every((skin) => skin.bezel)).toBe(true);
+    expect(css('skin-clear.css')).toContain(`--bezel: calc(${clear.side}px * var(--btn));`);
+    expect(css('skin-clear.css')).toContain(`--bezel-chin: calc(var(--bezel) + ${clear.chin}px);`);
+
+    for (const id of ['sandstone', 'retro']) {
+      expect(SKINS[id].bezel.side).toBe(0);
+      expect(css(`skin-${id}.css`)).toContain(`--pixel-chin: ${SKINS[id].bezel.chin}px;`);
+    }
   });
 });

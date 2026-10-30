@@ -1,6 +1,6 @@
 import { roomyScale } from '../../../../../packages/touch-pad/src/pad-room.js';
 import { BUTTON_SCALES, buttonScale } from '../../data/settings.js';
-import { layoutOf, shapesOf } from '../../data/skins/skins.js';
+import { layoutOf, shapesOf, SKINS } from '../../data/skins/skins.js';
 import { frameOf, lookNow, orientationNow, screenOf } from './fit-pad.js';
 import { arrangeStage } from './stage-layout.js';
 import { touchAreaOf } from './touch-area.js';
@@ -8,18 +8,14 @@ import { touchAreaOf } from './touch-area.js';
 // px at scale 1 a thumb needs between two controls to press one and not the next
 const CONTROL_GAP = 12;
 
-// a shell's bezel round the game's screen (styles/skin-clear.css), px at scale 1, as deep on every
-// side, and under the screen deeper still by the game's name, which does not scale
-export const BEZEL = { side: 12, name: 14 };
-
-function bezelRound(rect, scale) {
-  const side = BEZEL.side * scale;
+function bezelRound(rect, { side, chin }, scale) {
+  const round = side * scale;
 
   return {
-    left: rect.x - side,
-    top: rect.y - side,
-    right: rect.x + rect.width + side,
-    bottom: rect.y + rect.height + side + BEZEL.name,
+    left: rect.x - round,
+    top: rect.y - round,
+    right: rect.x + rect.width + round,
+    bottom: rect.y + rect.height + round + chin,
   };
 }
 
@@ -39,6 +35,7 @@ function safeLayer(context, safe) {
 
 export function padScaleOf(context, safe) {
   const { skinId } = lookNow(context);
+  const { bezel } = SKINS[skinId];
   const orientation = orientationNow(context);
   const padLayout = layoutOf(skinId, orientation);
   const hinge = context.hingeNow();
@@ -48,7 +45,7 @@ export function padScaleOf(context, safe) {
     const stage = { ...screen, safe, touch: true, buttonScale: scale, hinge, frame };
     const { rect, framed } = arrangeStage(stage);
 
-    return framed ? [bezelRound(rect, scale)] : [];
+    return framed && bezel ? [bezelRound(rect, bezel, scale)] : [];
   };
 
   return roomyScale({

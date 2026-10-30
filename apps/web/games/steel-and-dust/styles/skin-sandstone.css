@@ -1,0 +1,30 @@
+/* Sandstone (src/data/skins/pixel.js): a pixel handheld of carved Angkor sandstone, moss in its
+   corners (assets/skins/sandstone/), painted by styles/skin-pixel.css. Its grips are 46 pixels of
+   the art across and its bands 644 long; upright, the game's screen has a bronze trim, as the
+   painting's window has, and the body hangs from under it */
+.sandstone {
+  --pixel-landscape-left: url('../assets/skins/sandstone/landscape-left.png');
+  --pixel-landscape-left-foot: url('../assets/skins/sandstone/landscape-left-foot.png');
+  --pixel-landscape-right: url('../assets/skins/sandstone/landscape-right.png');
+  --pixel-landscape-right-foot: url('../assets/skins/sandstone/landscape-right-foot.png');
+  --pixel-landscape-top: url('../assets/skins/sandstone/landscape-top.png');
+  --pixel-landscape-bottom: url('../assets/skins/sandstone/landscape-bottom.png');
+  --pixel-portrait-crown: url('../assets/skins/sandstone/portrait-crown.png');
+  --pixel-portrait-body: url('../assets/skins/sandstone/portrait-body.png');
+  --pixel-portrait-foot: url('../assets/skins/sandstone/portrait-foot.png');
+  --pixel-key-round: url('../assets/skins/sandstone/key-round.png');
+  --pixel-key-round-pressed: url('../assets/skins/sandstone/key-round-pressed.png');
+  --pixel-key-pill: url('../assets/skins/sandstone/key-pill.png');
+  --pixel-key-pill-pressed: url('../assets/skins/sandstone/key-pill-pressed.png');
+  --pixel-dpad: url('../assets/skins/sandstone/dpad.png');
+  --pixel-grip-pixels: 46;
+  --pixel-band-pixels: 644;
+  --pixel-pill-tilt: 0deg;
+  --pixel-pill-art-width: 100%;
+  --pixel-pill-art-height: 100%;
+  --pixel-window: var(--color-sandstone-window);
+  --pixel-label: var(--color-cream);
+  --pixel-held: var(--color-sandstone-held);
+  --pixel-chin: 6px;
+  --shadow-pixel-bezel: var(--shadow-sandstone-bezel);
+}

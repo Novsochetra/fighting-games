@@ -33,8 +33,8 @@ On a foldable or dual-screen phone the game keeps clear of the fold, read from C
 Segments API (`window.viewport.segments`, `src/ui/screen/viewport-segments.js`). Half-folded on a
 table like a laptop (a Galaxy Z Fold or Flip in Flex mode, a Surface Duo turned sideways), the game
 plays on the top half and the stick, the buttons and pause sit on the bottom half, like a handheld.
-Folded like a book, it plays on the left half. The menus, the loading screen and the Button layout
-editor (whose copy of the controls stands where the real ones do) keep off the fold too. Unfolded
+Folded like a book, it plays on the left half. The menus, the loading screen and the Skins screen
+(whose copy of the controls stands where the real ones do) keep off the fold too. Unfolded
 flat, a Fold's near-square screen puts the touch buttons under the game instead of over the road, as
 an upright phone does.
 

@@ -55,7 +55,7 @@ function AmountField({ flow }: { flow: DonateFlow }) {
         name="amount"
         inputMode="decimal"
         autoComplete="off"
-        placeholder="Other amount, from $1"
+        placeholder={`Other amount, from $${DONATION_LIMITS.minAmount}`}
         required
         value={flow.form.fields.amount}
         onChange={(event) => flow.form.setField('amount', event.target.value)}

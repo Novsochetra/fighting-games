@@ -2,8 +2,9 @@ import { hasOwn } from '../../lib/objects.js';
 import { CLASSIC } from './classic.js';
 import { CLEAR_SKINS } from './clear.js';
 import { DUSK } from './dusk.js';
+import { PIXEL_SKINS } from './pixel.js';
 
-export const SKINS = { classic: CLASSIC, dusk: DUSK, ...CLEAR_SKINS };
+export const SKINS = { classic: CLASSIC, dusk: DUSK, ...PIXEL_SKINS, ...CLEAR_SKINS };
 
 export const SKIN_IDS = Object.keys(SKINS);
 
@@ -15,7 +16,8 @@ export function skinIdFor(settings) {
 }
 
 // every move is a round key, unless the player picks a pill for a key the skin offers one for
-// (`pills`, every key of a Clear skin), key by key; a pill is otherwise only for what runs the game
+// (`pills`, a handheld's DASH and ULT and every key of a Clear one), key by key; a pill is otherwise
+// only for what runs the game
 export const keyShapesOf = (settings) =>
   Object.fromEntries(
     Object.entries(settings.keyShapes ?? {}).filter(([, shape]) => shape === 'pill'),

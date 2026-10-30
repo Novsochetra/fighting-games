@@ -1,0 +1,190 @@
+/* the pixel skins (src/data/skins/pixel.js): a handheld painted as pixel art and read back at the
+   size it was painted (assets/skins/<skin>/, see assets/skins/README.md). The touch pad stands the
+   shell, the window and the controls; this only paints them, from the art and the colours each
+   skin's own class gives (styles/skin-sandstone.css). A phone is never the painting's shape, so the
+   shell is laid from long pieces anchored to its edges, each fading into the next in a dither, and
+   drawn a whole pixel of the art at a time */
+.pad-shell.pixel {
+  /* one pixel of the art: a grip fills the shell beside the game's screen */
+  --pixel-size: calc(var(--pad-screen-x) / var(--pixel-grip-pixels));
+  --pixel-middle: calc(var(--pad-screen-x) + var(--pad-screen-width) / 2);
+  --pixel-band-length: calc(var(--pixel-band-pixels) * var(--pixel-size));
+  --pixel-band-left: calc(var(--pixel-middle) - var(--pixel-band-length) / 2);
+
+  /* the bands, their ornaments in the middle of the window */
+  background:
+    var(--pixel-landscape-top) var(--pixel-band-left) 0 / var(--pixel-band-length) auto no-repeat,
+    var(--pixel-landscape-bottom) var(--pixel-band-left) 100% / var(--pixel-band-length) auto
+      no-repeat,
+    var(--pixel-window);
+  image-rendering: pixelated;
+}
+
+/* the grips: each runs down from the top and its foot, the corner ornaments, stands on the bottom,
+   over it wherever the screen is too short for both */
+.pad-shell.pixel::before,
+.pad-shell.pixel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.pad-shell.pixel::before {
+  left: 0;
+  width: var(--pad-screen-x);
+  background:
+    var(--pixel-landscape-left-foot) bottom / 100% auto no-repeat,
+    var(--pixel-landscape-left) top / 100% auto no-repeat;
+}
+
+.pad-shell.pixel::after {
+  left: calc(var(--pad-screen-x) + var(--pad-screen-width));
+  right: 0;
+  background:
+    var(--pixel-landscape-right-foot) bottom / 100% auto no-repeat,
+    var(--pixel-landscape-right) top / 100% auto no-repeat;
+}
+
+/* upright the game's screen is wider than the painting's window, so the crown gives only the rim
+   round it and the screen has a bezel of its own; the body hangs under it and the foot stands on
+   the bottom */
+@media (orientation: portrait) {
+  .pad-shell.pixel {
+    background:
+      var(--pixel-portrait-crown) top / 100% auto no-repeat,
+      var(--pixel-window);
+  }
+
+  .pad-shell.pixel::before {
+    top: calc(var(--pad-screen-y) + var(--pad-screen-height) + var(--pixel-chin));
+    right: 0;
+    width: auto;
+    background:
+      var(--pixel-portrait-foot) bottom / 100% auto no-repeat,
+      var(--pixel-portrait-body) top / 100% auto no-repeat;
+  }
+
+  .pad-shell.pixel::after {
+    content: none;
+  }
+
+  .pixel .pad-bezel {
+    box-shadow: var(--shadow-pixel-bezel);
+  }
+}
+
+/* the keys are the art's own, a held one swapping to its pressed art; the round of a key and of a
+   pill shapes only the press ring, as the art draws its own edge */
+.pixel-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: calc(var(--font-size-2xs) * var(--btn) * var(--pad-size, 1));
+  letter-spacing: var(--tracking-wide);
+  color: var(--pixel-label);
+  text-shadow: var(--text-shadow-pixel-xs);
+  background: var(--pixel-key-round) center / 100% 100% no-repeat;
+  image-rendering: pixelated;
+  transition: scale var(--duration-normal) var(--easing-overshoot);
+}
+
+/* a pill may be painted slanting (--pixel-pill-tilt), as a handheld's start and select keys are:
+   the key turns to it, so its label, its ring and where it answers lie along the pill, and its art
+   is turned back level under the label, at the size of the art's box (--pixel-pill-art-*) */
+.pixel-pill {
+  rotate: var(--pixel-pill-tilt);
+  background: none;
+}
+
+.pixel-pill::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: var(--pixel-pill-art-width);
+  height: var(--pixel-pill-art-height);
+  translate: -50% -50%;
+  rotate: calc(-1 * var(--pixel-pill-tilt));
+  background: var(--pixel-key-pill) center / 100% 100% no-repeat;
+}
+
+.pixel-light {
+  font-size: calc(var(--font-size-caption) * var(--btn) * var(--pad-size, 1));
+}
+
+/* pressed in as the art draws it and let go as the classic buttons are (styles/touch-buttons.css),
+   whose ring keyframes they share */
+.pixel-button.on {
+  background-image: var(--pixel-key-round-pressed);
+  scale: 0.95;
+  transition-duration: var(--duration-instant);
+}
+
+.pixel-pill.on {
+  background: none;
+}
+
+.pixel-pill.on::before {
+  background-image: var(--pixel-key-pill-pressed);
+}
+
+.pixel-button::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--color-touch-ring);
+  border-radius: var(--radius-pill);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pixel-button[data-pulse='a']::after {
+  animation: touch-pop-a var(--duration-touch-pop) var(--easing-out);
+}
+
+.pixel-button[data-pulse='b']::after {
+  animation: touch-pop-b var(--duration-touch-pop) var(--easing-out);
+}
+
+.pixel-ult.ready {
+  color: var(--color-touch-ult-ready);
+  animation: ult-ready var(--duration-pulse) var(--easing-step-2) infinite;
+}
+
+/* heavy spends the bar: with too little left it greys out, as the press would do nothing */
+.pixel-heavy.empty {
+  color: var(--color-text-muted);
+}
+
+/* the d-pad's art under its arms, which shade the one held; the art's arms are a third of it
+   across, as the pad's own are */
+.pixel-dpad {
+  background: var(--pixel-dpad) center / 100% 100% no-repeat;
+  image-rendering: pixelated;
+}
+
+.pixel-dpad[data-pressed~='up'] .pad-arm[data-direction='up'],
+.pixel-dpad[data-pressed~='right'] .pad-arm[data-direction='right'],
+.pixel-dpad[data-pressed~='down'] .pad-arm[data-direction='down'],
+.pixel-dpad[data-pressed~='left'] .pad-arm[data-direction='left'] {
+  background: var(--pixel-held);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-ult.ready {
+    animation: none;
+    box-shadow: var(--shadow-ult-ready-still);
+  }
+
+  .pixel-button {
+    transition: none;
+  }
+
+  .pixel-button[data-pulse]::after {
+    animation: none;
+  }
+}

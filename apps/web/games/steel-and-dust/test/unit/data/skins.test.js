@@ -51,12 +51,13 @@ describe('the skins Steel & Dust ships', () => {
     }
   });
 
-  it('offer a pill for every key of a Clear skin, each layout with them one the pad can draw', () => {
+  it('offer pills on every handheld, for every key of a Clear one, each layout one the pad draws', () => {
     const offering = Object.values(SKINS).filter((skin) => skin.pills);
 
     expect(offering.map((skin) => skin.id)).toEqual(
-      Object.keys(SKINS).filter((id) => id.startsWith('clear-')),
+      Object.keys(SKINS).filter((id) => SKINS[id].layouts.landscape.shell),
     );
+    expect(offering.map((skin) => skin.id)).toContain('sandstone');
 
     for (const skin of offering) {
       const pick = Object.fromEntries(KEYS.map((key) => [key, 'pill']));
@@ -69,12 +70,14 @@ describe('the skins Steel & Dust ships', () => {
 
       expect(skinProblems({ ...skin, layouts }), skin.id).toEqual([]);
 
+      const offered = skin.id.startsWith('clear-') ? KEYS : ['dash', 'ult'];
+
       for (const [orientation, layout] of Object.entries(layouts)) {
         const ids = (items) => items.map((item) => item.id);
         const pilled = layout.items.filter((item) => (item.aspect ?? 1) !== 1);
 
-        expect(pillsOffered(skin.id, orientation).sort(), skin.id).toEqual([...KEYS].sort());
-        expect(ids(pilled).sort()).toEqual([...KEYS].sort());
+        expect(pillsOffered(skin.id, orientation).sort(), skin.id).toEqual([...offered].sort());
+        expect(ids(pilled).sort()).toEqual([...offered].sort());
         expect(ids(layout.items)).toEqual(ids(skin.layouts[orientation].items));
       }
     }
