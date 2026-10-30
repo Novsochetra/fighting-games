@@ -41,15 +41,21 @@ async function relativeReferences(file) {
   const pattern = REFERENCE_PATTERNS[path.extname(file)];
   return [...text.matchAll(pattern)]
     .map((match) => match[1] ?? match[2])
-    .filter((reference) => reference.startsWith('.') || /^[\w-]+\//.test(reference))
+    .filter((reference) => /^(\.|@\/|[\w-]+\/)/.test(reference))
     .filter((reference) => !/^[a-z]+:/i.test(reference));
 }
+
+// @/ is the arcade's src/ (vite.config.ts), so an alias cannot carry the arcade into a game either
+const targetOf = (file, reference) =>
+  reference.startsWith('@/')
+    ? path.join(ARCADE_SRC, reference.slice(2))
+    : path.resolve(path.dirname(file), reference);
 
 async function referencesLeaving(files, isInside) {
   const leaving = [];
   for (const file of files) {
     for (const reference of await relativeReferences(file)) {
-      const target = path.resolve(path.dirname(file), reference.split(/[?#]/)[0]);
+      const target = targetOf(file, reference.split(/[?#]/)[0]);
       if (!isInside(target)) {
         leaving.push(`${path.relative(WEB_ROOT, file)} -> ${reference}`);
       }

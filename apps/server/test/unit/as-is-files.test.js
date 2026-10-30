@@ -1,4 +1,4 @@
-import { stat } from 'node:fs/promises';
+import { readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
@@ -58,5 +58,11 @@ describe('sourceOfAsIs', () => {
     for (const entry of entries) {
       await expect(stat(sourceOfAsIs(entry))).resolves.toBeTruthy();
     }
+  });
+
+  it('lists everything in public/, which the build and npm run dev send only by this list', async () => {
+    const published = (await readdir(PUBLIC_ROOT)).filter((name) => !name.startsWith('.'));
+
+    expect(AS_IS).toEqual(expect.arrayContaining(published));
   });
 });

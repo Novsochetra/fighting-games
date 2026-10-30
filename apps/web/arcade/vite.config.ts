@@ -55,6 +55,18 @@ function copyAsIs(): Plugin {
   };
 }
 
+// Vite watches only its root, pages/, and each module it has loaded, so a file added to src/ would
+// go unseen and an import waiting for it would stay broken until its importer is saved again.
+function watchSource(): Plugin {
+  return {
+    name: 'arcade-watch-source',
+    apply: 'serve',
+    configureServer(server) {
+      server.watcher.add(ARCADE_SRC);
+    },
+  };
+}
+
 // Each page names the build it comes from, and version.json the one the server holds now, so an
 // arcade left open on an older build learns of a deploy (src/services/updates/update-check.js).
 function stampVersion(): Plugin {
@@ -113,13 +125,14 @@ export default defineConfig({
   base: './',
   publicDir: false,
   resolve: {
-    // a page's /src/main.tsx is the app beside pages/, which is Vite's root
+    // A page's /src/main.tsx is the app beside pages/, which is Vite's root. Only that one address:
+    // a wider /src/ would also catch the absolute path of a checkout that lives under /src/.
     alias: [
       { find: /^@\//, replacement: `${ARCADE_SRC}/` },
-      { find: /^\/src\//, replacement: `${ARCADE_SRC}/` },
+      { find: /^\/src\/main\.tsx$/, replacement: path.join(ARCADE_SRC, 'main.tsx') },
     ],
   },
-  plugins: [react(), stampVersion(), copyAsIs(), offline],
+  plugins: [react(), stampVersion(), copyAsIs(), watchSource(), offline],
   build: {
     outDir: DIST_ROOT,
     emptyOutDir: true,

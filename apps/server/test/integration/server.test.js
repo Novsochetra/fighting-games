@@ -151,6 +151,7 @@ describe('the arcade as it is written', () => {
     '/games/steel-and-dust/test/',
     '/package.json',
     '/games/steel-and-dust/.DS_Store',
+    '/packages/input/test/',
   ])('does not serve the private path %s', async (pathname) => {
     expect((await rawRequest(server.port, pathname)).status).toBe(404);
   });

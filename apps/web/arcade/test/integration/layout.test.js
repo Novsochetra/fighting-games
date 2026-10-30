@@ -94,7 +94,7 @@ describe('the layout of the arcade', () => {
   });
 
   it('reaches outside a folder through @/, never by climbing out with ../', () => {
-    const climbing = IMPORTS_IN_SRC.filter(({ specifier }) => specifier.startsWith('../'));
+    const climbing = IMPORTS_IN_SRC.filter(({ specifier }) => /(^|\/)\.\.\//.test(specifier));
 
     expect(climbing.map(named)).toEqual([]);
   });
