@@ -510,7 +510,8 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   checked again by the arcade, `view-models.js`), and `trailerSmall`, a lighter copy of it. The small
   copy plays on a phone (the sheet's own `max-width: 40rem`), under a data saver or on a slow network
   (`navigator.connection`), the full one elsewhere (`trailerFor`). Steel & Dust's are on its CDN, a
-  1080p and a 360p copy. The Trailer button on the details sheet's art (the only way to it, so the entry screen
+  1080p and a 360p copy; Morodok Angkor's promo video is there too, one 720p copy light enough
+  for a phone. The Trailer button on the details sheet's art (the only way to it, so the entry screen
   keeps to Play, Details and the heart) plays the trailer in place of the art, Play right under it. It starts in the tap that asked for
   it (`flushSync`), with sound, since a browser lets sound play only then; muted where the browser
   still refuses, or where the player turned the arcade's sound off. It shows no controls, so nothing

@@ -154,3 +154,30 @@ describe('Steel & Dust’s trailer, from its CDN', () => {
     expect(video().getAttribute('src')).toBe(`${CDN}steel-and-dust-trailer-480.mp4`);
   });
 });
+
+describe('Morodok Angkor’s promo video, from the CDN', () => {
+  const PROMO = 'https://dphwn49s8chpb.cloudfront.net/promo-videos/morodok-angkor.mp4';
+
+  async function watchMorodokAngkor() {
+    const { games } = JSON.parse(await realCatalogJson());
+    const body = JSON.stringify({ games: games.filter((game) => game.id === 'morodok-angkor') });
+    await boot(async () => jsonReply(body));
+    watchTrailer();
+  }
+
+  it('plays as the trailer of a game hosted on its own site', async () => {
+    await watchMorodokAngkor();
+
+    expect(video().getAttribute('src')).toBe(PROMO);
+  });
+
+  it('plays the same copy on a phone, as it has no small one', async () => {
+    const wide = window.matchMedia.bind(window);
+    vi.spyOn(window, 'matchMedia').mockImplementation((query) =>
+      query === '(max-width: 40rem)' ? { ...wide(query), matches: true } : wide(query),
+    );
+    await watchMorodokAngkor();
+
+    expect(video().getAttribute('src')).toBe(PROMO);
+  });
+});
