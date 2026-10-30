@@ -33,34 +33,58 @@
   animation-delay: calc(var(--order, 0) * var(--duration-stagger) / 2);
 }
 
+/* the line between rows starts at the name, past the avatar, as iOS insets it */
 .roll__row + .roll__row::before {
   position: absolute;
   inset-block-start: 0;
-  inset-inline: var(--space-5) 0;
+  inset-inline: calc(var(--space-5) + var(--size-avatar) + var(--space-4)) 0;
   content: '';
   border-block-start: var(--border-width-hairline) solid var(--color-launcher-separator);
 }
 
-.roll__rank {
+.roll__portrait {
+  position: relative;
   flex: none;
-  min-inline-size: 2ch;
-  font-size: var(--font-size-apple-subheadline);
-  font-weight: var(--font-weight-semibold);
+}
+
+/* the place rides on the avatar's edge, as on the podium, and smaller, clear of the initials */
+.roll__rank {
+  position: absolute;
+  inset-block-end: calc(-1.5 * var(--space-1));
+  inset-inline-end: calc(-1.5 * var(--space-1));
+  display: grid;
+  place-items: center;
+  min-inline-size: calc(var(--size-medal) * 0.65);
+  block-size: calc(var(--size-medal) * 0.65);
+  padding-inline: var(--space-1);
+  font-size: var(--font-size-apple-caption-2);
+  font-weight: var(--font-weight-bold);
   font-variant-numeric: tabular-nums;
-  color: var(--color-label-muted);
-  text-align: end;
+  line-height: var(--leading-none);
+  color: var(--color-label);
+  background: var(--color-launcher-surface-raised);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-medal);
 }
 
-.roll__row[data-medal='gold'] .roll__rank {
-  color: var(--color-medal-gold-bottom);
+.roll__row[data-medal='gold'] {
+  --medal-top: var(--color-medal-gold-top);
+  --medal-bottom: var(--color-medal-gold-bottom);
 }
 
-.roll__row[data-medal='silver'] .roll__rank {
-  color: var(--color-medal-silver-bottom);
+.roll__row[data-medal='silver'] {
+  --medal-top: var(--color-medal-silver-top);
+  --medal-bottom: var(--color-medal-silver-bottom);
 }
 
-.roll__row[data-medal='bronze'] .roll__rank {
-  color: var(--color-medal-bronze-bottom);
+.roll__row[data-medal='bronze'] {
+  --medal-top: var(--color-medal-bronze-top);
+  --medal-bottom: var(--color-medal-bronze-bottom);
+}
+
+.roll__row:is([data-medal='gold'], [data-medal='silver'], [data-medal='bronze']) .roll__rank {
+  color: var(--color-on-medal);
+  background: linear-gradient(to bottom, var(--medal-top), var(--medal-bottom));
 }
 
 /* By day, a place number would read as a position in time, so it steps aside. */

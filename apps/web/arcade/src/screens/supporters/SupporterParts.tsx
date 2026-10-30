@@ -56,10 +56,12 @@ export function RollRow({ supporter, order }: { supporter: Supporter; order: num
 
   return (
     <li className="roll__row" data-medal={supporter.medal} style={stagger}>
-      <span className="roll__rank" aria-hidden="true">
-        {supporter.rank}
+      <span className="roll__portrait">
+        <SupporterAvatar supporter={supporter} />
+        <span className="roll__rank" aria-hidden="true">
+          {supporter.rank}
+        </span>
       </span>
-      <SupporterAvatar supporter={supporter} />
       <span className="roll__text">
         <span className="roll__title">
           <span className="roll__name">{supporter.name}</span>

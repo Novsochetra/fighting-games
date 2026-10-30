@@ -45,7 +45,10 @@ describe('the supporters page', () => {
       'Anonymous',
       'Srey Pov',
     ]);
-    expect(texts('.roll__rank')).toEqual(['1', '2', '3', '4', '5']);
+    expect(texts('.roll__portrait .roll__rank')).toEqual(['1', '2', '3', '4', '5']);
+    const firstRow = document.querySelector('.roll__row');
+    expect(firstRow.querySelector('.roll__portrait > .avatar')).not.toBeNull();
+    expect(firstRow.dataset.medal).toBe('gold');
     expect(texts('.roll__message')).toEqual(['Keep it free!']);
     expect(byId('roll').dataset.order).toBe('top');
   });
