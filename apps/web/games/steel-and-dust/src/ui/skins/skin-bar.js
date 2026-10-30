@@ -28,7 +28,6 @@ export class SkinBar {
     });
   }
 
-  // `shape` is null for a control the skin offers no pill for
   showControl({ name, size, shape }) {
     this.field('.layout-name').textContent = name;
     this.field('.layout-size').textContent = sizeLabel(size);

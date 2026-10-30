@@ -23,7 +23,6 @@ function bezelRound(rect, scale) {
   };
 }
 
-// the safe area the skin's own places are measured in (pad-styles.js), in px of the touch layer;
 // a folded phone's bottom half has no status bar over it (touch-area.js)
 function safeLayer(context, safe) {
   const area = touchAreaOf(context.hingeNow());
@@ -38,8 +37,6 @@ function safeLayer(context, safe) {
   };
 }
 
-// the scale the pad is drawn at: the player's Button size, or as near it as the skin's own places
-// have room for on this screen, every control in every shape it may take (pad-room.js)
 export function padScaleOf(context, safe) {
   const { skinId } = lookNow(context);
   const orientation = orientationNow(context);

@@ -53,16 +53,15 @@ const PORTRAIT = {
   ],
 };
 
-// a key as a pill, shaped as its art is (assets/skins/clear/key-pill.webp, 386 by 170): DASH and ULT
-// as a handheld's bumpers on the shoulders, the face keys a staggered column of capsules
+// shaped as the pill's art is (assets/skins/clear/key-pill.webp, 386 by 170)
 const pill = (id, label, place) => ({
   ...control(id, label, { ...place, aspect: 0.44 }),
   class: `clear-button clear-pill clear-${id}`,
 });
 
-// each pill stands where its round key does, moved and sized so that no mix of round keys and
-// pills touches, nor runs onto the bezel (test/unit/data/skins.test.js); sideways the shoulder pills
-// stand out toward the corners, clear of the Skins screen's bar on a small phone
+// moved and sized so that no mix of round keys and pills touches or runs onto the bezel
+// (test/unit/ui/pad-scale.test.js); sideways the shoulder pills stand out toward the corners, clear
+// of the Skins screen's bar on a small phone
 const PILLS = {
   landscape: [
     pill('dash', 'DASH', { at: { x: 0, y: 0, dx: 78, dy: 36 }, size: 96 }),

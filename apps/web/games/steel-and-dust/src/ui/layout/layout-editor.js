@@ -13,7 +13,6 @@ const withShape = (keyShapes, control, shape) => {
   return shape === 'pill' ? { ...others, [control]: 'pill' } : others;
 };
 
-// it works on the Skins screen's draft, so nothing it does is saved until Use
 export class LayoutEditor {
   constructor({ screen, audio }) {
     Object.assign(this, { screen, audio });
@@ -46,7 +45,6 @@ export class LayoutEditor {
     this.pick(nextControl(this.state.picked, this.controls.shown));
   }
 
-  // the highlight goes back to the control let go, for the keyboard and gamepad
   unpick() {
     const control = this.state.picked;
 

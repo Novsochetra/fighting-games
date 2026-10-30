@@ -66,11 +66,8 @@ function fits({ variants, layer, keepOut, gap }, scale) {
 }
 
 // controls anchored to opposite edges close in on each other as the scale grows, as their offsets
-// grow and the screen does not, so a large Button size can crowd them on a small phone. This is the
-// largest scale, from `wanted` down to `floor`, at which every control in each shape it may take
-// (`variants`: a round key and its pill, say) keeps `gap` px times the scale from the others, stands
-// whole on the layer and clears the rects `keepOut(scale)` gives (a shell's bezel round the game's
-// screen, which moves with the scale). A skin whose controls the game's styles place keeps `wanted`
+// grow and the screen does not, so a large Button size can crowd them on a small phone; `keepOut`
+// takes the scale, as a shell's bezel moves with it
 export function roomyScale({ variants, layer, keepOut = () => [], wanted, floor, gap }) {
   const room = { variants, layer, keepOut, gap };
 

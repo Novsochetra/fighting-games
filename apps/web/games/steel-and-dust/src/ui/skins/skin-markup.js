@@ -1,8 +1,7 @@
 import { SKIN_IDS } from '../../data/skins/skins.js';
 
 // Use also carries data-act="back": the picker's own click listener saves first, then the menus'
-// listener further up closes the screen the way Cancel does. The bar holds the skins' tools and,
-// while a control is edited (`#m-skins.editing`), that control's instead
+// listener further up closes the screen the way Cancel does
 export const SKINS_HTML = `<div class="skin-shell" aria-hidden="true"></div>
   <div class="skin-preview" aria-hidden="true"></div>
   <div class="layout-bar" role="toolbar" aria-label="Skins">

@@ -25,8 +25,7 @@ export const keyShapesOf = (settings) =>
 export const pillsOffered = (skinId, orientation) =>
   (SKINS[skinId].pills?.[orientation] ?? []).map((pill) => pill.id);
 
-// each control of a skin held one way in every shape it may take, round and a pill where offered,
-// so how much room the skin has does not change with a key's shape
+// the room a skin has (pad-scale.js) counts every shape, so a key reshaped never resizes the rest
 export function shapesOf(skinId, orientation) {
   const offered = SKINS[skinId].pills?.[orientation] ?? [];
 

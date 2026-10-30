@@ -10,7 +10,6 @@ const KEYS = ['light', 'heavy', 'jump', 'dash', 'ult'];
 const NO_INSETS = { top: 0, right: 0, bottom: 0, left: 0 };
 const [SMALL, MEDIUM, LARGE] = BUTTON_SCALES;
 
-// `buttonSize` is the setting's 0, 1 or 2
 function scaleOn([width, height], { skin, buttonSize, keyShapes = {}, safe = NO_INSETS }) {
   const context = {
     elements: { app: { clientWidth: width, clientHeight: height } },

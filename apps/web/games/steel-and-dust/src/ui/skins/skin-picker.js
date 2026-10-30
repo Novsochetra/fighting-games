@@ -48,7 +48,6 @@ export class SkinPicker {
     this.layout.previewSkin(null);
   }
 
-  // Back while a control is edited only lets go of it
   backOut() {
     if (!this.state.picked) {
       return false;
@@ -59,7 +58,6 @@ export class SkinPicker {
     return true;
   }
 
-  // left and right step through the skins, unless they are stepping through a control's tools
   sideways(step) {
     if (this.state.picked) {
       return false;

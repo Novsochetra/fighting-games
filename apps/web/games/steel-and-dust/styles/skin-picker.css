@@ -54,8 +54,6 @@ body.stick-hidden .skin-preview .pad-stick {
   visibility: hidden;
 }
 
-/* the control edited stands ringed and lit, and the others step back; the one the keyboard or
-   gamepad is on is ringed whole */
 .skin-preview .picked {
   outline: 2px dashed var(--color-gold);
   outline-offset: 4px;
@@ -158,7 +156,6 @@ body.stick-hidden .skin-preview .pad-stick {
   text-align: center;
 }
 
-/* the shape the key has stands lit, the other dimmed until a thumb or the highlight is on it */
 .edit-shape [aria-pressed='false']:not(.sel, :hover) {
   opacity: 0.55;
 }

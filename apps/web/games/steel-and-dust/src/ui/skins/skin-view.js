@@ -7,8 +7,6 @@ import { fitTouchLayer } from '../screen/touch-area.js';
 import { SkinBar } from './skin-bar.js';
 import { SKINS_HTML } from './skin-markup.js';
 
-// the skins screen: a copy of the touch layer with the skin looked at standing as it will, its
-// controls there to be picked and moved, and the bar
 export class SkinView {
   constructor({ document, layout }) {
     this.layout = layout;
@@ -45,8 +43,6 @@ export class SkinView {
     pad.classList.add(slide);
   }
 
-  // held the way the phone is, at the player's Button size and opacity, and as the draft has the
-  // controls of this skin; the one picked stands ringed and the bar holds its tools
   render({ skinId, keyShapes, draft, picked }, settings, from = 0) {
     const orientation = this.controls.orientation();
     const padLayout = layoutOf(skinId, orientation, keyShapes);

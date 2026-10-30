@@ -2,7 +2,6 @@ export function menuElement(document, id) {
   return document.getElementById(`m-${id}`);
 }
 
-// the Skins screen's bar, then the controls of its preview; while one is edited, only its tools
 function skinsItems(menu) {
   if (menu.classList.contains('editing')) {
     return [...menu.querySelectorAll('.edit-tools .layout-group:not([hidden]) button')];
