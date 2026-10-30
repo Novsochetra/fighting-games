@@ -91,9 +91,8 @@ function stampVersion(): Plugin {
   };
 }
 
-// The arcade's worker (src/service-worker/sw.js), built with the list of what it keeps: the pages,
-// the built modules and styles, the arcade's art, the early appearance script and each game's card
-// art. It is registered by the app itself, and the arcade keeps its own web manifest.
+// The app registers the worker itself (register-worker.ts) and keeps its own web manifest, so the
+// plugin writes neither.
 const offline = VitePWA({
   strategies: 'injectManifest',
   srcDir: path.join(ARCADE_SRC, 'service-worker'),

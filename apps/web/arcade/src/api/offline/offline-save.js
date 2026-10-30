@@ -8,9 +8,8 @@ const TIPS = {
   failed: 'Save failed. Try again',
 };
 
-// The address the arcade's worker answers about a game kept for offline (src/service-worker/routes.js).
-// The server has no such page, so where no worker runs (npm run dev, a browser without one) the
-// sheet hears nothing it knows and offers no save.
+// Only the worker answers it (src/service-worker/routes.js): where none runs (npm run dev, a browser
+// without one) the sheet hears nothing it knows and offers no save.
 export const saveAddress = (id) => `api/offline/${id}`;
 
 // a game the arcade keeps: one of its own, not a teaser nor a game on a site of its own

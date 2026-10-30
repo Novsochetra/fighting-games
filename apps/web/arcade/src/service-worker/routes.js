@@ -7,7 +7,8 @@ const GAME = /^games\/([\w-]+)\//;
 // only the worker answers it, so without one the arcade finds nothing there and offers no save
 const SAVE = /^api\/offline\/([\w-]+)$/;
 // the version of the build the server holds now, which the arcade reads past every cache to learn
-// of a deploy (src/services/updates/update-check.js), so the worker never answers it from what it keeps
+// of a deploy (src/services/updates/update-check.js), so the worker never answers it from what it
+// keeps
 const VERSION = 'version.json';
 
 // The worker keeps whole files, so it cannot answer the byte ranges a video asks for.

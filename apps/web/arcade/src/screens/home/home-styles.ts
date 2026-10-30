@@ -1,4 +1,4 @@
-// The arcade's own sheets, in the order its page loaded them (after the ones every screen shares).
+// in the order the home's page loaded them, after the sheets every screen shares, for the cascade
 import './hero/hero.css';
 import './top-bar/topbar.css';
 import './carousel/carousel.css';

@@ -1,4 +1,5 @@
-// The supporters page holds the same limits (apps/web/arcade/src/screens/supporters/donate/donate-form.js); a test keeps them equal.
+// The donate sheet holds the same limits
+// (apps/web/arcade/src/screens/supporters/donate/donate-form.js); a test keeps them equal.
 export const DONATION_LIMITS = {
   nameLength: 40,
   messageLength: 140,

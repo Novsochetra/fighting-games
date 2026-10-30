@@ -37,7 +37,6 @@ export function createArcadeServer({
     log: { warn, logError },
     now,
   });
-  // a webRoot of its own (a test's fixture site) is served as one folder
   const serveStatic =
     serveFiles ?? (webRoot ? createStaticHandler({ webRoot }) : createSourceFiles());
   return http.createServer((request, response) => {

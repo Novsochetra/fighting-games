@@ -45,7 +45,7 @@ async function relativeReferences(file) {
     .filter((reference) => !/^[a-z]+:/i.test(reference));
 }
 
-// @/ is the arcade's src/ (vite.config.ts), so an alias cannot carry the arcade into a game either
+// so an import through @/ cannot reach a game either
 const targetOf = (file, reference) =>
   reference.startsWith('@/')
     ? path.join(ARCADE_SRC, reference.slice(2))

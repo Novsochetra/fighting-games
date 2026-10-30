@@ -12,8 +12,7 @@ const suite = (name) => ({
   },
 });
 
-// The React plugin compiles the arcade's components for the tests as the build does, and @/ is the
-// arcade's src/ as in apps/web/arcade/vite.config.ts.
+// The React plugin compiles the arcade's components for the tests as the build does.
 export default defineConfig({
   plugins: [react()],
   resolve: {

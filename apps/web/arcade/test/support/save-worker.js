@@ -14,8 +14,6 @@ const ANSWERS = {
 
 const isSaveAddress = (address) => /\/api\/offline\/steel-and-dust$/.test(String(address));
 
-// The arcade's worker as it answers a game's save for offline (src/service-worker/game-downloads.js): GET
-// looks, POST saves, DELETE removes.
 export function fakeSaveWorker() {
   const worker = { status: { state: 'not-saved' }, posts: 0, removes: 0 };
 

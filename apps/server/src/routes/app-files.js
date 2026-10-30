@@ -29,7 +29,6 @@ export async function createDevFiles() {
   };
 }
 
-// the tests' server: the arcade as it is written, with no Vite and no build
 export function createSourceFiles() {
   return createStaticHandler({ webRoot: PAGES_ROOT, mounts: AS_IS_SOURCES });
 }

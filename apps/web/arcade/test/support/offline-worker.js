@@ -5,8 +5,6 @@ import { createDownloads } from '@/service-worker/game-downloads.js';
 import { respondTo } from '@/service-worker/respond.js';
 import { fakeCaches, fakeNetwork } from './fake-caches.js';
 
-// The arcade's worker as a browser runs it (src/service-worker/sw.js), answering requests from what it
-// keeps and from a network that can go away.
 export const SCOPE = 'https://arcade.test/';
 export const GAME = `${SCOPE}games/steel-and-dust/`;
 export const SAVE = 'api/offline/steel-and-dust';

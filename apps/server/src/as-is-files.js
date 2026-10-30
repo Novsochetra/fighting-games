@@ -1,11 +1,9 @@
 import path from 'node:path';
 import { GAMES_ROOT, PACKAGES_ROOT, PUBLIC_ROOT } from './paths.js';
 
-// What the arcade serves as it is, in the build (apps/web/arcade/vite.config.ts copies it to dist/)
-// and on the dev server: the games, each an app of its own that Vite never touches, the arcade's
-// art, the files a crawler asks for by name, and the classic script that sets light or dark before
-// the first paint, which Vite would not bundle. The service worker is built
-// (src/service-worker/sw.js).
+// Past Vite: each game is an app of its own, a crawler asks for robots.txt and sitemap.xml by name,
+// and appearance-early.js is a classic script that must run before the first paint, which Vite
+// would not bundle.
 export const AS_IS = ['games', 'assets', 'robots.txt', 'sitemap.xml', 'appearance-early.js'];
 
 // The packages the games share: the build joins them into each game's own bundles, so only
@@ -17,8 +15,6 @@ const SOURCE_ROOTS = new Map([
   ['packages', PACKAGES_ROOT],
 ]);
 
-// The games and the packages sit beside the arcade on disk but under it in its address, as the
-// build puts them in dist/.
 export const sourceOfAsIs = (entry) => SOURCE_ROOTS.get(entry) ?? path.join(PUBLIC_ROOT, entry);
 
 export const AS_IS_SOURCES = new Map(
