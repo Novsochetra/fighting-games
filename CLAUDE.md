@@ -37,14 +37,14 @@ changing structure.
 - Put logic in plain functions with unit tests. Components and route handlers stay thin.
 - Each game is independent: it loads nothing from outside its own folder but the shared packages
   (`apps/web/packages/`), and the home page loads nothing from a game
-  (`apps/web/test/integration/independence.test.js` checks both). Never share a file, token or
-  module between the home page and a game, or between games: code a second game needs goes in a
+  (`apps/web/arcade/test/integration/independence.test.js` checks both). Never share a file, token
+  or module between the home page and a game, or between games: code a second game needs goes in a
   package (see "Shared packages").
-- The home page's UI colors, type, radii, shadows and motion come from `apps/web/src/home/tokens.css`,
-  and each game's from its own `games/<id>/styles/tokens.css`. No raw hex values in components
-  (`local/no-raw-hex`, Stylelint). Colors painted on a game's canvas (sprites, scenery, effects, HUD)
-  are pixel-art data, like the PNGs, and live only in that game's `src/art/` palette files, the one
-  place lint allows hex in JS.
+- The home page's UI colors, type, radii, shadows and motion come from
+  `apps/web/arcade/src/styles/tokens.css`, and each game's from its own
+  `games/<id>/styles/tokens.css`. No raw hex values in components (`local/no-raw-hex`, Stylelint).
+  Colors painted on a game's canvas (sprites, scenery, effects, HUD) are pixel-art data, like the
+  PNGs, and live only in that game's `src/art/` palette files, the one place lint allows hex in JS.
 - Never install packages without asking; concurrent installs corrupt `node_modules`.
 
 ## Code style
@@ -102,6 +102,58 @@ A change players never see (tests, docs, tooling, a refactor) keeps the version.
 once, by the most its change needs, over the version on `main` as it merges; say in the reply which
 version it now is.
 
+## Layout of the arcade
+
+`apps/web/` holds the arcade (`arcade/`), the games (`games/`) and the packages (`packages/`) side
+by side. The arcade, `apps/web/arcade/`, holds `pages/` (its four pages, Vite's root), `public/`
+(sent as it is at the root of the arcade's address: `assets/`, `robots.txt`, `sitemap.xml`,
+`appearance-early.js`), `src/`, `test/`, `build-steps/` and `vite.config.ts`; paths below and in
+"Pages of the arcade" are under it. `src/` holds `main.tsx`, `App.tsx` and these folders:
+
+- `screens/`: one folder per screen (`home/`, `leaderboard/`, `supporters/`, `credits/`), a folder
+  per feature inside (`home/carousel/`, `home/details/`, `supporters/donate/`), and
+  `render-screen.tsx`,
+- `components/`: the UI parts two or more screens show (`page-bar/`, `sheet/`, `notice/`,
+  `segmented/`, `layout-swap/`, `board/`, `icons.tsx`),
+- `api/`: every request to the server or the worker, its reader and the hook that loads it
+  (`catalog/`, `leaderboard/`, `supporters/`, `offline/`),
+- `services/`: what is made once per page and reached with `useArcade()` (`arcade-context.tsx`,
+  `browser-ports.ts`, `preferences.js`, `appearance/`, `sound/`, `analytics/`, `install/`,
+  `updates/`),
+- `navigation/`: `routes/` (`SCREENS`, `SCREEN_HEADS`, `board-route.js`), `stack/` (the screen
+  stack and its slides) and `back/` (Back to the arcade),
+- `hooks/`: hooks that know no feature,
+- `utils/`: plain helpers that know no feature (`dom.js`, `format.js`, `aria.js`,
+  `marked-transition.js`),
+- `styles/`: what every screen stands on: `tokens.css` (the colors, type and motion of every
+  screen), `page.css`, `buttons.css`, `scroll-edge.css`, `motion-tokens.js`, `global-styles.ts`,
+- `service-worker/`: the offline worker, a program of its own.
+
+Where a file goes:
+
+1. It knows no feature: a hook goes in `hooks/`, a plain helper in `utils/`.
+2. It asks the server or the worker for data: `api/`.
+3. It is a UI part two or more screens show: `components/`.
+4. It is made once per page and reached with `useArcade()`: `services/`.
+5. Everything else goes in the feature folder of the screen that uses it.
+6. A screen never imports another screen, and only `screens/` imports a screen.
+
+No catch-all folders (`types/`, `constants/`, `helpers/`): a type or a constant lives with its
+owner. An import is `./` for a file in the same folder or under it, and `@/` (`apps/web/arcade/src/`)
+for anything else, never climbing out with `../`; `@/` is set in `vite.config.ts` and, at the
+repo's root, `vitest.config.js` and `tsconfig.json`. `apps/web/arcade/test/integration/layout.test.js` holds
+`src/` to these folders and fails when a screen imports another or anything outside `screens/`
+imports a screen, when `utils/` imports anything but `utils/`, `hooks/` anything but `hooks/`,
+`utils/` and `services/`, or `service-worker/` anything outside itself, and when an import climbs
+out with `../`. Tests mirror `src/`: `src/api/catalog/view-models.js` is tested in
+`test/unit/api/catalog/view-models.test.js`.
+
+A new screen is its page, `pages/<name>/index.html` (also an input in `vite.config.ts`, which
+builds the pages it names, and an address in `public/sitemap.xml`), its folder
+`src/screens/<name>/`, its entries in `SCREENS` (`src/navigation/routes/screens.ts`) and
+`SCREEN_HEADS` (`src/navigation/routes/screen-heads.ts`), and its line in `renderScreen`
+(`src/screens/render-screen.tsx`); "Pages of the arcade" says what each must do.
+
 ## Layout of a game
 
 `apps/web/games/<id>/` holds `game.json` (the catalog entry), `index.html`, `assets/`, `styles/`
@@ -137,24 +189,29 @@ for what runs the game (play, pause, settings).
 ## Pages of the arcade
 
 A page of the arcade that is not a game (like `credits/` and `supporters/`) is a screen of the one
-React app (`src/arcade/`, see "One app" in `docs/architecture.md`), without being asked each time:
+React app (`apps/web/arcade/src/`, see "One app" in `docs/architecture.md`), without being asked
+each time:
 
-- its page, `apps/web/<name>/index.html`, keeps its own head (title, description, link-preview
-  tags, `appearance-early.js`) and starts the app, `src/main.tsx`, as its only module, its body only
-  `<div id="root" data-screen="<name>">`; the screen is listed in `SCREENS` (`src/arcade/screens.ts`)
-  under its path, rendered by `renderScreen` and headed by `SCREEN_HEADS`, so a tap between screens
-  changes the screen in the page and slides like an iOS screen,
-- it lives in `src/<name>/` as components over plain logic modules, and resolves every address
-  against the arcade's root (`useArcadeUrl`), since it shows under another screen's address too,
-- its bar is `PageBar` (`src/arcade/PageBar.tsx`): Back is `<a data-back>` to the arcade (named with
-  `aria-label` where a phone hides the label), which pops back to the arcade as it was left, over the
-  iOS 26 soft edge of `src/home/scroll-edge.css` (`<header class="page-bar scroll-edge">`), as the
-  arcade's own bar has, so what scrolls under it fades out, and it frosts over where a blur cannot be
-  masked; its own CSS sets where its large title passes under the bar (`--page-bar-condense-*`),
+- its page, `apps/web/arcade/pages/<name>/index.html`, keeps its own head (title, description,
+  link-preview tags, `appearance-early.js`) and starts the app, `/src/main.tsx`, as its only module,
+  its body only `<div id="root" data-screen="<name>">`; the screen is listed in `SCREENS`
+  (`src/navigation/routes/screens.ts`) under its path, rendered by `renderScreen`
+  (`src/screens/render-screen.tsx`) and headed by `SCREEN_HEADS`
+  (`src/navigation/routes/screen-heads.ts`), so a tap between screens changes the screen in the page
+  and slides like an iOS screen,
+- it lives in `src/screens/<name>/` as components over plain logic modules, and resolves every
+  address against the arcade's root (`useArcadeUrl`), since it shows under another screen's address
+  too,
+- its bar is `PageBar` (`src/components/page-bar/PageBar.tsx`): Back is `<a data-back>` to the
+  arcade (named with `aria-label` where a phone hides the label), which pops back to the arcade as it
+  was left, over the iOS 26 soft edge of `src/styles/scroll-edge.css`
+  (`<header class="page-bar scroll-edge">`), as the arcade's own bar has, so what scrolls under it
+  fades out, and it frosts over where a blur cannot be masked; its own CSS sets where its large title
+  passes under the bar (`--page-bar-condense-*`),
 - its ids are unique across every screen, as the screens share one document,
 - it shares the arcade's tokens, buttons, sheets (`use-sheet.ts`) and appearance and sound
   (`useArcade`).
 
-`apps/web/test/integration/page-motion.test.js`, `page-bar.test.js` and `scroll-edge.test.js` find
-every such page on disk and render every screen, and fail until it does all this. A game never loads
-these: it keeps its own launch.
+`apps/web/arcade/test/integration/page-motion.test.js`, `page-bar.test.js` and
+`scroll-edge.test.js` find every such page on disk and render every screen, and fail until it does
+all this. A game never loads these: it keeps its own launch.

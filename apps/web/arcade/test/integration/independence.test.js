@@ -88,9 +88,10 @@ describe('games and the home page stay independent', () => {
     }
   });
 
-  it('keeps the home, supporters and credits pages from loading any file of a game', async () => {
+  it('keeps the home, leaderboard, supporters and credits pages from loading any file of a game', async () => {
     const homeFiles = [
       path.join(PAGES_ROOT, 'index.html'),
+      path.join(PAGES_ROOT, 'leaderboard', 'index.html'),
       path.join(PAGES_ROOT, 'supporters', 'index.html'),
       path.join(PAGES_ROOT, 'credits', 'index.html'),
       ...(await listFiles(ARCADE_SRC)),

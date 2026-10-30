@@ -1,8 +1,9 @@
 # Architecture
 
-A small retro arcade: a Node server, the arcade itself (a React app with its home, supporters and
-credits screens), and one folder per game. The arcade is TypeScript and React, built by Vite; its
-logic stays in plain modules (`.js`, tested on their own), which the components call. The games are
+A small retro arcade: a Node server, the arcade itself (a React app with its home, leaderboard,
+supporters and credits screens), and one folder per game. The arcade is TypeScript and React, built
+by Vite; its logic stays in plain modules (`.js`, tested on their own), which the components call.
+`CLAUDE.md` ("Layout of the arcade") says which of its folders each part goes in. The games are
 their own apps of native ES modules, written and run in development as they are, which the build
 only joins into a few bundles per game (see The build).
 
@@ -11,31 +12,52 @@ apps/
   server/                 Node HTTP server: the API (games, supporters, health) and the arcade's files
     src/
       db/                 the Postgres pool, the migrations and their runner (migrate-cli.js)
-      routes/             the API's routes, and app-files.js: the build, or Vite as you write (dev)
+      routes/             the API's routes, and app-files.js: the build, Vite as you write (dev), or
+                          the arcade as written with no Vite (the tests' server)
       security/           the same-site check and the rate limit for the API
       storage/            files in S3, sent from CloudFront (see File storage); no route uses it yet
       supporters/         reading a gift, the Postgres and in-memory stores, the JSON they send
-      as-is-files.js      what the arcade sends as it is, past Vite: the games, the art, robots.txt…
+      paths.js            where each part lies on disk: the arcade, its pages, public/ and src/, the
+                          games and the packages
+      as-is-files.js      what the arcade sends as it is, past Vite (the games, the art, robots.txt…),
+                          and where each lives on disk (sourceOfAsIs)
       build-version.js    the version each build of the arcade carries (see A new build)
     test/{unit,integration}
-  web/                    everything the browser loads
-    index.html            the arcade's page; supporters/ and credits/ hold the other two
-    vite.config.ts        the build: the four pages into dist/, the as-is files copied beside them
-    build-steps/          the build's own steps: bundle-game.js joins each game's scripts into bundles
-    robots.txt            lets every crawler in and names the sitemap
-    sitemap.xml           every page this server sends (see Search and link previews)
-    assets/               the arcade's icons and manifest (tools/arcade_icons.py draws the icons),
+  web/                    everything the browser loads: the arcade, the games and the packages
+    arcade/               the arcade, one React app of four screens (see One app)
+      pages/              its four pages, Vite's root: index.html, and leaderboard/, supporters/ and
+                          credits/ each with its own index.html
+      public/             sent as it is at the root of the arcade's address, with appearance-early.js,
+                          the classic script that sets light or dark before the first paint
+        assets/           the arcade's icons and manifest (tools/arcade_icons.py draws the icons),
                           donate/khqr.jpg, the KHQR code the donate sheet shows,
                           social/entry-screen.jpg, the picture a shared link shows, and
                           credits/, the maker's photos the credits screen shows
-    src/main.tsx          the app every page starts, on the screen the page names
-    src/arcade/           the app's frame: its services, the screen stack and its slides, and the
-                          parts every screen shares (the page bar, sheets, notices)
-    src/home/             the arcade's home screen, its logic modules and styles; tokens.css holds the
-                          colors, type and motion of every screen
-    src/supporters/       the supporters screen and its donate sheet
-    src/credits/          the credits screen: who makes the arcade, and where to find them
-    src/offline/          the service worker, which keeps the arcade and each game played for offline
+        robots.txt        lets every crawler in and names the sitemap
+        sitemap.xml       every page this server sends (see Search and link previews)
+      src/                the app, @/ in its imports; a page loads it as /src/main.tsx
+        main.tsx          the app every page starts, on the screen the page names (App.tsx beside it)
+        screens/          one folder per screen (home/, leaderboard/, supporters/, credits/), a folder
+                          per feature inside (home/carousel/, supporters/donate/), and
+                          render-screen.tsx, the one file outside them that loads a screen
+        components/       the UI parts two or more screens show: page-bar/, sheet/, notice/,
+                          segmented/, layout-swap/, board/ and icons.tsx
+        api/              every request, its reader and the hook that loads it: catalog/,
+                          leaderboard/, supporters/, and offline/, which asks the worker
+        services/         what is made once per page and reached with useArcade()
+                          (arcade-context.tsx): preferences, appearance, sound, analytics, install,
+                          updates, and what they take from the browser (browser-ports.ts)
+        navigation/       routes/ (SCREENS, SCREEN_HEADS, board-route.js), stack/ (the screen stack
+                          and its slides) and back/ (Back to the arcade)
+        hooks/            hooks that know no feature
+        utils/            plain helpers that know no feature (dom.js, format.js, aria.js…)
+        styles/           what every screen stands on: tokens.css holds the colors, type and motion
+                          of every screen, with page.css, buttons.css and scroll-edge.css
+        service-worker/   the service worker, which keeps the arcade and each game played for offline
+      test/{unit,integration,regression,support}
+                          the arcade's tests, mirroring src/ (support/render-arcade.tsx renders it)
+      build-steps/        the build's own steps: bundle-game.js joins each game's scripts into bundles
+      vite.config.ts      the build: the four pages into dist/, the as-is files copied beside them
     packages/
       <name>/             code more than one game uses (input: the gamepad, keys, rumble;
                           touch-pad: the touch controls drawn from a skin; screen: the stage fit,
@@ -50,23 +72,28 @@ apps/
         styles/           the game page CSS; tokens.css holds the game's own design tokens
         src/              game modules
         test/{unit,integration,regression,support}
-    test/{unit,integration,regression}  the arcade's tests (support/render-arcade.tsx renders it)
+    package.json          the arcade's packages from npm (React, React Router, TanStack Query, Vite…)
 .railway/railway.ts       the Railway service's settings (docs/deploy-railway.md)
 tools/eslint-rules/       the project's own lint rules
 tools/claude-hooks/       the Claude Code hook that shows Claude each comment it adds
-docs/                     this file and deploy-railway.md
+docs/                     this file, deploy-railway.md and boss-kits.md
 ```
+
+Below, a path that starts with `arcade/` is named from `apps/web/`, as `games/<id>/` and
+`packages/<name>/` are, and one that starts with a folder of the arcade's `src/` (`api/`,
+`components/`, `services/`, `screens/`…) from `arcade/src/`; a game's own files are named from its
+folder, and the server's from its own.
 
 ## Independent games
 
 The arcade and every game are separate apps that share no file. Each has its own design tokens
-(`src/home/tokens.css`, `games/<id>/styles/tokens.css`), styles and modules, so a game can change its
-look without touching the arcade or another game. The arcade knows a game only through its
-`game.json` and the art it names (`cover`, `banner`, `poster`, `screenshot`) and its trailer
+(`arcade/src/styles/tokens.css`, `games/<id>/styles/tokens.css`), styles and modules, so a game can
+change its look without touching the arcade or another game. The arcade knows a game only through
+its `game.json` and the art it names (`cover`, `banner`, `poster`, `screenshot`) and its trailer
 (`trailer`, see Home page); a game links back to the arcade only by address (`../../`).
-`test/integration/independence.test.js` fails if a game loads a file from outside its folder or the
-packages, a package loads a file from outside the packages, or the arcade (any of its pages or
-modules) loads a file from a game.
+`arcade/test/integration/independence.test.js` fails if a game loads a file from outside its folder
+or the packages, a package loads a file from outside the packages, or the arcade (any of its pages,
+modules or public files) loads a file from a game.
 
 A game hosted on its own site, such as Morodok Angkor (`games/morodok-angkor/`, at
 `https://morodokangkor.com/`), keeps only its `game.json` and art here. Its `url` must be an `https:`
@@ -162,24 +189,33 @@ shell's bezel round its screen). A game's tests check each skin it ships (`skinP
 The arcade, its leaderboard, its supporters and its credits are screens of one React app, so a tap
 between them changes the screen in the page, never through a load: on a phone's link a move to the
 supporters took about 1.3 s, 47 files coming again every time, and now shows at once. Each still has
-a page of its own on disk (`index.html`, `leaderboard/index.html`, `supporters/index.html`,
-`credits/index.html`), with its own title and
+a page of its own on disk, in `arcade/pages/` (`index.html`, `leaderboard/index.html`,
+`supporters/index.html`, `credits/index.html`), with its own title and
 link-preview tags, which a visitor can open directly, reload or share. Every page starts the same
-app, `src/main.tsx`, and names the screen it opens on (`<div id="root" data-screen="supporters">`).
+app, `/src/main.tsx`, and names the screen it opens on (`<div id="root" data-screen="supporters">`).
+`pages/` is Vite's root and the code sits beside it, so `vite.config.ts` aliases a page's `/src/` to
+`arcade/src/`.
 
-- **The app** (`main.tsx`, `arcade/App.tsx`): the arcade's services are made once for the page,
-  outside React (`createArcade` in `arcade-context.tsx`): its preferences, one appearance, one sound
-  and the analytics, with what they take from the browser passed in (`browser-ports.ts`), so the
-  tests hand them fakes. React Router follows the address, and TanStack Query holds what the screens
-  read from the API: a screen shown again uses what it read, and reads again after a minute.
+- **The app** (`main.tsx`, `App.tsx`): the arcade's services are made once for the page, outside
+  React (`createArcade` in `services/arcade-context.tsx`): its preferences, one appearance, one
+  sound and the analytics, with what they take from the browser passed in (`browser-ports.ts`), so
+  the tests hand them fakes. Every screen reaches them with `useArcade()`. React Router follows the
+  address, and TanStack Query holds what the screens read from the API (`api/`): a screen shown
+  again uses what it read, and reads again after a minute.
+- **Screens** (`screens/`): one folder per screen, which no other screen loads; `renderScreen`
+  (`screens/render-screen.tsx`) is the one place that loads them, so the stack renders a screen by
+  its id. `SCREENS` (`navigation/routes/screens.ts`) names each screen's path and depth, and
+  `SCREEN_HEADS` (`screen-heads.ts`) its title, description and canonical address, which the app
+  writes into the head as the screen on top changes.
 - **Addresses**: a screen shows under another's address (the arcade sits under the supporters when a
   visitor opened them), so every address in a screen resolves against the arcade's root
   (`useArcadeUrl`, `arcadeRoot` in `screens.ts`), never against the page.
 - **The stack** (`ScreenStack.tsx`, `stack-model.ts`, `stack.css`): like an iOS navigation stack, the
-  arcade is always at the bottom and the supporters or the credits are pushed over it. Each screen is
+  arcade is always at the bottom and the leaderboard, the supporters or the credits are pushed over
+  it. Each screen is
   a layer of its own, which scrolls on its own, so the arcade comes back as it was left, at its own
   scroll; a screen popped or covered goes once its slide ends, and the arcade stays, unseen and
-  inert. A move is a push to a deeper screen, a pop to a shallower one, and between the two pushed
+  inert. A move is a push to a deeper screen, a pop to a shallower one, and between two pushed
   screens a push on a link and a pop on the browser's back. The arcade's keys and pad are its own
   only while it is the top screen (`useIsTopScreen`).
 - **Back** (`use-back.ts`, `PageBar.tsx`): a Back link (`data-back`) goes back through history when
@@ -196,12 +232,12 @@ app, `src/main.tsx`, and names the screen it opens on (`<div id="root" data-scre
   changing so the compositor plays it alone. With reduced motion the screen only fades, as iOS
   dissolves.
 
-`test/integration/page-motion.test.js` finds every `index.html` under `apps/web/` outside the games,
-code and art, and fails for one that does not start the app, name the screen `SCREENS` knows by its
-path, or (over the arcade) have a Back link to it; a new screen of the arcade does all this (the rule
-is in `CLAUDE.md`). The games are pages of their own and keep their own launch.
-`test/regression/bugs/arcade-pages-reload.test.js` holds the arcade to changing screens without a
-load.
+`arcade/test/integration/page-motion.test.js` finds every `index.html` under `arcade/pages/`, and
+fails for one that does not start the app, name the screen `SCREENS` knows by its path, or (over the
+arcade) have a Back link to it; a new screen of the arcade does all this (the rule is in
+`CLAUDE.md`). The games are pages of their own and keep their own launch.
+`arcade/test/regression/bugs/arcade-pages-reload.test.js` holds the arcade to changing screens
+without a load.
 
 ## Request flow
 
@@ -236,11 +272,16 @@ gets 403 (`security/request-origin.js`), and a `POST` must carry an `Origin` of 
 every browser sends. A script outside a browser can write any header, so the gifts also rest on the
 rate limit and the checks below.
 
-**The build.** `npm run build` has Vite build the four pages into `dist/` (`base: './'`, so the same
-files work under any path) and copy what it never touches beside them (`as-is-files.js`: the games,
-the art, `robots.txt`, `sitemap.xml` and `appearance-early.js`), then builds the service worker (see
-Offline). Each game's page is built on the way (`build-steps/bundle-game.js`): the modules each of
-its module scripts loads are joined into a few bundles in the game's own `build/` folder, as they are
+**The build.** `npm run build` (`vite build --config apps/web/arcade/vite.config.ts`) has Vite build
+the four pages of `arcade/pages/` into `dist/` (`base: './'`, so the same files work under any path)
+and copy what it never touches beside them, each from where it lives (`AS_IS` and `sourceOfAsIs` in
+`as-is-files.js`: the games from `games/`, and the art, `robots.txt`, `sitemap.xml` and
+`appearance-early.js` from `arcade/public/`), then builds the service worker (see Offline). `dist/`
+is laid out as the arcade's address: the pages, `assets/`, `games/` and the rest at its root, and
+Vite's own files in `build/`; the pages link the art in `assets/` as it is (the icons in
+`assets/icons/`), not copies of it. Each game's page is built on the way
+(`arcade/build-steps/bundle-game.js`): the modules each of its module scripts loads are joined
+into a few bundles in the game's own `build/` folder, as they are
 written and minified, kept to ES2021 (`es2021`), with names that change with their content; the page
 is pointed at them and the modules are left out. Steel & Dust's 925 modules, thirty imports deep, were
 about 1,150 requests a load, each through the arcade's worker, and one that failed held its start; it
@@ -262,8 +303,15 @@ build. Vite names each module and stylesheet it builds by its content, under `bu
 lets a browser keep those for a year (`immutable`) and has it check everything else on each visit
 (`no-cache`). Every file carries an `ETag`, a hash of its content (`routes/file-tags.js`), so a check
 of a file that has not changed costs a `304` and no body, even across deploys. `npm run dev`
-serves the pages and modules from Vite as they are written, with hot reload, and the as-is files from
-disk as in production, each game's modules unbundled. If a game's module fails to load, fails to come down at all (a dropped
+serves the pages and modules from Vite as they are written (`createDevFiles` in `routes/app-files.js`,
+on `arcade/vite.config.ts`), with hot reload, and the as-is files and the packages from where they
+live on disk (`AS_IS_SOURCES`), each game's modules unbundled. They sit beside the arcade on disk but
+under it in its address, so the static handler takes `mounts`: the first segment of an address
+(`games`, `assets`, `robots.txt`…) names the folder or file it is sent from. The tests' server sends
+the arcade as it is written, with no Vite and no build (`createSourceFiles`): the as-is files
+through the same mounts, everything else from `arcade/pages/`; `arcade/test/support/arcade-files.js`
+finds a file by its address the same way (`fileAt`, and `fileLoadedBy` for what a page loads).
+If a game's module fails to load, fails to come down at all (a dropped
 connection, a phone that slept mid-load), or its load hears of no file coming in for 15 seconds (a
 request that never answers), its page reloads itself under a fresh address, each try a second
 later than the last, up to three times (`src/boot/boot-recovery.js`). The page's first script
@@ -356,9 +404,9 @@ type, and answers the file's CloudFront address.
 ## Offline
 
 The arcade works offline like an installed app, and so does each game once it has been played here
-(`src/offline/`, a service worker of plain modules; `register-worker.ts` registers it from the built
-app in every browser, `npm run dev` runs without it). Morodok Angkor lives on its own site and is
-not kept.
+(`arcade/src/service-worker/`, a service worker of plain modules that loads nothing of the app;
+`register-worker.ts` in `services/updates/` registers it from the built app in every browser,
+`npm run dev` runs without it). Morodok Angkor lives on its own site and is not kept.
 
 - **The arcade** (`arcade-cache.js`): the build writes the worker with the list of what it keeps
   (vite-plugin-pwa's `injectManifest`, in `vite.config.ts`): the four pages, the built modules and
@@ -399,8 +447,9 @@ not kept.
   shared by a save and a play keeping it fresh. The server has no such address, so where no worker
   runs the arcade offers no save.
 
-- **A new build** (`src/arcade/update-check.js`, `arcade-version.js`, `newest-worker.js`,
-  `UpdateBanner.tsx`, `use-update.ts`): the pages come from what the worker keeps, so an arcade
+- **A new build** (`arcade/src/services/updates/`: `update-check.js`, `arcade-version.js`,
+  `newest-worker.js`; the home's `UpdateBanner.tsx`, `use-update.ts`): the pages come from what the
+  worker keeps, so an arcade
   left open, or opened from the worker's copy, runs the build it loaded after a deploy, and a load
   before the new worker has taken over opens the old build again; an installed arcade that a phone
   brings back without a load could stay old for days. So the arcade compares its page's version
@@ -410,17 +459,19 @@ not kept.
   shows a banner, New version ready, whose Reload opens the new build at once. It takes the
   banners' place first (`has-update-banner`), as the others come again after the reload. Nothing
   reloads by itself, so a gift under way is never lost. The credits screen names the version the
-  page runs, as Version 1.0.0 (5f272d9) (`src/credits/version-label.js`). A new build is one whose
+  page runs, as Version 1.0.0 (5f272d9) (`arcade/src/screens/credits/version-label.js`). A new build is one whose
   version differs, so a redeploy of the same commit asks no one to reload. `npm run dev` writes no
   version, so it never asks.
 
-`test/integration/offline/worker.test.js` runs the worker's answers against fake caches and a
-network that can go away.
+`arcade/test/integration/service-worker/worker.test.js` runs the worker's answers against fake
+caches and a network that can go away.
 
 ## Home page
 
-The arcade's home screen (`HomeScreen.tsx`, its state and what its controls do in `home-context.tsx`
-and `home-actions.ts`) is a game hub like the Apple TV app: the selected game's key art fills the top of the
+The arcade's home screen (`arcade/src/screens/home/`: `HomeScreen.tsx`, its state and what its
+controls do in `home-context.tsx` and `home-actions.ts`, and a folder for each of its parts:
+`top-bar/`, `hero/`, `spotlight/`, `carousel/`, `library/`, `offline-saves/`, `details/`,
+`launch/`, `banners/`, `coffee/` and `inputs/`, its keys and pad) is a game hub like the Apple TV app: the selected game's key art fills the top of the
 screen behind a carousel of 16:9 cards, and a library of every game sits below. Type follows Apple's
 text styles (Large Title, Title, Body, Subheadline, Footnote) in SF Pro on Apple devices, with Inter
 standing in for it elsewhere; buttons are Apple's Play pill and frosted glass ones (`buttons.css`).
@@ -435,7 +486,8 @@ backdrop. The root's `data-appearance`
 follows the device, and the sun and moon button in the top bar flips it (`appearance.js`, which
 cross-fades the page through a view transition). The choice is kept with the device's appearance at
 the time, so when the device next changes (at sunset, say) the arcade follows it again.
-`appearance-early.js`, a classic script in the head, sets the attribute before the first paint, so a
+`appearance-early.js` (`arcade/public/`, at `/appearance-early.js`), a classic script in the head,
+sent as it is since Vite would not bundle it, sets the attribute before the first paint, so a
 light screen never shows dark first; a test holds it to the same choice as `resolveAppearance`.
 
 - **Top bar** (`topbar.css`): the arcade's name with the supporters, appearance and sound buttons.
@@ -518,8 +570,8 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   stops, and stops downloading, as the sheet closes, and the sheet shows the art again the next time.
   No save keeps it, and one on another site never passes through the worker.
 
-Opening a game plays an app-launch animation before the page changes (`src/home/launcher.js`, made
-on the first launch by `use-launcher.ts`), like
+Opening a game plays an app-launch animation before the page changes
+(`arcade/src/screens/home/launch/launcher.js`, made on the first launch by `use-launcher.ts`), like
 opening a game in Apple Arcade: a panel grows from the card to fill the screen while the home zooms
 away behind it, and the card's art, still sharp, moves to rest in the middle of the screen at the
 size of a large card (`launchArtRect`), a little above center. Behind it the same art fills the
@@ -532,23 +584,24 @@ over the launch. It
 flies from the carousel card, or from the library tile when the carousel has scrolled out of sight
 (`launch-source.js`). The keyframes are plain functions of the art's box and the screen
 (`launch-geometry.js`), and their timing comes from `--duration-launch` and `--easing-launch` in
-`src/home/tokens.css`. When the browser brings the page back from its back/forward cache, the panel
+`arcade/src/styles/tokens.css`. When the browser brings the page back from its back/forward cache, the panel
 shrinks back into the card and the Recent list catches up. A game's own way back should go back in
 the tab's history when the arcade opened it, as Steel & Dust's Back to arcade does
 (`src/ui/menus/arcade-exit.js`); loading the arcade again would start it over. With reduced motion the game opens at
 once, and the zoom, the slides and the rises are off.
 
-Every interaction has a short sound (`sound-cues.js`): one crisp click, `switch`, both as a card
+Every interaction has a short sound (`sound-cues.js`, in the arcade's sound service,
+`arcade/src/services/sound/`): one crisp click, `switch`, both as a card
 moves into the center and as the segmented control changes, a rising C major chime and a breath of
 noise on Play, a pop for the heart, and airy sweeps for the sheet and for coming back. They are synthesized with Web Audio
 (`sound-synth.js`), so the home page ships no audio files; `sound-player.js` makes the audio context
 on the first cue, which always follows a tap, click or key press as browsers require, and plays
 everything through one master gain and a limiter. The speaker button in the top bar turns them off.
 
-The arcade installs as an app (`assets/manifest.webmanifest`, standalone, its scope the whole arcade
-with every game in it). Its logo is a white joystick on an orange to pink gradient, in front of the
-title in the top bar and on every icon; `tools/arcade_icons.py` draws all sizes, run it again after
-changing the design. An install banner floats at the bottom (`InstallBanner.tsx`, `use-install.ts`,
+The arcade installs as an app (`arcade/public/assets/manifest.webmanifest`, standalone, its scope
+the whole arcade with every game in it). Its logo is a white joystick on an orange to pink gradient,
+in front of the title in the top bar and on every icon; `tools/arcade_icons.py` draws all sizes into
+`arcade/public/assets/icons/`, run it again after changing the design. An install banner floats at the bottom (`InstallBanner.tsx`, `use-install.ts`,
 `install.css`):
 where the browser hands over its install prompt (`beforeinstallprompt`, Chrome and Edge) it offers
 Install, and on an iPhone or iPad, where Safari installs only from its Share menu, it says where to
@@ -580,13 +633,15 @@ pages name that domain; every other URL stays relative. Each page served here ca
   and a game page can be loaded under a query (`boot-recovery.js`),
 - Open Graph tags and `twitter:card` `summary_large_image`, so a shared link opens into a picture.
 
-The home, leaderboard, supporters and credits pages share `assets/social/entry-screen.jpg`, the arcade's entry screen at
+The home, leaderboard, supporters and credits pages share `assets/social/entry-screen.jpg` (in
+`arcade/public/`), the arcade's entry screen at
 1200x630: the home page in its light appearance with Steel & Dust picked, taken in a 1200x630 window
 at 2x and scaled down. A game shares a picture of its own from its own folder (Steel & Dust's title
 screen, `games/steel-and-dust/assets/social/`). The home page also names the site for search results
-in JSON-LD (`WebSite`). `robots.txt` blocks nothing, as Google renders the home page and its list
-comes from `api/games`, and names `sitemap.xml`, which lists the home, leaderboard, supporters and credits pages
-and every game served here, but not one on its own site. `test/integration/seo.test.js` fails when a page
+in JSON-LD (`WebSite`). `robots.txt` (in `arcade/public/`, as `sitemap.xml` is) blocks nothing, as
+Google renders the home page and its list comes from `api/games`, and names `sitemap.xml`, which
+lists the home, leaderboard, supporters and credits pages and every game served here, but not one
+on its own site. `arcade/test/integration/seo.test.js` fails when a page
 is missing from the sitemap or its tags, or its picture is not a 1200x630 JPEG the server sends.
 
 **Analytics.** Cloudflare Web Analytics counts visits to every page: Cloudflare adds its beacon at the
@@ -595,9 +650,9 @@ and only for those who say yes. On the live site (`LIVE_HOSTS` with a `MEASUREME
 `analytics-config.js`) a banner in the install banner's place asks first (`use-consent.ts`,
 `Banners.tsx`, `consent.css`), and the install and support banners wait until it is answered. Allow loads Google's
 tag (`google-tag.js`, with ads and Google signals off); No thanks loads nothing. The answer is kept in
-`localStorage` under its own key in `analytics.js`, not in `preferences.js`, since a browser can
+`localStorage` under its own key in `analytics.ts`, not in `preferences.js`, since a browser can
 still hold an older `preferences.js` after a deploy. Privacy choices at the foot of the page asks
-again; a no after a yes turns storage off and clears the `_ga` cookies. `analytics.js` sends an event only while a yes
+again; a no after a yes turns storage off and clears the `_ga` cookies. `analytics.ts` sends an event only while a yes
 stands. The events and their names are in `analytics-events.js`: a play (with the game and its
 source: Play, Details, a card, the keyboard or a gamepad), a tap on a teaser, Details, the heart, the
 library filters and Show more, the sound and appearance switches, each link to the leaderboard, the supporters and
@@ -620,8 +675,10 @@ shows), so Play stays in reach. The button and note wait while a banner is up ac
 
 ## Leaderboard page
 
-The arcade's own board, `leaderboard/` (`LeaderboardScreen.tsx` and the rest of `src/leaderboard/`,
-with a page of its own, `leaderboard/index.html`), is a screen pushed over the arcade like the
+The arcade's own board, `leaderboard/` (`LeaderboardScreen.tsx` and the rest of
+`arcade/src/screens/leaderboard/`, with a page of its own, `arcade/pages/leaderboard/index.html`;
+it reads the board through `api/leaderboard/` and draws it with `components/board/`, which the
+Details sheet's peek shares), is a screen pushed over the arcade like the
 supporters and the credits (see One app), so a link to it (`khmerarcade.games/leaderboard/`) can be
 shared with a picture of its own. A trophy in the top bar leads there (`#leaderboard-link`), on the
 board of the game in the carousel when it has one, and so does See all under a game's top three in
@@ -648,8 +705,9 @@ name still read out with it (`topbar.css`).
   held by TanStack Query like the arcade's other reads (`use-board.ts`); the server answers every
   reader from one read of the database for 15 seconds, so showing the board costs nothing.
   `read-board.js` keeps only runs made of what a run is, and a name, free text a player typed, is
-  only ever written as text, which React does. `view-model.js` gives each run its place, medal and
-  labels (numbers and days through `Intl`, the day read in UTC so the day the server dated in Phnom
+  only ever written as text, which React does. `view-model.js` (`components/board/`) gives each run
+  its place, medal and labels (numbers and days through `Intl`, in `utils/format.js`, the day read
+  in UTC so the day the server dated in Phnom
   Penh never shifts). The offline worker keeps the last answer for each game (`routes.js`), so the
   board shows offline as it was last read.
 - **In the Details sheet.** A game with a board shows the week's top three under Play
@@ -660,17 +718,20 @@ name still read out with it (`topbar.css`).
 ## Supporters page
 
 Every game is free, so the arcade thanks the people who chip in on a screen of its own,
-`supporters/` (`SupportersScreen.tsx` and the rest of `src/supporters/`, with a page of its own,
-`supporters/index.html`). It is part of the arcade, not a game, so it shares the home's tokens,
+`supporters/` (`SupportersScreen.tsx` and the rest of `arcade/src/screens/supporters/`, its donate
+sheet in `donate/`, with a page of its own, `arcade/pages/supporters/index.html`; it reads and sends
+through `api/supporters/`). It is part of the arcade, not a game, so it shares the home's tokens,
 buttons, segmented control and notice, and follows the same light or dark choice
 (`appearance-early.js`, `appearance.js`). Two links lead there from the home page:
 a heart in the top bar (the heart alone on a phone, `support.css`) and a card under the library.
 It is pushed over the arcade (see One app): it slides in, and its Back pops back to the arcade as it
-was left. Its bar is the credits page's (`src/home/page-bar.css`): it stays at the top, and as the
+was left. Its bar is the credits page's and the leaderboard's (`PageBar.tsx` and `page-bar.css` in
+`arcade/src/components/page-bar/`): it stays at the top, and as the
 large title scrolls under it, the page fades out under its soft edge and it shows Supporters small;
 on a phone Back keeps its
-chevron alone. Each page sets where its own large title passes under the bar (`--scroll-*-condense-*`
-in `tokens.css`), and `test/integration/page-bar.test.js` holds both pages to it.
+chevron alone. Each screen's own CSS sets where its large title passes under the bar
+(`--page-bar-condense-*`, from its `--scroll-*-condense-*` in `tokens.css`), and
+`arcade/test/integration/page-bar.test.js` holds every screen over the arcade to it.
 
 The list comes from the server, `GET /api/supporters`:
 
@@ -715,10 +776,11 @@ three steps (`DonateSheet.tsx`, its steps in `DonateForm.tsx` and `DonateSteps.t
    a diamond blue with a glint; it pops when the tier changes. The server names each listed gift's
    tier from the same steps, and has the last word; a test keeps the sheet's steps equal to the
    server's.
-2. The KHQR code (`assets/donate/khqr.jpg`, Wing Bank, NOV SOCHETRA) and the amount to send with any
+2. The KHQR code (`arcade/public/assets/donate/khqr.jpg`, Wing Bank, NOV SOCHETRA) and the amount to send with any
    bank app that scans KHQR. A phone can't scan its own screen, so Save the code downloads it for
    the bank app's scan-from-photo. No one can see whether money arrived, so I sent it is the gift;
-   it counts down for 10 seconds first (`use-pay-wait.ts`, `pay-wait.js`), time to open a bank app and pay, so it is
+   it counts down for 10 seconds first (`pay-wait.js`, counted by `useCountdown` in
+   `hooks/use-countdown.ts`), time to open a bank app and pay, so it is
    not a tap straight through. Back and Continue start the count again.
 3. Thanks, with the gift's tier, a cheer (a rising arpeggio, `cheer` in `sound-cues.js`) and confetti
    bursting from the heart (`confetti.js` moves the paper, `confetti-view.js` draws it on a canvas
@@ -744,13 +806,13 @@ whole amounts without cents), and the components only write them out (`Supporter
 `SupporterParts.tsx`); the list comes through TanStack Query (`use-supporters.ts`). The top three stand on a podium with
 gold, silver and bronze, second, first and third from the left, and everyone follows in a grouped list
 under a Top and Recent switch that clicks like the home page's. Each supporter gets a round monogram,
-colored by their name (`paletteOf` in `format.js`); anonymous ones stay gray. Beside each name, on
+colored by their name (`paletteOf` in `avatar.js`); anonymous ones stay gray. Beside each name, on
 the podium and the list, a chip shows the gift's tier: its gem and name (`TierChip`), kept apart
 from the place medals so a Gold gift in second place reads plainly. With no one on the list
 yet the page says so and invites the first.
 
 **Loading.** The arcade's screens swap their loading notice for what they load, or for an error,
-through `LayoutSwap.tsx` and `src/home/layout-swap.js`, given the blocks that change, so the screen
+through `LayoutSwap.tsx` and `layout-swap.js` (`arcade/src/components/layout-swap/`), given the blocks that change, so the screen
 never jumps in one frame. It measures the blocks just before React changes them (the one thing only a
 class component can do), lets the change happen and plays the difference; a change that lands while
 the last still plays starts from where everything shows at that moment, as iOS animates a
@@ -763,13 +825,14 @@ then the stats, the podium and the list rise in. On the home page the spinner fa
 stage's own fade-in (`stage-enter` in `hero.css`) and the library rises in under it. It moves
 elements with the Web Animations API, on their own layer, so it never stops the slide in from the
 arcade (see One app), which the list often lands in the middle of. With reduced motion, or without the tokens (the tests), the swap happens at once.
-`test/regression/bugs/supporters-load-jump.test.js` holds the supporters page to it. The games and
+`arcade/test/regression/bugs/supporters-load-jump.test.js` holds the supporters page to it. The games and
 the Details sheet load nothing this way, so they keep their own motion.
 
 ## Credits page
 
-`credits/` (`CreditsScreen.tsx`) says who makes the arcade, like the profile card at the top of an iOS
-contact, and is part of the arcade the way the supporters screen is: the home's tokens, buttons and
+`credits/` (`CreditsScreen.tsx` in `arcade/src/screens/credits/`, its page
+`arcade/pages/credits/index.html`) says who makes the arcade, like the profile card at the top of an
+iOS contact, and is part of the arcade the way the supporters screen is: the home's tokens, buttons and
 light or dark choice.
 The home page signs off under the library with Made by Nov Sochetra (`made-by.css`), which leads
 there; it sits after the controls hint, which touch screens hide, so every screen shows it.
@@ -778,7 +841,7 @@ It is mostly markup and CSS (`credits-links.tsx` lists its rows), pushed over th
 app): it slides in, and its Back pops back to the arcade as it was left.
 
 A photo of the maker and their brother as children heads the page, as an artist's photo heads their
-page in Apple Music (`cover.css`, `assets/credits/childhood.jpg`): it fills the top behind the bar,
+page in Apple Music (`cover.css`, `assets/credits/childhood.jpg` in `arcade/public/`): it fills the top behind the bar,
 drifts in the arcade's slow Ken Burns zoom and fades into the page. The photo is small, so a wide
 screen shows it no wider than `--layout-cover-max-width`, its sides fading out too. The maker's own
 photo (`portrait.jpg`) sits on its lower edge in a slowly turning glow of system colors
@@ -789,18 +852,19 @@ rounded icon in its service's color (`tiles.css`): Find me (Buy Me a Coffee firs
 Facebook), Thanks to (the supporters page) and Made with (Inter, Kokoro). A row lights up while it
 is pressed, and on a mouse its arrow nudges toward where it leads. The bar floats over the cover; as
 the large name scrolls under it, the page fades out under its soft edge and it shows the name small,
-as an iOS large title does. That runs on scroll-driven animations alone (`src/home/page-bar.css`, which the supporters page
-shares), and a browser without them keeps a plain bar that scrolls away with the cover.
+as an iOS large title does. That runs on scroll-driven animations alone
+(`arcade/src/components/page-bar/page-bar.css`, which the supporters and leaderboard screens
+share), and a browser without them keeps a plain bar that scrolls away with the cover.
 With reduced motion nothing rises, pops or turns. Its foot names the version of the build the page
 runs (see A new build), so a phone that seems behind can be checked against the latest deploy.
 
 The arcade's bar and every page's stay clear as in iOS 26, and what scrolls under one fades out
-behind a soft edge (`src/home/scroll-edge.css`, the class `scroll-edge` on the bar): a blur tinted
+behind a soft edge (`arcade/src/styles/scroll-edge.css`, the class `scroll-edge` on the bar): a blur tinted
 with the page's color (`--color-scroll-edge`, `--blur-scroll-edge`), strongest at the top and gone
 a little below the bar (`--size-scroll-edge-fade`). Each bar sets where it comes in
 (`--scroll-edge-start` and `--scroll-edge-end`). Where a blur cannot be masked the edge would end in
 a hard line, so the bar frosts over with a material and a hairline instead, as iOS bars did before.
-`test/integration/scroll-edge.test.js` renders every screen and fails for one whose bar does not
+`arcade/test/integration/scroll-edge.test.js` renders every screen and fails for one whose bar does not
 wear the edge. The games keep their own screens.
 
 The arcade and the screens over it change like screens in an iOS navigation stack, in one page (see
@@ -1549,5 +1613,9 @@ Each app keeps its tests next to it, split by kind, and Vitest runs them as thre
 | `test/regression/`  | `regression`  | the recorded game runs and sound bank, and one test per fixed bug (`regression/bugs/`, `regression/past-fixes/`)                                                                                       |
 
 `apps/web/games/steel-and-dust/test/support/` holds the scenario bot, the recording canvas and the
-game drivers the regression and integration tests share. `npm run typecheck` checks the arcade's
+game drivers the regression and integration tests share. The arcade's tests mirror its `src/`
+(`arcade/test/unit/api/catalog/view-models.test.js` tests `arcade/src/api/catalog/view-models.js`),
+and `arcade/test/support/` holds its harnesses, its fakes and `arcade-files.js`, which finds the file
+an address names as the server does. `arcade/test/integration/layout.test.js` holds `arcade/src/` to
+its layout (`CLAUDE.md`, "Layout of the arcade"). `npm run typecheck` checks the arcade's
 TypeScript (`tsconfig.json`); its plain logic modules stay JavaScript, typed from their code.

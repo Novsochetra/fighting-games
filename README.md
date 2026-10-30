@@ -31,15 +31,20 @@ serves the build, as Railway does, with the offline worker.
 ## Project layout
 
 ```
-apps/server/   Node HTTP server: the games, supporters and health API, and the arcade's files
-apps/web/      everything the browser loads: the arcade (a React and TypeScript app with its home,
-               supporters and credits screens, built by Vite) and the games, each game with its own
-               tokens
-tools/         the project's own ESLint rules and Claude Code hook
-docs/          architecture notes
+apps/server/         Node HTTP server: the games, supporters and health API, and the arcade's files
+apps/web/            everything the browser loads, in three folders side by side:
+  arcade/            the arcade, a React and TypeScript app built by Vite: pages/ (its home,
+                     leaderboard, supporters and credits pages), public/ (its art, robots.txt and
+                     sitemap.xml, sent as they are) and src/ (one folder per screen, and the parts
+                     the screens share)
+  games/             the games, each its own app with its own tokens
+  packages/          code more than one game uses (input, touch-pad, screen)
+tools/               the project's own ESLint rules and Claude Code hook
+docs/                architecture notes
 ```
 
-`docs/architecture.md` explains how the pieces fit, and `CLAUDE.md` holds the coding rules.
+`docs/architecture.md` explains how the pieces fit, and `CLAUDE.md` holds the coding rules and where
+each part of the arcade goes ("Layout of the arcade").
 
 ## Quality checks
 
@@ -54,7 +59,8 @@ docs/          architecture notes
 
 The lint rules enforce small files (150 lines) and functions (40 lines), complexity 10, no section
 banners, no `/** */` blocks, no `TODO` comments, and no raw colors outside the design tokens (the
-home page's `apps/web/src/home/tokens.css`, each game's `styles/tokens.css`) and a game's art palette.
+home page's `apps/web/arcade/src/styles/tokens.css`, each game's `styles/tokens.css`) and a game's
+art palette.
 
 The home page and each game are independent apps: none loads a file from another.
 
