@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { POSTER_SIZES as GAME_POSTER_SIZES } from '../../../web/games/steel-and-dust/src/online/poster-sizes.js';
 import { jpegSize, pngSize } from '../../src/leaderboard/image-size.js';
-import { newPosterKey, POSTER_SIZES, posterFileKey } from '../../src/leaderboard/poster-files.js';
+import {
+  isPosterKey,
+  newPosterKey,
+  POSTER_SIZES,
+  posterFileKey,
+} from '../../src/leaderboard/poster-files.js';
 import { readPoster } from '../../src/leaderboard/read-poster.js';
 import { isFileKey } from '../../src/storage/file-keys.js';
 import { fakeJpeg, fakePng, posterImages } from '../support/poster-images.js';
@@ -78,5 +83,16 @@ describe('a poster in the bucket', () => {
     expect(key).toMatch(/^posters\/steel-and-dust\/[0-9a-f]{24}$/);
     expect(newPosterKey('steel-and-dust')).not.toBe(key);
     expect(POSTER_SIZES.map((size) => posterFileKey(key, size)).every(isFileKey)).toBe(true);
+  });
+
+  it('is told from anything else: a key made for its game only', () => {
+    expect(isPosterKey(newPosterKey('steel-and-dust'), 'steel-and-dust')).toBe(true);
+    expect(isPosterKey(newPosterKey('steel-and-dust'), 'brawler')).toBe(false);
+    for (const typed of ['1', '', null, 'posters/steel-and-dust/ABCDEF0123456789abcdef01']) {
+      expect(isPosterKey(typed, 'steel-and-dust')).toBe(false);
+    }
+    expect(isPosterKey('posters/steel-and-dust/../0123456789abcdef0123', 'steel-and-dust')).toBe(
+      false,
+    );
   });
 });

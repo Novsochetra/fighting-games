@@ -11,8 +11,18 @@ export const POSTER_SIZES = [
   { name: 'large', width: 1200, height: 630, type: 'image/png', ext: 'png', maxBytes: 400_000 },
 ];
 
+const POSTER_NAME = /^[0-9a-f]{24}$/;
+
 // a random name, so a poster taken off the board is found by nobody who did not already have it
 export const newPosterKey = (game) => `posters/${game}/${randomBytes(12).toString('hex')}`;
+
+export function isPosterKey(key, game) {
+  const folder = `posters/${game}/`;
+
+  return (
+    typeof key === 'string' && key.startsWith(folder) && POSTER_NAME.test(key.slice(folder.length))
+  );
+}
 
 export const posterFileKey = (posterKey, size) => `${posterKey}-${size.width}.${size.ext}`;
 

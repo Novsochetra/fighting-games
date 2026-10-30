@@ -48,4 +48,13 @@ export const MIGRATIONS = [
       'ALTER TABLE scores ADD COLUMN poster text CHECK (char_length(poster) <= 120)',
     ],
   },
+  {
+    name: '0004_poster_key_shape',
+    statements: [
+      // NOT VALID: a row already holding a value typed in by hand keeps it rather than stop the deploy,
+      // and every write from here on is checked
+      `ALTER TABLE scores ADD CONSTRAINT scores_poster_key
+        CHECK (poster ~ '^posters/[a-z0-9]+(-[a-z0-9]+)*/[0-9a-f]{24}$') NOT VALID`,
+    ],
+  },
 ];

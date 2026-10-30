@@ -175,10 +175,21 @@ UPDATE scores SET poster = NULL WHERE id = 42;
 
 Its files stay in the bucket under a random name that nothing links to any more. To delete them
 too, take the run's `poster` value first (`posters/steel-and-dust/9f2c…`), delete its three files
-(`-320.jpg`, `-640.jpg`, `-1200.png`) in the AWS Console (**S3** → `fighting-games-arcade-files`,
+(`-192.jpg`, `-640.jpg`, `-1200.png`) in the AWS Console (**S3** → `fighting-games-arcade-files`,
 with **Show versions**, as versioning keeps old copies), then **CloudFront** → `E1MCQTXMG16EJB` →
 **Invalidations** → **Create invalidation** with `/posters/steel-and-dust/9f2c…*`, since CloudFront
 keeps a file a year.
+
+To give a run a poster by hand (one posted before posters existed), upload its files first, then set
+`poster` to the key they went up under, exactly as it printed, never a row id or an address:
+
+```sql
+UPDATE scores SET poster = 'posters/steel-and-dust/0123456789abcdef01234567' WHERE id = 42;
+```
+
+The column takes only a key of that shape, `posters/<game>/` and 24 hex digits
+(`0004_poster_key_shape`), and refuses anything else with `scores_poster_key`; the board shows no
+poster for a value that is not one (`isPosterKey`), rather than pictures that are not there.
 
 ## Run against Postgres on your Mac
 

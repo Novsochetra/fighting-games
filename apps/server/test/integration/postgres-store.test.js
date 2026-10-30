@@ -22,6 +22,7 @@ describe('migrate', () => {
       '0001_supporters',
       '0002_scores',
       '0003_score_posters',
+      '0004_poster_key_shape',
     ]);
   });
 

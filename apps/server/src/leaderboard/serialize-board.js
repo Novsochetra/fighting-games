@@ -1,12 +1,16 @@
 import { toArcadeDay } from '../arcade-time.js';
-import { posterImages } from './poster-files.js';
+import { isPosterKey, posterImages } from './poster-files.js';
 
 export function presentScore({ name, score, mission, hero, difficulty, seconds, cleared }) {
   return { name, score, mission, hero, difficulty, seconds, cleared };
 }
 
+// a value typed in by hand in place of a key would point at files that are not there, and the board
+// would show broken pictures
 const posterOf = (saved, storage) =>
-  saved.poster && storage ? posterImages(saved.poster, storage.urlOf) : null;
+  storage && isPosterKey(saved.poster, saved.game)
+    ? posterImages(saved.poster, storage.urlOf)
+    : null;
 
 export function serializeBoard({ week, allTime }, { weekStart, storage = null }) {
   const present = (saved) => ({
