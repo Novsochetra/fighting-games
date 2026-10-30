@@ -10,7 +10,6 @@ import { SupportersHero } from './SupportersHero';
 import { EmptyList, Podium, Roll, type SortOrder, type SupportersView } from './SupportersLists';
 import { phaseOf, useGiven, useSupporters } from '@/api/supporters/use-supporters';
 import { supportersPage } from './view-model.js';
-import './avatar.css';
 import './podium.css';
 import './roll.css';
 import './supporters.css';

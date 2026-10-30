@@ -11,10 +11,11 @@ import { createMemoryScoresStore } from './leaderboard/memory-store.js';
 import { createMemorySupportersStore } from './supporters/memory-store.js';
 
 // without a database (a laptop, the tests) what is sent is kept in memory until the server stops
-function storesOrMemory({ supporters, scores }) {
+function storesOrMemory({ supporters, scores, storage }) {
   return {
     supporters: supporters ?? createMemorySupportersStore(),
     scores: scores ?? createMemoryScoresStore(),
+    storage: storage ?? null,
   };
 }
 

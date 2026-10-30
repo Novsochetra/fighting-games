@@ -1,0 +1,75 @@
+.run-sheet__poster {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 1200 / 630;
+  background: var(--color-card-blank);
+}
+
+.run-sheet__body {
+  gap: var(--space-5);
+}
+
+/* clear of the close button, which stands over the body when there is no poster above it */
+.run-sheet__who {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  inline-size: 100%;
+  padding-inline-end: var(--space-12);
+}
+
+.run-sheet[data-poster='yes'] .run-sheet__who {
+  padding-inline-end: 0;
+}
+
+.run-sheet__who .run-avatar {
+  --run-avatar-size: var(--size-avatar-medium);
+}
+
+.run-sheet__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-inline-size: 0;
+}
+
+.run-sheet__name {
+  overflow-wrap: anywhere;
+}
+
+/* What the run did, in tiles of three across, as Fitness shows a workout. */
+.run-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  inline-size: 100%;
+  margin: 0;
+}
+
+.run-facts__fact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-inline-size: 0;
+  padding: var(--space-3);
+  background: var(--color-fill-quiet);
+  border-radius: var(--radius-segment);
+}
+
+.run-facts__fact--wide {
+  grid-column: span 2;
+}
+
+.run-facts__label {
+  font-size: var(--font-size-apple-caption);
+  color: var(--color-label-muted);
+}
+
+.run-facts__value {
+  margin: 0;
+  font-size: var(--font-size-apple-subheadline);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}

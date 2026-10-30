@@ -100,7 +100,7 @@ Then click **Deploy** on the staged changes (or push a commit), and watch **Depl
 
 The server can put files in the S3 bucket `fighting-games-arcade-files` (Singapore,
 `ap-southeast-1`), which CloudFront sends from `https://dphwn49s8chpb.cloudfront.net`
-(`apps/server/src/storage/`). No route uses it yet. The bucket is private: all four Block Public
+(`apps/server/src/storage/`). It keeps the runs' posters, under `posters/<game>/`. The bucket is private: all four Block Public
 Access settings are on, its policy lets only the CloudFront distribution `E1MCQTXMG16EJB` read it
 (Origin Access Control), and versioning keeps every old copy. A key is written once, since CloudFront
 and browsers keep a file a year: put a new version under a new name (`hero-v2.png`).
@@ -161,6 +161,24 @@ post one that looks real. Hide it the same way, from the `scores` table (the boa
 ```sql
 UPDATE scores SET hidden = true WHERE id = 42;
 ```
+
+Hiding a score takes its poster off the board too.
+
+## Take a poster down
+
+The server checks a poster's size and type, but not what it shows. To take one down and keep its
+run, set its `poster` back to `NULL` (the board drops it within 15 seconds):
+
+```sql
+UPDATE scores SET poster = NULL WHERE id = 42;
+```
+
+Its files stay in the bucket under a random name that nothing links to any more. To delete them
+too, take the run's `poster` value first (`posters/steel-and-dust/9f2c…`), delete its three files
+(`-320.jpg`, `-640.jpg`, `-1200.png`) in the AWS Console (**S3** → `fighting-games-arcade-files`,
+with **Show versions**, as versioning keeps old copies), then **CloudFront** → `E1MCQTXMG16EJB` →
+**Invalidations** → **Create invalidation** with `/posters/steel-and-dust/9f2c…*`, since CloudFront
+keeps a file a year.
 
 ## Run against Postgres on your Mac
 

@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { Avatar } from '@/components/avatar/Avatar';
 
 // A supporter as the screen shows them (view-model.js).
 export interface Supporter {
@@ -19,16 +20,8 @@ export interface Supporter {
 // The rows rise in one after another, but never wait longer than this many steps.
 const MAX_STAGGER = 12;
 
-export function Avatar({ supporter, size }: { supporter: Supporter; size?: 'large' }) {
-  return (
-    <span
-      className={size ? `avatar avatar--${size}` : 'avatar'}
-      data-palette={supporter.palette}
-      aria-hidden="true"
-    >
-      {supporter.initials}
-    </span>
-  );
+export function SupporterAvatar({ supporter, size }: { supporter: Supporter; size?: 'large' }) {
+  return <Avatar initials={supporter.initials} palette={supporter.palette} size={size} />;
 }
 
 // The tier rides beside the name as a gem and a word, so it never reads as the place medal.
@@ -45,7 +38,7 @@ export function PodiumPlace({ supporter }: { supporter: Supporter }) {
   return (
     <li className="podium__place" data-medal={supporter.medal}>
       <span className="podium__portrait">
-        <Avatar supporter={supporter} size="large" />
+        <SupporterAvatar supporter={supporter} size="large" />
         <span className="podium__medal" aria-hidden="true">
           {supporter.rank}
         </span>
@@ -66,7 +59,7 @@ export function RollRow({ supporter, order }: { supporter: Supporter; order: num
       <span className="roll__rank" aria-hidden="true">
         {supporter.rank}
       </span>
-      <Avatar supporter={supporter} />
+      <SupporterAvatar supporter={supporter} />
       <span className="roll__text">
         <span className="roll__title">
           <span className="roll__name">{supporter.name}</span>

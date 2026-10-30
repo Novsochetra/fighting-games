@@ -1,4 +1,4 @@
-/* A round monogram, colored by the supporter's name (paletteOf in format.js). */
+/* A round monogram, colored by the name (paletteOf in avatar.js). */
 .avatar {
   --avatar-top: var(--color-avatar-0-top);
   --avatar-bottom: var(--color-avatar-0-bottom);

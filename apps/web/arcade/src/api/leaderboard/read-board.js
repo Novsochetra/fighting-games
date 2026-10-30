@@ -5,6 +5,31 @@ const NAME = /^[^\p{Cc}]{1,40}$/u;
 
 const isWhole = (value, min) => Number.isInteger(value) && value >= min;
 
+// a poster's address goes into an srcset, which a space or a comma would break up
+function isPosterUrl(url) {
+  try {
+    return new URL(url).protocol === 'https:' && !/[\s,]/.test(url);
+  } catch {
+    return false;
+  }
+}
+
+const isPosterImage = (image) => isWhole(image?.width, 1) && isPosterUrl(image.url);
+
+// a run keeps its place without a poster any part of which is not what a poster's is
+function readPoster(poster) {
+  const images = poster?.images;
+  const isPoster =
+    isPosterUrl(poster?.avatar) &&
+    Array.isArray(images) &&
+    images.length > 0 &&
+    images.every(isPosterImage);
+
+  return isPoster
+    ? { avatar: poster.avatar, images: images.map(({ width, url }) => ({ width, url })) }
+    : null;
+}
+
 function isRun(run) {
   return (
     typeof run?.name === 'string' &&
@@ -19,7 +44,7 @@ function isRun(run) {
   );
 }
 
-const readRun = ({ name, score, mission, hero, difficulty, seconds, cleared, date }) => ({
+const readRun = ({ name, score, mission, hero, difficulty, seconds, cleared, date, poster }) => ({
   name,
   score,
   mission,
@@ -28,6 +53,7 @@ const readRun = ({ name, score, mission, hero, difficulty, seconds, cleared, dat
   seconds,
   cleared: cleared === true,
   date,
+  poster: readPoster(poster),
 });
 
 const readRuns = (runs) => (Array.isArray(runs) ? runs.filter(isRun).map(readRun) : []);

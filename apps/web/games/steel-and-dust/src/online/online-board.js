@@ -14,7 +14,7 @@ const failureText = (error) => (error instanceof BoardRefusal ? error.message : 
 
 // what the menus show of the online board: its runs as last read, and the run being posted;
 // `onChange` draws the open panel again as an answer comes in
-export function createOnlineBoard({ api, ticket, storage, now = Date.now }) {
+export function createOnlineBoard({ api, ticket, storage, now = Date.now, drawPoster = null }) {
   const online = {
     status: 'idle',
     runs: null,
@@ -49,7 +49,7 @@ export function createOnlineBoard({ api, ticket, storage, now = Date.now }) {
 
       Object.assign(online, { posting: true, note: 'Posting…' });
       online.onChange();
-      await sendRun(online, { api, ticket, storage }, { run, name });
+      await sendRun(online, { api, ticket, storage, drawPoster }, { run, name });
       online.posting = false;
       online.onChange();
     },
@@ -77,9 +77,12 @@ async function loadBoard(online, { api, now }) {
   online.onChange();
 }
 
-async function sendRun(online, { api, ticket, storage }, { run, name }) {
+async function sendRun(online, ports, { run, name }) {
+  const { api, ticket, storage } = ports;
+  const runTicket = ticket.current();
+
   try {
-    const answer = await api.postScore(scoreBody(run, name, ticket.current()));
+    const answer = await api.postScore(scoreBody(run, name, runTicket));
     const posted = answer.score?.name ?? name;
 
     ticket.spend();
@@ -90,7 +93,20 @@ async function sendRun(online, { api, ticket, storage }, { run, name }) {
       name: posted,
       triedAt: -Infinity,
     });
+    sendPoster(ports, { run, name: posted, ticket: runTicket });
   } catch (error) {
     online.note = failureText(error);
   }
+}
+
+// the poster goes up behind the note that the run is posted, and one that does not is no loss: the
+// run is on the board either way
+function sendPoster({ api, drawPoster }, { run, name, ticket }) {
+  if (!drawPoster) {
+    return;
+  }
+
+  drawPoster(run, name)
+    .then((images) => api.postPoster({ ticket, images }))
+    .catch(() => {});
 }

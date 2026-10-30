@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { AVATAR_PALETTES, initialsOf, paletteOf } from '@/screens/supporters/avatar.js';
+import { AVATAR_PALETTES, initialsOf, paletteOf } from '@/components/avatar/avatar.js';
 
 describe('initialsOf', () => {
   it('takes the first letter of the first two words', () => {

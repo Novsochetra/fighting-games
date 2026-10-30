@@ -39,6 +39,21 @@ describe('the memory scores store', () => {
     expect(await store.rank(late, WEEK)).toEqual({ week: 2, allTime: 3 });
   });
 
+  it('finds a run waiting for its poster by its ticket while it is fresh, and takes one poster', async () => {
+    const store = storeAt(['2026-10-27T00:00:00Z', '2026-10-28T00:00:00Z']);
+    await store.add(run('OLD', 10), 'old');
+    const saved = await store.add(run('SOK', 20), 'nonce-1');
+    const since = new Date('2026-10-27T12:00:00Z');
+    expect(await store.posterless('brawler', 'old', since)).toBeNull();
+    expect(await store.posterless('puzzle', 'nonce-1', since)).toBeNull();
+    expect((await store.posterless('brawler', 'nonce-1', since)).id).toBe(saved.id);
+    expect(await store.setPoster(saved.id, 'posters/brawler/abc')).toBe(true);
+    expect(await store.setPoster(saved.id, 'posters/brawler/def')).toBe(false);
+    expect(await store.posterless('brawler', 'nonce-1', since)).toBeNull();
+    const { allTime } = await store.board('brawler', { weekStart: WEEK, size: 10 });
+    expect(allTime.map((each) => each.poster)).toEqual(['posters/brawler/abc', null]);
+  });
+
   it('keeps each game to its own board, and each board to its size', async () => {
     const store = createMemoryScoresStore();
     for (let i = 1; i <= 12; i += 1) {

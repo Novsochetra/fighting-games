@@ -18,7 +18,11 @@ describe('migrate', () => {
   it('applies every migration once, then has nothing to do', async () => {
     expect(await migrate(database)).toEqual(MIGRATIONS.map((migration) => migration.name));
     expect(await migrate(database)).toEqual([]);
-    expect([...(await appliedMigrations(database))]).toEqual(['0001_supporters', '0002_scores']);
+    expect([...(await appliedMigrations(database))]).toEqual([
+      '0001_supporters',
+      '0002_scores',
+      '0003_score_posters',
+    ]);
   });
 
   it('leaves nothing behind when a migration fails, so the next run tries it again', async () => {

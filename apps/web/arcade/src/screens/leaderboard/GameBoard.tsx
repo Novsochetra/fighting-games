@@ -2,9 +2,10 @@ import { useMemo } from 'react';
 import { useArcade, useArcadeUrl } from '@/services/arcade-context';
 import { Notice } from '@/components/notice/Notice';
 import type { GameBoard as Rules, GameCard } from '@/api/catalog/game-card';
-import { BoardList, Podium, type BoardView } from '@/components/board/BoardParts';
+import type { BoardView } from '@/components/board/BoardParts';
 import { useBoard, type Period } from '@/api/leaderboard/use-board';
-import { boardView, PODIUM_SIZE, runsOf } from '@/components/board/view-model.js';
+import { boardView, runsOf } from '@/components/board/view-model.js';
+import { BoardRuns } from './BoardRuns';
 
 export const BOARD_LOADING = 'Loading the board…';
 export const BOARD_ERROR = 'The board did not load. Check your connection and try again.';
@@ -71,12 +72,7 @@ export function GameBoard({ game, period }: { game: GameCard; period: Period }) 
         onRetry={() => query.refetch()}
       />
       {view?.isEmpty ? <EmptyBoard game={game} period={period} /> : null}
-      {view && !view.isEmpty ? (
-        <>
-          <Podium rows={view.podium} />
-          <BoardList rows={view.rows.slice(PODIUM_SIZE)} />
-        </>
-      ) : null}
+      {view && !view.isEmpty ? <BoardRuns game={game} view={view} period={period} /> : null}
     </section>
   );
 }
