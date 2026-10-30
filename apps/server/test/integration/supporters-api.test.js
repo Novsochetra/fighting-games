@@ -110,9 +110,16 @@ describe('the supporters API', () => {
 
   it('says what is wrong with a gift it cannot take', async () => {
     await start();
-    const reply = await give({ amount: 0.5 });
+    const reply = await give({ amount: 0 });
     expect(reply.status).toBe(400);
-    expect(JSON.parse(reply.text).error).toMatch(/from \$1 to \$10000/);
+    expect(JSON.parse(reply.text).error).toMatch(/from \$0\.01 to \$10000/);
+  });
+
+  it('takes a gift under a dollar as Bronze', async () => {
+    await start();
+    const reply = await give({ amount: 0.5 });
+    expect(reply.status).toBe(201);
+    expect(JSON.parse(reply.text).supporter).toMatchObject({ amount: 0.5, tier: 'bronze' });
   });
 
   it('holds back a burst of gifts from one address', async () => {

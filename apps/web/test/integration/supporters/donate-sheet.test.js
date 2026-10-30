@@ -74,11 +74,20 @@ describe('the donate sheet', () => {
 
   it('keeps the form up and says why when the amount is wrong', async () => {
     await openSheet();
-    type('donate-amount', '0.50');
+    type('donate-amount', '0');
     submitForm();
     expect(visibleStep()).toEqual(['form']);
     expect(byId('donate-form-error').hidden).toBe(false);
-    expect(byId('donate-form-error').textContent).toBe('Enter an amount from $1 to $10,000.');
+    expect(byId('donate-form-error').textContent).toBe('Enter an amount from $0.01 to $10,000.');
+  });
+
+  it('takes a gift under a dollar', async () => {
+    await openSheet();
+    expect(byId('donate-amount').placeholder).toBe('Other amount, from $0.01');
+    type('donate-amount', '0.50');
+    submitForm();
+    expect(visibleStep()).toEqual(['pay']);
+    expect(byId('donate-pay-amount').textContent).toBe('$0.50');
   });
 
   it('shows the KHQR code for the amount, with a way to save it on a phone', async () => {
@@ -220,6 +229,11 @@ describe('the donate sheet', () => {
       nudge: 'The top tier',
     });
     type('donate-amount', '0.50');
+    expect(tierLine('donate-tier')).toMatchObject({
+      tier: 'bronze',
+      nudge: '$4.50 more for Silver',
+    });
+    type('donate-amount', '0');
     expect(byId('donate-tier').hidden).toBe(true);
   });
 

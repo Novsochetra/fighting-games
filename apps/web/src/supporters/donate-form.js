@@ -3,7 +3,7 @@
 export const DONATION_LIMITS = {
   nameLength: 40,
   messageLength: 140,
-  minAmount: 1,
+  minAmount: 0.01,
   maxAmount: 10000,
 };
 

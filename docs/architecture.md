@@ -702,13 +702,14 @@ records it in `schema_migrations`; `npm run db:migrate` does the same against an
 three steps (`DonateSheet.tsx`, its steps in `DonateForm.tsx` and `DonateSteps.tsx`, the flow in
 `use-donate-flow.ts`, `donate.css`, and the dialog through `use-sheet.ts`, as every sheet):
 
-1. An amount (four quick ones, or any from $1 to $10,000 in dollars and cents), a name (empty gives
-   anonymously) and a message. `donate-form.js` checks them, with the server's limits; a test keeps
-   the two equal. As the amount changes, its tier shows under it (`tiers.js`): Bronze from $1,
-   Silver from $5, Gold from $10 and Diamond from $25, one for each quick amount, with how much more
-   reaches the next. A tier is a cut gem drawn in CSS (`tier.css`), in the podium's metals and a
-   diamond blue with a glint; it pops when the tier changes. The server names each listed gift's tier
-   from the same steps, and has the last word; a test keeps the sheet's steps equal to the server's.
+1. An amount (four quick ones, or any from $0.01 to $10,000 in dollars and cents), a name (empty
+   gives anonymously) and a message. `donate-form.js` checks them, with the server's limits; a test
+   keeps the two equal. As the amount changes, its tier shows under it (`tiers.js`): Bronze under
+   $5, Silver from $5, Gold from $10 and Diamond from $25, one for each quick amount, with how much
+   more reaches the next. A tier is a cut gem drawn in CSS (`tier.css`), in the podium's metals and
+   a diamond blue with a glint; it pops when the tier changes. The server names each listed gift's
+   tier from the same steps, and has the last word; a test keeps the sheet's steps equal to the
+   server's.
 2. The KHQR code (`assets/donate/khqr.jpg`, Wing Bank, NOV SOCHETRA) and the amount to send with any
    bank app that scans KHQR. A phone can't scan its own screen, so Save the code downloads it for
    the bank app's scan-from-photo. No one can see whether money arrived, so I sent it is the gift;

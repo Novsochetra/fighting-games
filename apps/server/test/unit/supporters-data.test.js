@@ -24,16 +24,21 @@ describe('readDonation', () => {
     });
   });
 
-  it.each([0, 0.99, 10000.01, 1.005, -5, 'five', '', null, Number.NaN, Infinity])(
+  it.each([0, 0.001, 10000.01, 1.005, -5, 'five', '', null, Number.NaN, Infinity])(
     'refuses the amount %s',
     (amount) => {
-      expect(readDonation({ amount }).error).toMatch(/amount must be from \$1 to \$10000/);
+      expect(readDonation({ amount }).error).toMatch(/amount must be from \$0\.01 to \$10000/);
     },
   );
 
   it('takes an amount typed as text', () => {
     expect(toCents('7.25')).toBe(725);
     expect(toCents(10000)).toBe(1000000);
+  });
+
+  it('takes a gift under a dollar, down to a cent', () => {
+    expect(toCents('0.50')).toBe(50);
+    expect(toCents(0.01)).toBe(1);
   });
 
   it('counts Khmer letters by code point, as Postgres does', () => {
