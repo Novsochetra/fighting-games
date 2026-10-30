@@ -45,7 +45,6 @@ async function relativeReferences(file) {
     .filter((reference) => !/^[a-z]+:/i.test(reference));
 }
 
-// so an import through @/ cannot reach a game either
 const targetOf = (file, reference) =>
   reference.startsWith('@/')
     ? path.join(ARCADE_SRC, reference.slice(2))
