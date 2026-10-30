@@ -65,7 +65,7 @@ export default [
   },
   {
     files: ['apps/web/**/*.{js,ts,tsx}'],
-    ignores: ['apps/web/**/test/**', 'apps/web/vite.config.ts'],
+    ignores: ['apps/web/**/test/**', 'apps/web/arcade/vite.config.ts'],
     languageOptions: { globals: globals.browser },
     rules: { 'local/no-raw-hex': 'error' },
   },

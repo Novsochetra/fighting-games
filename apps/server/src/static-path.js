@@ -38,13 +38,15 @@ function isPublicSegment(segment) {
   return !isHiddenName(segment);
 }
 
-export function resolveStaticTarget(webRoot, rawPathname) {
+export function resolveStaticTarget(webRoot, rawPathname, mounts = new Map()) {
   const parsed = toPublicSegments(rawPathname);
   if (!parsed) {
     return null;
   }
-  const root = path.resolve(webRoot);
-  const filePath = path.resolve(root, ...parsed.segments);
+  const [first, ...rest] = parsed.segments;
+  const mount = mounts.get(first);
+  const root = path.resolve(mount ?? webRoot);
+  const filePath = path.resolve(root, ...(mount ? rest : parsed.segments));
   if (filePath !== root && !filePath.startsWith(`${root}${path.sep}`)) {
     return null;
   }

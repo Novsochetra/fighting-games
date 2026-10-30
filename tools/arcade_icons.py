@@ -3,7 +3,7 @@
 
     python3 tools/arcade_icons.py [OUT_DIR]
 
-Writes every size the home page and its manifest name to apps/web/assets/icons/ (or OUT_DIR):
+Writes every size the home page and its manifest name to apps/web/arcade/public/assets/icons/ (or OUT_DIR):
   icon-32.png, icon-192.png, icon-512.png  rounded squares, for tabs, desktops and the top bar
   icon-maskable-512.png                    full bleed, the joystick inside Android's safe circle
   apple-touch-icon.png                     180 x 180 full bleed; iOS rounds the corners itself
@@ -79,7 +79,7 @@ def icons():
 
 def main():
     repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    out_dir = sys.argv[1] if len(sys.argv) > 1 else os.path.join(repo, 'apps', 'web', 'assets', 'icons')
+    out_dir = sys.argv[1] if len(sys.argv) > 1 else os.path.join(repo, 'apps', 'web', 'arcade', 'public', 'assets', 'icons')
     os.makedirs(out_dir, exist_ok=True)
     for name, image in icons().items():
         image.save(os.path.join(out_dir, name), optimize=True)

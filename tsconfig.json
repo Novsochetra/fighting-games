@@ -14,8 +14,9 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "paths": { "@/*": ["./apps/web/arcade/src/*"] }
   },
-  "include": ["apps/web/src/**/*", "apps/web/test/**/*"],
+  "include": ["apps/web/arcade/src/**/*", "apps/web/arcade/test/**/*"],
   "exclude": ["apps/web/games/**", "node_modules", "dist"]
 }

@@ -14,7 +14,7 @@
     "start": "node apps/server/src/main.js",
     "db:migrate": "node apps/server/src/db/migrate-cli.js",
     "storage:check": "node apps/server/src/storage/check-cli.js",
-    "build": "vite build --config apps/web/vite.config.ts",
+    "build": "vite build --config apps/web/arcade/vite.config.ts",
     "typecheck": "tsc -p tsconfig.json",
     "lint": "eslint . && stylelint \"apps/**/*.css\"",
     "format": "prettier --write .",

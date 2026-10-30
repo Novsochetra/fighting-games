@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 const script = path.join(root, 'tools/claude-hooks/review-comments.js');
-const component = path.join(root, 'apps/web/src/home/use-details.ts');
+const component = path.join(root, 'apps/web/arcade/src/screens/home/details/use-details.ts');
 const scratchRepos = [];
 
 function runHook(payload, projectDir = root) {
@@ -56,7 +56,7 @@ describe('the comment review hook, after an edit', () => {
     expect(run.status).toBe(0);
     expect(hookSpecificOutput.hookEventName).toBe('PostToolUse');
     expect(hookSpecificOutput.additionalContext).toContain(
-      'apps/web/src/home/use-details.ts:\n  // x',
+      'apps/web/arcade/src/screens/home/details/use-details.ts:\n  // x',
     );
   });
 

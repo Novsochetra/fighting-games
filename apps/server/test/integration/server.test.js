@@ -3,7 +3,7 @@ import path from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { serializeCatalog } from '../../src/catalog/build-catalog.js';
 import { loadCatalog } from '../../src/catalog/read-catalog.js';
-import { GAMES_ROOT, WEB_ROOT } from '../../src/paths.js';
+import { GAMES_ROOT, PAGES_ROOT } from '../../src/paths.js';
 import { rawRequest, startTestServer } from '../support/test-server.js';
 
 let server;
@@ -83,24 +83,25 @@ describe('GET /api/games', () => {
   });
 });
 
-describe('static files from apps/web', () => {
+describe('the arcade as it is written', () => {
   it('serves the home page at /', async () => {
     const response = await get('/');
     expect(response.status).toBe(200);
     expect(response.headers.get('content-type')).toBe('text/html; charset=utf-8');
     expect(response.headers.get('cache-control')).toBe('no-cache');
-    expect(await response.text()).toBe(await readFile(path.join(WEB_ROOT, 'index.html'), 'utf8'));
+    expect(await response.text()).toBe(await readFile(path.join(PAGES_ROOT, 'index.html'), 'utf8'));
   });
 
   it.each([
-    ['/src/home/appearance-early.js', 'text/javascript; charset=utf-8'],
-    ['/src/home/tokens.css', 'text/css; charset=utf-8'],
+    ['/appearance-early.js', 'text/javascript; charset=utf-8'],
+    ['/credits/', 'text/html; charset=utf-8'],
     ['/games/steel-and-dust/assets/icons/icon-192.png', 'image/png'],
     [
       '/games/steel-and-dust/assets/manifest.webmanifest',
       'application/manifest+json; charset=utf-8',
     ],
     ['/robots.txt', 'text/plain; charset=utf-8'],
+    ['/packages/input/src/gamepad.js', 'text/javascript; charset=utf-8'],
     ['/sitemap.xml', 'application/xml; charset=utf-8'],
     ['/assets/social/entry-screen.jpg', 'image/jpeg'],
   ])('serves %s as %s', async (pathname, contentType) => {

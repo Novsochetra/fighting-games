@@ -1,3 +1,4 @@
+import path from 'node:path';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
@@ -11,9 +12,15 @@ const suite = (name) => ({
   },
 });
 
-// The React plugin compiles the arcade's components for the tests as the build does.
+// The React plugin compiles the arcade's components for the tests as the build does, and @/ is the
+// arcade's src/ as in apps/web/arcade/vite.config.ts.
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: [
+      { find: /^@\//, replacement: `${path.join(import.meta.dirname, 'apps/web/arcade/src')}/` },
+    ],
+  },
   test: {
     projects: [
       {

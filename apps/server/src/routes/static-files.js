@@ -11,10 +11,10 @@ import { matchesTag, tagOf } from './file-tags.js';
 // asking again; every other file it checks on each visit.
 const KEPT_FOR_A_YEAR = 'public, max-age=31536000, immutable';
 
-export function createStaticHandler({ webRoot, isImmutable = () => false }) {
+export function createStaticHandler({ webRoot, mounts, isImmutable = () => false }) {
   return async function serveStatic(request, response) {
     const { pathname, query } = splitRequestTarget(request.url);
-    const target = resolveStaticTarget(webRoot, pathname);
+    const target = resolveStaticTarget(webRoot, pathname, mounts);
     const stats = target && (await statOrNull(target.filePath));
     if (!stats) {
       return sendNotFound(response);

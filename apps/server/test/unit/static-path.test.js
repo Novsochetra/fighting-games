@@ -53,6 +53,34 @@ describe('resolveStaticTarget', () => {
     expect(resolveStaticTarget(webRoot, '/games/my%20game').canonicalPath).toBe('/games/my%20game');
   });
 
+  it('serves a mounted first segment from its own folder, and a mounted file as itself', () => {
+    const mounts = new Map([
+      ['games', path.resolve('/srv/arcade/games')],
+      ['robots.txt', path.resolve('/srv/arcade/public/robots.txt')],
+    ]);
+
+    expect(resolveStaticTarget(webRoot, '/games/demo/cover.png', mounts)).toEqual({
+      filePath: path.resolve('/srv/arcade/games/demo/cover.png'),
+      trailingSlash: false,
+      canonicalPath: '/games/demo/cover.png',
+    });
+    expect(resolveStaticTarget(webRoot, '/robots.txt', mounts).filePath).toBe(
+      path.resolve('/srv/arcade/public/robots.txt'),
+    );
+    expect(resolveStaticTarget(webRoot, '/credits/', mounts).filePath).toBe(
+      path.join(webRoot, 'credits'),
+    );
+  });
+
+  it.each(['/games/../../secret', '/games/%2e%2e/secret', '/games/demo/.git/config'])(
+    'keeps the mounted path %s refused as any other',
+    (rawPath) => {
+      const mounts = new Map([['games', path.resolve('/srv/arcade/games')]]);
+
+      expect(resolveStaticTarget(webRoot, rawPath, mounts)).toBeNull();
+    },
+  );
+
   it.each([
     ['plain parent segments', '/../package.json'],
     ['parent segments inside the path', '/games/../../secret'],

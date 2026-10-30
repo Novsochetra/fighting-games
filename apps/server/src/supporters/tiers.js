@@ -2,7 +2,7 @@
 // donate sheet offers ($1, $5, $10, $25), and Bronze at zero, so every gift the server takes has
 // one. No tier is stored: it follows from the amount, so a change of steps needs no migration. The
 // server has the last word; the donate sheet keeps the same steps to show the tier while an amount
-// is typed (web/src/supporters/tiers.js, which a test keeps equal to these).
+// is typed (web/arcade/src/screens/supporters/tiers.js, which a test keeps equal to these).
 export const TIERS = [
   { id: 'bronze', minCents: 0 },
   { id: 'silver', minCents: 500 },

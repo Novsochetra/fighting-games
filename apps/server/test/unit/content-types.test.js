@@ -4,8 +4,8 @@ import { FALLBACK_CONTENT_TYPE, contentTypeFor } from '../../src/content-types.j
 describe('contentTypeFor', () => {
   it.each([
     ['index.html', 'text/html; charset=utf-8'],
-    ['src/arcade/main.js', 'text/javascript; charset=utf-8'],
-    ['src/home/page.css', 'text/css; charset=utf-8'],
+    ['src/main.js', 'text/javascript; charset=utf-8'],
+    ['src/styles/page.css', 'text/css; charset=utf-8'],
     ['games/demo/game.json', 'application/json; charset=utf-8'],
     ['assets/icons/icon-192.png', 'image/png'],
     ['assets/logo.svg', 'image/svg+xml'],

@@ -1,8 +1,9 @@
 import http from 'node:http';
 import { sendForbidden, sendMethodNotAllowed, sendServerError } from './http-responses.js';
-import { GAMES_ROOT, WEB_ROOT } from './paths.js';
+import { GAMES_ROOT } from './paths.js';
 import { chooseRoute } from './router.js';
 import { createApiRoutes } from './routes/api-routes.js';
+import { createSourceFiles } from './routes/app-files.js';
 import { createStaticHandler } from './routes/static-files.js';
 import { isFromOtherSite } from './security/request-origin.js';
 import { splitRequestTarget } from './static-path.js';
@@ -18,7 +19,7 @@ function storesOrMemory({ supporters, scores }) {
 }
 
 export function createArcadeServer({
-  webRoot = WEB_ROOT,
+  webRoot,
   gamesRoot = GAMES_ROOT,
   trustProxy = false,
   limiters,
@@ -36,7 +37,9 @@ export function createArcadeServer({
     log: { warn, logError },
     now,
   });
-  const serveStatic = serveFiles ?? createStaticHandler({ webRoot });
+  // a webRoot of its own (a test's fixture site) is served as one folder
+  const serveStatic =
+    serveFiles ?? (webRoot ? createStaticHandler({ webRoot }) : createSourceFiles());
   return http.createServer((request, response) => {
     dispatch({ request, response, routes, serveStatic }).catch((error) => {
       logError(error);
