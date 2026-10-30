@@ -36,7 +36,6 @@
 }
 
 .board-place {
-  position: relative;
   display: flex;
   flex: 1;
   min-inline-size: 0;
@@ -46,7 +45,7 @@
   text-align: start;
   cursor: pointer;
   background: var(--color-launcher-surface);
-  border: 0;
+  border: var(--border-width-hairline) solid var(--color-launcher-separator);
   border-radius: var(--radius-card);
   transition: scale var(--duration-fast) var(--easing-standard);
 }
@@ -60,26 +59,22 @@
   outline-offset: var(--border-width-ring);
 }
 
-/* Cards and the list keep no border, as Apple's do: the surface sets them off the page, and a faint
-   edge is drawn over them as the home page's game cards draw theirs, over the poster too, and over a
-   pressed row, rather than a line framing them. */
-.board-place::after,
-.board-list::after {
+/* the poster runs to the card's rounded edge, which is drawn over it as the home page's game cards
+   draw theirs, rather than a border framing it */
+.board-place--champion {
+  position: relative;
+  flex-direction: column;
+  overflow: hidden;
+  border: 0;
+}
+
+.board-place--champion::after {
   position: absolute;
   inset: 0;
   pointer-events: none;
   content: '';
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card-edge);
-}
-
-.board-list::after {
-  border-radius: var(--radius-tile);
-}
-
-.board-place--champion {
-  flex-direction: column;
-  overflow: hidden;
 }
 
 .board-place__media {
@@ -270,12 +265,12 @@
 
 /* An inset grouped list, as in iOS Settings. */
 .board-list {
-  position: relative;
   padding: 0;
   margin: 0;
   overflow: hidden;
   list-style: none;
   background: var(--color-launcher-surface);
+  border: var(--border-width-hairline) solid var(--color-launcher-separator);
   border-radius: var(--radius-tile);
 }
 
