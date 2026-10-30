@@ -1,8 +1,6 @@
 import { Avatar } from '@/components/avatar/Avatar';
 import type { BoardRow } from './BoardParts';
 
-// The run's hero, cut out of its poster, or the player's initials for a run posted without one, its
-// place on its edge.
 export function RunAvatar({ row }: { row: BoardRow }) {
   return (
     <span className="run-avatar" data-medal={row.medal || undefined}>

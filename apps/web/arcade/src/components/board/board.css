@@ -230,7 +230,6 @@
   outline-offset: calc(var(--border-width-ring) - 1px);
 }
 
-/* every place rides on the avatar's edge, as a medal for the top three and plain for the rest */
 .run-avatar__place {
   position: absolute;
   inset-block-end: calc(-1 * var(--space-1));
