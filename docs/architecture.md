@@ -407,9 +407,9 @@ no board (404).
   off the board with it.
 
 The scores live in one `scores` table (`0002_scores` in `db/migrations.js`, and its `poster` from
-`0003_score_posters`) with the table's own
-checks, an index for the all-time board (`game, score DESC, id`) and one for the week's
-(`game, created_at`), both without hidden rows.
+`0003_score_posters`, which takes only a key `newPosterKey` could have made, `0004_poster_key_shape`)
+with the table's own checks, an index for the all-time board (`game, score DESC, id`) and one for
+the week's (`game, created_at`), both without hidden rows.
 
 ## File storage
 

@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { migrate } from '../../src/db/migrate.js';
+import { MIGRATIONS } from '../../src/db/migrations.js';
 import { createPostgresScoresStore } from '../../src/leaderboard/postgres-store.js';
 import { createPgliteDatabase } from '../support/pglite-database.js';
 
@@ -26,6 +27,9 @@ const run = (name, score, extra) => ({
   cleared: false,
   ...extra,
 });
+
+const KEY = 'posters/brawler/0123456789abcdef01234567';
+const OTHER_KEY = 'posters/brawler/89abcdef0123456789abcdef';
 
 const datedAt = (name, time) =>
   database.query('UPDATE scores SET created_at = $2 WHERE name = $1', [name, time]);
@@ -82,11 +86,11 @@ describe('the Postgres scores store', () => {
     expect(await store.posterless('brawler', 'nonce-2', since)).toBeNull();
     expect(await store.posterless('puzzle', 'nonce-1', since)).toBeNull();
     expect((await store.posterless('brawler', 'nonce-1', since)).id).toBe(saved.id);
-    expect(await store.setPoster(saved.id, 'posters/brawler/abc')).toBe(true);
-    expect(await store.setPoster(saved.id, 'posters/brawler/def')).toBe(false);
+    expect(await store.setPoster(saved.id, KEY)).toBe(true);
+    expect(await store.setPoster(saved.id, OTHER_KEY)).toBe(false);
     expect(await store.posterless('brawler', 'nonce-1', since)).toBeNull();
     const { week } = await store.board('brawler', { weekStart: WEEK, size: 10 });
-    expect(week[0].poster).toBe('posters/brawler/abc');
+    expect(week[0].poster).toBe(KEY);
   });
 
   it('gives no poster to a run posted too long ago, or hidden', async () => {
@@ -101,10 +105,27 @@ describe('the Postgres scores store', () => {
 
   it('takes a poster off the board with its key set back to NULL, and keeps the run', async () => {
     const saved = await store.add(run('SOK', 4200), 'nonce-1');
-    await store.setPoster(saved.id, 'posters/brawler/abc');
+    await store.setPoster(saved.id, KEY);
     await database.query('UPDATE scores SET poster = NULL WHERE id = $1', [saved.id]);
     const { week } = await store.board('brawler', { weekStart: WEEK, size: 10 });
     expect(week).toEqual([expect.objectContaining({ name: 'SOK', poster: null })]);
+  });
+
+  it.each([
+    ['a row id', '1'],
+    ['a whole address', `https://files.example.test/${KEY}-192.jpg`],
+    ['a file of the poster', `${KEY}-192.jpg`],
+    ['a name too short', 'posters/brawler/abc123'],
+  ])('refuses %s typed in by hand in place of a poster key', async (_label, typed) => {
+    const saved = await store.add(run('SOK', 4200), 'nonce-1');
+    const typedIn = database.query('UPDATE scores SET poster = $2 WHERE id = $1', [
+      saved.id,
+      typed,
+    ]);
+    await expect(typedIn).rejects.toThrow(/scores_poster_key/);
+    await database.query('UPDATE scores SET poster = $2 WHERE id = $1', [saved.id, KEY]);
+    const { week } = await store.board('brawler', { weekStart: WEEK, size: 10 });
+    expect(week[0].poster).toBe(KEY);
   });
 
   it('keeps the first secret made, so every server after a deploy checks the same tickets', async () => {
@@ -159,4 +180,24 @@ describe('a database the pre-deploy never gave the scores table', () => {
       await bare.close();
     }
   });
+});
+
+describe('the poster key check, as it is deployed', () => {
+  it('lets the deploy through over a value typed in by hand before it, and checks every write after', async () => {
+    const older = await createPgliteDatabase();
+
+    try {
+      await migrate(older, MIGRATIONS.slice(0, 3));
+      const scores = createPostgresScoresStore(older);
+      const saved = await scores.add(run('DARA', 338314), 'nonce-1');
+      await older.query("UPDATE scores SET poster = '1' WHERE id = $1", [saved.id]);
+      expect(await migrate(older)).toEqual(['0004_poster_key_shape']);
+      const { rows } = await older.query('SELECT poster FROM scores WHERE id = $1', [saved.id]);
+      expect(rows[0].poster).toBe('1');
+      const again = older.query("UPDATE scores SET poster = '2' WHERE id = $1", [saved.id]);
+      await expect(again).rejects.toThrow(/scores_poster_key/);
+    } finally {
+      await older.close();
+    }
+  }, 30000);
 });
