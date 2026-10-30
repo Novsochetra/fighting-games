@@ -85,7 +85,8 @@ describe('the leaderboard screen', () => {
     const champion = document.querySelector('.board-place--champion .board-place__poster');
     expect(champion.getAttribute('src')).toBe('https://files.example.test/sok-640');
     expect(texts('.board-place--runner .avatar')).toEqual(['M', 'A']);
-    expect(texts('.board-place--runner .run-avatar__medal')).toEqual(['2', '3']);
+    expect(texts('.board-place--runner .run-avatar__place')).toEqual(['2', '3']);
+    expect(texts('.board-list .run-avatar__place')).toEqual(['4']);
     const row = document.querySelector('.board-list__row .run-avatar__image');
     expect(row.getAttribute('src')).toBe('https://files.example.test/bopha-192');
     expect(row.getAttribute('loading')).toBe('lazy');
@@ -119,7 +120,7 @@ describe('the leaderboard screen', () => {
     fireEvent.click(document.querySelector('.board-place--champion'));
     expect(byId('run-poster')).toBeNull();
     expect(texts('#run-sheet .avatar')).toEqual(['SD']);
-    expect(texts('#run-sheet .run-avatar__medal')).toEqual(['1']);
+    expect(texts('#run-sheet .run-avatar__place')).toEqual(['1']);
   });
 
   it('writes a name a player typed as text, never as markup', async () => {

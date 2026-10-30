@@ -45,7 +45,7 @@ function Champion({ row, art, onPick }: { row: BoardRow; art: BoardArt; onPick: 
 function RunnerUp({ row, onPick }: { row: BoardRow; onPick: OnPick }) {
   return (
     <button className="board-place board-place--runner" type="button" onClick={() => onPick(row)}>
-      <RunAvatar row={row} medal />
+      <RunAvatar row={row} />
       <span className="board-place__who">
         <span className="board-place__name">{row.name}</span>
         <span className="board-place__score">{row.scoreLabel}</span>

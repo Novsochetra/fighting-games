@@ -56,7 +56,7 @@ export function RunSheet({ row, isOpen, periodLabel, onClose }: RunSheetProps) {
       {row ? (
         <div className="sheet__body run-sheet__body">
           <div className="run-sheet__who">
-            {row.poster ? null : <RunAvatar row={row} medal={row.medal !== ''} />}
+            {row.poster ? null : <RunAvatar row={row} />}
             <div className="run-sheet__heading">
               <h2 className="sheet__title run-sheet__name" id="run-title">
                 {row.name}

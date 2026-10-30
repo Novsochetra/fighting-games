@@ -719,11 +719,13 @@ name still read out with it (`topbar.css`).
   segmented control, then one game's board (a game has one when its catalog entry names it:
   `board-rules.js` reads its heroes' and difficulties' names into the game's card, as `board`): the
   game's icon, name and Play, then its top three (`Podium.tsx`): the first place across the board,
-  its poster over a gold-lit bar with its medal, name, hero, how far it got and score (on a wide
-  screen the poster and the words side by side), and second and third side by side under it, each
-  with its avatar wearing its medal. The rest follow in an inset list, a row each: place, avatar,
-  name, hero and how far it got on one line, score and day. A long name or hero is cut short
-  rather than wrapping. An empty board invites a first run, with Play.
+  its poster running to the card's rounded edge, drawn over it as the home page's game cards draw
+  theirs, over a gold-lit bar with its medal, name, hero, how far it got and score (on a wide screen
+  the poster and the words side by side), and second and third side by side under it, each with its
+  avatar wearing its medal. The rest follow in an inset list, a row each: the avatar with its place on
+  its edge, as the top three wear theirs, then name, hero and how far it got on one line, score and
+  day. A long name or hero is cut short rather than wrapping. An empty board invites a first run,
+  with Play.
 - **Avatars and posters.** A run's avatar is its hero cut out of its poster, round (`RunAvatar.tsx`);
   a run posted without a poster shows the player's initials instead, in the monogram the supporters
   wear (`components/avatar/`). The first place shows its poster 640 wide, or the game's own painting

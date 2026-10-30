@@ -51,9 +51,6 @@ export function BoardList({ rows, onPick }: { rows: BoardRow[]; onPick: (row: Bo
           style={{ '--order': Math.min(i, MAX_STAGGER) } as CSSProperties}
         >
           <button className="board-list__open" type="button" onClick={() => onPick(row)}>
-            <span className="board-list__place" aria-hidden="true">
-              {row.place}
-            </span>
             <RunAvatar row={row} />
             <span className="board-list__text">
               <span className="board-list__name">{row.name}</span>
