@@ -32,8 +32,10 @@ FULL_BLEED_FIT = 0.92
 # Android crops a maskable icon to any shape inside the circle of 80% of its width.
 SAFE_RADIUS = 0.4
 FRINGE_PASSES = 4
+TINT_REACH = 8
+CUT_FADE_ROWS = 48
 
-# Where the sun sits, in shares of the logo's box: behind the middle tower's face.
+# Where the sun sits, in shares of the logo's box: behind the middle tower and the fighter's head.
 SUN_IN_LOGO = (0.5, 0.3)
 # Outermost first: radius in shares of the logo's width, colour, and how much of the dusk it covers.
 SUN_GLOW = (
@@ -55,6 +57,17 @@ def neighbours_of(mask):
     return grown
 
 
+def faded_at_cut_top(alpha):
+    # The drawing cuts its middle tower off at the top; left whole, the cut would stand as a flat
+    # line against the sun.
+    if not alpha[0].any():
+        return alpha
+
+    share = np.clip(np.arange(len(alpha)) / CUT_FADE_ROWS, 0, 1)
+
+    return alpha * (share * share * (3 - 2 * share))[:, None]
+
+
 def key_out_magenta(image):
     red, green, blue = (np.asarray(image, dtype=int)[..., channel] for channel in range(3))
     background = (red > 170) & (blue > 170) & (green < 100)
@@ -66,10 +79,14 @@ def key_out_magenta(image):
         background |= fringe & neighbours_of(background)
 
     # the tinted outline the passes leave (pockets the magenta reached only through the art) goes
-    # back to the dark it was drawn
-    untinted = np.where(fringe, spill, 0)
+    # back to the dark it was drawn; further in, red beside blue (a flag on an armband) is the art's own
+    near = background
+    for _ in range(TINT_REACH):
+        near = neighbours_of(near)
+
+    untinted = np.where(fringe & near, spill, 0)
     rgb = np.stack([red - untinted, green, blue - untinted], axis=2).astype(np.uint8)
-    alpha = np.where(background, 0, 255).astype(np.uint8)
+    alpha = faded_at_cut_top(np.where(background, 0.0, 255.0)).round().astype(np.uint8)
     logo = Image.fromarray(np.dstack([rgb, alpha]), 'RGBA')
 
     return logo.crop(logo.getbbox())
