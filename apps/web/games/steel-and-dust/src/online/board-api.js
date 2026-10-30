@@ -1,6 +1,7 @@
 // the arcade's own API, by address from the game's page, as Back to arcade finds the arcade
 const BOARD_ADDRESS = '../../api/leaderboard';
 const TICKETS_ADDRESS = '../../api/leaderboard/tickets';
+const POSTERS_ADDRESS = '../../api/leaderboard/posters';
 export const GAME_ID = 'steel-and-dust';
 
 export const OFFLINE_MESSAGE = "Can't reach the online board. Check your connection.";
@@ -37,6 +38,10 @@ export function createBoardApi(fetch) {
 
     async postScore(score) {
       return readAnswer(await send(BOARD_ADDRESS, { game: GAME_ID, ...score }));
+    },
+
+    async postPoster(poster) {
+      return readAnswer(await send(POSTERS_ADDRESS, { game: GAME_ID, ...poster }));
     },
   };
 }

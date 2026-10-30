@@ -23,17 +23,20 @@ function lazyTickets(scores, now) {
   };
 }
 
-export function createLeaderboard({ gamesRoot, scores, now = Date.now }) {
+export function createLeaderboard({ gamesRoot, scores, storage = null, now = Date.now }) {
   const weekStart = () => weekStartOf(new Date(now()));
 
   async function loadBoard(game) {
     const start = weekStart();
+    const board = await scores.board(game, { weekStart: start, size: BOARD_SIZE });
 
-    return serializeBoard(await scores.board(game, { weekStart: start, size: BOARD_SIZE }), start);
+    return serializeBoard(board, { weekStart: start, storage });
   }
 
   return {
     scores,
+    storage,
+    now,
     weekStart,
     rulesByGame: createBoardRules(gamesRoot),
     tickets: lazyTickets(scores, now),

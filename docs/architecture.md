@@ -15,7 +15,7 @@ apps/
       routes/             the API's routes, and app-files.js: the build, Vite as you write (dev), or
                           the arcade as written with no Vite (the tests' server)
       security/           the same-site check and the rate limit for the API
-      storage/            files in S3, sent from CloudFront (see File storage); no route uses it yet
+      storage/            files in S3, sent from CloudFront (see File storage): the runs' posters
       supporters/         reading a gift, the Postgres and in-memory stores, the JSON they send
       paths.js            where each part lies on disk: the arcade, its pages, public/ and src/, the
                           games and the packages
@@ -343,7 +343,12 @@ no board (404).
         "difficulty": 1,
         "seconds": 1500,
         "cleared": false,
-        "date": "2026-10-28"
+        "date": "2026-10-28",
+        "poster": [
+          { "width": 320, "url": "https://…cloudfront.net/posters/steel-and-dust/9f2c…-320.jpg" },
+          { "width": 640, "url": "https://…cloudfront.net/posters/steel-and-dust/9f2c…-640.jpg" },
+          { "width": 1200, "url": "https://…cloudfront.net/posters/steel-and-dust/9f2c…-1200.png" }
+        ]
       }
     ],
     "allTime": []
@@ -375,19 +380,37 @@ no board (404).
   at least as old as the time the run claims, give or take 30 seconds. Posting a made-up score
   means waiting out the time it claims. The ticket's nonce is stored with the score, unique, so a
   ticket is spent once (409). It answers 201 with where the run placed, this week and all time.
-- **Guards.** Tickets and scores come only from the arcade's own pages (an `Origin` of its own host),
-  as gifts do, in JSON of at most 2 KB; a visitor gets 30 tickets and 10 scores in 10 minutes. A
-  cheat's score is hidden, not deleted, with `UPDATE scores SET hidden = true WHERE id = …`
-  (`docs/deploy-railway.md`).
+- **Posters.** A run's poster, the picture of it the game draws, goes up just after its score with
+  `POST /api/leaderboard/posters`: `game`, the `ticket` the run was posted with, and `images`, the
+  poster in each size the board shows (`poster-files.js`), as base64. Every game's poster has the
+  shape of a link preview, and comes as `small` (320x168 JPEG, at most 40 KB) for a row of the
+  board, `medium` (640x336 JPEG, 120 KB) for the podium, and `large` (1200x630 PNG, 400 KB, so its
+  pixels stay crisp) for the whole poster, which loads only once a player opens it. The server
+  checks each size is the image and shape it says (`read-poster.js`, `image-size.js`) but cannot
+  check what it shows, so a poster can be taken down by hand (`docs/deploy-railway.md`). The ticket
+  proves the poster is that run's: it must be signed here, and its run posted in the last ten
+  minutes, not hidden and with no poster yet (409). The files go up under a random name,
+  `posters/<game>/<24 hex>-<width>.<jpg|png>`, before the run names it in its `poster` column, so
+  the board never shows a poster still on its way, and the board answers each run with every size's
+  address (`poster`, or `null`). Without file storage (`S3_BUCKET` unset) posters are turned away
+  (404) and the board shows none.
+- **Guards.** Tickets, scores and posters come only from the arcade's own pages (an `Origin` of its
+  own host), as gifts do, in JSON of at most 2 KB (a poster's at most what its three sizes may weigh
+  in base64, about 750 KB); a visitor gets 30 tickets, 10 scores and 10 posters in 10 minutes, a
+  poster counted before its body is read. A cheat's score is hidden, not deleted, with
+  `UPDATE scores SET hidden = true WHERE id = …` (`docs/deploy-railway.md`), which takes its poster
+  off the board with it.
 
-The scores live in one `scores` table (`0002_scores` in `db/migrations.js`) with the table's own
+The scores live in one `scores` table (`0002_scores` in `db/migrations.js`, and its `poster` from
+`0003_score_posters`) with the table's own
 checks, an index for the all-time board (`game, score DESC, id`) and one for the week's
 (`game, created_at`), both without hidden rows.
 
 ## File storage
 
-The server can keep files in S3 and send them from CloudFront (`src/storage/`), for a game that needs
-to keep pictures; no route uses it yet. It is on once `S3_BUCKET` is set, with `AWS_REGION` and
+The server can keep files in S3 and send them from CloudFront (`src/storage/`), where it keeps the
+runs' posters (see Leaderboard API); `main.js` opens it (`open-storage.js`). It is on once
+`S3_BUCKET` is set, with `AWS_REGION` and
 `CLOUDFRONT_URL` (an `https:` address), and signs in with the AWS key in `AWS_ACCESS_KEY_ID` and
 `AWS_SECRET_ACCESS_KEY` (on a Mac, the one in `~/.aws`). `putFile` takes a key, the file and its
 type, and answers the file's CloudFront address.
@@ -693,6 +716,14 @@ name still read out with it (`topbar.css`).
   game's icon, name and Play, its top three on a podium (second, first raised, third, in the medals'
   metals), then the rest in an inset list with each run's hero, how far it got, its difficulty,
   score and day. An empty board invites a first run, with Play.
+- **Posters.** A run with a poster shows it across its podium place and small at the start of its
+  row (`PosterButton.tsx`), each with every size in its `srcset` and how wide it shows in its
+  `sizes`, so the browser loads the smallest size sharp there: on a phone the podium's 640 wide and
+  the rows' 320, about 15 KB a row, and the rows below the screen only as they come near
+  (`loading="lazy"`). A tap opens the whole poster in a sheet (`screens/leaderboard/poster/`), where
+  a phone's screen loads the 1200 wide PNG, with the player's name, place, score, how far the run got
+  and its day. `read-board.js` keeps a poster only if every size is an `https:` address an `srcset`
+  can hold (no space or comma); a run with any other keeps its place without one.
 - **One game at a time.** With more than one game with a board, a row of them over the period picks
   whose board shows, like the App Store's categories, the picked one filled in the tint; a phone
   scrolls the row (`GamePicker.tsx`). With one game there is nothing to pick, so the row waits until
@@ -1041,7 +1072,8 @@ Steel & Dust posts its runs to the arcade's API (`src/online/`), by address from
   it. `player-name.js` says what is wrong with a name (empty, too long, a letter it cannot hold)
   before sending it, with the server's limits, which a server test keeps equal; the words the
   server blocks are its own to know. Post sends the run (`score-body.js`: its time in whole seconds)
-  with its ticket, which it then spends; the panel shows where it placed
+  with its ticket, which it then spends, and then its poster (see Sharing a run); the panel shows
+  where it placed
   (`#3 this week · #18 all time`), the field keeps the name as posted, the Game over note says
   `Online #3 this week`, and Post becomes See the board. A refusal the server explains (a name it
   turns away, a run too old) is shown as it says it, and the ticket kept to try again. On a phone
@@ -1070,6 +1102,12 @@ score, how far the run got, its place this week once posted, and the arcade's ad
 sheet gets the card and the words (`I reached mission 8 of Steel & Dust as Bokator with 48,210
 points. Can you beat me?`) with the game's canonical address; a browser that shares only words shares
 those, and one that cannot share at all saves the card.
+
+A run posted online sends the board its own copy of the card (`board-poster.js`, drawn by
+`card-canvas.js` as Share's is): the player's name, `by Dara`, in place of the rank, which would soon
+be out of date there, in each size the board keeps (`src/online/poster-sizes.js`, which a server test
+keeps equal to its own): 320 and 640 wide as JPEG and 1200 wide as PNG. It is drawn and sent behind
+the note that the run is posted, and one that fails is no loss: the run is on the board either way.
 
 ### Missions
 

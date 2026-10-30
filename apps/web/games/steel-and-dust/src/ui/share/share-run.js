@@ -1,46 +1,12 @@
-import { heroById } from '../../data/heroes.js';
-import { CARD_SIZE, drawShareCard } from './share-card.js';
+import { canvasBlob, drawCardCanvas, gameUrl } from './card-canvas.js';
 import { SHARE_TITLE, shareText } from './share-text.js';
 
-const BACKDROP = 'assets/ui/select/bg-landscape.png';
 const FILE_NAME = 'steel-and-dust-run.png';
 // the card is drawn once the over screen has come in, so drawing it never stutters the menu's entry
 const PREPARE_DELAY_MS = 600;
 
-function loadImage(window, src) {
-  return new Promise((resolve, reject) => {
-    const image = new window.Image();
-
-    image.onload = () => resolve(image);
-    image.onerror = reject;
-    image.src = src;
-  });
-}
-
-// the canonical address is the game's one public address, the same wherever the page was opened
-function gameUrl(document) {
-  return document.querySelector('link[rel="canonical"]')?.href ?? document.location.href;
-}
-
-const siteOf = (url) => new URL(url).host.replace(/^www\./, '');
-
 async function drawCardFile({ window, document, run, rank }) {
-  const [backdrop, heroArt] = await Promise.all([
-    loadImage(window, BACKDROP),
-    loadImage(window, heroById(run.hero).cards.middle),
-  ]);
-  await Promise.all([400, 700].map((weight) => document.fonts?.load(`${weight} 32px Silkscreen`)));
-  const canvas = document.createElement('canvas');
-
-  Object.assign(canvas, CARD_SIZE);
-  drawShareCard(canvas.getContext('2d'), {
-    run,
-    rank,
-    backdrop,
-    heroArt,
-    site: siteOf(gameUrl(document)),
-  });
-  const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+  const blob = await canvasBlob(await drawCardCanvas({ window, document, run, rank }), 'image/png');
 
   return blob ? new window.File([blob], FILE_NAME, { type: 'image/png' }) : null;
 }

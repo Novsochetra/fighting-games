@@ -2,12 +2,13 @@ import { createLeaderboard } from '../leaderboard/create-leaderboard.js';
 import { createGamesApiHandler } from './games-api.js';
 import { createHealthHandler } from './health.js';
 import { createLeaderboardApi } from './leaderboard-api.js';
+import { createPostersApi } from './posters-api.js';
 import { createRunTicketsApi } from './run-tickets-api.js';
 import { createSupportersApi } from './supporters-api.js';
 
 export function createApiRoutes({ gamesRoot, stores, trustProxy, limiters = {}, log, now }) {
-  const { supporters, scores } = stores;
-  const leaderboard = createLeaderboard({ gamesRoot, scores, now });
+  const { supporters, scores, storage } = stores;
+  const leaderboard = createLeaderboard({ gamesRoot, scores, storage, now });
   const { warn, logError } = log;
 
   return [
@@ -23,6 +24,10 @@ export function createApiRoutes({ gamesRoot, stores, trustProxy, limiters = {}, 
     {
       path: '/api/leaderboard/tickets',
       handlers: createRunTicketsApi({ leaderboard, trustProxy, limiter: limiters.ticket }),
+    },
+    {
+      path: '/api/leaderboard/posters',
+      handlers: createPostersApi({ leaderboard, trustProxy, limiter: limiters.poster }),
     },
     {
       path: '/api/health',

@@ -76,6 +76,37 @@ describe('the Postgres scores store', () => {
     expect((await store.rank(fair, new Date(0))).allTime).toBe(1);
   });
 
+  it('finds a run waiting for its poster by its ticket, and takes the poster once', async () => {
+    const saved = await store.add(run('SOK', 4200), 'nonce-1');
+    const since = new Date(Date.now() - 60_000);
+    expect(await store.posterless('brawler', 'nonce-2', since)).toBeNull();
+    expect(await store.posterless('puzzle', 'nonce-1', since)).toBeNull();
+    expect((await store.posterless('brawler', 'nonce-1', since)).id).toBe(saved.id);
+    expect(await store.setPoster(saved.id, 'posters/brawler/abc')).toBe(true);
+    expect(await store.setPoster(saved.id, 'posters/brawler/def')).toBe(false);
+    expect(await store.posterless('brawler', 'nonce-1', since)).toBeNull();
+    const { week } = await store.board('brawler', { weekStart: WEEK, size: 10 });
+    expect(week[0].poster).toBe('posters/brawler/abc');
+  });
+
+  it('gives no poster to a run posted too long ago, or hidden', async () => {
+    await store.add(run('OLD', 10), 'old');
+    await store.add(run('BAD', 20), 'bad');
+    await datedAt('OLD', '2026-10-20T00:00:00Z');
+    await database.query("UPDATE scores SET hidden = true WHERE name = 'BAD'");
+    const since = new Date('2026-10-21T00:00:00Z');
+    expect(await store.posterless('brawler', 'old', since)).toBeNull();
+    expect(await store.posterless('brawler', 'bad', since)).toBeNull();
+  });
+
+  it('takes a poster off the board with its key set back to NULL, and keeps the run', async () => {
+    const saved = await store.add(run('SOK', 4200), 'nonce-1');
+    await store.setPoster(saved.id, 'posters/brawler/abc');
+    await database.query('UPDATE scores SET poster = NULL WHERE id = $1', [saved.id]);
+    const { week } = await store.board('brawler', { weekStart: WEEK, size: 10 });
+    expect(week).toEqual([expect.objectContaining({ name: 'SOK', poster: null })]);
+  });
+
   it('keeps the first secret made, so every server after a deploy checks the same tickets', async () => {
     const first = await store.secret();
     expect(first.length).toBeGreaterThanOrEqual(32);

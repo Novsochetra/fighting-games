@@ -11,10 +11,16 @@ export function fakeBoardApi(answers = {}) {
     loadBoard: vi.fn(async () => answers.board ?? EMPTY_BOARD),
     requestTicket: vi.fn(async () => answers.ticket ?? 'ticket-1'),
     postScore: vi.fn(async () => answers.posted ?? { rank: { week: 1, allTime: 4 } }),
+    postPoster: vi.fn(async () => ({ poster: [] })),
   };
 }
 
-export function createTestOnline({ api = fakeBoardApi(), storage = memoryStorage(), now } = {}) {
+export function createTestOnline({
+  api = fakeBoardApi(),
+  storage = memoryStorage(),
+  now,
+  drawPoster,
+} = {}) {
   const ticket = createRunTicket({ api, storage });
-  return { api, storage, online: createOnlineBoard({ api, ticket, storage, now }) };
+  return { api, storage, online: createOnlineBoard({ api, ticket, storage, now, drawPoster }) };
 }

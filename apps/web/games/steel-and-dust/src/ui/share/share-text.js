@@ -13,6 +13,8 @@ export function reachedLine(run) {
 
 export const rankLine = (rank) => (rank ? `#${rank.week} this week online` : '');
 
+const playerLine = (name) => (name ? `by ${name}` : '');
+
 // what goes with the card: what the run did, and a dare
 export function shareText(run, rank) {
   const hero = heroById(run.hero).name;
@@ -24,12 +26,14 @@ export function shareText(run, rank) {
   return `${what} with ${points(run.score)} points${place}. Can you beat me?`;
 }
 
-// the words on the card, from the top
-export function cardWords(run, rank) {
+// the words on the card, from the top; the board's copy names who played in place of a rank that
+// would soon be out of date there
+export function cardWords(run, rank, name) {
   return {
     hero: heroById(run.hero).name,
     score: points(run.score),
     reached: reachedLine(run),
     rank: rankLine(rank),
+    player: playerLine(name),
   };
 }

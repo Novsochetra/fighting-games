@@ -21,6 +21,27 @@ describe('readBoard', () => {
     expect(readBoard({ week: [run('Sok', 10, extra)], allTime: [] }).week).toEqual([]);
   });
 
+  const poster = (url = 'https://files.example.test/p') =>
+    [320, 640, 1200].map((width) => ({ width, url: `${url}-${width}.jpg` }));
+
+  it("keeps a run's poster, each size an https address", () => {
+    const [read] = readBoard({ week: [run('Sok', 10, { poster: poster() })], allTime: [] }).week;
+    expect(read.poster).toEqual(poster());
+    expect(readBoard(sampleBoard()).week[0].poster).toBeNull();
+  });
+
+  it.each([
+    ['an http address', poster('http://files.example.test/p')],
+    ['a script address', poster('javascript:alert(1)//')],
+    ['a comma that would split the srcset', poster('https://files.example.test/a,b')],
+    ['a size with no width', [{ url: 'https://files.example.test/p.jpg' }]],
+    ['no sizes', []],
+    ['text', 'https://files.example.test/p.jpg'],
+  ])('keeps the run but not a poster with %s', (_label, sent) => {
+    const [read] = readBoard({ week: [run('Sok', 10, { poster: sent })], allTime: [] }).week;
+    expect(read).toMatchObject({ name: 'Sok', poster: null });
+  });
+
   it('reads anything else as empty boards', () => {
     expect(readBoard(null)).toEqual({ weekStart: '', week: [], allTime: [] });
     expect(readBoard({ week: 'all', allTime: [null] })).toEqual({

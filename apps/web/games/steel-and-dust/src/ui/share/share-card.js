@@ -76,7 +76,12 @@ function drawWords(context, { words, glow, site }) {
   drawWord(context, { text: 'Score', y: 214, size: 28, color: SHARE_COLORS.label, weight: 400 });
   drawWord(context, { text: words.score, y: 250, size: 110, color: SHARE_COLORS.score });
   drawWord(context, { text: words.reached, y: 390, size: 34, color: SHARE_COLORS.text });
-  drawWord(context, { text: words.rank, y: 446, size: 34, color: SHARE_COLORS.rank });
+  drawWord(context, {
+    text: words.rank || words.player,
+    y: 446,
+    size: 34,
+    color: SHARE_COLORS.rank,
+  });
   drawWord(context, {
     text: `Play free at ${site}`,
     y: 552,
@@ -86,12 +91,12 @@ function drawWords(context, { words, glow, site }) {
   });
 }
 
-export function drawShareCard(context, { run, rank, backdrop, heroArt, site }) {
+export function drawShareCard(context, { run, rank, name, backdrop, heroArt, site }) {
   const glow = HERO_THEMES[run.hero]?.spark ?? SHARE_COLORS.text;
 
   context.imageSmoothingEnabled = false;
   drawBackdrop(context, backdrop);
   drawBand(context);
   drawHero(context, { heroArt, glow });
-  drawWords(context, { words: cardWords(run, rank), glow, site });
+  drawWords(context, { words: cardWords(run, rank, name), glow, site });
 }

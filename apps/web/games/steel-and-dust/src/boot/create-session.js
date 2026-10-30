@@ -6,6 +6,7 @@ import { createHaptics } from '../platform/haptics.js';
 import { persistencePorts, loadSaved } from '../platform/persistence.js';
 import { createGame } from '../sim/create-game.js';
 import { placeOnTitle } from '../sim/stage/flow.js';
+import { createBoardPoster } from '../ui/share/board-poster.js';
 import { createUiState } from '../ui/ui-state.js';
 
 export function createSession({ window }) {
@@ -14,7 +15,12 @@ export function createSession({ window }) {
   const saved = loadSaved(storage, coarsePointer);
   const ports = { audio: null, haptics: null };
   const api = createBoardApi((address, options) => window.fetch(address, options));
-  const online = createOnlineBoard({ api, ticket: createRunTicket({ api, storage }), storage });
+  const online = createOnlineBoard({
+    api,
+    ticket: createRunTicket({ api, storage }),
+    storage,
+    drawPoster: createBoardPoster({ window, document: window.document }),
+  });
 
   const game = createGame({
     ...saved,

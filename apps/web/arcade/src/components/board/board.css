@@ -172,9 +172,51 @@
   }
 }
 
+/* A run's poster in its own shape: across a podium place, or small at the start of a row. */
+.board-poster {
+  display: block;
+  flex: none;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--color-card-blank);
+  border: 0;
+  border-radius: var(--radius-sm);
+  transition: scale var(--duration-fast) var(--easing-standard);
+}
+
+.board-poster:active {
+  scale: var(--scale-pressed);
+}
+
+.board-poster:focus-visible {
+  outline: var(--border-width-ring) solid var(--color-focus-ring);
+  outline-offset: var(--border-width-ring);
+}
+
+.board-poster__image {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 1200 / 630;
+}
+
+.board-podium__place .board-poster {
+  inline-size: 100%;
+  margin-block-end: var(--space-2);
+}
+
+.board-list__row .board-poster {
+  inline-size: 4.5rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .board-podium__place,
   .board-list__row {
     animation: none;
+  }
+
+  .board-poster {
+    transition: none;
   }
 }

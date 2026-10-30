@@ -187,9 +187,8 @@ describe('serializeBoard', () => {
       ticket: 'secret-nonce',
       createdAt: new Date('2026-10-28T18:30:00Z'),
     };
-    const json = JSON.parse(
-      serializeBoard({ week: [saved], allTime: [] }, new Date('2026-10-25T17:00:00Z')),
-    );
+    const weekStart = new Date('2026-10-25T17:00:00Z');
+    const json = JSON.parse(serializeBoard({ week: [saved], allTime: [] }, { weekStart }));
     expect(json.weekStart).toBe('2026-10-26');
     expect(json.allTime).toEqual([]);
     expect(json.week).toEqual([
@@ -202,8 +201,23 @@ describe('serializeBoard', () => {
         seconds: 300,
         cleared: false,
         date: '2026-10-29',
+        poster: null,
       },
     ]);
+  });
+
+  it("sends a run's poster in each of its sizes, only while the arcade keeps its files", () => {
+    const saved = { ...run(), id: 7, createdAt: new Date(), poster: 'posters/brawler/abc123' };
+    const storage = { urlOf: (key) => `https://files.example.test/${key}` };
+    const board = { week: [saved], allTime: [] };
+    const weekStart = new Date('2026-10-25T17:00:00Z');
+    const kept = JSON.parse(serializeBoard(board, { weekStart, storage })).week[0].poster;
+    expect(kept).toEqual([
+      { width: 320, url: 'https://files.example.test/posters/brawler/abc123-320.jpg' },
+      { width: 640, url: 'https://files.example.test/posters/brawler/abc123-640.jpg' },
+      { width: 1200, url: 'https://files.example.test/posters/brawler/abc123-1200.png' },
+    ]);
+    expect(JSON.parse(serializeBoard(board, { weekStart })).week[0].poster).toBeNull();
   });
 });
 

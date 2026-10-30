@@ -30,11 +30,16 @@ describe('the words a run is shared with', () => {
       score: '48,210',
       reached: 'Mission 8: Iron Works',
       rank: '#3 this week online',
+      player: '',
     });
     expect(cardWords(run({ cleared: true }), null)).toMatchObject({
       reached: 'All 12 missions clear!',
       rank: '',
     });
+  });
+
+  it("names who played on the board's copy, which carries no rank", () => {
+    expect(cardWords(run(), null, 'Sok Dara')).toMatchObject({ rank: '', player: 'by Sok Dara' });
   });
 });
 

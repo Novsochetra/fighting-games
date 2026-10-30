@@ -1,0 +1,8 @@
+/* the poster in its own shape, the full width of the sheet, under the close button */
+.poster-sheet__image {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 1200 / 630;
+  background: var(--color-card-blank);
+}

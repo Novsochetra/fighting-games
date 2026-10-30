@@ -60,12 +60,50 @@ describe('the leaderboard screen', () => {
     expect(byId('board-steel-and-dust-retry').hidden).toBe(false);
   });
 
+  it("shows a run's poster small, the smallest size sharp there, and opens it whole", async () => {
+    const posterOf = (id) =>
+      [320, 640, 1200].map((width) => ({
+        width,
+        url: `https://files.example.test/${id}-${width}`,
+      }));
+    const week = [
+      run('Sok Dara', 48210, { poster: posterOf('sok') }),
+      run('Mey', 9000),
+      run('Arun', 4200),
+      run('Bopha', 100, { poster: posterOf('bopha') }),
+    ];
+    const { fetchFn } = boardFetch({ board: { ...sampleBoard(), week } });
+    await openLeaderboard(fetchFn);
+    await showsBoard();
+    const buttons = [...document.querySelectorAll('.board-poster')];
+    expect(buttons.map((button) => button.getAttribute('aria-label'))).toEqual([
+      "View Sok Dara's poster",
+      "View Bopha's poster",
+    ]);
+    const [podium, row] = buttons.map((button) => button.querySelector('img'));
+    expect(podium.getAttribute('srcset')).toBe(
+      'https://files.example.test/sok-320 320w, https://files.example.test/sok-640 640w, https://files.example.test/sok-1200 1200w',
+    );
+    expect(podium.getAttribute('sizes')).toBe('(min-width: 50rem) 14rem, 30vw');
+    expect(row.getAttribute('sizes')).toBe('4.5rem');
+    expect(row.getAttribute('loading')).toBe('lazy');
+    expect(byId('poster-sheet').open).toBe(false);
+    fireEvent.click(buttons[1]);
+    expect(byId('poster-sheet').open).toBe(true);
+    expect(byId('poster-title').textContent).toBe('Bopha');
+    expect(byId('poster-description').textContent).toBe('#4 · 100 points · Mission 4 · Oct 28');
+    const whole = byId('poster-image');
+    expect(whole.getAttribute('src')).toBe('https://files.example.test/bopha-320');
+    expect(whole.getAttribute('sizes')).toBe('(max-width: 40rem) 100vw, 36rem');
+    expect(whole.getAttribute('srcset')).toMatch(/bopha-1200 1200w$/);
+  });
+
   it('writes a name a player typed as text, never as markup', async () => {
     const board = { ...sampleBoard(), week: [run('<img src=x onerror=alert(1)>', 10)] };
     const { fetchFn } = boardFetch({ board });
     await openLeaderboard(fetchFn);
     await showsBoard();
-    expect(document.querySelector('.board-podium img')).toBeNull();
+    expect(document.querySelector('.board-podium img[src="x"]')).toBeNull();
     expect(texts('.board-podium__name')).toEqual(['<img src=x onerror=alert(1)>']);
   });
 });

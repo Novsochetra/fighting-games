@@ -26,6 +26,18 @@ describe('boardView', () => {
     expect(view.rows[3]).toMatchObject({ place: 4, medal: '', heroName: '', timeLabel: '1:02:05' });
   });
 
+  it("offers every size of a run's poster, the smallest first, and none for a run without", () => {
+    const sizes = [1200, 320, 640].map((width) => ({ width, url: `https://f.test/p-${width}` }));
+    const runs = [{ ...readBoard(sampleBoard()).week[0], poster: sizes }];
+    const [row] = boardView(runs, { board: BOARD, locale: 'en-US' }).rows;
+    expect(row.poster).toEqual({
+      src: 'https://f.test/p-320',
+      srcSet: 'https://f.test/p-320 320w, https://f.test/p-640 640w, https://f.test/p-1200 1200w',
+    });
+    const plain = boardView(readBoard(sampleBoard()).week, { board: BOARD, locale: 'en-US' });
+    expect(plain.rows[0].poster).toBeNull();
+  });
+
   it('is empty with no runs, and picks the week or every run', () => {
     expect(boardView([], { board: BOARD, locale: 'en-US' })).toEqual({
       isEmpty: true,

@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 
 const COLUMNS =
-  'id, game, name, score, mission, hero, difficulty, play_seconds, cleared, created_at';
+  'id, game, name, score, mission, hero, difficulty, play_seconds, cleared, created_at, poster';
 const SHOWN = 'game = $1 AND NOT hidden';
 
 const ADD = `INSERT INTO scores
@@ -21,6 +21,9 @@ const KEEP_SECRET =
   'INSERT INTO server_secrets (name, value) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING';
 const READ_SECRET = 'SELECT value FROM server_secrets WHERE name = $1';
 const TICKET_SECRET = 'run-tickets';
+const POSTERLESS = `SELECT ${COLUMNS} FROM scores WHERE game = $1 AND ticket = $2
+  AND poster IS NULL AND NOT hidden AND created_at >= $3`;
+const SET_POSTER = 'UPDATE scores SET poster = $2 WHERE id = $1 AND poster IS NULL RETURNING id';
 const PING = 'SELECT 1 FROM scores LIMIT 1';
 
 const toScore = (row) => ({
@@ -34,6 +37,7 @@ const toScore = (row) => ({
   seconds: row.play_seconds,
   cleared: row.cleared,
   createdAt: new Date(row.created_at),
+  poster: row.poster,
 });
 
 export function createPostgresScoresStore(database) {
@@ -61,6 +65,16 @@ export function createPostgresScoresStore(database) {
       const [row] = await rowsOf(RANK, [run.game, run.score, weekStart, run.id]);
 
       return { week: Number(row.week) + 1, allTime: Number(row.all_time) + 1 };
+    },
+
+    async posterless(game, ticket, since) {
+      const [row] = await rowsOf(POSTERLESS, [game, ticket, since]);
+
+      return row ? toScore(row) : null;
+    },
+
+    async setPoster(id, posterKey) {
+      return (await rowsOf(SET_POSTER, [id, posterKey])).length === 1;
     },
 
     async secret() {

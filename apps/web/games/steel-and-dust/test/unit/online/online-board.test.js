@@ -28,6 +28,14 @@ describe('the board API', () => {
     expect(JSON.parse(options.body)).toEqual({ game: 'steel-and-dust', name: 'Sok' });
   });
 
+  it('posts a poster as JSON with the game named', async () => {
+    const fetch = vi.fn(async () => answer(201, { poster: [] }));
+    await createBoardApi(fetch).postPoster({ ticket: 'T1', images: {} });
+    const [address, options] = fetch.mock.calls[0];
+    expect(address).toBe('../../api/leaderboard/posters');
+    expect(JSON.parse(options.body)).toEqual({ game: 'steel-and-dust', ticket: 'T1', images: {} });
+  });
+
   it('asks for a run ticket', async () => {
     const fetch = vi.fn(async () => answer(201, { ticket: 'abc' }));
     expect(await createBoardApi(fetch).requestTicket()).toBe('abc');
@@ -119,6 +127,55 @@ describe('the online board', () => {
     await online.load();
     expect(online.status).toBe('ready');
     expect(online.onChange).toHaveBeenCalledTimes(2);
+  });
+
+  it('sends the run its poster once posted, naming who played as the board does, with its ticket', async () => {
+    const api = fakeBoardApi({
+      ticket: 'T1',
+      posted: { rank: { week: 1 }, score: { name: 'Dara' } },
+    });
+    const drawPoster = vi.fn(async () => ({ small: 'cw==', medium: 'bQ==', large: 'bA==' }));
+    const { online } = createTestOnline({ api, drawPoster });
+    online.startRun();
+    await settle();
+    await online.post(run, ' dara ');
+    await settle();
+    expect(drawPoster).toHaveBeenCalledWith(run, 'Dara');
+    expect(api.postPoster).toHaveBeenCalledWith({
+      ticket: 'T1',
+      images: { small: 'cw==', medium: 'bQ==', large: 'bA==' },
+    });
+  });
+
+  it('says the run is posted without waiting on its poster, and loses nothing if that fails', async () => {
+    const api = fakeBoardApi();
+    api.postPoster.mockRejectedValue(new TypeError('offline'));
+    const drawPoster = vi.fn(() => new Promise(() => {}));
+    const { online } = createTestOnline({ api, drawPoster });
+    online.startRun();
+    await settle();
+    await online.post(run, 'Sok');
+    expect(online.note).toMatch(/^Posted!/);
+    expect(online.posting).toBe(false);
+    const failing = createTestOnline({ api, drawPoster: vi.fn(async () => ({})) }).online;
+    failing.startRun();
+    await settle();
+    await failing.post(run, 'Sok');
+    await settle();
+    expect(failing.note).toMatch(/^Posted!/);
+  });
+
+  it('sends no poster for a run the board refused', async () => {
+    const api = fakeBoardApi();
+    api.postScore.mockRejectedValue(new BoardRefusal('Pick another name.'));
+    const drawPoster = vi.fn(async () => ({}));
+    const { online } = createTestOnline({ api, drawPoster });
+    online.startRun();
+    await settle();
+    await online.post(run, 'Sok');
+    await settle();
+    expect(drawPoster).not.toHaveBeenCalled();
+    expect(api.postPoster).not.toHaveBeenCalled();
   });
 
   it('posts a run once, with its ticket, then names its places', async () => {

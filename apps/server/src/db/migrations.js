@@ -41,4 +41,11 @@ export const MIGRATIONS = [
       )`,
     ],
   },
+  {
+    name: '0003_score_posters',
+    statements: [
+      // a poster is taken off the board by setting this back to NULL, which keeps the run
+      'ALTER TABLE scores ADD COLUMN poster text CHECK (char_length(poster) <= 120)',
+    ],
+  },
 ];
