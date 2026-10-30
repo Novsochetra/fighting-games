@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { createBoardPoster } from '../../../src/ui/share/board-poster.js';
+import { HERO_SPOT } from '../../../src/ui/share/share-card.js';
 
 const run = { score: 4200, mission: 3, hero: 'moss', difficulty: 1, time: 600, cleared: false };
 
@@ -8,14 +9,22 @@ const run = { score: 4200, mission: 3, hero: 'moss', difficulty: 1, time: 600, c
 function fakePage() {
   const canvases = [];
   const fakeCanvas = () => {
-    const canvas = { texts: [] };
+    const canvas = { texts: [], cuts: [] };
     const context = new Proxy(
       {},
       {
         get: (target, key) =>
           key in target
             ? target[key]
-            : (...args) => (key === 'fillText' && canvas.texts.push(args[0]), { width: 1 }),
+            : (...args) => {
+                if (key === 'fillText') {
+                  canvas.texts.push(args[0]);
+                }
+                if (key === 'drawImage') {
+                  canvas.cuts.push(args.slice(1, 5));
+                }
+                return { width: 1 };
+              },
       },
     );
     canvas.getContext = () => context;
@@ -59,10 +68,20 @@ describe("a run's poster for the online board", () => {
       Object.entries(images).map(([size, data]) => [size, atob(data)]),
     );
     expect(decoded).toEqual({
-      small: '320x168 image/jpeg 0.8',
+      avatar: '192x192 image/jpeg 0.8',
       medium: '640x336 image/jpeg 0.8',
       large: '1200x630 image/png 0.8',
     });
+  });
+
+  it('cuts the avatar out of the card around the hero, and shrinks the card whole for the rest', async () => {
+    const { window, document, canvases } = fakePage();
+    await createBoardPoster({ window, document })(run, 'Sok Dara');
+    const [avatar, medium] = canvases.slice(1);
+    expect([avatar.width, avatar.height]).toEqual([192, 192]);
+    expect(avatar.cuts).toEqual([[HERO_SPOT.x, HERO_SPOT.y, HERO_SPOT.size, HERO_SPOT.size]]);
+    expect(HERO_SPOT).toEqual({ x: 712, y: 230, size: 400 });
+    expect(medium.cuts).toEqual([[0, 0, 1200, 630]]);
   });
 
   it('fails as a whole when a size cannot be encoded, so nothing half drawn is sent', async () => {

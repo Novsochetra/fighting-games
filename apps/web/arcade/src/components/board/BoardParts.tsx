@@ -1,5 +1,11 @@
 import type { CSSProperties } from 'react';
-import { PosterButton, type PosterImage } from './PosterButton';
+import { RunAvatar } from './RunAvatar';
+
+// A run's poster as view-model.js presents it.
+export interface PosterImage {
+  previewSrc: string;
+  srcSet: string;
+}
 
 // A run as view-model.js puts it together.
 export interface BoardRow {
@@ -14,6 +20,9 @@ export interface BoardRow {
   timeLabel: string;
   dateLabel: string;
   poster: PosterImage | null;
+  avatarSrc: string | null;
+  initials: string;
+  palette: number;
 }
 
 export interface BoardView {
@@ -24,41 +33,11 @@ export interface BoardView {
 
 // The rows rise in one after another, but never wait longer than this many steps.
 const MAX_STAGGER = 8;
-// how wide a poster shows on the podium (a third of the board) and in a row (board.css)
-const PODIUM_POSTER_SIZES = '(min-width: 50rem) 14rem, 30vw';
-const ROW_POSTER_SIZES = '4.5rem';
 
-type OnPoster = (row: BoardRow) => void;
+const detailOf = (row: BoardRow) => [row.heroName, row.reachedLabel].filter(Boolean).join(' · ');
 
-const detailOf = (row: BoardRow) =>
-  [row.heroName, row.reachedLabel, row.difficultyName].filter(Boolean).join(' · ');
-
-// The top three stand like a podium: second, first (raised), third.
-export function Podium({ rows, onPoster }: { rows: BoardRow[]; onPoster: OnPoster }) {
-  return (
-    <ol className="board-podium">
-      {rows.map((row) => (
-        <li className="board-podium__place" data-medal={row.medal} key={row.key}>
-          {row.poster ? (
-            <PosterButton
-              poster={row.poster}
-              name={row.name}
-              sizes={PODIUM_POSTER_SIZES}
-              onOpen={() => onPoster(row)}
-            />
-          ) : null}
-          <span className="board-podium__medal">{row.place}</span>
-          <span className="board-podium__name">{row.name}</span>
-          <span className="board-podium__score">{row.scoreLabel}</span>
-          <span className="board-podium__detail">{row.heroName}</span>
-          <span className="board-podium__detail">{row.reachedLabel}</span>
-        </li>
-      ))}
-    </ol>
-  );
-}
-
-export function BoardList({ rows, onPoster }: { rows: BoardRow[]; onPoster: OnPoster }) {
+// An inset grouped list, as in iOS Settings, each row opening its run.
+export function BoardList({ rows, onPick }: { rows: BoardRow[]; onPick: (row: BoardRow) => void }) {
   if (rows.length === 0) {
     return null;
   }
@@ -71,25 +50,20 @@ export function BoardList({ rows, onPoster }: { rows: BoardRow[]; onPoster: OnPo
           key={row.key}
           style={{ '--order': Math.min(i, MAX_STAGGER) } as CSSProperties}
         >
-          <span className="board-list__place" aria-hidden="true">
-            {row.place}
-          </span>
-          {row.poster ? (
-            <PosterButton
-              poster={row.poster}
-              name={row.name}
-              sizes={ROW_POSTER_SIZES}
-              onOpen={() => onPoster(row)}
-            />
-          ) : null}
-          <span className="board-list__text">
-            <span className="board-list__name">{row.name}</span>
-            <span className="board-list__detail">{detailOf(row)}</span>
-          </span>
-          <span className="board-list__end">
-            <span className="board-list__score">{row.scoreLabel}</span>
-            <span className="board-list__date">{row.dateLabel}</span>
-          </span>
+          <button className="board-list__open" type="button" onClick={() => onPick(row)}>
+            <span className="board-list__place" aria-hidden="true">
+              {row.place}
+            </span>
+            <RunAvatar row={row} />
+            <span className="board-list__text">
+              <span className="board-list__name">{row.name}</span>
+              <span className="board-list__detail">{detailOf(row)}</span>
+            </span>
+            <span className="board-list__end">
+              <span className="board-list__score">{row.scoreLabel}</span>
+              <span className="board-list__date">{row.dateLabel}</span>
+            </span>
+          </button>
         </li>
       ))}
     </ol>

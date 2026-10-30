@@ -95,10 +95,10 @@ describe('a run poster', () => {
     const reply = await sendPoster(ticket);
     expect(reply.status).toBe(201);
     const { poster } = json(reply);
-    expect(poster.map((image) => image.width)).toEqual([320, 640, 1200]);
-    expect(poster[0].url).toMatch(
-      /^https:\/\/files\.example\.test\/posters\/brawler\/\w+-320\.jpg$/,
+    expect(poster.avatar).toMatch(
+      /^https:\/\/files\.example\.test\/posters\/brawler\/\w+-192\.jpg$/,
     );
+    expect(poster.images.map((image) => image.width)).toEqual([640, 1200]);
     expect((await boardRuns())[0].poster).toEqual(poster);
     const types = [...bucket.values()].map((file) => file.contentType);
     expect(types).toEqual(['image/jpeg', 'image/jpeg', 'image/png']);

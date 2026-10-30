@@ -18,7 +18,7 @@ const twoGames = () => boardFetch({ second: true, boards: { [SECOND_GAME.id]: te
 
 const chips = () => [...document.querySelectorAll('#board-games .game-picker__game')];
 const picked = () => chips().find((chip) => chip.getAttribute('aria-pressed') === 'true');
-const podium = () => texts('.board-podium__name');
+const podium = () => texts('.board-place__name');
 const boardShows = (name) => waitUntil(() => expect(podium()[0]).toBe(name));
 
 afterEach(stopLeaderboard);

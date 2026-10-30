@@ -26,16 +26,26 @@ describe('boardView', () => {
     expect(view.rows[3]).toMatchObject({ place: 4, medal: '', heroName: '', timeLabel: '1:02:05' });
   });
 
-  it("offers every size of a run's poster, the smallest first, and none for a run without", () => {
-    const sizes = [1200, 320, 640].map((width) => ({ width, url: `https://f.test/p-${width}` }));
-    const runs = [{ ...readBoard(sampleBoard()).week[0], poster: sizes }];
+  it("offers a run's poster at its smallest and in every size, and its hero as its avatar", () => {
+    const images = [1200, 640].map((width) => ({ width, url: `https://f.test/p-${width}` }));
+    const poster = { avatar: 'https://f.test/p-192', images };
+    const runs = [{ ...readBoard(sampleBoard()).week[0], poster }];
     const [row] = boardView(runs, { board: BOARD, locale: 'en-US' }).rows;
     expect(row.poster).toEqual({
-      src: 'https://f.test/p-320',
-      srcSet: 'https://f.test/p-320 320w, https://f.test/p-640 640w, https://f.test/p-1200 1200w',
+      previewSrc: 'https://f.test/p-640',
+      srcSet: 'https://f.test/p-640 640w, https://f.test/p-1200 1200w',
     });
-    const plain = boardView(readBoard(sampleBoard()).week, { board: BOARD, locale: 'en-US' });
-    expect(plain.rows[0].poster).toBeNull();
+    expect(row.avatarSrc).toBe('https://f.test/p-192');
+  });
+
+  it("gives a run without a poster the player's initials, colored by the name, instead", () => {
+    const [khmer, plain] = boardView(readBoard(sampleBoard()).week.slice(0, 2).reverse(), {
+      board: BOARD,
+      locale: 'en-US',
+    }).rows;
+    expect(plain).toMatchObject({ poster: null, avatarSrc: null, initials: 'SD' });
+    expect(khmer.initials).toBe('សុដា');
+    expect(plain.palette).toBeGreaterThan(0);
   });
 
   it('is empty with no runs, and picks the week or every run', () => {

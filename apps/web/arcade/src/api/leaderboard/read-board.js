@@ -16,11 +16,19 @@ function isPosterUrl(url) {
 
 const isPosterImage = (image) => isWhole(image?.width, 1) && isPosterUrl(image.url);
 
-// a run keeps its place without a poster whose sizes are not all what a poster's are
-const readPoster = (poster) =>
-  Array.isArray(poster) && poster.length > 0 && poster.every(isPosterImage)
-    ? poster.map(({ width, url }) => ({ width, url }))
+// a run keeps its place without a poster any part of which is not what a poster's is
+function readPoster(poster) {
+  const images = poster?.images;
+  const isPoster =
+    isPosterUrl(poster?.avatar) &&
+    Array.isArray(images) &&
+    images.length > 0 &&
+    images.every(isPosterImage);
+
+  return isPoster
+    ? { avatar: poster.avatar, images: images.map(({ width, url }) => ({ width, url })) }
     : null;
+}
 
 function isRun(run) {
   return (

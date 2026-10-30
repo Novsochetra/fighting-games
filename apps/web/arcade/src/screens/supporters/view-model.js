@@ -1,5 +1,5 @@
 import { formatCount, formatDay, formatMoney } from '@/utils/format.js';
-import { initialsOf, paletteOf } from './avatar.js';
+import { initialsOf, paletteOf } from '@/components/avatar/avatar.js';
 import { podiumOf, rankByAmount, sortSupporters, totalOf } from './ranking.js';
 import { tierOf } from './tiers.js';
 

@@ -21,10 +21,12 @@ describe('readBoard', () => {
     expect(readBoard({ week: [run('Sok', 10, extra)], allTime: [] }).week).toEqual([]);
   });
 
-  const poster = (url = 'https://files.example.test/p') =>
-    [320, 640, 1200].map((width) => ({ width, url: `${url}-${width}.jpg` }));
+  const poster = (url = 'https://files.example.test/p') => ({
+    avatar: `${url}-192.jpg`,
+    images: [640, 1200].map((width) => ({ width, url: `${url}-${width}.jpg` })),
+  });
 
-  it("keeps a run's poster, each size an https address", () => {
+  it("keeps a run's avatar and poster, each an https address", () => {
     const [read] = readBoard({ week: [run('Sok', 10, { poster: poster() })], allTime: [] }).week;
     expect(read.poster).toEqual(poster());
     expect(readBoard(sampleBoard()).week[0].poster).toBeNull();
@@ -34,8 +36,12 @@ describe('readBoard', () => {
     ['an http address', poster('http://files.example.test/p')],
     ['a script address', poster('javascript:alert(1)//')],
     ['a comma that would split the srcset', poster('https://files.example.test/a,b')],
-    ['a size with no width', [{ url: 'https://files.example.test/p.jpg' }]],
-    ['no sizes', []],
+    ['no avatar', { ...poster(), avatar: undefined }],
+    [
+      'a size with no width',
+      { ...poster(), images: [{ url: 'https://files.example.test/p.jpg' }] },
+    ],
+    ['no sizes', { ...poster(), images: [] }],
     ['text', 'https://files.example.test/p.jpg'],
   ])('keeps the run but not a poster with %s', (_label, sent) => {
     const [read] = readBoard({ week: [run('Sok', 10, { poster: sent })], allTime: [] }).week;

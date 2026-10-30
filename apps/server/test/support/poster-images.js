@@ -36,7 +36,7 @@ export function fakeJpeg(width, height, filler = 64) {
 
 // a poster in every size the board keeps, as the game sends it
 export const posterImages = (overrides = {}) => ({
-  small: fakeJpeg(320, 168).toString('base64'),
+  avatar: fakeJpeg(192, 192).toString('base64'),
   medium: fakeJpeg(640, 336).toString('base64'),
   large: fakePng(1200, 630).toString('base64'),
   ...overrides,

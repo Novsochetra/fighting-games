@@ -114,7 +114,7 @@ by side. The arcade, `apps/web/arcade/`, holds `pages/` (its four pages, Vite's 
   per feature inside (`home/carousel/`, `home/details/`, `supporters/donate/`), and
   `render-screen.tsx`,
 - `components/`: the UI parts two or more screens show (`page-bar/`, `sheet/`, `notice/`,
-  `segmented/`, `layout-swap/`, `board/`, `icons.tsx`),
+  `segmented/`, `layout-swap/`, `board/`, `avatar/`, `icons.tsx`),
 - `api/`: every request to the server or the worker, its reader and the hook that loads it
   (`catalog/`, `leaderboard/`, `supporters/`, `offline/`),
 - `services/`: what is made once per page and reached with `useArcade()` (`arcade-context.tsx`,

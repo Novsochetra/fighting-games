@@ -41,7 +41,7 @@ apps/
                           per feature inside (home/carousel/, supporters/donate/), and
                           render-screen.tsx, the one file outside them that loads a screen
         components/       the UI parts two or more screens show: page-bar/, sheet/, notice/,
-                          segmented/, layout-swap/, board/ and icons.tsx
+                          segmented/, layout-swap/, board/, avatar/ and icons.tsx
         api/              every request, its reader and the hook that loads it: catalog/,
                           leaderboard/, supporters/, and offline/, which asks the worker
         services/         what is made once per page and reached with useArcade()
@@ -344,11 +344,16 @@ no board (404).
         "seconds": 1500,
         "cleared": false,
         "date": "2026-10-28",
-        "poster": [
-          { "width": 320, "url": "https://…cloudfront.net/posters/steel-and-dust/9f2c…-320.jpg" },
-          { "width": 640, "url": "https://…cloudfront.net/posters/steel-and-dust/9f2c…-640.jpg" },
-          { "width": 1200, "url": "https://…cloudfront.net/posters/steel-and-dust/9f2c…-1200.png" }
-        ]
+        "poster": {
+          "avatar": "https://…cloudfront.net/posters/steel-and-dust/9f2c…-192.jpg",
+          "images": [
+            { "width": 640, "url": "https://…cloudfront.net/posters/steel-and-dust/9f2c…-640.jpg" },
+            {
+              "width": 1200,
+              "url": "https://…cloudfront.net/posters/steel-and-dust/9f2c…-1200.png"
+            }
+          ]
+        }
       }
     ],
     "allTime": []
@@ -383,17 +388,17 @@ no board (404).
 - **Posters.** A run's poster, the picture of it the game draws, goes up just after its score with
   `POST /api/leaderboard/posters`: `game`, the `ticket` the run was posted with, and `images`, the
   poster in each size the board shows (`poster-files.js`), as base64. Every game's poster has the
-  shape of a link preview, and comes as `small` (320x168 JPEG, at most 40 KB) for a row of the
-  board, `medium` (640x336 JPEG, 120 KB) for the podium, and `large` (1200x630 PNG, 400 KB, so its
-  pixels stay crisp) for the whole poster, which loads only once a player opens it. The server
-  checks each size is the image and shape it says (`read-poster.js`, `image-size.js`) but cannot
-  check what it shows, so a poster can be taken down by hand (`docs/deploy-railway.md`). The ticket
-  proves the poster is that run's: it must be signed here, and its run posted in the last ten
-  minutes, not hidden and with no poster yet (409). The files go up under a random name,
-  `posters/<game>/<24 hex>-<width>.<jpg|png>`, before the run names it in its `poster` column, so
-  the board never shows a poster still on its way, and the board answers each run with every size's
-  address (`poster`, or `null`). Without file storage (`S3_BUCKET` unset) posters are turned away
-  (404) and the board shows none.
+  shape of a link preview, and comes with a square cut out of it: `avatar` (192x192 JPEG, at most 30
+  KB), the run's face on the board, `medium` (640x336 JPEG, 120 KB) for the board's first place, and
+  `large` (1200x630 PNG, 400 KB, so its pixels stay crisp) for the whole poster, which loads only
+  once a player opens it. The server checks each size is the image and shape it says
+  (`read-poster.js`, `image-size.js`) but cannot check what it shows, so a poster can be taken down
+  by hand (`docs/deploy-railway.md`). The ticket proves the poster is that run's: it must be signed
+  here, and its run posted in the last ten minutes, not hidden and with no poster yet (409). The
+  files go up under a random name, `posters/<game>/<24 hex>-<width>.<jpg|png>`, before the run names
+  it in its `poster` column, so the board never shows a poster still on its way, and the board
+  answers each run with its avatar's address and every poster size's (`poster`, or `null`). Without
+  file storage (`S3_BUCKET` unset) posters are turned away (404) and the board shows none.
 - **Guards.** Tickets, scores and posters come only from the arcade's own pages (an `Origin` of its
   own host), as gifts do, in JSON of at most 2 KB (a poster's at most what its three sizes may weigh
   in base64, about 750 KB); a visitor gets 30 tickets, 10 scores and 10 posters in 10 minutes, a
@@ -713,17 +718,25 @@ name still read out with it (`topbar.css`).
 - **What it shows.** A gold light from the top and a trophy badge, then This week and All time in a
   segmented control, then one game's board (a game has one when its catalog entry names it:
   `board-rules.js` reads its heroes' and difficulties' names into the game's card, as `board`): the
-  game's icon, name and Play, its top three on a podium (second, first raised, third, in the medals'
-  metals), then the rest in an inset list with each run's hero, how far it got, its difficulty,
-  score and day. An empty board invites a first run, with Play.
-- **Posters.** A run with a poster shows it across its podium place and small at the start of its
-  row (`PosterButton.tsx`), each with every size in its `srcset` and how wide it shows in its
-  `sizes`, so the browser loads the smallest size sharp there: on a phone the podium's 640 wide and
-  the rows' 320, about 15 KB a row, and the rows below the screen only as they come near
-  (`loading="lazy"`). A tap opens the whole poster in a sheet (`screens/leaderboard/poster/`), where
-  a phone's screen loads the 1200 wide PNG, with the player's name, place, score, how far the run got
-  and its day. `read-board.js` keeps a poster only if every size is an `https:` address an `srcset`
+  game's icon, name and Play, then its top three (`Podium.tsx`): the first place across the board,
+  its poster over a gold-lit bar with its medal, name, hero, how far it got and score (on a wide
+  screen the poster and the words side by side), and second and third side by side under it, each
+  with its avatar wearing its medal. The rest follow in an inset list, a row each: place, avatar,
+  name, hero and how far it got on one line, score and day. A long name or hero is cut short
+  rather than wrapping. An empty board invites a first run, with Play.
+- **Avatars and posters.** A run's avatar is its hero cut out of its poster, round (`RunAvatar.tsx`);
+  a run posted without a poster shows the player's initials instead, in the monogram the supporters
+  wear (`components/avatar/`). The first place shows its poster 640 wide, or the game's own painting
+  (its `banner`) for a run with none, so a phone loads one poster of about 45 KB and an avatar of
+  about 11 KB a run, the rows below the screen only as they come near (`loading="lazy"`).
+  `read-board.js` keeps a poster only if its avatar and every size are `https:` addresses an `srcset`
   can hold (no space or comma); a run with any other keeps its place without one.
+- **A run's sheet.** Every place and row is a button that opens its run in a sheet
+  (`screens/leaderboard/run-sheet/`): its poster whole, with every size in its `srcset`, so a
+  phone's screen loads the 1200 wide PNG and a computer's the 640; then its name, its place on the
+  board shown and its day, and tiles of what it did, as Fitness shows a workout: score, how far it
+  got, time, hero (two tiles wide, as a hero's name can run to three words) and difficulty. A run
+  with no poster shows its avatar beside its name instead.
 - **One game at a time.** With more than one game with a board, a row of them over the period picks
   whose board shows, like the App Store's categories, the picked one filled in the tint; a phone
   scrolls the row (`GamePicker.tsx`). With one game there is nothing to pick, so the row waits until
@@ -838,7 +851,8 @@ whole amounts without cents), and the components only write them out (`Supporter
 `SupporterParts.tsx`); the list comes through TanStack Query (`use-supporters.ts`). The top three stand on a podium with
 gold, silver and bronze, second, first and third from the left, and everyone follows in a grouped list
 under a Top and Recent switch that clicks like the home page's. Each supporter gets a round monogram,
-colored by their name (`paletteOf` in `avatar.js`); anonymous ones stay gray. Beside each name, on
+colored by their name (`paletteOf` in `components/avatar/avatar.js`, which the leaderboard's runs
+without a poster wear too); anonymous ones stay gray. Beside each name, on
 the podium and the list, a chip shows the gift's tier: its gem and name (`TierChip`), kept apart
 from the place medals so a Gold gift in second place reads plainly. With no one on the list
 yet the page says so and invites the first.
@@ -1104,10 +1118,12 @@ points. Can you beat me?`) with the game's canonical address; a browser that sha
 those, and one that cannot share at all saves the card.
 
 A run posted online sends the board its own copy of the card (`board-poster.js`, drawn by
-`card-canvas.js` as Share's is): the player's name, `by Dara`, in place of the rank, which would soon
-be out of date there, in each size the board keeps (`src/online/poster-sizes.js`, which a server test
-keeps equal to its own): 320 and 640 wide as JPEG and 1200 wide as PNG. It is drawn and sent behind
-the note that the run is posted, and one that fails is no loss: the run is on the board either way.
+`card-canvas.js` as Share's is): the player's name, `by Dara`, in place of the rank, which would
+soon be out of date there, in each size the board keeps (`src/online/poster-sizes.js`, which a
+server test keeps equal to its own): the avatar, a 192 px square cut around the hero (`HERO_SPOT` in
+`share-card.js`: right of the band's edge, from the floor up, which frames every hero's whole win
+pose), and the card 640 wide as JPEG and 1200 wide as PNG. It is drawn and sent behind the note that
+the run is posted, and one that fails is no loss: the run is on the board either way.
 
 ### Missions
 

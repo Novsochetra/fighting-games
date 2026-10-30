@@ -28,8 +28,8 @@ describe('the size of an image', () => {
 
   it.each([
     ['nothing', Buffer.alloc(0)],
-    ['a PNG as a JPEG', fakePng(320, 168)],
-    ['a JPEG cut off before its frame', fakeJpeg(320, 168).subarray(0, 24)],
+    ['a PNG as a JPEG', fakePng(192, 192)],
+    ['a JPEG cut off before its frame', fakeJpeg(192, 192).subarray(0, 24)],
     ['a JPEG whose scan comes before any frame', Buffer.from([0xff, 0xd8, 0xff, 0xda, 0, 2])],
   ])('finds no JPEG in %s', (_label, bytes) => {
     expect(jpegSize(bytes)).toBeNull();
@@ -41,18 +41,18 @@ describe('readPoster', () => {
     const poster = readPoster(body(), RULES);
     expect(poster.game).toBe('brawler');
     expect(poster.files.map((file) => [file.size.name, file.bytes.length > 0])).toEqual([
-      ['small', true],
+      ['avatar', true],
       ['medium', true],
       ['large', true],
     ]);
   });
 
   it.each([
-    ['a size missing', { small: undefined }],
+    ['a size missing', { avatar: undefined }],
     ['a size of the wrong shape', { medium: fakeJpeg(600, 336).toString('base64') }],
     ['a JPEG for the PNG', { large: fakeJpeg(1200, 630).toString('base64') }],
-    ['a size too heavy', { small: fakeJpeg(320, 168, 41_000).toString('base64') }],
-    ['text that is not base64', { small: '<script>alert(1)</script>' }],
+    ['a size too heavy', { avatar: fakeJpeg(192, 192, 31_000).toString('base64') }],
+    ['text that is not base64', { avatar: '<script>alert(1)</script>' }],
   ])('refuses %s', (_label, images) => {
     const poster = readPoster(body({ images: posterImages(images) }), RULES);
     expect(poster.error).toMatch(/not a poster the game drew/);

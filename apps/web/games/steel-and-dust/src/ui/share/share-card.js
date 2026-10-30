@@ -6,9 +6,20 @@ export const CARD_SIZE = { width: 1200, height: 630 };
 const FONT = "'Silkscreen', 'Courier New', monospace";
 const LEFT = 64;
 const TEXT_WIDTH = 600;
+const BAND_WIDTH = LEFT + TEXT_WIDTH + 40;
+const EDGE_WIDTH = 6;
+const AVATAR_SIZE = 400;
 // a hero's card frame is 128 px wide, its height that of the art (80, or 112 for the Khmer fighters)
 const HERO_FRAME_WIDTH = 128;
 const HERO_SCALE = 5;
+
+// a square right of the band's edge, from the floor up, which frames the hero's whole win pose: the
+// run's avatar on the online board
+export const HERO_SPOT = {
+  x: BAND_WIDTH + EDGE_WIDTH + 2,
+  y: CARD_SIZE.height - AVATAR_SIZE,
+  size: AVATAR_SIZE,
+};
 
 // the select screen's painting, as large as whole pixels let it cover the card, from its middle
 function drawBackdrop(context, backdrop) {
@@ -30,10 +41,10 @@ function drawBackdrop(context, backdrop) {
 function drawBand(context) {
   context.globalAlpha = 0.78;
   context.fillStyle = SHARE_COLORS.band;
-  context.fillRect(0, 0, LEFT + TEXT_WIDTH + 40, CARD_SIZE.height);
+  context.fillRect(0, 0, BAND_WIDTH, CARD_SIZE.height);
   context.globalAlpha = 1;
   context.fillStyle = SHARE_COLORS.edge;
-  context.fillRect(LEFT + TEXT_WIDTH + 40, 0, 6, CARD_SIZE.height);
+  context.fillRect(BAND_WIDTH, 0, EDGE_WIDTH, CARD_SIZE.height);
 }
 
 // the hero's first frame of their win pose, standing on the card's floor in their own glow

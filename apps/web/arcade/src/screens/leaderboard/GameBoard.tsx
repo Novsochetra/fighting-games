@@ -2,11 +2,10 @@ import { useMemo } from 'react';
 import { useArcade, useArcadeUrl } from '@/services/arcade-context';
 import { Notice } from '@/components/notice/Notice';
 import type { GameBoard as Rules, GameCard } from '@/api/catalog/game-card';
-import { BoardList, Podium, type BoardView } from '@/components/board/BoardParts';
+import type { BoardView } from '@/components/board/BoardParts';
 import { useBoard, type Period } from '@/api/leaderboard/use-board';
-import { boardView, PODIUM_SIZE, runsOf } from '@/components/board/view-model.js';
-import { PosterSheet } from './poster/PosterSheet';
-import { usePosterSheet } from './poster/use-poster-sheet';
+import { boardView, runsOf } from '@/components/board/view-model.js';
+import { BoardRuns } from './BoardRuns';
 
 export const BOARD_LOADING = 'Loading the board…';
 export const BOARD_ERROR = 'The board did not load. Check your connection and try again.';
@@ -47,12 +46,10 @@ function useBoardView(game: GameCard, period: Period) {
   return { query, view };
 }
 
-// One game's board: its icon and name with a way to play it, then its podium and the rest, each
-// run's poster opening whole in a sheet
+// One game's board: its icon and name with a way to play it, then its podium and the rest
 export function GameBoard({ game, period }: { game: GameCard; period: Period }) {
   const url = useArcadeUrl();
   const { query, view } = useBoardView(game, period);
-  const poster = usePosterSheet();
   const failed = query.isError && !query.isFetching;
   const titleId = `board-${game.id}-title`;
 
@@ -75,13 +72,7 @@ export function GameBoard({ game, period }: { game: GameCard; period: Period }) 
         onRetry={() => query.refetch()}
       />
       {view?.isEmpty ? <EmptyBoard game={game} period={period} /> : null}
-      {view && !view.isEmpty ? (
-        <>
-          <Podium rows={view.podium} onPoster={poster.open} />
-          <BoardList rows={view.rows.slice(PODIUM_SIZE)} onPoster={poster.open} />
-        </>
-      ) : null}
-      <PosterSheet row={poster.row} isOpen={poster.isOpen} onClose={poster.close} />
+      {view && !view.isEmpty ? <BoardRuns game={game} view={view} period={period} /> : null}
     </section>
   );
 }

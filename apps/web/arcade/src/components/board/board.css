@@ -1,9 +1,8 @@
-/* The top three stand like a podium: second, first (raised), third. */
+/* The first place stands across the board with its poster; second and third side by side under it. */
 .board-podium {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-3);
-  align-items: end;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -14,54 +13,95 @@
   --medal-bottom: var(--color-medal-bronze-bottom);
 
   display: flex;
-  flex-direction: column;
-  grid-row: 1;
-  gap: var(--space-1);
-  align-items: center;
   min-inline-size: 0;
-  padding: var(--space-5) var(--space-2) var(--space-4);
-  text-align: center;
-  background: var(--color-launcher-surface);
-  border: var(--border-width-hairline) solid var(--color-launcher-separator);
-  border-radius: var(--radius-card);
   animation: board-rise var(--duration-rise) var(--easing-spring) backwards;
-}
-
-.board-podium__place:nth-child(1) {
-  grid-column: 2;
-  padding-block: var(--space-8) var(--space-6);
-}
-
-.board-podium__place:nth-child(2) {
-  grid-column: 1;
-  animation-delay: var(--duration-stagger);
-}
-
-.board-podium__place:nth-child(3) {
-  grid-column: 3;
-  animation-delay: calc(2 * var(--duration-stagger));
 }
 
 .board-podium__place[data-medal='gold'] {
   --medal-top: var(--color-medal-gold-top);
   --medal-bottom: var(--color-medal-gold-bottom);
 
-  background:
-    linear-gradient(to bottom, var(--color-podium-glow), var(--color-clear) 70%),
-    var(--color-launcher-surface);
+  grid-column: 1 / -1;
 }
 
 .board-podium__place[data-medal='silver'] {
   --medal-top: var(--color-medal-silver-top);
   --medal-bottom: var(--color-medal-silver-bottom);
+
+  animation-delay: var(--duration-stagger);
 }
 
-.board-podium__medal {
+.board-podium__place[data-medal='bronze'] {
+  animation-delay: calc(2 * var(--duration-stagger));
+}
+
+.board-place {
+  display: flex;
+  flex: 1;
+  min-inline-size: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+  background: var(--color-launcher-surface);
+  border: var(--border-width-hairline) solid var(--color-launcher-separator);
+  border-radius: var(--radius-tile);
+  transition: scale var(--duration-fast) var(--easing-standard);
+}
+
+.board-place:active {
+  scale: var(--scale-pressed);
+}
+
+.board-place:focus-visible {
+  outline: var(--border-width-ring) solid var(--color-focus-ring);
+  outline-offset: var(--border-width-ring);
+}
+
+.board-place--champion {
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+}
+
+.board-place__media {
+  display: block;
+  flex: none;
+  aspect-ratio: 1200 / 630;
+  background: var(--color-card-blank);
+}
+
+.board-place__poster {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.board-place__poster.is-art {
+  image-rendering: pixelated;
+}
+
+.board-place__poster.is-art.is-smooth {
+  image-rendering: auto;
+}
+
+.board-place__info {
+  display: flex;
+  flex: 1;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+  background: linear-gradient(to bottom, var(--color-podium-glow), var(--color-clear));
+}
+
+.board-place__medal {
   display: grid;
+  flex: none;
   place-items: center;
-  inline-size: calc(var(--size-medal) * 1.4);
-  block-size: calc(var(--size-medal) * 1.4);
-  margin-block-end: var(--space-2);
+  inline-size: calc(var(--size-medal) * 1.3);
+  block-size: calc(var(--size-medal) * 1.3);
   font-size: var(--font-size-apple-subheadline);
   font-weight: var(--font-weight-bold);
   font-variant-numeric: tabular-nums;
@@ -72,23 +112,124 @@
   box-shadow: var(--shadow-medal);
 }
 
-/* a name is free text, so a long one breaks where it can rather than pushing the podium wide */
-.board-podium__name {
-  max-inline-size: 100%;
-  font-size: var(--font-size-apple-subheadline);
-  font-weight: var(--font-weight-semibold);
-  overflow-wrap: anywhere;
+.board-place__who {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-inline-size: 0;
 }
 
-.board-podium__score {
+/* a name is free text, so a long one is cut short rather than pushing the score out */
+.board-place__name,
+.board-place__detail {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.board-place__name {
+  font-size: var(--font-size-apple-callout);
+  font-weight: var(--font-weight-semibold);
+}
+
+.board-place__detail {
+  font-size: var(--font-size-apple-footnote);
+  color: var(--color-label-muted);
+}
+
+.board-place__score {
+  flex: none;
   font-size: var(--font-size-apple-title-3);
   font-weight: var(--font-weight-bold);
   font-variant-numeric: tabular-nums;
 }
 
-.board-podium__detail {
+.board-place--runner {
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+}
+
+.board-place--runner .run-avatar {
+  --run-avatar-size: var(--size-avatar-medium);
+}
+
+.board-place--runner .board-place__who {
+  gap: 0;
+}
+
+.board-place--runner .board-place__name {
+  font-size: var(--font-size-apple-subheadline);
+}
+
+.board-place--runner .board-place__score {
+  font-size: var(--font-size-apple-callout);
+}
+
+.board-place--runner .board-place__detail {
   font-size: var(--font-size-apple-caption);
-  color: var(--color-label-muted);
+}
+
+.run-avatar {
+  --run-avatar-size: var(--size-avatar);
+
+  position: relative;
+  flex: none;
+  inline-size: var(--run-avatar-size);
+  block-size: var(--run-avatar-size);
+}
+
+.run-avatar[data-medal='gold'] {
+  --medal-top: var(--color-medal-gold-top);
+  --medal-bottom: var(--color-medal-gold-bottom);
+}
+
+.run-avatar[data-medal='silver'] {
+  --medal-top: var(--color-medal-silver-top);
+  --medal-bottom: var(--color-medal-silver-bottom);
+}
+
+.run-avatar[data-medal='bronze'] {
+  --medal-top: var(--color-medal-bronze-top);
+  --medal-bottom: var(--color-medal-bronze-bottom);
+}
+
+.run-avatar__image,
+.run-avatar .avatar {
+  inline-size: 100%;
+  block-size: 100%;
+  border-radius: var(--radius-pill);
+}
+
+.run-avatar__image {
+  display: block;
+  object-fit: cover;
+  background: var(--color-card-blank);
+}
+
+.run-avatar[data-medal] .run-avatar__image,
+.run-avatar[data-medal] .avatar {
+  outline: calc(var(--border-width-ring) - 1px) solid var(--medal-bottom);
+  outline-offset: calc(var(--border-width-ring) - 1px);
+}
+
+.run-avatar__medal {
+  position: absolute;
+  inset-block-end: calc(-1 * var(--space-1));
+  inset-inline-end: calc(-1 * var(--space-1));
+  display: grid;
+  place-items: center;
+  inline-size: calc(var(--size-medal) * 0.8);
+  block-size: calc(var(--size-medal) * 0.8);
+  font-size: var(--font-size-apple-caption);
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-none);
+  color: var(--color-on-medal);
+  background: linear-gradient(to bottom, var(--medal-top), var(--medal-bottom));
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-medal);
 }
 
 /* An inset grouped list, as in iOS Settings. */
@@ -104,20 +245,40 @@
 
 .board-list__row {
   position: relative;
-  display: flex;
-  gap: var(--space-4);
-  align-items: center;
-  padding: var(--space-3) var(--space-5);
   animation: board-rise var(--duration-rise) var(--easing-spring) backwards;
   animation-delay: calc(var(--order, 0) * var(--duration-stagger) / 2);
 }
 
+/* the line between rows starts at the name, past the place and the avatar, as iOS insets it */
 .board-list__row + .board-list__row::before {
   position: absolute;
   inset-block-start: 0;
-  inset-inline: var(--space-5) 0;
+  inset-inline: calc(var(--space-4) + 2ch + 2 * var(--space-3) + var(--size-avatar)) 0;
   content: '';
   border-block-start: var(--border-width-hairline) solid var(--color-launcher-separator);
+}
+
+.board-list__open {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  inline-size: 100%;
+  padding: var(--space-3) var(--space-4);
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+.board-list__open:active {
+  background: var(--color-fill-quiet);
+}
+
+.board-list__open:focus-visible {
+  outline: var(--border-width-ring) solid var(--color-focus-ring);
+  outline-offset: calc(-1 * var(--border-width-ring));
 }
 
 .board-list__place {
@@ -127,7 +288,7 @@
   font-weight: var(--font-weight-semibold);
   font-variant-numeric: tabular-nums;
   color: var(--color-label-muted);
-  text-align: end;
+  text-align: center;
 }
 
 .board-list__text,
@@ -147,10 +308,16 @@
   align-items: flex-end;
 }
 
+.board-list__name,
+.board-list__detail {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .board-list__name {
   font-size: var(--font-size-apple-callout);
   font-weight: var(--font-weight-semibold);
-  overflow-wrap: anywhere;
 }
 
 .board-list__score {
@@ -165,49 +332,46 @@
   color: var(--color-label-muted);
 }
 
+@media (min-width: 48rem) {
+  .board-place--champion {
+    flex-direction: row;
+  }
+
+  .board-place--champion .board-place__media {
+    inline-size: 55%;
+  }
+
+  .board-place--champion .board-place__info {
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: flex-start;
+    justify-content: center;
+    padding: var(--space-6);
+  }
+
+  .board-place--champion .board-place__who {
+    flex: none;
+    inline-size: 100%;
+  }
+
+  .board-place--champion .board-place__name {
+    font-size: var(--font-size-apple-title-3);
+  }
+
+  .board-place--champion .board-place__score {
+    font-size: var(--font-size-apple-title-1);
+  }
+
+  .board-place--runner {
+    padding: var(--space-4);
+  }
+}
+
 @keyframes board-rise {
   from {
     opacity: 0;
     translate: 0 var(--offset-rise);
   }
-}
-
-/* A run's poster in its own shape: across a podium place, or small at the start of a row. */
-.board-poster {
-  display: block;
-  flex: none;
-  padding: 0;
-  overflow: hidden;
-  cursor: pointer;
-  background: var(--color-card-blank);
-  border: 0;
-  border-radius: var(--radius-sm);
-  transition: scale var(--duration-fast) var(--easing-standard);
-}
-
-.board-poster:active {
-  scale: var(--scale-pressed);
-}
-
-.board-poster:focus-visible {
-  outline: var(--border-width-ring) solid var(--color-focus-ring);
-  outline-offset: var(--border-width-ring);
-}
-
-.board-poster__image {
-  display: block;
-  inline-size: 100%;
-  block-size: auto;
-  aspect-ratio: 1200 / 630;
-}
-
-.board-podium__place .board-poster {
-  inline-size: 100%;
-  margin-block-end: var(--space-2);
-}
-
-.board-list__row .board-poster {
-  inline-size: 4.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -216,7 +380,7 @@
     animation: none;
   }
 
-  .board-poster {
+  .board-place {
     transition: none;
   }
 }
