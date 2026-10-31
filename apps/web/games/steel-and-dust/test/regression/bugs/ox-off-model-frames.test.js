@@ -8,6 +8,11 @@ import { lowestRow, readSheet } from '../../support/sheet-cells.js';
 // flinch had a slit cut through his neck and breastplate where a hit splash was keyed out
 const { sprite, image, cellOf } = readSheet('ox');
 const SKILLS = ['chainHook', 'guardCounter', 'execution'];
+// sheet pixels per unit of his (body-point.js)
+const UNIT = RENDER_SCALE * sprite.density;
+// where the slit was, in the pixels of his sheet before it was drawn as fine as he is shown
+const NECK = { left: 117, right: 124, top: 84, bottom: 108 };
+const fine = (pixel) => Math.round(pixel * sprite.density);
 const isSteel = ([red, green, blue]) =>
   Math.max(red, green, blue) - Math.min(red, green, blue) < 48 && blue > 90;
 
@@ -31,8 +36,8 @@ describe('the Warden Ox, strip to strip', () => {
   it('keeps the hammer up in front of him all through his guard', () => {
     for (const frame of [2, 3]) {
       const cell = cellOf('guardCounter', frame);
-      const x = cell.left + sprite.feetX + Math.round(GUARD_GLINT.ahead * RENDER_SCALE);
-      const y = cell.top + sprite.feetY - Math.round(GUARD_GLINT.up * RENDER_SCALE);
+      const x = cell.left + sprite.feetX + Math.round(GUARD_GLINT.ahead * UNIT);
+      const y = cell.top + sprite.feetY - Math.round(GUARD_GLINT.up * UNIT);
       expect(image.alpha(x, y) > 0 && isSteel(image.rgb(x, y)), `frame ${frame}`).toBe(true);
     }
   });
@@ -40,8 +45,8 @@ describe('the Warden Ox, strip to strip', () => {
   it('flinches with his neck and breastplate whole', () => {
     const cell = cellOf('hurt', 0);
     let holes = 0;
-    for (let y = 84; y <= 108; y++) {
-      for (let x = 117; x <= 124; x++) {
+    for (let y = fine(NECK.top); y <= fine(NECK.bottom); y++) {
+      for (let x = fine(NECK.left); x <= fine(NECK.right); x++) {
         holes += image.alpha(cell.left + x, cell.top + y) > 0 ? 0 : 1;
       }
     }

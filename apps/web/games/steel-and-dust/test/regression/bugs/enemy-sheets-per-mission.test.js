@@ -9,7 +9,9 @@ import { TrackedImage } from '../../support/tracked-image.js';
 // Bug: every enemy's sheet loaded at the start and stayed for the whole run, though a road only
 // ever sees its own raiders and bosses: the first road's boss still took memory on the last road
 const MEGABYTE = 1024 * 1024;
-const MOST_MEGABYTES_HELD = 24;
+// the Warden Ox's sheet, drawn as fine as he is shown, takes 10 MB of the road before his and his
+// own; every sheet together takes 48
+const MOST_MEGABYTES_HELD = 32;
 
 function playingView() {
   const createCanvas = (width, height) => Object.assign(new RecordingCanvas(), { width, height });

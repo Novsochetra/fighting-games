@@ -9,12 +9,13 @@ import { readPngAlpha } from '../../support/png-alpha.js';
 const GAME = new URL('../../../', import.meta.url);
 const sprite = ENEMY_SPRITES.ox;
 const sheet = readPngAlpha(new URL(`assets/sprites/enemies/${sprite.file}`, GAME));
+// sheet pixels per unit of his (body-point.js)
+const UNIT = RENDER_SCALE * sprite.density;
 
 // the sheet pixel under a point on his body (body-point.js), in his own units from his feet
 function pixelAt(strip, frame, { ahead = 0, up = 0 }) {
-  const x = frame * sprite.frameWidth + sprite.feetX + Math.round(ahead * RENDER_SCALE);
-  const y =
-    sprite.strips[strip].row * sprite.frameHeight + sprite.feetY - Math.round(up * RENDER_SCALE);
+  const x = frame * sprite.frameWidth + sprite.feetX + Math.round(ahead * UNIT);
+  const y = sprite.strips[strip].row * sprite.frameHeight + sprite.feetY - Math.round(up * UNIT);
   return { alpha: sheet.alpha(x, y), rgb: sheet.rgb(x, y) };
 }
 

@@ -9,6 +9,9 @@ const BIG_BOSS = { frameWidth: 256, frameHeight: 160, feetX: 128, feetY: 156 };
 // the Naga Raja's sheet is drawn half as fine again (`density`: sheet pixels per world pixel at
 // scale 1, over the usual two), so she stays sharp drawn big
 const HUGE_BOSS = { frameWidth: 384, frameHeight: 240, feetX: 192, feetY: 236, density: 1.5 };
+// the Warden Ox's big frames drawn as fine as he is shown (`density` his scale), so each of his
+// pixels is one screen pixel, as a hero's is
+const FINE_OX = { frameWidth: 499, frameHeight: 312, feetX: 250, feetY: 304, density: 1.95 };
 
 // one PNG per enemy in assets/sprites/enemies/ with a row per strip, in the order listed;
 // "attack 9/4" is a strip of 9 frames whose frame 4 holds while the hitbox is out
@@ -44,7 +47,7 @@ export const ENEMY_SPRITES = {
   ox: sheet(
     'ox.png',
     `${bossStrips(5, 5)}, chainHook 9, guardCounter 8/4, execution 12/9`,
-    BIG_BOSS,
+    FINE_OX,
   ),
   queen: sheet(
     'queen.png',
