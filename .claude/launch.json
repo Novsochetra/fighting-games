@@ -1,0 +1,229 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "arcade",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 8765
+    },
+    {
+      "name": "arcade-8767",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "PORT=8767 node --watch apps/server/src/main.js"
+      ],
+      "port": 8767
+    },
+    {
+      "name": "boss9",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/boss9 && PORT=8779 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js"
+      ],
+      "port": 8779
+    },
+    {
+      "name": "boss12",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/boss12 && PORT=8781 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js"
+      ],
+      "port": 8781
+    },
+    {
+      "name": "boss11",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "PORT=8783 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js"
+      ],
+      "port": 8783
+    },
+    {
+      "name": "naga-frames",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/naga-recording && /usr/bin/python3 -m http.server 8793 --bind 127.0.0.1"
+      ],
+      "port": 8793
+    },
+    {
+      "name": "supporters",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/supporters && PORT=8785 /opt/homebrew/opt/node@22/bin/node --watch apps/server/src/main.js"
+      ],
+      "port": 8785
+    },
+    {
+      "name": "loot-by-hand",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/loot-by-hand && PORT=8797 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js"
+      ],
+      "port": 8797
+    },
+    {
+      "name": "morodok",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/morodok && PORT=8799 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js"
+      ],
+      "port": 8799
+    },
+    {
+      "name": "supporters-server",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/server && PORT=8801 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js"
+      ],
+      "port": 8801
+    },
+    {
+      "name": "boss-toughness",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/boss-toughness && PORT=8803 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js"
+      ],
+      "port": 8803
+    },
+    {
+      "name": "credits",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/credits && PORT=8805 /opt/homebrew/opt/node@22/bin/node --watch apps/server/src/main.js"
+      ],
+      "port": 8805
+    },
+    {
+      "name": "promo-v2",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/promo-v2 && PORT=8807 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js"
+      ],
+      "port": 8807
+    },
+    {
+      "name": "analytics",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/analytics && PORT=8809 /opt/homebrew/opt/node@22/bin/node --watch apps/server/src/main.js"
+      ],
+      "port": 8809
+    },
+    {
+      "name": "bmc-widget",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/bmc-widget && PORT=8809 /opt/homebrew/opt/node@22/bin/node --watch apps/server/src/main.js"
+      ],
+      "port": 8809
+    },
+    {
+      "name": "promo-60",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/promo-60 && PORT=8811 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js"
+      ],
+      "port": 8811
+    },
+    {
+      "name": "launch-glitch",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/launch-glitch && PORT=8813 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js --dev"
+      ],
+      "port": 8813
+    },
+    {
+      "name": "offline-ready",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/offline-ready && PORT=8821 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js"
+      ],
+      "port": 8821
+    },
+    {
+      "name": "bamboo-way-in",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/bamboo-way-in && PORT=8825 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js --dev"
+      ],
+      "port": 8825
+    },
+    {
+      "name": "web-nav",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/web-nav && PORT=8823 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js --dev"
+      ],
+      "port": 8823
+    },
+    {
+      "name": "gate-run",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/gate-run && PORT=8829 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js --dev"
+      ],
+      "port": 8829
+    },
+    {
+      "name": "sd-favicon",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/sd-favicon && PORT=8841 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js"
+      ],
+      "port": 8841
+    },
+    {
+      "name": "football",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/football && PORT=8845 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js --dev"
+      ],
+      "port": 8845
+    },
+    {
+      "name": "clip-catcher",
+      "runtimeExecutable": "/opt/homebrew/opt/node@22/bin/node",
+      "runtimeArgs": [
+        "/private/tmp/claude-501/-Users-sochetranov-Documents-workspace-personal-fighting-games/e3bf15d6-3db7-4186-9496-8330223ce6a2/scratchpad/clip-catcher/catch.mjs"
+      ],
+      "port": 8833
+    },
+    {
+      "name": "card-details",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd .claude/worktrees/card-details && PORT=8851 /opt/homebrew/opt/node@22/bin/node apps/server/src/main.js --dev"
+      ],
+      "port": 8851
+    }
+  ]
+}
