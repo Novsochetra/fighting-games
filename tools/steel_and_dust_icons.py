@@ -33,9 +33,11 @@ FULL_BLEED_FIT = 0.92
 SAFE_RADIUS = 0.4
 FRINGE_PASSES = 4
 TINT_REACH = 8
-CUT_FADE_ROWS = 48
+# The magenta has red and blue level, and so has any colour blended into it; the logo's pink clouds
+# are far redder than blue.
+LEVEL = 40
 
-# Where the sun sits, in shares of the logo's box: behind the middle tower and the fighter's head.
+# Where the sun sits, in shares of the logo's box: on the logo's own sun, behind the middle tower.
 SUN_IN_LOGO = (0.5, 0.3)
 # Outermost first: radius in shares of the logo's width, colour, and how much of the dusk it covers.
 SUN_GLOW = (
@@ -57,24 +59,12 @@ def neighbours_of(mask):
     return grown
 
 
-def faded_at_cut_top(alpha):
-    # The drawing cuts its middle tower off at the top; left whole, the cut would stand as a flat
-    # line against the sun.
-    if not alpha[0].any():
-        return alpha
-
-    share = np.clip(np.arange(len(alpha)) / CUT_FADE_ROWS, 0, 1)
-
-    return alpha * (share * share * (3 - 2 * share))[:, None]
-
-
 def key_out_magenta(image):
     red, green, blue = (np.asarray(image, dtype=int)[..., channel] for channel in range(3))
     background = (red > 170) & (blue > 170) & (green < 100)
-    # magenta blended into the logo's dark outline: red and blue both well above green, which none
-    # of its stone, gold or skin has
+    # magenta blended into the logo's dark outline: red and blue both well above green and level
     spill = np.minimum(red, blue) - green
-    fringe = spill > 30
+    fringe = (spill > 30) & (np.abs(red - blue) < LEVEL)
     for _ in range(FRINGE_PASSES):
         background |= fringe & neighbours_of(background)
 
@@ -86,7 +76,7 @@ def key_out_magenta(image):
 
     untinted = np.where(fringe & near, spill, 0)
     rgb = np.stack([red - untinted, green, blue - untinted], axis=2).astype(np.uint8)
-    alpha = faded_at_cut_top(np.where(background, 0.0, 255.0)).round().astype(np.uint8)
+    alpha = np.where(background, 0, 255).astype(np.uint8)
     logo = Image.fromarray(np.dstack([rgb, alpha]), 'RGBA')
 
     return logo.crop(logo.getbbox())

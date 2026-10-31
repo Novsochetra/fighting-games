@@ -1,8 +1,9 @@
 # Icons
 
-Every icon is the Steel & Dust logo: a fighter before the face towers of a temple, between two
-nagas, over the title. The logo is drawn on magenta (`concepts/logo/steel-and-dust.webp`), and
-`tools/steel_and_dust_icons.py` keys the magenta out and draws every size here:
+Every icon is the Steel & Dust logo: a fighter before the face towers of a temple and a setting
+sun, between two nagas, over the title. The logo is drawn on magenta
+(`concepts/logo/steel-and-dust.webp`), and `tools/steel_and_dust_icons.py` keys the magenta out and
+draws every size here:
 
 | File                    | Size    | What it is                                               | Used by                               |
 | ----------------------- | ------- | -------------------------------------------------------- | ------------------------------------- |
