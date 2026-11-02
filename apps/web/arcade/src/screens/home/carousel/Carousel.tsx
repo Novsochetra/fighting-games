@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, type ReactNode } from 'react';
 import { createCarouselMotion } from './carousel-motion.js';
+import { isPlayable } from '@/api/catalog/coming-soon.js';
 import type { GameCard } from '@/api/catalog/game-card';
 import { GameArt } from '@/screens/home/GameArt';
 import { useHome } from '@/screens/home/home-context';
@@ -27,6 +28,7 @@ export function CarouselCard({ card, index, children }: CarouselCardProps) {
       data-game-index={index}
       tabIndex={-1}
       aria-label={card.title}
+      aria-haspopup={isPlayable(card) ? 'dialog' : undefined}
     >
       <span className="card__ring" aria-hidden="true" />
       <span className="card__frame">

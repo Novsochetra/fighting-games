@@ -86,13 +86,15 @@ describe('browsing the carousel', () => {
     expect(spotlightTitle()).toBe('Coming Soon');
   });
 
-  it('brings a side card to the center on a click, and opens it on the next', async () => {
+  it('brings a side card to the center on a click, and shows its details on the next', async () => {
     const { navigate } = await bootWithGames(['alpha', 'bravo', 'charlie']);
     click(cards()[1].querySelector('.card__frame'));
     expect(spotlightTitle()).toBe('bravo');
-    expect(navigate).not.toHaveBeenCalled();
+    expect(byId('details').open).toBe(false);
     click(cards()[1]);
-    expect(navigate).toHaveBeenCalledWith('games/bravo/');
+    expect(byId('details').open).toBe(true);
+    expect(byId('details-title').textContent).toBe('bravo');
+    expect(navigate).not.toHaveBeenCalled();
   });
 
   it('follows a sideways swipe, and the click that ends it picks nothing', async () => {

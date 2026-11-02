@@ -36,10 +36,10 @@ describe('createAnalytics', () => {
     const { analytics, storage, tag, loadTag } = setup();
     analytics.allow();
     analytics.allow();
-    analytics.track(EVENTS.play, { game_id: 'a', source: 'card' });
+    analytics.track(EVENTS.play, { game_id: 'a', source: 'play_button' });
     expect(loadTag).toHaveBeenCalledOnce();
     expect(tag.grant).toHaveBeenCalledTimes(2);
-    expect(tag.event).toHaveBeenCalledWith('play_game', { game_id: 'a', source: 'card' });
+    expect(tag.event).toHaveBeenCalledWith('play_game', { game_id: 'a', source: 'play_button' });
     expect(storage.read(CONSENT_KEY)).toBe(CONSENT.granted);
     expect(analytics.needsAnswer()).toBe(false);
   });

@@ -6,6 +6,7 @@ import { isPlayable } from '@/api/catalog/coming-soon.js';
 import type { FocusZone, GameCard, LaunchSource } from '@/api/catalog/game-card';
 import { cardFrameOf } from './home-parts';
 import { popHeart } from './spotlight/spotlight-motion.js';
+import type { Details } from './details/use-details';
 import type { Library } from './library/use-library';
 import type { Launcher } from './launch/use-launcher';
 import type { useSelection } from './use-selection';
@@ -16,6 +17,7 @@ export interface HomeParts {
   choice: ReturnType<typeof useSelection>;
   library: Library;
   launcher: Launcher;
+  details: Details;
   homeRef: RefObject<HTMLElement | null>;
   favoritesChanged: () => void;
 }
@@ -23,9 +25,21 @@ export interface HomeParts {
 const STEPS: Record<string, number> = { left: -1, right: 1 };
 const wrapIndex = (index: number, count: number) => ((index % count) + count) % count;
 
-// The source (play_button, details, card, keyboard, gamepad) shows how players start a game.
-function openerOf({ arcade, cards, choice, launcher, homeRef }: HomeParts) {
+function knockOf({ arcade, homeRef }: HomeParts) {
+  const { sound, analytics } = arcade;
+
+  return (index: number, card: GameCard) => {
+    sound.play('locked');
+    nudgeFrame(cardFrameOf(homeRef.current!, index));
+    analytics.track(EVENTS.comingSoon, { card_id: card.id });
+  };
+}
+
+// The source (play_button, details, keyboard, gamepad) shows how players start a game.
+function openerOf(parts: HomeParts) {
+  const { arcade, cards, choice, launcher } = parts;
   const { preferences, sound, analytics } = arcade;
+  const knock = knockOf(parts);
 
   return (index: number, source: LaunchSource) => {
     const card = cards[index];
@@ -37,9 +51,7 @@ function openerOf({ arcade, cards, choice, launcher, homeRef }: HomeParts) {
     choice.select(index);
 
     if (!isPlayable(card)) {
-      sound.play('locked');
-      nudgeFrame(cardFrameOf(homeRef.current!, index));
-      analytics.track(EVENTS.comingSoon, { card_id: card.id });
+      knock(index, card);
 
       return false;
     }
@@ -50,6 +62,26 @@ function openerOf({ arcade, cards, choice, launcher, homeRef }: HomeParts) {
     analytics.track(EVENTS.play, { game_id: card.id, source });
 
     return true;
+  };
+}
+
+// A tap on a card shows its game before it starts; only Play, Enter or the pad start it at once.
+function detailsOpenerOf(parts: HomeParts) {
+  const { cards, launcher, details } = parts;
+  const knock = knockOf(parts);
+
+  return (index: number) => {
+    const card = cards[index];
+
+    if (!card || launcher.isFlying()) {
+      return;
+    }
+
+    if (isPlayable(card)) {
+      details.open(card);
+    } else {
+      knock(index, card);
+    }
   };
 }
 
@@ -88,6 +120,7 @@ export function homeActions(parts: HomeParts) {
 
   return {
     open,
+    showDetails: detailsOpenerOf(parts),
     step,
     toggleFavorite: favoriteToggleOf(parts),
     pickTile(index: number) {

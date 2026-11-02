@@ -29,4 +29,4 @@ export interface GameBoard {
 
 export type FocusZone = 'carousel' | 'library' | null;
 
-export type LaunchSource = 'play_button' | 'details' | 'card' | 'keyboard' | 'gamepad';
+export type LaunchSource = 'play_button' | 'details' | 'keyboard' | 'gamepad';

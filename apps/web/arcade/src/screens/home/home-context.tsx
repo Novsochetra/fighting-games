@@ -23,7 +23,7 @@ export function useHomeState(homeRef: RefObject<HTMLElement | null>) {
   const saves = useOfflineSaves();
   const removal = useRemoveSave();
   const [favorites, favoritesChanged] = useReducer((count: number) => count + 1, 0);
-  const parts = { arcade, cards, choice, library, launcher, homeRef, favoritesChanged };
+  const parts = { arcade, cards, choice, library, launcher, details, homeRef, favoritesChanged };
 
   return {
     ...catalog,

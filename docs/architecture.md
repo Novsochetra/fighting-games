@@ -545,8 +545,8 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   `--shift`, `--scale`, ...), which the CSS turns into one transform, so every move is a compositor
   transition on the spring easing. A card that comes round the loop slides in from out of sight
   beyond its new place, and a copy of it slides out by the side it left. Arrows and A/D, the round arrow buttons, a click on a side card, a swipe
-  (`gestures.js`) and a sideways trackpad scroll move it; Enter, Play or a click on the center card
-  opens the game.
+  (`gestures.js`) and a sideways trackpad scroll move it; a click on the center card opens its
+  Details sheet, and Enter or Play opens the game.
 - **Library** (`Library.tsx`, `use-library.ts`, `library-filter.js`): a grid of tiles
   under an iOS segmented control: All (eight, then Show more), Recent (newest first) and Favorites.
   A tile selects its game and scrolls the hero back into view. Favorites, recent games and the sound

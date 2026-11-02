@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
   bootWithSteelAndDust,
   byId,
+  centerCard,
   click,
   onPage,
   press,
@@ -53,6 +54,16 @@ describe('the details sheet', () => {
     expect(press('ArrowRight').defaultPrevented).toBe(false);
     expect(press('Enter').defaultPrevented).toBe(false);
     expect(navigate).not.toHaveBeenCalled();
+  });
+
+  it('opens on a click on the center card, which starts nothing until Play', async () => {
+    const { navigate } = await bootWithSteelAndDust();
+    click(centerCard());
+    expect(dialog().open).toBe(true);
+    expect(byId('details-title').textContent).toBe('Steel & Dust');
+    expect(navigate).not.toHaveBeenCalled();
+    click(byId('details-play'));
+    expect(navigate).toHaveBeenCalledWith('games/steel-and-dust/');
   });
 
   it('closes and opens the game from its Play link', async () => {

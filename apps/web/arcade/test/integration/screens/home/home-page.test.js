@@ -84,13 +84,13 @@ describe('home page with the real catalog', () => {
     expect(byId('next').hidden).toBe(false);
   });
 
-  it('opens the selected game with Enter or Space, and with a click on its card', async () => {
+  it('opens the selected game with Enter or Space, but not with a click on its card', async () => {
     const { navigate } = await bootWithSteelAndDust();
     expect(press('Enter').defaultPrevented).toBe(true);
     expect(navigate).toHaveBeenLastCalledWith('games/steel-and-dust/');
     press(' ');
     click(centerCard());
-    expect(navigate).toHaveBeenCalledTimes(3);
+    expect(navigate).toHaveBeenCalledTimes(2);
   });
 
   it('leaves Enter on a focused button to the button', async () => {

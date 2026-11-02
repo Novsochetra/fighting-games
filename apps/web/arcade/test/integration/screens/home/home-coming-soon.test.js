@@ -66,6 +66,7 @@ describe('the Coming Soon teasers', () => {
     click(byId('play'));
     click(centerCard());
     expect(navigate).not.toHaveBeenCalled();
+    expect(byId('details').open).toBe(false);
     expect(context.started).toHaveLength(afterMove + 3 * CUES.locked.length);
   });
 });

@@ -75,7 +75,8 @@ function useWheel(carousel: RefObject<HTMLElement | null>, step: (delta: number)
   }, [carousel]);
 }
 
-// Swipes and the wheel turn the carousel; a click picks a card, and opens the one already picked.
+// Swipes and the wheel turn the carousel; a click picks a card, and shows the details of the one
+// already picked.
 export function useCarouselGestures(carousel: RefObject<HTMLElement | null>) {
   const home = useHome();
   const swipedRef = useSwipes(carousel, home.step);
@@ -94,7 +95,7 @@ export function useCarouselGestures(carousel: RefObject<HTMLElement | null>) {
     }
 
     if (index === home.selected) {
-      home.open(index, 'card');
+      home.showDetails(index);
     } else {
       home.select(index, { cue: true });
     }
