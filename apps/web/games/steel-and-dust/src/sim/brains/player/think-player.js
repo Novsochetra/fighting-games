@@ -8,6 +8,7 @@ import { thinkAttack } from './attack.js';
 import { thinkCharge } from './charge.js';
 import { consumeBuffer, heldDirection } from './controls.js';
 import { thinkDash } from './dash.js';
+import { thinkGateRun } from './gate-run.js';
 import { thinkGrounded, thinkSquat } from './ground.js';
 import { thinkRun } from './run.js';
 
@@ -57,6 +58,10 @@ function tryUltimate(game, player) {
 
 export function thinkPlayer(game, player) {
   const direction = heldDirection(game.input.held);
+  if (game.gateRun) {
+    thinkGateRun(game, player);
+    return;
+  }
   if (game.mode !== 'play' || game.clearTime > 0) {
     idleBetweenFights(game, player);
     return;

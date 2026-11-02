@@ -1,6 +1,7 @@
 import { HERO_THEMES } from '../art/hero-themes.js';
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../config.js';
 import { heroById } from '../data/heroes.js';
+import { propsShown } from '../data/missions/props-layout.js';
 import { dimForBossUltimate, isBossUltimate } from './fighters/boss-ultimate.js';
 import { drawFighter } from './fighters/draw-fighter.js';
 import { heroSheetFor } from './fighters/hero-sheets.js';
@@ -134,7 +135,8 @@ export function drawWorld(painter, { game, view, cameraX }) {
     sheets: view.fxSheets,
   });
   drawGround(painter, { cameraX, colors, tick, terrain, backdrop });
-  drawProps(painter, { cameraX, props: mission.props, sheets: view.propSheets });
+  const props = propsShown(mission, game.wallSmashed);
+  drawProps(painter, { cameraX, props, sheets: view.propSheets });
   drawTrees(painter, view.fxSheets, { trees: game.trees, cameraX });
   drawNestTrees(painter, view.fxSheets, { nests: game.nests, backdrop, cameraX });
   drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });

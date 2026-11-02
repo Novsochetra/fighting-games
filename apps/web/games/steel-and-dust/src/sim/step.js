@@ -28,6 +28,7 @@ import { endRun } from './stage/run-end.js';
 import { updateSummons } from './summons/update-summons.js';
 import { BANNER_FOREVER, CLEAR_TICKS } from './stage/stage-clear.js';
 import { cueSummary } from './stage/summary-cues.js';
+import { holdForWayOut } from './stage/way-out.js';
 import { updateZones } from './stage/zones.js';
 
 function updateWorld(game) {
@@ -59,7 +60,7 @@ function updateWorld(game) {
 }
 
 function advanceClearScreen(game) {
-  if (!game.clearTime) {
+  if (!game.clearTime || holdForWayOut(game)) {
     return;
   }
   game.clearTime++;
@@ -142,7 +143,8 @@ export function simulateStep(game) {
     updateEffects(game);
     return;
   }
-  if (game.mode === 'play' && !isFightOver(game)) {
+  // the clock waits while the hero runs onto the road on its own
+  if (game.mode === 'play' && !isFightOver(game) && !game.gateRun) {
     game.playTime++;
   }
   updateZones(game);
