@@ -853,7 +853,7 @@ whole amounts without cents), and the components only write them out (`Supporter
 `SupporterParts.tsx`); the list comes through TanStack Query (`use-supporters.ts`). The top three stand on a podium with
 gold, silver and bronze, second, first and third from the left, and everyone follows in a grouped list
 under a Top and Recent switch that clicks like the home page's. Each supporter gets a round monogram,
-colored by their name (`paletteOf` in `components/avatar/avatar.js`, which the leaderboard's runs
+colored by their name (`paletteOf` in `components/avatar/avatar-look.js`, which the leaderboard's runs
 without a poster wear too); anonymous ones stay gray. Each row of the list wears its place on its
 avatar's edge, as the podium does, in its medal for the top three and plain for the rest, and Recent
 hides it, as a place there would read as a position in time. Beside each name, on

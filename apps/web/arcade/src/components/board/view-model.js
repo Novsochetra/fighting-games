@@ -1,4 +1,4 @@
-import { initialsOf, paletteOf } from '@/components/avatar/avatar.js';
+import { initialsOf, paletteOf } from '@/components/avatar/avatar-look.js';
 import { formatClock, formatCount, formatDay } from '@/utils/format.js';
 
 const MEDALS = ['gold', 'silver', 'bronze'];
