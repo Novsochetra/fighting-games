@@ -37,23 +37,38 @@ export function rawRequest(port, rawPath, method = 'GET') {
   });
 }
 
+async function readReply(response) {
+  const chunks = [];
+
+  for await (const chunk of response) {
+    chunks.push(chunk);
+  }
+
+  const text = Buffer.concat(chunks).toString('utf8');
+
+  return { status: response.statusCode, headers: response.headers, text };
+}
+
+// A server may answer (a 413, a 429) before it reads the body, and goes on draining it. Like a
+// browser, this keeps an answer that came in full if the rest of the upload fails, and settles only
+// once the upload is over, so a test never closes the server under a write still in flight.
 export function sendRequest(port, { method = 'GET', path: rawPath, headers = {}, body } = {}) {
   return new Promise((resolve, reject) => {
-    const request = http.request(
-      { host: '127.0.0.1', port, path: rawPath, method, headers },
-      (response) => {
-        const chunks = [];
-        response.on('data', (chunk) => chunks.push(chunk));
-        response.on('end', () => {
-          const text = Buffer.concat(chunks).toString('utf8');
-          resolve({ status: response.statusCode, headers: response.headers, text });
-        });
-      },
+    const state = { reply: null, closed: false };
+    const settle = () => state.reply && state.closed && resolve(state.reply);
+    const options = { host: '127.0.0.1', port, path: rawPath, method, headers };
+    const request = http.request(options, (response) =>
+      readReply(response).then((reply) => {
+        state.reply = reply;
+        settle();
+      }, reject),
     );
-    request.on('error', reject);
-    // a server that refuses a big body answers before reading it and hangs up, so the rest of the
-    // body is written to a closed socket after the answer is in, where no request listens any more
-    request.on('socket', (socket) => socket.on('error', () => {}));
+
+    request.on('error', (error) => request.res?.complete || reject(error));
+    request.on('close', () => {
+      state.closed = true;
+      settle();
+    });
     request.end(body);
   });
 }
