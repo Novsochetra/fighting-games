@@ -53,17 +53,16 @@ describe("a road's way out and way in", () => {
         return;
       }
 
-      const { dark, opening } = sprite.doorway;
-      const [left, top, right, bottom] = dark ? [dark[0], 0, dark[1], 1] : opening;
+      const [left, top, right, bottom] = sprite.doorway.opening;
       expect(0 < left && left < right && right < sprite.width).toBe(true);
       expect(top < bottom && bottom <= sprite.width * 2).toBe(true);
-      expect(Boolean(dark) !== Boolean(opening)).toBe(true);
     });
   }
 
-  it("sets a door's dark on the road where the door stands", () => {
+  it("sets a door's black hole on the road where the door stands", () => {
     const door = doorwayOf({ kind: 'templeDoorBroken', x: 100, y: 180 });
-    expect(door).toMatchObject({ dark: true, left: 100 - 8 + 21, right: 100 - 8 + 27.5 });
+    const opening = { x: 113, y: 180 - 139 / 2 + 26, width: 10, height: 32 };
+    expect(door).toMatchObject({ dark: true, left: 113, right: 123, opening });
   });
 
   it("sets a fence's opening on the road where the fence stands", () => {

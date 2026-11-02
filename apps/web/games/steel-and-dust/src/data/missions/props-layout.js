@@ -27,22 +27,15 @@ export function layoutProps(spec, road) {
 const leftOf = ({ kind, x }) => x - PROP_SPRITES[kind].feetX / RENDER_SCALE;
 const topOf = ({ kind, y }) => y - PROP_SPRITES[kind].feetY / RENDER_SCALE;
 
-// a broken wall's doorway on the road, `left` and `right` being where its dark space or its
-// opening starts and ends
+// a broken wall's doorway on the road: the opening the hero goes through, and whether it is a
+// door's black hole
 export function doorwayOf(wall) {
-  const { opening, dark } = PROP_SPRITES[wall.kind].doorway;
-  const x = leftOf(wall);
-
-  if (dark) {
-    const [left, right] = dark.map((pixels) => x + pixels / RENDER_SCALE);
-
-    return { wall, dark: true, left, right };
-  }
-
+  const { opening, dark = false } = PROP_SPRITES[wall.kind].doorway;
   const [left, top, right, bottom] = opening.map((pixels) => pixels / RENDER_SCALE);
-  const shown = { x: x + left, y: topOf(wall) + top, width: right - left, height: bottom - top };
+  const x = leftOf(wall) + left;
+  const shown = { x, y: topOf(wall) + top, width: right - left, height: bottom - top };
 
-  return { wall, dark: false, left: x + left, right: x + right, opening: shown };
+  return { wall, dark, left: x, right: x + shown.width, opening: shown };
 }
 
 // a wall and its broken sprite are one picture, whole and smashed, each set on the road by its own

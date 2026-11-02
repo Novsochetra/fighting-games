@@ -3,17 +3,17 @@
 // feet sunk a little into the road so it looks planted. A road's way in is the last road's wall
 // broken open, standing at the start with its left edge on the road's edge; a road's closing wall
 // stands whole on screen at the end of the road, by its `width`, known before its image loads.
-// A broken wall's `doorway` is where the hero walks through it, in the sprite's own pixels. A door
-// has a `dark` space painted in it, [left, right] along the road: the hero walks in front of the
-// wall into that dark and is lost in it, and comes out of it the same way. A fence or a breach
-// has an `opening` the road shows through, [left, top, right, bottom]: there the hero walks behind
-// the wall, seen only through the opening, and out of sight behind its far side
+// A broken wall's `doorway` is the opening the hero goes through, [left, top, right, bottom] in the
+// sprite's own pixels. A door's is the black hole painted in it (`dark`): the hero steps into the
+// hole in front of the dark and fades into it, the door in front of it all round the hole. A fence's
+// or a breach's is a gap the road shows through: there the hero walks behind the wall, seen only
+// through the gap, and out of sight behind its far side
 const DOORWAYS = {
   palisadeBroken: { opening: [22, 0, 60, 112] },
   canyonBarricadeBroken: { opening: [57, 0, 88, 112] },
-  foundryGateBroken: { dark: [62, 86] },
-  templeDoorBroken: { dark: [42, 55] },
-  wardenGateBroken: { dark: [80, 110] },
+  foundryGateBroken: { opening: [60, 24, 82, 98], dark: true },
+  templeDoorBroken: { opening: [42, 52, 62, 116], dark: true },
+  wardenGateBroken: { opening: [82, 48, 110, 180], dark: true },
   templeGateBroken: { opening: [48, 0, 74, 112] },
 };
 

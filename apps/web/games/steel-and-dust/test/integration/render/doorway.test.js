@@ -45,8 +45,7 @@ function drawnWhen(missionIndex, done) {
 const lastDraw = (log, file) =>
   log.findLastIndex((call) => call.startsWith(`drawImage(img(${file})`));
 const heroDraws = (log) => log.filter((call) => call.includes('img(hero_'));
-const intoTheDark = (game) =>
-  game.gateRun?.phase === 'enter' && game.player.x > game.gateRun.doorway.left;
+const halfIn = (game) => game.gateRun?.phase === 'enter' && game.gateRun.alpha < 0.6;
 
 // the clip a hero in a doorway is drawn under, as the log has it
 function heroClip(log) {
@@ -57,25 +56,30 @@ function heroClip(log) {
 }
 
 describe('the hero in a doorway', () => {
-  it('walks in front of a door and is lost in its dark from the front, whole and unfaded', () => {
-    const { game, log } = drawnWhen(8, intoTheDark);
+  it("steps into a door's black hole: seen only in it, faint, the door drawn again round it", () => {
+    const { game, log } = drawnWhen(8, halfIn);
     const { doorway } = game.gateRun;
+    const { x, y, width } = doorway.opening;
     const { hero, clip, area } = heroClip(log);
     expect(doorway.dark).toBe(true);
     expect(clip).toBeGreaterThan(-1);
-    expect(area).toBe(`rect(${doorway.left - 2000},-2000,2000,4000)`);
-    expect(lastDraw(log, PROP_SPRITES[doorway.wall.kind].file)).toBeLessThan(hero);
+    expect(area).toBe(`rect(${x},${y},${width},2000)`);
+    const faint = log.slice(clip, hero).filter((call) => call.startsWith('globalAlpha='));
+    expect(faint.length).toBeGreaterThan(0);
+    expect(faint.every((call) => Number(call.split('=')[1]) < 0.6)).toBe(true);
+    const roundTheHole = log.indexOf('clip(evenodd)', hero);
+    expect(roundTheHole).toBeGreaterThan(hero);
+    expect(lastDraw(log, PROP_SPRITES[doorway.wall.kind].file)).toBeGreaterThan(roundTheHole);
   });
 
-  it("steps out of the next road's door from its dark, front first", () => {
+  it("steps out of the next road's door from its hole, faint at first", () => {
     const comingOut = (game) =>
-      game.missionIndex === 9 &&
-      game.gateRun?.phase === 'emerge' &&
-      game.player.x > game.gateRun.doorway.right;
+      game.missionIndex === 9 && game.gateRun?.phase === 'emerge' && game.gateRun.alpha > 0.3;
     const { game, log } = drawnWhen(8, comingOut);
     const { doorway } = game.gateRun;
+    const { x, y, width } = doorway.opening;
     expect(doorway.dark).toBe(true);
-    expect(heroClip(log).area).toBe(`rect(${doorway.right},-2000,2000,4000)`);
+    expect(heroClip(log).area).toBe(`rect(${x},${y},${width},2000)`);
   });
 
   it('walks behind a broken fence, seen only through its gap', () => {

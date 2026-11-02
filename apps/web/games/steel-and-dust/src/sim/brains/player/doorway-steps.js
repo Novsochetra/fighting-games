@@ -5,18 +5,24 @@ import { REVEAL_FRAMES } from '../../stage/stage-clear.js';
 const PICK_UP = 0.15;
 // past this far beyond a doorway's edge the hero, its weapon and its scarf are all on one side of it
 const HERO_REACH = 20;
-// coming out, the hero walks: a step at a time out of the dark, not a run
+// coming out of a fence's gap, the hero walks: a step at a time, not a run
 const WALK_OUT_PACE = 1.3;
+// in a door's black hole the hero takes a few slow steps as it fades into the dark, or out of it,
+// across the middle of the hole
+export const FADE_TICKS = 30;
+const FADE_PACE = 0.3;
+const FADE_LEAD = (FADE_PACE * FADE_TICKS) / 2;
 
-// going in, the hero runs on into a door's dark front first, or into a fence's opening and on
-// behind its far side
-export const goingInAt = ({ dark, left }) => (dark ? left - HERO_REACH : left);
-export const goneAt = ({ dark, left, right }) => (dark ? left : right) + HERO_REACH;
+const middleOf = ({ left, right }) => (left + right) / 2;
 
-// coming out, the hero starts out of sight in the dark or behind the near side of the opening, and
-// is out once all of it has left the dark, or once it is in the middle of the opening
-export const unseenAt = ({ dark, left, right }) => (dark ? right : left) - HERO_REACH;
-const outAt = ({ dark, left, right }) => (dark ? right + HERO_REACH : (left + right) / 2);
+// going in, the hero steps into a door's hole just short of its middle, or into a fence's gap at
+// its near side and on behind its far side
+export const goingInAt = (doorway) => (doorway.dark ? middleOf(doorway) - FADE_LEAD : doorway.left);
+const goneAt = ({ right }) => right + HERO_REACH;
+
+// coming out, the hero starts in a door's hole, unseen, or behind the near side of a fence's gap
+export const unseenAt = (doorway) =>
+  doorway.dark ? middleOf(doorway) - FADE_LEAD : doorway.left - HERO_REACH;
 
 export function runToward(player, direction, pace = RUN_SPEED) {
   player.facing = direction;
@@ -28,24 +34,61 @@ export function runToward(player, direction, pace = RUN_SPEED) {
   player.vx += (direction * pace - player.vx) * PICK_UP;
 }
 
+// one slow step in a door's hole, fading out going in or in coming out; says when the fade is done
+export function stepInHole(player, run, { comingOut }) {
+  run.time++;
+  const share = Math.min(1, run.time / FADE_TICKS);
+
+  run.alpha = comingOut ? share : 1 - share;
+  player.facing = 1;
+
+  if (player.state !== 'run') {
+    startRun(player);
+  }
+
+  player.vx = FADE_PACE;
+
+  return share === 1;
+}
+
+// running on through a fence's gap, says when the far side hides the hero
+export function runPastGap(player, doorway) {
+  runToward(player, 1);
+
+  return player.x > goneAt(doorway);
+}
+
+// walking out through a fence's gap, says when the hero is in its middle, in front of the fence
+function walkOutOfGap(player, doorway) {
+  runToward(player, 1, WALK_OUT_PACE);
+
+  return player.x >= middleOf(doorway);
+}
+
+function emerge(player, run) {
+  const { doorway } = run;
+  const out = doorway.dark
+    ? stepInHole(player, run, { comingOut: true })
+    : walkOutOfGap(player, doorway);
+
+  if (out) {
+    Object.assign(run, { phase: 'run', inDoorway: false, alpha: 1 });
+  }
+}
+
 // unseen in the last road's doorway while the next road opens out of the wipe, then out of it and
 // on to the spot a road starts on, where the controls are handed over
 export function comeIn(game, player, run) {
   if (run.phase === 'wait') {
     if (++run.time >= REVEAL_FRAMES) {
-      run.phase = 'emerge';
+      Object.assign(run, { phase: 'emerge', time: 0 });
     }
 
     return;
   }
 
   if (run.phase === 'emerge') {
-    runToward(player, 1, WALK_OUT_PACE);
-
-    if (player.x >= outAt(run.doorway)) {
-      Object.assign(run, { phase: 'run', inDoorway: false });
-    }
-
+    emerge(player, run);
     return;
   }
 

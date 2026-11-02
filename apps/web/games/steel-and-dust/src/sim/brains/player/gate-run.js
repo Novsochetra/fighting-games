@@ -2,7 +2,7 @@ import { RUN_SPEED } from '../../../config.js';
 import { startMove } from '../../fighters/actions.js';
 import { missionOf } from '../../stage/mission.js';
 import { smashWall } from '../../stage/way-out.js';
-import { comeIn, goingInAt, goneAt, runToward } from './doorway-steps.js';
+import { comeIn, goingInAt, runPastGap, runToward, stepInHole } from './doorway-steps.js';
 
 // the hero stops this far short of the closing wall's face, so the heavy blow lands on it
 const SMASH_REACH = 18;
@@ -42,20 +42,29 @@ function smash(game, player, run) {
   Object.assign(run, { phase: 'through', free: true });
 }
 
+// the stride that would carry the hero into the doorway ends where its way in starts, so it steps
+// into a narrow hole at its middle, not past it
 function runToDoorway(game, player, run) {
   const { doorway } = missionOf(game).wayOut;
+  const start = goingInAt(doorway);
 
   runToward(player, 1);
 
-  if (player.x >= goingInAt(doorway)) {
-    Object.assign(run, { phase: 'enter', inDoorway: true, doorway });
+  if (player.x + player.vx >= start) {
+    player.vx = start - player.x;
+    Object.assign(run, { phase: 'enter', inDoorway: true, doorway, time: 0 });
   }
 }
 
+// into a door's hole the hero steps and fades into the dark; through a fence's gap it runs on
+// until the far side hides it
 function goIn(_game, player, run) {
-  runToward(player, 1);
+  const { doorway } = run;
+  const gone = doorway.dark
+    ? stepInHole(player, run, { comingOut: false })
+    : runPastGap(player, doorway);
 
-  if (player.x > goneAt(run.doorway)) {
+  if (gone) {
     Object.assign(player, { state: 'idle', vx: 0 });
     run.phase = 'gone';
   }

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { VIEW_WIDTH } from '../../../src/config.js';
+import { RUN_SPEED, VIEW_WIDTH } from '../../../src/config.js';
 import { HEROES } from '../../../src/data/heroes.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
-import { goingInAt, goneAt, unseenAt } from '../../../src/sim/brains/player/doorway-steps.js';
+import { FADE_TICKS, goingInAt, unseenAt } from '../../../src/sim/brains/player/doorway-steps.js';
 import { followFloor } from '../../../src/sim/fighters/terrain-motion.js';
 import { selectMission, startPlay } from '../../../src/sim/stage/flow.js';
 import { REVEAL_FRAMES, stageClear } from '../../../src/sim/stage/stage-clear.js';
@@ -66,27 +66,30 @@ describe('the hero leaving a cleared road', () => {
         expect(game.player.x).toBeGreaterThanOrEqual(goingInAt(doorway));
         expect(game.gateRun.doorway.wall).toBe(mission.wayOut.broken);
         runUntil(game, gone);
-        expect(game.player.x).toBeGreaterThan(goneAt(doorway));
-        expect(game.player.x).toBeLessThan(goneAt(doorway) + 6);
+        expect(game.player.x).toBeGreaterThan(doorway.dark ? doorway.left : doorway.right);
+        expect(game.player.x).toBeLessThan(doorway.right + (doorway.dark ? RUN_SPEED : 26));
+        expect(game.gateRun.alpha).toBe(doorway.dark ? 0 : 1);
         runUntil(game, () => game.missionIndex === mission.index + 1);
       }
     });
   }
 
-  it("runs the hero on into a door's dark at its pace, front first, never stopping", () => {
+  it("steps into a door's black hole and fades into the dark a little at a time", () => {
     const { game } = clearedAt(8);
     runUntil(game, () => game.gateRun?.phase === 'enter');
-    expect(game.gateRun.doorway.dark).toBe(true);
-    expect(game.player.x).toBeLessThan(game.gateRun.doorway.left);
-    const steps = [];
+    const { doorway } = game.gateRun;
+    expect(doorway.dark).toBe(true);
+    expect(game.player.x).toBeGreaterThan(doorway.left);
+    const shown = [];
 
     while (game.gateRun.phase === 'enter') {
-      const from = game.player.x;
       runTicks(game, 1);
-      steps.push(game.player.x - from);
+      shown.push(game.gateRun.alpha);
+      expect(game.player.x).toBeLessThan(doorway.right + RUN_SPEED);
     }
 
-    expect(steps.slice(0, -1).every((step) => step > 1.5)).toBe(true);
+    expect(shown.length).toBe(FADE_TICKS);
+    expect(shown.every((alpha, i) => i === 0 || alpha < shown[i - 1])).toBe(true);
     expect(game.player.state).toBe('idle');
   });
 

@@ -14,12 +14,18 @@ const WAY_IN_FROM = -24;
 export function startWayIn(game) {
   const { player } = game;
   const doorway = missionOf(game).wayIn;
-  const run = { way: 'in', phase: 'run', to: player.x, free: true, inDoorway: false };
+  const run = { way: 'in', phase: 'run', to: player.x, free: true, inDoorway: false, alpha: 1 };
 
   game.gateRun = run;
 
   if (doorway) {
-    Object.assign(run, { phase: 'wait', inDoorway: true, time: 0, doorway });
+    Object.assign(run, {
+      phase: 'wait',
+      inDoorway: true,
+      time: 0,
+      alpha: doorway.dark ? 0 : 1,
+      doorway,
+    });
     player.x = unseenAt(doorway);
     player.state = 'idle';
   } else {

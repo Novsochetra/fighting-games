@@ -1,20 +1,36 @@
 import { drawPropSprite } from '../scene/props/prop-sprites.js';
 
-// reaches past anything on the road, above or below, so a cut along a door's dark holds the hero
+// reaches past anything on the road, so a cut along a doorway's sides holds all of the hero below it
 const FAR = 2000;
 const UNSEEN = new Set(['wait', 'gone']);
 
-// what of the hero shows in a doorway: in front of a door, all of it but what has gone into its
-// dark, on the near side going in and on the far side coming out; at a fence, only what is in
-// its opening
-function shownPart({ way, doorway }) {
-  if (!doorway.dark) {
-    return doorway.opening;
+// a hero fading into a door's dark or out of it: everything it draws is drawn that much fainter, the
+// shades it lays on its own way included
+function drawFaded(painter, shown, draw) {
+  if (shown >= 1) {
+    draw();
+    return;
   }
 
-  const from = way === 'out' ? doorway.left - FAR : doorway.right;
+  const { alpha } = painter;
 
-  return { x: from, y: -FAR, width: FAR, height: FAR * 2 };
+  painter.alpha = (value) => alpha(value * shown);
+  painter.alpha(1);
+
+  try {
+    draw();
+  } finally {
+    painter.alpha = alpha;
+    alpha(1);
+  }
+}
+
+// what of a hero in a doorway shows: what is inside a fence's gap, or inside a door's hole and
+// below it, where the door's rubble, drawn again over it, hides the feet
+function shownPart({ doorway }) {
+  const { opening, dark } = doorway;
+
+  return dark ? { ...opening, height: FAR } : opening;
 }
 
 export function drawInDoorway(painter, { game, fighter }, draw) {
@@ -25,7 +41,7 @@ export function drawInDoorway(painter, { game, fighter }, draw) {
     return;
   }
 
-  if (UNSEEN.has(run.phase)) {
+  if (UNSEEN.has(run.phase) || run.alpha <= 0) {
     return;
   }
 
@@ -36,16 +52,33 @@ export function drawInDoorway(painter, { game, fighter }, draw) {
   context.beginPath();
   context.rect(x, y, width, height);
   context.clip();
-  draw();
+  drawFaded(painter, run.alpha, draw);
   context.restore();
 }
 
-// a hero walking through a fence's opening is behind the fence, so the fence is drawn again over
-// it; at a door the hero walks in front of the wall, into its dark
+// a hero in a doorway is behind the wall, so the wall is drawn again over it: all of a fence, whose
+// gaps show the hero through them, and all of a door but its painted black hole, in front of which
+// the hero fades
 export function drawWallOverHero(painter, { game, sheets }) {
   const run = game.gateRun;
 
-  if (run?.inDoorway && !run.doorway.dark) {
-    drawPropSprite(painter, sheets, run.doorway.wall);
+  if (!run?.inDoorway) {
+    return;
   }
+
+  const { wall, dark, opening } = run.doorway;
+  const { context } = painter;
+
+  context.save();
+
+  if (dark) {
+    const { x, y, width, height } = opening;
+    context.beginPath();
+    context.rect(x - FAR, y - FAR, FAR * 2, FAR * 2);
+    context.rect(x, y, width, height);
+    context.clip('evenodd');
+  }
+
+  drawPropSprite(painter, sheets, wall);
+  context.restore();
 }
