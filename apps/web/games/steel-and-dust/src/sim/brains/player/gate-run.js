@@ -1,27 +1,13 @@
-import { RUN_SPEED, VIEW_WIDTH } from '../../../config.js';
-import { startMove, startRun } from '../../fighters/actions.js';
+import { RUN_SPEED } from '../../../config.js';
+import { startMove } from '../../fighters/actions.js';
 import { missionOf } from '../../stage/mission.js';
 import { smashWall } from '../../stage/way-out.js';
+import { comeIn, DOORWAY_LEAD, runToward, stepThroughDoorway } from './doorway-steps.js';
 
 // the hero stops this far short of the closing wall's face, so the heavy blow lands on it
 const SMASH_REACH = 18;
-// how far past the screen's edge the hero runs before the clear goes on
-const OFF_SCREEN = 24;
-const PICK_UP = 0.15;
 
 const ON_FOOT = new Set(['idle', 'walk', 'run', 'win']);
-
-function runToward(player, direction) {
-  player.facing = direction;
-
-  if (player.state !== 'run') {
-    startRun(player);
-  }
-
-  player.vx += (direction * RUN_SPEED - player.vx) * PICK_UP;
-}
-
-const runRight = (player) => runToward(player, 1);
 
 // a hero already up against the wall, or standing over its picture, backs off to swing at it
 function runToWall(game, player, run) {
@@ -53,34 +39,33 @@ function smash(game, player, run) {
     smashWall(game);
   }
 
-  run.phase = 'through';
-  run.free = true;
+  Object.assign(run, { phase: 'through', free: true });
 }
 
-function runThrough(game, player, run) {
-  runRight(player);
+function runToDoorway(game, player, run) {
+  const { doorway } = missionOf(game).wayOut;
 
-  if (player.x > game.camera.x + VIEW_WIDTH + OFF_SCREEN) {
+  if (player.x < doorway.middle - DOORWAY_LEAD) {
+    runToward(player, 1);
+    return;
+  }
+
+  Object.assign(run, { phase: 'enter', behind: true, doorway, time: 0 });
+}
+
+function goIn(_game, player, run) {
+  if (stepThroughDoorway(player, run, { comingOut: false })) {
     Object.assign(player, { state: 'idle', vx: 0 });
     run.phase = 'gone';
   }
 }
 
-function runIn(game, player, run) {
-  if (player.x < run.to) {
-    runRight(player);
-    return;
-  }
-
-  player.state = 'idle';
-  game.gateRun = null;
-}
-
-const WAY_OUT = { run: runToWall, smash, through: runThrough, gone: () => {} };
+const WAY_OUT = { run: runToWall, smash, through: runToDoorway, enter: goIn, gone: () => {} };
 
 // between two roads the hero runs on its own: off the cleared one by smashing its closing wall
-// open, and onto the next one through it; a hero still in the air or mid-blow lands first, and a
-// charge only ends when its button is let go, which no one presses now
+// open and going in at its doorway, and onto the next one out of that doorway; a hero still in the
+// air or mid-blow lands first, and a charge only ends when its button is let go, which no one
+// presses now
 export function thinkGateRun(game, player) {
   const run = game.gateRun;
 
@@ -94,7 +79,7 @@ export function thinkGateRun(game, player) {
     return;
   }
 
-  const think = run.way === 'in' ? runIn : WAY_OUT[run.phase];
+  const think = run.way === 'in' ? comeIn : WAY_OUT[run.phase];
 
   think(game, player, run);
 }

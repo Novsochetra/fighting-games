@@ -2,9 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { VIEW_WIDTH } from '../../../src/config.js';
 import { HEROES } from '../../../src/data/heroes.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
+import { DOORWAY_LEAD, DOORWAY_TICKS } from '../../../src/sim/brains/player/doorway-steps.js';
 import { followFloor } from '../../../src/sim/fighters/terrain-motion.js';
 import { selectMission, startPlay } from '../../../src/sim/stage/flow.js';
-import { stageClear } from '../../../src/sim/stage/stage-clear.js';
+import { REVEAL_FRAMES, stageClear } from '../../../src/sim/stage/stage-clear.js';
 import { WAY_OUT_AT } from '../../../src/sim/stage/way-out.js';
 import { createTestGame, press, runTicks } from '../../support/test-game.js';
 
@@ -52,19 +53,41 @@ describe('the hero leaving a cleared road', () => {
   });
 
   for (const mission of MISSIONS.slice(0, -1)) {
-    it(`smashes ${mission.name}'s closing wall open and runs off the road through it`, () => {
+    it(`smashes ${mission.name}'s closing wall open and goes in at its doorway`, () => {
+      const { middle } = mission.wayOut.doorway;
+
       for (const offset of [30, VIEW_WIDTH - 40]) {
         const { game } = clearedAt(mission.index, { offset });
         runUntil(game, smashed);
         expect(game.player.move.id).toBe('K1');
         expect(game.player.x).toBeLessThan(mission.wayOut.face);
         expect(game.clearTime).toBe(WAY_OUT_AT);
+        runUntil(game, () => game.gateRun.behind);
+        expect(game.player.x).toBeCloseTo(middle - DOORWAY_LEAD, -1);
+        expect(game.gateRun.doorway.wall).toBe(mission.wayOut.broken);
         runUntil(game, gone);
-        expect(game.player.x).toBeGreaterThan(game.camera.x + VIEW_WIDTH);
+        expect(game.gateRun.alpha).toBe(0);
+        expect(Math.abs(game.player.x - middle)).toBeLessThan(DOORWAY_LEAD * 2);
+        expect(game.player.x).toBeLessThan(game.camera.x + VIEW_WIDTH);
         runUntil(game, () => game.missionIndex === mission.index + 1);
       }
     });
   }
+
+  it('fades the hero out a step at a time as it goes in, not all at once', () => {
+    const { game } = clearedAt(8);
+    runUntil(game, () => game.gateRun?.phase === 'enter');
+    const shown = [];
+
+    while (game.gateRun.phase === 'enter') {
+      runTicks(game, 1);
+      shown.push(game.gateRun.alpha);
+    }
+
+    expect(shown.length).toBeGreaterThanOrEqual(DOORWAY_TICKS);
+    expect(shown.every((alpha, i) => i === 0 || alpha <= shown[i - 1])).toBe(true);
+    expect(shown.at(-1)).toBe(0);
+  });
 
   it('lands the heavy blow on the wall with every Shade, whatever their weapon', () => {
     for (const { id } of HEROES) {
@@ -125,15 +148,28 @@ describe('the hero coming onto the next road', () => {
     return game;
   }
 
-  it('runs in from off screen through the broken wall and stops on the spot a road starts on', () => {
+  it('waits unseen in the broken wall while the road opens, then comes out of its doorway', () => {
     const game = enteredNext();
-    expect(game.player.x).toBeLessThan(0);
-    expect(game.player.state).toBe('run');
-    const wall = MISSIONS[2].props[0];
-    expect(wall.kind).toBe('palisadeBroken');
+    const { wayIn } = MISSIONS[2];
+    expect(wayIn.wall.kind).toBe('palisadeBroken');
+    expect(game.gateRun).toMatchObject({ phase: 'wait', alpha: 0, behind: true });
+    expect(game.player.x).toBeCloseTo(wayIn.middle - DOORWAY_LEAD);
+    runTicks(game, REVEAL_FRAMES - 1);
+    expect(game.gateRun.alpha).toBe(0);
+    runUntil(game, () => game.gateRun.phase === 'run');
+    expect(game.gateRun).toMatchObject({ alpha: 1, behind: false });
     runUntil(game, () => !game.gateRun);
-    expect(game.player.x).toBeGreaterThan(wall.x + 40);
+    expect(game.player.x).toBeGreaterThan(wayIn.middle + 30);
     expect(game.player.state).toBe('idle');
+  });
+
+  it('comes out of the doorway of every wall a road starts on', () => {
+    for (const mission of MISSIONS.slice(0, -2)) {
+      const { game } = clearedAt(mission.index);
+      runUntil(game, () => game.missionIndex === mission.index + 1);
+      expect(game.gateRun.doorway).toBe(MISSIONS[mission.index + 1].wayIn);
+      runUntil(game, () => !game.gateRun);
+    }
   });
 
   it('leaves a hero felled on the way in down, for the fall to take its course', () => {

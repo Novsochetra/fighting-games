@@ -29,7 +29,7 @@ export function holdForWayOut(game) {
   }
 
   if (!game.gateRun && wallOnScreen(game)) {
-    game.gateRun = { way: 'out', phase: 'run', free: false };
+    game.gateRun = { way: 'out', phase: 'run', free: false, alpha: 1, behind: false, time: 0 };
   }
 
   return Boolean(game.gateRun) && game.gateRun.phase !== 'gone';

@@ -4,13 +4,17 @@ import { groundAt } from './terrain.js';
 
 // the way in from the last mission (its gate broken open) stands behind the hero's start
 const ENTRY_X = 10;
+// the closing wall stands this far in from the road's end, so all of it shows on the last screen
+const END_GAP = 2;
 
 function entry(spec, { terrain }) {
   return spec.entry ? [{ kind: spec.entry, x: ENTRY_X, y: groundAt(terrain, ENTRY_X) }] : [];
 }
 
 function endWall(spec, { length, terrain }) {
-  const x = length - 12;
+  const { width, feetX } = PROP_SPRITES[spec.endWall];
+  const x = length - (width - feetX) / RENDER_SCALE - END_GAP;
+
   return { kind: spec.endWall, x, y: groundAt(terrain, x) };
 }
 
@@ -18,6 +22,31 @@ function endWall(spec, { length, terrain }) {
 // mission and the wall that closes this one
 export function layoutProps(spec, road) {
   return [...entry(spec, road), endWall(spec, road)];
+}
+
+const leftOf = ({ kind, x }) => x - PROP_SPRITES[kind].feetX / RENDER_SCALE;
+const topOf = ({ kind, y }) => y - PROP_SPRITES[kind].feetY / RENDER_SCALE;
+
+function insideOf(wall, inside) {
+  if (!inside) {
+    return null;
+  }
+
+  const [left, top, right, bottom] = inside.map((pixels) => pixels / RENDER_SCALE);
+
+  return {
+    x: leftOf(wall) + left,
+    y: topOf(wall) + top,
+    width: right - left,
+    height: bottom - top,
+  };
+}
+
+// a broken wall's doorway on the road: where the hero stands in it, and its dark inside
+export function doorwayOf(wall) {
+  const { middle, inside } = PROP_SPRITES[wall.kind].doorway;
+
+  return { wall, middle: leftOf(wall) + middle / RENDER_SCALE, inside: insideOf(wall, inside) };
 }
 
 // a wall and its broken sprite are one picture, whole and smashed, each set on the road by its own
@@ -29,10 +58,16 @@ function brokenOpen({ kind, x, y }) {
   return { kind: broken, x: x - shift, y };
 }
 
-// the hero leaves a cleared road by smashing its closing wall open: where the wall's face is, and
-// the wall as it stands once smashed
+// the hero leaves a cleared road by smashing its closing wall open and going in at its doorway
 export function layoutWayOut(wall) {
-  return { face: wall.x - PROP_SPRITES[wall.kind].feetX / RENDER_SCALE, broken: brokenOpen(wall) };
+  const broken = brokenOpen(wall);
+
+  return { face: leftOf(wall), broken, doorway: doorwayOf(broken) };
+}
+
+// and comes onto the next road out of the doorway of that wall, standing at its start
+export function layoutWayIn(spec, props) {
+  return spec.entry ? doorwayOf(props[0]) : null;
 }
 
 // the closing wall is always the last piece set on the road
