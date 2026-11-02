@@ -10,6 +10,7 @@ import { offlineListOf } from '../../server/src/offline/game-files.js';
 import { ARCADE_SRC, DIST_ROOT, GAMES_ROOT, PAGES_ROOT, WEB_ROOT } from '../../server/src/paths.js';
 import { isPublishedPath } from '../../server/src/public-files.js';
 import { bundleGame } from './build-steps/bundle-game.js';
+import { versionIcons } from './build-steps/version-icons.js';
 
 // The games played here, each with a page of its own (a game on its own site keeps only its art).
 async function playedGames(gamesRoot: string) {
@@ -28,6 +29,7 @@ async function buildGames(gamesRoot: string) {
     const gameRoot = path.join(gamesRoot, id);
 
     await bundleGame({ sourceRoot: path.join(GAMES_ROOT, id), gameRoot });
+    await versionIcons(path.join(gameRoot, 'index.html'));
     await writeFile(
       path.join(gameRoot, 'offline.json'),
       JSON.stringify(await offlineListOf(gameRoot)),
