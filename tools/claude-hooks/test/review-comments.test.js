@@ -9,11 +9,16 @@ const root = fileURLToPath(new URL('../../../', import.meta.url));
 const script = path.join(root, 'tools/claude-hooks/review-comments.js');
 const component = path.join(root, 'apps/web/arcade/src/screens/home/details/use-details.ts');
 const scratchRepos = [];
+// run from a commit's pre-commit check, git has set GIT_INDEX_FILE and the like for the commit's own
+// repository, and git in a scratch repository would follow them there
+const env = Object.fromEntries(
+  Object.entries(process.env).filter(([name]) => !name.startsWith('GIT_')),
+);
 
 function runHook(payload, projectDir = root) {
   const run = spawnSync('node', [script], {
     input: JSON.stringify(payload),
-    env: { ...process.env, CLAUDE_PROJECT_DIR: projectDir },
+    env: { ...env, CLAUDE_PROJECT_DIR: projectDir },
     encoding: 'utf8',
   });
 
@@ -24,9 +29,10 @@ const contextOf = ({ output }) => JSON.parse(output).hookSpecificOutput.addition
 
 function commitIn(repo, file, text) {
   writeFileSync(path.join(repo, file), text);
-  execFileSync('git', ['add', file], { cwd: repo });
+  execFileSync('git', ['add', file], { cwd: repo, env });
   execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', 'commit', '-qm', 'change'], {
     cwd: repo,
+    env,
   });
 }
 
@@ -34,7 +40,7 @@ function scratchRepo() {
   const repo = mkdtempSync(path.join(tmpdir(), 'comment-review-'));
 
   scratchRepos.push(repo);
-  execFileSync('git', ['init', '-q'], { cwd: repo });
+  execFileSync('git', ['init', '-q'], { cwd: repo, env });
   commitIn(repo, 'a.js', '// kept\nconst a = 1;\n');
 
   return repo;

@@ -51,6 +51,9 @@ export function sendRequest(port, { method = 'GET', path: rawPath, headers = {},
       },
     );
     request.on('error', reject);
+    // a server that refuses a big body answers before reading it and hangs up, so the rest of the
+    // body is written to a closed socket after the answer is in, where no request listens any more
+    request.on('socket', (socket) => socket.on('error', () => {}));
     request.end(body);
   });
 }
