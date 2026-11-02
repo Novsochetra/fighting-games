@@ -6,8 +6,7 @@
 // A broken wall's `doorway` is the opening the hero goes through, [left, top, right, bottom] in the
 // sprite's own pixels. A door's is the black hole painted in it (`dark`): the hero steps into the
 // hole in front of the dark and fades into it, the door in front of it all round the hole. A fence's
-// or a breach's is a gap the road shows through: there the hero walks behind the wall, seen only
-// through the gap, and out of sight behind its far side
+// or a breach's is the gap it was broken open at, low enough for the hero to jump over
 const DOORWAYS = {
   palisadeBroken: { opening: [22, 0, 60, 112] },
   canyonBarricadeBroken: { opening: [57, 0, 88, 112] },

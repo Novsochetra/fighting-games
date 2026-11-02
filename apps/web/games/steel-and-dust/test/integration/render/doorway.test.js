@@ -82,14 +82,14 @@ describe('the hero in a doorway', () => {
     expect(heroClip(log).area).toBe(`rect(${x},${y},${width},2000)`);
   });
 
-  it('walks behind a broken fence, seen only through its gap', () => {
-    const { game, log } = drawnWhen(0, (current) => current.gateRun?.phase === 'enter');
-    const { doorway } = game.gateRun;
-    const { x, y, width, height } = doorway.opening;
-    const { hero, area } = heroClip(log);
-    expect(doorway.wall.kind).toBe('palisadeBroken');
-    expect(area).toBe(`rect(${x},${y},${width},${height})`);
-    expect(lastDraw(log, 'palisadeBroken.png')).toBeGreaterThan(hero);
+  it('jumps over a broken fence in front of it, whole, with nothing drawn over it', () => {
+    const overTheFence = (game) => game.gateRun?.phase === 'leap' && game.player.airborne;
+    const { game, log } = drawnWhen(0, overTheFence);
+    const fence = lastDraw(log, 'palisadeBroken.png');
+    const hero = log.findLastIndex((call) => call.includes('img(hero_'));
+    expect(game.gateRun.doorway.wall.kind).toBe('palisadeBroken');
+    expect(hero).toBeGreaterThan(fence);
+    expect(log.slice(fence, hero).filter((call) => call.startsWith('clip('))).toEqual([]);
   });
 
   it('is not drawn at all once it has gone in', () => {

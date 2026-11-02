@@ -7,8 +7,8 @@ road's wall broken open, stands at its start with its left edge on the road's ed
 broken sprite must stay the same width, as the broken one is drawn over the same columns when the
 wall is smashed. Each broken sprite's `doorway` in `src/data/prop-sprites.js` marks, in its pixels,
 where the hero goes through: a door's black hole, which the hero steps into and fades into, or a
-fence's see-through opening; measure it again when a sprite is redrawn. These are the temple roads'
-pieces and how they were made.
+fence's broken gap, which the hero jumps over; measure it again when a sprite is redrawn. These are
+the temple roads' pieces and how they were made.
 
 | Sprite | Where | `feetX`, `feetY` | Made with |
 | --- | --- | --- | --- |

@@ -25,14 +25,6 @@ function drawFaded(painter, shown, draw) {
   }
 }
 
-// what of a hero in a doorway shows: what is inside a fence's gap, or inside a door's hole and
-// below it, where the door's rubble, drawn again over it, hides the feet
-function shownPart({ doorway }) {
-  const { opening, dark } = doorway;
-
-  return dark ? { ...opening, height: FAR } : opening;
-}
-
 export function drawInDoorway(painter, { game, fighter }, draw) {
   const run = game.gateRun;
 
@@ -45,40 +37,37 @@ export function drawInDoorway(painter, { game, fighter }, draw) {
     return;
   }
 
-  const { x, y, width, height } = shownPart(run);
+  // only what is in the door's hole and below it shows, where the door's rubble, drawn again over
+  // the hero, hides the feet
+  const { x, y, width } = run.doorway.opening;
   const { context } = painter;
 
   context.save();
   context.beginPath();
-  context.rect(x, y, width, height);
+  context.rect(x, y, width, FAR);
   context.clip();
   drawFaded(painter, run.alpha, draw);
   context.restore();
 }
 
-// a hero in a doorway is behind the wall, so the wall is drawn again over it: all of a fence, whose
-// gaps show the hero through them, and all of a door but its painted black hole, in front of which
-// the hero fades
+// a hero in a door's hole is in the door, so the door is drawn again over it, all but its painted
+// black hole, in front of which the hero fades
 export function drawWallOverHero(painter, { game, sheets }) {
   const run = game.gateRun;
 
-  if (!run?.inDoorway) {
+  if (!run?.inDoorway || !run.doorway.dark) {
     return;
   }
 
-  const { wall, dark, opening } = run.doorway;
+  const { wall, opening } = run.doorway;
+  const { x, y, width, height } = opening;
   const { context } = painter;
 
   context.save();
-
-  if (dark) {
-    const { x, y, width, height } = opening;
-    context.beginPath();
-    context.rect(x - FAR, y - FAR, FAR * 2, FAR * 2);
-    context.rect(x, y, width, height);
-    context.clip('evenodd');
-  }
-
+  context.beginPath();
+  context.rect(x - FAR, y - FAR, FAR * 2, FAR * 2);
+  context.rect(x, y, width, height);
+  context.clip('evenodd');
   drawPropSprite(painter, sheets, wall);
   context.restore();
 }

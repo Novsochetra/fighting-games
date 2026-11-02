@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { RUN_SPEED, VIEW_WIDTH } from '../../../src/config.js';
 import { HEROES } from '../../../src/data/heroes.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
-import { FADE_TICKS, goingInAt, unseenAt } from '../../../src/sim/brains/player/doorway-steps.js';
+import { FADE_TICKS, startOf } from '../../../src/sim/brains/player/doorway-steps.js';
 import { followFloor } from '../../../src/sim/fighters/terrain-motion.js';
 import { selectMission, startPlay } from '../../../src/sim/stage/flow.js';
 import { REVEAL_FRAMES, stageClear } from '../../../src/sim/stage/stage-clear.js';
@@ -53,7 +53,9 @@ describe('the hero leaving a cleared road', () => {
   });
 
   for (const mission of MISSIONS.slice(0, -1)) {
-    it(`smashes ${mission.name}'s closing wall open and goes in at its doorway`, () => {
+    const through = mission.wayOut.doorway.dark ? 'steps into its door' : 'jumps over its fence';
+
+    it(`smashes ${mission.name}'s closing wall open and ${through}`, () => {
       const { doorway } = mission.wayOut;
 
       for (const offset of [30, VIEW_WIDTH - 40]) {
@@ -62,13 +64,20 @@ describe('the hero leaving a cleared road', () => {
         expect(game.player.move.id).toBe('K1');
         expect(game.player.x).toBeLessThan(mission.wayOut.face);
         expect(game.clearTime).toBe(WAY_OUT_AT);
-        runUntil(game, () => game.gateRun.inDoorway);
-        expect(game.player.x).toBeGreaterThanOrEqual(goingInAt(doorway));
+        runUntil(game, () => ['enter', 'leap'].includes(game.gateRun.phase));
+        expect(game.gateRun.phase).toBe(doorway.dark ? 'enter' : 'leap');
+        expect(game.player.airborne).toBe(!doorway.dark);
         expect(game.gateRun.doorway.wall).toBe(mission.wayOut.broken);
         runUntil(game, gone);
-        expect(game.player.x).toBeGreaterThan(doorway.dark ? doorway.left : doorway.right);
-        expect(game.player.x).toBeLessThan(doorway.right + (doorway.dark ? RUN_SPEED : 26));
-        expect(game.gateRun.alpha).toBe(doorway.dark ? 0 : 1);
+
+        if (doorway.dark) {
+          expect(game.gateRun.alpha).toBe(0);
+          expect(game.player.x).toBeGreaterThan(doorway.left);
+          expect(game.player.x).toBeLessThan(doorway.right + RUN_SPEED);
+        } else {
+          expect(game.player.x).toBeGreaterThan(game.camera.x + VIEW_WIDTH);
+        }
+
         runUntil(game, () => game.missionIndex === mission.index + 1);
       }
     });
@@ -152,18 +161,20 @@ describe('the hero coming onto the next road', () => {
     return game;
   }
 
-  it('waits unseen behind the broken fence while the road opens, then walks out through its gap', () => {
+  it('waits unseen behind the broken fence while the road opens, then jumps in over it', () => {
     const game = enteredNext();
     const { wayIn } = MISSIONS[2];
     expect(wayIn.wall.kind).toBe('palisadeBroken');
     expect(game.gateRun).toMatchObject({ phase: 'wait', inDoorway: true });
-    expect(game.player.x).toBe(unseenAt(wayIn));
+    expect(game.player.x).toBe(startOf(wayIn));
     runTicks(game, REVEAL_FRAMES - 1);
     expect(game.gateRun.phase).toBe('wait');
-    expect(game.player.x).toBe(unseenAt(wayIn));
+    expect(game.player.x).toBe(startOf(wayIn));
     runUntil(game, () => game.gateRun.phase === 'run');
     expect(game.gateRun.inDoorway).toBe(false);
-    expect(game.player.x).toBeGreaterThan(wayIn.left);
+    expect(game.player.airborne).toBe(true);
+    runUntil(game, () => !game.player.airborne);
+    expect(game.player.x).toBeGreaterThan(wayIn.right);
     runUntil(game, () => !game.gateRun);
     expect(game.player.x).toBeGreaterThan(wayIn.right + 30);
     expect(game.player.state).toBe('idle');
