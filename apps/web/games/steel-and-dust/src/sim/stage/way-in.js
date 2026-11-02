@@ -1,5 +1,5 @@
 import { RUN_SPEED } from '../../config.js';
-import { DOORWAY_LEAD } from '../brains/player/doorway-steps.js';
+import { unseenAt } from '../brains/player/doorway-steps.js';
 import { startRun } from '../fighters/actions.js';
 import { placeOnGround } from '../fighters/terrain-motion.js';
 import { refreshPose } from '../pose/refresh-pose.js';
@@ -14,13 +14,13 @@ const WAY_IN_FROM = -24;
 export function startWayIn(game) {
   const { player } = game;
   const doorway = missionOf(game).wayIn;
-  const run = { way: 'in', phase: 'run', to: player.x, free: true, alpha: 1, behind: false };
+  const run = { way: 'in', phase: 'run', to: player.x, free: true, inDoorway: false };
 
   game.gateRun = run;
 
   if (doorway) {
-    Object.assign(run, { phase: 'wait', behind: true, alpha: 0, time: 0, doorway });
-    player.x = doorway.middle - DOORWAY_LEAD;
+    Object.assign(run, { phase: 'wait', inDoorway: true, time: 0, doorway });
+    player.x = unseenAt(doorway);
     player.state = 'idle';
   } else {
     player.x = WAY_IN_FROM;

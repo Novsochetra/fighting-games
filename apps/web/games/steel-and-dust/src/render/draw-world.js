@@ -3,7 +3,7 @@ import { VIEW_HEIGHT, VIEW_WIDTH } from '../config.js';
 import { heroById } from '../data/heroes.js';
 import { propsShown } from '../data/missions/props-layout.js';
 import { dimForBossUltimate, isBossUltimate } from './fighters/boss-ultimate.js';
-import { drawFaded, drawWallOverHero, heroShown } from './fighters/doorway.js';
+import { drawInDoorway, drawWallOverHero } from './fighters/doorway.js';
 import { drawFighter } from './fighters/draw-fighter.js';
 import { heroSheetFor } from './fighters/hero-sheets.js';
 import { drawSinking } from './fighters/sinking.js';
@@ -65,7 +65,7 @@ function drawOne(painter, { game, view, fighter, sheet, cameraX }) {
   if (isBossUltimate(fighter)) {
     dimForBossUltimate(painter, fighter, cameraX);
   }
-  drawFaded(painter, heroShown(game, fighter), () => {
+  drawInDoorway(painter, { game, fighter }, () => {
     drawSinking(painter, fighter, () =>
       drawFighter(painter, {
         fighter,

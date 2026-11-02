@@ -53,29 +53,23 @@ describe("a road's way out and way in", () => {
         return;
       }
 
-      const { middle, inside } = sprite.doorway;
-      expect(middle).toBeGreaterThan(0);
-      expect(middle).toBeLessThan(sprite.width);
-
-      if (inside) {
-        const [left, top, right, bottom] = inside;
-        expect(left < middle && middle < right && top < bottom).toBe(true);
-        expect(right <= sprite.width && bottom <= sprite.feetY).toBe(true);
-      }
+      const { dark, opening } = sprite.doorway;
+      const [left, top, right, bottom] = dark ? [dark[0], 0, dark[1], 1] : opening;
+      expect(0 < left && left < right && right < sprite.width).toBe(true);
+      expect(top < bottom && bottom <= sprite.width * 2).toBe(true);
+      expect(Boolean(dark) !== Boolean(opening)).toBe(true);
     });
   }
 
-  it("sets a broken wall's doorway on the road where the wall stands", () => {
-    const wall = { kind: 'templeDoorBroken', x: 100, y: 180 };
-    const { middle, inside } = doorwayOf(wall);
-    expect(middle).toBe(100 - 16 / RENDER_SCALE + 50 / RENDER_SCALE);
-    expect(inside).toEqual({
-      x: 100 - 8 + 18,
-      y: 180 - 139 / RENDER_SCALE + 21,
-      width: (75 - 36) / RENDER_SCALE,
-      height: (118 - 42) / RENDER_SCALE,
-    });
-    expect(doorwayOf({ kind: 'palisadeBroken', x: 10, y: 180 }).inside).toBeNull();
+  it("sets a door's dark on the road where the door stands", () => {
+    const door = doorwayOf({ kind: 'templeDoorBroken', x: 100, y: 180 });
+    expect(door).toMatchObject({ dark: true, left: 100 - 8 + 21, right: 100 - 8 + 27.5 });
+  });
+
+  it("sets a fence's opening on the road where the fence stands", () => {
+    const fence = doorwayOf({ kind: 'palisadeBroken', x: 10, y: 180 });
+    const opening = { x: 10 - 8 + 11, y: 180 - 55, width: 19, height: 56 };
+    expect(fence).toMatchObject({ dark: false, left: 13, right: 32, opening });
   });
 
   it('shows the closing wall whole until it is smashed, and the way in all along', () => {

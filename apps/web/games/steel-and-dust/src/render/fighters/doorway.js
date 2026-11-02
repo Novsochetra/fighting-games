@@ -1,58 +1,51 @@
 import { drawPropSprite } from '../scene/props/prop-sprites.js';
 
-// reaches past the edges of the biggest wall, so the clip around a door's inside holds all of it
-const WALL_REACH = 200;
+// reaches past anything on the road, above or below, so a cut along a door's dark holds the hero
+const FAR = 2000;
+const UNSEEN = new Set(['wait', 'gone']);
 
-// a hero fading into a doorway or out of one: everything it draws is drawn that much fainter, the
-// shades it lays on its own way included
-export function drawFaded(painter, shown, draw) {
-  if (shown >= 1) {
-    draw();
-    return;
+// what of the hero shows in a doorway: in front of a door, all of it but what has gone into its
+// dark, on the near side going in and on the far side coming out; at a fence, only what is in
+// its opening
+function shownPart({ way, doorway }) {
+  if (!doorway.dark) {
+    return doorway.opening;
   }
 
-  if (shown <= 0) {
-    return;
-  }
+  const from = way === 'out' ? doorway.left - FAR : doorway.right;
 
-  const { alpha } = painter;
-
-  painter.alpha = (value) => alpha(value * shown);
-  painter.alpha(1);
-
-  try {
-    draw();
-  } finally {
-    painter.alpha = alpha;
-    alpha(1);
-  }
+  return { x: from, y: -FAR, width: FAR, height: FAR * 2 };
 }
 
-export function heroShown(game, fighter) {
-  return fighter === game.player ? (game.gateRun?.alpha ?? 1) : 1;
-}
-
-// a hero in a doorway stands behind its wall: the wall is drawn again over the hero, all but a
-// door's painted dark inside, so the hero shows there and through the wall's see-through gaps
-export function drawWallOverHero(painter, { game, sheets }) {
+export function drawInDoorway(painter, { game, fighter }, draw) {
   const run = game.gateRun;
 
-  if (!run?.behind) {
+  if (fighter !== game.player || !run?.inDoorway) {
+    draw();
     return;
   }
 
-  const { wall, inside } = run.doorway;
+  if (UNSEEN.has(run.phase)) {
+    return;
+  }
+
+  const { x, y, width, height } = shownPart(run);
   const { context } = painter;
 
   context.save();
-
-  if (inside) {
-    context.beginPath();
-    context.rect(inside.x - WALL_REACH, inside.y - WALL_REACH, WALL_REACH * 3, WALL_REACH * 3);
-    context.rect(inside.x, inside.y, inside.width, inside.height);
-    context.clip('evenodd');
-  }
-
-  drawPropSprite(painter, sheets, wall);
+  context.beginPath();
+  context.rect(x, y, width, height);
+  context.clip();
+  draw();
   context.restore();
+}
+
+// a hero walking through a fence's opening is behind the fence, so the fence is drawn again over
+// it; at a door the hero walks in front of the wall, into its dark
+export function drawWallOverHero(painter, { game, sheets }) {
+  const run = game.gateRun;
+
+  if (run?.inDoorway && !run.doorway.dark) {
+    drawPropSprite(painter, sheets, run.doorway.wall);
+  }
 }

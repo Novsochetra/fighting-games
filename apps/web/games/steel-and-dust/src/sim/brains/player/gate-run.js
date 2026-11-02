@@ -2,7 +2,7 @@ import { RUN_SPEED } from '../../../config.js';
 import { startMove } from '../../fighters/actions.js';
 import { missionOf } from '../../stage/mission.js';
 import { smashWall } from '../../stage/way-out.js';
-import { comeIn, DOORWAY_LEAD, runToward, stepThroughDoorway } from './doorway-steps.js';
+import { comeIn, goingInAt, goneAt, runToward } from './doorway-steps.js';
 
 // the hero stops this far short of the closing wall's face, so the heavy blow lands on it
 const SMASH_REACH = 18;
@@ -45,16 +45,17 @@ function smash(game, player, run) {
 function runToDoorway(game, player, run) {
   const { doorway } = missionOf(game).wayOut;
 
-  if (player.x < doorway.middle - DOORWAY_LEAD) {
-    runToward(player, 1);
-    return;
-  }
+  runToward(player, 1);
 
-  Object.assign(run, { phase: 'enter', behind: true, doorway, time: 0 });
+  if (player.x >= goingInAt(doorway)) {
+    Object.assign(run, { phase: 'enter', inDoorway: true, doorway });
+  }
 }
 
 function goIn(_game, player, run) {
-  if (stepThroughDoorway(player, run, { comingOut: false })) {
+  runToward(player, 1);
+
+  if (player.x > goneAt(run.doorway)) {
     Object.assign(player, { state: 'idle', vx: 0 });
     run.phase = 'gone';
   }
