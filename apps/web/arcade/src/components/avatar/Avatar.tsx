@@ -2,7 +2,7 @@ import './avatar.css';
 
 interface AvatarProps {
   initials: string;
-  // one of avatar.js's palettes, picked by the name
+  // one of avatar-look.js's palettes, picked by the name
   palette: number;
   size?: 'large';
 }
