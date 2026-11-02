@@ -4,16 +4,15 @@ import { groundAt } from './terrain.js';
 
 // the way in from the last mission (its gate broken open) stands behind the hero's start
 const ENTRY_X = 10;
-// the closing wall stands this far in from the road's end, so all of it shows on the last screen
-const END_GAP = 2;
 
 function entry(spec, { terrain }) {
   return spec.entry ? [{ kind: spec.entry, x: ENTRY_X, y: groundAt(terrain, ENTRY_X) }] : [];
 }
 
 function endWall(spec, { length, terrain }) {
-  const { width, feetX } = PROP_SPRITES[spec.endWall];
-  const x = length - (width - feetX) / RENDER_SCALE - END_GAP;
+  // the closing wall's paint ends where the road does, so no road shows past it on the last screen
+  const { paintedRight, feetX } = PROP_SPRITES[spec.endWall];
+  const x = length - (paintedRight - feetX) / RENDER_SCALE;
 
   return { kind: spec.endWall, x, y: groundAt(terrain, x) };
 }

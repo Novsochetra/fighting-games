@@ -82,7 +82,7 @@ describe('laying out a mission', () => {
       [wide.left + VIEW_WIDTH + 60, 'ration'],
       [camp.left - 120, 'ration'],
     ]);
-    expect(mission.props).toEqual([{ kind: 'palisade', x: mission.length - 35, y: GROUND_Y }]);
+    expect(mission.props).toEqual([{ kind: 'palisade', x: mission.length - 33, y: GROUND_Y }]);
   });
 
   it('stands every crate and prop on the ground of a hilly road', () => {

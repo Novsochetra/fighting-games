@@ -6,6 +6,7 @@ import { WALL_DEBRIS } from '../../../src/art/wall-debris.js';
 import { MISSIONS } from '../../../src/data/missions/index.js';
 import { doorwayOf, propsShown } from '../../../src/data/missions/props-layout.js';
 import { PROP_SPRITES } from '../../../src/data/prop-sprites.js';
+import { readPngAlpha } from '../../support/png-alpha.js';
 import { pngSize } from '../../support/png-size.js';
 
 const PROPS = fileURLToPath(new URL('../../../assets/sprites/props/', import.meta.url));
@@ -37,16 +38,23 @@ describe("a road's way out and way in", () => {
   for (const mission of MISSIONS) {
     const wall = mission.props.at(-1);
 
-    it(`stands ${mission.name}'s closing wall whole on the road's last screen`, () => {
-      const { width, feetX } = PROP_SPRITES[wall.kind];
+    it(`stands ${mission.name}'s closing wall whole on its last screen, its paint to the edge`, () => {
+      const { width, paintedRight, feetX } = PROP_SPRITES[wall.kind];
       expect(leftEdge(wall)).toBeGreaterThan(mission.length - VIEW_WIDTH);
-      expect(wall.x + (width - feetX) / RENDER_SCALE).toBeLessThanOrEqual(mission.length);
+      expect(wall.x + (paintedRight - feetX) / RENDER_SCALE).toBe(mission.length);
+      expect(wall.x + (width - feetX) / RENDER_SCALE).toBeLessThanOrEqual(mission.length + 6);
     });
   }
 
   for (const [kind, sprite] of Object.entries(PROP_SPRITES)) {
     it(`gives the ${kind} sprite its own width${kind.endsWith('Broken') ? ' and a doorway' : ''}`, () => {
-      expect(pngSize(join(PROPS, sprite.file)).width).toBe(sprite.width);
+      const png = readPngAlpha(join(PROPS, sprite.file));
+      const painted = (x) => Array.from({ length: png.height }, (_, y) => png.alpha(x, y) > 40);
+      expect(png.width).toBe(sprite.width);
+      expect(painted(sprite.paintedRight - 1).some(Boolean)).toBe(true);
+      expect(sprite.paintedRight === png.width || !painted(sprite.paintedRight).some(Boolean)).toBe(
+        true,
+      );
 
       if (!kind.endsWith('Broken')) {
         expect(sprite.doorway).toBeUndefined();
