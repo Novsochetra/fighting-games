@@ -6,6 +6,8 @@ export const DUELS = {
   // the same two players meet again only after this, and no duel follows another this soon
   pairCooldown: 1500,
   quietTicks: 90,
+  // the human is asked at a challenge no sooner than this after he was last asked
+  commandCooldown: 1500,
   // and none starts this soon after a kick off
   kickoffQuietTicks: 240,
   // how far the attacker's stats over the defender's tip the odds, and how far they ever go

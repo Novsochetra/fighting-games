@@ -1,5 +1,6 @@
 import { DUELS } from '../../data/duels.js';
 import { directionTo, distance, dot } from '../vector.js';
+import { commandMeetingOf } from './detect-command.js';
 import { isStar, pairKey } from './geometry.js';
 
 const ownerOf = (match) => (match.ball.owner === null ? null : match.players[match.ball.owner]);
@@ -31,7 +32,7 @@ const inFront = (carrier, other) =>
   dot(directionTo(carrier, other), carrier.facing) > DUELS.inFront;
 
 function canCarry(match, carrier) {
-  return Boolean(carrier) && carrier.role !== 'keeper' && isStar(carrier) && carrier.stun === 0;
+  return carrier.role !== 'keeper' && isStar(carrier) && carrier.stun === 0;
 }
 
 // a kick off is a fresh start: the two stars meet again only once the play has opened up, not
@@ -39,10 +40,8 @@ function canCarry(match, carrier) {
 const quietUntilOf = (match) =>
   Math.max(match.duelMemory.quietUntil, (match.lastKickoff ?? -Infinity) + DUELS.kickoffQuietTicks);
 
-export function meetingOf(match) {
-  const carrier = ownerOf(match);
-
-  if (match.phase !== 'play' || match.tick < quietUntilOf(match) || !canCarry(match, carrier)) {
+function starMeetingOf(match, carrier) {
+  if (!canCarry(match, carrier)) {
     return null;
   }
 
@@ -56,4 +55,14 @@ export function meetingOf(match) {
   rivals.sort((first, second) => distance(carrier, first) - distance(carrier, second));
 
   return rivals.length > 0 ? { attacker: carrier, defender: rivals[0] } : null;
+}
+
+export function meetingOf(match) {
+  const carrier = ownerOf(match);
+
+  if (match.phase !== 'play' || match.tick < quietUntilOf(match) || !carrier) {
+    return null;
+  }
+
+  return starMeetingOf(match, carrier) ?? commandMeetingOf(match, carrier);
 }

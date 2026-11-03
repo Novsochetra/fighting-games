@@ -44,6 +44,17 @@ function isHunting(match, hunter, quarry) {
   );
 }
 
+// a star is still sought while a rival of his has the time left to hunt him and they have not met
+export function isSought(match, star) {
+  return match.players.some(
+    (hunter) =>
+      hunter.team !== star.team &&
+      hunter.hunts === star.star &&
+      !haveMet(match, hunter, star) &&
+      playedTicksOf(match) < huntTicksOf(match),
+  );
+}
+
 // a rival whose table names a star he hunts (`hunts`: the star's character id) seeks that star out
 // whenever the star is near, in the first part of the match until the two have met in a duel, as
 // the rivals of the old football anime did: { hunter, quarry } as player indexes, or null

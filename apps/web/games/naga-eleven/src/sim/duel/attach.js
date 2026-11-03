@@ -6,6 +6,10 @@ import { tickDuel } from './tick-duel.js';
 function beginDuel(match) {
   const meeting = match.duel ? null : meetingOf(match);
 
+  if (meeting?.command) {
+    match.duelMemory.commandAt = match.tick;
+  }
+
   return meeting ? startDuel(match, { kind: 'field', ...meeting }) : false;
 }
 

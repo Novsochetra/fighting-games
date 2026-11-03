@@ -7,10 +7,12 @@ import { goalShareOf } from './geometry.js';
 import { findReceiver } from './receivers.js';
 import { currentRound, playerOf } from './rounds.js';
 
+export const FIELD_ATTACK_KINDS = ['dribble', 'pass'];
+
 // which of his moves each side of each kind of round may use besides the shots on offer: a star's
 // specials and a plain player's skill of that kind
 const SPECIAL_KINDS = {
-  field: { attack: ['dribble'], defend: ['tackle', 'block'] },
+  field: { attack: FIELD_ATTACK_KINDS, defend: ['tackle', 'block'] },
   keeper: { attack: [], defend: ['save'] },
 };
 
@@ -35,14 +37,15 @@ export const specialOption = (move) => ({
   power: move.power,
 });
 
-// a move is there to pick when its owner has the spirit for it, is not waiting out his last, and
-// a shot is in range
+// a move is there to pick when its owner has the spirit for it, is not waiting out his last, a
+// shot is in range and a pass has a mate to go to
 export function canUse(match, player, move) {
   const affordable = (player.spirit ?? 0) >= move.cost;
   const rested = (player.cooldown ?? 0) <= 0;
   const inRange = move.kind !== 'shot' || goalShareOf(match, player) < DUELS.specialRange;
+  const aimed = move.kind !== 'pass' || Boolean(findReceiver(match, player));
 
-  return affordable && rested && inRange && !DUO_MOVES.has(move.id);
+  return affordable && rested && inRange && aimed && !DUO_MOVES.has(move.id);
 }
 
 export function specialsOf(match, player, kinds) {

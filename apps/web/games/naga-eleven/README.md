@@ -316,7 +316,14 @@ shot's cost:
 One skill plays on in the open: a role skill, a star's dribble move by RUN twice, a block, save or
 tackle skill. A cut-in (a duel, as today) plays for a star's special and for every combo: a
 finisher, a duo, a chain. Duels also still start as they do today: two stars meet, or a star lets go
-of a special. On one full-charge SHOOT every shot on offer goes on the keeper-duel menu; with only
+of a special. And the human is asked, as a command game asks at a challenge: when a man of the other
+side closes in front of the player he has on the ball, star or not, and that player has a dribble
+move or a pass skill he can pay for, play stops for the field duel's menu, his moves on it by name
+and cost (`src/sim/duel/detect-command.js`). It asks no sooner than `DUELS.commandCooldown` (1500
+ticks) after it last asked, and never while a rival still hunts the hero, whose meeting is the
+story's own; with nothing to pay for, play runs on. A pass or cross skill is on the field menu
+(`FIELD_ATTACK_KINDS`) whenever there is a mate to pass to, on both sides. On one full-charge SHOOT
+every shot on offer goes on the keeper-duel menu; with only
 one it plays at once (as `presetShot` does today), and the computer takes the strongest by its
 weights. Offered in this order: duo, named chain, chain, finisher, the star's specials, the role
 shot skill. A move's cut-in plays in full the first time in a match and at half length after (the
