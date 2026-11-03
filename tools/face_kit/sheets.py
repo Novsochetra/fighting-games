@@ -48,8 +48,14 @@ GEAR = {'headband': ('gear', 1), 'sweatband': ('gear', 2), 'cap': ('gear', 3), '
 # facial hair follows the jaw, so each was painted with ChatGPT's edit tool on the adult face's
 # stern cell (moods-adult 4), one picture a style, read at the size that gives the kit's skull
 FACIAL = {'stubble': 'facial-stubble', 'moustache': 'facial-moustache', 'beard': 'facial-beard',
-          'goatee': 'facial-goatee', 'sideburns': 'facial-sideburns'}
+          'goatee': 'facial-goatee', 'sideburns': 'facial-sideburns',
+          'moustache-beard': 'facial-moustache-beard'}
 FACIAL_BLOCK = 21.0
+
+# drawn thick and alone on the hero's face with the edit tool: thin, on the gear sheet, they broke
+# into scraps when read back
+SINGLE_GEAR = {'glasses': 'gear-glasses', 'earring': 'gear-earring'}
+SINGLE_GEAR_BLOCK = 10.0
 
 # hair and gear sheets are lined up on the skull through the shirt: each sheet's shoulders sit
 # the same way under its head as in this cell of it, where the skull shows

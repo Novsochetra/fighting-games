@@ -68,10 +68,16 @@ def hair_letters(cell):
             **{k: shade(cell['px'], k, *low_high, HAIR, HAIR_LEAN) for k in cell['hair']}}
 
 
+# a stud a few pixels wide has nearly one shade, which read over the whole ramp came out its
+# darkest and vanished on dark skin; read over at least this much light, its shine stays bright
+GEAR_SPAN = 60
+
+
 def gear_letters(cell):
     px = cell['px']
     green = {k for k, p in px.items() if p[1] > p[0] + 40 and p[1] > p[2] + 40}
-    low_high = range_of(px, green)
+    low, high = range_of(px, green)
+    low_high = (min(low, high - GEAR_SPAN), high)
     return {**rimmed(cell, green), **{k: shade(px, k, *low_high, GEAR) for k in green}}
 
 

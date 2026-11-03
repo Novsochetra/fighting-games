@@ -1,4 +1,4 @@
-import { COVERING_GEAR, GEAR_TONES } from '../../../art/face-kit/index.js';
+import { COVERING_GEAR, GEAR_OWN_TONES, GEAR_TONES } from '../../../art/face-kit/index.js';
 import { composeKitFace } from './compose.js';
 import { kitLookOf } from './looks.js';
 import { kitMoodOf } from './moods.js';
@@ -38,5 +38,7 @@ export function kitGridFor(request) {
     covers: COVERING_GEAR.has(look.gear),
   });
 
-  return { grid, tone: look.gear ? (look.tone ?? 'kit') : null };
+  const tone = look.tone ?? GEAR_OWN_TONES[look.gear] ?? 'kit';
+
+  return { grid, tone: look.gear ? tone : null };
 }

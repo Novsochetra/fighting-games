@@ -102,10 +102,21 @@ describe('the look the kit gives a plain player', () => {
     expect(keepers.some((look) => look.facial === 'beard')).toBe(false);
   });
 
-  it('ties a band round some heads, in the side’s colours', () => {
+  it('puts an earring only on a grown man', () => {
+    const looks = AGED_PLAYERS.map(({ kit, age, place }) => ({
+      age,
+      ...plain({ team: kit, kit, place }, age),
+    }));
+    const studded = looks.filter((look) => look.gear === 'earring');
+
+    expect(studded.length).toBeGreaterThan(0);
+    expect(studded.every((look) => look.age === 'adult')).toBe(true);
+  });
+
+  it('ties a band round some heads, leaving its colours to the kit', () => {
     const banded = places.map(plain).filter((look) => look.gear);
 
     expect(banded.length).toBeGreaterThan(0);
-    expect(banded.every((look) => look.tone === 'kit')).toBe(true);
+    expect(banded.every((look) => look.tone === undefined)).toBe(true);
   });
 });

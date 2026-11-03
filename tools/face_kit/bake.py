@@ -20,7 +20,8 @@ from encode import encode, module  # noqa: E402
 from label import label  # noqa: E402
 from parts import (calibrate, face_letters, facial_letters, gear_letters, hair_letters, layer_anchor,  # noqa: E402
                    sheet_offset, skull_anchor)
-from sheets import BLOCKS, CALIBRATION, FACES, FACIAL, FACIAL_BLOCK, GEAR, HAIR, SKULL_SHOWN, SOURCE  # noqa: E402
+from sheets import (BLOCKS, CALIBRATION, FACES, FACIAL, FACIAL_BLOCK, GEAR, HAIR, SINGLE_GEAR,  # noqa: E402
+                    SINGLE_GEAR_BLOCK, SKULL_SHOWN, SOURCE)
 
 OUT = os.path.join(ROOT, 'apps/web/games/naga-eleven/src/art/face-kit')
 
@@ -54,11 +55,12 @@ def bake_layers(cells, table, letters_of, shift):
             for name, where in table.items()}
 
 
-def bake_facial(ranges):
+def bake_singles(table, block, letters_of, ranges):
+    """Each painted on a face of its own, so it lines up by that face's skull."""
     baked = {}
-    for name, source in FACIAL.items():
-        cell = label(read_single(os.path.join(ROOT, SOURCE), source, FACIAL_BLOCK))
-        baked[name] = encode(facial_letters(cell), skull_anchor(face_letters(cell, ranges)))
+    for name, source in table.items():
+        cell = label(read_single(os.path.join(ROOT, SOURCE), source, block))
+        baked[name] = encode(letters_of(cell), skull_anchor(face_letters(cell, ranges)))
     return baked
 
 
@@ -80,9 +82,12 @@ def main():
         write(os.path.join(OUT, 'faces', f'{face}.js'), module(f'{face.upper()}_MOODS', parts))
     shift = offsets(cells, ranges)
     write(os.path.join(OUT, 'hair.js'), module('KIT_HAIR', bake_layers(cells, HAIR, hair_letters, shift)))
-    write(os.path.join(OUT, 'gear.js'), module('KIT_GEAR', bake_layers(cells, GEAR, gear_letters, shift)))
-    write(os.path.join(OUT, 'facial.js'), module('KIT_FACIAL', bake_facial(ranges)))
-    print(f'baked {len(FACES)} faces, {len(HAIR)} hairstyles, {len(GEAR)} hats, {len(FACIAL)} beards into {OUT}')
+    gear = {**bake_layers(cells, GEAR, gear_letters, shift),
+            **bake_singles(SINGLE_GEAR, SINGLE_GEAR_BLOCK, gear_letters, ranges)}
+    write(os.path.join(OUT, 'gear.js'), module('KIT_GEAR', gear))
+    write(os.path.join(OUT, 'facial.js'), module('KIT_FACIAL', bake_singles(FACIAL, FACIAL_BLOCK, facial_letters, ranges)))
+    print(f'baked {len(FACES)} faces, {len(HAIR)} hairstyles, {len(gear)} hats and trinkets, '
+          f'{len(FACIAL)} beards into {OUT}')
 
 
 def measure(cells, ranges):

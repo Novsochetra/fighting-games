@@ -69,8 +69,13 @@ describe('the face kit', () => {
 
   it('has the facial hair painted on the adult face', () => {
     expect(Object.keys(KIT_FACIAL).sort()).toEqual(
-      ['beard', 'goatee', 'moustache', 'sideburns', 'stubble'].sort(),
+      ['beard', 'goatee', 'moustache', 'moustache-beard', 'sideburns', 'stubble'].sort(),
     );
+  });
+
+  it('has the glasses and the earring drawn on the hero face', () => {
+    expect(KIT_GEAR.glasses).toBeDefined();
+    expect(KIT_GEAR.earring).toBeDefined();
   });
 
   it('knows which of its hats cover the hair', () => {

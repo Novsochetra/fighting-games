@@ -20,3 +20,6 @@ export const KIT_FACES = {
 };
 
 export const COVERING_GEAR = new Set(['cap', 'beanie']);
+
+// a band takes the side's colours unless a look says otherwise; these keep their own
+export const GEAR_OWN_TONES = { glasses: 'frames', earring: 'gold' };

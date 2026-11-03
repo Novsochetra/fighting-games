@@ -29,6 +29,8 @@ const GROWN_ONLY = new Set(['receding', 'slicked', 'long-back', 'shoulder', 'top
 
 const BANDS = [null, null, null, null, null, null, null, null, 'headband', 'sweatband'];
 
+const GROWN_GEAR = [...BANDS, 'earring'];
+
 // facial hair follows the jaw it was painted on, the adult's, which the wall's face was drawn from
 const BEARDED_FACES = new Set(['wall', 'adult']);
 
@@ -56,10 +58,10 @@ function plainLook({ team = 'side-0', kit = 'plain-0', wear = 'home', place = 0 
   const { face, hair } = mixOf({ face: PLAIN_FACES, hair: hairs }, { seed: team, place });
   const keeper = wear.startsWith('keeper');
   const pick = pickerOf(`${team}:${place}`);
-  const gear = keeper ? null : pick(BANDS, 'kit-band');
+  const gear = keeper ? null : pick(age === 'adult' ? GROWN_GEAR : BANDS, 'kit-band');
   const facial = whiskersOf({ face, age, keeper, pick });
 
-  return { face, hair, facial, gear, tone: 'kit' };
+  return { face, hair, facial, gear };
 }
 
 export function kitLookOf({ character, age, variant }) {

@@ -1119,7 +1119,8 @@ camera, match, { venue, tick })` draws what stands in front. `drawMinimap(contex
   colours the player's recipe already has: his skin, hair, eyes and kit; a keeper keeps his gloves.
   A star wears the look `kitLookOf` gives him (Sochetra the hero's face and spikes, Rafael his curls
   under a white headband); a plain player's is seeded by his side and place, no mate's twin, from
-  his side's hairstyles, and one in five ties a band on in his side's colours. Under a cap or a
+  his side's hairstyles, and one in five ties a band on in his side's colours (a grown man may wear
+  a gold earring instead; the kit's glasses are for the story's scenes). Under a cap or a
   beanie hair shows only below the brim and behind the face (`kit/hats.js`,
   `test/regression/bugs/hat-hair.test.js`). The cut-in shouts; the versus card looks determined.
   Every other portrait (the story's scenes) is drawn from its recipe as before.
