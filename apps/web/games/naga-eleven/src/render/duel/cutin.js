@@ -12,6 +12,7 @@ import { tagOf } from './menu-rows.js';
 import { drawPortraitAt, portraitOf } from './portrait-card.js';
 import { polygon } from './shapes.js';
 import { shownRound } from './show.js';
+import { drawStrike, strikeFrameAt, strikesIn } from './strike.js';
 
 const BAND = { top: 34, height: 76 };
 
@@ -71,6 +72,15 @@ function portraits(pen, { show, cast, side, offset, ticks }) {
   });
 }
 
+// a striker drawn whole bursts out over the band's edges, as the old anime cut-ins did
+function strike(pen, { show, cast, offset, ticks }) {
+  drawStrike(pen, {
+    feet: { x: 52 + Math.round(offset * 1.3), y: BAND.top + BAND.height + 8 },
+    look: portraitOf(cast.striker, { mood: 'shout', heroAge: show.heroAge, match: show.match }),
+    index: strikeFrameAt(ticks),
+  });
+}
+
 function nameRoom(side, cast) {
   const portraitsWidth = cast.partner ? 128 : 92;
 
@@ -105,7 +115,12 @@ export function drawCutin(pen, show, { lang, tick }) {
     ticks,
     ...BAND,
   });
-  portraits(band, { show, cast, side, offset, ticks });
+
+  if (strikesIn(cast, option)) {
+    strike(pen, { show, cast, offset, ticks });
+  } else {
+    portraits(band, { show, cast, side, offset, ticks });
+  }
 
   if (ticks >= 10) {
     drawCutinName(pen, { option, tag, lang, ...nameRoom(side, cast), art, band: BAND });
