@@ -2,8 +2,8 @@ import { toneIndex } from '../ground/grass.js';
 import { bayer, noiseOf } from '../kit/hash.js';
 
 // last night's rain: a pool with a lobe off its side and a little one beside it, its shore pushed in
-// and out by noise, a rim of wet mud round it, the far bank and the sky in the water, short glints
-// of light and the rings of a drop
+// and out by noise, a rim of wet mud round it, the far bank and the sky in the water and short
+// glints of light. A drop's rings move, so they are drawn over it each frame (ripple.js) from `drop`
 const shore = noiseOf(12, 21);
 const mud = noiseOf(7, 22);
 const MUD_REACH = 1.22;
@@ -51,32 +51,8 @@ function rimAt(reach, { x, y, column, row }, art) {
   return bayer(column, row) < (DAMP_REACH - reach) * 2.5 ? art.dirt[2] : null;
 }
 
-// the rings a drop sends out: lit on their far side, shaded on their near one, fainter as they go
-function rippleAt(puddle, { x, y, column, row }) {
-  const across = (x - puddle.drop.x) / 2.3;
-  const down = y - puddle.drop.y;
-  const distance = Math.sqrt(across * across + down * down);
-
-  for (const [radius, strength] of [
-    [3.5, 1],
-    [7, 0.75],
-    [11, 0.45],
-  ]) {
-    if (Math.abs(distance - radius) < 0.7 && bayer(column, row) < strength) {
-      return down < 0 ? 5 : 1;
-    }
-  }
-
-  return null;
-}
-
 function waterAt(puddle, reach, point, art) {
   const { y, column, row } = point;
-  const ripple = rippleAt(puddle, point);
-
-  if (ripple !== null) {
-    return art.water[ripple];
-  }
 
   // the far bank stands upside down along the far shore
   if (reach > 0.68 && y < puddle.y + 2) {

@@ -1,11 +1,11 @@
 import { createPen, shiftedPen } from '../duel/pen.js';
 import { drawBars } from '../duel/bars.js';
 import { UNIT } from '../duel/layout.js';
-import { drawBackdrop, goalStyleOf } from './backdrop.js';
+import { drawBackdrop, goalStyleOf, skyOf } from './backdrop.js';
 import { drawCamBall } from './ball.js';
 import { drawContact, drawContactBurst, drawFlash, shakeOf } from './effects.js';
 import { drawFrame, drawNet } from './goal.js';
-import { drawCamFocus } from './focus.js';
+import { drawCamFocus, focusLight } from './focus.js';
 import { guardOf } from './guards/index.js';
 import { drawHeldGloves, drawKeeper, drawKeeperShadow } from './keeper.js';
 import { clutched, drawLayer, layersOf } from './layers.js';
@@ -40,11 +40,11 @@ function keeper(pen, scene, { cam, actors }) {
 }
 
 // lines rush in on where the shot is aimed while it flies
-function focus(pen, scene) {
+function focus(pen, scene, sky) {
   if (scene.flight > 0 && scene.since < 12) {
     drawCamFocus(pen, {
+      ...focusLight(scene.art.body, sky),
       centre: scene.aim,
-      color: scene.art.body[4],
       tick: scene.tick,
       strength: scene.flight * 0.7,
     });
@@ -61,7 +61,7 @@ export function drawCamScene(pen, cam, { actors, tick }) {
   const goal = goalStyleOf(cam.venue);
 
   drawBackdrop(pen, { tick, ticks: cam.ticks, venue: cam.venue });
-  focus(pen, scene);
+  focus(pen, scene, skyOf(cam.venue));
   drawNet(pen, { bulge: bulgeOf(scene), style: goal });
   guard.back?.(pen, { ...scene, art: scene.guardArt });
   drawFrame(pen, goal);

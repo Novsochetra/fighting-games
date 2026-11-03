@@ -65,5 +65,6 @@ export const VILLAGE_BACKDROP = {
   paint,
   frameOf: (ticks) => (Math.floor(ticks / 15) % 3 === 2 ? 1 : 0),
   live: (pen, { ticks }) => drawEgrets(pen, ticks),
+  sky: 'day',
   goal: { ...SAVE_CAM_VILLAGE.goal, bamboo: true },
 };

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { createPen } from '../../../../src/render/duel/pen.js';
-import { drawCamFocus } from '../../../../src/render/save-cam/focus.js';
+import { drawCamFocus, focusLight } from '../../../../src/render/save-cam/focus.js';
 import { createPixelCanvas } from '../../../support/pixel-canvas.js';
 
 const LIGHT = [255, 251, 224];
@@ -56,5 +56,19 @@ describe('the save cam’s focus lines', () => {
   it('grow in number as the ball flies, and are not there before it does', () => {
     expect(linesOn({ strength: 0 })).toEqual([]);
     expect(linesOn({ strength: 0.2 }).length).toBeLessThan(linesOn({ strength: 0.7 }).length);
+  });
+});
+
+describe('the focus lines’ light by the sky behind the goal', () => {
+  const body = ['#3a1a08', '#8a4a14', '#e08a2a', '#ffd070', '#fffbe0'];
+
+  it('is the move’s light over a bright sky, and stronger than over a night one', () => {
+    expect(focusLight(body, 'day').color).toBe(body[3]);
+    expect(focusLight(body, 'day').show).toBeGreaterThan(focusLight(body, 'night').show);
+  });
+
+  it('is that light halfway to the move’s palest over a night stand', () => {
+    expect(focusLight(body, 'night').color).toBe('#ffe6a8');
+    expect(focusLight(body, undefined)).toEqual(focusLight(body, 'night'));
   });
 });

@@ -329,12 +329,14 @@ defender's block skill in a field duel, a plain keeper's save skill against the 
 shows its icon (star move, skill or combo), its name, "+8" when a combo or chain lifts it, and what
 the picker pays: FREE for a finisher, a duo the striker's share. A duo's tag names the partner
 beside its word ("DUO + RITHY", "គូ + រិទ្ធី"; a partner with no Khmer name keeps the pixel face),
-or names him alone ("+ RITHY") where the move's name would not fit by both. The tags are flat plates
-on the row's own colour, with no ink frame. The cursor opens on the strongest combo or special on
-offer (attacking) or on the skill that answers a special (defending), so a quick PASS plays the big
-move. The words are `SKILL_WORDS` (`src/data/skill-words.js`). In Khmer a cut-in stamp (DUO, CHAIN,
-a combo) carries its Khmer word in its plate, beside the English, at the size of the move's Khmer
-name.
+or names him alone ("+ RITHY") where the move's name would not fit by both. With a duo's row lit,
+the menu's head tells what each of the two pays, the striker's share first ("36 + 24"), since the
+row already names the partner (`duoShares` in `src/render/duel/menu-detail.js`). The tags are flat
+plates on the row's own colour, with no ink frame. The cursor opens on the strongest combo or
+special on offer (attacking) or on the skill that answers a special (defending), so a quick PASS
+plays the big move. The words are `SKILL_WORDS` (`src/data/skill-words.js`). In Khmer a cut-in stamp
+(DUO, CHAIN, a combo) carries its Khmer word in its plate, beside the English, at the size of the
+move's Khmer name.
 
 ### On the pitch
 
@@ -407,8 +409,10 @@ would miss (`SKILL_PLAY.save`).
 **The save cam** is a front view, as if from the penalty spot: the goal frame and its net from in
 front, posts and bar across the view, the keeper facing the camera (`idle`, `south`), the ball
 flying in from the camera to the goal with its move's trail, smaller as it goes, then the result.
-While the ball flies, thin lines in the move's palest light rush in on the aim from the edge of the
-view, the venue showing through them and the goal left clear (`src/render/save-cam/focus.js`).
+While the ball flies, thin lines in the move's light rush in on the aim from the edge of the view,
+the venue showing through them and the goal left clear: over a bright sky the fourth shade of its
+ramp and stronger, over a night stand that shade halfway to its palest, so they tint the stand in
+its colour (`focusLight` in `src/render/save-cam/focus.js`, by each backdrop's `sky`).
 
 Behind the goal stands the match's own venue (`src/render/save-cam/backdrops/`, its colours in
 `src/art/save-cam/venues/`, taken from the venue's own): the village field by morning, its bamboo
@@ -416,12 +420,14 @@ goal with a sagging bar lashed with rope and an old slack net, the goalmouth wor
 paddies, sugar palms, stilt houses and the wat's spire behind, kids on the dike and egrets over; the
 provincial ground's banner wall and grass bank of standing fans, scooters along its top; the school
 stadium at sunset, its red track, red wall and terraces of schoolchildren, the city's towers and the
-floodlight masts; the national stadium's bowl by day; the Asian and World stadiums under the
-floodlights. Each venue's still is painted once at the cam's pixel scale (`createMatchSession`
-paints it ahead) and laid down whole each frame, with what moves (the crowd's second frame, egrets,
-flashes) drawn over it. A match with no venue plays under the World Stadium's floodlights.
-`createSaveCam(match, moment, { venue })` takes it, and `createDuelShow(match, { venue })` hands it
-to its keeper rounds.
+floodlight masts; the national stadium's bowl by day; the Asian stadium's bowl by night under its
+starry sky, banks of floodlights blazing along its roof's edge over the upper tier in its shade, a
+ring of LED panels in the championship's five colours between its tiers and its glowing boards
+(`backdrops/asia/`); the World Stadium's floodlit stand. Each venue's still is painted once at the
+cam's pixel scale (`createMatchSession` paints it ahead) and laid down whole each frame, with what
+moves (the crowd's second frame, egrets, flashes) drawn over it. A match with no venue plays under
+the World Stadium's floodlights. `createSaveCam(match, moment, { venue })` takes it, and
+`createDuelShow(match, { venue })` hands it to its keeper rounds.
 
 For a ball to one side he dives toward the camera on a dive of his own: hand-made pixel maps in
 `src/art/save-cam/keeper-dive/`, drawn diving to the screen's right and mirrored for its left, at
@@ -440,13 +446,16 @@ grass, his shadow under him all the way.
 - **Height**: a ball high enough for his boots to stay off the grass at full stretch takes the
   diagonal (about 37 degrees: head, arms and ball up by the post, chest in the middle, legs bent a
   little and trailing to the middle of the goal); one at mid height a shallower slant; a lower one a
-  flat dive, his gloves reaching down along the grass. Each height has its own load and take-off:
-  for a high ball his arms swing up across him and he springs up at the corner; at mid height they
-  swing out at chest height; for a low ball they reach down and across to the low corner and he
-  falls to his side.
+  flat dive, his gloves reaching down along the grass, his knees bent and his shins rising to his
+  boots as he flies low and lies down. Each height has its own load and take-off: for a high ball
+  his arms swing up across him and he springs up at the corner; at mid height they swing out at
+  chest height; for a low ball they reach down and across to the low corner and he falls to his
+  side.
 - **Hands**, by what he does: open as he reaches; both gloves round the ball from the contact on a
-  catch (the frame draws the ball, and he lands holding it); both fists leading for a punch; open
-  at full stretch with the ball beyond them on a goal, a miss, a post or a parry.
+  catch, the fingers curled over it and a thumb on each glove (the frame draws the ball, and he
+  lands holding it, a thumb over the top of the ball from each side); both fists leading for a
+  punch, each thumb wrapped over its fist; open at full stretch with the ball beyond them on a goal,
+  a miss, a post or a parry.
 - **Gloves**: `keeperPose` says where the drawn gloves are (`gloves`), so the ball meets them on a
   save and passes them when he is beaten; the frame's navel (`x`, `y`) moves on one path: set,
   loaded, then one arc from his near boot on toward the stretch, never back (across at an easing
@@ -459,11 +468,13 @@ A ball at him he takes standing on his sheets (`idle`, arms up from `celebrate`,
 `fall`). A punch adds a fist flash and the ball flying out of the view; a wall raises the move's
 impact in front of him; a goal bulges the net, the ball held in it as a hand-drawn ball with its
 shade on the strings behind it (`src/art/save-cam/net-ball.js`), slipping down slowly, the beaten
-keeper landing short of it. At the contact: 6 ticks of hit-stop, a flash, the move's impact behind
-him (so his gloves and the ball show on it), a small shake, the venue laid down unshaken under it so
-the view stays covered. From his push-off the move's trail and beast go behind him and the ball
-stays in front, so his head and gloves read through the stretch and the contact (`layersOf` in
-`src/render/save-cam/layers.js`).
+keeper landing short of it. One that comes in over him is held there, slipping no lower than leaves
+it showing over him; a low one he lands on rolls on along the foot of the net, away from him, to
+where his landing leaves it showing (`src/render/save-cam/net-rest.js`). At the contact: 6 ticks of
+hit-stop, a flash, the move's impact behind him (so his gloves and the ball show on it), a small
+shake, the venue laid down unshaken under it so the view stays covered. From his push-off the move's
+trail and beast go behind him and the ball stays in front, so his head and gloves read through the
+stretch and the contact (`layersOf` in `src/render/save-cam/layers.js`).
 
 The Naga of Naga Shot, Twin Naga, Seven-Headed Naga and Flying Naga is one profile head
 (`src/render/duel/looks/naga-head.js`): a scaled cobra hood rimmed in gold and ringed in kbach
@@ -475,7 +486,9 @@ grows with the ball (`headSize`, the ball's radius over 2.9, capped at 4); Twin 
 close on the ball from either side, and Seven-Headed Naga's six other heads stand in an arc over it
 on necks, the middle pair highest, all looking the way the ball goes, gold-faced with jade hoods
 like the title's, a step darker than the one in front (`fanOf` in
-`src/render/save-cam/trails/seven-naga.js`).
+`src/render/save-cam/trails/seven-naga.js`). It is drawn on a sheet of the art grid in plain
+JavaScript and laid on the canvas in one call (`trails/sheet.js`), its six heads behind on whole
+pixels, each drawn once for its size and stamped (`trails/head-stamps.js`).
 
 - **In a duel** every keeper round (a special, a finisher, a duo, a chain, a shot carried on from a
   field duel) plays it in place of the clash at the keeper: intro, versus, menu, cut-ins, save cam,
@@ -732,8 +745,9 @@ this game's. Every helper follows all of them.
   object's methods; never right after `{` or right before `}`.
 - **Colours**: hex only in `src/art/` (pixel-art data) and `styles/tokens.css`; components and
   other CSS use tokens. Never import or copy a file of another game or of the arcade.
-- **One gold look**: focus (keys, pad, a tap) is the one gold look, with the cursor; a mouse over a
-  button or a row lights it pale, never gold.
+- **One gold look**: focus (keys, pad, a tap, and a mouse moving over a button or a row,
+  `src/ui/screens/pointer-focus.js`) is the one gold look, with the cursor; a mouse resting over a
+  button the keys have moved off lights it pale, never gold.
 - **Logic in plain functions with tests.** Each change has the right mix of `test/unit/`,
   `test/integration/` and `test/regression/`, mirroring `src/` (`src/sim/ball.js` is tested in
   `test/unit/sim/ball.test.js`). Determinism: the sim uses the match's own seeded random
@@ -1076,9 +1090,12 @@ always. A place past the story's end, or a stage the story lacks, plays everythi
   (goals, trees, people by the line) as `{ depth, draw(context) }`; `drawVenueFront(context,
 camera, match, { venue, tick })` draws what stands in front. `drawMinimap(context, match, rect,
 { alpha })` (it fades while the ball or a goal comes under it). Photographers behind the goals
-  kneel with long white lenses on monopods (`art/venues/photographer.js`); the village puddle has an
-  uneven shore, a mud rim, the far bank and the sky in it, and a drop's rings
-  (`village-field/puddle.js`).
+  kneel with long white lenses on monopods (`art/venues/photographer.js`). They fire at every chance
+  while the crowd cheers a goal, and in open play in bursts of two flashes, now and then, and most
+  while the play is near the goal they kneel behind (`isFlashing` in `props/drawables.js`). The
+  village puddle has an uneven shore, a mud rim, and the far bank and the sky in it
+  (`village-field/puddle.js`). Now and then a drop falls in it and three rings grow slowly from it
+  and fade, lit on their far side, drawn over the water each frame (`village-field/ripple.js`).
 - `src/render/actors/`: the players and the ball, from sprites when `src/data/sprites.js` names
   them, else from the block figure (`src/render/figure.js`), recoloured to each team's kit
   (`src/art/kits.js`).
@@ -1102,8 +1119,12 @@ camera, match, { venue, tick })` draws what stands in front. `drawMinimap(contex
   draws both players from the footballer's sheets, one sheet pixel to one of the cut-in's, each in
   his own kit, skin, hair and chest number (`src/render/duel/clash/`): the run and the defender's
   jockeying crouch 3/4 to the camera, the strike, the slide and the stretch side on, each lit along
-  his back and top by the move's light, and a move's afterimages are his own frames in its tint;
-  with no sheets loaded, and in the penalty show, the lit shadow of
+  his back and top by the move's light, and a move's afterimages are his own frames in its tint; a
+  dribbler a tackle beats goes down flat on the grass in a puff of dust: over a plain slide he flies
+  on past the tackler, and a block, a stretch or a wall a guard's move raised throws him back on his
+  own side, while the tackler gets up with the ball, clear of him
+  (`src/render/duel/clash/tackle.js`); a duo's partner strikes beside the striker in his own look,
+  turned to the camera; with no sheets loaded, and in the penalty show, the lit shadow of
   `src/render/duel/clash/silhouette.js` stands in.
 - `src/render/training/`: each drill's screen.
 

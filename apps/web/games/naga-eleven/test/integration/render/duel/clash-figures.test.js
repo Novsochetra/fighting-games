@@ -86,6 +86,11 @@ const PLAYS = [
   ['samba-mirage', 'tackle', ['broke', 'attack'], ['stolen', 'defend']],
   ['apsara-curl', 'intercept', ['passed', 'attack'], ['cut', 'defend']],
   ['garuda-volley', 'steel-block', ['through', 'attack'], ['blocked', 'defend']],
+  ['dribble', 'block', ['broke', 'attack'], ['stolen', 'defend']],
+  ['dribble', 'intercept', ['broke', 'attack'], ['stolen', 'defend']],
+  ['dribble', 'steel-block', ['broke', 'attack'], ['stolen', 'defend']],
+  ['dribble', 'iron-gate', ['broke', 'attack'], ['stolen', 'defend']],
+  ['twin-naga', 'block', ['through', 'attack'], ['blocked', 'defend']],
 ];
 
 describe('the clash from the sheets', { timeout: 20000 }, () => {
@@ -93,7 +98,7 @@ describe('the clash from the sheets', { timeout: 20000 }, () => {
     for (const [word, side] of results) {
       const { canvas, bad } = drawClashAt(
         decided({ attack, defend, word, side }),
-        [6, 30, 50, 54, 70, 90],
+        [6, 30, 50, 54, 58, 62, 66, 70, 90],
       );
 
       expect(bad, `${attack} ${word}`).toEqual([]);

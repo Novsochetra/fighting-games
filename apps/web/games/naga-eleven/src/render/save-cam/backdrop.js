@@ -36,3 +36,5 @@ export function prepareBackdrop(venue) {
 }
 
 export const goalStyleOf = (venue) => backdropOf(venue).goal;
+
+export const skyOf = (venue) => backdropOf(venue).sky;

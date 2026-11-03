@@ -38,6 +38,19 @@ describe('the sheet frame of a clash pose', () => {
     expect(sheetShotOf({ pose: 'block', facing: -1 }).direction).toBe('south');
   });
 
+  it('draws a tripped man and a duo partner from the rows the sheets have for them', () => {
+    expect(sheetShotOf({ pose: 'fallen', sheet: 'trip', frame: 7, facing: -1 })).toMatchObject({
+      animation: 'dive',
+      direction: 'west',
+      frame: 7,
+    });
+    expect(sheetShotOf({ pose: 'kick', sheet: 'duoKick', frame: 2 })).toMatchObject({
+      animation: 'kick',
+      direction: 'south-east',
+      frame: 2,
+    });
+  });
+
   it('takes the choreography frame, else the pose frame, else steps on with the clock', () => {
     expect(sheetShotOf({ pose: 'kick', frame: 2 }).frame).toBe(2);
     expect(sheetShotOf({ pose: 'kick' }).frame).toBe(1);

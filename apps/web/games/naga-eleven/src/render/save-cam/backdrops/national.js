@@ -109,5 +109,6 @@ export const NATIONAL_BACKDROP = {
   id: 'national-stadium',
   paint,
   frameOf: (ticks) => (Math.floor(ticks / 12) % 3 === 2 ? 1 : 0),
+  sky: 'day',
   goal: { ...SAVE_CAM_NATIONAL.goal, bamboo: false },
 };

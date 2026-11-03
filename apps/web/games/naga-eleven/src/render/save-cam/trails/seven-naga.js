@@ -1,8 +1,10 @@
 import { drawNagaBody } from '../../duel/looks/naga-body.js';
-import { drawNagaHead, headPoint, NAPE } from '../../duel/looks/naga-head.js';
+import { headPoint, NAPE } from '../../duel/looks/naga-head.js';
 import { farther } from '../../duel/looks/naga-pose.js';
 import { titled } from '../../duel/looks/seven-naga.js';
+import { drawHeadStamp } from './head-stamps.js';
 import { serpent, serpentPose } from './naga.js';
+import { drawOnSheet } from './sheet.js';
 
 // the six heads behind the one with the ball stand in an arc over it like the great Naga's on the
 // title, the middle ones highest, all looking the way it goes: `turn` is how far round from
@@ -79,20 +81,26 @@ export function fanOf(options) {
   };
 }
 
-// the seven heads of the Naga: six on necks parting from its body, fanned over the one in front,
-// which holds the ball in its jaws
-export function heads(pen, options) {
+const onPixels = (place) => ({ ...place, x: Math.round(place.x), y: Math.round(place.y) });
+
+function fan(pen, options) {
   const { front, pose, root, heads: places } = fanOf(options);
   const art = farther(titled(options.art));
   const neckArt = farther(options.art);
 
-  places.forEach((place) => {
+  places.map(onPixels).forEach((place) => {
     drawNagaBody(pen, {
       points: neck(root, headPoint(place, NAPE), place.size),
       art: neckArt,
       facing: place.facing,
     });
-    drawNagaHead(pen, { ...place, art, far: true });
+    drawHeadStamp(pen, { ...place, art, far: true }, options.art);
   });
   serpent(pen, front, pose);
+}
+
+// the seven heads of the Naga: six on necks parting from its body, fanned over the one in front,
+// which holds the ball in its jaws
+export function heads(pen, options) {
+  drawOnSheet(pen, (sheet) => fan(sheet, options));
 }

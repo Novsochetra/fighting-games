@@ -2,17 +2,49 @@ import { WORLD_VIEW } from '../../../config.js';
 import { project } from '../../camera.js';
 import { hash2 } from '../kit/hash.js';
 
-// the venue's small props on the ground round the pitch (corner flags, photographers), each a
-// sprite with its foot at a world point, sorted by depth with the players. `cheer` is the drawing
-// a prop shows while the crowd cheers, and it shows it on and off, as a flash goes
-function frameOf(prop, sprite, { mood, tick }) {
-  const turns = (sprite.frames ?? 1) > 1 && prop.cheer === undefined;
+// a photographer fires at every chance while the crowd cheers a goal, and in open play in bursts
+// of two flashes: often while the play is near the goal he kneels behind (the crowd's excited
+// share of the pitch), now and then elsewhere. Each chance is a hash of the tick and his place,
+// so a frame drawn twice flashes the same
+const BURST_ODDS = { near: 0.06, far: 0.008 };
+const NEAR_GOAL = 0.18;
 
-  if (prop.cheer !== undefined && mood.cheer) {
-    return hash2(tick >> 2, Math.round(prop.x + prop.y), 5) < 0.3 ? prop.cheer : 0;
+function nearHisGoal(prop, { match }) {
+  const pitch = match?.pitch;
+  const ball = match?.ball;
+
+  if (!pitch || !ball) {
+    return false;
   }
 
-  return turns ? Math.floor((tick + prop.x) / (prop.every ?? 12)) % sprite.frames : 0;
+  const line = prop.x < pitch.length / 2 ? 0 : pitch.length;
+
+  return Math.abs(ball.x - line) < pitch.length * NEAR_GOAL;
+}
+
+export function isFlashing(prop, scene) {
+  const seed = Math.round(prop.x + prop.y);
+
+  if (scene.mood.cheer) {
+    return hash2(scene.tick >> 2, seed, 5) < 0.3;
+  }
+
+  const odds = nearHisGoal(prop, scene) ? BURST_ODDS.near : BURST_ODDS.far;
+
+  return hash2(scene.tick >> 4, seed, 6) < odds && ((scene.tick >> 2) & 1) === 0;
+}
+
+// the venue's small props on the ground round the pitch (corner flags, photographers), each a
+// sprite with its foot at a world point, sorted by depth with the players. `flash` is the drawing
+// a photographer shows as his flash fires
+function frameOf(prop, sprite, scene) {
+  if (prop.flash !== undefined) {
+    return isFlashing(prop, scene) ? prop.flash : 0;
+  }
+
+  const turns = (sprite.frames ?? 1) > 1;
+
+  return turns ? Math.floor((scene.tick + prop.x) / (prop.every ?? 12)) % sprite.frames : 0;
 }
 
 export function propDrawables(scene, props) {
@@ -54,13 +86,13 @@ export function photographers({ pitch, goal }) {
   const spots = [mouth.far - 110, mouth.far - 60, mouth.near + 70, mouth.near + 130];
 
   return [
-    ...spots.map((y) => ({ sprite: 'photographer', x: -goal.depth - 30, y, facing: 1, cheer: 1 })),
+    ...spots.map((y) => ({ sprite: 'photographer', x: -goal.depth - 30, y, facing: 1, flash: 1 })),
     ...spots.map((y) => ({
       sprite: 'photographer',
       x: pitch.length + goal.depth + 30,
       y,
       facing: -1,
-      cheer: 1,
+      flash: 1,
     })),
   ];
 }

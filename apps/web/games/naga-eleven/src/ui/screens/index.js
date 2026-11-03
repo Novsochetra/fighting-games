@@ -1,5 +1,6 @@
 import { applyStrings } from './apply-strings.js';
 import { back, confirm, navigate, onClick } from './controls.js';
+import { followPointer } from './pointer-focus.js';
 import { watchScroll } from './scroll-hint.js';
 import { preferredLang, readSettings, writeSettings } from './settings-store.js';
 import { changeLang, hideScreens, rerender, sectionOf, showScreen } from './show.js';
@@ -43,6 +44,7 @@ export function createScreens(document, { storage = null, onAction = () => {} } 
 
   applyStrings(app.root, app.lang);
   app.root.addEventListener('click', (event) => onClick(app, event));
+  followPointer(app);
   watchScroll(app.root);
   followStage(document, sectionOf(app, 'title'));
 

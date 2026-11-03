@@ -1,23 +1,25 @@
 import { ASIA_STADIUM } from '../../venues/asia-stadium.js';
 
-// The save cam at the Asian Youth Championship by night: the World Stadium's floodlit stand behind
-// the goal (SAVE_CAM_ART) in the venue's own deep blue night, its crowd and its glowing boards.
-// Ramps run deep to light
+// The save cam at the Asian Youth Championship by night, from the penalty spot: the venue's bowl
+// behind the goal under its deep blue starry sky, the dark underside of its roof with the banks of
+// floodlights blazing along its edge, the upper tier in the roof's shade, the ring of glowing LED
+// panels between the tiers, the lower tier lit gold, its boards and its floodlit pitch. Ramps run
+// deep to light
 export const SAVE_CAM_ASIA = {
-  sky: [ASIA_STADIUM.sky[0], ASIA_STADIUM.sky[3]],
-  glow: [ASIA_STADIUM.sky[5]],
-  lamp: [ASIA_STADIUM.glow, ASIA_STADIUM.lamp],
-  stand: ASIA_STADIUM.concrete.slice(0, 4),
-  crowd: ASIA_STADIUM.crowd.shirts.map((shirt) => shirt[1]),
-  flashBulb: ASIA_STADIUM.lamp,
-  boards: [
-    ASIA_STADIUM.led.back,
-    ASIA_STADIUM.led.frame,
-    ASIA_STADIUM.ads[1].back,
-    ASIA_STADIUM.ads[0].back,
-    ASIA_STADIUM.ads[2].back,
-  ],
-  grass: ASIA_STADIUM.grass.slice(2, 7),
+  sky: ASIA_STADIUM.sky.slice(0, 5),
+  star: ASIA_STADIUM.star,
+  roof: ASIA_STADIUM.roof,
+  roofUnder: ASIA_STADIUM.roofUnder,
+  steel: ASIA_STADIUM.steel,
+  lamp: ASIA_STADIUM.lamp,
+  glow: ASIA_STADIUM.glow,
+  shadow: ASIA_STADIUM.shadow,
+  concrete: ASIA_STADIUM.concrete,
+  seats: ASIA_STADIUM.seats,
+  crowd: ASIA_STADIUM.crowd,
+  led: ASIA_STADIUM.led,
+  ads: ASIA_STADIUM.ads,
+  grass: ASIA_STADIUM.grass,
   line: ASIA_STADIUM.line,
   goal: {
     post: ASIA_STADIUM.post,

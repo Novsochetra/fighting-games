@@ -9,6 +9,8 @@ import { paintFence } from './fence.js';
 import { limeLines, villageSurface } from './ground.js';
 import { distantTrees, villageRow } from './skyline.js';
 import { drawDog } from './dog.js';
+import { puddleOf } from './puddle.js';
+import { drawRipple } from './ripple.js';
 import { DOG_SIZE, paintDog } from '../scenery/dog.js';
 
 const art = packAll(VILLAGE_FIELD);
@@ -35,6 +37,7 @@ const backLayers = (layout) => [
 function build(layout) {
   const { pitch } = layout;
   const side = pitchside(layout, { cloth: art.flagCloth, pole: art.bamboo.slice(1), press: false });
+  const puddle = puddleOf(layout);
 
   return {
     ground: {
@@ -66,7 +69,10 @@ function build(layout) {
       dog: { ...DOG_SIZE, frames: 3, paint: (raster, index) => paintDog(raster, index, art.dog) },
     },
     props: side.props,
-    overlay: drawDog,
+    overlay: (context, scene) => {
+      drawRipple(context, scene, puddle);
+      drawDog(context, scene);
+    },
   };
 }
 

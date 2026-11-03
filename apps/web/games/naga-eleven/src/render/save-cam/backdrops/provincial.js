@@ -99,5 +99,6 @@ export const PROVINCIAL_BACKDROP = {
   id: 'provincial-ground',
   paint,
   frameOf: (ticks) => (Math.floor(ticks / 13) % 3 === 2 ? 1 : 0),
+  sky: 'day',
   goal: { ...SAVE_CAM_PROVINCIAL.goal, bamboo: false },
 };

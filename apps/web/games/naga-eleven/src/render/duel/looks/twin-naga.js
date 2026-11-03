@@ -31,9 +31,21 @@ function front(pen, scene) {
   });
 }
 
+// turned to the camera, his face and number show beside Sochetra's side-on strike, so he reads as
+// a second man, not a copy
+const TURNED = { windup: 'duoWindup', kick: 'duoKick' };
+
 // Rithy strikes it with him, a step behind
-function figures(pen, scene, attacker) {
-  drawFigure(pen, { ...attacker, x: attacker.x - 12, y: attacker.y - 3, rim: scene.art.accent[3] });
+function figures(pen, scene, attacker, cast) {
+  drawFigure(pen, {
+    ...attacker,
+    sheet: TURNED[attacker.pose],
+    x: attacker.x - 14,
+    y: attacker.y - 4,
+    rim: scene.art.accent[3],
+    ...cast,
+    side: 'partner',
+  });
 }
 
 export const TWIN_NAGA = { front, figures };

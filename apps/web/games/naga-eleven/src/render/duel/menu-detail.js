@@ -1,8 +1,8 @@
-import { NAMED_CHAINS, PASS_COMBO } from '../../data/combos.js';
+import { DUO_COMBOS, NAMED_CHAINS, PASS_COMBO } from '../../data/combos.js';
 import { moveOf } from '../../data/moves.js';
 import { SKILL_WORDS } from '../../data/skill-words.js';
 import { numberIn, textOf } from '../text.js';
-import { partnerOf, tagOf } from './menu-rows.js';
+import { tagOf } from './menu-rows.js';
 
 const nameOf = (id, lang) => textOf(moveOf(id)?.name ?? '', lang);
 
@@ -34,12 +34,22 @@ export function chainMoves(option) {
   return [option.from ?? null, option.move];
 }
 
-const DETAILS = {
-  duo: (option, match, lang) => {
-    const partner = partnerOf(match, option);
+// what each of a duo pays, the striker's share first as his row's price shows it: the row names
+// the partner, so the head tells what the row cannot, that both pay. A partner who paid with his
+// pass (`partnerShare` 0) still gave his share, so the move's own share is told for him
+export function duoShares(option) {
+  const shares = DUO_COMBOS.find((duo) => duo.move === option.move)?.shares;
+  const striker = option.cost || shares?.striker;
+  const partner = option.partnerShare || shares?.partner;
 
-    return partner ? `+ ${textOf(partner.name, lang)}` : textOf(SKILL_WORDS.duo, lang);
-  },
+  return striker && partner ? [striker, partner] : null;
+}
+
+const DETAILS = {
+  duo: (option, match, lang) =>
+    duoShares(option)
+      ?.map((share) => numberIn(share, lang))
+      .join(' + ') ?? null,
   chain: (option, match, lang) =>
     chainMoves(option)
       .filter(Boolean)

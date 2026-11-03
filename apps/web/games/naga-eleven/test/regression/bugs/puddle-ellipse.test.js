@@ -61,7 +61,7 @@ describe('the village puddle', () => {
     expect(middle.filter(({ colour }) => colour === art.water[0]).length).toBe(0);
   });
 
-  it('shows the rings of a drop, lit on their far side', () => {
+  it('catches the light in glints on its water', () => {
     const lit = water.filter(({ colour }) => colour === art.water[5]);
 
     expect(lit.length).toBeGreaterThan(60);

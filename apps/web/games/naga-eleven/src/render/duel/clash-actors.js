@@ -1,12 +1,11 @@
+import { tackleOf } from './clash/tackle.js';
+import { slideReach } from './clash/trip-over.js';
 import { DEFENDER, GROUND, KEEPER, KICKER } from './paths.js';
 
 const runFrame = (tick) => (Math.floor(tick / 5) % 2 === 0 ? 'run' : 'run2');
 
 // how many of the marks a count has passed: the frame of a move that steps on at each
 const passed = (count, marks) => marks.filter((mark) => count >= mark).length;
-
-// the tackle takes his feet: back onto the grass, then flat
-const fallFrame = (scene) => passed(scene.sinceHit, [4, 9]);
 
 function kicker(scene) {
   if (scene.t < 10) {
@@ -21,15 +20,13 @@ function kicker(scene) {
   return { pose: 'kick', frame: 1 + passed(scene.t, [16]), x: KICKER.x, y: GROUND, facing: 1 };
 }
 
+// a dribble the tackle won: from then on the clash's own choreography draws him, not his move's
+export const isTackled = (scene) =>
+  scene.attack.kind === 'dribble' && !scene.keeper && scene.hit && !scene.attackWins;
+
 function dribbler(scene) {
-  if (scene.hit && !scene.attackWins) {
-    return {
-      pose: 'fallen',
-      frame: fallFrame(scene),
-      x: scene.impact.x - 30,
-      y: GROUND,
-      facing: 1,
-    };
+  if (isTackled(scene)) {
+    return tackleOf(scene).dribbler(scene);
   }
 
   return { pose: runFrame(scene.tick), x: scene.ball.x - 16, y: GROUND, facing: 1 };
@@ -64,7 +61,7 @@ const actingFrame = (pose, approach) =>
 
 function closingDefender(scene) {
   const pose = GUARDS[scene.defend.kind] ?? 'block';
-  const slide = pose === 'slide' ? Math.round((Math.min(scene.approach, 1) - 0.55) * 24) : 0;
+  const slide = pose === 'slide' ? slideReach(scene.approach) : 0;
   const frame = pose === 'block' ? undefined : actingFrame(pose, scene.approach);
 
   return { pose, frame, x: DEFENDER.x - Math.max(0, slide), y: GROUND, facing: -1 };
@@ -75,8 +72,8 @@ function fieldDefender(scene) {
     return { pose: 'fallen', sheet: 'sat', x: DEFENDER.x + 14, y: GROUND, facing: -1 };
   }
 
-  if (scene.hit && scene.word === 'stolen') {
-    return { pose: 'slide', frame: 2, x: scene.ball.x + 22, y: GROUND, facing: -1 };
+  if (isTackled(scene)) {
+    return tackleOf(scene).winner(scene, closingDefender(scene));
   }
 
   if (scene.approach > 0.55 || scene.hit) {

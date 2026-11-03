@@ -30,6 +30,28 @@ describe('who a side sends into the clash', () => {
     expect(castOf(show, 'attack').look.key).not.toBe(castOf(show, 'defend').look.key);
   });
 
+  it('is the mate who strikes a duo with him, in his own look and number', () => {
+    const { match, show } = shownDuel();
+    const round = match.duel.rounds[0];
+    const mate = match.players.find(
+      (player) => player.team === match.players[round.attacker].team && player.role === 'defender',
+    );
+
+    Object.assign(mate, { star: 'rithy' });
+    round.picked = { attack: { kind: 'shot', move: 'twin-naga', look: 'twin-naga' }, defend: null };
+
+    expect(castOf(show, 'partner')).toEqual({
+      look: looksOf(match).players[mate.index],
+      number: mate.number,
+    });
+  });
+
+  it('has no partner before the attack is picked', () => {
+    const { show } = shownDuel();
+
+    expect(castOf(show, 'partner')).toBeNull();
+  });
+
   it('is nobody without a show, a round or a side', () => {
     const { show } = shownDuel();
 

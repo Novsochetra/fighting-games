@@ -35,14 +35,31 @@ describe('the dribbler in the clash', () => {
     expect(['run', 'run2']).toContain(runner.pose);
   });
 
-  it('goes down back then flat when the tackle wins', () => {
-    const frames = [0, 5, 12].map(
-      (since) => attackerOf(sceneAt(IMPACT_TICK + since, { word: 'stolen', wins: false })).frame,
+  it('goes over a slide tackle that wins and comes down flat beyond it', () => {
+    const trip = [0, 4, 8, 11, 20].map((since) =>
+      attackerOf(sceneAt(IMPACT_TICK + since, { word: 'stolen', wins: false })),
     );
-    const fallen = attackerOf(sceneAt(IMPACT_TICK + 12, { word: 'stolen', wins: false }));
 
-    expect(frames).toEqual([0, 1, 2]);
-    expect(fallen).toMatchObject({ pose: 'fallen', x: DEFENDER.x - 22 - 30 });
+    expect(trip.map(({ frame }) => frame)).toEqual([2, 4, 5, 6, 7]);
+    expect(trip.every(({ sheet }) => sheet === 'trip')).toBe(true);
+    expect(trip.at(-1)).toMatchObject({ pose: 'fallen', facing: 1 });
+    expect(trip.at(-1).x).toBeGreaterThan(DEFENDER.x);
+  });
+
+  it('is thrown back flat by a block or a stretch that wins', () => {
+    for (const defend of ['block', 'intercept']) {
+      const down = [0, 5, 12].map((since) =>
+        attackerOf(sceneAt(IMPACT_TICK + since, { defend, word: 'stolen', wins: false })),
+      );
+
+      expect(down.map(({ sheet, frame }) => [sheet, frame])).toEqual([
+        ['knocked', 0],
+        ['knocked', 1],
+        ['trip', 7],
+      ]);
+      expect(down[2]).toMatchObject({ pose: 'fallen', facing: -1 });
+      expect(down[2].x).toBeLessThan(down[0].x);
+    }
   });
 });
 
@@ -85,16 +102,34 @@ describe('the defender in the clash', () => {
     });
   });
 
-  it('goes down when beaten and slides on with the ball when he wins it', () => {
+  it('goes down when beaten', () => {
     expect(defenderOf(sceneAt(IMPACT_TICK + 10))).toMatchObject({
       pose: 'fallen',
       sheet: 'sat',
       x: DEFENDER.x + 14,
     });
-    expect(defenderOf(sceneAt(IMPACT_TICK + 10, { word: 'stolen', wins: false }))).toMatchObject({
-      pose: 'slide',
-      frame: 2,
-      x: 120 + 22,
+  });
+
+  it('slides on with the ball he won, gets up and stands over it', () => {
+    const won = [4, 12, 30].map((since) =>
+      defenderOf(sceneAt(IMPACT_TICK + since, { word: 'stolen', wins: false })),
+    );
+
+    expect(won.map(({ pose, sheet, frame }) => [pose, sheet, frame])).toEqual([
+      ['slide', undefined, 2],
+      ['run', 'rise', undefined],
+      ['stand', undefined, undefined],
+    ]);
+    expect(won.map(({ x }) => x)).toEqual([120 + 22, 120 + 22, 120 + 15]);
+  });
+
+  it('holds his block when it wins, then stands where he blocked', () => {
+    const block = { defend: 'block', word: 'stolen', wins: false };
+
+    expect(defenderOf(sceneAt(IMPACT_TICK + 4, block))).toMatchObject({ pose: 'block' });
+    expect(defenderOf(sceneAt(IMPACT_TICK + 20, block))).toMatchObject({
+      pose: 'stand',
+      x: DEFENDER.x,
     });
   });
 });

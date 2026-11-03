@@ -19,6 +19,11 @@ export function drawFigure(pen, { show, side, actors, ...figure }) {
 }
 
 export function drawAfterimage(pen, { alpha, ...figure }) {
+  // a man brought down has stopped: a move's copies of him end with the tackle
+  if (figure.pose === 'fallen') {
+    return;
+  }
+
   pen.context.save();
   pen.context.globalAlpha *= alpha;
   drawFigure(pen, figure);

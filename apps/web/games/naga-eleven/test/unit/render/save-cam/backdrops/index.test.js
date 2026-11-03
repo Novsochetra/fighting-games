@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { SAVE_CAM_ART } from '../../../../../src/art/save-cam.js';
 import { VILLAGE_FIELD } from '../../../../../src/art/venues/village-field.js';
-import { goalStyleOf } from '../../../../../src/render/save-cam/backdrop.js';
+import { goalStyleOf, skyOf } from '../../../../../src/render/save-cam/backdrop.js';
 import { backdropOf, SAVE_CAM_VENUES } from '../../../../../src/render/save-cam/backdrops/index.js';
 import { VENUES } from '../../../../../src/render/venues/catalog.js';
 
@@ -35,6 +35,15 @@ describe('the save cam’s backdrop for a venue', () => {
     for (const venue of Object.keys(VENUES).filter((id) => id !== 'village-field')) {
       expect(goalStyleOf(venue).bamboo).toBe(false);
     }
+  });
+
+  it('says whether its sky is bright or night, for the focus lines laid over it', () => {
+    const night = Object.keys(VENUES).filter((venue) => skyOf(venue) === 'night');
+
+    expect(Object.keys(VENUES).every((venue) => ['day', 'night'].includes(skyOf(venue)))).toBe(
+      true,
+    );
+    expect(night.sort()).toEqual(['asia-stadium', 'world-stadium']);
   });
 
   it('plays a match with no venue, or one it does not know, under the floodlights', () => {

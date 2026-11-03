@@ -48,9 +48,9 @@
   box-shadow: var(--shadow-button-focus);
 }
 
-/* a mouse over a button only lights it, its rim pale and never gold: the pad and the keys move the
-   focus, not the mouse, and with both gold two buttons looked picked at once (a :focus-visible
-   would hide the pick from a pad, which no browser counts as a keyboard) */
+/* a mouse over a button the keys have moved off only lights it, its rim pale and never gold: with
+   both gold two buttons looked picked at once (a :focus-visible would hide the pick from a pad,
+   which no browser counts as a keyboard); a mouse moving over one gives it the focus */
 @media (hover: hover) {
   .btn:hover:not(:focus) {
     background: var(--color-panel-shine);

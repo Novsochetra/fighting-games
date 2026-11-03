@@ -37,8 +37,8 @@ function lightRow(pen, { box, tick }) {
   });
 }
 
-// the head: whose pick it is, and on its right what the lit row brings with it (the partner of a
-// duo, the skill a chain starts from, the combo a finisher was built on)
+// the head: whose pick it is, and on its right what the lit row brings with it (what each of a duo
+// pays, the skill a chain starts from, the combo a finisher was built on)
 function head(pen, { side, detail, lang, menu }) {
   const title = textOf(HEADS[side], lang);
   const size = measureText(pen.context, title, { size: 16 }) > toCanvas(menu.width / 2) ? 8 : 16;

@@ -12,14 +12,24 @@ const SHOTS = {
   run2: { animation: 'run', way: 'south-east', frame: null, dx: 3 },
   windup: { animation: 'kick', way: 'east', frame: 0, dx: 6 },
   kick: { animation: 'kick', way: 'east', frame: 1, dx: 6 },
+  // a duo's partner strikes turned to the camera, his face and number beside the striker's side on
+  duoWindup: { animation: 'kick', way: 'south-east', frame: 0 },
+  duoKick: { animation: 'kick', way: 'south-east', frame: 1 },
   leap: { animation: 'kick', way: 'east', frame: 0 },
   slide: { animation: 'slide', way: 'east', frame: 2, dx: -4 },
   // his celebration's second frame is a crouch with his fists in: braced for the shot
   block: { animation: 'celebrate', way: 'south', frame: 1 },
   lunge: { animation: 'kick', way: 'east', frame: 2, dx: -2 },
   fallen: { animation: 'fall', way: 'south-east', frame: 2, dx: -10 },
+  // the fall's first frames throw him back off his feet: a dribbler stopped dead
+  knocked: { animation: 'fall', way: 'south-east', frame: 0 },
   // the slide's first frame is him sat on the grass, a leg out: a defender left behind
   sat: { animation: 'slide', way: 'east', frame: 0 },
+  // the keeper's dive pitches forward, flies flat and lands on its chest, side on: a dribbler
+  // tripped over the tackle, whose choreography gives the frame; its last is flat on the grass
+  trip: { animation: 'dive', way: 'east', frame: 7 },
+  // the fall's last frame pushes up off the grass into a run: a tackler back on his feet
+  rise: { animation: 'fall', way: 'east', frame: 3 },
   catch: { animation: 'celebrate', way: 'south', frame: 6 },
   punch: { animation: 'celebrate', way: 'south', frame: 4 },
   dive: { animation: 'dive', way: 'east', frame: 4, dx: -6 },
