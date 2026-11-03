@@ -6,6 +6,8 @@
 export const EFFECT_SHAPES = {
   trail: [
     'streak',
+    'spiral',
+    'helix',
     'coils',
     'twin-coils',
     'heads',
@@ -63,12 +65,12 @@ export const MOVE_EFFECTS = {
   'tidal-wave': { trail: 'wave', aura: 'halo', impact: 'splash' },
   'kite-header': { trail: 'kite', impact: 'sparks' },
   'chrey-lightning': { trail: 'bolt', impact: 'sparks' },
-  'moon-relay': { trail: 'arc', aura: 'halo' },
+  'moon-relay': { trail: 'helix', aura: 'halo' },
   'carnival-bicycle': { trail: 'confetti', aura: 'flame' },
   'flying-naga': { trail: 'coils', aura: 'wind', impact: 'splash' },
   'storm-garuda': { trail: 'wings', aura: 'wind', impact: 'feathers' },
   'eclipse-moon': { trail: 'arc', aura: 'halo', impact: 'sparks' },
-  'samba-rocket': { trail: 'flame', aura: 'flame' },
+  'samba-rocket': { trail: 'spiral', aura: 'flame' },
 };
 
 // how long each part lasts on the pitch, in ticks; a trail lasts while its ball is in flight

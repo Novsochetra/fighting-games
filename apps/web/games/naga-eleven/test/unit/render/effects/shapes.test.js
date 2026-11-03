@@ -22,6 +22,32 @@ function rectsOf(draw) {
   return calls.filter((call) => call.name === 'fillRect').map((call) => call.args);
 }
 
+// what a drawing painted on a pixel canvas, and how many calls it took to paint it
+function paintedOf(draw) {
+  const canvas = createPixelCanvas(1200, 800);
+
+  draw(canvas.getContext('2d'));
+
+  const points = [];
+
+  for (let i = 3; i < canvas.data.length; i += 4) {
+    if (canvas.data[i] > 0) {
+      points.push([((i - 3) / 4) % canvas.width, Math.floor((i - 3) / 4 / canvas.width)]);
+    }
+  }
+
+  return points;
+}
+
+function callsOf(draw) {
+  const { context, calls } = createRecordingContext();
+
+  context.globalAlpha = 1;
+  draw(context);
+
+  return calls.filter((call) => call.name === 'fillRect' || call.name === 'drawImage');
+}
+
 const isWhole = (rect) => rect.every(Number.isInteger);
 const reach = (rects, centre) =>
   Math.max(...rects.map(([x, y]) => Math.hypot(x - centre.x, y - centre.y)));
@@ -72,35 +98,44 @@ describe('the shapes a move draws on the pitch', () => {
 
   it.each(Object.keys(AURA_SHAPES))('wraps the %s aura round its player', (shape) => {
     const foot = { x: 500, y: 400 };
-    const rects = rectsOf((context) =>
-      AURA_SHAPES[shape](context, { foot, height: 56, art: ART, tick: 40, strength: 1, seed: 3 }),
-    );
+    const aura = { foot, height: 56, art: ART, tick: 40, strength: 1, seed: 3 };
+    const draw = (context) => AURA_SHAPES[shape](context, { ...aura, bake: createPixelCanvas });
 
-    expect(rects.length).toBeGreaterThan(8);
-    expect(rects.length).toBeLessThan(120);
-    expect(rects.every(isWhole)).toBe(true);
-    expect(reach(rects, { x: foot.x, y: foot.y - 28 })).toBeLessThan(60);
+    expect(paintedOf(draw).length).toBeGreaterThan(30);
+    expect(reach(paintedOf(draw), { x: foot.x, y: foot.y - 28 })).toBeLessThan(60);
+    expect(callsOf(draw).length).toBeLessThan(120);
+    expect(rectsOf(draw).every(isWhole)).toBe(true);
   });
 
   it.each(Object.keys(IMPACT_SHAPES))('bursts the %s impact where it lands', (shape) => {
     for (const age of [1, 8, 20]) {
       const at = { x: 600, y: 380 };
-      const rects = rectsOf((context) =>
-        IMPACT_SHAPES[shape](context, {
-          camera: CAMERA,
-          art: ART,
-          age,
-          share: age / 24,
-          scale: 1,
-          seed: 9,
-          at,
-          ground: { x: 600, y: 400 },
-          place: { x: 900, y: 600 },
-        }),
-      );
+      const impact = {
+        camera: CAMERA,
+        art: ART,
+        age,
+        share: age / 24,
+        scale: 1,
+        seed: 9,
+        at,
+        ground: { x: 600, y: 400 },
+        place: { x: 900, y: 600 },
+        bake: createPixelCanvas,
+      };
+      const draw = (context) => IMPACT_SHAPES[shape](context, impact);
 
-      expect(rects.every(isWhole), `${shape} ${age}`).toBe(true);
-      expect(rects.length, `${shape} ${age}`).toBeLessThan(140);
+      expect(rectsOf(draw).every(isWhole), `${shape} ${age}`).toBe(true);
+      expect(callsOf(draw).length, `${shape} ${age}`).toBeLessThan(140);
     }
+  });
+
+  it.each(['burst', 'ring'])('paints the kit’s %s impact round where it lands', (shape) => {
+    const at = { x: 600, y: 380 };
+    const painted = paintedOf((context) =>
+      IMPACT_SHAPES[shape](context, { art: ART, share: 0.4, at, ground: at, scale: 1 }),
+    );
+
+    expect(painted.length).toBeGreaterThan(30);
+    expect(reach(painted, at)).toBeLessThan(60);
   });
 });

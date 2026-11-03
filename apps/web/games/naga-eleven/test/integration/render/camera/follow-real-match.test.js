@@ -24,8 +24,12 @@ function humanMatch(format, seed) {
 
 const groundOf = (camera, point) => project(camera, point.x, point.y);
 
+// each test plays whole matches, which can take longer than vitest's five seconds while every
+// other test file runs beside it
+const SLOW = { timeout: 60000 };
+
 describe.each(['7', '11'])('the live camera over a real %s a side match', (format) => {
-  it('keeps the ball inside the view on every tick of open play and of each kick off', () => {
+  it('keeps the ball inside the view on every tick of open play and of each kick off', SLOW, () => {
     const missed = [];
     const check = (camera, match) => {
       const isWatched = match.phase === 'play' || match.phase === 'kickoff';
@@ -42,7 +46,7 @@ describe.each(['7', '11'])('the live camera over a real %s a side match', (forma
     expect(missed).toEqual([]);
   });
 
-  it('keeps a ball in flight in view, high balls too', () => {
+  it('keeps a ball in flight in view, high balls too', SLOW, () => {
     let flights = 0;
     let missed = 0;
     const check = (camera, match) => {
@@ -61,7 +65,7 @@ describe.each(['7', '11'])('the live camera over a real %s a side match', (forma
     expect(missed).toBe(0);
   });
 
-  it('shows the player the human steers on nine ticks in ten of open play', () => {
+  it('shows the player the human steers on nine ticks in ten of open play', SLOW, () => {
     let play = 0;
     let shown = 0;
     const check = (camera, match) => {

@@ -1,5 +1,3 @@
-import { noise } from '../noise.js';
-
 const BLOCK = 7;
 
 function drawSide(context, { x, top, bottom, art, shimmer }) {
@@ -49,35 +47,5 @@ export function drawStone(context, { foot, height, art, tick, strength }) {
   drawSide(context, { x: left, top, bottom, art, shimmer });
   drawSide(context, { x: right, top, bottom, art, shimmer });
   drawArch(context, { centre: { x: foot.x, y: top }, radius, art });
-  context.globalAlpha = 1;
-}
-
-const TONGUES = [10, 15, 21, 27, 31, 27, 21, 15, 10];
-
-// flames round him from the feet up to his chest, flickering, embers going up off them
-export function drawBlaze(context, { foot, art, tick, strength }) {
-  const flicker = Math.floor(tick / 4);
-
-  context.globalAlpha = strength;
-  TONGUES.forEach((tallest, i) => {
-    const height = Math.round(tallest * (0.7 + noise(flicker, i) * 0.3) * strength);
-    const x = Math.round(foot.x + (i - 4) * 3) - 1;
-    const base = Math.round(foot.y) + 1;
-
-    context.fillStyle = art.body[2];
-    context.fillRect(x, base - height, 3, height);
-    context.fillStyle = art.body[3];
-    context.fillRect(x + 1, base - Math.round(height * 0.65), 2, Math.round(height * 0.65));
-    context.fillStyle = art.body[4];
-    context.fillRect(x + 1, base - Math.round(height * 0.3), 1, Math.round(height * 0.3));
-  });
-
-  for (let i = 0; i < 3; i += 1) {
-    const up = ((tick + i * 13) % 30) / 30;
-
-    context.fillStyle = art.accent[3];
-    context.fillRect(Math.round(foot.x + (i - 1) * 7), Math.round(foot.y - 20 - up * 30), 1, 1);
-  }
-
   context.globalAlpha = 1;
 }

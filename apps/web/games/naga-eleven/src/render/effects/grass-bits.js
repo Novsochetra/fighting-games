@@ -6,7 +6,7 @@ import { noise } from './noise.js';
 const BITS = 7;
 const GRAVITY = 0.16;
 
-export function drawGrassBits(context, camera, effect, tick) {
+export function drawGrassBits(context, camera, effect, { tick }) {
   const age = ageOf(effect, tick);
   const fade = Math.min(1, (effect.life - age) / 8);
 

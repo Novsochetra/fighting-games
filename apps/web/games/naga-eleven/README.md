@@ -370,6 +370,10 @@ from `src/data/move-effects.js`:
 - An **impact** bursts where it is struck, blocked or saved, for `EFFECT_TICKS.impact` (24): `burst`
   (a star of light), `splash` (water thrown up), `feathers`, `ring` (a shock ring across the grass,
   20 ticks), `wall` (light and dust rising in front of the blocker, 36), `sparks`, `dust`.
+- The `motes` and `flame` auras, the `burst` and `ring` impacts and the heads of the `streak`,
+  `spiral`, `helix` and `ribbon` trails are the effect kit's sprites (`src/art/effect-kit.js`,
+  baked by `tools/effect_kit/bake.py` from `concepts/naga-eleven/effect-kit/`), six frames each
+  in the effects' codes, coloured by the move's look like every other shape.
 - Each play has its three (`PLAY_EFFECTS`) and a move may change any (`MOVE_EFFECTS`): the Naga
   Shot's coils and splash, Garuda Volley's wings and feathers, Silent Moon's arc, Carnival Rocket's
   flame, the Kouprey Kick's horns, the Mekong Current's river, Chrey Lightning's bolt. Every shot

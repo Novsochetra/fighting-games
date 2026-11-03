@@ -52,6 +52,6 @@ def entry(key, value):
     return line if len(line) <= PRINT_WIDTH or len(name) < SHORT_KEY else f"  {name}:\n    '{value}',"
 
 
-def module(name, parts):
+def module(name, parts, header=HEADER):
     lines = [entry(key, value) for key, value in parts.items()]
-    return HEADER + f'export const {name} = {{\n' + '\n'.join(lines) + '\n};\n'
+    return header + f'export const {name} = {{\n' + '\n'.join(lines) + '\n};\n'

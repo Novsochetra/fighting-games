@@ -6,6 +6,7 @@ import { drawKite } from './kite.js';
 import { drawArc, drawBlade } from './moon.js';
 import { drawCoils, drawTwinCoils } from './serpent.js';
 import { drawFlame, drawRibbon, drawStreak } from './streak.js';
+import { kitTrail } from '../kit-sprites.js';
 import { drawRiver, drawWave } from './water.js';
 import { drawWings } from './wings.js';
 
@@ -13,7 +14,9 @@ export { drawAfterimages } from './ghosts.js';
 
 // every trail of EFFECT_SHAPES.trail but the afterimage, which draws the player himself
 export const TRAIL_SHAPES = {
-  streak: drawStreak,
+  streak: kitTrail('comet', drawStreak),
+  spiral: kitTrail('spiral', drawStreak),
+  helix: kitTrail('helix', drawStreak),
   coils: drawCoils,
   'twin-coils': drawTwinCoils,
   heads: drawSevenHeads,
@@ -22,7 +25,7 @@ export const TRAIL_SHAPES = {
   arc: drawArc,
   flame: drawFlame,
   horns: drawHorns,
-  ribbon: drawRibbon,
+  ribbon: kitTrail('ribbon', drawRibbon),
   kite: drawKite,
   river: drawRiver,
   wave: drawWave,
@@ -33,5 +36,5 @@ export const TRAIL_SHAPES = {
 
 // `trail` is { samples, head, flip, art, tick, age, alpha, seed, river } (draw-trail.js)
 export function drawTrailShape(context, shape, trail) {
-  (TRAIL_SHAPES[shape] ?? drawStreak)(context, trail);
+  (TRAIL_SHAPES[shape] ?? TRAIL_SHAPES.streak)(context, trail);
 }

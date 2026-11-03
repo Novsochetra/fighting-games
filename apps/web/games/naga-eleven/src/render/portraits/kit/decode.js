@@ -3,11 +3,11 @@ const STORED = { a: '1', b: '2', c: '3', d: '4' };
 
 const RUN = /(\D)(\d*)/g;
 
-function rowCells(row, width) {
+function rowCells(row, width, stored) {
   const cells = [];
 
   for (const [, letter, count] of row.matchAll(RUN)) {
-    const cell = letter === '.' ? null : (STORED[letter] ?? letter);
+    const cell = letter === '.' ? null : (stored[letter] ?? letter);
 
     cells.push(...new Array(Number(count || 1)).fill(cell));
   }
@@ -15,10 +15,11 @@ function rowCells(row, width) {
   return [...cells, ...new Array(width - cells.length).fill(null)];
 }
 
-export function decodePart(text) {
+// the effects' codes have no digits, so their `d` is their own: they decode with `stored` empty
+export function decodePart(text, stored = STORED) {
   const [head, body] = text.split('|');
   const [width, height, x, y] = head.split(' ').map(Number);
-  const rows = body.split('/').map((row) => rowCells(row, width));
+  const rows = body.split('/').map((row) => rowCells(row, width, stored));
 
   return { width, height, anchor: { x, y }, cells: rows.flat().slice(0, width * height) };
 }

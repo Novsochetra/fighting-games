@@ -51,7 +51,7 @@ function drawWorld(context, match, camera, { art, venue, effects, tick }) {
   }
 
   drawVenueFront(context, camera, match, venue);
-  drawEffects(context, effects, { camera, match });
+  drawEffects(context, effects, { camera, match, bake: art?.createCanvas ?? null });
   drawOverPlayers(context, effects, { camera, match, art });
   drawActorOverlays(context, match, camera, { art, tick });
 }

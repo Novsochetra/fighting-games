@@ -41,7 +41,7 @@ const strengthOf = (aura, tick) =>
   Math.min(1, (tick - aura.born + 1) / GROW) * Math.min(1, (aura.until - tick + 1) / GROW);
 
 // under the players, so each wraps round its own player from behind
-export function drawAuras(context, camera, effects, { match, standHeight }) {
+export function drawAuras(context, camera, effects, { match, standHeight, bake = null }) {
   for (const aura of effects?.auras ?? []) {
     const player = match.players[aura.player];
     const strength = strengthOf(aura, match.tick);
@@ -54,6 +54,7 @@ export function drawAuras(context, camera, effects, { match, standHeight }) {
         tick: match.tick,
         strength,
         seed: aura.player * 31 + 7,
+        bake,
       });
     }
   }

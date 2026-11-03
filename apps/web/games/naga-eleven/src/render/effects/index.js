@@ -68,9 +68,10 @@ export function updateEffects(effects, match, { camera } = {}) {
 
 const DRAWERS = { dust: drawDust, grass: drawGrassBits, impact: drawImpact };
 
-export function drawEffects(context, effects, { camera, match }) {
+// `bake` makes the canvases the kit's sprites are painted on once (pixel-map.js)
+export function drawEffects(context, effects, { camera, match, bake = null }) {
   for (const effect of effects?.list ?? []) {
-    DRAWERS[effect.kind]?.(context, camera, effect, match.tick);
+    DRAWERS[effect.kind]?.(context, camera, effect, { tick: match.tick, bake });
   }
 }
 
@@ -80,7 +81,11 @@ export function drawUnderPlayers(context, effects, { camera, match, art, scoring
     return;
   }
 
-  drawAuras(context, camera, effects, { match, standHeight: art.standHeight });
+  drawAuras(context, camera, effects, {
+    match,
+    standHeight: art.standHeight,
+    bake: art.createCanvas,
+  });
   drawCarries(context, camera, effects, {
     match,
     drawGhost: ghostDrawer(art, match, { scoringTeam }),

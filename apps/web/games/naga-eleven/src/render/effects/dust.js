@@ -6,7 +6,7 @@ import { noise } from './noise.js';
 
 const PUFFS = 3;
 
-export function drawDust(context, camera, effect, tick) {
+export function drawDust(context, camera, effect, { tick }) {
   const age = ageOf(effect, tick);
   const share = age / effect.life;
   const ground = project(camera, effect.x, effect.y);

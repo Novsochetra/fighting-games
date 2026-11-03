@@ -1,48 +1,6 @@
 import { project } from '../../camera.js';
 import { drawPixelEllipse } from '../../actors/shadow.js';
-import { drawDashedEllipse } from '../ellipse.js';
 import { noise } from '../noise.js';
-
-// a shock ring running out across the grass, a second behind it, dust kicked up on the first
-export function drawRing(context, { ground, art, share, scale, seed }) {
-  const radius = (8 + 56 * share) * scale;
-
-  context.globalAlpha = 1 - share;
-  drawDashedEllipse(context, {
-    x: ground.x,
-    y: ground.y,
-    radiusX: radius,
-    radiusY: radius * 0.34,
-    count: 34,
-    size: 4,
-    colour: art.body[4],
-    back: art.body[3],
-  });
-  drawDashedEllipse(context, {
-    x: ground.x,
-    y: ground.y,
-    radiusX: radius * 0.6,
-    radiusY: radius * 0.2,
-    count: 16,
-    colour: art.body[3],
-    back: art.body[2],
-    turn: 0.2,
-  });
-  context.fillStyle = art.body[2];
-
-  for (let i = 0; i < 6; i += 1) {
-    const angle = noise(seed, i) * Math.PI * 2;
-
-    context.fillRect(
-      Math.round(ground.x + Math.cos(angle) * radius),
-      Math.round(ground.y + Math.sin(angle) * radius * 0.34 - share * 6),
-      1,
-      1,
-    );
-  }
-
-  context.globalAlpha = 1;
-}
 
 // a cloud of dust in the move's colours, puffing out and settling
 export function drawDustCloud(context, { ground, art, share, scale, seed, puffs = 6 }) {

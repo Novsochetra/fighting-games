@@ -28,7 +28,7 @@ export function addImpact(effects, match, { plan, at, scale = 1, shape = plan?.i
   });
 }
 
-export function drawImpact(context, camera, effect, tick) {
+export function drawImpact(context, camera, effect, { tick, bake = null }) {
   const age = ageOf(effect, tick);
 
   IMPACT_SHAPES[effect.shape]?.(context, {
@@ -41,5 +41,6 @@ export function drawImpact(context, camera, effect, tick) {
     at: project(camera, effect.x, effect.y, effect.z + BALL.radius),
     ground: project(camera, effect.x, effect.y),
     place: effect.place,
+    bake,
   });
 }
