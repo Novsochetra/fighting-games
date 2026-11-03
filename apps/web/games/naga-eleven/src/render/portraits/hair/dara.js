@@ -1,0 +1,48 @@
+export const DARA_HAIR = {
+  x: 17,
+  y: 5,
+  rows: [
+    '..........hhhhhhhggg..........',
+    '.......hhhhhhhhhhhhhggg.......',
+    '.....hhhhhhhhhhhhhhhhhggg.....',
+    '...hhHHHHHHhhhhhhhhhhhhhggg...',
+    '..hHHHHHhhhhHHHHhhhhhhhhhggg..',
+    '.hHHhhhhhhhHHhhhhhhhhhhhhhggg.',
+    'hhhhhhhhhhhhhhhhhhhhhhhhhhhggg',
+    'hhhhhhhhhhhhhhhhhhhhhhhhhhhggg',
+    'hhhhhhhkhhhhghhhhkhhhhghhhhggg',
+    'hhhhhggkghhgkghhgkghhgkgghhggg',
+    'hhhhgkk.kggk.kggk.kggk.kkghggg',
+    'hhggk....kk...kk...kk....kgggg',
+    'hggk......................kggg',
+    'ggg........................ggg',
+    'ggg........................ggg',
+    'ggg........................ggg',
+    'kgg........................ggk',
+    '.kk........................kk.',
+  ],
+};
+
+// at twenty-four his sides are cut short
+export const DARA_HAIR_ADULT = {
+  x: 17,
+  y: 5,
+  rows: [
+    '..........hhhhhhhggg..........',
+    '.......hhhhhhhhhhhhhggg.......',
+    '.....hhhhhhhhhhhhhhhhhggg.....',
+    '...hhHHHHHHhhhhhhhhhhhhhggg...',
+    '..hHHHHHhhhhHHHHhhhhhhhhhggg..',
+    '.hHHhhhhhhhHHhhhhhhhhhhhhhggg.',
+    'hhhhhhhhhhhhhhhhhhhhhhhhhhhggg',
+    'hhhhhhhhhhhhhhhhhhhhhhhhhhhggg',
+    'hhhhhhhkhhhhghhhhkhhhhghhhhggg',
+    'hhhhhggkghhgkghhgkghhgkgghhggg',
+    'hhhhgkk.kggk.kggk.kggk.kkghggg',
+    'hhggk....kk...kk...kk....kgggg',
+    'hggk......................kggg',
+    '.gg........................gg.',
+    '.g.g......................g.g.',
+    '..g........................g..',
+  ],
+};

@@ -1,0 +1,62 @@
+import { FIGURE, SOCHETRA_LOOK } from './people.js';
+import { shadeKeys } from './shade-keys.js';
+
+// Sochetra cross-legged, barefoot on the temple stone, his hands on his knees and his eyes shut:
+// his head is the footballer sheets' own, so he is the boy who runs the drills. Letters name a
+// part and a shade, dark to light, as the sheets' parts: hair h H i, skin a A b B, shirt r R S s,
+// shorts w W v V
+export const MEDITATOR = {
+  anchor: { x: 20, y: 41 },
+  // the rows over this one rise with each breath
+  chest: 24,
+  rows: [
+    '................00000000.................',
+    '...............00HHhhhh000...............',
+    '..............00iHHHhhhhh00..............',
+    '..............0HiiiHihhhhh0..............',
+    '.............00hhhiihhHhhH00.............',
+    '.............0hhhhhhhHhahhh0.............',
+    '.............0hhhhhahhAAhhh0.............',
+    '.............00hAAA0AAbbAh00.............',
+    '..............00a00bbb00a00..............',
+    '.............0b0AbAAbAAbA0b0.............',
+    '.............0aaA00bbb00Aaa0.............',
+    '.............0babbbbBbbbbab0.............',
+    '..............00bbbbAAbbb00..............',
+    '...............0AbbbbbbbA0...............',
+    '................0abAAAba0................',
+    '...............00wabbbaw00...............',
+    '.............00RRWaaaaaWRr00.............',
+    '............0SSsRvAAAAAvRRRR0............',
+    '...........0SsssssVbbbVssssSR0...........',
+    '..........0RsssssssVVVssssssS0...........',
+    '..........0SssSsssssssssssRssR0..........',
+    '.........0RssRRsssssssssssRRsS0..........',
+    '........0vSsSRrSsssssssssRrRssv0.........',
+    '.........0VVRRrRssssssssSRrRRVv0.........',
+    '........00WWW0rRSSSSSSSSSRr0WWW00........',
+    '.......0BbbA0.0RSSSSSSSSRr0.0AbbA0.......',
+    '......0BbbA0..0RSSSSSSSSRr0..0AbbA0......',
+    '.....0BbbA0...0RSSSSSSSSRr0...0AbbA0.....',
+    '....0BbbA0....0RSSSSSSSSRr0....0AbbA0....',
+    '....0bbbA0....0rRRRRRRRRRr0....0Abba0....',
+    '....0BbbbA0...0WWWWWWwwwww0...0abbbA0....',
+    '...0BbbbbA0000VVVVVVVvvvvvv0000abbbbA0...',
+    '...0bbbbbA0WVVVVVVVVVvvvvvvvvw0abbbbb0...',
+    '..00aAaAaa0WVVVVVVVVWvvvvvvvvw0aaaaaa00..',
+    '.0BB000000WvVVVVVVVVWvvvvvvvvWw000000AA0.',
+    '.0bBbbbAa0wWvvvvvvvvWWWWWWWWWww0aabbbAb0.',
+    '.0AbbbbaA00000000000000000000000Abbbbba0.',
+    '..0aAbBBBBBBBBBBBBBBBB0bbbbbbbbbbbbAaAa0.',
+    '...0aAbbbbbbbbbbbbbbbbB00AAbbbbbbbbbA00..',
+    '....0aAAAAAAAAAAAAAAAAAAAa0aaAAAAAAa0....',
+    '.....00000000000000000000000000000000....',
+  ],
+  palette: {
+    0: FIGURE.outline,
+    ...shadeKeys(SOCHETRA_LOOK.hair, 'hHi'),
+    ...shadeKeys(SOCHETRA_LOOK.skin, 'aAbB'),
+    ...shadeKeys(SOCHETRA_LOOK.shirt, 'rRSs'),
+    ...shadeKeys(SOCHETRA_LOOK.shorts, 'wWvV'),
+  },
+};

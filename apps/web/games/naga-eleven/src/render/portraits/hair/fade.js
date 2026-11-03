@@ -1,0 +1,20 @@
+export const FADE_HAIR = {
+  x: 19,
+  y: 6,
+  rows: [
+    '.......hhhhhhhhhggg.......',
+    '....hHHHHHHhhhhhhhhggg....',
+    '..hHHHHHhhhhhhhhhhhhhggg..',
+    '.hHHhhhhhhhhhhhhhhhhhhggg.',
+    'hhhhhhhhhhhhhhhhhhhhhhhggg',
+    'hhhhhhhhhhhhhhhhhhhhhhhggg',
+    'hhhhhhhhhhhhhhhhhhhhhhhggg',
+    'ghhhhhhhhhhhhhhhhhhhhhgggg',
+    'gkhkkkkkkkkkkkkkkkkkkkkkgg',
+    'gg......................gg',
+    'g.g....................g.g',
+    '.g......................g.',
+    'g.g....................g.g',
+    '.g......................g.',
+  ],
+};

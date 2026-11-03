@@ -1,0 +1,44 @@
+{
+  "name": "Naga Eleven",
+  "short_name": "Naga Eleven",
+  "description": "The Sochetra story: pixel football from a Cambodian village to the world stage.",
+  "start_url": "../",
+  "scope": "../",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0b0e18",
+  "theme_color": "#0b0e18",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/world-stadium.png",
+      "sizes": "768x432",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Cambodia attack Brazil's box at the World Championship"
+    },
+    {
+      "src": "screenshots/angkor-sunrise.png",
+      "sizes": "768x432",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Sochetra calls Rithy to the Twin Naga in the Asian final, Angkor Wat at sunrise behind them"
+    },
+    {
+      "src": "screenshots/seven-headed-naga.png",
+      "sizes": "768x432",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "The Seven-Headed Naga special shot bursting at the keeper in a duel"
+    }
+  ]
+}

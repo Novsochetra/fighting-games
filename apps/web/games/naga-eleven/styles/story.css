@@ -1,0 +1,276 @@
+/* the story's chapters and Sochetra's sheet */
+.chapter-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 18px 14px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chapter-card {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  margin: 2px;
+  padding: 14px 12px 12px;
+  background: var(--color-panel-deep);
+  box-shadow: var(--shadow-card);
+}
+
+.chapter-card.is-current {
+  background: var(--color-panel-light);
+  box-shadow: var(--shadow-card-current);
+}
+
+.chapter-number {
+  position: absolute;
+  top: -12px;
+  left: -6px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  background: var(--color-gold);
+  box-shadow: var(--shadow-chip);
+  color: var(--color-ink);
+  font-weight: var(--font-weight-bold);
+}
+
+.chapter-label {
+  padding-left: 18px;
+  color: var(--color-chalk-muted);
+  font-size: var(--font-size-note);
+  line-height: var(--leading-tight);
+  text-transform: uppercase;
+}
+
+.chapter-title {
+  color: var(--color-chalk);
+  line-height: var(--leading-tight);
+}
+
+.chapter-state {
+  justify-self: start;
+  margin-top: 4px;
+  padding: 2px 6px;
+  background: var(--color-chalk-dim);
+  color: var(--color-ink);
+  font-size: var(--font-size-note);
+  line-height: var(--leading-tight);
+  text-transform: uppercase;
+}
+
+.is-done .chapter-state {
+  background: var(--color-jade);
+}
+
+.is-current .chapter-state {
+  background: var(--color-gold);
+}
+
+.is-locked .chapter-title,
+.is-locked .chapter-label {
+  color: var(--color-chalk-dim);
+}
+
+.is-locked .chapter-number {
+  background: var(--color-chalk-dim);
+}
+
+.story-done {
+  margin: 18px 0 0;
+  color: var(--color-gold-light);
+  text-align: center;
+  text-shadow: var(--text-shadow-pixel-small);
+}
+
+/* held sideways the cards close up, and the chapter's number on its corner says what its label
+   would, so the label gives its line to the title */
+@media (max-height: 480px) {
+  .chapter-list {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 18px 12px;
+    margin-top: 18px;
+  }
+
+  .chapter-card {
+    padding: 10px 10px 8px;
+  }
+
+  .chapter-label {
+    display: none;
+  }
+
+  .chapter-title {
+    text-indent: 20px;
+  }
+
+  .chapter-state {
+    margin-top: 2px;
+  }
+}
+
+.hero-sheet {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 24px;
+}
+
+.hero-side {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.hero-side .xp-meter {
+  flex: none;
+  width: 100%;
+}
+
+.portrait-frame {
+  width: 128px;
+  height: 128px;
+  margin: 4px;
+  background: var(--color-panel-deep);
+  box-shadow: var(--shadow-portrait);
+}
+
+.portrait {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+/* the cards share their columns, so every kind, name and cost lines up down the list; the name
+   takes what the kind and the cost leave, and wraps there before either does */
+.move-list {
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
+  container: moves / inline-size;
+}
+
+.move {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: center;
+  column-gap: 12px;
+  margin: 2px;
+  padding: 6px 10px;
+  background: var(--color-panel-deep);
+  box-shadow: var(--shadow-chip);
+}
+
+.move-kind {
+  justify-self: start;
+  padding: 2px 6px;
+  background: var(--color-red-light);
+  color: var(--color-ink);
+  font-size: var(--font-size-note);
+  text-transform: uppercase;
+}
+
+.kind-dribble .move-kind {
+  background: var(--color-jade);
+}
+
+.kind-save .move-kind {
+  background: var(--color-sky);
+}
+
+.kind-tackle .move-kind {
+  background: var(--color-gold);
+}
+
+.move-name {
+  min-width: 0;
+  color: var(--color-gold-light);
+  line-height: var(--leading-tight);
+}
+
+.move.is-locked .move-name {
+  color: var(--color-chalk-dim);
+  letter-spacing: var(--tracking-wide);
+}
+
+.move.is-locked .move-kind {
+  background: var(--color-chalk-dim);
+}
+
+.move-cost {
+  color: var(--color-sky);
+  font-size: var(--font-size-note);
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* where a list is too narrow for a name between its kind and its cost, the name goes under them */
+@container moves (width < 460px) {
+  .move {
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      'kind cost'
+      'name name';
+    row-gap: 6px;
+  }
+
+  .move-kind {
+    grid-area: kind;
+  }
+
+  .move-name {
+    grid-area: name;
+  }
+
+  .move-cost {
+    grid-area: cost;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-sheet {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* a big screen gives the sheet room for the stats and the moves side by side */
+@media (min-width: 1100px) and (min-height: 600px) {
+  .screen-hero .panel {
+    width: min(100%, 1100px);
+  }
+
+  .hero-main {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr 1.4fr;
+    grid-auto-flow: column;
+    align-items: start;
+    column-gap: 32px;
+  }
+
+  .hero-main .panel-subtitle {
+    margin-top: 0;
+  }
+}
+
+/* held sideways the sheet keeps its two columns, the stats two by two */
+@media (max-height: 480px) and (min-width: 601px) {
+  .hero-sheet {
+    grid-template-columns: 150px 1fr;
+    gap: 20px;
+  }
+
+  .stat-list {
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 24px;
+  }
+
+  .hero-side .portrait-frame {
+    width: 96px;
+    height: 96px;
+  }
+}

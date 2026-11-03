@@ -1,0 +1,79 @@
+/* the DOM screens over the canvas: the title shows the canvas's own art, every other screen dims
+   the match behind it, the pause the most */
+.screens {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: var(--color-backdrop);
+  color: var(--color-chalk);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-body);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-ui);
+  -webkit-font-smoothing: none;
+}
+
+.screens[data-screen='title'] {
+  background: var(--color-clear);
+}
+
+.screens[data-screen='pause'] {
+  background: var(--color-backdrop-deep);
+}
+
+/* a screen taller than the phone scrolls, its panel centred while it fits and never cut off */
+.screen {
+  --screen-pad-bottom: max(24px, env(safe-area-inset-bottom));
+
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: max(24px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
+    var(--screen-pad-bottom) max(20px, env(safe-area-inset-left));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+
+.screen > .panel {
+  margin: auto;
+}
+
+/* a button walked to with the pad scrolls into view above the docked row, not under it */
+.screen.is-scrollable {
+  scroll-padding-bottom: 104px;
+}
+
+@media (max-height: 480px) {
+  .screen {
+    --screen-pad-bottom: max(14px, env(safe-area-inset-bottom));
+
+    padding-top: max(18px, env(safe-area-inset-top));
+  }
+}
+
+/* a screen steps in from a little below, a few pixels at a time; the screen moves, not what is
+   in it, so the step never makes a screen that fits look taller than the phone */
+.screen.is-entering {
+  animation: screen-in var(--duration-screen) var(--easing-steps) both;
+}
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen.is-entering {
+    animation: none;
+  }
+}

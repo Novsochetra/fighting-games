@@ -1,0 +1,153 @@
+/* bars of whole pixels: a lit top, a body and a shaded foot, in a dark well with ticks */
+.level-badge {
+  display: inline-block;
+  flex: none;
+  padding: 2px 8px;
+  background: var(--color-gold);
+  box-shadow: var(--shadow-chip);
+  color: var(--color-ink);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+}
+
+.progress-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+}
+
+.xp-meter {
+  position: relative;
+  flex: 1 1 140px;
+  min-width: 120px;
+  height: 14px;
+  margin: 2px;
+  overflow: hidden;
+  background: var(--color-panel-deep);
+  box-shadow: var(--shadow-well);
+}
+
+.xp-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    var(--color-jade-light) 0 4px,
+    var(--color-jade) 4px 10px,
+    var(--color-jade-deep) 10px
+  );
+  transform-origin: 0 0;
+  scale: var(--xp-to, 0) 1;
+}
+
+.xp-meter::after,
+.stat-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-clear) 0 10px,
+    var(--color-panel-deep) 10px 12px
+  );
+  pointer-events: none;
+}
+
+/* after a match the bar fills from where it stood to where the XP takes it */
+.xp-meter.is-filling .xp-fill {
+  animation: xp-fill var(--duration-fill) var(--easing-out) 240ms both;
+}
+
+@keyframes xp-fill {
+  from {
+    scale: var(--xp-from, 0) 1;
+  }
+
+  to {
+    scale: var(--xp-to, 0) 1;
+  }
+}
+
+.xp-note,
+.spirit-line {
+  margin: 0;
+  color: var(--color-chalk-muted);
+  font-size: var(--font-size-note);
+  line-height: var(--leading-tight);
+}
+
+.stat-list,
+.move-list,
+.woken-list,
+.goal-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stat {
+  display: grid;
+  grid-template-columns: minmax(6.5em, auto) 1fr 3ch;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-name {
+  color: var(--color-chalk-muted);
+  text-transform: uppercase;
+}
+
+.stat-bar {
+  position: relative;
+  height: 10px;
+  margin: 2px;
+  overflow: hidden;
+  background: var(--color-panel-deep);
+  box-shadow: var(--shadow-well);
+}
+
+.stat-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    var(--color-gold-light) 0 2px,
+    var(--color-gold) 2px 6px,
+    var(--color-gold-deep) 6px
+  );
+  transform-origin: 0 0;
+  scale: var(--share, 0) 1;
+}
+
+.stat-value {
+  color: var(--color-gold-light);
+  text-align: right;
+}
+
+.volume-cells {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.volume-cells i {
+  width: 6px;
+  height: 14px;
+  background: var(--color-panel-deep);
+}
+
+.volume-cells i.is-on {
+  background: var(--color-gold);
+}
+
+.volume-number {
+  min-width: 3ch;
+  text-align: right;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xp-meter.is-filling .xp-fill {
+    animation: none;
+  }
+}

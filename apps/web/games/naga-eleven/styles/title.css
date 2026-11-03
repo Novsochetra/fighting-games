@@ -1,0 +1,253 @@
+/* the title: NAGA ELEVEN in big gold pixel letters, outlined in ink, a shine sweeping across now
+   and then; the canvas behind draws the title art, and a tap anywhere starts */
+.screen-title {
+  padding: 0;
+  text-align: center;
+}
+
+/* the words stand in boxes measured off the stage (src/ui/screens/title-spots.js): the art's sky
+   over the Naga's heads, or the dark over or under an upright stage; each box is a container,
+   so the words take the largest step of their sizes it holds */
+.title-head {
+  position: absolute;
+  top: var(--head-y, 4vh);
+  left: var(--head-x, 16px);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-sizing: border-box;
+  width: var(--head-width, calc(100% - 32px));
+  height: var(--head-height, 24vh);
+  container: title-head / size;
+  pointer-events: none;
+}
+
+.screen-title .logo {
+  flex-direction: row;
+  column-gap: 0.4em;
+  font-size: var(--font-size-logo-smallest);
+}
+
+.screen-title .logo::before {
+  display: none;
+}
+
+.logo {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-size: var(--font-size-logo);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.logo::before {
+  content: '';
+  width: 2px;
+  height: 2px;
+  margin: 0 62px 46px 0;
+  box-shadow: var(--shadow-ornament-crest);
+  transform-origin: 0 0;
+  scale: 2;
+}
+
+.logo-line {
+  display: block;
+  padding: 0 4px;
+  background:
+    linear-gradient(
+        110deg,
+        var(--color-clear) 0 40%,
+        var(--color-gold-light) 40% 44%,
+        var(--color-clear) 44% 100%
+      )
+      100% 0 / 300% 100% no-repeat,
+    linear-gradient(
+      var(--color-gold-light) 0 28%,
+      var(--color-gold) 28% 62%,
+      var(--color-gold-deep) 62% 100%
+    );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: var(--color-gold);
+  -webkit-text-fill-color: var(--color-clear);
+  filter: drop-shadow(2px 0 0 var(--color-ink)) drop-shadow(-2px 0 0 var(--color-ink))
+    drop-shadow(0 2px 0 var(--color-ink)) drop-shadow(0 -2px 0 var(--color-ink))
+    drop-shadow(0 4px 0 var(--color-red-deep));
+  animation: logo-shine var(--duration-shine) var(--easing-linear) infinite;
+}
+
+.logo-eleven {
+  animation-delay: 160ms;
+}
+
+@keyframes logo-shine {
+  0% {
+    background-position:
+      100% 0,
+      0 0;
+  }
+
+  35%,
+  100% {
+    background-position:
+      0 0,
+      0 0;
+  }
+}
+
+.logo-subtitle {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: var(--color-chalk);
+  font-size: var(--font-size-subtitle-small);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  text-shadow: var(--text-shadow-pixel);
+  pointer-events: none;
+}
+
+/* sideways the name runs on one line over the heads */
+@container title-head (min-width: 450px) and (min-height: 80px) {
+  .screen-title .logo {
+    font-size: var(--font-size-logo-small);
+  }
+}
+
+@container title-head (min-width: 540px) and (min-height: 104px) {
+  .screen-title .logo {
+    font-size: var(--font-size-logo);
+  }
+
+  .logo-subtitle {
+    font-size: var(--font-size-subtitle);
+  }
+}
+
+@container title-head (min-width: 700px) and (min-height: 124px) {
+  .screen-title .logo {
+    font-size: var(--font-size-logo-largest);
+  }
+}
+
+/* upright, the name stands in two lines, as the screen is narrow and the dark over it tall */
+.screen-title:is([data-head='above'], [data-head='below']) .logo {
+  flex-direction: column;
+  font-size: var(--font-size-logo-small);
+}
+
+@container title-head (min-width: 300px) and (min-height: 156px) {
+  .screen-title:is([data-head='above'], [data-head='below']) .logo {
+    font-size: var(--font-size-logo);
+  }
+
+  .screen-title:is([data-head='above'], [data-head='below']) .logo-subtitle {
+    font-size: var(--font-size-subtitle);
+  }
+}
+
+@container title-head (min-width: 350px) and (min-height: 176px) {
+  .screen-title:is([data-head='above'], [data-head='below']) .logo {
+    font-size: var(--font-size-logo-large);
+  }
+}
+
+@container title-head (min-width: 400px) and (min-height: 200px) {
+  .screen-title:is([data-head='above'], [data-head='below']) .logo {
+    font-size: var(--font-size-logo-largest);
+  }
+}
+
+/* the whole screen is the button; its words stand in their own box under the boy */
+.press-start {
+  position: absolute;
+  inset: 0;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-gold-light);
+  font: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+.press-start-spot {
+  position: absolute;
+  top: var(--prompt-y, 82%);
+  left: var(--prompt-x, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--prompt-width, 100%);
+  height: var(--prompt-height, 14%);
+  container: title-prompt / size;
+}
+
+.press-start-label {
+  font-size: var(--font-size-prompt-smallest);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+  text-transform: uppercase;
+  text-shadow: var(--text-shadow-pixel);
+  animation: press-blink var(--duration-blink) var(--easing-linear) infinite;
+}
+
+@container title-prompt (min-height: 30px) {
+  .press-start-label {
+    font-size: var(--font-size-prompt-small);
+  }
+}
+
+@container title-prompt (min-height: 48px) {
+  .press-start-label {
+    font-size: var(--font-size-prompt);
+  }
+}
+
+/* past the boy's ball, on a phone held sideways, the prompt stays a caption at his feet */
+.screen-title[data-prompt='beside'] .press-start-spot {
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.screen-title[data-prompt='beside'] .press-start-label {
+  font-size: var(--font-size-prompt-small);
+}
+
+.press-start:focus .press-start-label {
+  color: var(--color-gold);
+}
+
+@keyframes press-blink {
+  0%,
+  58% {
+    opacity: 1;
+  }
+
+  60%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-line,
+  .press-start-label {
+    animation: none;
+  }
+}

@@ -1,0 +1,317 @@
+/* Naga Eleven's colours, type and motion: deep night-blue panels in gold frames with Khmer
+   corners, the Silkscreen pixel face for English and the device's own face for Khmer */
+:root {
+  --color-night: #0b0e18;
+  --color-ink: #06070f;
+  --color-panel-deep: #0b1533;
+  --color-panel: #12204a;
+  --color-panel-light: #1d3170;
+  --color-panel-shine: #2a4590;
+  --color-rim: #3d5bb0;
+  --color-chalk: #f4f1e8;
+  --color-chalk-muted: #a9b4d4;
+  --color-chalk-dim: #67729a;
+  --color-gold-light: #fff3b8;
+  --color-gold: #ffd25a;
+  --color-gold-deep: #d08f1f;
+  --color-gold-shade: #7a4410;
+  --color-red-light: #ff7a5c;
+  --color-red: #d8413a;
+  --color-red-deep: #8a1d24;
+  --color-jade-light: #8ef0b0;
+  --color-jade: #45c97a;
+  --color-jade-deep: #1c7a48;
+  --color-sky: #6ec8ff;
+  --color-kit-neutral: #8a92aa;
+  --color-clear: transparent;
+  --color-drop: color-mix(in srgb, var(--color-ink) 65%, transparent);
+  --color-backdrop: color-mix(in srgb, var(--color-night) 60%, transparent);
+  --color-backdrop-deep: color-mix(in srgb, var(--color-night) 82%, transparent);
+  --color-panel-glass: color-mix(in srgb, var(--color-panel) 95%, transparent);
+  --color-pad-glass: color-mix(in srgb, var(--color-panel-light) 42%, transparent);
+  --color-pad-glass-deep: color-mix(in srgb, var(--color-panel-deep) 62%, transparent);
+  --color-pad-glint: color-mix(in srgb, var(--color-chalk) 50%, transparent);
+  --color-pad-rim: color-mix(in srgb, var(--color-chalk) 72%, transparent);
+  --color-pad-on: color-mix(in srgb, var(--color-gold) 62%, transparent);
+  --color-pad-gold-glass: color-mix(in srgb, var(--color-gold-deep) 40%, transparent);
+  --color-panel-dot: color-mix(in srgb, var(--color-panel-light) 55%, var(--color-panel));
+  --color-dock-fade: color-mix(in srgb, var(--color-panel-deep) 40%, transparent);
+  --color-dock-fade-deep: color-mix(in srgb, var(--color-panel-deep) 75%, transparent);
+
+  --font-pixel: 'Silkscreen', ui-monospace, monospace;
+  --font-khmer:
+    'Khmer Sangam MN', 'Noto Sans Khmer', 'Khmer UI', 'Khmer OS', 'Leelawadee UI', sans-serif;
+  --font-ui: var(--font-pixel);
+  /* only the touch pad's pause key still reads the micro size, at twice it (touch.css) */
+  --font-size-micro: 8px;
+  --font-size-note: 16px;
+  --font-size-body: 16px;
+  --font-size-button: 16px;
+  --font-size-title: 24px;
+  --font-size-score: 48px;
+  --font-size-pad: 16px;
+
+  /* the title's words come in steps, as Silkscreen stays crisp only at whole multiples of 8 px:
+     title.css picks the step the room over the title art holds */
+  --font-size-logo-largest: 64px;
+  --font-size-logo-large: 56px;
+  --font-size-logo: 48px;
+  --font-size-logo-small: 40px;
+  --font-size-logo-smallest: 32px;
+  --font-size-subtitle: 24px;
+  --font-size-subtitle-small: 16px;
+  --font-size-prompt: 24px;
+  --font-size-prompt-small: 16px;
+  --font-size-prompt-smallest: 16px;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+  --leading-tight: 1.1;
+  --leading-body: 1.5;
+  --tracking-ui: 0.04em;
+  --tracking-wide: 0.12em;
+
+  --radius-round: 50%;
+
+  --duration-instant: 0ms;
+  --duration-quick: 120ms;
+  --duration-screen: 280ms;
+  --duration-pop: 420ms;
+  --duration-touch-pop: 320ms;
+  --duration-bob: 800ms;
+  --duration-blink: 1200ms;
+  --duration-fill: 1100ms;
+  --duration-shine: 3600ms;
+  --easing-steps: steps(5, end);
+  --easing-blink: steps(2, jump-none);
+  --easing-linear: linear;
+  --easing-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --easing-overshoot: cubic-bezier(0.3, 1.6, 0.5, 1);
+
+  --clip-notch: polygon(
+    2px 0,
+    calc(100% - 2px) 0,
+    calc(100% - 2px) 2px,
+    100% 2px,
+    100% calc(100% - 2px),
+    calc(100% - 2px) calc(100% - 2px),
+    calc(100% - 2px) 100%,
+    2px 100%,
+    2px calc(100% - 2px),
+    0 calc(100% - 2px),
+    0 2px,
+    2px 2px
+  );
+
+  /* a pixel arrow, and a shirt and shorts, on whole pixels so their edges stay crisp */
+  --clip-arrow: polygon(
+    10px 0,
+    10px 18px,
+    8px 18px,
+    8px 16px,
+    6px 16px,
+    6px 14px,
+    4px 14px,
+    4px 12px,
+    2px 12px,
+    2px 10px,
+    0 10px,
+    0 8px,
+    2px 8px,
+    2px 6px,
+    4px 6px,
+    4px 4px,
+    6px 4px,
+    6px 2px,
+    8px 2px,
+    8px 0
+  );
+  --clip-shirt: polygon(
+    0 4px,
+    4px 4px,
+    4px 2px,
+    8px 2px,
+    8px 0,
+    12px 0,
+    12px 2px,
+    20px 2px,
+    20px 0,
+    24px 0,
+    24px 2px,
+    28px 2px,
+    28px 4px,
+    32px 4px,
+    32px 12px,
+    26px 12px,
+    26px 22px,
+    6px 22px,
+    6px 12px,
+    0 12px
+  );
+  --clip-shorts: polygon(0 0, 20px 0, 20px 12px, 12px 12px, 12px 6px, 8px 6px, 8px 12px, 0 12px);
+
+  --text-shadow-pixel: 2px 2px 0 var(--color-ink);
+  --text-shadow-pixel-small: 1px 1px 0 var(--color-ink);
+
+  /* stepped pixel edges: an ink outline with its corner pixels left out, a rim inside it, and a
+     lit top and a shaded foot; outer shadows are offset, never blurred */
+  --shadow-outline:
+    0 -2px var(--color-ink), 0 2px var(--color-ink), -2px 0 var(--color-ink),
+    2px 0 var(--color-ink), 0 4px var(--color-drop);
+  --shadow-button:
+    var(--shadow-outline), inset 0 0 0 2px var(--color-rim), inset 0 4px var(--color-panel-shine),
+    inset 0 -4px var(--color-panel-deep);
+  --shadow-button-focus:
+    var(--shadow-outline), inset 0 0 0 2px var(--color-gold), inset 0 4px var(--color-gold-light),
+    inset 0 -4px var(--color-gold-deep);
+  --shadow-button-primary:
+    var(--shadow-outline), inset 0 0 0 2px var(--color-gold-deep),
+    inset 0 4px var(--color-red-light), inset 0 -4px var(--color-red-deep);
+  --shadow-button-pressed:
+    0 -2px var(--color-ink), 0 2px var(--color-ink), -2px 0 var(--color-ink),
+    2px 0 var(--color-ink), inset 0 0 0 2px var(--color-gold), inset 0 4px var(--color-panel-deep);
+  --shadow-panel:
+    0 0 0 2px var(--color-gold), 0 0 0 4px var(--color-gold-deep), 0 0 0 6px var(--color-ink),
+    0 10px 0 6px var(--color-drop), inset 0 2px var(--color-panel-light),
+    inset 0 -2px var(--color-panel-deep);
+  --shadow-well:
+    0 -2px var(--color-ink), 0 2px var(--color-ink), -2px 0 var(--color-ink),
+    2px 0 var(--color-ink), inset 0 2px var(--color-ink);
+  --shadow-chip:
+    0 -2px var(--color-ink), 0 2px var(--color-ink), -2px 0 var(--color-ink), 2px 0 var(--color-ink);
+  --shadow-card: var(--shadow-chip), inset 0 0 0 2px var(--color-panel-light);
+  --shadow-card-current: var(--shadow-chip), inset 0 0 0 2px var(--color-gold);
+  --shadow-portrait: 0 0 0 2px var(--color-gold), 0 0 0 4px var(--color-ink);
+  --shadow-key: var(--shadow-chip), inset 0 -4px var(--color-chalk-muted);
+  --shadow-pad:
+    0 0 0 2px var(--color-ink), inset 0 0 0 2px var(--color-ink), 0 4px 0 2px var(--color-drop);
+  --shadow-pad-on: 0 0 0 2px var(--color-ink), inset 0 0 0 2px var(--color-ink);
+
+  /* the gilded Khmer corner, its crest over a title and the menu's cursor, as pixel art: one
+     shadow a pixel two px square, cast off an element of that size, as a shadow never paints
+     under its own box */
+  --shadow-ornament-corner:
+    2px 2px var(--color-ink), 4px 2px var(--color-ink), 6px 2px var(--color-ink),
+    8px 2px var(--color-ink), 10px 2px var(--color-ink), 12px 2px var(--color-ink),
+    14px 2px var(--color-ink), 16px 2px var(--color-ink), 2px 4px var(--color-ink),
+    4px 4px var(--color-gold-light), 6px 4px var(--color-gold-light),
+    8px 4px var(--color-gold-light), 10px 4px var(--color-gold-light), 12px 4px var(--color-gold),
+    14px 4px var(--color-gold), 16px 4px var(--color-gold-deep), 18px 4px var(--color-ink),
+    2px 6px var(--color-ink), 4px 6px var(--color-gold-light), 6px 6px var(--color-gold),
+    8px 6px var(--color-gold), 10px 6px var(--color-gold), 12px 6px var(--color-gold),
+    14px 6px var(--color-gold-deep), 16px 6px var(--color-gold-deep),
+    18px 6px var(--color-gold-shade), 20px 6px var(--color-ink), 2px 8px var(--color-ink),
+    4px 8px var(--color-gold-light), 6px 8px var(--color-gold), 8px 8px var(--color-ink),
+    10px 8px var(--color-ink), 12px 8px var(--color-ink), 14px 8px var(--color-ink),
+    16px 8px var(--color-gold-deep), 18px 8px var(--color-gold-shade), 20px 8px var(--color-ink),
+    2px 10px var(--color-ink), 4px 10px var(--color-gold-light), 6px 10px var(--color-gold),
+    8px 10px var(--color-ink), 10px 10px var(--color-red-light), 12px 10px var(--color-red),
+    14px 10px var(--color-ink), 16px 10px var(--color-gold-deep), 18px 10px var(--color-gold-shade),
+    20px 10px var(--color-ink), 2px 12px var(--color-ink), 4px 12px var(--color-gold),
+    6px 12px var(--color-gold), 8px 12px var(--color-ink), 10px 12px var(--color-red),
+    12px 12px var(--color-red), 14px 12px var(--color-ink), 16px 12px var(--color-gold-shade),
+    18px 12px var(--color-ink), 2px 14px var(--color-ink), 4px 14px var(--color-gold),
+    6px 14px var(--color-gold-deep), 8px 14px var(--color-ink), 10px 14px var(--color-ink),
+    12px 14px var(--color-ink), 14px 14px var(--color-gold-shade), 16px 14px var(--color-ink),
+    18px 14px var(--color-gold-light), 20px 14px var(--color-ink), 2px 16px var(--color-ink),
+    4px 16px var(--color-gold-deep), 6px 16px var(--color-gold-deep),
+    8px 16px var(--color-gold-deep), 10px 16px var(--color-gold-shade),
+    12px 16px var(--color-gold-shade), 14px 16px var(--color-ink),
+    16px 16px var(--color-gold-light), 18px 16px var(--color-gold),
+    20px 16px var(--color-gold-deep), 22px 16px var(--color-ink), 4px 18px var(--color-ink),
+    6px 18px var(--color-gold-shade), 8px 18px var(--color-gold-shade), 10px 18px var(--color-ink),
+    12px 18px var(--color-ink), 14px 18px var(--color-gold-light), 16px 18px var(--color-gold),
+    18px 18px var(--color-gold-deep), 20px 18px var(--color-ink), 6px 20px var(--color-ink),
+    8px 20px var(--color-ink), 10px 20px var(--color-ink), 12px 20px var(--color-gold-light),
+    14px 20px var(--color-gold), 16px 20px var(--color-gold-deep), 18px 20px var(--color-ink),
+    8px 22px var(--color-ink), 10px 22px var(--color-ink), 12px 22px var(--color-gold),
+    14px 22px var(--color-gold-deep), 16px 22px var(--color-ink), 12px 24px var(--color-ink),
+    14px 24px var(--color-ink);
+  --shadow-ornament-crest:
+    14px 2px var(--color-ink), 16px 2px var(--color-ink), 12px 4px var(--color-ink),
+    14px 4px var(--color-gold-light), 16px 4px var(--color-gold), 18px 4px var(--color-ink),
+    10px 6px var(--color-ink), 12px 6px var(--color-gold-light), 14px 6px var(--color-gold),
+    16px 6px var(--color-red), 18px 6px var(--color-gold-deep), 20px 6px var(--color-ink),
+    2px 8px var(--color-ink), 4px 8px var(--color-ink), 6px 8px var(--color-ink),
+    8px 8px var(--color-ink), 10px 8px var(--color-gold-light), 12px 8px var(--color-gold),
+    14px 8px var(--color-red), 16px 8px var(--color-red-light), 18px 8px var(--color-red),
+    20px 8px var(--color-gold-deep), 22px 8px var(--color-ink), 24px 8px var(--color-ink),
+    26px 8px var(--color-ink), 28px 8px var(--color-ink), 2px 10px var(--color-gold-light),
+    4px 10px var(--color-gold-light), 6px 10px var(--color-gold), 8px 10px var(--color-gold),
+    10px 10px var(--color-gold-deep), 12px 10px var(--color-ink), 14px 10px var(--color-red),
+    16px 10px var(--color-red), 18px 10px var(--color-ink), 20px 10px var(--color-gold-deep),
+    22px 10px var(--color-gold-deep), 24px 10px var(--color-gold), 26px 10px var(--color-gold),
+    28px 10px var(--color-gold-shade), 2px 12px var(--color-ink), 4px 12px var(--color-ink),
+    6px 12px var(--color-ink), 8px 12px var(--color-ink), 10px 12px var(--color-gold-shade),
+    12px 12px var(--color-gold-deep), 14px 12px var(--color-ink), 16px 12px var(--color-ink),
+    18px 12px var(--color-gold-deep), 20px 12px var(--color-gold-shade), 22px 12px var(--color-ink),
+    24px 12px var(--color-ink), 26px 12px var(--color-ink), 28px 12px var(--color-ink),
+    10px 14px var(--color-ink), 12px 14px var(--color-gold-shade), 14px 14px var(--color-gold-deep),
+    16px 14px var(--color-gold-deep), 18px 14px var(--color-gold-shade), 20px 14px var(--color-ink),
+    12px 16px var(--color-ink), 14px 16px var(--color-gold-shade),
+    16px 16px var(--color-gold-shade), 18px 16px var(--color-ink), 14px 18px var(--color-ink),
+    16px 18px var(--color-ink);
+  --shadow-cursor:
+    2px 2px var(--color-ink), 4px 2px var(--color-ink), 2px 4px var(--color-ink),
+    4px 4px var(--color-gold-light), 6px 4px var(--color-ink), 2px 6px var(--color-ink),
+    4px 6px var(--color-gold-light), 6px 6px var(--color-gold), 8px 6px var(--color-ink),
+    2px 8px var(--color-ink), 4px 8px var(--color-gold-light), 6px 8px var(--color-gold),
+    8px 8px var(--color-gold-deep), 10px 8px var(--color-ink), 2px 10px var(--color-ink),
+    4px 10px var(--color-gold), 6px 10px var(--color-gold-deep), 8px 10px var(--color-ink),
+    2px 12px var(--color-ink), 4px 12px var(--color-gold-deep), 6px 12px var(--color-ink),
+    2px 14px var(--color-ink), 4px 14px var(--color-ink);
+
+  /* the cursor turned to point down, under a panel's last line while there is more below */
+  --shadow-more:
+    2px 2px var(--color-ink), 2px 4px var(--color-ink), 4px 2px var(--color-ink),
+    4px 4px var(--color-gold-light), 4px 6px var(--color-ink), 6px 2px var(--color-ink),
+    6px 4px var(--color-gold-light), 6px 6px var(--color-gold), 6px 8px var(--color-ink),
+    8px 2px var(--color-ink), 8px 4px var(--color-gold-light), 8px 6px var(--color-gold),
+    8px 8px var(--color-gold-deep), 8px 10px var(--color-ink), 10px 2px var(--color-ink),
+    10px 4px var(--color-gold), 10px 6px var(--color-gold-deep), 10px 8px var(--color-ink),
+    12px 2px var(--color-ink), 12px 4px var(--color-gold-deep), 12px 6px var(--color-ink),
+    14px 2px var(--color-ink), 14px 4px var(--color-ink);
+}
+
+/* Khmer's stacked letters want a larger size and taller lines than the pixel face */
+:lang(km) {
+  --font-ui: var(--font-khmer);
+  --font-size-micro: 12px;
+  --font-size-note: 16px;
+  --font-size-body: 18px;
+  --font-size-button: 18px;
+  --font-size-title: 26px;
+  --font-size-subtitle: 24px;
+  --font-size-subtitle-small: 16px;
+  --font-size-prompt: 26px;
+  --font-size-prompt-small: 18px;
+  --font-size-prompt-smallest: 14px;
+  --leading-tight: 1.5;
+  --leading-body: 1.75;
+  --tracking-ui: normal;
+  --tracking-wide: normal;
+}
+
+:lang(en) {
+  --font-ui: var(--font-pixel);
+  --font-size-micro: 8px;
+  --font-size-note: 16px;
+  --font-size-body: 16px;
+  --font-size-button: 16px;
+  --font-size-title: 24px;
+  --font-size-subtitle: 24px;
+  --font-size-subtitle-small: 16px;
+  --font-size-prompt: 24px;
+  --font-size-prompt-small: 16px;
+  --font-size-prompt-smallest: 16px;
+  --leading-tight: 1.1;
+  --leading-body: 1.5;
+  --tracking-ui: 0.04em;
+  --tracking-wide: 0.12em;
+}
+
+/* a phone held sideways has little height: the score comes down a step */
+@media (max-height: 480px) {
+  :root {
+    --font-size-score: 32px;
+  }
+}

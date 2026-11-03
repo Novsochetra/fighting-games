@@ -1,0 +1,132 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--color-night);
+  color: var(--color-chalk);
+  font-family: var(--font-ui);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: var(--color-clear);
+}
+
+/* a screen's own display rules must never show what it hides */
+[hidden] {
+  display: none !important;
+}
+
+#app {
+  position: fixed;
+  inset: 0;
+}
+
+#pitch {
+  position: absolute;
+  image-rendering: pixelated;
+  outline: none;
+}
+
+/* src/ui/stage.js: shown smaller than a screen pixel to each of its own */
+#pitch.is-shrunk {
+  image-rendering: auto;
+}
+
+/* a phone held upright would show the pitch as a strip a quarter of its height: this card asks for
+   it sideways, and the match waits under it (src/ui/turn-card.js) */
+.turn-card {
+  --turn-pixel: 4px;
+
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: max(40px, env(safe-area-inset-top)) 28px max(40px, env(safe-area-inset-bottom));
+  background:
+    conic-gradient(at 2px 2px, var(--color-clear) 75%, var(--color-panel-dot) 0) 0 0 / 8px 8px,
+    var(--color-night);
+  color: var(--color-chalk);
+  font-family: var(--font-ui);
+  touch-action: none;
+  -webkit-font-smoothing: none;
+}
+
+.is-upright .turn-card {
+  display: flex;
+}
+
+.turn-panel {
+  width: min(100%, 320px);
+  text-align: center;
+}
+
+/* drawn sideways, as the phone ends up: a quarter turn stands it upright, and the margins keep the
+   room it takes upright, as a turn moves nothing round it */
+.turn-phone {
+  display: block;
+  width: calc(33 * var(--turn-pixel));
+  height: calc(19 * var(--turn-pixel));
+  margin: calc(7 * var(--turn-pixel)) auto calc(11 * var(--turn-pixel));
+  image-rendering: pixelated;
+  rotate: 90deg;
+  animation: turn-phone var(--duration-shine) var(--easing-linear) infinite;
+}
+
+/* each line sets its own face, as an inherited one was worked out under the page's lang, not the
+   line's own */
+.turn-title {
+  margin-bottom: 14px;
+  font-family: var(--font-ui);
+}
+
+.turn-khmer {
+  margin: 0;
+  color: var(--color-chalk);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-body);
+  line-height: var(--leading-body);
+  text-shadow: var(--text-shadow-pixel-small);
+}
+
+@keyframes turn-phone {
+  0% {
+    opacity: 0;
+    rotate: 90deg;
+  }
+
+  8% {
+    opacity: 1;
+    rotate: 90deg;
+  }
+
+  32% {
+    rotate: 90deg;
+    animation-timing-function: var(--easing-overshoot);
+  }
+
+  52% {
+    rotate: 0deg;
+  }
+
+  90% {
+    opacity: 1;
+    rotate: 0deg;
+  }
+
+  100% {
+    opacity: 0;
+    rotate: 0deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .turn-phone {
+    rotate: none;
+    animation: none;
+  }
+}

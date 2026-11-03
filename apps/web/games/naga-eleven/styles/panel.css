@@ -1,0 +1,168 @@
+/* a night-blue panel in a gilded frame (gold, deep gold, ink), with a Khmer corner at each corner
+   and a crest over its title; the ornaments are pixel art drawn by box shadows (styles/tokens.css) */
+.panel {
+  --panel-pad-top: 28px;
+  --panel-pad-side: 24px;
+  --panel-pad-bottom: 24px;
+
+  position: relative;
+  box-sizing: border-box;
+  width: min(100%, 440px);
+  padding: var(--panel-pad-top) var(--panel-pad-side) var(--panel-pad-bottom);
+  background:
+    conic-gradient(at 2px 2px, var(--color-clear) 75%, var(--color-panel-dot) 0) 0 0 / 8px 8px,
+    linear-gradient(
+      var(--color-panel-light) 0 10px,
+      var(--color-panel) 10px calc(100% - 10px),
+      var(--color-panel-deep) calc(100% - 10px)
+    );
+  box-shadow: var(--shadow-panel);
+}
+
+.wide-panel {
+  width: min(100%, 760px);
+}
+
+.panel::before,
+.panel::after,
+.panel-trim::before,
+.panel-trim::after,
+.panel-title::before {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  width: 2px;
+  height: 2px;
+  box-shadow: var(--shadow-ornament-corner);
+  pointer-events: none;
+}
+
+.panel::before {
+  top: -8px;
+  left: -8px;
+}
+
+.panel::after {
+  top: -8px;
+  right: -8px;
+  scale: -1 1;
+}
+
+.panel-trim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.panel-trim::before {
+  bottom: -8px;
+  left: -8px;
+  scale: 1 -1;
+}
+
+.panel-trim::after {
+  right: -8px;
+  bottom: -8px;
+  scale: -1 -1;
+}
+
+.panel-title {
+  margin: 0 0 18px;
+  color: var(--color-gold);
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-wide);
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: var(--text-shadow-pixel);
+}
+
+.panel-title::before {
+  top: -16px;
+  left: calc(50% - 16px);
+  box-shadow: var(--shadow-ornament-crest);
+}
+
+.panel-title::after {
+  content: '';
+  display: block;
+  width: min(60%, 240px);
+  height: 2px;
+  margin: 10px auto 0;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-gold-deep) 0 4px,
+    var(--color-clear) 4px 8px
+  );
+}
+
+.panel-subtitle {
+  margin: 18px 0 10px;
+  color: var(--color-gold-light);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  text-shadow: var(--text-shadow-pixel-small);
+}
+
+.panel-subtitle:first-child {
+  margin-top: 0;
+}
+
+/* a question over the panel's own buttons, which step back behind it */
+.confirm {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px;
+  background: inherit;
+  text-align: center;
+}
+
+.confirm-ask {
+  margin: 0;
+  max-width: 22em;
+  color: var(--color-chalk);
+  text-shadow: var(--text-shadow-pixel-small);
+}
+
+.confirm-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 32px;
+}
+
+.is-confirming .button-list,
+.is-confirming .panel-title {
+  visibility: hidden;
+}
+
+/* a phone held sideways: the panel and its title close up; after the rules above, which would
+   set them back otherwise */
+@media (max-height: 480px) {
+  .panel {
+    --panel-pad-top: 20px;
+    --panel-pad-side: 20px;
+    --panel-pad-bottom: 16px;
+  }
+
+  .panel-title {
+    margin-bottom: 12px;
+  }
+
+  .panel-title::after {
+    margin-top: 6px;
+  }
+
+  .panel-subtitle {
+    margin: 12px 0 8px;
+  }
+}

@@ -1,0 +1,23 @@
+export const CROP_HAIR = {
+  x: 19,
+  y: 5,
+  rows: [
+    '.......hhhhhhhhhggg.......',
+    '....hHHHHHHhhhhhhhhggg....',
+    '..hHHHHHhhhhhhhhhhhhhggg..',
+    '.hHHhhhhhhhhHHHhhhhhhhggg.',
+    'hhhhhhhhghhhhhhhghhhhhhggg',
+    'hhhhhhhhhhhhhhhhhhhhhhhggg',
+    'hhhhhghhhhhghhhhhhhhhhhggg',
+    'hhhhhhhgghhhhhggghhghhhggg',
+    'hhhhgggkkgggggkkkggggghggg',
+    'hhhgkkk..kkkkk...kkkkkgggg',
+    'hggk..................kggg',
+    'ggg....................ggg',
+    'ggg....................ggg',
+    'ggg....................ggg',
+    'ggg....................ggg',
+    'ggg....................ggg',
+    'kkk....................kkk',
+  ],
+};

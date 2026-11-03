@@ -1661,6 +1661,45 @@ The replays swap `Math.sin` and `Math.cos` for a port of V8's fdlibm (`test/supp
 on Apple Silicon the native ones round about one result in 200 differently from x64, where the
 fixtures were recorded and CI runs, so without it a Mac fails runs no change touched.
 
+## Game: Naga Eleven
+
+The Sochetra story: a boy from a village in Kampong Cham who wins the primary schools cup (7 v 7),
+the high schools (11 v 11), the Asian Youth Championship and the World Championship with Cambodia,
+told in English and Khmer. Its bible, `games/naga-eleven/README.md`, holds the story, the cast, the
+rules every part follows and the contracts the parts meet at; this section is the map.
+
+It keeps Steel & Dust's split and adds three logic folders: `src/story/` (the scene player and the
+watch on a match that fires its story moments), `src/campaign/` (the save, the walk through the
+chapters, cup tables, XP and levels) and `src/training/` (the three drills' rules). `src/data/`
+holds the content: `story/` (four chapters of stages and scenes), `teams/`, `characters.js`,
+`moves.js`, `formats.js` (7 and 11 a side: pitch, goals, formation), `progression.js`,
+`training.js` and `music/`.
+
+- **The match** (`src/sim/`): one `match` object stepped at 60 Hz, deterministic from its seed
+  (its own random, square roots, no trig), so `test/regression/` replays recorded matches to the
+  bit. Stats drive play; restarts, halves, lofted passes, volleys and headers are in. Duels
+  (`src/sim/duel/`) hang on `match.hooks`: two named stars meeting, or a star's special shot,
+  stop play for a choice of moves, and `finishDuel` writes the outcome back. A drawn knockout goes
+  to penalties there too.
+- **Drawing** (`src/render/`): a camera on a rail beside the near touchline (`camera.js`, 1.45
+  canvas px a world unit, the far side smaller), six venues baked once a match
+  (`venues/`), the PixelLab footballer recoloured per kit (`actors/`, sheets in
+  `assets/sprites/`, its kit ramps in `src/art/sprite-kit.js`), effects, the HUD and minimap, and
+  the canvas screens: portraits built from pixel-map parts (`portraits/`), the dialogue box
+  (`dialogue/`), backdrops and the title art, duel cut-ins (`duel/`), drills (`training/`), and
+  television's intro, goal replay and boards (`cinematics/`, `replay/`).
+- **Sound** (`src/audio/`): every effect and the pinpeat-coloured music synthesized with Web Audio,
+  from the match's events.
+- **The app** (`src/ui/`): the DOM screens over the canvas (`screens/`: title, menu, chapters,
+  hero, line-up, result, quick match, settings, pause, how to play), and the lead's glue:
+  `flow/story-run.js` walks a save through the stages screen by screen (pure, tested on the real
+  chapters), `flow/` the scene, drill and match sessions (a match session runs the sim, the duel
+  shows, the story moments, the replay and the boards), `app/` the screens' actions and what the
+  canvas shows, and `main.js` the wiring.
+
+`test/support/pixel-canvas.js` draws any renderer into plain pixels in Node and writes a png, which
+is how the art was checked without a browser.
+
 ## Tests
 
 Each app keeps its tests next to it, split by kind, and Vitest runs them as three projects:

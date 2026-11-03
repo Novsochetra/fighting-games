@@ -1,0 +1,14 @@
+{
+  "id": "naga-eleven",
+  "title": "Naga Eleven",
+  "tagline": "The Sochetra story",
+  "description": "A boy from a village in Kampong Cham has a gift for football. Play his story: win the primary schools cup, then the high schools, then the Asian Youth Championship with Cambodia, and face the world's best at the World Championship. 7 v 7 and 11 v 11 pixel football with rival duels, special moves woken by training, and a story told in English and Khmer.",
+  "genre": "Sports story",
+  "players": "1 player",
+  "year": 2026,
+  "controls": ["Keyboard", "Gamepad", "Touch"],
+  "cover": "assets/icons/icon-512.png",
+  "banner": "assets/key-art/banner.png",
+  "poster": "assets/key-art/poster.png",
+  "screenshot": "assets/screenshots/sochetra-strikes.png"
+}

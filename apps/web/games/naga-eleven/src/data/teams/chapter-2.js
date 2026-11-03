@@ -1,0 +1,110 @@
+import { hero, member, starPlayer, team, withSpirit } from './squad.js';
+
+const school = ({ id, en, km, short, players }) =>
+  team({ id, name: { en, km }, short, format: '11', players });
+
+// high school players: stats around 45 to 65, Rithy above Sochetra at fifteen
+export const CHAPTER_2_TEAMS = [
+  school({
+    id: 'kampong-cham-high',
+    en: 'Kampong Cham High',
+    km: 'វិទ្យាល័យកំពង់ចាម',
+    short: 'KCH',
+    players: [
+      starPlayer('dara', 1, [46, 30, 42, 34, 40, 60, 52], ['angkor-wall']),
+      member({ en: 'Kosal', km: 'កុសល' }, 2, [52, 36, 46, 42, 58, 10, 56]),
+      member({ en: 'Narith', km: 'ណារិទ្ធ' }, 4, [50, 38, 44, 40, 60, 10, 54]),
+      member({ en: 'Kimheng', km: 'គីមហេង' }, 5, [50, 36, 46, 42, 58, 10, 56]),
+      member({ en: 'Visal', km: 'វិសាល' }, 3, [54, 38, 48, 46, 56, 10, 56]),
+      member({ en: 'Pisey', km: 'ពិសី' }, 6, [52, 46, 58, 52, 50, 10, 56]),
+      member({ en: 'Vichea', km: 'វិជ្ជា' }, 8, [54, 48, 56, 54, 48, 10, 60]),
+      member({ en: 'Vuthy', km: 'វុទ្ធី' }, 14, [54, 46, 54, 52, 50, 10, 58]),
+      member({ en: 'Tola', km: 'តុលា' }, 7, [58, 52, 48, 56, 40, 10, 54]),
+      hero(),
+      member({ en: 'Bunthoeun', km: 'ប៊ុនធឿន' }, 11, [58, 50, 48, 56, 40, 10, 54]),
+    ],
+  }),
+  school({
+    id: 'siem-reap-high',
+    en: 'Siem Reap High',
+    km: 'វិទ្យាល័យសៀមរាប',
+    short: 'SRH',
+    players: [
+      member({ en: 'Sakda', km: 'សក្ដា' }, 1, [44, 26, 38, 30, 36, 54, 50]),
+      member({ en: 'Chanra', km: 'ចាន់រ៉ា' }, 2, [48, 34, 42, 38, 54, 10, 50]),
+      member({ en: 'Bunna', km: 'ប៊ុនណា' }, 4, [46, 34, 40, 36, 55, 10, 50]),
+      member({ en: 'Rady', km: 'រ៉ាឌី' }, 5, [46, 32, 42, 38, 53, 10, 52]),
+      member({ en: 'Sokhom', km: 'សុខុម' }, 3, [50, 36, 44, 42, 52, 10, 52]),
+      member({ en: 'Vanny', km: 'វ៉ាន់នី' }, 6, [48, 42, 52, 48, 46, 10, 52]),
+      member({ en: 'Phearom', km: 'ភារម្យ' }, 8, [50, 44, 54, 50, 44, 10, 54]),
+      member({ en: 'Sopheap', km: 'សុភាព' }, 14, [50, 44, 50, 50, 42, 10, 52]),
+      member({ en: 'Mengly', km: 'ម៉េងលី' }, 7, [54, 48, 44, 52, 36, 10, 50]),
+      member({ en: 'Sereyvuth', km: 'សិរីវុធ' }, 9, [52, 54, 42, 50, 34, 10, 50]),
+      member({ en: 'Pheaktra', km: 'ភក្ត្រា' }, 11, [54, 48, 44, 52, 36, 10, 50]),
+    ],
+  }),
+  school({
+    id: 'battambang-high',
+    en: 'Battambang High',
+    km: 'វិទ្យាល័យបាត់ដំបង',
+    short: 'BBH',
+    players: [
+      member({ en: 'Chhay', km: 'ឆាយ' }, 1, [46, 28, 40, 30, 38, 56, 52]),
+      member({ en: 'Lyhour', km: 'លីហួរ' }, 2, [50, 36, 42, 38, 57, 10, 54]),
+      member({ en: 'Daravuth', km: 'ដារ៉ាវុធ' }, 4, [48, 36, 42, 36, 58, 10, 54]),
+      member({ en: 'Bunrith', km: 'ប៊ុនរិទ្ធ' }, 5, [48, 34, 42, 38, 57, 10, 54]),
+      member({ en: 'Kimsan', km: 'គីមសាន' }, 3, [52, 38, 44, 42, 55, 10, 54]),
+      member({ en: 'Sovath', km: 'សុវត្ថិ' }, 6, [50, 44, 54, 50, 50, 10, 56]),
+      member({ en: 'Raksa', km: 'រក្សា' }, 8, [52, 46, 55, 52, 48, 10, 56]),
+      member({ en: 'Vannda', km: 'វណ្ណដា' }, 16, [52, 46, 52, 52, 46, 10, 56]),
+      member({ en: 'Kimleng', km: 'គីមឡេង' }, 7, [56, 50, 46, 54, 38, 10, 52]),
+      member({ en: 'Samrith', km: 'សំរិទ្ធ' }, 9, [54, 56, 44, 52, 36, 10, 52]),
+      member({ en: 'Sokleap', km: 'សុខលាភ' }, 11, [56, 50, 46, 54, 38, 10, 52]),
+    ],
+  }),
+  school({
+    id: 'kampot-high',
+    en: 'Kampot High',
+    km: 'វិទ្យាល័យកំពត',
+    short: 'KPH',
+    players: [
+      member({ en: 'Saroeun', km: 'សារឿន' }, 1, [48, 30, 42, 32, 40, 65, 57]),
+      member({ en: 'Chantha', km: 'ចន្ថា' }, 2, [55, 41, 49, 43, 65, 10, 59]),
+      member({ en: 'Sokkea', km: 'សុខគា' }, 4, [53, 41, 49, 43, 65, 10, 61]),
+      member({ en: 'Phanith', km: 'ផានិត' }, 5, [53, 39, 49, 43, 65, 10, 61]),
+      member({ en: 'Ravuth', km: 'រ៉ាវុធ' }, 3, [57, 43, 49, 47, 63, 10, 59]),
+      member({ en: 'Sambo', km: 'សម្បូរ' }, 6, [55, 49, 59, 55, 59, 10, 61]),
+      member({ en: 'Vireak', km: 'វីរៈ' }, 8, [57, 51, 61, 57, 57, 10, 63]),
+      member({ en: 'Sothy', km: 'សុធី' }, 16, [55, 49, 59, 55, 57, 10, 61]),
+      member({ en: 'Pich', km: 'ពេជ្រ' }, 7, [61, 55, 51, 59, 43, 10, 57]),
+      member({ en: 'Rin', km: 'រិន' }, 9, [59, 61, 49, 57, 41, 10, 57]),
+      member({ en: 'Thavy', km: 'ថាវី' }, 11, [61, 55, 51, 59, 43, 10, 57]),
+    ],
+  }),
+  school({
+    id: 'phnom-penh-elite',
+    en: 'Phnom Penh Elite',
+    km: 'ភ្នំពេញ អេលីត',
+    short: 'PPE',
+    players: [
+      member({ en: 'Leang', km: 'លាង' }, 1, [50, 32, 46, 34, 42, 64, 56]),
+      member({ en: 'Sovannara', km: 'សុវណ្ណារ៉ា' }, 2, [56, 40, 50, 46, 64, 10, 58]),
+      member({ en: 'Kimhour', km: 'គីមហួរ' }, 4, [54, 40, 50, 44, 65, 10, 58]),
+      member({ en: 'Meng', km: 'ម៉េង' }, 5, [54, 38, 50, 44, 64, 10, 58]),
+      member({ en: 'Bunheng', km: 'ប៊ុនហេង' }, 3, [58, 42, 50, 48, 62, 10, 58]),
+      member({ en: 'Rotanak', km: 'រតនៈ' }, 6, [56, 50, 62, 56, 56, 10, 60]),
+      member({ en: 'Sokheng', km: 'សុខហេង' }, 8, [58, 52, 63, 58, 54, 10, 62]),
+      member({ en: 'Chanthy', km: 'ចាន់ធី' }, 16, [56, 50, 60, 58, 54, 10, 60]),
+      member({ en: 'Visoth', km: 'វិសុទ្ធ' }, 7, [62, 56, 52, 60, 42, 10, 58]),
+      // his duel scene in the final is written for him and Sochetra face to face (src/sim/hunts.js)
+      {
+        ...withSpirit(
+          starPlayer('rithy', 10, [64, 70, 62, 68, 42, 10, 62], ['preah-khan-strike']),
+          150,
+        ),
+        hunts: 'sochetra',
+      },
+      member({ en: 'Davith', km: 'ដាវីត' }, 11, [62, 56, 52, 60, 42, 10, 58]),
+    ],
+  }),
+];

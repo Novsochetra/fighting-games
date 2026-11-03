@@ -1,0 +1,456 @@
+/* before and after a match, and the quick match's picks: two teams face each other */
+.cup-name {
+  margin: 0 0 4px;
+  color: var(--color-chalk-muted);
+  line-height: var(--leading-tight);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.cup-name:empty {
+  display: none;
+}
+
+.versus {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0 10px;
+}
+
+.team-card {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 6px;
+  min-width: 0;
+  text-align: center;
+}
+
+.team-short {
+  color: var(--color-chalk);
+  font-family: var(--font-pixel);
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-tight);
+  text-shadow: var(--text-shadow-pixel);
+}
+
+.team-name {
+  color: var(--color-chalk-muted);
+  line-height: var(--leading-tight);
+}
+
+.team-format {
+  padding: 2px 6px;
+  background: var(--color-panel-deep);
+  box-shadow: var(--shadow-chip);
+  color: var(--color-sky);
+  font-size: var(--font-size-note);
+}
+
+.versus-mark,
+.score {
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-size: var(--font-size-score);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-tight);
+  filter: drop-shadow(2px 0 0 var(--color-ink)) drop-shadow(-2px 0 0 var(--color-ink))
+    drop-shadow(0 2px 0 var(--color-ink)) drop-shadow(0 -2px 0 var(--color-ink));
+}
+
+.versus-mark {
+  color: var(--color-red-light);
+}
+
+.score {
+  color: var(--color-gold-light);
+  white-space: nowrap;
+}
+
+.screens:lang(km) .score {
+  font-family: var(--font-khmer);
+}
+
+/* a little shirt over shorts in the kit worn, outlined in ink */
+.kit-chip {
+  position: relative;
+  width: 32px;
+  height: 34px;
+  filter: drop-shadow(2px 0 0 var(--color-ink)) drop-shadow(-2px 0 0 var(--color-ink))
+    drop-shadow(0 2px 0 var(--color-ink)) drop-shadow(0 -2px 0 var(--color-ink));
+}
+
+.kit-shirt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 22px;
+  background: linear-gradient(
+    var(--kit-trim, var(--color-chalk-dim)) 0 4px,
+    var(--kit-shirt, var(--color-kit-neutral)) 4px
+  );
+  clip-path: var(--clip-shirt);
+}
+
+.kit-shorts {
+  position: absolute;
+  top: 22px;
+  left: 6px;
+  width: 20px;
+  height: 12px;
+  background: var(--kit-shorts, var(--color-chalk-dim));
+  clip-path: var(--clip-shorts);
+}
+
+.venue-line {
+  margin: 0 0 14px;
+  color: var(--color-chalk-muted);
+  line-height: var(--leading-tight);
+  text-align: center;
+}
+
+.venue-line:empty {
+  display: none;
+}
+
+.rival-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 10px 18px 10px 10px;
+  background: var(--color-panel-deep);
+  box-shadow: var(--shadow-card);
+}
+
+.rival-card .portrait-frame {
+  flex: none;
+}
+
+.rival-words {
+  display: grid;
+  gap: 4px;
+}
+
+.rival-words p {
+  margin: 0;
+  line-height: var(--leading-tight);
+}
+
+.rival-label {
+  color: var(--color-red-light);
+  font-size: var(--font-size-note);
+  text-transform: uppercase;
+}
+
+.rival-name {
+  color: var(--color-gold-light);
+  font-size: var(--font-size-title);
+  line-height: var(--leading-tight);
+  text-shadow: var(--text-shadow-pixel);
+}
+
+.rival-move {
+  color: var(--color-sky);
+}
+
+.result-banner {
+  width: fit-content;
+  margin: -6px auto 10px;
+  padding: 2px 16px;
+  background: var(--color-chalk-muted);
+  box-shadow: var(--shadow-chip);
+  color: var(--color-ink);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.result-banner.is-win {
+  background: var(--color-gold);
+}
+
+.result-banner.is-loss {
+  background: var(--color-red-light);
+}
+
+.penalty-line {
+  margin: 0 0 10px;
+  color: var(--color-gold-light);
+  text-align: center;
+}
+
+.post-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 28px;
+  margin-top: 10px;
+}
+
+.goal-row {
+  display: grid;
+  grid-template-columns: 3.5em 3.5em 1fr;
+  gap: 2px 10px;
+  align-items: baseline;
+}
+
+.goal-minute {
+  color: var(--color-chalk-muted);
+}
+
+.goal-team {
+  color: var(--color-sky);
+  font-family: var(--font-pixel);
+}
+
+.goal-row.by-hero .goal-scorer {
+  color: var(--color-gold-light);
+}
+
+.goal-move {
+  grid-column: 3;
+  color: var(--color-gold);
+  font-size: var(--font-size-note);
+  text-transform: uppercase;
+}
+
+.goal-none {
+  color: var(--color-chalk-dim);
+}
+
+.post-growth {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.xp-gain {
+  color: var(--color-jade-light);
+  font-weight: var(--font-weight-bold);
+}
+
+.level-up,
+.woken-label {
+  width: fit-content;
+  margin: 0;
+  padding: 2px 10px;
+  background: var(--color-gold);
+  box-shadow: var(--shadow-chip);
+  color: var(--color-ink);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  animation: badge-pop var(--duration-pop) var(--easing-overshoot) 1.2s both;
+}
+
+.woken-move {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+}
+
+.woken-name {
+  color: var(--color-gold-light);
+  text-shadow: var(--text-shadow-pixel-small);
+}
+
+@keyframes badge-pop {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+.group-block {
+  margin-top: 6px;
+}
+
+.group-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.group-table th {
+  padding: 4px 6px;
+  color: var(--color-chalk-muted);
+  font-size: var(--font-size-note);
+  font-weight: var(--font-weight-regular);
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.group-table td {
+  padding: 4px 6px;
+  border-top: 2px solid var(--color-panel-light);
+  text-align: right;
+}
+
+.group-table .cell-rank,
+.group-table .cell-short,
+.group-table .cell-name {
+  text-align: left;
+}
+
+.cell-short {
+  font-family: var(--font-pixel);
+}
+
+.cell-name {
+  color: var(--color-chalk-muted);
+}
+
+.table-row.is-through .cell-rank {
+  background: linear-gradient(90deg, var(--color-jade) 0 4px, var(--color-clear) 4px);
+}
+
+.table-row.is-own td {
+  color: var(--color-gold);
+}
+
+.cell-points {
+  font-weight: var(--font-weight-bold);
+}
+
+/* a big screen sets a group's table beside the goals and the growth, not under them */
+@media (min-width: 1100px) and (min-height: 600px) {
+  .screen-postmatch .panel:has(.group-block:not([hidden])) {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.7fr;
+    column-gap: 28px;
+    width: min(100%, 1100px);
+  }
+
+  .screen-postmatch .panel > * {
+    grid-column: 1 / -1;
+  }
+
+  .screen-postmatch .panel:has(.group-block:not([hidden])) .post-columns {
+    display: contents;
+  }
+
+  .screen-postmatch .panel:has(.group-block:not([hidden])) :is(.post-goals, .post-growth),
+  .screen-postmatch .panel > .group-block {
+    grid-column: auto;
+    margin-top: 10px;
+  }
+}
+
+/* held sideways the rival stands beside Kick off, the portrait at the art's own size; the
+   buttons there are no dock, as the rival keeps the panel's foot */
+@media (max-height: 480px) and (min-width: 601px) {
+  .screen-prematch .panel {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 24px;
+  }
+
+  .screen-prematch .panel > :not(.rival-card, .button-row) {
+    grid-column: 1 / -1;
+  }
+
+  .screen-prematch .rival-card {
+    margin: 0;
+  }
+
+  .screen-prematch .rival-card .portrait-frame {
+    width: 64px;
+    height: 64px;
+  }
+
+  .screen-prematch .rival-words {
+    gap: 2px;
+  }
+
+  .screen-prematch .rival-name {
+    font-size: var(--font-size-body);
+  }
+
+  .screen-prematch .panel > .button-row {
+    position: static;
+    align-self: center;
+    margin: 0;
+    padding: 0;
+    background: none;
+  }
+
+  .screen-prematch .panel > .button-row::before,
+  .screen-prematch .panel > .button-row::after {
+    content: none;
+  }
+
+  .versus {
+    margin-bottom: 4px;
+  }
+
+  .venue-line {
+    margin-bottom: 10px;
+  }
+}
+
+/* held sideways each side's shirt stands beside its name, not over it */
+@media (max-height: 480px) {
+  .versus .team-card {
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      'kit short'
+      'kit name';
+    column-gap: 12px;
+    row-gap: 0;
+    justify-content: center;
+    justify-items: start;
+    text-align: left;
+  }
+
+  .versus .kit-chip {
+    grid-area: kit;
+    align-self: center;
+  }
+
+  .versus .team-short {
+    grid-area: short;
+  }
+
+  .versus .team-name {
+    grid-area: name;
+  }
+}
+
+@media (max-width: 600px) {
+  .post-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .group-table .cell-name {
+    display: none;
+  }
+
+  .group-table :is(th, td) {
+    padding-inline: 2px;
+  }
+
+  .group-table .cell-rank {
+    padding-left: 8px;
+  }
+
+  .group-table th.cell-short {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .level-up,
+  .woken-label {
+    animation: none;
+  }
+}

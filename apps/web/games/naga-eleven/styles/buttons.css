@@ -1,0 +1,260 @@
+/* a 16-bit menu button: stepped ink outline, a rim, a lit top and a shaded foot; the one picked
+   (in focus, walked to with the keys or a pad, or tapped) turns gold and a cursor bobs beside it.
+   Colours change at once; only the cursor moves */
+.btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  box-sizing: border-box;
+  min-width: 44px;
+  min-height: 48px;
+  margin: 2px 2px 4px;
+  padding: 8px 20px 10px;
+  border: 0;
+  border-radius: 0;
+  background: var(--color-panel-light);
+  box-shadow: var(--shadow-button);
+  color: var(--color-chalk);
+  font: inherit;
+  font-size: var(--font-size-button);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-ui);
+  text-transform: uppercase;
+  text-shadow: var(--text-shadow-pixel-small);
+  cursor: pointer;
+  outline: none;
+  touch-action: manipulation;
+}
+
+.btn:focus {
+  background: var(--color-panel-shine);
+  box-shadow: var(--shadow-button-focus);
+  color: var(--color-gold-light);
+}
+
+.btn-primary,
+.btn-danger {
+  background: var(--color-red);
+  box-shadow: var(--shadow-button-primary);
+}
+
+.btn-primary:focus,
+.btn-danger:focus {
+  background: var(--color-red);
+  box-shadow: var(--shadow-button-focus);
+}
+
+/* a mouse over a button only lights it, its rim pale and never gold: the pad and the keys move the
+   focus, not the mouse, and with both gold two buttons looked picked at once (a :focus-visible
+   would hide the pick from a pad, which no browser counts as a keyboard) */
+@media (hover: hover) {
+  .btn:hover:not(:focus) {
+    background: var(--color-panel-shine);
+    box-shadow:
+      var(--shadow-outline),
+      inset 0 0 0 2px var(--color-chalk-muted),
+      inset 0 4px var(--color-rim),
+      inset 0 -4px var(--color-panel-deep);
+    color: var(--color-chalk);
+  }
+
+  .btn-primary:hover:not(:focus),
+  .btn-danger:hover:not(:focus) {
+    background: var(--color-red);
+    box-shadow:
+      var(--shadow-outline),
+      inset 0 0 0 2px var(--color-chalk-muted),
+      inset 0 4px var(--color-red-light),
+      inset 0 -4px var(--color-red-deep);
+  }
+
+  .step-button:hover::before {
+    background: var(--color-gold-light);
+  }
+}
+
+.btn-quiet {
+  background: var(--color-panel-deep);
+  color: var(--color-chalk-muted);
+}
+
+.btn:active {
+  translate: 0 2px;
+  box-shadow: var(--shadow-button-pressed);
+}
+
+.btn:focus::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -24px;
+  width: 2px;
+  height: 2px;
+  margin-top: -9px;
+  box-shadow: var(--shadow-cursor);
+  animation: cursor-bob var(--duration-bob) var(--easing-blink) infinite;
+}
+
+@keyframes cursor-bob {
+  50% {
+    translate: 4px 0;
+  }
+}
+
+.btn-note {
+  color: var(--color-gold-light);
+  font-size: var(--font-size-note);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.btn-note:empty {
+  display: none;
+}
+
+.button-list {
+  display: grid;
+  gap: 10px;
+  width: min(100%, 300px);
+  margin: 0 auto;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px 36px;
+  margin-top: 22px;
+}
+
+/* a panel's last row reaches its edges, so on a screen taller than the phone it docks at the
+   foot over what scrolls under it, and a cursor points down while there is more below
+   (src/ui/screens/scroll-hint.js); a sticky box stops at its scroller's padding, so the dock
+   reaches past the screen's own, and keeps its buttons over a phone's home bar */
+.panel > .button-row {
+  position: relative;
+  margin: 10px calc(-1 * var(--panel-pad-side)) calc(-1 * var(--panel-pad-bottom));
+  padding: 12px var(--panel-pad-side) var(--panel-pad-bottom);
+}
+
+.is-scrollable .panel > .button-row {
+  position: sticky;
+  bottom: calc(-1 * var(--screen-pad-bottom));
+  z-index: 3;
+  padding-bottom: max(var(--panel-pad-bottom), var(--screen-pad-bottom));
+  background:
+    repeating-linear-gradient(90deg, var(--color-gold-deep) 0 4px, var(--color-clear) 4px 8px) 0 0 /
+      100% 2px no-repeat,
+    var(--color-panel-deep);
+}
+
+.has-more .panel > .button-row::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  height: 24px;
+  background: linear-gradient(
+    var(--color-clear) 0 8px,
+    var(--color-dock-fade) 8px 16px,
+    var(--color-dock-fade-deep) 16px
+  );
+  pointer-events: none;
+}
+
+.has-more .panel > .button-row::after {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: calc(50% - 9px);
+  width: 2px;
+  height: 2px;
+  box-shadow: var(--shadow-more);
+  animation: more-bob var(--duration-bob) var(--easing-blink) infinite;
+  pointer-events: none;
+}
+
+@keyframes more-bob {
+  50% {
+    translate: 0 2px;
+  }
+}
+
+/* the ‹ and › beside a row: a pixel arrow in a dark well, a thumb's size */
+.step-button {
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  margin: 2px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--color-panel-deep);
+  box-shadow: var(--shadow-chip);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.step-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 10px;
+  height: 18px;
+  margin: auto;
+  background: var(--color-gold);
+  clip-path: var(--clip-arrow);
+}
+
+.step-on::before {
+  scale: -1 1;
+}
+
+.step-button:active {
+  translate: 0 2px;
+}
+
+.step-button:active::before {
+  background: var(--color-gold-light);
+}
+
+/* a phone held sideways: the menus' buttons stand in two columns, the first across both */
+@media (max-height: 480px) {
+  .btn {
+    min-height: 44px;
+    padding: 6px 16px 8px;
+  }
+
+  .menu-panel {
+    width: min(100%, 620px);
+  }
+
+  .menu-panel .button-list {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 40px;
+    width: min(100%, 540px);
+  }
+
+  .menu-panel .button-list > :first-child,
+  .menu-panel .button-list > :last-child:nth-child(even) {
+    grid-column: 1 / -1;
+  }
+
+  .panel > .button-row {
+    margin-top: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:focus::before,
+  .has-more .panel > .button-row::after {
+    animation: none;
+  }
+}

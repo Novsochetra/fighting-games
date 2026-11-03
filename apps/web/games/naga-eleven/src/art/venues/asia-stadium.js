@@ -1,0 +1,48 @@
+// The Asian Youth Championship by night: a deep blue sky, banks of floodlights blazing along the
+// roof, the crowd lit gold against the dark, glowing boards and a pitch lit in bright pools. Ramps
+// run deep to light.
+export const ASIA_STADIUM = {
+  sky: ['#05081a', '#080c24', '#0c122e', '#121a3a', '#1a2448', '#243058', '#303c66'],
+  star: ['#8a94c8', '#e8ecff'],
+  grass: ['#04161a', '#06241f', '#0a3426', '#10462e', '#185c36', '#22723e', '#328a48', '#4aa456'],
+  line: ['#b8d0c4', '#f4fbf2'],
+  concrete: ['#12141e', '#1e2230', '#2c3244', '#3e465c', '#565f78'],
+  seats: { red: '#4a1420', blue: '#16224a', shade: '#10121c' },
+  roof: ['#1a1e2a', '#3a4252', '#7a8494', '#c4ccd8'],
+  roofUnder: ['#080a12', '#121622'],
+  steel: ['#1e2230', '#3c4456'],
+  led: { back: '#04050a', frame: '#161a28' },
+  lamp: '#fffbe6',
+  glow: '#fff2c2',
+  ads: [
+    { back: '#00b8d8', ink: '#04050a', text: 'NAGA AIR' },
+    { back: '#ff3c78', ink: '#fff4fa', text: 'ASIA YOUTH' },
+    { back: '#f6d24a', ink: '#04050a', text: 'MEKONG BANK' },
+    { back: '#3cf08a', ink: '#04050a', text: 'KAMPOT TEA' },
+    { back: '#ff7a1a', ink: '#04050a', text: 'TONLE COLA' },
+  ],
+  crowd: {
+    shirts: [
+      ['#6a1018', '#b0202a', '#e24a44'],
+      ['#6a1018', '#b0202a', '#e24a44'],
+      ['#6a1018', '#b0202a', '#e24a44'],
+      ['#0e1a4c', '#1c3484', '#3456b4'],
+      ['#0e1a4c', '#1c3484', '#3456b4'],
+      ['#7a7c8c', '#b8bac4', '#e8e8ec'],
+      ['#7a7c8c', '#b8bac4', '#e8e8ec'],
+      ['#7a5c14', '#c89a2a', '#eec25a'],
+      ['#121218', '#22222c', '#3a3a48'],
+      ['#0e2c6a', '#1c3c9c', '#4062c8'],
+    ],
+    skins: ['#4a2a1e', '#6a4028', '#8a5636', '#a86e46'],
+    hairs: ['#06050a', '#100e16'],
+    hairLight: '#2a2638',
+    caps: ['#b0202a', '#e8e8ec', '#1c3484'],
+  },
+  shadow: '#04060e',
+  haze: '#1a2448',
+  post: ['#2a3040', '#9aa4b8', '#e6ecf4', '#ffffff'],
+  net: '#f2f6fa',
+  tower: ['#141822', '#262c3c', '#3e4658'],
+  flagCloth: ['#a06a10', '#f0b020', '#ffd860'],
+};

@@ -1,0 +1,21 @@
+export const FARHAD_HAIR = {
+  x: 19,
+  y: 6,
+  rows: [
+    '.......hhhhhhhhhggg.......',
+    '....hhhhhhhhhhhhhhhggg....',
+    '..hhHHHHHHhhhhhhhhhhhggg..',
+    '.hhHHHHhhhhHHHHhhhhhhhggg.',
+    'hhhhhhhhhhhhhhhhhhhhhhhggg',
+    'hhhhhhhhhhhhhhhhhhhhhhhggg',
+    'hhhhhgggggggggggggggghhggg',
+    'hhgggkkkkkkkkkkkkkkkkggggg',
+    'hhkkk................kkkgg',
+    'gg......................gg',
+    'gg......................gg',
+    'gg......................gg',
+    'gg......................gg',
+    'gg......................gg',
+    'kk......................kk',
+  ],
+};

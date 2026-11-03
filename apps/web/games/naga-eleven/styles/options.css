@@ -1,0 +1,359 @@
+/* rows a value steps through (settings, the quick match's teams), the help's tabs and keys */
+.option-list {
+  display: grid;
+  gap: 12px;
+}
+
+.option-row {
+  display: grid;
+  grid-template-columns: 1fr 48px minmax(9em, auto) 48px;
+  grid-template-areas: 'label back value on';
+  align-items: center;
+  gap: 8px;
+  margin: 2px;
+  padding: 6px 8px 6px 14px;
+  background: var(--color-panel-deep);
+  box-shadow: var(--shadow-card);
+  outline: none;
+}
+
+.option-row:focus {
+  background: var(--color-panel-light);
+  box-shadow: var(--shadow-card-current);
+}
+
+/* the row under a mouse lights a little, its frame pale; only the row in focus goes gold
+   (buttons.css says why) */
+@media (hover: hover) {
+  .option-row:hover:not(:focus) {
+    background: var(--color-panel);
+    box-shadow:
+      var(--shadow-chip),
+      inset 0 0 0 2px var(--color-rim);
+  }
+
+  .option-row:hover:not(:focus) .option-label {
+    color: var(--color-chalk);
+  }
+
+  .tab:hover:not([aria-selected='true']) {
+    background: var(--color-panel);
+    color: var(--color-chalk);
+  }
+}
+
+.option-label {
+  grid-area: label;
+  color: var(--color-chalk-muted);
+  text-transform: uppercase;
+}
+
+.option-row:focus .option-label {
+  color: var(--color-gold-light);
+}
+
+.option-row .step-back {
+  grid-area: back;
+}
+
+.option-row .step-on {
+  grid-area: on;
+}
+
+.option-value,
+.option-row .team-card {
+  display: flex;
+  grid-area: value;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--color-chalk);
+  text-align: center;
+}
+
+/* a team is a picture and two lines: the pick rows stand the label over the arrows */
+.pick-row {
+  grid-template-columns: 48px 1fr 48px;
+  grid-template-areas:
+    'label label label'
+    'back value on';
+  padding: 10px 8px 12px;
+}
+
+.pick-row .option-label {
+  text-align: center;
+}
+
+.pick-row .team-card {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-areas:
+    'kit short'
+    'kit name'
+    'format format';
+  justify-content: center;
+  column-gap: 14px;
+}
+
+.pick-row .kit-chip {
+  grid-area: kit;
+}
+
+.pick-row .team-short {
+  grid-area: short;
+  justify-self: start;
+}
+
+.pick-row .team-name {
+  grid-area: name;
+  justify-self: start;
+}
+
+.pick-row .team-format {
+  grid-area: format;
+  justify-self: center;
+}
+
+.lang-name:lang(km) {
+  font-family: var(--font-khmer);
+}
+
+.tab-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 6px;
+  outline: none;
+}
+
+.tab-row:focus {
+  box-shadow: var(--shadow-card-current);
+}
+
+.tab {
+  min-width: 44px;
+  min-height: 44px;
+  margin: 2px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 0;
+  background: var(--color-panel-deep);
+  box-shadow: var(--shadow-chip);
+  color: var(--color-chalk-muted);
+  font: inherit;
+  text-transform: uppercase;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.tab[aria-selected='true'] {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+.control-list {
+  display: grid;
+  grid-template-columns: minmax(7em, auto) 1fr;
+  align-items: center;
+  gap: 12px 18px;
+  margin: 18px 0;
+}
+
+.control-does {
+  color: var(--color-gold-light);
+  text-transform: uppercase;
+}
+
+/* a control's notes run under its row across both columns, each behind a gold pixel */
+.control-notes {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 4px;
+  margin: -4px 0 4px;
+  padding-left: 4px;
+}
+
+.control-note {
+  position: relative;
+  padding-left: 16px;
+  color: var(--color-chalk-muted);
+  font-size: var(--font-size-note);
+  line-height: var(--leading-tight);
+}
+
+.control-note::before {
+  content: '';
+  position: absolute;
+  top: calc(0.5lh - 2px);
+  left: 0;
+  width: 4px;
+  height: 4px;
+  background: var(--color-gold-deep);
+}
+
+.control-caps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+}
+
+/* a cap reads as its key is printed (J, ENTER, RB), so on a Khmer screen too it keeps the pixel
+   face at its crisp size; only a cap with no word of its own (the arrows, the stick) falls to Khmer */
+.cap {
+  display: inline-grid;
+  place-items: center;
+  box-sizing: border-box;
+  min-width: 30px;
+  height: 30px;
+  margin: 2px;
+  padding: 0 8px;
+  font: inherit;
+  font-family: var(--font-pixel), var(--font-khmer);
+  font-size: var(--font-size-note);
+  text-transform: uppercase;
+}
+
+.cap-keys {
+  padding-bottom: 4px;
+  background: var(--color-chalk);
+  box-shadow: var(--shadow-key);
+  color: var(--color-ink);
+}
+
+.cap-pad {
+  border-radius: var(--radius-round);
+  background: var(--color-panel-deep);
+  box-shadow: var(--shadow-chip);
+  color: var(--color-gold-light);
+}
+
+.cap-touch {
+  min-width: 36px;
+  height: 36px;
+  border: 2px solid var(--color-pad-rim);
+  border-radius: var(--radius-round);
+  background: var(--color-pad-glass);
+  color: var(--color-chalk);
+}
+
+.help-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.help-card {
+  margin: 2px;
+  padding: 12px 14px;
+  background: var(--color-panel-deep);
+  box-shadow: var(--shadow-card);
+}
+
+.help-card p {
+  margin: 0 0 8px;
+  color: var(--color-chalk);
+}
+
+.help-card p:last-child {
+  margin-bottom: 0;
+}
+
+.help-cards-wide {
+  margin-top: 16px;
+}
+
+/* on a wide screen the two picks stand side by side, and the settings in two columns */
+@media (min-width: 640px) {
+  .screen-quickmatch .panel,
+  .screen-settings .panel {
+    width: min(100%, 760px);
+  }
+
+  .screen-quickmatch .option-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* held sideways the settings close up, two by two where a row is wide enough for its label */
+@media (min-width: 760px) and (max-height: 480px) {
+  .screen-settings .option-list {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 14px;
+  }
+}
+
+@media (min-width: 640px) and (max-height: 480px) {
+  .screen-settings .option-list {
+    gap: 8px 14px;
+  }
+
+  .screen-settings .option-row {
+    grid-template-columns: 1fr 44px minmax(7em, auto) 44px;
+    padding: 2px 4px 2px 12px;
+  }
+
+  .screen-settings .option-value {
+    min-height: 40px;
+  }
+
+  .screen-settings .step-button {
+    height: 40px;
+  }
+
+  .pick-row {
+    padding: 6px 8px 8px;
+  }
+}
+
+/* help: the controls beside the duels and the specials, where there is room, and a big screen
+   widens both so the controls' notes keep to a line or two */
+@media (min-width: 1100px) and (min-height: 600px) {
+  .screen-howto .panel {
+    width: min(100%, 1040px);
+  }
+}
+
+@media (min-width: 700px) {
+  .screen-howto .panel {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    column-gap: 28px;
+  }
+
+  .screen-howto .panel > :not(.control-list, .help-cards) {
+    grid-column: 1 / -1;
+  }
+
+  .screen-howto .control-list {
+    align-content: start;
+  }
+
+  .screen-howto .help-cards {
+    grid-template-columns: 1fr;
+    align-content: start;
+    margin-top: 18px;
+  }
+
+  /* the skills and combos sit side by side under both columns, so neither column runs on alone */
+  .screen-howto .help-cards-wide {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .help-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .option-row {
+    grid-template-columns: 48px 1fr 48px;
+    grid-template-areas:
+      'label label label'
+      'back value on';
+  }
+}

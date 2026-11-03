@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <title>Naga Eleven · The Sochetra Story, a free pixel football game</title>
+    <meta
+      name="description"
+      content="A boy from a Cambodian village carries his country to the world stage: a free pixel-art football story with rivals, duels and special shots, in English and Khmer. Play in your browser."
+    />
+    <link rel="canonical" href="https://www.khmerarcade.games/games/naga-eleven/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Retro Arcade" />
+    <meta property="og:title" content="Naga Eleven · The Sochetra Story" />
+    <meta
+      property="og:description"
+      content="From a village in Kampong Cham to the world stage: a free pixel football story in English and Khmer. Play in your browser."
+    />
+    <meta property="og:url" content="https://www.khmerarcade.games/games/naga-eleven/" />
+    <meta
+      property="og:image"
+      content="https://www.khmerarcade.games/games/naga-eleven/assets/social/share.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Naga Eleven in gold letters over a seven-headed Naga rising before Angkor Wat at dusk, a boy with a ball looking up at it from the causeway"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#0b0e18" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Naga Eleven" />
+    <link rel="manifest" href="assets/manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+    <link
+      rel="preload"
+      href="assets/fonts/silkscreen-400-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="assets/fonts/silkscreen-700-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="styles/fonts.css" />
+    <link rel="stylesheet" href="styles/tokens.css" />
+    <link rel="stylesheet" href="styles/page.css" />
+    <link rel="stylesheet" href="styles/screens.css" />
+    <link rel="stylesheet" href="styles/panel.css" />
+    <link rel="stylesheet" href="styles/buttons.css" />
+    <link rel="stylesheet" href="styles/title.css" />
+    <link rel="stylesheet" href="styles/meters.css" />
+    <link rel="stylesheet" href="styles/story.css" />
+    <link rel="stylesheet" href="styles/match.css" />
+    <link rel="stylesheet" href="styles/options.css" />
+    <link rel="stylesheet" href="styles/touch.css" />
+    <script type="module" src="src/main.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <canvas
+        id="pitch"
+        width="768"
+        height="432"
+        tabindex="0"
+        aria-label="Naga Eleven pitch"
+      ></canvas>
+
+      <div class="touch" id="touch" aria-hidden="true"></div>
+
+      <div class="screens" id="screens" hidden>
+        <section class="screen screen-title" id="screen-title" aria-labelledby="title-logo" hidden>
+          <div class="title-head">
+            <h1 class="logo" id="title-logo" lang="en" aria-label="Naga Eleven">
+              <span class="logo-line" aria-hidden="true">Naga</span>
+              <span class="logo-line logo-eleven" aria-hidden="true">Eleven</span>
+            </h1>
+            <p class="logo-subtitle" data-text="subtitle">The Sochetra Story</p>
+          </div>
+          <button class="press-start" type="button" data-nav data-action="start">
+            <span class="press-start-spot">
+              <span class="press-start-label" data-text="pressStart">Press start</span>
+            </span>
+          </button>
+        </section>
+
+        <section class="screen screen-menu" id="screen-menu" aria-labelledby="menu-heading" hidden>
+          <div class="panel menu-panel">
+            <span class="panel-trim" aria-hidden="true"></span>
+            <h2 class="panel-title" id="menu-heading" data-text="menuTitle">Main menu</h2>
+            <div class="button-list">
+              <button class="btn btn-primary" type="button" data-nav data-action="continue">
+                <span data-text="continue">Continue</span>
+                <small class="btn-note" data-slot="continue-note"></small>
+              </button>
+              <button
+                class="btn"
+                type="button"
+                data-nav
+                data-action="new-story"
+                data-text="newStory"
+              >
+                New story
+              </button>
+              <button
+                class="btn"
+                type="button"
+                data-nav
+                data-action="quick-match"
+                data-text="quickMatch"
+              >
+                Quick match
+              </button>
+              <button class="btn" type="button" data-nav data-action="hero" data-text="hero">
+                Hero
+              </button>
+              <button
+                class="btn"
+                type="button"
+                data-nav
+                data-action="settings"
+                data-text="settings"
+              >
+                Settings
+              </button>
+              <button class="btn" type="button" data-nav data-action="how-to" data-text="howTo">
+                How to play
+              </button>
+              <button
+                class="btn btn-quiet"
+                type="button"
+                data-nav
+                data-action="arcade"
+                data-text="arcade"
+              >
+                Back to arcade
+              </button>
+            </div>
+            <div class="confirm" role="alertdialog" aria-labelledby="menu-ask" hidden>
+              <p class="confirm-ask" id="menu-ask" data-slot="ask"></p>
+              <div class="confirm-row">
+                <button
+                  class="btn btn-danger"
+                  type="button"
+                  data-nav
+                  data-action="confirm-yes"
+                  data-slot="yes"
+                ></button>
+                <button class="btn" type="button" data-nav data-action="confirm-no" data-text="no">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          class="screen screen-chapters"
+          id="screen-chapters"
+          aria-labelledby="chapters-heading"
+          hidden
+        >
+          <div class="panel wide-panel">
+            <span class="panel-trim" aria-hidden="true"></span>
+            <h2 class="panel-title" id="chapters-heading" data-text="chapters">Story</h2>
+            <div class="progress-strip">
+              <span class="level-badge" data-slot="level"></span>
+              <div class="xp-meter" data-slot="xp"></div>
+              <span class="xp-note" data-slot="xp-note"></span>
+            </div>
+            <ol class="chapter-list" data-slot="chapters"></ol>
+            <p class="story-done" data-slot="story-done" data-text="storyDone" hidden>
+              The story is complete!
+            </p>
+            <div class="button-row">
+              <button
+                class="btn btn-primary"
+                type="button"
+                data-nav
+                data-action="play-chapter"
+                data-text="playChapter"
+              >
+                Play
+              </button>
+              <button class="btn" type="button" data-nav data-action="back" data-text="back">
+                Back
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen screen-hero" id="screen-hero" aria-labelledby="hero-heading" hidden>
+          <div class="panel wide-panel">
+            <span class="panel-trim" aria-hidden="true"></span>
+            <h2 class="panel-title" id="hero-heading" data-text="heroName">Sochetra</h2>
+            <div class="hero-sheet">
+              <div class="hero-side">
+                <div class="portrait-frame">
+                  <canvas class="portrait" data-slot="portrait" aria-hidden="true"></canvas>
+                </div>
+                <span class="level-badge" data-slot="level"></span>
+                <div class="xp-meter" data-slot="xp"></div>
+                <span class="xp-note" data-slot="xp-note"></span>
+                <p class="spirit-line" data-slot="spirit"></p>
+              </div>
+              <div class="hero-main">
+                <h3 class="panel-subtitle" data-text="stats">Stats</h3>
+                <ul class="stat-list" data-slot="stats"></ul>
+                <h3 class="panel-subtitle" data-text="moves">Special moves</h3>
+                <ul class="move-list" data-slot="moves"></ul>
+              </div>
+            </div>
+            <div class="button-row">
+              <button class="btn" type="button" data-nav data-action="back" data-text="back">
+                Back
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section
+          class="screen screen-prematch"
+          id="screen-prematch"
+          aria-labelledby="prematch-heading"
+          hidden
+        >
+          <div class="panel wide-panel">
+            <span class="panel-trim" aria-hidden="true"></span>
+            <p class="cup-name" data-slot="cup"></p>
+            <h2 class="panel-title" id="prematch-heading" data-slot="round"></h2>
+            <div class="versus">
+              <div class="team-card" data-slot="home"></div>
+              <span class="versus-mark" lang="en" aria-hidden="true">VS</span>
+              <div class="team-card" data-slot="away"></div>
+            </div>
+            <p class="venue-line" data-slot="venue"></p>
+            <div class="rival-card" data-slot="rival">
+              <div class="portrait-frame">
+                <canvas class="portrait" data-slot="rival-portrait" aria-hidden="true"></canvas>
+              </div>
+              <div class="rival-words">
+                <p class="rival-label" data-text="rivalToWatch">Rival to watch</p>
+                <p class="rival-name" data-slot="rival-name"></p>
+                <p class="rival-move" data-slot="rival-move"></p>
+              </div>
+            </div>
+            <div class="button-row">
+              <button
+                class="btn btn-primary"
+                type="button"
+                data-nav
+                data-action="kick-off"
+                data-text="kickOff"
+              >
+                Kick off
+              </button>
+              <button class="btn" type="button" data-nav data-action="back" data-text="back">
+                Back
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section
+          class="screen screen-postmatch"
+          id="screen-postmatch"
+          aria-labelledby="postmatch-heading"
+          hidden
+        >
+          <div class="panel wide-panel">
+            <span class="panel-trim" aria-hidden="true"></span>
+            <h2 class="panel-title" id="postmatch-heading" data-text="fullTime">Full time</h2>
+            <p class="result-banner" data-slot="outcome"></p>
+            <div class="versus scoreboard">
+              <div class="team-card" data-slot="home"></div>
+              <p class="score" data-slot="score"></p>
+              <div class="team-card" data-slot="away"></div>
+            </div>
+            <p class="penalty-line" data-slot="penalties" hidden></p>
+            <div class="post-columns">
+              <div class="post-goals">
+                <h3 class="panel-subtitle" data-text="goals">Goals</h3>
+                <ol class="goal-list" data-slot="goals"></ol>
+              </div>
+              <div class="post-growth">
+                <div class="progress-strip">
+                  <span class="level-badge" data-slot="level"></span>
+                  <span class="xp-gain" data-slot="xp-gain"></span>
+                </div>
+                <div class="xp-meter" data-slot="xp"></div>
+                <p class="level-up" data-slot="level-up" data-text="levelUp" hidden>Level up!</p>
+                <ul class="woken-list" data-slot="woken"></ul>
+              </div>
+            </div>
+            <div class="group-block" data-slot="group" hidden>
+              <h3 class="panel-subtitle" data-text="groupTable">Group table</h3>
+              <table class="group-table">
+                <thead>
+                  <tr>
+                    <th scope="col" class="cell-rank">#</th>
+                    <th scope="col" class="cell-short" colspan="2" data-text="colTeam">Team</th>
+                    <th scope="col" class="cell-number" data-text="colPlayed">P</th>
+                    <th scope="col" class="cell-number" data-text="colWon">W</th>
+                    <th scope="col" class="cell-number" data-text="colDrawn">D</th>
+                    <th scope="col" class="cell-number" data-text="colLost">L</th>
+                    <th scope="col" class="cell-number" data-text="colDiff">GD</th>
+                    <th scope="col" class="cell-points" data-text="colPoints">Pts</th>
+                  </tr>
+                </thead>
+                <tbody data-slot="table"></tbody>
+              </table>
+            </div>
+            <div class="button-row">
+              <button
+                class="btn btn-primary"
+                type="button"
+                data-nav
+                data-action="after-match"
+                data-text="afterMatch"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section
+          class="screen screen-quickmatch"
+          id="screen-quickmatch"
+          aria-labelledby="quick-heading"
+          hidden
+        >
+          <div class="panel">
+            <span class="panel-trim" aria-hidden="true"></span>
+            <h2 class="panel-title" id="quick-heading" data-text="quickMatch">Quick match</h2>
+            <div class="option-list">
+              <div
+                class="option-row pick-row"
+                role="group"
+                tabindex="0"
+                aria-labelledby="quick-home"
+                data-nav
+                data-adjust="home"
+              >
+                <span class="option-label" id="quick-home" data-text="yourTeam">Your team</span>
+                <button
+                  class="step-button step-back"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="-1"
+                  data-label="previous"
+                ></button>
+                <div class="team-card" data-slot="home"></div>
+                <button
+                  class="step-button step-on"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="1"
+                  data-label="next"
+                ></button>
+              </div>
+              <div
+                class="option-row pick-row"
+                role="group"
+                tabindex="0"
+                aria-labelledby="quick-away"
+                data-nav
+                data-adjust="away"
+              >
+                <span class="option-label" id="quick-away" data-text="opponent">Opponent</span>
+                <button
+                  class="step-button step-back"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="-1"
+                  data-label="previous"
+                ></button>
+                <div class="team-card" data-slot="away"></div>
+                <button
+                  class="step-button step-on"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="1"
+                  data-label="next"
+                ></button>
+              </div>
+            </div>
+            <div class="button-row">
+              <button
+                class="btn btn-primary"
+                type="button"
+                data-nav
+                data-action="pick-teams"
+                data-text="kickOff"
+              >
+                Kick off
+              </button>
+              <button class="btn" type="button" data-nav data-action="back" data-text="back">
+                Back
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section
+          class="screen screen-settings"
+          id="screen-settings"
+          aria-labelledby="settings-heading"
+          hidden
+        >
+          <div class="panel">
+            <span class="panel-trim" aria-hidden="true"></span>
+            <h2 class="panel-title" id="settings-heading" data-text="settings">Settings</h2>
+            <div class="option-list">
+              <div
+                class="option-row"
+                role="slider"
+                tabindex="0"
+                aria-labelledby="setting-lang"
+                data-nav
+                data-adjust="lang"
+              >
+                <span class="option-label" id="setting-lang" data-text="language">Language</span>
+                <button
+                  class="step-button step-back"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="-1"
+                  data-label="previous"
+                ></button>
+                <span class="option-value" data-slot="lang"></span>
+                <button
+                  class="step-button step-on"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="1"
+                  data-label="next"
+                ></button>
+              </div>
+              <div
+                class="option-row"
+                role="slider"
+                tabindex="0"
+                aria-labelledby="setting-sound"
+                data-nav
+                data-adjust="sound"
+              >
+                <span class="option-label" id="setting-sound" data-text="sound">Sound</span>
+                <button
+                  class="step-button step-back"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="-1"
+                  data-label="previous"
+                ></button>
+                <span class="option-value" data-slot="sound"></span>
+                <button
+                  class="step-button step-on"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="1"
+                  data-label="next"
+                ></button>
+              </div>
+              <div
+                class="option-row"
+                role="slider"
+                tabindex="0"
+                aria-labelledby="setting-music"
+                data-nav
+                data-adjust="music"
+              >
+                <span class="option-label" id="setting-music" data-text="music">Music</span>
+                <button
+                  class="step-button step-back"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="-1"
+                  data-label="previous"
+                ></button>
+                <span class="option-value" data-slot="music"></span>
+                <button
+                  class="step-button step-on"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="1"
+                  data-label="next"
+                ></button>
+              </div>
+              <div
+                class="option-row"
+                role="slider"
+                tabindex="0"
+                aria-labelledby="setting-length"
+                data-nav
+                data-adjust="matchLength"
+              >
+                <span class="option-label" id="setting-length" data-text="matchLength"
+                  >Match length</span
+                >
+                <button
+                  class="step-button step-back"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="-1"
+                  data-label="previous"
+                ></button>
+                <span class="option-value" data-slot="matchLength"></span>
+                <button
+                  class="step-button step-on"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="1"
+                  data-label="next"
+                ></button>
+              </div>
+              <div
+                class="option-row"
+                role="slider"
+                tabindex="0"
+                aria-labelledby="setting-touch"
+                data-nav
+                data-adjust="touch"
+              >
+                <span class="option-label" id="setting-touch" data-text="touchControls"
+                  >Touch controls</span
+                >
+                <button
+                  class="step-button step-back"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="-1"
+                  data-label="previous"
+                ></button>
+                <span class="option-value" data-slot="touch"></span>
+                <button
+                  class="step-button step-on"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="1"
+                  data-label="next"
+                ></button>
+              </div>
+            </div>
+            <div class="button-row">
+              <button class="btn" type="button" data-nav data-action="back" data-text="back">
+                Back
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section
+          class="screen screen-pause"
+          id="screen-pause"
+          aria-labelledby="pause-heading"
+          hidden
+        >
+          <div class="panel menu-panel">
+            <span class="panel-trim" aria-hidden="true"></span>
+            <h2 class="panel-title" id="pause-heading" data-text="paused">Paused</h2>
+            <div class="button-list">
+              <button
+                class="btn btn-primary"
+                type="button"
+                data-nav
+                data-action="resume"
+                data-text="resume"
+              >
+                Resume
+              </button>
+              <button class="btn" type="button" data-nav data-action="hero" data-text="hero">
+                Hero
+              </button>
+              <button
+                class="btn"
+                type="button"
+                data-nav
+                data-action="settings"
+                data-text="settings"
+              >
+                Settings
+              </button>
+              <button class="btn" type="button" data-nav data-action="how-to" data-text="howTo">
+                How to play
+              </button>
+              <button
+                class="btn"
+                type="button"
+                data-nav
+                data-action="quit"
+                data-ask="askQuit"
+                data-yes="yesQuit"
+                data-text="quit"
+              >
+                Quit to menu
+              </button>
+              <button
+                class="btn btn-quiet"
+                type="button"
+                data-nav
+                data-action="arcade"
+                data-ask="askArcade"
+                data-yes="yesLeave"
+                data-text="arcade"
+              >
+                Back to arcade
+              </button>
+            </div>
+            <div class="confirm" role="alertdialog" aria-labelledby="pause-ask" hidden>
+              <p class="confirm-ask" id="pause-ask" data-slot="ask"></p>
+              <div class="confirm-row">
+                <button
+                  class="btn btn-danger"
+                  type="button"
+                  data-nav
+                  data-action="confirm-yes"
+                  data-slot="yes"
+                ></button>
+                <button class="btn" type="button" data-nav data-action="confirm-no" data-text="no">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          class="screen screen-howto"
+          id="screen-howto"
+          aria-labelledby="howto-heading"
+          hidden
+        >
+          <div class="panel wide-panel">
+            <span class="panel-trim" aria-hidden="true"></span>
+            <h2 class="panel-title" id="howto-heading" data-text="howTo">How to play</h2>
+            <div
+              class="tab-row"
+              role="tablist"
+              tabindex="0"
+              aria-labelledby="howto-heading"
+              data-nav
+              data-adjust="device"
+            >
+              <button
+                class="tab"
+                type="button"
+                role="tab"
+                tabindex="-1"
+                data-action="tab"
+                data-device="keys"
+                data-text="tabKeys"
+              >
+                Keys
+              </button>
+              <button
+                class="tab"
+                type="button"
+                role="tab"
+                tabindex="-1"
+                data-action="tab"
+                data-device="pad"
+                data-text="tabPad"
+              >
+                Pad
+              </button>
+              <button
+                class="tab"
+                type="button"
+                role="tab"
+                tabindex="-1"
+                data-action="tab"
+                data-device="touch"
+                data-text="tabTouch"
+              >
+                Touch
+              </button>
+            </div>
+            <dl class="control-list" data-slot="controls"></dl>
+            <div class="help-cards">
+              <article class="help-card help-duels">
+                <h3 class="panel-subtitle" data-text="duelsTitle">Duels</h3>
+                <p data-text="duelsAttack">
+                  When two stars meet, play stops. With the ball, pick Dribble, Pass or Shoot.
+                </p>
+                <p data-text="duelsDefend">
+                  Defending: Tackle beats a dribble, Block beats a shot, Intercept beats a pass.
+                </p>
+              </article>
+              <article class="help-card help-specials">
+                <h3 class="panel-subtitle" data-text="specialsTitle">Specials</h3>
+                <p data-text="specialsGauge">
+                  Spirit fills from good play: passes, tackles, saves and beating a man.
+                </p>
+                <p data-text="specialsFire">
+                  Hold SHOOT to a full charge with spirit to spend, or pick a special in a duel.
+                </p>
+              </article>
+            </div>
+            <div class="help-cards help-cards-wide">
+              <article class="help-card help-skills">
+                <h3 class="panel-subtitle" data-text="skillsTitle">Skills</h3>
+                <p data-text="skillsUse">
+                  Every player has a skill. With the spirit for it, hold SHOOT or PASS to full and
+                  let go.
+                </p>
+                <p data-text="skillsDribble">With the ball, tap RUN twice: a dribble skill.</p>
+                <p data-text="skillsGuard">Blocks and saves fire by themselves.</p>
+              </article>
+              <article class="help-card help-combos">
+                <h3 class="panel-subtitle" data-text="combosTitle">Combos</h3>
+                <p data-text="combosPass">
+                  Quick passes build a COMBO. From x3, hold SHOOT to full: a free finisher.
+                </p>
+                <p data-text="combosChain">A skill straight into a shot skill is a CHAIN.</p>
+                <p data-text="combosDuo">
+                  Two friends near the ball strike together: a DUO. Both pay.
+                </p>
+              </article>
+            </div>
+            <div class="button-row">
+              <button class="btn" type="button" data-nav data-action="back" data-text="back">
+                Back
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>
