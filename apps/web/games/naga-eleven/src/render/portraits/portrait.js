@@ -1,5 +1,6 @@
 import { MOODS, footballerKey, recipeFor } from './cast/index.js';
 import { composePortrait } from './compose.js';
+import { KIT_MOOD_NAMES, gearColours, kitGridFor } from './kit/index.js';
 import { createLru } from './lru.js';
 import { runsOf } from './runs.js';
 import { SILHOUETTE_PALETTE, composeSilhouette } from './silhouette.js';
@@ -14,10 +15,11 @@ function variantKey(character, variant) {
   return character === 'villager' ? (variant ?? 0) : '';
 }
 
-function keyOf({ character, age, mood, variant }) {
-  const known = MOODS.includes(mood) ? mood : 'neutral';
+function keyOf({ character, age, mood, variant, kit }) {
+  const moods = kit ? KIT_MOOD_NAMES : MOODS;
+  const known = moods.includes(mood) ? mood : 'neutral';
 
-  return `${character}|${age ?? ''}|${known}|${variantKey(character, variant)}`;
+  return `${kit ? 'kit|' : ''}${character}|${age ?? ''}|${known}|${variantKey(character, variant)}`;
 }
 
 function compose(request) {
@@ -25,6 +27,14 @@ function compose(request) {
 
   if (!recipe) {
     return runsOf(composeSilhouette(), SILHOUETTE_PALETTE);
+  }
+
+  const kit = request.kit ? kitGridFor(request) : null;
+
+  if (kit) {
+    (recipe.frontProps ?? []).forEach((paint) => paint(kit.grid, request.mood));
+
+    return runsOf(kit.grid, { ...recipe.palette, ...gearColours(kit.tone, recipe.palette) });
   }
 
   return runsOf(composePortrait(recipe, request.mood), recipe.palette);
@@ -39,7 +49,8 @@ export function portraitFor(request) {
     return found;
   }
 
-  const portrait = { key, runs: compose({ ...request, mood: key.split('|')[2] }) };
+  const mood = key.split('|').at(-2);
+  const portrait = { key, runs: compose({ ...request, mood }) };
 
   composed.set(key, portrait);
 

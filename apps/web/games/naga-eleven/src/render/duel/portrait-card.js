@@ -25,6 +25,7 @@ export function portraitOf(player, { mood, heroAge, match = null }) {
 export function drawPortraitAt(pen, { x, y, look, flip }) {
   drawPortrait(pen.context, {
     ...look,
+    kit: true,
     x: pen.origin.x + toCanvas(x),
     y: pen.origin.y + toCanvas(y),
     scale: 3,

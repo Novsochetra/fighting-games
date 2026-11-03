@@ -1108,6 +1108,19 @@ camera, match, { venue, tick })` draws what stands in front. `drawMinimap(contex
   `away`, `keeper` or `keeper-<n>`). `portraitOf(player, { mood, heroAge, match })` in
   `src/render/duel/portrait-card.js` picks it; the versus card and the cut-in pass the match so away
   kits and keepers' spare shirts show.
+- The face kit (`src/render/portraits/kit/`): with `kit: true` (the versus card and the cut-ins ask
+  for it) a portrait is put together from parts ChatGPT painted (`concepts/naga-eleven/face-kit/`,
+  baked by `tools/face_kit/bake.py` into `src/art/face-kit/`): one of five faces (hero, friend, ace,
+  wall, child) in a mood (neutral, shout, grin, hurt, angry, surprised, calm; the story's moods map
+  onto them), one of eighteen hairstyles, and a band or a hat. The parts are letter grids in the
+  portraits' own letters, lined up by the top of the skull, so they paint in the colours the
+  player's recipe already has: his skin, hair, eyes and kit; a keeper keeps his gloves. A star wears
+  the look `kitLookOf` gives him (Sochetra the hero's face and spikes, Rafael his curls under a white
+  headband); a plain player's is seeded by his side and place, no mate's twin, from his side's
+  hairstyles, and one in five ties a band on in his side's colours. Under a cap or a beanie hair
+  shows only below the brim and behind the face (`kit/hats.js`,
+  `test/regression/bugs/hat-hair.test.js`). The cut-in shouts; the versus card looks determined.
+  Every other portrait (the story's scenes) is drawn from its recipe as before.
 - `src/render/backdrops/`: `drawBackdrop(context, id, { tick })` fills the view. The village's mist
   (`backdrops/parts/mist.js`) is soft, dithered wisps low over the fields, and passes behind what
   stands up out of them (`villageMistMask`).

@@ -50,7 +50,7 @@ function portraits(pen, { show, cast, side, offset, ticks }) {
   const home = side === 'attack' ? 14 : ART.width - 78;
   const facing = side === 'attack' ? 1 : -1;
   const look = (player) =>
-    portraitOf(player, { mood: 'determined', heroAge: show.heroAge, match: show.match });
+    portraitOf(player, { mood: 'shout', heroAge: show.heroAge, match: show.match });
 
   if (cast.partner) {
     const slide = Math.round(-facing * 90 * (1 - easeOut(phaseOf(ticks, 4, 10))));
