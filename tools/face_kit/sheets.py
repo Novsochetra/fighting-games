@@ -15,6 +15,7 @@ BLOCKS = {
     'moods-ace': 7.47,
     'moods-wall': 7.25,
     'moods-child': 7.73,
+    'moods-adult': 8.43,
     'hair-1': 6.6,
     'hair-2': 7.05,
     'hair-3': 7.47,
@@ -24,12 +25,13 @@ BLOCKS = {
 MOODS = ['shout', 'grin', 'hurt', 'angry', 'surprised', 'calm']
 
 # the child was only painted in moods; the others' neutral face is the base they were drawn from
-NEUTRAL = {'hero': ('hero-takes', 1), 'friend': ('bases', 1), 'ace': ('bases', 2), 'wall': ('bases', 6)}
+NEUTRAL = {'hero': ('hero-takes', 1), 'friend': ('bases', 1), 'ace': ('bases', 2), 'wall': ('bases', 6),
+           'adult': ('moods-adult', 4)}
 
 FACES = {
     face: {**({'neutral': NEUTRAL[face]} if face in NEUTRAL else {}),
            **{mood: (f'moods-{face}', i + 1) for i, mood in enumerate(MOODS)}}
-    for face in ['hero', 'friend', 'ace', 'wall', 'child']
+    for face in ['hero', 'friend', 'ace', 'wall', 'child', 'adult']
 }
 
 HAIR = {
@@ -42,6 +44,12 @@ HAIR = {
 }
 
 GEAR = {'headband': ('gear', 1), 'sweatband': ('gear', 2), 'cap': ('gear', 3), 'beanie': ('gear', 4)}
+
+# facial hair follows the jaw, so each was painted with ChatGPT's edit tool on the adult face's
+# stern cell (moods-adult 4), one picture a style, read at the size that gives the kit's skull
+FACIAL = {'stubble': 'facial-stubble', 'moustache': 'facial-moustache', 'beard': 'facial-beard',
+          'goatee': 'facial-goatee', 'sideburns': 'facial-sideburns'}
+FACIAL_BLOCK = 21.0
 
 # hair and gear sheets are lined up on the skull through the shirt: each sheet's shoulders sit
 # the same way under its head as in this cell of it, where the skull shows

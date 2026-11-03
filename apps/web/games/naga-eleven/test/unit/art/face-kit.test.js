@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { COVERING_GEAR, KIT_FACES, KIT_GEAR, KIT_HAIR } from '../../../src/art/face-kit/index.js';
+import {
+  COVERING_GEAR,
+  KIT_FACES,
+  KIT_FACIAL,
+  KIT_GEAR,
+  KIT_HAIR,
+} from '../../../src/art/face-kit/index.js';
 import { LEGEND } from '../../../src/render/portraits/legend.js';
 import { decodePart } from '../../../src/render/portraits/kit/decode.js';
 
@@ -29,6 +35,7 @@ const PARTS = [
   ),
   ...Object.entries(KIT_HAIR).map(([name, text]) => [name, text, HAIR_LETTERS]),
   ...Object.entries(KIT_GEAR).map(([name, text]) => [name, text, GEAR_LETTERS]),
+  ...Object.entries(KIT_FACIAL).map(([name, text]) => [name, text, HAIR_LETTERS]),
 ];
 
 describe('the face kit', () => {
@@ -59,6 +66,12 @@ describe('the face kit', () => {
       expect(anchor.x).toBeLessThan(width);
     },
   );
+
+  it('has the facial hair painted on the adult face', () => {
+    expect(Object.keys(KIT_FACIAL).sort()).toEqual(
+      ['beard', 'goatee', 'moustache', 'sideburns', 'stubble'].sort(),
+    );
+  });
 
   it('knows which of its hats cover the hair', () => {
     expect([...COVERING_GEAR].every((gear) => KIT_GEAR[gear])).toBe(true);

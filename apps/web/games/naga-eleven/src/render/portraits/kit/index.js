@@ -2,7 +2,7 @@ import { COVERING_GEAR, GEAR_TONES } from '../../../art/face-kit/index.js';
 import { composeKitFace } from './compose.js';
 import { kitLookOf } from './looks.js';
 import { kitMoodOf } from './moods.js';
-import { facePart, gearPart, hairPart, moodsOf } from './parts.js';
+import { facePart, facialPart, gearPart, hairPart, moodsOf } from './parts.js';
 
 export { KIT_MOOD_NAMES } from './moods.js';
 export { kitLookOf } from './looks.js';
@@ -32,6 +32,7 @@ export function kitGridFor(request) {
   const mood = kitMoodOf(request.mood, moodsOf(look.face));
   const grid = composeKitFace({
     face: facePart(look.face, mood),
+    facial: look.facial ? facialPart(look.facial) : null,
     hair: look.hair ? hairPart(look.hair) : null,
     gear: look.gear ? gearPart(look.gear) : null,
     covers: COVERING_GEAR.has(look.gear),

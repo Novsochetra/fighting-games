@@ -23,7 +23,7 @@ Each sheet is three cells across and two down, numbered 1 to 6 row by row.
 | `hero-takes`                                       | six takes of the bald hero face; take 1 is the kit's hero                                          |
 | `bases`                                            | the friend, the ace and the wall, two takes each; 1, 2 and 6 are kept                              |
 | `moods-hero`, `-friend`, `-ace`, `-wall`, `-child` | shout, grin, hurt, angry, surprised, calm                                                          |
-| `moods-adult`                                      | the same moods at 45, kept for the story's grown-ups; not baked yet                                |
+| `moods-adult`                                      | the same moods at 45; the stern cell 4 is also his neutral face                                    |
 | `hair-1`                                           | spiky, crop, side part, curtains, curly, swept                                                     |
 | `hair-2`                                           | buzz, bowl, long back, mohawk, bedhead, top knot                                                   |
 | `hair-3`                                           | afro, twists, cornrows, shoulder length, slicked back, receding                                    |
@@ -42,6 +42,9 @@ ask for what it does keep, and the bake sorts the pixels by where they lie:
 - Hair is asked for in **silver-white and light grey**, so it stands apart from the outline and the
   game paints it any colour. Hats and bands are asked for in **bright green**, which nothing else
   in a face uses.
+- `facial-*` are single pictures, each the adult's stern face (`moods-adult` cell 4) with one
+  style painted on by the edit tool: stubble, moustache, beard, goatee, sideburns. They are worn
+  only on the faces with that jaw, the adult and the wall he was drawn from.
 - Facial hair follows the jaw, so it cannot be painted on one face and worn by another: draw it
   with ChatGPT's edit tool on the face that wears it (brush only where it grows), never as a new
   picture.

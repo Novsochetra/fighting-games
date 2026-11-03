@@ -15,12 +15,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, HERE)
 
-from cells import read_sheet  # noqa: E402
+from cells import read_sheet, read_single  # noqa: E402
 from encode import encode, module  # noqa: E402
 from label import label  # noqa: E402
-from parts import (calibrate, face_letters, gear_letters, hair_letters, layer_anchor, sheet_offset,  # noqa: E402
-                   skull_anchor)
-from sheets import BLOCKS, CALIBRATION, FACES, GEAR, HAIR, SKULL_SHOWN, SOURCE  # noqa: E402
+from parts import (calibrate, face_letters, facial_letters, gear_letters, hair_letters, layer_anchor,  # noqa: E402
+                   sheet_offset, skull_anchor)
+from sheets import BLOCKS, CALIBRATION, FACES, FACIAL, FACIAL_BLOCK, GEAR, HAIR, SKULL_SHOWN, SOURCE  # noqa: E402
 
 OUT = os.path.join(ROOT, 'apps/web/games/naga-eleven/src/art/face-kit')
 
@@ -54,6 +54,14 @@ def bake_layers(cells, table, letters_of, shift):
             for name, where in table.items()}
 
 
+def bake_facial(ranges):
+    baked = {}
+    for name, source in FACIAL.items():
+        cell = label(read_single(os.path.join(ROOT, SOURCE), source, FACIAL_BLOCK))
+        baked[name] = encode(facial_letters(cell), skull_anchor(face_letters(cell, ranges)))
+    return baked
+
+
 def write(name, text):
     os.makedirs(os.path.dirname(name), exist_ok=True)
     with open(name, 'w') as out:
@@ -73,7 +81,8 @@ def main():
     shift = offsets(cells, ranges)
     write(os.path.join(OUT, 'hair.js'), module('KIT_HAIR', bake_layers(cells, HAIR, hair_letters, shift)))
     write(os.path.join(OUT, 'gear.js'), module('KIT_GEAR', bake_layers(cells, GEAR, gear_letters, shift)))
-    print(f'baked {len(FACES)} faces, {len(HAIR)} hairstyles, {len(GEAR)} hats into {OUT}')
+    write(os.path.join(OUT, 'facial.js'), module('KIT_FACIAL', bake_facial(ranges)))
+    print(f'baked {len(FACES)} faces, {len(HAIR)} hairstyles, {len(GEAR)} hats, {len(FACIAL)} beards into {OUT}')
 
 
 def measure(cells, ranges):

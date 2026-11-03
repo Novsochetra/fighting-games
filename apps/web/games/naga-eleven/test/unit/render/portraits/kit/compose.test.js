@@ -6,6 +6,7 @@ import { decodePart } from '../../../../../src/render/portraits/kit/decode.js';
 const FACE = decodePart('3 3 1 0|abc/aaa/aaa');
 const HAIR = decodePart('3 4 1 2|.h/h3/h3/h3');
 const HAT = decodePart('3 1 1 0|F3');
+const BEARD = decodePart('3 1 1 -1|k3');
 
 const at = (grid, dx, dy) => cellAt(grid, SKULL_AT.x + dx, SKULL_AT.y + dy);
 
@@ -24,6 +25,15 @@ describe('a face from the kit', () => {
     expect(at(grid, 0, -2)).toBe('h');
     expect(at(grid, 1, 1)).toBe('h');
     expect(at(grid, 1, 2)).toBe('1');
+  });
+
+  it('wears facial hair over the face and under the hair', () => {
+    const bare = composeKitFace({ face: FACE, facial: BEARD });
+    const haired = composeKitFace({ face: FACE, facial: BEARD, hair: HAIR });
+
+    expect(at(bare, 0, 1)).toBe('k');
+    expect(at(bare, 0, 2)).toBe('1');
+    expect(at(haired, 0, 1)).toBe('h');
   });
 
   it('wears a band over standing hair, which still shows over it', () => {

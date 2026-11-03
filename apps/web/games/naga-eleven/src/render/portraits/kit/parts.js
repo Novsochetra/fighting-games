@@ -1,4 +1,4 @@
-import { KIT_FACES, KIT_GEAR, KIT_HAIR } from '../../../art/face-kit/index.js';
+import { KIT_FACES, KIT_FACIAL, KIT_GEAR, KIT_HAIR } from '../../../art/face-kit/index.js';
 import { decodePart } from './decode.js';
 
 const decoded = new Map();
@@ -18,6 +18,8 @@ function decodedOf(key, text) {
 export const facePart = (face, mood) => decodedOf(`face:${face}:${mood}`, KIT_FACES[face]?.[mood]);
 
 export const hairPart = (hair) => decodedOf(`hair:${hair}`, KIT_HAIR[hair]);
+
+export const facialPart = (facial) => decodedOf(`facial:${facial}`, KIT_FACIAL[facial]);
 
 export const gearPart = (gear) => decodedOf(`gear:${gear}`, KIT_GEAR[gear]);
 

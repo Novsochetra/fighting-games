@@ -39,7 +39,7 @@ function shownHair(hairCells, gearCells, covers) {
   return withoutScraps(hairCells.filter((cell) => !hidden(cell)));
 }
 
-export function kitLayers({ face, hair = null, gear = null }) {
+export function kitLayers({ face, facial = null, hair = null, gear = null }) {
   const faceAt = {
     x: Math.round(SKULL_AT.x - face.anchor.x),
     y: Math.round(SKULL_AT.y - face.anchor.y),
@@ -47,17 +47,19 @@ export function kitLayers({ face, hair = null, gear = null }) {
 
   return {
     faceCells: cellsOf(face, faceAt),
+    facialCells: facial ? cellsOf(facial, layerAt(face, faceAt, facial)) : [],
     hairCells: hair ? cellsOf(hair, layerAt(face, faceAt, hair)) : [],
     gearCells: gear ? cellsOf(gear, layerAt(face, faceAt, gear)) : [],
   };
 }
 
-export function composeKitFace({ face, hair = null, gear = null, covers = false }) {
+export function composeKitFace({ face, facial = null, hair = null, gear = null, covers = false }) {
   const grid = createGrid();
-  const { faceCells, hairCells, gearCells } = kitLayers({ face, hair, gear });
+  const { faceCells, facialCells, hairCells, gearCells } = kitLayers({ face, facial, hair, gear });
 
   for (const { x, y, letter } of [
     ...faceCells,
+    ...facialCells,
     ...shownHair(hairCells, gearCells, covers),
     ...gearCells,
   ]) {

@@ -65,3 +65,7 @@ def read_cell(cell, block):
 def read_sheet(root, name, block):
     sheet = Image.open(os.path.join(root, f'{name}.webp')).convert('RGB')
     return [read_cell(cell, block) for cell in cut(sheet)]
+
+
+def read_single(root, name, block):
+    return read_cell(Image.open(os.path.join(root, f'{name}.webp')).convert('RGB'), block)

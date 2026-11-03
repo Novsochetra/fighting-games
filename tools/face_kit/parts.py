@@ -2,7 +2,9 @@
 (apps/web/games/naga-eleven/src/render/portraits/legend.js), each with the point that sits on the
 top of the skull, so any hair or hat lines up on any face.
 """
-from label import light
+from label import groups_of, light
+
+EIGHT = [(dx, dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if dx or dy]
 
 SKIN = '4321'
 HAIR = 'kghH'
@@ -71,6 +73,28 @@ def gear_letters(cell):
     green = {k for k, p in px.items() if p[1] > p[0] + 40 and p[1] > p[2] + 40}
     low_high = range_of(px, green)
     return {**rimmed(cell, green), **{k: shade(px, k, *low_high, GEAR) for k in green}}
+
+
+# a stubble's dots stay dots; a moustache or a beard keeps the outline painted round it
+SOLID = 20
+
+
+def touches(group, points):
+    return any((x + dx, y + dy) in points for x, y in group for dx, dy in EIGHT)
+
+
+def facial_letters(cell):
+    """The grey under the eyes; on a stern shut mouth no white is teeth, so a moustache or a goatee
+    the labels took for teeth is kept, and the collar, grey too, is told apart by meeting the shirt."""
+    px = cell['px']
+    eyes_bottom = max((y for _, y in cell['eyes']), default=cell['size'][1] // 2)
+    grey = {k for k, p in px.items() if k not in cell['outline'] and k not in cell['shirt']
+            and p[0] <= p[2] + 25 and light(p) > 110 and k[1] > eyes_bottom + 1}
+    groups = [g for g in groups_of(grey, EIGHT) if not touches(g, cell['shirt'])]
+    grey = set().union(*groups or [set()])
+    low_high = range_of(px, grey)
+    solid = set().union(*[g for g in groups if len(g) >= SOLID] or [set()])
+    return {**rimmed(cell, solid), **{k: shade(px, k, *low_high, HAIR, HAIR_LEAN) for k in grey}}
 
 
 def skull_anchor(letters):
