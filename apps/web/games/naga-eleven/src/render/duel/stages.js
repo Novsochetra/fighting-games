@@ -5,8 +5,9 @@ export const STAGE_TICKS = {
   cutin: 64,
   clash: 96,
   saveCam: 96,
+  finale: 60,
   result: 84,
-  through: 36,
+  through: 54,
   outro: 24,
 };
 

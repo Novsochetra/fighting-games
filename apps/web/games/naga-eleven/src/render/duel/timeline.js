@@ -1,5 +1,6 @@
 import { isSaveCamDone, updateSaveCam } from '../save-cam/index.js';
 import { beginCutin, beginMeeting, cutinLength, specialsIn, versusLength } from './beats.js';
+import { hasFinale } from './finale.js';
 import { openMenu, stepMenu } from './menu.js';
 import { enter, pendingSide, shownRound } from './show.js';
 import { IMPACT_TICK, MENU_AFTER, SHAKE, STAGE_TICKS } from './stages.js';
@@ -57,7 +58,7 @@ function clash(show) {
   }
 
   if (show.stageTicks >= STAGE_TICKS.clash) {
-    enter(show, 'result');
+    enter(show, hasFinale(show) ? 'finale' : 'result');
   }
 }
 
@@ -65,7 +66,7 @@ function saveCam(show, input) {
   updateSaveCam(show.saveCam, input);
 
   if (isSaveCamDone(show.saveCam)) {
-    enter(show, 'result');
+    enter(show, hasFinale(show) ? 'finale' : 'result');
   }
 }
 
@@ -101,6 +102,7 @@ const STAGES = {
   cutin,
   clash,
   saveCam,
+  finale: after('finale', 'result'),
   result,
   outro: after('outro', 'done'),
   done: () => {},

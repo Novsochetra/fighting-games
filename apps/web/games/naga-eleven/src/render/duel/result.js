@@ -1,5 +1,6 @@
 import { WORD_RAMPS } from '../../art/duel/palette.js';
 import { drawSaveCamOn } from '../save-cam/index.js';
+import { BLOWN_WORD_AFTER, drawBlownAway, isBlownAway } from './blown.js';
 import { drawClash } from './clash.js';
 import { easeOut, phaseOf } from './hash.js';
 import { ART, toCanvas } from './layout.js';
@@ -69,15 +70,19 @@ export function drawResult(pen, show, options) {
 
   if (show.saveCam) {
     drawSaveCamOn(pen, show.saveCam, options);
+  } else if (isBlownAway(show)) {
+    drawBlownAway(pen, show, options);
   } else {
     drawClash(pen, show, options);
   }
 
-  if (!entry) {
+  const wordTicks = isBlownAway(show) ? ticks - BLOWN_WORD_AFTER : ticks;
+
+  if (!entry || wordTicks < 0) {
     return;
   }
 
-  const bottom = word(pen, { entry, ticks });
+  const bottom = word(pen, { entry, ticks: wordTicks });
 
   if (options.lang === 'km') {
     drawOutlinedText(pen.context, entry.km, {

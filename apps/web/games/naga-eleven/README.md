@@ -1139,6 +1139,12 @@ camera, match, { venue, tick })` draws what stands in front. `drawMinimap(contex
   out over the band, through the five frames of a kick ChatGPT painted (`src/art/cutin-art.js`,
   baked by `tools/cutin_art/bake.py` from `concepts/naga-eleven/cutin-art/`) in the colours his
   portrait has: his skin, his hair, his side's shirt. A duo or another striker keeps the portraits.
+- The finale (`src/render/duel/finale.js`): after a star's special or a combo scores, between the
+  save cam and the word, a stage of its own (`STAGE_TICKS.finale`, 60 ticks) plays the ball at
+  the camera, the net tearing, and the keeper knocked back, flung into it and left dazed, in the
+  move's light and the keeper's own colours. A field duel's PAST HIM! (`through`, now 54 ticks)
+  blows the two defenders away in the defending side's colours (`src/render/duel/blown.js`), its
+  word once they are down.
 - `src/render/backdrops/`: `drawBackdrop(context, id, { tick })` fills the view. The village's mist
   (`backdrops/parts/mist.js`) is soft, dithered wisps low over the fields, and passes behind what
   stands up out of them (`villageMistMask`).

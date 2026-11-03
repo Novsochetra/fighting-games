@@ -3,6 +3,7 @@ import { textOf } from '../text.js';
 import { drawBars, drawCaption } from './bars.js';
 import { drawClash } from './clash.js';
 import { drawCutin } from './cutin.js';
+import { drawFinale } from './finale.js';
 import { drawFocusLines } from './focus-lines.js';
 import { hash, phaseOf } from './hash.js';
 import { ART, duelMenu, ROOMY_MENU, UNIT } from './layout.js';
@@ -45,6 +46,7 @@ const SCENES = {
   cutin: drawCutin,
   clash: drawClash,
   saveCam: (pen, show, options) => drawSaveCamOn(pen, show.saveCam, options),
+  finale: drawFinale,
   result: drawResult,
   outro: drawResult,
   done: () => {},
