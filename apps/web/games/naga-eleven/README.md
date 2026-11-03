@@ -427,20 +427,33 @@ For a ball to one side he dives toward the camera on a dive of his own: hand-mad
 `src/art/save-cam/keeper-dive/`, drawn diving to the screen's right and mirrored for its left, at
 the save cam's own pixel scale, in his own kit, skin and hair (his look), his shirt number from the
 shirt-number art printed on his chest, never mirrored. Frame by frame (`DIVE_BEATS` in
-`src/render/save-cam/dive-frames.js`): set in a crouch facing the camera, the push-off, the full
-stretch 3/4 to the camera, held through the contact, then down flatter onto his side on the grass,
-his shadow under him all the way.
+`src/render/save-cam/dive-frames.js`): set in the ready stance facing the camera (feet wider than
+his shoulders, knees bent, gloves out in front of his waist, palms to the shot); loaded on his near
+leg from 14 ticks before the contact, leaning to the ball with both arms swinging across to it;
+leaving the grass from 9 ticks before it, the near leg driving long and the far knee up, his boots
+off the grass and apart from his shadow, the toe of his near boot leaving where that boot stood; for
+a ball close to him a short hop instead, the near leg kicked out under him toward it, his load and
+spring smaller the closer the ball and never back the way he came; the full stretch 3/4 to the
+camera from 5 ticks before it, held through the contact; then down flatter onto his side on the
+grass, his shadow under him all the way.
 
 - **Height**: a ball high enough for his boots to stay off the grass at full stretch takes the
   diagonal (about 37 degrees: head, arms and ball up by the post, chest in the middle, legs bent a
   little and trailing to the middle of the goal); one at mid height a shallower slant; a lower one a
-  flat dive, his gloves reaching down along the grass. Each height has its own push-off.
+  flat dive, his gloves reaching down along the grass. Each height has its own load and take-off:
+  for a high ball his arms swing up across him and he springs up at the corner; at mid height they
+  swing out at chest height; for a low ball they reach down and across to the low corner and he
+  falls to his side.
 - **Hands**, by what he does: open as he reaches; both gloves round the ball from the contact on a
   catch (the frame draws the ball, and he lands holding it); both fists leading for a punch; open
   at full stretch with the ball beyond them on a goal, a miss, a post or a parry.
 - **Gloves**: `keeperPose` says where the drawn gloves are (`gloves`), so the ball meets them on a
-  save and passes them when he is beaten; the frame's navel (`x`, `y`) moves on one path from the
-  set to the stretch to the grass.
+  save and passes them when he is beaten; the frame's navel (`x`, `y`) moves on one path: set,
+  loaded, then one arc from his near boot on toward the stretch, never back (across at an easing
+  pace while he rises fast and slows, or for a low ball drops slowly and then faster), and down to
+  the grass. A ball he keeps out curls into his gloves over its last 8 ticks, since a stretch
+  reaches past a ball close to him, and a punch or a parry leaves from them
+  (`src/render/save-cam/glove-pull.js`).
 
 A ball at him he takes standing on his sheets (`idle`, arms up from `celebrate`, beaten on
 `fall`). A punch adds a fist flash and the ball flying out of the view; a wall raises the move's

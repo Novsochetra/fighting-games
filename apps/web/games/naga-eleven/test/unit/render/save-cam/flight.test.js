@@ -67,7 +67,7 @@ describe("the ball's flight in the save cam", () => {
     const trail = trailOf(moment, 30);
 
     expect(trail.length).toBeGreaterThan(5);
-    expect(trail.at(-1)).toEqual(ballAt(moment, 30));
+    expect(trail.at(-1)).toEqual({ ...ballAt(moment, 30), tick: 30 });
     expect(trailOf(moment, contact + 30)).toEqual([]);
   });
 });

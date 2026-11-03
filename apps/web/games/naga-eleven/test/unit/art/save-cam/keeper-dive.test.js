@@ -10,6 +10,8 @@ import { STAMP, STAMP_CODES, stampCodes } from '../../../../src/render/actors/nu
 const FRAMES = [
   ['set', DIVE_FRAMES.set],
   ...Object.entries(DIVE_FRAMES.push).map(([height, map]) => [`push ${height}`, map]),
+  ...Object.entries(DIVE_FRAMES.takeoff).map(([height, map]) => [`takeoff ${height}`, map]),
+  ...Object.entries(DIVE_FRAMES.hop).map(([height, map]) => [`hop ${height}`, map]),
   ...['high', 'mid', 'low'].flatMap((height) =>
     Object.entries(DIVE_FRAMES[height]).map(([grip, map]) => [`${height} ${grip}`, map]),
   ),
@@ -20,6 +22,25 @@ const BALL = new Set(['R', 'S', 'T', 'U', 'P', 'Q']);
 const GLOVE = new Set(['G', 'H', 'I', 'J']);
 
 const partOf = (map, x, y) => DIVE_KIT_LETTERS[map.rows[y]?.[x]]?.[0];
+
+const middleOf = (points) => ({
+  x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
+  y: points.reduce((sum, point) => sum + point.y, 0) / points.length,
+});
+
+// how far his head leans over from his hips toward the ball, in degrees off upright
+function leanOf(map) {
+  const of = (part) =>
+    middleOf(
+      map.rows.flatMap((row, y) =>
+        [...row].flatMap((letter, x) => (DIVE_KIT_LETTERS[letter]?.[0] === part ? [{ x, y }] : [])),
+      ),
+    );
+  const hair = of('hair');
+  const hips = of('shorts');
+
+  return (Math.atan2(hair.x - hips.x, hips.y - hair.y) * 180) / Math.PI;
+}
 
 // the letters within `reach` of a point, with how far across and up from it each is
 function around(map, { x, y }, reach) {
@@ -106,6 +127,55 @@ describe("the keeper's front-facing dive, as pixel maps", () => {
       expect(rise(DIVE_FRAMES.low[grip]), grip).toBeLessThan(0.1);
     }
   });
+
+  it('leans further to the ball frame by frame: set upright, loaded, leaving the grass, stretched', () => {
+    expect(Math.abs(leanOf(DIVE_FRAMES.set))).toBeLessThan(5);
+
+    for (const height of ['high', 'mid', 'low']) {
+      const leans = [
+        DIVE_FRAMES.push[height],
+        DIVE_FRAMES.takeoff[height],
+        DIVE_FRAMES[height].reach,
+      ].map(leanOf);
+
+      expect(leans[0], height).toBeGreaterThan(10);
+      expect(leans[1], height).toBeGreaterThan(leans[0] + 10);
+      expect(leans[2], height).toBeGreaterThan(leans[1] + 5);
+      expect(leanOf(DIVE_FRAMES.hop[height]), height).toBeGreaterThan(leans[0] + 5);
+      expect(leanOf(DIVE_FRAMES.hop[height]), height).toBeLessThan(leans[2]);
+    }
+  });
+
+  it.each(Object.entries(DIVE_FRAMES.push))(
+    'shows the whole "1" and its ring on his chest as he loads for a %s ball, in its middle',
+    (height, map) => {
+      const codes = stampCodes(1, 'back');
+      const left = map.number.x - Math.floor(STAMP.width / 2);
+      const top = map.number.y - Math.floor(STAMP.height / 2);
+      const row = map.rows[map.number.y];
+      let from = map.number.x;
+      let to = map.number.x;
+
+      codes.forEach((code, i) => {
+        if (code !== STAMP_CODES.empty) {
+          expect(partOf(map, left + (i % STAMP.width), top + Math.floor(i / STAMP.width))).toBe(
+            'shirt',
+          );
+        }
+      });
+
+      while (partOf(map, from - 1, map.number.y) === 'shirt') {
+        from -= 1;
+      }
+
+      while (partOf(map, to + 1, map.number.y) === 'shirt') {
+        to += 1;
+      }
+
+      expect(row[map.number.x]).toMatch(/[abcd]/);
+      expect(Math.abs(map.number.x - (from + to) / 2)).toBeLessThanOrEqual(3);
+    },
+  );
 
   it('has a face we can see in every frame: skin, and the whites of his eyes', () => {
     for (const [name, map] of FRAMES) {

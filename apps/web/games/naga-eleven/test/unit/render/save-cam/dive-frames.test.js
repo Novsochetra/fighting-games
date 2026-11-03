@@ -7,9 +7,11 @@ import {
   diveFrameAt,
   gripOf,
   handsOf,
+  nearFootOf,
   restOf,
   SHALLOW_FROM,
   stretchOf,
+  strideOf,
 } from '../../../../src/render/save-cam/dive-frames.js';
 
 const TOY = {
@@ -54,6 +56,45 @@ describe("the dive's frames", () => {
     expect(at(0)).toEqual({ name: 'stretch', map: DIVE_FRAMES.high.catch });
     expect(at(DIVE_BEATS.hold)).toEqual({ name: 'fall', map: DIVE_FRAMES.low.catch });
     expect(at(DIVE_BEATS.land)).toEqual({ name: 'land', map: DIVE_FRAMES.land.ball });
+  });
+
+  it('loads on his near leg, then leaves the grass on a frame of its own before the stretch', () => {
+    expect(DIVE_BEATS.push).toBeLessThan(DIVE_BEATS.takeoff);
+    expect(DIVE_BEATS.takeoff).toBeLessThan(DIVE_BEATS.stretch);
+
+    for (const stretch of ['high', 'mid', 'low']) {
+      const at = (since) => diveFrameAt({ outcome: 'catch', stretch }, since);
+
+      expect(at(DIVE_BEATS.takeoff - 1), stretch).toEqual({
+        name: 'push',
+        map: DIVE_FRAMES.push[stretch],
+      });
+      expect(at(DIVE_BEATS.takeoff), stretch).toEqual({
+        name: 'takeoff',
+        map: DIVE_FRAMES.takeoff[stretch],
+      });
+      expect(at(DIVE_BEATS.stretch - 1).name, stretch).toBe('takeoff');
+      expect(at(DIVE_BEATS.stretch).name, stretch).toBe('stretch');
+    }
+  });
+
+  it('finds the near boot on a frame’s lowest row: the studs he stands on, or the toe he leaves from', () => {
+    const standing = { rows: ['.................', '0....0.....0....0'], anchor: { x: 8, y: 0 } };
+    const leaving = { rows: ['......', '......', '...00.'], anchor: { x: 1, y: 0 } };
+
+    expect(nearFootOf(standing)).toBe(5.5);
+    expect(nearFootOf(leaving)).toBe(2.5);
+  });
+
+  it('springs long off the boot he stood on, or hops short just past it', () => {
+    for (const stretch of ['high', 'mid', 'low']) {
+      expect(strideOf(stretch, DIVE_FRAMES.takeoff[stretch]), stretch).toBeGreaterThan(15);
+      expect(Math.abs(strideOf(stretch, DIVE_FRAMES.hop[stretch])), stretch).toBeLessThan(4);
+      expect(
+        diveFrameAt({ outcome: 'catch', stretch, hop: true }, DIVE_BEATS.takeoff),
+        stretch,
+      ).toEqual({ name: 'takeoff', map: DIVE_FRAMES.hop[stretch] });
+    }
   });
 
   it('pushes off low and lands empty-handed for a low ball he does not hold', () => {

@@ -4,11 +4,12 @@ import { hash } from '../duel/hash.js';
 import { drawImpact } from '../duel/impact.js';
 import { ART } from '../duel/layout.js';
 import { band, ring } from '../duel/shapes.js';
-import { KEEPER_SHARE, shotPoint } from './flight.js';
+import { shotPoint } from './flight.js';
+import { contactAt } from './glove-pull.js';
 import { contactTick } from './timing.js';
 import { project } from './view.js';
 
-export const contactOnScreen = (moment) => project(shotPoint(moment.aim, KEEPER_SHARE));
+export const contactOnScreen = contactAt;
 
 // a fist thrown at the ball: a star of white at his gloves, and lines flying off the way it goes
 function fistFlash(pen, { at, since, dive }) {

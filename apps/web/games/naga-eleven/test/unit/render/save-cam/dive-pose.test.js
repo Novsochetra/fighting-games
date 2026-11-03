@@ -26,6 +26,29 @@ const momentOf = (result, aim, extra = {}) =>
 // the lowest row the pose's frame paints, on the art grid
 const lowestRow = (pose) => pose.y + restOf(pose.figure);
 
+// the art grid columns of the pose's frame that hold `letters`, on its lowest row or anywhere
+function columnsOf(pose, letters, { lowest = false } = {}) {
+  const map = pose.figure;
+  const width = map.rows[0].length;
+  const left = pose.x - (pose.mirror ? width - 1 - map.anchor.x : map.anchor.x);
+  const rows = lowest ? [map.rows.at(-1)] : map.rows;
+
+  return rows.flatMap((row) =>
+    [...row].flatMap((letter, x) =>
+      letters.includes(letter) ? [left + (pose.mirror ? width - 1 - x : x)] : [],
+    ),
+  );
+}
+
+const FAR = [
+  { side: 0.75, height: 0.85 },
+  { side: -0.75, height: 0.85 },
+  { side: 0.7, height: 0.5 },
+  { side: -0.7, height: 0.5 },
+  { side: 0.8, height: 0.1 },
+  { side: -0.8, height: 0.1 },
+];
+
 describe('the front-facing dive', () => {
   it('waits set in the middle of the goal, then flies the way he dives', () => {
     const left = momentOf('saved', { side: -0.7, height: 0.7 });
@@ -91,6 +114,57 @@ describe('the front-facing dive', () => {
     expect(pose.mirror).toBe(true);
     expect(pose.gloves.x).toBeLessThan(SPOT.x);
     expect(ball.x - pose.gloves.x).toBeGreaterThan(60);
+  });
+
+  it('loads on the grass, his far boot where it stood set, and leaves it from his near boot', () => {
+    for (const aim of FAR) {
+      const moment = momentOf('saved', aim);
+      const dive = Math.sign(aim.side);
+      const pose = (since) => divePose(moment, contact + since);
+      const far = (columns) => (dive > 0 ? Math.min(...columns) : Math.max(...columns));
+      const set = pose(DIVE_BEATS.push - 1);
+      const load = pose(DIVE_BEATS.push);
+      const takeoff = pose(DIVE_BEATS.takeoff);
+      const nearBoot = columnsOf(load, 'KLMN').filter((x) => dive * (x - SPOT.x) > 0);
+      const toe = columnsOf(takeoff, '0KLMN', { lowest: true });
+      const name = JSON.stringify(aim);
+
+      expect([set.frame, load.frame, takeoff.frame], name).toEqual(['set', 'push', 'takeoff']);
+      expect(lowestRow(load), name).toBe(GROUND);
+      expect(
+        Math.abs(far(columnsOf(load, 'KLMN')) - far(columnsOf(set, 'KLMN'))),
+        name,
+      ).toBeLessThan(2);
+      expect(lowestRow(takeoff), name).toBeLessThanOrEqual(GROUND - 3);
+      expect(Math.min(...toe), name).toBeGreaterThanOrEqual(Math.min(...nearBoot) - 3);
+      expect(Math.max(...toe), name).toBeLessThanOrEqual(Math.max(...nearBoot) + 3);
+    }
+  });
+
+  it('flies one arc from his near boot to the stretch, never back the way he came', () => {
+    for (const aim of FAR) {
+      const moment = momentOf('saved', aim);
+      const dive = Math.sign(aim.side);
+      const poses = [];
+
+      for (let since = DIVE_BEATS.push - 2; since <= 0; since += 1) {
+        poses.push(divePose(moment, contact + since));
+      }
+
+      const flight = poses.filter((pose) => pose.frame !== 'set' && pose.frame !== 'push');
+      const rise = Math.sign(flight.at(-1).y - flight[0].y);
+
+      for (let i = 1; i < poses.length; i += 1) {
+        expect(dive * (poses[i].x - poses[i - 1].x), JSON.stringify(aim)).toBeGreaterThanOrEqual(0);
+      }
+
+      for (let i = 1; i < flight.length; i += 1) {
+        expect(Math.abs(flight[i].x - flight[i - 1].x), JSON.stringify(aim)).toBeLessThan(10);
+        expect(rise * (flight[i].y - flight[i - 1].y), JSON.stringify(aim)).toBeGreaterThanOrEqual(
+          0,
+        );
+      }
+    }
   });
 
   it('lays his shadow under him, as wide as the frame', () => {

@@ -115,12 +115,13 @@ export function ballAtPlay(moment, play) {
 
 export const ballAt = (moment, ticks) => ballAtPlay(moment, playTicks(ticks));
 
-// the points the ball passed through, newest last, while it flew free, up to the play tick `until`
+// the points the ball passed through, newest last, each with its play tick, while it flew free, up
+// to the play tick `until`
 export function trailOf(moment, ticks, { count = 12, gap = 1, until = Infinity } = {}) {
   const play = playTicks(ticks);
 
   return Array.from({ length: count }, (_, i) => play - (count - 1 - i) * gap)
     .filter((tick) => tick >= BEATS.strike && tick <= until)
-    .map((tick) => ballAtPlay(moment, tick))
+    .map((tick) => ({ ...ballAtPlay(moment, tick), tick }))
     .filter((at) => !at.held && !at.gone);
 }

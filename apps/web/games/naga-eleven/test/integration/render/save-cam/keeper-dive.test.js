@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { BALL_PALETTE } from '../../../../src/art/duel/ball.js';
 import { DIVE_FRAMES, DIVE_INKS } from '../../../../src/art/save-cam/keeper-dive/index.js';
 import { looksOf } from '../../../../src/render/actors/looks.js';
+import { DIVE_BEATS } from '../../../../src/render/save-cam/dive-frames.js';
 import { columnOf } from '../../../../src/render/save-cam/dive-figure.js';
 import { KEEPER_SHARE, shotPoint } from '../../../../src/render/save-cam/flight.js';
 import { keeperPose } from '../../../../src/render/save-cam/keeper-pose.js';
@@ -112,6 +113,64 @@ describe("the keeper's dive in the save cam, drawn", () => {
       }
 
       expect(look.shirt, String(side)).toContain(colourAt(chest.x - 1, chest.y - 2));
+    }
+  });
+
+  it('shows the whole number on his chest as he loads, high, mid or low, either way', () => {
+    for (const aim of [
+      { side: 0.8, height: 0.9 },
+      { side: -0.8, height: 0.9 },
+      { side: 0.7, height: 0.5 },
+      { side: -0.7, height: 0.5 },
+      { side: 0.8, height: 0.1 },
+      { side: -0.8, height: 0.1 },
+    ]) {
+      const moment = { ...catchAt(Math.sign(aim.side)), aim, dive: Math.sign(aim.side) };
+      const ticks = contactTick() + DIVE_BEATS.push;
+      const match = cambodiaMatch();
+      const { cam, colourAt } = drawnSaveCam(match, moment, { ticks });
+      const pose = keeperPose(cam.moment, playTicks(ticks));
+      const chest = chestOf(pose);
+      const one = [
+        [0, -2],
+        [-1, -1],
+        [0, -1],
+        [0, 0],
+        [0, 1],
+        [0, 2],
+      ];
+
+      expect(pose.frame, JSON.stringify(aim)).toBe('push');
+
+      for (const [dx, dy] of one) {
+        expect(colourAt(chest.x + dx, chest.y + dy), `${JSON.stringify(aim)} ${dx},${dy}`).toBe(
+          looksOf(match).players[0].numberColours.fill,
+        );
+      }
+    }
+  });
+
+  it('leaves the grass on the take-off, daylight under his boots, for any height and either way', () => {
+    const ground = Math.round(project({ x: 0, y: 0, z: 10.2 }).y);
+    const boots = ['K', 'L', 'M', 'N'].map((letter) => DIVE_INKS[letter]);
+
+    for (const aim of [
+      { side: 0.8, height: 0.9 },
+      { side: -0.7, height: 0.5 },
+      { side: 0.8, height: 0.1 },
+    ]) {
+      const moment = { ...catchAt(Math.sign(aim.side)), aim, dive: Math.sign(aim.side) };
+      const ticks = contactTick() + DIVE_BEATS.takeoff;
+      const { cam, colourAt } = drawnSaveCam(cambodiaMatch(), moment, { ticks });
+      const pose = keeperPose(cam.moment, playTicks(ticks));
+      const box = { x: pose.x - 50, y: pose.y - 10, width: 100, height: ground - pose.y + 14 };
+      const drawn = pixelsIn(colourAt, boots, box);
+
+      expect(pose.frame, JSON.stringify(aim)).toBe('takeoff');
+      expect(drawn.length, JSON.stringify(aim)).toBeGreaterThan(20);
+      expect(Math.max(...drawn.map((pixel) => pixel.y)), JSON.stringify(aim)).toBeLessThan(
+        ground - 2,
+      );
     }
   });
 
