@@ -184,14 +184,16 @@ Style: a 1-pixel black outline all around him, flat colours only. No anti-aliasi
 Colours: pure black outline; red shirt in four reds, from deep wine red to bright warm red; white shorts shaded pale blue-grey; navy socks with two lighter blues; warm brown skin in four shades, dark brown to light tan; black hair with dark grey and grey highlights; white boots shaded light grey; cream-white eyes.
 ```
 
-## 12. Fall, south
+## 12. Getting up after a fall
 
-Image 2: `pose-fall-south.png`
+Image 2: `pose-fall-getting-up.png`
+
+The fall's first three frames are the slide's, so only this last one is drawn.
 
 ```text
-Pixel art sprite sheet of the boy on the LEFT of image 1 (image 3 shows his face and hair closer): brought down by a tackle in four frames, facing the camera: dropping onto his hip, sliding on the grass with his legs out, the same sliding pose lower, then pushing back up to run on.
+Pixel art sprite sheet of the boy on the LEFT of image 1 (image 3 shows his face and hair closer): pushing himself back up off the grass after a tackle, about to run on, in five directions: facing the camera, facing down and to the right, side on facing right, facing away and to the right, and with his back to us. The sixth cell stays empty magenta.
 
-Image 2 is the layout: copy it exactly, 4 cells in 2 columns and 2 rows, read left to right, top row first, with a flat magenta background (pure #FF00FF) and the same dark grey gaps. Each cell is one game frame of 64 by 62 pixels drawn 6 times bigger, so one pixel is one solid 6 by 6 square. In each cell, draw him in place of the pose that is there, doing the same thing at the same size.
+Image 2 is the layout: copy it exactly, 6 cells in 3 columns and 2 rows, with a flat magenta background (pure #FF00FF) and the same dark grey gaps. Each cell is one game frame of 64 by 62 pixels drawn 6 times bigger, so one pixel is one solid 6 by 6 square. In each cell, draw him in place of the pose that is there, doing the same thing at the same size.
 
 Size: standing, he is 58 pixels tall: hair on the top green line, soles on the bottom green line, feet centred on the blue line.
 
@@ -200,71 +202,7 @@ Style: a 1-pixel black outline all around him, flat colours only. No anti-aliasi
 Colours: pure black outline; red shirt in four reds, from deep wine red to bright warm red; white shorts shaded pale blue-grey; navy socks with two lighter blues; warm brown skin in four shades, dark brown to light tan; black hair with dark grey and grey highlights; white boots shaded light grey; cream-white eyes.
 ```
 
-## 13. Fall, south-east
-
-Image 2: `pose-fall-south-east.png`
-
-```text
-Pixel art sprite sheet of the boy on the LEFT of image 1 (image 3 shows his face and hair closer): brought down by a tackle in four frames, facing down and to the right: dropping onto his hip, sliding on the grass with his legs out, the same sliding pose lower, then pushing back up to run on.
-
-Image 2 is the layout: copy it exactly, 4 cells in 2 columns and 2 rows, read left to right, top row first, with a flat magenta background (pure #FF00FF) and the same dark grey gaps. Each cell is one game frame of 64 by 62 pixels drawn 6 times bigger, so one pixel is one solid 6 by 6 square. In each cell, draw him in place of the pose that is there, doing the same thing at the same size.
-
-Size: standing, he is 58 pixels tall: hair on the top green line, soles on the bottom green line, feet centred on the blue line.
-
-Style: a 1-pixel black outline all around him, flat colours only. No anti-aliasing, blur, gradients, soft shading or glow. Nothing else in the cells: no ground, shadow, ball, text or grid.
-
-Colours: pure black outline; red shirt in four reds, from deep wine red to bright warm red; white shorts shaded pale blue-grey; navy socks with two lighter blues; warm brown skin in four shades, dark brown to light tan; black hair with dark grey and grey highlights; white boots shaded light grey; cream-white eyes.
-```
-
-## 14. Fall, east
-
-Image 2: `pose-fall-east.png`
-
-```text
-Pixel art sprite sheet of the boy on the LEFT of image 1 (image 3 shows his face and hair closer): brought down by a tackle in four frames, side on, facing right: dropping onto his hip, sliding on the grass with his legs out, the same sliding pose lower, then pushing back up to run on.
-
-Image 2 is the layout: copy it exactly, 4 cells in 2 columns and 2 rows, read left to right, top row first, with a flat magenta background (pure #FF00FF) and the same dark grey gaps. Each cell is one game frame of 64 by 62 pixels drawn 6 times bigger, so one pixel is one solid 6 by 6 square. In each cell, draw him in place of the pose that is there, doing the same thing at the same size.
-
-Size: standing, he is 58 pixels tall: hair on the top green line, soles on the bottom green line, feet centred on the blue line.
-
-Style: a 1-pixel black outline all around him, flat colours only. No anti-aliasing, blur, gradients, soft shading or glow. Nothing else in the cells: no ground, shadow, ball, text or grid.
-
-Colours: pure black outline; red shirt in four reds, from deep wine red to bright warm red; white shorts shaded pale blue-grey; navy socks with two lighter blues; warm brown skin in four shades, dark brown to light tan; black hair with dark grey and grey highlights; white boots shaded light grey; cream-white eyes.
-```
-
-## 15. Fall, north-east
-
-Image 2: `pose-fall-north-east.png`
-
-```text
-Pixel art sprite sheet of the boy on the LEFT of image 1 (image 3 shows his face and hair closer): brought down by a tackle in four frames, facing away and to the right: dropping onto his hip, sliding on the grass with his legs out, the same sliding pose lower, then pushing back up to run on.
-
-Image 2 is the layout: copy it exactly, 4 cells in 2 columns and 2 rows, read left to right, top row first, with a flat magenta background (pure #FF00FF) and the same dark grey gaps. Each cell is one game frame of 64 by 62 pixels drawn 6 times bigger, so one pixel is one solid 6 by 6 square. In each cell, draw him in place of the pose that is there, doing the same thing at the same size.
-
-Size: standing, he is 58 pixels tall: hair on the top green line, soles on the bottom green line, feet centred on the blue line.
-
-Style: a 1-pixel black outline all around him, flat colours only. No anti-aliasing, blur, gradients, soft shading or glow. Nothing else in the cells: no ground, shadow, ball, text or grid.
-
-Colours: pure black outline; red shirt in four reds, from deep wine red to bright warm red; white shorts shaded pale blue-grey; navy socks with two lighter blues; warm brown skin in four shades, dark brown to light tan; black hair with dark grey and grey highlights; white boots shaded light grey; cream-white eyes.
-```
-
-## 16. Fall, north
-
-Image 2: `pose-fall-north.png`
-
-```text
-Pixel art sprite sheet of the boy on the LEFT of image 1 (image 3 shows his face and hair closer): brought down by a tackle in four frames, with his back to us: dropping onto his hip, sliding on the grass with his legs out, the same sliding pose lower, then pushing back up to run on.
-
-Image 2 is the layout: copy it exactly, 4 cells in 2 columns and 2 rows, read left to right, top row first, with a flat magenta background (pure #FF00FF) and the same dark grey gaps. Each cell is one game frame of 64 by 62 pixels drawn 6 times bigger, so one pixel is one solid 6 by 6 square. In each cell, draw him in place of the pose that is there, doing the same thing at the same size.
-
-Size: standing, he is 58 pixels tall: hair on the top green line, soles on the bottom green line, feet centred on the blue line.
-
-Style: a 1-pixel black outline all around him, flat colours only. No anti-aliasing, blur, gradients, soft shading or glow. Nothing else in the cells: no ground, shadow, ball, text or grid.
-
-Colours: pure black outline; red shirt in four reds, from deep wine red to bright warm red; white shorts shaded pale blue-grey; navy socks with two lighter blues; warm brown skin in four shades, dark brown to light tan; black hair with dark grey and grey highlights; white boots shaded light grey; cream-white eyes.
-```
-
-## 17. Dive, part 1
+## 13. Dive, part 1
 
 Image 2: `pose-dive-east-1.png`
 
@@ -280,7 +218,7 @@ Style: a 1-pixel black outline all around him, flat colours only. No anti-aliasi
 Colours: pure black outline; red shirt in four reds, from deep wine red to bright warm red; white shorts shaded pale blue-grey; navy socks with two lighter blues; warm brown skin in four shades, dark brown to light tan; black hair with dark grey and grey highlights; white boots shaded light grey; cream-white eyes.
 ```
 
-## 18. Dive, part 2
+## 14. Dive, part 2
 
 Image 2: `pose-dive-east-2.png`
 
@@ -296,7 +234,7 @@ Style: a 1-pixel black outline all around him, flat colours only. No anti-aliasi
 Colours: pure black outline; red shirt in four reds, from deep wine red to bright warm red; white shorts shaded pale blue-grey; navy socks with two lighter blues; warm brown skin in four shades, dark brown to light tan; black hair with dark grey and grey highlights; white boots shaded light grey; cream-white eyes.
 ```
 
-## 19. Celebrate, part 1
+## 15. Celebrate, part 1
 
 Image 2: `pose-celebrate-1.png`
 
@@ -312,7 +250,7 @@ Style: a 1-pixel black outline all around him, flat colours only. No anti-aliasi
 Colours: pure black outline; red shirt in four reds, from deep wine red to bright warm red; white shorts shaded pale blue-grey; navy socks with two lighter blues; warm brown skin in four shades, dark brown to light tan; black hair with dark grey and grey highlights; white boots shaded light grey; cream-white eyes.
 ```
 
-## 20. Celebrate, part 2
+## 16. Celebrate, part 2
 
 Image 2: `pose-celebrate-2.png`
 

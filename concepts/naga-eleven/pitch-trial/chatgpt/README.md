@@ -29,15 +29,15 @@ python3 tools/pitch_trial/pose_sheets.py
 The game draws five directions and mirrors the other three, so west, south-west and north-west
 are never drawn.
 
-| animation | frames | speed  | directions                     | pose sheets                                    |
-| --------- | ------ | ------ | ------------------------------ | ---------------------------------------------- |
-| idle      | 1      | –      | south, south-east, east, NE, N | `pose-idle`                                    |
-| run       | 6      | 12 fps | all five                       | `pose-run-<direction>`                         |
-| kick      | 3      | 12 fps | south, south-east, east, NE    | `pose-kick-south-southeast`, `-east-northeast` |
-| slide     | 3      | 12 fps | all five                       | `pose-slide-…` (three sheets)                  |
-| fall      | 4      | 7 fps  | all five                       | `pose-fall-<direction>`                        |
-| dive      | 8      | 14 fps | east (the keeper)              | `pose-dive-east-1`, `-2`                       |
-| celebrate | 8      | 10 fps | south                          | `pose-celebrate-1`, `-2`                       |
+| animation | frames | speed  | directions                           | pose sheets                                    |
+| --------- | ------ | ------ | ------------------------------------ | ---------------------------------------------- |
+| idle      | 1      | –      | south, south-east, east, NE, N       | `pose-idle`                                    |
+| run       | 6      | 12 fps | all five                             | `pose-run-<direction>`                         |
+| kick      | 3      | 12 fps | south, south-east, east, NE          | `pose-kick-south-southeast`, `-east-northeast` |
+| slide     | 3      | 12 fps | all five                             | `pose-slide-…` (three sheets)                  |
+| fall      | 4      | 7 fps  | all five; frames 1–3 are the slide's | `pose-fall-getting-up` (frame 4 only)          |
+| dive      | 8      | 14 fps | east (the keeper)                    | `pose-dive-east-1`, `-2`                       |
+| celebrate | 8      | 10 fps | south                                | `pose-celebrate-1`, `-2`                       |
 
 The directions in words: south faces the camera; south-east faces down and to the right; east is
 side on, facing right; north-east faces away and to the right; north is the back.

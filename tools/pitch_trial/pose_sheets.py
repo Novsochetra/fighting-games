@@ -30,7 +30,8 @@ SHEETS = [
     ('slide-south-southeast', 'slide', 3, [(d, i) for d in ('south', 'south-east') for i in range(3)]),
     ('slide-east-northeast', 'slide', 3, [(d, i) for d in ('east', 'north-east') for i in range(3)]),
     ('slide-north', 'slide', 3, [('north', i) for i in range(3)]),
-    *[(f'fall-{d}', 'fall', 2, [(d, i) for i in range(4)]) for d in ROW_OF],
+    # the fall's first three frames are the slide's; only its last, pushing back up, is its own
+    ('fall-getting-up', 'fall', 3, [(d, 3) for d in ROW_OF]),
     ('dive-east-1', 'dive', 2, [('east', i) for i in range(4)]),
     ('dive-east-2', 'dive', 2, [('east', i) for i in range(4, 8)]),
     ('celebrate-1', 'celebrate', 2, [('south', i) for i in range(4)]),
