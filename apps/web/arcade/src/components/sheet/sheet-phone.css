@@ -1,0 +1,91 @@
+/* A phone's sheet is UIKit's page sheet, which slides without fading and sets the screen under it
+   back onto black rather than blurring it; sheet-gesture.js lets a finger pull it down. */
+@media (max-width: 40rem) {
+  :root.has-open-sheet,
+  :root.has-open-sheet body {
+    background: var(--color-sheet-underlay);
+  }
+
+  .sheet {
+    --sheet-enter: 0 100%;
+    --sheet-scale: 1;
+    --sheet-enter-opacity: 1;
+
+    inline-size: 100%;
+    max-inline-size: 100%;
+    max-block-size: calc(100dvh - var(--size-sheet-gap-top));
+    margin-block-end: 0;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  .sheet[open] {
+    animation-timing-function: var(--easing-sheet-phone);
+  }
+
+  .sheet.is-closing {
+    animation-timing-function: var(--easing-sheet-phone);
+  }
+
+  .sheet.is-settling {
+    transition: translate var(--duration-sheet) var(--easing-sheet-phone);
+  }
+
+  /* Sticky, so it stays at the sheet's top edge as the sheet scrolls; the negative margin keeps it
+     out of the layout, over the art. */
+  .sheet::before {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+    display: block;
+    inline-size: var(--size-sheet-grabber-width);
+    block-size: var(--size-sheet-grabber-height);
+    margin: 0 auto calc(-1 * var(--size-sheet-grabber-height));
+    content: '';
+    background: var(--color-sheet-grabber);
+    border-radius: var(--radius-pill);
+    translate: 0 var(--offset-sheet-grabber);
+  }
+
+  .sheet::backdrop {
+    opacity: calc(1 - var(--sheet-pull, 0));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .sheet.is-settling::backdrop {
+    transition: opacity var(--duration-sheet) var(--easing-sheet-phone);
+  }
+
+  .sheet__body {
+    padding-block-end: max(var(--space-8), env(safe-area-inset-bottom));
+  }
+
+  .screen-stack {
+    transition:
+      scale var(--duration-sheet) var(--easing-sheet-phone),
+      translate var(--duration-sheet) var(--easing-sheet-phone),
+      border-radius var(--duration-sheet) var(--easing-sheet-phone);
+    transform-origin: 50% 0;
+  }
+
+  :root:has(.sheet[open]:not(.is-closing)) .screen-stack {
+    --sheet-recede: calc(1 - var(--sheet-pull, 0));
+
+    scale: calc(1 - (1 - var(--scale-sheet-recede)) * var(--sheet-recede));
+    border-radius: calc(var(--radius-sheet-recede) * var(--sheet-recede));
+    translate: 0 calc(var(--offset-sheet-recede) * var(--sheet-recede));
+  }
+
+  :root:has(.sheet.is-dragging) .screen-stack {
+    transition: none;
+  }
+}
+
+@media (max-width: 40rem) and (prefers-reduced-motion: reduce) {
+  .sheet.is-settling,
+  .sheet.is-settling::backdrop,
+  .screen-stack {
+    transition: none;
+  }
+}

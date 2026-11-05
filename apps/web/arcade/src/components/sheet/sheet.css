@@ -5,10 +5,12 @@
   overscroll-behavior: none;
 }
 
-/* A form sheet like iPadOS's: centered on wide screens, rising from the bottom edge on phones. */
+/* A form sheet like iPadOS's: centered on wide screens, rising from the bottom edge on phones
+   (sheet-phone.css). */
 .sheet {
   --sheet-enter: 0 var(--space-6);
   --sheet-scale: 0.96;
+  --sheet-enter-opacity: 0;
 
   inline-size: min(var(--size-sheet), calc(100% - 2 * var(--space-gutter)));
   max-block-size: calc(100dvh - 2 * var(--space-gutter));
@@ -186,27 +188,9 @@
   }
 }
 
-@media (max-width: 40rem) {
-  .sheet {
-    --sheet-enter: 0 100%;
-    --sheet-scale: 1;
-
-    inline-size: 100%;
-    max-inline-size: 100%;
-    max-block-size: calc(100dvh - var(--space-10));
-    margin-block-end: 0;
-    border-end-start-radius: 0;
-    border-end-end-radius: 0;
-  }
-
-  .sheet__body {
-    padding-block-end: max(var(--space-8), env(safe-area-inset-bottom));
-  }
-}
-
 @keyframes sheet-in {
   from {
-    opacity: 0;
+    opacity: var(--sheet-enter-opacity);
     translate: var(--sheet-enter);
     scale: var(--sheet-scale);
   }
@@ -214,7 +198,7 @@
 
 @keyframes sheet-out {
   to {
-    opacity: 0;
+    opacity: var(--sheet-enter-opacity);
     translate: var(--sheet-enter);
     scale: var(--sheet-scale);
   }

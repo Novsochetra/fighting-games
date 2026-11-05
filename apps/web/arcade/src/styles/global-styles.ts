@@ -8,3 +8,4 @@ import './scroll-edge.css';
 import '@/components/segmented/segmented.css';
 import '@/components/notice/notice.css';
 import '@/components/sheet/sheet.css';
+import '@/components/sheet/sheet-phone.css';

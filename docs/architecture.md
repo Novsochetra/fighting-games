@@ -583,7 +583,12 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   Safari and a mouse wheel scroll the arcade under it, and the sheet itself takes the focus. Every
   sheet of the arcade works through `use-sheet.ts` over `sheet.js`: it shows while its screen asks
   for it, Escape and a tap on the dimmed page close it with its animation, and a screen that goes
-  takes its sheet down at once.
+  takes its sheet down at once. On a phone (`sheet-phone.css`) it is UIKit's page sheet: it slides up
+  opaque under a grabber, and the screen under it recedes into a card on black instead of blurring.
+  A finger pulls it down from its top (`sheet-gesture.js` over the plain `sheet-drag.js`): the sheet
+  follows it, the page comes back as it goes, and on letting go it closes past a third of its height
+  or on a flick, else springs back. The first move decides, since iOS Safari ignores a
+  `preventDefault` once a touch scrolls: down from the top pulls, anything else scrolls.
 - **Trailer** (`DetailsMedia.tsx`, `trailer-player.js`, `trailer.css`): a game's `game.json` may
   name a trailer, an `.mp4` (MP4, H.264 and AAC, is the one kind every phone plays) in its
   `assets/trailer/` or at an `https:` address of its own, such as a CDN (`catalog/trailer-rules.js`,
