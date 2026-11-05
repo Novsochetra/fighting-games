@@ -7,3 +7,5 @@ SPRITE_PROMPT.md
 **/test/**/__snapshots__/
 **/test/**/fixtures/
 **/assets/**
+# written by tools/pose_guides/make.py
+concepts/naga-eleven/pose-guides/chatgpt-prompts.md
