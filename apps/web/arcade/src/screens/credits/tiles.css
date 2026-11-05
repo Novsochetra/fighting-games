@@ -26,6 +26,24 @@
   background: var(--color-brand-coffee);
 }
 
+.credits-tile--youtube {
+  background: var(--color-brand-youtube);
+}
+
+.credits-tile--youtube .icon {
+  inline-size: 72%;
+  block-size: 72%;
+}
+
+.credits-tile--x {
+  background: var(--color-brand-x);
+}
+
+.credits-tile--x .icon {
+  inline-size: 52%;
+  block-size: 52%;
+}
+
 .credits-tile--facebook {
   background: var(--color-brand-facebook);
 }

@@ -11,6 +11,8 @@ import { claimedAndRealSize } from '../../../support/jpeg-size.js';
 const SOCIAL_LINKS = [
   'https://buymeacoffee.com/sochetranov',
   'https://github.com/Novsochetra',
+  'https://www.youtube.com/@sochetranov',
+  'https://x.com/Sochetra_NOV',
   'https://www.facebook.com/sochetra.nov.7',
   'https://www.facebook.com/profile.php?id=61594987526699',
 ];
@@ -44,14 +46,14 @@ describe('the credits page', () => {
     expect(textOf(one('#credits-bar-title'))).toBe('Nov Sochetra');
   });
 
-  it('links to the maker on Buy Me a Coffee first, then GitHub and Facebook', () => {
+  it('links to the maker on Buy Me a Coffee first, then GitHub, YouTube, X and Facebook', () => {
     const hrefs = all('#social-links a').map((link) => link.getAttribute('href'));
     expect(hrefs).toEqual(SOCIAL_LINKS);
   });
 
   it("links to Morodok Angkor's Facebook page under the maker's own", () => {
     const [mine, morodok] = all('#social-links a')
-      .slice(2)
+      .slice(4)
       .map((link) => textOf(link));
 
     expect(mine).toBe('Facebooksochetra.nov.7');
@@ -72,7 +74,7 @@ describe('the credits page', () => {
 
   it('names every row by its title, with the icons hidden from screen readers', () => {
     const rows = all('.credits-row');
-    expect(rows).toHaveLength(7);
+    expect(rows).toHaveLength(9);
     for (const row of rows) {
       expect(textOf(row.querySelector('.credits-row__title'))).not.toBe('');
       expect(row.querySelector('.credits-tile').getAttribute('aria-hidden')).toBe('true');
