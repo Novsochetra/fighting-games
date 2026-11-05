@@ -584,7 +584,7 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   sheet of the arcade works through `use-sheet.ts` over `sheet.js`: it shows while its screen asks
   for it, Escape and a tap on the dimmed page close it with its animation, and a screen that goes
   takes its sheet down at once. On a phone (`sheet-phone.css`) it is UIKit's page sheet: it slides up
-  opaque under a grabber, and the screen under it dims without blurring, staying its full size.
+  opaque under a grabber, and the screen under it dims and blurs, staying its full size.
   A finger pulls it down from its top (`sheet-gesture.js` over the plain `sheet-drag.js`): the sheet
   follows it, the dimming lifts as it goes, and on letting go it closes past a third of its height
   or on a flick, else springs back. The first move decides, since iOS Safari ignores a

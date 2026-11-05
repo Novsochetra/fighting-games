@@ -1,5 +1,5 @@
-/* A phone's sheet is UIKit's page sheet, which slides without fading and dims the screen under it
-   without blurring it; sheet-gesture.js lets a finger pull it down. */
+/* A phone's sheet is UIKit's page sheet, which slides without fading; sheet-gesture.js lets a finger
+   pull it down. */
 @media (max-width: 40rem) {
   .sheet {
     --sheet-enter: 0 100%;
@@ -44,8 +44,6 @@
 
   .sheet::backdrop {
     opacity: calc(1 - var(--sheet-pull, 0));
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
   }
 
   .sheet.is-settling::backdrop {
