@@ -69,7 +69,6 @@
   --color-on-tag: var(--color-white);
   --color-sheet-backdrop: rgb(0 0 0 / 55%);
   --color-sheet-grabber: rgb(235 235 245 / 45%);
-  --color-sheet-underlay: var(--color-black);
   --color-chip: var(--color-apple-gray-5);
   --color-soon-top: var(--color-apple-gray-5);
   --color-soon-bottom: var(--color-black);
@@ -297,7 +296,6 @@
   --radius-card: 28px;
   --radius-card-ring: 38px;
   --radius-sheet: 1.75rem;
-  --radius-sheet-recede: 12px;
   --radius-pill: 999px;
   --radius-banner: 22px;
   --radius-icon-tile: 8px;
@@ -338,9 +336,7 @@
   --scale-heart-pop: 1.28;
   --scale-tile-press: 1.08;
   --scale-enter: 0.82;
-  --scale-sheet-recede: 0.92;
   --offset-sheet-grabber: 5px;
-  --offset-sheet-recede: calc(env(safe-area-inset-top) + var(--space-2));
   --opacity-halo: 0.6;
   --opacity-ring-track: 0.25;
   --offset-tip: 6px;

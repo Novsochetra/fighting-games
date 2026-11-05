@@ -8,18 +8,15 @@ import {
   trackVelocity,
 } from './sheet-drag.js';
 
-const rootOf = (dialog) => dialog.ownerDocument.documentElement;
-
-// The pull sits on the root, where both the backdrop and the receding screen under the sheet read it.
 function follow(dialog, offset) {
   dialog.style.translate = `0 ${offset}px`;
-  rootOf(dialog).style.setProperty('--sheet-pull', String(pullOf(offset, dialog.offsetHeight)));
+  dialog.style.setProperty('--sheet-pull', String(pullOf(offset, dialog.offsetHeight)));
 }
 
 export function clearDrag(dialog) {
   dialog.classList.remove('is-dragging');
   dialog.style.removeProperty('translate');
-  rootOf(dialog).style.removeProperty('--sheet-pull');
+  dialog.style.removeProperty('--sheet-pull');
 }
 
 function settle(dialog, settling) {
