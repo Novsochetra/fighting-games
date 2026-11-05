@@ -1,8 +1,9 @@
 # Naga Eleven: the pitch player's states, for ChatGPT
 
 The pitch player's animations redrawn by ChatGPT in the new style (`../../pitch-boy-front.webp`),
-at exactly the size the game draws him. Each pose sheet here is the game's own frames on a pixel
-grid, in the cells ChatGPT fills.
+at exactly the size the game draws him. Each pose sheet here is a skeleton's poses
+(`tools/pose_guides/`, see `../../pose-guides/README.md`) on a pixel grid, in the cells ChatGPT
+fills; the old sheets' poses are not used, as several were drawn wrong.
 
 ```bash
 python3 tools/pitch_trial/pose_sheets.py

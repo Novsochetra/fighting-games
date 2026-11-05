@@ -3,16 +3,23 @@
 
     python3 tools/pitch_trial/pose_sheets.py    writes concepts/naga-eleven/pitch-trial/chatgpt/
 
-Each sheet is a few frames of the game's own sprites, 64×62 each, scaled on a pixel grid on
-magenta, in the cells ChatGPT is asked to fill: it redraws every pose in the new style, at the
-same size, and the frames are read back from those cells.
+Each sheet is a few frames of the pose guides' skeleton (tools/pose_guides/), 64×62 each, scaled
+on a pixel grid on magenta, in the cells ChatGPT is asked to fill: it draws the boy in every pose in
+the new style, at the same size, and the frames are read back from those cells. The poses are the
+skeleton's, not the old sheets', as several of those were drawn wrong.
 """
 import os
+import sys
 
 from PIL import Image, ImageDraw
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-SPRITES = os.path.join(ROOT, 'apps/web/games/naga-eleven/assets/sprites')
+sys.path.insert(0, os.path.join(ROOT, 'tools', 'pose_guides'))
+
+from animations import ANIMATIONS  # noqa: E402
+from draw import frame_image  # noqa: E402
+
+POSES = {animation['name']: animation for animation in ANIMATIONS}
 OUT = os.path.join(ROOT, 'concepts/naga-eleven/pitch-trial/chatgpt')
 WIDTH, HEIGHT = 64, 62
 SCALE = 6
@@ -55,23 +62,22 @@ def paint_cell(sheet, left, top):
     draw.line((left + MIDDLE * SCALE, top, left + MIDDLE * SCALE, top + height), fill=CENTRE, width=2)
 
 
-def frame_of(sheet, animation, direction, index):
-    row = 0 if animation in SINGLE_ROW else ROW_OF[direction]
-    box = (index * WIDTH, row * HEIGHT, (index + 1) * WIDTH, (row + 1) * HEIGHT)
-    return sheet.crop(box).resize((WIDTH * SCALE, HEIGHT * SCALE), Image.NEAREST)
+def frame_of(animation, direction, index):
+    pose = POSES[animation]['frames'][index]
+
+    return frame_image(pose, direction, SCALE, (WIDTH, HEIGHT), (MIDDLE, SOLE_ROW + 1), bare=True)
 
 
 def pose_sheet(animation, columns, cells, with_poses=True):
     rows = -(-len(cells) // columns)
     width, height = WIDTH * SCALE, HEIGHT * SCALE
     sheet = Image.new('RGB', (columns * width + (columns + 1) * GAP, rows * height + (rows + 1) * GAP), BORDER)
-    source = Image.open(os.path.join(SPRITES, f'{animation}.png')).convert('RGBA')
     for i, (direction, index) in enumerate(cells):
         left = GAP + (i % columns) * (width + GAP)
         top = GAP + (i // columns) * (height + GAP)
         paint_cell(sheet, left, top)
         if with_poses:
-            pose = frame_of(source, animation, direction, index)
+            pose = frame_of(animation, direction, index)
             sheet.paste(pose, (left, top), pose)
     return sheet
 

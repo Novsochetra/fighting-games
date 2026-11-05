@@ -134,21 +134,24 @@ def ground(pen, world, width):
     pen.draw.ellipse([x - 10 * scale, y - 3.2 * scale, x + 10 * scale, y + 3.2 * scale], fill=SHADOW)
 
 
-def draw_frame(image, origin, scale, pose, direction, frame=FRAME, anchor=ANCHOR):
+def draw_frame(image, origin, scale, pose, direction, frame=FRAME, anchor=ANCHOR, bare=False):
     world, face_forward, face_left = staged(pose, direction, frame, anchor)
     pen = Pen(image, scale, origin, anchor)
-    ground(pen, world, frame[0])
-    items = bone_items(world, pen) + torso_item(world, pen)
-    items += head_item(world, face_forward, face_left, pen) + ball_item(world, pen)
+    items = bone_items(world, pen) + torso_item(world, pen) + head_item(world, face_forward, face_left, pen)
+
+    if not bare:
+        ground(pen, world, frame[0])
+        items += ball_item(world, pen)
 
     for _, paint in sorted(items, key=lambda item: item[0]):
         paint()
 
 
-def frame_image(pose, direction, scale, frame=FRAME, anchor=ANCHOR, supersample=4):
-    """One frame, `scale` times the game's size, smoothed by drawing it larger and shrinking."""
+def frame_image(pose, direction, scale, frame=FRAME, anchor=ANCHOR, bare=False, supersample=4):
+    """One frame, `scale` times the game's size, smoothed by drawing it larger and shrinking; a bare
+    frame is the skeleton alone on a clear ground, to lay over another sheet's cells."""
     big = scale * supersample
-    image = Image.new('RGB', (frame[0] * big, frame[1] * big), PAPER)
-    draw_frame(image, (0, 0), big, pose, direction, frame, anchor)
+    image = Image.new('RGBA', (frame[0] * big, frame[1] * big), (0, 0, 0, 0) if bare else PAPER + (255,))
+    draw_frame(image, (0, 0), big, pose, direction, frame, anchor, bare)
 
     return image.resize((frame[0] * scale, frame[1] * scale), Image.LANCZOS)

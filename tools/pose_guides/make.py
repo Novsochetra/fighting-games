@@ -5,8 +5,8 @@
 For each animation it writes, in concepts/naga-eleven/pose-guides/<animation>/:
   <direction>.png  the strip to attach: its frames left to right at 4x, a grey line between frames,
   sheet.png        every direction's strip, labelled, to check the whole animation at a glance,
-  <direction>.gif  the strip played at the game's speed, to check the motion reads,
-and chatgpt-prompts.md beside them, one prompt per strip.
+  <direction>.gif  the strip played at the game's speed, to check the motion reads.
+tools/pitch_trial/pose_sheets.py lays the same poses into the cells ChatGPT fills.
 His right limbs are red and orange, his left blue and cyan; the pale ball is only a guide.
 """
 
@@ -17,7 +17,6 @@ from PIL import Image, ImageDraw, ImageFont
 
 from animations import ANIMATIONS
 from draw import GRID, INK, PAPER, frame_image
-from prompts import document
 from stage import ANCHOR, FRAME, GUIDE_SCALE as SCALE
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -33,7 +32,7 @@ def frames_of(animation, direction):
     size = animation.get('frame', FRAME)
     anchor = animation.get('anchor', ANCHOR)
 
-    return [frame_image(pose, direction, SCALE, size, anchor) for pose in animation['frames']]
+    return [frame_image(pose, direction, SCALE, size, anchor).convert('RGB') for pose in animation['frames']]
 
 
 def strip(frames):
@@ -90,9 +89,6 @@ def main(names):
     for animation in ANIMATIONS:
         if not names or animation['name'] in names:
             write(animation)
-
-    with open(os.path.join(OUT, 'chatgpt-prompts.md'), 'w') as prompts:
-        prompts.write(document(ANIMATIONS))
 
 
 if __name__ == '__main__':
