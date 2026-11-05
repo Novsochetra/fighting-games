@@ -1,4 +1,6 @@
 import { prefersReducedMotion, readDuration } from '@/styles/motion-tokens.js';
+import { isOutside } from './sheet-drag.js';
+import { clearDrag, wireDrag } from './sheet-gesture.js';
 
 // A modal dialog leaves the page behind it scrollable: a finger on the dimmed backdrop in iOS Safari,
 // or a mouse wheel, scrolled the arcade under the sheet. It holds still while the sheet is up, as
@@ -26,9 +28,6 @@ function hideDialog(dialog) {
   }
   holdPage(dialog, false);
 }
-
-const isOutside = (rect, { clientX, clientY }) =>
-  clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom;
 
 // Escape and a click on the dimmed page close the sheet with its animation, like the close button.
 function wireClosing({ dialog, closeButton }, { close, signal }) {
@@ -62,6 +61,7 @@ export function createSheet({ dialog, closeButton, document, sound, signal }) {
     clearTimeout(closing);
     closing = null;
     dialog.classList.remove('is-closing');
+    clearDrag(dialog);
     if (dialog.open) {
       hideDialog(dialog);
     }
@@ -88,5 +88,6 @@ export function createSheet({ dialog, closeButton, document, sound, signal }) {
   }
 
   wireClosing({ dialog, closeButton }, { close, signal });
+  wireDrag({ dialog, close, signal });
   return { open, close, finish, isOpen: () => dialog.open };
 }
