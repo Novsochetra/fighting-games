@@ -1,5 +1,7 @@
-// What every screen stands on, in the order the pages loaded it: the tokens first, then the page, its
-// buttons and the pieces the screens share. Each screen imports its own sheets after these.
+// What every screen stands on, in the order the pages loaded it: the font and the tokens first, then
+// the page, its buttons and the pieces the screens share. Each screen imports its own sheets after
+// these.
+import './fonts.css';
 import './tokens.css';
 import './page.css';
 import './buttons.css';

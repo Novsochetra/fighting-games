@@ -31,7 +31,7 @@ describe('light and dark appearance', () => {
     const html = await readFile(path.join(PAGES_ROOT, 'index.html'), 'utf8');
     const early = html.indexOf('<script src="appearance-early.js"></script>');
     expect(early).toBeGreaterThan(0);
-    expect(early).toBeLessThan(html.search(/<link\s+rel="stylesheet"/));
+    expect(html.slice(0, early)).not.toMatch(/<link\s+rel="stylesheet"/);
     expect(early).toBeLessThan(html.indexOf('<script type="module"'));
     expect(html).toContain('<meta name="color-scheme" content="dark light" />');
   });

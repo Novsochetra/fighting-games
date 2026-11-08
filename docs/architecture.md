@@ -442,9 +442,18 @@ The arcade works offline like an installed app, and so does each game once it ha
   with a revision. Installing fills one cache named by that list and, once it is all in, takes over
   at once; a page open on the old build keeps what it loaded, its next load is the new one, and the
   builds before go. The pages and files come from that cache, so the arcade opens without the network.
-- **The API** (`api-cache.js`): the games and the supporters are read from the network first, and
-  the last answer stands in offline; the worker reads them once as it installs, since the first
-  visit read them before it was there. A gift sent offline fails as it always did, saying so.
+- **A slow network** opens the arcade as fast as none: no page waits on another site before it
+  draws (`test/regression/bugs/arcade-on-a-slow-network.test.js`), since a stylesheet from one held
+  the page, and the app's module with it, as long as a slow network took, while offline it failed at
+  once. So the arcade's font, Inter, ships with it (`src/styles/fonts.css` and `fonts/`, latin and
+  latin-ext cut as Google Fonts serves them, with its `OFL.txt`), kept with the build's files.
+- **The API** (`api-cache.js`): the games change only with a deploy, so the worker answers
+  `api/games` from its last answer at once and reads the network behind it for the next visit (the
+  network's answer only when it has none). The supporters and the leaderboard change with each gift
+  and score, so they are read from the network first, and the last answer stands in offline or once
+  the network has taken `NETWORK_LIMIT_MS` (3 s); its late answer is still kept for the next read.
+  The worker reads the games and the supporters once as it installs, since the first visit read them
+  before it was there. A gift sent offline fails as it always did, saying so.
 - **A game** (`game-cache.js`): a game is kept once the player saves it (see Saving a game), and
   the whole of it comes down: the build writes each game's `offline.json` (`game-files.js`), every file it may load
   as it is played (not its screenshots, link-preview art, trailer or notes, nor a sprite that has a packed
@@ -502,7 +511,8 @@ controls do in `home-context.tsx` and `home-actions.ts`, and a folder for each o
 `launch/`, `banners/`, `coffee/` and `inputs/`, its keys and pad) is a game hub like the Apple TV app: the selected game's key art fills the top of the
 screen behind a carousel of 16:9 cards, and a library of every game sits below. Type follows Apple's
 text styles (Large Title, Title, Body, Subheadline, Footnote) in SF Pro on Apple devices, with Inter
-standing in for it elsewhere; buttons are Apple's Play pill and frosted glass ones (`buttons.css`).
+standing in for it elsewhere (see Offline: it ships with the arcade); buttons are Apple's Play pill
+and frosted glass ones (`buttons.css`).
 
 It comes in Apple's dark and light appearances. Dark is the default set of tokens in `tokens.css`;
 `:root[data-appearance='light']` swaps in the light colors, a lighter shadow, side cards that dim

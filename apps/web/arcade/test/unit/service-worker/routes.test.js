@@ -22,7 +22,9 @@ describe('routeOf', () => {
       kind: 'file',
       key: 'build/main-3f9a.js',
     });
+    expect(routeOf(get('api/games'), SCOPE)).toEqual({ kind: 'catalog' });
     expect(routeOf(get('api/supporters'), SCOPE)).toEqual({ kind: 'api' });
+    expect(routeOf(get('api/leaderboard?game=steel-and-dust'), SCOPE)).toEqual({ kind: 'api' });
     expect(routeOf(get('games/steel-and-dust/', 'navigate'), SCOPE)).toEqual({
       kind: 'game',
       id: 'steel-and-dust',

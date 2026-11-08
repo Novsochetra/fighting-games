@@ -1,4 +1,4 @@
-import { apiNetworkFirst } from './api-cache.js';
+import { apiKeptFirst, apiNetworkFirst } from './api-cache.js';
 import { fromArcade } from './arcade-cache.js';
 import { fromGame, keepNewestWhole } from './game-cache.js';
 import { keepSavedFresh, saveResponse } from './game-downloads.js';
@@ -62,8 +62,10 @@ export function respondTo(event, services) {
       return fromArcadeOrNetwork(context, route.key).catch(offlineResponse);
     case 'file':
       return fromArcadeOrNetwork(context, route.key);
+    case 'catalog':
+      return apiKeptFirst(event, context);
     case 'api':
-      return apiNetworkFirst(context);
+      return apiNetworkFirst(event, context);
     case 'game':
       return startGame(event, context, route);
     case 'save':
