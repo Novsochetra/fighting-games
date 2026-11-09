@@ -10,6 +10,7 @@ import bake_hair
 from grid import write_grid
 from hairstyles import STYLES
 from locks import paint
+from mirror import MIRRORS, flipped_points
 from render import FACINGS, HEIGHT, WIDTH
 
 OUT = Path(__file__).resolve().parents[2] / 'concepts' / 'naga-eleven' / 'hero-kit' / 'hair'
@@ -24,13 +25,20 @@ def over_base(letters, base, direction):
 
 
 def draw(style, direction):
-    """A style's layer for a direction, and its twin (the lopsided style seen with its sides swapped,
-    which the mirrored direction shows) where the art draws one."""
-    art = importlib.import_module(f'hair_art.{style}_{direction.replace("-", "_")}')
-    write(style, direction, art, art.LOCKS, getattr(art, 'SHEENED', None), f'{direction}.txt')
+    """A style's layer for a direction. A mirrored direction takes its counterpart's locks with their
+    sides swapped (the twin of a lopsided style, so the sweep stays on his own side), painted afresh
+    so their light still falls from the upper left."""
+    source = MIRRORS.get(direction, direction)
+    art = importlib.import_module(f'hair_art.{style}_{source.replace("-", "_")}')
 
-    if hasattr(art, 'TWIN_LOCKS'):
-        write(style, direction, art, art.TWIN_LOCKS, getattr(art, 'TWIN_SHEENED', None), f'{direction}.twin.txt')
+    if direction not in MIRRORS:
+        write(style, direction, art, art.LOCKS, getattr(art, 'SHEENED', None), f'{direction}.txt')
+        return
+
+    twin = hasattr(art, 'TWIN_LOCKS')
+    locks = [{**lock, 'points': flipped_points(lock['points'])} for lock in (art.TWIN_LOCKS if twin else art.LOCKS)]
+    sheened = getattr(art, 'TWIN_SHEENED' if twin else 'SHEENED', None)
+    write(style, direction, art, locks, sheened, f'{direction}.txt')
 
 
 def write(style, direction, art, lock_list, sheened, name):

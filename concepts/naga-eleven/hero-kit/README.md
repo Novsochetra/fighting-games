@@ -26,12 +26,12 @@ repaint the same art shade for shade. They stack in this order:
 
 ## Directions
 
-Five directions are drawn (`south`, `south-east`, `east`, `north-east`, `north`); west,
-south-west and north-west are their mirrors. The number is printed after mirroring, so it never
-reads backwards. A part on one side of him (the scars, the captain band, the sweep of the hero's
-hair) has a twin on the other side, `<direction>.twin.txt`, drawn for the three directions that get
-mirrored, so a mirrored player keeps his scar on its cheek, his armband on his left arm and his
-long locks on his right.
+All eight directions are drawn, each lit from the upper left. South, south-east, east, north-east
+and north are drawn by hand over the 3D blockout. South-west, west and north-west are rendered in 3D
+on their own, and their hand-drawn parts (the faces, the hair's locks, the scars) are carried across
+from their counterpart with the sides swapped and lit again from the upper left (`mirror.py`). A
+part on one side of him (a scar, the sweep of the hero's hair) is drawn for its counterpart from the
+other side, as a twin (`TWIN_LOCKS`, `TWIN_SCARS`), so it stays on its own side as he turns.
 
 ## How the art is made
 

@@ -3,10 +3,9 @@
 from pathlib import Path
 
 from grid import write_grid
+from mirror import MIRRORS, flipped_runs
 from marks_art import GEAR, SCARS, TWIN_SCARS, TWINNED
 from render import HEIGHT, WIDTH
-
-MIRRORED_FROM = ('south-east', 'east', 'north-east')
 
 KIT = Path(__file__).resolve().parents[2] / 'concepts' / 'naga-eleven' / 'hero-kit'
 
@@ -26,9 +25,18 @@ def main():
             for direction, runs in directions.items():
                 write_grid(KIT / folder / name / f'{direction}.txt', layer(runs))
 
-    for name in TWINNED:
-        for direction in MIRRORED_FROM:
-            write_grid(KIT / 'scars' / name / f'{direction}.twin.txt', layer(TWIN_SCARS[name].get(direction, [])))
+    for direction, source in MIRRORS.items():
+        for name, directions in SCARS.items():
+            runs = TWIN_SCARS[name].get(source, []) if name in TWINNED else directions.get(source, [])
+            write_flipped(KIT / 'scars' / name / f'{direction}.txt', runs)
+
+        for name, directions in GEAR.items():
+            write_flipped(KIT / 'gear' / name / f'{direction}.txt', directions.get(source, []))
+
+
+def write_flipped(path, runs):
+    if runs:
+        write_grid(path, layer(flipped_runs(runs, relight=False)))
 
 
 if __name__ == '__main__':

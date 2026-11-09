@@ -13,7 +13,8 @@ from model import body_parts
 from pixel import edges, materials_of, shades_of, tidy
 from render import FACINGS, render
 
-FACE_WINDOWS = {'south': (40, 59, 24), 'south-east': (41, 60, 24), 'east': (50, 64, 24)}
+FACE_WINDOWS = {'south': (40, 59, 24), 'south-east': (41, 60, 24), 'east': (50, 64, 24),
+                'south-west': (39, 58, 24), 'west': (35, 49, 24)}
 
 OUT = Path(__file__).resolve().parents[2] / 'concepts' / 'naga-eleven' / 'hero-kit' / 'hair'
 

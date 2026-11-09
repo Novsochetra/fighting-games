@@ -6,6 +6,7 @@ from pathlib import Path
 
 from bake import body_rows
 from grid import write_grid
+from mirror import MIRRORS, flipped_runs
 from render import FACINGS
 
 OUT = Path(__file__).resolve().parents[2] / 'concepts' / 'naga-eleven' / 'hero-kit' / 'body'
@@ -20,11 +21,17 @@ def head_row(left, right, lit, shadow, deep):
 
 def drawn(direction):
     rows = [list(row) for row in body_rows(FACINGS[direction])]
-    module = f'body_art.{direction.replace("-", "_")}'
+    module = f'body_art.{MIRRORS.get(direction, direction).replace("-", "_")}'
 
     try:
         art = importlib.import_module(module)
     except ModuleNotFoundError:
+        return rows
+
+    if direction in MIRRORS:
+        for x, y, run in flipped_runs(getattr(art, 'RUNS', [])):
+            rows[y][x:x + len(run)] = run
+
         return rows
 
     for y, (left, right, lit, shadow, deep) in getattr(art, 'HEAD', {}).items():

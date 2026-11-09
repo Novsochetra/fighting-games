@@ -2,8 +2,9 @@
 small gear (earrings, a plaster). Each is {direction: [(x, y, run)]}; a direction it is hidden
 from is left out.
 
-A scar on one side of the face has a twin on the other side, drawn for the directions the mirrored
-ones are made from (south-east, east, north-east), so a mirrored player keeps his scar where it is.
+A scar on one side of the face has a twin on the other side, drawn for south-east, east and
+north-east: south-west, west and north-west are drawn from it with its sides swapped, so the scar
+stays on its own cheek.
 """
 
 SCARS = {

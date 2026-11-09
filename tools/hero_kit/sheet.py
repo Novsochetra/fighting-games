@@ -1,4 +1,4 @@
-"""Draws a look in every direction, the drawn five and the three mirrored, for a look by eye."""
+"""Draws a look in all eight directions, for a look by eye."""
 
 import sys
 
@@ -6,8 +6,9 @@ from PIL import Image
 
 from compose import painted, stacked
 from palette import OUTLINE, RAMPS
+from render import FACINGS
 
-DRAWN = ['south', 'south-east', 'east', 'north-east', 'north']
+DRAWN = list(FACINGS)
 
 
 def sheet(look, out, scale=4, background=(92, 150, 84, 255)):

@@ -141,11 +141,6 @@
     color: var(--chalk);
   }
 
-  .turn small {
-    font-size: 10px;
-    color: var(--gold-dim);
-  }
-
   aside {
     display: grid;
     gap: 12px;
@@ -478,14 +473,14 @@
   const H = KIT.height;
   const RULER = 26;
   const TURNS = [
-    ['south', 'south', false],
-    ['south-east', 'south-east', false],
-    ['east', 'east', false],
-    ['north-east', 'north-east', false],
-    ['north', 'north', false],
-    ['north-west', 'north-east', true],
-    ['west', 'east', true],
-    ['south-west', 'south-east', true],
+    'south',
+    'south-east',
+    'east',
+    'north-east',
+    'north',
+    'north-west',
+    'west',
+    'south-west',
   ];
   const SHORT = {
     south: 'S',
@@ -582,22 +577,8 @@
     });
   }
 
-  function mirror(frame) {
-    for (const key of ['letter', 'layer', 'name']) {
-      const flipped = new Array(W * H);
-
-      for (let y = 0; y < H; y += 1) {
-        for (let x = 0; x < W; x += 1) {
-          flipped[y * W + x] = frame[key][y * W + (W - 1 - x)];
-        }
-      }
-
-      frame[key] = flipped;
-    }
-  }
-
-  function printNumber(frame, source, mirrored) {
-    const place = KIT.number.places[source];
+  function printNumber(frame, turn) {
+    const place = KIT.number.places[turn];
 
     if (!place || state.number === '' || !state.shown.has('number')) {
       return;
@@ -611,8 +592,7 @@
       .map((digit) => font[digit]);
     const width =
       glyphs.reduce((sum, glyph) => sum + glyph[0].length, 0) + gap * (glyphs.length - 1);
-    const centre = mirrored ? W - centreAt : centreAt;
-    let left = Math.floor(centre - width / 2 + 0.5);
+    let left = Math.floor(centreAt - width / 2 + 0.5);
 
     for (const glyph of glyphs) {
       glyph.forEach((line, dy) => {
@@ -630,12 +610,6 @@
     }
 
     clearAroundNumber(frame);
-  }
-
-  // A mark on one side of him is drawn again on the other side for the directions that get mirrored,
-  // so a mirrored player keeps his scar or armband on its own side.
-  function sided(name, source, mirrored) {
-    return mirrored && KIT.twinned.includes(name) ? `${source}.twin` : source;
   }
 
   // A seam's trim touching a digit makes it misread (a 1 grows a stroke into a 7), so trim next to
@@ -658,7 +632,6 @@
   }
 
   function compose(turn) {
-    const [, source, mirrored] = TURNS.find(([name]) => name === turn);
     const frame = {
       letter: new Array(W * H).fill('.'),
       layer: new Array(W * H).fill(''),
@@ -667,32 +640,22 @@
     const show = (layer) => state.shown.has(layer);
 
     if (show('body')) {
-      stamp(frame, KIT.body[source], 'body', 'body');
+      stamp(frame, KIT.body[turn], 'body', 'body');
     }
 
     if (show('scars')) {
-      state.scars.forEach((scar) =>
-        stamp(frame, KIT.scars[scar]?.[sided(scar, source, mirrored)], 'scars', scar),
-      );
+      state.scars.forEach((scar) => stamp(frame, KIT.scars[scar]?.[turn], 'scars', scar));
     }
 
     if (show('hair') && state.hair !== 'none') {
-      stamp(frame, KIT.hair[state.hair]?.[sided(state.hair, source, mirrored)], 'hair', state.hair);
+      stamp(frame, KIT.hair[state.hair]?.[turn], 'hair', state.hair);
     }
 
     if (show('gear')) {
-      state.gear.forEach((item) =>
-        stamp(frame, KIT.gear[item]?.[sided(item, source, mirrored)], 'gear', item),
-      );
+      state.gear.forEach((item) => stamp(frame, KIT.gear[item]?.[turn], 'gear', item));
     }
 
-    if (mirrored) {
-      mirror(frame);
-    }
-
-    printNumber(frame, source, mirrored);
-    frame.source = source;
-    frame.mirrored = mirrored;
+    printNumber(frame, turn);
 
     return frame;
   }
@@ -824,13 +787,13 @@
     const holder = $('turns');
 
     if (!holder.children.length) {
-      TURNS.forEach(([turn, source, mirrored]) => {
+      TURNS.forEach((turn) => {
         const button = document.createElement('button');
 
         button.className = 'turn';
         button.type = 'button';
         button.dataset.turn = turn;
-        button.innerHTML = `<canvas width="${W}" height="${H}"></canvas>${SHORT[turn]}<small>${mirrored ? `mirrors ${SHORT[source]}` : 'drawn'}</small>`;
+        button.innerHTML = `<canvas width="${W}" height="${H}"></canvas>${SHORT[turn]}`;
         button.addEventListener('click', () => {
           state.turn = turn;
           draw();
@@ -895,11 +858,8 @@
       colour.ramp === 'outline'
         ? 'outline'
         : `${colour.ramp}, shade ${colour.shade + 1} of ${colour.of}`;
-    const drawn = frame.mirrored
-      ? `mirrored from ${SHORT[frame.source]} x ${W - 1 - pixel.x}`
-      : 'drawn';
 
-    return `<dt>Where</dt><dd>${where}</dd><dt>Layer</dt><dd>${layer}</dd><dt>Letter</dt><dd>${letter}</dd><dt>Ramp</dt><dd>${shade}</dd><dt>Colour</dt><dd><i class="swatch" style="background:${colour.hex}"></i>${colour.hex}</dd><dt>Source</dt><dd>${drawn}</dd>`;
+    return `<dt>Where</dt><dd>${where}</dd><dt>Layer</dt><dd>${layer}</dd><dt>Letter</dt><dd>${letter}</dd><dt>Ramp</dt><dd>${shade}</dd><dt>Colour</dt><dd><i class="swatch" style="background:${colour.hex}"></i>${colour.hex}</dd>`;
   }
 
   function drawReadout() {
@@ -1138,9 +1098,9 @@
 
       $('spin').textContent = 'Stop turning';
       spinning = setInterval(() => {
-        const index = TURNS.findIndex(([turn]) => turn === state.turn);
+        const index = TURNS.indexOf(state.turn);
 
-        state.turn = TURNS[(index + 1) % TURNS.length][0];
+        state.turn = TURNS[(index + 1) % TURNS.length];
         draw();
       }, 450);
     });

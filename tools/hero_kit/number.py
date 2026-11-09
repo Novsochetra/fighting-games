@@ -1,6 +1,5 @@
 """The shirt's number: a small pixel font printed on the shirt where each direction shows it, the
-chest from the front and the back from behind. It is drawn after any mirroring, so a mirrored
-player's number still reads the right way round."""
+chest from the front and the back from behind, so it always reads the right way round."""
 
 import math
 
@@ -42,6 +41,8 @@ PLACES = {
     'south-east': ('chest', 52.5, 50, 1),
     'north-east': ('back-narrow', 47, 52, 1),
     'north': ('back', 49.5, 49, 2),
+    'north-west': ('back-narrow', 53, 52, 1),
+    'south-west': ('chest', 47.5, 50, 1),
 }
 
 PRINTED = {'P': 'Y', 'R': 'Y', 'r': 'T', 'd': 't'}
@@ -51,7 +52,7 @@ PRINTED = {'P': 'Y', 'R': 'Y', 'r': 'T', 'd': 't'}
 CLEARED = {'t': 'r', 'T': 'R', 'Y': 'R'}
 
 
-def printed(rows, direction, number, mirrored=False):
+def printed(rows, direction, number):
     """Prints `number` on the shirt pixels of `rows`, shaded by the shirt beneath it."""
     if direction not in PLACES or not number:
         return rows
@@ -59,7 +60,6 @@ def printed(rows, direction, number, mirrored=False):
     font, centre, top, gap = PLACES[direction]
     glyphs = [FONTS[font][digit] for digit in str(number) if digit in FONTS[font]]
     width = sum(len(glyph[0]) for glyph in glyphs) + gap * (len(glyphs) - 1)
-    centre = len(rows[0]) - centre if mirrored else centre
     left = math.floor(centre - width / 2 + 0.5)
     rows = [list(row) for row in rows]
 

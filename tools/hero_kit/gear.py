@@ -18,7 +18,7 @@ def wristbands():
 
 
 def captain_band(side=-1):
-    """On his left arm; its twin, on the right, is what a mirrored player shows."""
+    """On his left arm."""
     return [('gear', partial(cone, start=mirrored(side, along(SHOULDER, ELBOW, 0.74)),
                              end=mirrored(side, along(SHOULDER, ELBOW, 0.96)), start_radius=5.0, end_radius=4.8))]
 
@@ -41,8 +41,6 @@ def keeper_gloves():
                          end=mirrored(side, along(WRIST, ELBOW, 0.3)), start_radius=4.6, end_radius=4.4))
         for side in (1, -1)]
 
-
-TWINS = {'captain-band': partial(captain_band, side=1)}
 
 GEAR = {
     'wristbands': wristbands,
