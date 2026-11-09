@@ -8,6 +8,7 @@ from grid import write_grid
 from hair_clumps import painted
 from mirror import MIRRORS
 from render import WIDTH
+from despeckle import despeckled
 from selout import sel_out
 
 OUT = Path(__file__).resolve().parents[3] / 'concepts' / 'naga-eleven' / 'hero-kit' / 'hair' / 'spiky'
@@ -107,7 +108,7 @@ def layers():
 
 def main():
     for direction, rows in layers().items():
-        write_grid(OUT / f'{direction}.txt', sel_out(rows))
+        write_grid(OUT / f'{direction}.txt', sel_out(despeckled(rows)))
 
 
 if __name__ == '__main__':
