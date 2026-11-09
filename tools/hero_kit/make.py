@@ -9,9 +9,10 @@ import body_draw
 import export
 import hair_draw
 import marks_draw
+from reference import spiky
 from render import FACINGS
 
-DRAWN_HAIR = sorted({path.stem.split('_')[0] for path in (Path(__file__).parent / 'hair_art').glob('[a-z]*_*.py') if 'back' not in path.stem})
+DRAWN_HAIR = sorted({path.stem.split('_')[0] for path in (Path(__file__).parent / 'hair_art').glob('[a-z]*_*.py')})
 
 
 def main():
@@ -20,7 +21,10 @@ def main():
 
     for style in DRAWN_HAIR:
         for direction in FACINGS:
-            hair_draw.draw(style, direction)
+            if hair_draw.has_art(style, direction):
+                hair_draw.draw(style, direction)
+
+    spiky.main()
 
     bake_gear.main([])
     marks_draw.main()

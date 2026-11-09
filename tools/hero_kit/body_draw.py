@@ -21,6 +21,13 @@ def head_row(left, right, lit, shadow, deep):
     return 'o' + 'L' * lit + 'S' * base + 's' * shadow + 'x' * deep + 'o'
 
 
+def put(rows, x, y, run):
+    """A run of letters at (x, y); its underscores leave what is beneath."""
+    for dx, letter in enumerate(run):
+        if letter != '_':
+            rows[y][x + dx] = letter
+
+
 def drawn(direction):
     rows = [list(row) for row in body_rows(FACINGS[direction], FAR_LEG.get(direction))]
     module = f'body_art.{MIRRORS.get(direction, direction).replace("-", "_")}'
@@ -30,9 +37,12 @@ def drawn(direction):
     except ModuleNotFoundError:
         return rows
 
+    if hasattr(art, 'drawn_rows'):
+        return art.drawn_rows()
+
     if direction in MIRRORS:
         for x, y, run in flipped_runs(getattr(art, 'RUNS', [])):
-            rows[y][x:x + len(run)] = run
+            put(rows, x, y, run)
 
         return rows
 
@@ -40,7 +50,7 @@ def drawn(direction):
         rows[y][left:right + 1] = head_row(left, right, lit, shadow, deep)
 
     for x, y, run in getattr(art, 'RUNS', []):
-        rows[y][x:x + len(run)] = run
+        put(rows, x, y, run)
 
     for x, top, block in getattr(art, 'BLOCKS', []):
         for dy, line in enumerate(block):

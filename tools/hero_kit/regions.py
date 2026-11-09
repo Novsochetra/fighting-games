@@ -63,7 +63,7 @@ def raglan(u, v, z):
     across = np.abs(u)
     line = 66.4 - (across - 5.2) * 1.5
 
-    return (across > 5.2) & (across < 12.5) & (np.abs(z - line) < 0.8) & (v > -1)
+    return (across > 5.2) & (across < 10) & (np.abs(z - line) < 0.8) & (v > -1)
 
 
 def regions(names, material, local):
@@ -79,7 +79,6 @@ def regions(names, material, local):
     material[shirt & near_neck & (z <= line) & (z > line - TRIM)] = 'trim'
     material[sleeve & (material == 'shirt') & (z < SLEEVE_END + CUFF)] = 'trim'
     material[(material == 'shirt') & ~sleeve & raglan(u, v, z)] = 'trim'
-    material[(material == 'socks') & (z > SOCK_TOP - SOCK_BAND)] = 'trim'
     material[(material == 'shorts') & short_stripe(u, v, z)] = 'stripe'
     boots = material == 'boots'
     laces, heel = boot_parts(u, v, z)

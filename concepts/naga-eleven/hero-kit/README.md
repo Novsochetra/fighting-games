@@ -35,17 +35,21 @@ other side, as a twin (`TWIN_LOCKS`, `TWIN_SCARS`), so it stays on its own side 
 
 ## How the art is made
 
-- `model.py` builds the hero from rounded shapes in 3D, matched to the reference's proportions.
+- `reference.png` is the hero as designed. The front is that drawing: `tools/hero_kit/reference/`
+  reads its body into the kit's letters by region, takes its hair into the hair layer, and
+  `body_art/south.py` puts it under a bald head drawn by hand with the reference's face, so every
+  hairstyle sits on one skull.
+- The back (`body_art/north.py`) is the front's body turned round and repainted where the back
+  differs; its hair is the reference's turned round, with locks falling to the nape over the face.
+- `model.py` builds the hero from rounded shapes in 3D, fitted to the reference's silhouette.
   `render.py` looks at it through the game's camera (from the south and above, the ground squashed
-  by a quarter) and `pixel.py` turns that into ramp shades and outlines. This keeps him the same
-  size and build in every direction.
-- `regions.py` puts the kit's details on the 3D body (the V-neck's trim, the cuffs, the stripes
-  down the shorts, the raglan trim over the front of the shoulders, the sock tops, the boots' laces, heels and
-  soles), so they line up in every direction.
-- `body_art/<direction>.py` holds what is drawn by hand over that: the faces (front, three-quarter
-  and profile), the fists, and the boots from the front.
+  by a quarter) and `pixel.py` turns it into the reference's flat shades and outlines, for the
+  three-quarter and side views. `regions.py` puts the kit's trims on it, so they agree in every
+  direction.
+- `body_art/<direction>.py` holds what is drawn by hand over the 3D views: the faces in the
+  reference's style, the fists, the boots, the shirt's folds.
 - `hair_art/<style>_<direction>.py` draws a hairstyle as locks, polygons painted with a stripe lit
-  along each lock, a dark side and a blue sheen, outlined against the background. The mohawk's
-  crest is drawn over the 3D head of `shaved`.
+  along each lock, a dark side and a blue sheen. The mohawk's crest is drawn over the 3D head of
+  `shaved`.
 - `marks_art.py` holds the scars, the earrings and the plaster.
 - `looks.py` holds the sample players and the swatches the inspector offers.

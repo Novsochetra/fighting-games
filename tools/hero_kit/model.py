@@ -7,7 +7,7 @@ shoulder runs into its arm; the part nearest a surface point gives that pixel it
 from functools import partial
 
 from sdf import clipped, cone, ellipsoid, round_box, turned
-SHOULDER, ELBOW, WRIST, FIST = (12.6, -0.4, 63.4), (18.4, -1.2, 54), (20.4, 1, 45.6), (20.8, 1.6, 40.4)
+SHOULDER, ELBOW, WRIST, FIST = (12.2, -0.4, 63.4), (19, -1.2, 54), (21.8, 1, 45.6), (22.2, 1.6, 40.4)
 SHOULDER, ELBOW, WRIST, FIST = (12.6, -0.4, 63.4), (17.4, -1.2, 53.8), (19.4, 1, 45.4), (20, 1.6, 40.4)
 HIP, KNEE, ANKLE = (6.8, 0, 42), (11.8, 0.6, 26.5), (15, -0.6, 9.5)
 
@@ -33,8 +33,8 @@ def ear_parts(side):
 
 def torso_parts():
     return [
-        ('chest', 'shirt', 'torso', partial(ellipsoid, centre=(0, 0.2, 59), radii=(12, 9.6, 9.6))),
-        ('belly', 'shirt', 'torso', partial(ellipsoid, centre=(0, 0, 49.4), radii=(11.2, 9, 8.4))),
+        ('chest', 'shirt', 'torso', partial(ellipsoid, centre=(0, 0.2, 59), radii=(11.4, 9.6, 9.6))),
+        ('belly', 'shirt', 'torso', partial(ellipsoid, centre=(0, 0, 49.4), radii=(10.6, 9, 8.4))),
         ('blades', 'shirt', 'torso', partial(ellipsoid, centre=(0, -5.2, 57.5), radii=(10, 4.6, 6))),
         ('collar', 'shirt', 'torso', clipped(partial(cone, start=(0, -0.6, 63), end=(0, -0.6, 67.2), start_radius=6.8,
                                                      end_radius=5.4), above=66.4)),
@@ -44,7 +44,7 @@ def torso_parts():
 def arm_parts(side):
     return [
         (f'sleeve{side}', 'shirt', 'torso', clipped(partial(cone, start=mirrored(side, (12.2, -0.3, 63.2)),
-                                                            end=mirrored(side, ELBOW), start_radius=5.6, end_radius=4.9),
+                                                            end=mirrored(side, ELBOW), start_radius=5.0, end_radius=4.6),
                                                     below=56.4)),
         (f'upper{side}', 'skin', f'arm{side}', partial(cone, start=mirrored(side, SHOULDER), end=mirrored(side, ELBOW),
                                                        start_radius=4.5, end_radius=3.9)),
@@ -63,7 +63,7 @@ def leg_parts(side):
                                                       start_radius=4.8, end_radius=3.6)),
         (f'calf{side}', 'skin', f'leg{side}', partial(ellipsoid, centre=mirrored(side, (13.2, -2.6, 19.5)), radii=(4.8, 5, 6.4))),
         (f'boot{side}', 'boots', f'boot{side}', turned(clipped(partial(ellipsoid, centre=mirrored(side, (15.4, 3, 3.2)),
-                                                                       radii=(5.4, 9.4, 4.4)), below=0),
+                                                                       radii=(5.0, 9.4, 4.4)), below=0),
                                                        mirrored(side, (15.4, 0, 0)), side * 16)),
         (f'collar{side}', 'boots', f'boot{side}', partial(cone, start=mirrored(side, (15.1, -0.8, 3)),
                                                           end=mirrored(side, (15.1, -0.8, 7.4)), start_radius=4.8, end_radius=4.3)),

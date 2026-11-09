@@ -1,14 +1,14 @@
 """Sample players for the inspector: one face for all, told apart by skin, hair, scars, kit and gear."""
 
 SKINS = {
-    'tan': ['#7a2e22', '#b8562e', '#e8853f', '#f8ac63'],
+    'tan': ['#7a2e22', '#b8502b', '#f49348', '#fcb470'],
     'light': ['#8a4a3a', '#c97f63', '#f0b48e', '#ffd8b8'],
     'olive': ['#5a2e1a', '#94532c', '#c47c45', '#e2a466'],
     'deep': ['#2e1410', '#5a2a1c', '#8a4a2c', '#b0703e'],
 }
 
 HAIRS = {
-    'navy': ['#2c1e48', '#3d2a5e', '#58448e', '#4462d0'],
+    'navy': ['#241636', '#36224a', '#4c3468', '#283ca0'],
     'black': ['#0e0b10', '#1e1a24', '#2f2a38', '#5a5468'],
     'platinum': ['#6b6478', '#a8a0b8', '#e0dcea', '#ffffff'],
     'copper': ['#4a0e12', '#8a1c1c', '#c8382a', '#ff7a4a'],
@@ -16,9 +16,9 @@ HAIRS = {
 }
 
 KITS = {
-    'cambodia': {'shirt': ['#5c0a1c', '#9a1221', '#d42528', '#ee4a33'], 'trim': ['#c87a1c', '#f2b236', '#ffe07a'],
-                 'shorts': ['#141a52', '#1f2c86', '#2d45b0', '#4a66d0'], 'stripe': ['#9a98bd', '#f2eef7'],
-                 'socks': ['#5c0a1c', '#9a1221', '#d42528', '#ee4a33']},
+    'cambodia': {'shirt': ['#850d19', '#b7101c', '#df2321', '#f2543a'], 'trim': ['#c87a1c', '#fcb94c', '#ffe07a'],
+                 'shorts': ['#10123c', '#191c5a', '#283ca0', '#3f58c0'], 'stripe': ['#8980ae', '#dfdae6'],
+                 'socks': ['#850d19', '#b7101c', '#df2321', '#f2543a']},
     'sky': {'shirt': ['#1d4f7a', '#2f7fb8', '#5cb4e8', '#9ad8ff'], 'trim': ['#8a90b0', '#dfe6f5', '#ffffff'],
             'shorts': ['#0c0c14', '#1a1a26', '#2a2a3a', '#44445a'], 'stripe': ['#2f7fb8', '#9ad8ff'],
             'socks': ['#1d4f7a', '#2f7fb8', '#5cb4e8', '#9ad8ff']},
@@ -31,13 +31,13 @@ KITS = {
 }
 
 BOOTS = {
-    'white': {'boots': ['#5d5a86', '#9d9ac0', '#dcd8ea', '#ffffff'], 'sole': ['#2a2440', '#4a4468']},
+    'white': {'boots': ['#5d5a86', '#8980ae', '#dfdae6', '#ffffff'], 'sole': ['#2a2440', '#4a4468']},
     'black': {'boots': ['#0e0c14', '#221e2c', '#3a3448', '#6a6280'], 'sole': ['#c87a1c', '#f2b236']},
     'gold': {'boots': ['#7a4a08', '#c48a14', '#f2c43a', '#fff0a0'], 'sole': ['#2a2440', '#4a4468']},
 }
 
 EYES = {
-    'amber': ['#1c0b16', '#8a4a22', '#ffffff'],
+    'amber': ['#180411', '#5a2a1e', '#e6e2ee'],
     'blue': ['#101a3a', '#2f6fd0', '#ffffff'],
     'green': ['#0e2412', '#3f8a3a', '#ffffff'],
     'grey': ['#16161e', '#6a7080', '#ffffff'],

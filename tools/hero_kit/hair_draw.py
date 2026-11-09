@@ -1,6 +1,7 @@
 """Paints the hand-drawn hairstyles from hair_art/ into the kit's hair grids."""
 
 import importlib
+import importlib.util
 import sys
 from pathlib import Path
 
@@ -22,6 +23,12 @@ def over_base(letters, base, direction):
     under = np.array([list(row) for row in rows])
 
     return np.where(letters == '.', under, letters)
+
+
+def has_art(style, direction):
+    source = MIRRORS.get(direction, direction)
+
+    return importlib.util.find_spec(f'hair_art.{style}_{source.replace("-", "_")}') is not None
 
 
 def draw(style, direction):
