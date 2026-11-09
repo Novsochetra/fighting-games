@@ -6,7 +6,7 @@ import numpy as np
 from sdf import smooth_min
 
 WIDTH = 100
-HEIGHT = 112
+HEIGHT = 116
 GROUND_ROW = 109
 GROUND_SQUASH = 0.25
 BLEND = {'head': 2.5, 'torso': 3.0, 'shorts': 2.0, 'hair': 1.2}

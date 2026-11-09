@@ -76,12 +76,34 @@ def shade(owner, line, locks, sheen, crease):
     return letters
 
 
+LIGHT = np.array([-0.7071, -0.7071])
+
+
+def axis_sides(lock):
+    """How far each point sits toward the lit side of a lock, across the line from its middle to its
+    tip, scaled to -1 (dark side) .. 1 (lit side)."""
+    points = np.array(lock['points'], float)
+    centre = points.mean(axis=0)
+    tip = points[np.argmax(np.linalg.norm(points - centre, axis=1))]
+    axis = (tip - centre) / max(np.linalg.norm(tip - centre), 1e-6)
+    normal = np.array([-axis[1], axis[0]])
+    normal = normal if normal @ LIGHT > 0 else -normal
+    reach = max(abs((points - centre) @ normal).max(), 1e-6)
+
+    return lambda x, y: float((np.array([x + 0.5, y + 0.5]) - centre) @ normal) / reach
+
+
 def lock_shade(padded, x, y, index, lock, sheen):
     if padded[y + 1, x + 1] != index or padded[y + 1, x] != index:
         return 'g'
 
     if (x - 2, y - 2) in sheen and lock.get('sheen', True):
         return 'J'
+
+    if 'side' in lock:
+        side = lock['side'](x - 2, y - 2)
+
+        return 'H' if side > 0.3 else ('g' if side < -0.55 else 'h')
 
     if padded[y - 1, x - 1] != index and padded[y - 1, x] != index and lock.get('rim', True):
         return 'H'
@@ -108,6 +130,8 @@ def band(centre, radii, thickness, right_of=None, left_of=None):
 
 
 def paint(locks, width, height, sheen=frozenset()):
+    locks = [{**lock, 'side': axis_sides(lock)} if index and lock.get('axis', True) else lock
+             for index, lock in enumerate(locks)]
     owner = owners(locks, width, height)
 
     return shade(owner, outlined(owner), locks, sheen, creased(owner))

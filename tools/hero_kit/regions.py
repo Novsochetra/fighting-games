@@ -34,6 +34,29 @@ def short_stripe(u, v, z):
     return (angle > STRIPE_FROM) & (angle < STRIPE_TO) & (z < 44)
 
 
+BOOT_CENTRE_U, BOOT_TURN = 15.4, 30
+
+
+def boot_frame(u, v):
+    """A point in its boot's own frame: across the boot and along it, toe forward."""
+    side = np.sign(u)
+    radians = np.radians(-side * BOOT_TURN)
+    across = u - side * BOOT_CENTRE_U
+    along = across * np.sin(radians) + v * np.cos(radians)
+    across = across * np.cos(radians) - v * np.sin(radians)
+
+    return across, along
+
+
+def boot_parts(u, v, z):
+    """The laces down the instep and the stiff heel at the back of each boot."""
+    across, along = boot_frame(u, v)
+    laces = (np.abs(across) < 1.4) & (along > -0.5) & (along < 6.5) & (z > 4.6)
+    heel = (along < -5.6) & (z > 2.2) & (z < 6.6) & (np.abs(across) < 2.6)
+
+    return laces, heel
+
+
 def regions(names, material, local):
     u, v, z = local[..., 0], local[..., 1], local[..., 2]
     leg = np.isin(names, [f'{name}{side}' for name in LEG_PARTS for side in (1, -1)])
@@ -49,6 +72,9 @@ def regions(names, material, local):
     material[(material == 'socks') & (z > SOCK_TOP - SOCK_BAND)] = 'trim'
     material[(material == 'shorts') & short_stripe(u, v, z)] = 'stripe'
     boots = material == 'boots'
+    laces, heel = boot_parts(u, v, z)
+    material[boots & laces] = 'lace'
+    material[boots & heel] = 'heel'
     material[boots & (z < SOLE)] = 'sole'
 
     return material

@@ -6,6 +6,11 @@ from model import body_parts
 from pixel import edges, materials_of, shades_of, tidy
 from render import render
 
+BOOT_MARKS = {
+    'lace': lambda shade, x, y: 'm' if (x + y) % 2 == 0 else letter_for('boots', shade - 1),
+    'heel': lambda shade, x, y: letter_for('boots', shade - 1),
+}
+
 
 def body_rows(facing):
     parts = body_parts()
@@ -25,6 +30,8 @@ def body_rows(facing):
                 row += EMPTY
             elif line[y, x]:
                 row += OUTLINE
+            elif ramp in BOOT_MARKS:
+                row += BOOT_MARKS[ramp](shade[y, x], x, y)
             else:
                 row += letter_for(ramp, shade[y, x] - (4 - len(RAMP_LETTERS[ramp])))
 

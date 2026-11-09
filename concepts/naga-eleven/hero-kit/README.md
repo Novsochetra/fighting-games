@@ -11,10 +11,10 @@ python3 tools/hero_kit/make.py
 
 ## The layers
 
-Each layer is a grid of letters, one text row per pixel row on a 100 × 112 canvas, soles on row 109
-and the body centred between columns 49 and 50. A letter names a ramp and a shade, dark to light
-(`tools/hero_kit/letters.py`), so a player's colours repaint the same art shade for shade. They stack
-in this order:
+Each layer is a grid of letters, one text row per pixel row on a 100 × 116 canvas, soles on row 109
+(a foot toward the camera reaches lower) and the body centred between columns 49 and 50. A letter
+names a ramp and a shade, dark to light (`tools/hero_kit/letters.py`), so a player's colours
+repaint the same art shade for shade. They stack in this order:
 
 | layer           | what                                               | how it is made                       |
 | --------------- | -------------------------------------------------- | ------------------------------------ |
@@ -41,6 +41,6 @@ reads backwards. A scar changes cheek in a mirrored direction, as everything els
 - `body_art/<direction>.py` holds what is drawn by hand over that: the faces (front, three-quarter
   and profile), the fists and the boots.
 - `hair_art/spiky_<direction>.py` draws the hero's hair as locks: polygons painted with a lit edge,
-  a base, a dark underside and a blue sheen, outlined against the background.
+  a stripe lit along each lock, a dark side and a blue sheen, outlined against the background.
 - `marks_art.py` holds the scars, the earrings and the plaster.
 - `looks.py` holds the sample players and the swatches the inspector offers.
