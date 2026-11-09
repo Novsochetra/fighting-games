@@ -71,3 +71,18 @@ def near_boot():
 
 
 RUNS = [run for run in RUNS if not (run[1] >= 103 and run[0] < 50)] + near_boot()
+
+
+def far_boot():
+    """The far boot points out to our right too, a little higher as it stands further back: the
+    front's right boot again, under the far sock."""
+    from body_art.south import drawn_rows as front_rows
+
+    front = front_rows()
+    cleared = [(52, y, '.' * 22) for y in range(98, 110)]
+    boot = [(58 - 4, y - 2, ''.join(front[y][58:73]).replace('.', '_')) for y in range(99, 110)]
+
+    return cleared + boot
+
+
+RUNS += far_boot()

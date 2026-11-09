@@ -60,3 +60,30 @@ ARM = [
 
 RUNS = [run for run in RUNS if not (41 <= run[0] <= 58 and 64 <= run[1] <= 79)]
 RUNS += SHORTS_BEHIND_ARM + ARM
+
+
+TRIM_TO_SHIRT = {'T': 'R', 't': 'r', 'Y': 'R'}
+
+TORSO = [
+    (40, 46, 'oR'), (40, 47, 'oR'), (40, 48, 'oR'), (40, 49, 'oR'), (40, 50, 'oR'),
+    (59, 47, 'ro'), (59, 48, 'ro'), (59, 49, 'ro'), (59, 50, 'ro'), (59, 51, 'ro'), (59, 52, 'ro'),
+    (55, 59, 'r'), (56, 60, 'r'), (56, 61, 'd'), (57, 62, 'r'),
+]
+
+
+def touch_up(rows, mirrored):
+    """Side on, the raglan seam would run down the chest as a stripe, so the front's trim is left
+    off; the chest swells forward and the shoulder blade back."""
+    chest = range(51, 60) if not mirrored else range(40, 49)
+
+    for y in range(43, 56):
+        for x in chest:
+            rows[y][x] = TRIM_TO_SHIRT.get(rows[y][x], rows[y][x])
+
+    for x, y, run in TORSO:
+        if mirrored:
+            x, run = 99 - (x + len(run) - 1), run[::-1]
+
+        rows[y][x:x + len(run)] = run
+
+    return rows
