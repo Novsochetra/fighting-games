@@ -2,7 +2,7 @@
 from the upper left: a light rim along its upper-left edges, a dark one along the lower right, and
 light, base and dark tones across it as one plane, creased in the darkest
 tone where a clump in front meets it, and outlined outside the whole shape so a spike's tip keeps
-its colour. Streaks of sheen in the lightest tone run along the lit edges of the locks round the crown."""
+its colour. A band of sheen, lightest tone over a lit one, arcs over the lit side of the crown."""
 
 from render import HEIGHT, WIDTH
 
@@ -65,11 +65,14 @@ def creased(owner, x, y):
     return any(owner.get((x + dx, y + dy), -1) > owner[(x, y)] for dx, dy in NEIGHBOURS)
 
 
-def lit_edge(owner, x, y):
-    return owner.get((x - 1, y)) != owner[(x, y)] or owner.get((x, y - 1)) != owner[(x, y)]
+def in_band(x, y, crown, reach):
+    across, height = (x + 0.5 - crown[0]) / reach[0], (y + 0.5 - crown[1]) / reach[1]
+    distance = (across * across + height * height) ** 0.5
+
+    return y < crown[1] and across < 0.25 and 1 - 2.2 / reach[1] <= distance <= 1
 
 
-def painted(clumps, sheen_rows):
+def painted(clumps, crown, reach=(12, 12)):
     owner = owners(clumps)
     boxes = bounds(owner)
     rows = [['.'] * WIDTH for _ in range(HEIGHT)]
@@ -77,8 +80,8 @@ def painted(clumps, sheen_rows):
     for (x, y), index in owner.items():
         rows[y][x] = 'g' if creased(owner, x, y) else tone(owner, x, y, boxes[index])
 
-        if y in sheen_rows and rows[y][x] == 'H' and lit_edge(owner, x, y):
-            rows[y][x] = 'J'
+        if rows[y][x] != 'g' and in_band(x, y, crown, reach):
+            rows[y][x] = 'J' if rows[y][x] == 'H' or in_band(x, y - 1, crown, reach) else 'H'
 
     for x, y in owner:
         for dx, dy in NEIGHBOURS:

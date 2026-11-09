@@ -69,10 +69,9 @@ NORTH_EAST = [
     [(54.5, 12), (68, 6), (61.5, 16)],
     [(61, 15.5), (72, 16.5), (62.5, 21.5)],
     [(61.5, 21), (68, 27.5), (61, 26.5)],
-    [(50, 12), (41, 15.5), (37, 23), (39.5, 30.5), (43, 26.5), (47.5, 19)],
-    [(53, 12), (61, 15), (64.5, 22.5), (62, 30.5), (60, 26.5), (59, 20)],
-    [(51, 12.5), (44.5, 20), (43, 29.5), (45.5, 36), (48.5, 28.5), (50.5, 20)],
-    [(51.5, 12.5), (49, 22), (50.5, 32.5), (53, 37), (55, 27), (54.5, 18.5)],
+    [(50, 12), (40, 15.5), (37, 24), (40, 31), (44.5, 34.5), (47, 24)],
+    [(53, 12), (61, 15), (64.5, 22.5), (62, 30.5), (58, 31), (55.5, 23)],
+    [(51, 12.5), (46.5, 20), (46, 30), (50.5, 37), (55, 30), (55.5, 20)],
 ]
 
 NORTH = [
@@ -85,17 +84,15 @@ NORTH = [
     [(44.5, 12), (30, 6), (37.5, 16)],
     [(38, 15.5), (26, 16.5), (36, 21.5)],
     [(37, 21), (29.5, 28), (37.5, 27)],
-    [(49, 12), (40, 15.5), (35.5, 23), (38.5, 30.5), (42, 26.5), (46.5, 19)],
-    [(52, 12), (60.5, 15), (64.5, 23), (62, 29.5), (60.5, 21.5)],
-    [(50, 12.5), (43.5, 20), (42, 29.5), (44.5, 35.5), (47.5, 28.5), (49.5, 20)],
-    [(51, 12), (55.5, 19), (57.5, 28.5), (57.5, 34.5), (60.5, 26.5), (58.5, 17.5)],
-    [(50, 12.5), (47.5, 22), (49.5, 32.5), (52.5, 37), (54, 27), (53, 18.5)],
+    [(49, 12), (39, 15.5), (35.5, 24), (38.5, 31), (43.5, 34.5), (46, 24)],
+    [(52, 12), (61, 15), (64.5, 24), (61.5, 31), (56.5, 34.5), (54, 24)],
+    [(50, 12.5), (45.5, 20), (45, 30), (49.5, 37), (54.5, 30), (54.5, 20)],
 ]
 
 DRAWN = {'south': SOUTH, 'south-east': SOUTH_EAST, 'east': EAST, 'north-east': NORTH_EAST, 'north': NORTH}
 
-
-SHEEN_ROWS = range(10, 15)
+# the middle of the head's crown in each direction, round which the sheen arcs
+CROWNS = {'south': (50, 25), 'south-east': (48, 25), 'east': (47, 25), 'north-east': (51, 25), 'north': (50, 25)}
 
 
 def mirrored(clumps):
@@ -103,8 +100,9 @@ def mirrored(clumps):
 
 
 def layers():
-    drawn = {direction: painted(clumps, SHEEN_ROWS) for direction, clumps in DRAWN.items()}
-    turned = {direction: painted(mirrored(DRAWN[source]), SHEEN_ROWS) for direction, source in MIRRORS.items()}
+    drawn = {direction: painted(clumps, CROWNS[direction]) for direction, clumps in DRAWN.items()}
+    turned = {direction: painted(mirrored(DRAWN[source]), (WIDTH - CROWNS[source][0], CROWNS[source][1]))
+              for direction, source in MIRRORS.items()}
 
     return {**drawn, **turned}
 
