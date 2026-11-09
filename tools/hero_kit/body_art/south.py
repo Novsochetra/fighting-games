@@ -1,7 +1,10 @@
 """The hero from the front: the reference's body from the collar down, cleaned, under a bald head
 drawn by hand with the reference's face, so every hairstyle sits on the same skull."""
 
+from bake import body_rows
+from letters import RAMP_LETTERS
 from reference.front import face_rows
+from render import FACINGS
 from reference.front import rows as reference_rows
 
 HEAD = [
@@ -54,6 +57,27 @@ FIXES = [
 ]
 
 
+RESHADED = {ramp: RAMP_LETTERS[ramp] for ramp in ('skin', 'shirt', 'shorts', 'socks')}
+BODY_FROM = 44
+
+
+def clean_shading(rows):
+    """The reference's own shading is speckled; under its outlines and details, each pixel of skin,
+    shirt, shorts and sock takes the shade the fitted 3D body gives that spot, so light falls in
+    clean shapes from the upper left, as in every other direction."""
+    lit = body_rows(FACINGS['south'])
+
+    for y in range(BODY_FROM, len(rows)):
+        for x in range(len(rows[y]) - SHIFT):
+            mine, theirs = rows[y][x], lit[y][x + SHIFT]
+
+            for letters in RESHADED.values():
+                if mine in letters and theirs in letters:
+                    rows[y][x] = theirs
+
+    return rows
+
+
 def drawn_rows():
     rows = reference_rows()
 
@@ -64,5 +88,7 @@ def drawn_rows():
 
     for x, y, run in BROWS + COLLAR:
         rows[y][x:x + len(run)] = run
+
+    rows = clean_shading(rows)
 
     return [['.'] * SHIFT + row[:-SHIFT] for row in rows]
