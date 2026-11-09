@@ -28,9 +28,11 @@ def seen_with(parts, facing):
     return seen, material, edges(apart, seen['depth'])
 
 
-def hair_rows(shapes, facing):
+def hair_rows(style, facing):
+    shapes, stubble = style
     body = body_parts()
     hair = [(f'hair{index}', 'hair', 'hair', shape) for index, shape in enumerate(shapes)]
+    hair += [(f'stubble{index}', 'stubble', 'stubble', shape) for index, shape in enumerate(stubble)]
     _, _, body_line = seen_with(body, facing)
     seen, material, line = seen_with(body + hair, facing)
     shade = tidy(shades_of(seen, material), material)
@@ -49,6 +51,13 @@ def hair_rows(shapes, facing):
 
 
 def hair_letter(y, x, is_hair, material, line, body_line, shade):
+    """A shaved head shows its stubble as hair pixels scattered over the skin."""
+    if material[y, x] == 'stubble':
+        if line[y, x]:
+            return OUTLINE
+
+        return letter_for('hair', shade[y, x] - 1) if x % 2 == 0 and y % 2 == 0 else letter_for('skin', shade[y, x] - 1)
+
     if is_hair[y, x]:
         return OUTLINE if line[y, x] else letter_for('hair', shade[y, x])
 

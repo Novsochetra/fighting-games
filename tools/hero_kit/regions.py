@@ -34,14 +34,6 @@ def short_stripe(u, v, z):
     return (angle > STRIPE_FROM) & (angle < STRIPE_TO) & (z < 44)
 
 
-def boot_stripe(u, v, z):
-    """A swept flash along the outer side of each boot."""
-    outer = np.abs(u) > 15.6
-    slant = z - 0.32 * v
-
-    return outer & (slant > 2.6) & (slant < 4.2) & (v > -3) & (v < 7)
-
-
 def regions(names, material, local):
     u, v, z = local[..., 0], local[..., 1], local[..., 2]
     leg = np.isin(names, [f'{name}{side}' for name in LEG_PARTS for side in (1, -1)])
@@ -57,7 +49,6 @@ def regions(names, material, local):
     material[(material == 'socks') & (z > SOCK_TOP - SOCK_BAND)] = 'trim'
     material[(material == 'shorts') & short_stripe(u, v, z)] = 'stripe'
     boots = material == 'boots'
-    material[boots & boot_stripe(u, v, z)] = 'trim'
     material[boots & (z < SOLE)] = 'sole'
 
     return material
