@@ -24,7 +24,7 @@ def skull_span(body, y):
 
 
 def rows(body):
-    hair = [list(reversed(row)) for row in front_hair()]
+    hair = [[{'J': 'h'}.get(letter, letter) for letter in reversed(row)] for row in front_hair()]
 
     for y in range(14, NAPE):
         span = skull_span(body, y)

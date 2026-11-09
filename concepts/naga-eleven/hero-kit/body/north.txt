@@ -67,9 +67,9 @@
 066 |..........................oSSSSSSo....oBVvBBBbbbooooooobbBBVVBo....oSSSSSSo.........................|
 067 |.........................oSSSSSSSSo..obvVBbbbBBBBBBBBBBBbbbBVvoo..oSSSSSSSSo........................|
 068 |.........................oSSSSssSSo..oBVBBBBBBBBBBBBBBBBBBBbBVBo..oSSssSSSSo........................|
-069 |.........................oSSSSSSsSo..ovVBBBBBBBBBBbBBBBBBBBBBVvBo.oSSSoSSSSo........................|
-070 |.........................oSSSSSssso.oBVBBBBBBBBBbbbbbBBBBBBBBVvBo.ossSoSSSSo........................|
-071 |.........................osssxsxso..oBVBBBBBBBBboHobbbBBBBBBBBVBo.xsxsSSsSso........................|
+069 |.........................oSSSSSSsSo..ovVBBBBBBBBBBbBBBBBBBBBBVvBo.oSsoSSSSSo........................|
+070 |.........................oSSSSSssso.oBVBBBBBBBBBbbbbbBBBBBBBBVvBo.ossoSSSSSo........................|
+071 |.........................osssxsxso..oBVBBBBBBBBbooobbbBBBBBBBBVBo.ooxsxssSso........................|
 072 |..........................ossssso..oBVBBBBBBBbbboooobbbBBBBBBBVvBo..ossssso.........................|
 073 |...........................ooooo...ovVBBBBBBbbbBoooobBbbBBBBBBVvBo...ooooo..........................|
 074 |...................................ovVBBBBBbbBBBoooobBBBbBBBBBBVBo..................................|
@@ -106,7 +106,7 @@
 105 |...........................ooUUUUUUUUuuuuo.................ouuuuUUUUUUUUUo..........................|
 106 |...........................oUUUUUUUuuuouoo.................oououuuUUUUUUUo..........................|
 107 |...........................oouuuuuuuuoooo...................oooouuuuuuuuoo..........................|
-108 |............................ooouuoouoo....................n....oouoouuono...........................|
+108 |............................ooouuoouoo.........................oouoouuono...........................|
 109 |.............................oooooooo...........................oooooooo............................|
 110 |....................................................................................................|
 111 |....................................................................................................|
