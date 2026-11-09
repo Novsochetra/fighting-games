@@ -63,7 +63,7 @@ def hair_letter(y, x, is_hair, material, line, body_line, shade):
         return letter_for('hair', 1) if at_hairline(material, y, x) else letter_for('skin', shade[y, x] - 1)
 
     if is_hair[y, x]:
-        return OUTLINE if line[y, x] else letter_for('hair', shade[y, x])
+        return OUTLINE if line[y, x] else letter_for('hair', min(shade[y, x], 2))
 
     if line[y, x] and not body_line[y, x]:
         return OUTLINE

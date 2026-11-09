@@ -12,6 +12,19 @@ BOOT_MARKS = {
 }
 
 
+def within_one_material(material, line, y, x):
+    """A line between two parts of the same cloth or skin (the far shoulder behind the chest) is
+    drawn in that material's darkest shade, so only the figure's edge and where materials meet stay
+    black."""
+    height, width = material.shape
+    neighbours = [(y + dy, x + dx) for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))]
+
+    if any(not (0 <= ny < height and 0 <= nx < width) or material[ny, nx] == '' for ny, nx in neighbours):
+        return False
+
+    return all(material[ny, nx] == material[y, x] for ny, nx in neighbours)
+
+
 def body_rows(facing):
     parts = body_parts()
     seen = render(parts, facing)
@@ -28,6 +41,8 @@ def body_rows(facing):
 
             if ramp == '':
                 row += EMPTY
+            elif line[y, x] and within_one_material(material, line, y, x) and ramp in RAMP_LETTERS:
+                row += RAMP_LETTERS[ramp][0]
             elif line[y, x]:
                 row += OUTLINE
             elif ramp in BOOT_MARKS:

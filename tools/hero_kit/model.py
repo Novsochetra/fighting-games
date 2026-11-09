@@ -34,14 +34,15 @@ def torso_parts():
     return [
         ('chest', 'shirt', 'torso', partial(ellipsoid, centre=(0, 0.2, 59), radii=(12, 8.4, 9.6))),
         ('belly', 'shirt', 'torso', partial(ellipsoid, centre=(0, 0, 49.4), radii=(11.2, 8, 8.4))),
-        ('collar', 'shirt', 'torso', partial(cone, start=(0, -0.6, 63), end=(0, -0.6, 67.2), start_radius=6.8, end_radius=5.4)),
+        ('collar', 'shirt', 'torso', clipped(partial(cone, start=(0, -0.6, 63), end=(0, -0.6, 67.2), start_radius=6.8,
+                                                     end_radius=5.4), above=66.4)),
     ]
 
 
 def arm_parts(side):
     return [
-        (f'sleeve{side}', 'shirt', 'torso', clipped(partial(cone, start=mirrored(side, (10.6, -0.2, 64)),
-                                                            end=mirrored(side, ELBOW), start_radius=5.4, end_radius=4.8),
+        (f'sleeve{side}', 'shirt', 'torso', clipped(partial(cone, start=mirrored(side, (12.2, -0.3, 63.2)),
+                                                            end=mirrored(side, ELBOW), start_radius=5.6, end_radius=4.9),
                                                     below=56.4)),
         (f'upper{side}', 'skin', f'arm{side}', partial(cone, start=mirrored(side, SHOULDER), end=mirrored(side, ELBOW),
                                                        start_radius=4.3, end_radius=3.6)),
