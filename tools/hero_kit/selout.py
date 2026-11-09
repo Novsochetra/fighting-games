@@ -4,7 +4,10 @@ of the figure is drawn against another, the line takes a dark shade of the part 
 
 from letters import EMPTY, LETTERS, OUTLINE, RAMP_LETTERS
 
-KEPT_BLACK = {'trim', 'stripe', 'eyes', 'metal'}
+KEPT_BLACK = {'trim', 'stripe', 'eyes', 'metal', 'hair'}
+
+# light parts whose lit edge can take a shade above their darkest and still hold against the ground
+SOFT_EDGED = {'skin', 'shirt', 'socks', 'boots'}
 NEIGHBOURS = ((1, 0), (-1, 0), (0, 1), (0, -1))
 AROUND = NEIGHBOURS + ((1, 1), (1, -1), (-1, 1), (-1, -1))
 
@@ -28,11 +31,13 @@ def line_colour(rows, x, y):
 
     edge = [letter_at(rows, x + dx, y + dy) == EMPTY for dx, dy in NEIGHBOURS]
 
-    if any(edge) and not (edge[1] or edge[3]):
+    lit = edge[1] or (edge[3] and not edge[0])
+
+    if any(edge) and not lit:
         return OUTLINE
 
     ramp = next((name for name in DARKEST_FIRST if name in ramps), None)
-    shade = 1 if any(edge) else 0
+    shade = 1 if any(edge) and ramp in SOFT_EDGED else 0
 
     return RAMP_LETTERS[ramp][shade] if ramp else OUTLINE
 

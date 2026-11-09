@@ -1,11 +1,12 @@
 """Paints hair drawn as clumps: polygons in pixel coordinates, later ones in front. Each clump is lit
-as one plane from the upper left (light, base and dark tones across it), creased in the darkest
+from the upper left: a light rim along its upper-left edges, a dark one along the lower right, and
+light, base and dark tones across it as one plane, creased in the darkest
 tone where a clump in front meets it, and outlined outside the whole shape so a spike's tip keeps
 its colour. Streaks of sheen in the lightest tone run along the lit edges of the locks round the crown."""
 
 from render import HEIGHT, WIDTH
 
-LIT, DARK = 0.62, 0.3
+LIT, DARK = 0.55, 0.26
 ACROSS, DOWN = 0.6, 0.55
 NEIGHBOURS = ((1, 0), (-1, 0), (0, 1), (0, -1))
 
@@ -44,9 +45,18 @@ def bounds(owner):
     return boxes
 
 
-def tone(x, y, box):
+def tone(owner, x, y, box):
     left, right, top, bottom = box
     light = 1 - ACROSS * (x - left) / max(right - left, 1) - DOWN * (y - top) / max(bottom - top, 1)
+    mine = owner[(x, y)]
+    lit_side = any(owner.get((x - step, y)) != mine or owner.get((x, y - step)) != mine for step in (1, 2))
+    dark_side = owner.get((x + 1, y)) != mine or owner.get((x, y + 1)) != mine
+
+    if lit_side and not dark_side:
+        return 'H'
+
+    if dark_side:
+        return 'g' if light < LIT else 'h'
 
     return 'H' if light > LIT else ('h' if light > DARK else 'g')
 
@@ -65,7 +75,7 @@ def painted(clumps, sheen_rows):
     rows = [['.'] * WIDTH for _ in range(HEIGHT)]
 
     for (x, y), index in owner.items():
-        rows[y][x] = 'g' if creased(owner, x, y) else tone(x, y, boxes[index])
+        rows[y][x] = 'g' if creased(owner, x, y) else tone(owner, x, y, boxes[index])
 
         if y in sheen_rows and rows[y][x] == 'H' and lit_edge(owner, x, y):
             rows[y][x] = 'J'
