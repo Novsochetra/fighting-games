@@ -1,7 +1,7 @@
 """Sample players for the inspector: one face for all, told apart by skin, hair, scars, kit and gear."""
 
 SKINS = {
-    'tan': ['#7a2e22', '#b8502b', '#f49348', '#fcb470'],
+    'tan': ['#6e2a26', '#ad5639', '#e59660', '#fbca94'],
     'light': ['#8a4a3a', '#c97f63', '#f0b48e', '#ffd8b8'],
     'olive': ['#5a2e1a', '#94532c', '#c47c45', '#e2a466'],
     'deep': ['#2e1410', '#5a2a1c', '#8a4a2c', '#b0703e'],
