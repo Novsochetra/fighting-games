@@ -7,7 +7,7 @@ shoulder runs into its arm; the part nearest a surface point gives that pixel it
 from functools import partial
 
 from sdf import clipped, cone, ellipsoid, round_box, turned
-
+SHOULDER, ELBOW, WRIST, FIST = (12.6, -0.4, 63.4), (18.4, -1.2, 54), (20.4, 1, 45.6), (20.8, 1.6, 40.4)
 SHOULDER, ELBOW, WRIST, FIST = (12.6, -0.4, 63.4), (17.4, -1.2, 53.8), (19.4, 1, 45.4), (20, 1.6, 40.4)
 HIP, KNEE, ANKLE = (6.8, 0, 42), (11.8, 0.6, 26.5), (15, -0.6, 9.5)
 
@@ -45,9 +45,9 @@ def arm_parts(side):
                                                             end=mirrored(side, ELBOW), start_radius=5.6, end_radius=4.9),
                                                     below=56.4)),
         (f'upper{side}', 'skin', f'arm{side}', partial(cone, start=mirrored(side, SHOULDER), end=mirrored(side, ELBOW),
-                                                       start_radius=4.3, end_radius=3.6)),
+                                                       start_radius=4.5, end_radius=3.9)),
         (f'fore{side}', 'skin', f'arm{side}', partial(cone, start=mirrored(side, ELBOW), end=mirrored(side, WRIST),
-                                                      start_radius=3.9, end_radius=3.0)),
+                                                      start_radius=4.5, end_radius=3.5)),
         (f'fist{side}', 'skin', f'arm{side}', partial(round_box, centre=mirrored(side, FIST), half=(4.1, 4.5, 4.5),
                                                       radius=3)),
     ]
