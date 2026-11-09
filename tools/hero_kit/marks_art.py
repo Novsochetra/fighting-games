@@ -1,6 +1,10 @@
 """Hand-drawn marks too small to model: scars, in the skin's own shades so they take any skin, and
 small gear (earrings, a plaster). Each is {direction: [(x, y, run)]}; a direction it is hidden
-from is left out."""
+from is left out.
+
+A scar on one side of the face has a twin on the other side, drawn for the directions the mirrored
+ones are made from (south-east, east, north-east), so a mirrored player keeps his scar where it is.
+"""
 
 SCARS = {
     'cheek-slash': {
@@ -26,6 +30,20 @@ SCARS = {
         'east': [(59, 30, 'xx')],
     },
 }
+
+TWIN_SCARS = {
+    'cheek-slash': {'south-east': [(56, 32, 'xL'), (55, 33, 'xL'), (54, 34, 'xL')]},
+    'split-brow': {
+        'south-east': [(45, 23, 'x'), (45, 24, 'x'), (45, 25, 'L'), (45, 26, 'L')],
+        'east': [(56, 24, 'x'), (56, 25, 'x'), (56, 26, 'L'), (56, 27, 'L')],
+    },
+    'eye-scar': {
+        'south-east': [(55, 22, 'xL'), (55, 23, 'xL'), (55, 24, 'x'), (55, 25, 'L'), (55, 26, 'L'),
+                       (55, 32, 'x'), (55, 33, 'xL'), (55, 34, 'x')],
+    },
+}
+
+TWINNED = ('cheek-slash', 'split-brow', 'eye-scar')
 
 GEAR = {
     'earrings': {

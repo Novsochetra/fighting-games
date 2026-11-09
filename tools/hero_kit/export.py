@@ -49,6 +49,8 @@ def kit():
         'number': {'fonts': FONTS, 'places': PLACES, 'printed': PRINTED},
         'swatches': {'skin': SKINS, 'hair': HAIRS, 'kit': KITS, 'boots': BOOTS, 'eyes': EYES},
         'gearColours': GEAR_COLOURS, 'players': PLAYERS,
+        'twinned': sorted(name for folder in ('scars', 'gear') for name in folder_layers(folder)
+                          if any(key.endswith('.twin') for key in folder_layers(folder)[name])),
     }
 
 

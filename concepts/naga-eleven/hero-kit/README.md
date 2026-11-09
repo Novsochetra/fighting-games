@@ -28,7 +28,9 @@ repaint the same art shade for shade. They stack in this order:
 
 Five directions are drawn (`south`, `south-east`, `east`, `north-east`, `north`); west,
 south-west and north-west are their mirrors. The number is printed after mirroring, so it never
-reads backwards. A scar changes cheek in a mirrored direction, as everything else does.
+reads backwards. A mark on one side of him (the scars, the captain band) has a twin on the other
+side, `<direction>.twin.txt`, drawn for the three directions that get mirrored, so a mirrored player
+keeps his scar on its own cheek and his armband on his left arm.
 
 ## How the art is made
 
@@ -37,10 +39,11 @@ reads backwards. A scar changes cheek in a mirrored direction, as everything els
   by a quarter) and `pixel.py` turns that into ramp shades and outlines. This keeps him the same
   size and build in every direction.
 - `regions.py` puts the kit's details on the 3D body (the V-neck's trim, the cuffs, the stripes
-  down the shorts, the sock tops, the boots' flash and soles), so they line up in every direction.
+  down the shorts, the sock tops, the boots' laces, heels and soles), so they line up in every direction.
 - `body_art/<direction>.py` holds what is drawn by hand over that: the faces (front, three-quarter
-  and profile), the fists and the boots.
-- `hair_art/spiky_<direction>.py` draws the hero's hair as locks: polygons painted with a lit edge,
-  a stripe lit along each lock, a dark side and a blue sheen, outlined against the background.
+  and profile), the fists, and the boots from the front.
+- `hair_art/<style>_<direction>.py` draws a hairstyle as locks, polygons painted with a stripe lit
+  along each lock, a dark side and a blue sheen, outlined against the background. The mohawk's
+  crest is drawn over the 3D head of `shaved`.
 - `marks_art.py` holds the scars, the earrings and the plaster.
 - `looks.py` holds the sample players and the swatches the inspector offers.

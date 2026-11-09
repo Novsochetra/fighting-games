@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 
 from bake_hair import seen_with
-from gear import GEAR
+from gear import GEAR, TWINS
 from grid import write_grid
 from letters import EMPTY, OUTLINE, RAMP_LETTERS, letter_for
 from model import body_parts
@@ -47,6 +47,10 @@ def main(names):
     for name in names or GEAR:
         for direction, facing in FACINGS.items():
             write_grid(OUT / name / f'{direction}.txt', gear_rows(GEAR[name](), facing))
+
+        if name in TWINS:
+            for direction in ('south-east', 'east', 'north-east'):
+                write_grid(OUT / name / f'{direction}.twin.txt', gear_rows(TWINS[name](), FACINGS[direction]))
 
         print(f'baked {name}')
 

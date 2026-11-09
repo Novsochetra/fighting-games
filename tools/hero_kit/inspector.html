@@ -630,6 +630,12 @@
     }
   }
 
+  // A mark on one side of him is drawn again on the other side for the directions that get mirrored,
+  // so a mirrored player keeps his scar or armband on its own side.
+  function sided(name, source, mirrored) {
+    return mirrored && KIT.twinned.includes(name) ? `${source}.twin` : source;
+  }
+
   function compose(turn) {
     const [, source, mirrored] = TURNS.find(([name]) => name === turn);
     const frame = {
@@ -644,7 +650,9 @@
     }
 
     if (show('scars')) {
-      state.scars.forEach((scar) => stamp(frame, KIT.scars[scar]?.[source], 'scars', scar));
+      state.scars.forEach((scar) =>
+        stamp(frame, KIT.scars[scar]?.[sided(scar, source, mirrored)], 'scars', scar),
+      );
     }
 
     if (show('hair') && state.hair !== 'none') {
@@ -652,7 +660,9 @@
     }
 
     if (show('gear')) {
-      state.gear.forEach((item) => stamp(frame, KIT.gear[item]?.[source], 'gear', item));
+      state.gear.forEach((item) =>
+        stamp(frame, KIT.gear[item]?.[sided(item, source, mirrored)], 'gear', item),
+      );
     }
 
     if (mirrored) {

@@ -50,13 +50,17 @@ def hair_rows(style, facing):
     return rows
 
 
+def at_hairline(material, y, x):
+    return any(material[y + dy, x + dx] == 'skin' for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+
+
 def hair_letter(y, x, is_hair, material, line, body_line, shade):
-    """A shaved head shows its stubble as hair pixels scattered over the skin."""
+    """A shaved head is the skin a shade darker, edged by a hair-coloured hairline."""
     if material[y, x] == 'stubble':
         if line[y, x]:
             return OUTLINE
 
-        return letter_for('hair', shade[y, x] - 1) if x % 2 == 0 and y % 2 == 0 else letter_for('skin', shade[y, x] - 1)
+        return letter_for('hair', 1) if at_hairline(material, y, x) else letter_for('skin', shade[y, x] - 1)
 
     if is_hair[y, x]:
         return OUTLINE if line[y, x] else letter_for('hair', shade[y, x])
