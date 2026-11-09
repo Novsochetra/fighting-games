@@ -23,3 +23,12 @@ def touch_up(rows, mirrored):
                 rows[y][x] = 'S'
 
     return rows
+
+DETAIL = [(57, y, 'Vv') for y in range(67, 76)] + [
+    (54, 89, 'eeeeeeee'), (54, 90, 'fffffff'), (35, 85, 'eeeeeeee'), (35, 86, 'ffffff'),
+    (55, 84, 'ss'), (56, 85, 'sss'), (60, 92, 'f'), (61, 94, 'f'), (60, 96, 'f'),
+    (59, 62, 's'), (60, 63, 's'), (61, 66, 's'), (62, 67, 's'), (58, 64, 'L'), (58, 65, 'L'),
+    (43, 73, 'b'), (44, 74, 'b'),
+]
+
+RUNS += DETAIL
