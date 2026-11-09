@@ -1,17 +1,19 @@
 """The hero's spiky hair from behind, shared by north and north-east: the locks fanning from the
-crown, clumps ending in three points at the nape, his long swept locks on his right (our right) and short spikes on his
+crown, clumps falling to points at the nape, the ears left clear, his long swept locks on his right (our right) and short spikes on his
 left. `back_locks(shift, swept_right)` places it; the mirrored side is the twin."""
 
 CROWN = [
     [(50, 16), (44, 14), (38.5, 21), (37.5, 27), (42, 24)],
     [(50, 16), (56, 14), (61.5, 21), (62.5, 27), (58, 24)],
-    [(49, 17), (45, 20), (42, 27), (43.5, 33), (47, 26)],
-    [(51, 17), (55, 20), (58, 27), (56.5, 33), (53, 26)],
-    [(48.5, 18), (51.5, 18), (52, 27), (50, 35), (48, 27)],
+    [(49, 17), (45, 20), (41.5, 28), (43.5, 38), (47, 30)],
+    [(51, 17), (55, 20), (58.5, 28), (56.5, 38), (53, 30)],
+    [(48.5, 18), (51.5, 18), (52.5, 29), (50, 39), (47.5, 29)],
+    [(46, 27), (48.5, 28), (48, 34), (46.5, 37.5), (45, 33)],
+    [(51.5, 28), (54, 27), (55, 33), (53.5, 37.5), (52, 34)],
 ]
 NAPE = []
-MASS = [(40.5, 31), (37.5, 26), (35.5, 19), (38, 14.5), (43, 12), (50, 11.5), (57, 12), (62, 15), (64.5, 20),
-        (62.5, 26), (59.5, 31), (55, 33.5), (45, 33.5)]
+MASS = [(41, 36), (40, 31), (37.5, 26), (35.5, 19), (38, 14.5), (43, 12), (50, 11.5), (57, 12), (62, 15),
+        (64.5, 20), (62.5, 26), (60, 31), (59, 36), (50, 37)]
 TOP = [
     [(57, 15), (55.5, 9), (53, 5), (50.5, 8), (48, 13)],
     [(47, 14), (44.5, 8.5), (41.5, 6.5), (41.5, 11), (41, 16)],
@@ -39,4 +41,4 @@ def back_locks(shift=0, swept_right=True):
             + [placed(points, shift, False) for points in CROWN + NAPE])
 
 
-SHEENED = [0, 8, 9, 10, 11, 12]
+SHEENED = [0, 8, 9, 10, 11, 12, 13, 14]

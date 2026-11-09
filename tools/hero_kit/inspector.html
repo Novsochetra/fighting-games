@@ -620,12 +620,16 @@
         continue;
       }
 
-      for (const step of [-W - 1, -W, -W + 1, -1, 1, W - 1, W, W + 1]) {
-        const near = at + step;
-        const cleared = KIT.number.cleared[frame.letter[near]];
+      const reach = KIT.number.clearance;
 
-        if (cleared && frame.layer[near] === 'body') {
-          frame.letter[near] = cleared;
+      for (let dy = -reach; dy <= reach; dy += 1) {
+        for (let dx = -reach; dx <= reach; dx += 1) {
+          const near = at + dy * W + dx;
+          const cleared = KIT.number.cleared[frame.letter[near]];
+
+          if (cleared && frame.layer[near] === 'body') {
+            frame.letter[near] = cleared;
+          }
         }
       }
     }

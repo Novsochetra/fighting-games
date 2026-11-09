@@ -34,8 +34,19 @@ def within_one_material(material, line, y, x):
     return all(material[ny, nx] in group for ny, nx in neighbours)
 
 
-def body_rows(facing):
-    parts = body_parts()
+LEG_PARTS = ('thigh', 'shin', 'calf', 'boot', 'collar')
+
+
+def without_far_leg(parts, far_side):
+    """Side on, the far leg shows only as a foot floating by the near ankle, so it is left out, as
+    side-on sprites do."""
+    hidden = {f'{name}{far_side}' for name in LEG_PARTS}
+
+    return [part for part in parts if part[0] not in hidden]
+
+
+def body_rows(facing, far_side=None):
+    parts = body_parts() if far_side is None else without_far_leg(body_parts(), far_side)
     seen = render(parts, facing)
     material = materials_of(parts, seen)
     line = edges(material, seen['depth'])

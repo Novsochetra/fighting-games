@@ -9,6 +9,8 @@ from grid import write_grid
 from mirror import MIRRORS, flipped_runs
 from render import FACINGS
 
+FAR_LEG = {'east': -1, 'west': 1}
+
 OUT = Path(__file__).resolve().parents[2] / 'concepts' / 'naga-eleven' / 'hero-kit' / 'body'
 
 
@@ -20,7 +22,7 @@ def head_row(left, right, lit, shadow, deep):
 
 
 def drawn(direction):
-    rows = [list(row) for row in body_rows(FACINGS[direction])]
+    rows = [list(row) for row in body_rows(FACINGS[direction], FAR_LEG.get(direction))]
     module = f'body_art.{MIRRORS.get(direction, direction).replace("-", "_")}'
 
     try:

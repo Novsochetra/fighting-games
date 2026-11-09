@@ -40,7 +40,7 @@ other side, as a twin (`TWIN_LOCKS`, `TWIN_SCARS`), so it stays on its own side 
   by a quarter) and `pixel.py` turns that into ramp shades and outlines. This keeps him the same
   size and build in every direction.
 - `regions.py` puts the kit's details on the 3D body (the V-neck's trim, the cuffs, the stripes
-  down the shorts, the raglan trim over the shoulders, the sock tops, the boots' laces, heels and
+  down the shorts, the raglan trim over the front of the shoulders, the sock tops, the boots' laces, heels and
   soles), so they line up in every direction.
 - `body_art/<direction>.py` holds what is drawn by hand over that: the faces (front, three-quarter
   and profile), the fists, and the boots from the front.

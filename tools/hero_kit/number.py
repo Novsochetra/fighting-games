@@ -50,6 +50,7 @@ PRINTED = {'P': 'Y', 'R': 'Y', 'r': 'T', 'd': 't'}
 # A seam's trim touching a digit makes it misread (a 1 grows a stroke into a 7), so trim next to the
 # number turns back to shirt.
 CLEARED = {'t': 'r', 'T': 'R', 'Y': 'R'}
+CLEARANCE = 2
 
 
 def printed(rows, direction, number):
@@ -83,9 +84,9 @@ def printed(rows, direction, number):
 
 def clear_around(rows, inked):
     for x, y in inked:
-        for dy in (-1, 0, 1):
-            for dx in (-1, 0, 1):
+        for dy in range(-CLEARANCE, CLEARANCE + 1):
+            for dx in range(-CLEARANCE, CLEARANCE + 1):
                 near = (x + dx, y + dy)
 
-                if near not in inked and rows[near[1]][near[0]] in CLEARED:
+                if near not in inked and 0 <= near[1] < len(rows) and rows[near[1]][near[0]] in CLEARED:
                     rows[near[1]][near[0]] = CLEARED[rows[near[1]][near[0]]]

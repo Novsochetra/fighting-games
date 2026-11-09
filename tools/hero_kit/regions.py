@@ -57,12 +57,13 @@ def boot_parts(u, v, z):
     return laces, heel
 
 
-def raglan(u, z):
-    """The raglan seam's trim: from the collar down over each shoulder to the armpit."""
+def raglan(u, v, z):
+    """The raglan seam's trim, from the collar down over each shoulder to the armpit, on the front
+    only, as the reference shows it; behind, a seam beside the number reads as part of it."""
     across = np.abs(u)
     line = 66.4 - (across - 5.2) * 1.5
 
-    return (across > 5.2) & (across < 12.5) & (np.abs(z - line) < 0.8)
+    return (across > 5.2) & (across < 12.5) & (np.abs(z - line) < 0.8) & (v > -1)
 
 
 def regions(names, material, local):
@@ -77,7 +78,7 @@ def regions(names, material, local):
     material[shirt & near_neck & (z > line)] = 'skin'
     material[shirt & near_neck & (z <= line) & (z > line - TRIM)] = 'trim'
     material[sleeve & (material == 'shirt') & (z < SLEEVE_END + CUFF)] = 'trim'
-    material[(material == 'shirt') & ~sleeve & raglan(u, z)] = 'trim'
+    material[(material == 'shirt') & ~sleeve & raglan(u, v, z)] = 'trim'
     material[(material == 'socks') & (z > SOCK_TOP - SOCK_BAND)] = 'trim'
     material[(material == 'shorts') & short_stripe(u, v, z)] = 'stripe'
     boots = material == 'boots'
