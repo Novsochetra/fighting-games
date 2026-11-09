@@ -6,8 +6,15 @@ from model import body_parts
 from pixel import edges, materials_of, shades_of, tidy
 from render import render
 
+MATERIAL_GROUPS = {
+    'shirt': {'shirt', 'trim'},
+    'trim': {'shirt', 'trim'},
+    'shorts': {'shorts', 'stripe'},
+    'stripe': {'shorts', 'stripe'},
+}
+
 BOOT_MARKS = {
-    'lace': lambda shade, x, y: 'm' if (x + y) % 2 == 0 else letter_for('boots', shade - 1),
+    'lace': lambda shade, x, y: 'm' if y % 2 == 0 else letter_for('boots', shade - 1),
     'heel': lambda shade, x, y: letter_for('boots', shade - 1),
 }
 
@@ -22,7 +29,9 @@ def within_one_material(material, line, y, x):
     if any(not (0 <= ny < height and 0 <= nx < width) or material[ny, nx] == '' for ny, nx in neighbours):
         return False
 
-    return all(material[ny, nx] == material[y, x] for ny, nx in neighbours)
+    group = MATERIAL_GROUPS.get(material[y, x], {material[y, x]})
+
+    return all(material[ny, nx] in group for ny, nx in neighbours)
 
 
 def body_rows(facing):

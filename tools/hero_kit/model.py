@@ -22,6 +22,7 @@ def head_parts():
         ('jaw', 'skin', 'head', partial(ellipsoid, centre=(0, 1.8, 74.6), radii=(7.9, 7.9, 5.8))),
         ('chin', 'skin', 'head', partial(ellipsoid, centre=(0, 4.4, 71.4), radii=(4.2, 4, 2.6))),
         ('nose', 'skin', 'nose', partial(ellipsoid, centre=(0, 9.9, 75.8), radii=(1.2, 1.4, 2.2))),
+        ('nape', 'skin', 'head', partial(ellipsoid, centre=(0, -4.6, 70.5), radii=(5.6, 4.6, 6.4))),
         ('neck', 'skin', 'head', partial(cone, start=(0, -1, 64), end=(0, 0, 73), start_radius=4.9, end_radius=4.3)),
     ]
 
@@ -32,8 +33,8 @@ def ear_parts(side):
 
 def torso_parts():
     return [
-        ('chest', 'shirt', 'torso', partial(ellipsoid, centre=(0, 0.2, 59), radii=(12, 8.4, 9.6))),
-        ('belly', 'shirt', 'torso', partial(ellipsoid, centre=(0, 0, 49.4), radii=(11.2, 8, 8.4))),
+        ('chest', 'shirt', 'torso', partial(ellipsoid, centre=(0, 0.2, 59), radii=(12, 9.6, 9.6))),
+        ('belly', 'shirt', 'torso', partial(ellipsoid, centre=(0, 0, 49.4), radii=(11.2, 9, 8.4))),
         ('collar', 'shirt', 'torso', clipped(partial(cone, start=(0, -0.6, 63), end=(0, -0.6, 67.2), start_radius=6.8,
                                                      end_radius=5.4), above=66.4)),
     ]
@@ -47,7 +48,7 @@ def arm_parts(side):
         (f'upper{side}', 'skin', f'arm{side}', partial(cone, start=mirrored(side, SHOULDER), end=mirrored(side, ELBOW),
                                                        start_radius=4.5, end_radius=3.9)),
         (f'fore{side}', 'skin', f'arm{side}', partial(cone, start=mirrored(side, ELBOW), end=mirrored(side, WRIST),
-                                                      start_radius=4.5, end_radius=3.5)),
+                                                      start_radius=4.2, end_radius=3.2)),
         (f'fist{side}', 'skin', f'arm{side}', partial(round_box, centre=mirrored(side, FIST), half=(4.1, 4.5, 4.5),
                                                       radius=3)),
     ]

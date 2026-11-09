@@ -94,11 +94,11 @@ def axis_sides(lock):
 
 
 def lock_shade(padded, x, y, index, lock, sheen):
-    if padded[y + 1, x + 1] != index or padded[y + 1, x] != index:
-        return 'g'
-
     if (x - 2, y - 2) in sheen and lock.get('sheen', True):
         return 'J'
+
+    if padded[y + 1, x + 1] != index or padded[y + 1, x] != index:
+        return 'g'
 
     if 'side' in lock:
         side = lock['side'](x - 2, y - 2)

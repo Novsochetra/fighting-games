@@ -20,7 +20,7 @@ def neckline(u, v):
     front = np.clip(v / 6, 0, 1)
     middle = np.clip(1 - np.abs(u) / 4.6, 0, 1)
 
-    return 66.8 - 4.6 * front * middle
+    return 66.8 - 3.0 * front * middle
 
 
 def short_stripe(u, v, z):

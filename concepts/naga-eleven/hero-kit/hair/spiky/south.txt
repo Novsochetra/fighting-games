@@ -13,11 +13,11 @@
 012 |....................................ohhoo.ohhggggoggghhhgoohhhho....................................|
 013 |....................................ohhhhoggggggggggggggghhhhhho....................................|
 014 |.....................................ohhhggggghhJJJJhggggghhhhgo....................................|
-015 |.....................................ohggggggggggggggggJgggghho.....................................|
-016 |...............................ooooooggggggJJJHggHHhhhggggggggo.oooooooo............................|
+015 |.....................................ohgggggggggJggggggJgggghho.....................................|
+016 |...............................oooooogggggJJJJHggHHhhhJgggggggo.oooooooo............................|
 017 |...........................oooohhHHHHgggJJghhHHggHHhhhgghJJgggHoHHhhhgo.............................|
-018 |.............................oohhhhhhggJJHgghhhgooHhhggghhhJgghhhhhhgo..............................|
-019 |...............................oohhhhggJHhhghhgo..ohhgoohhhhgghhhgooo...............................|
+018 |.............................oohhhhhhgJJJHgghhhgooHhhggghhhJJghhhhhhgo..............................|
+019 |...............................oohhhhggJHhhghhgo..ohhgoohhhhJghhhgooo...............................|
 020 |.................................ooogggghhgooho...ohho..ohhgggggoo..................................|
 021 |....................................oggghho..oo...ohgo..ohhgggHo....................................|
 022 |...................................oHgggogo..oo....oo....ogoggHHo...................................|

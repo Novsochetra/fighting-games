@@ -40,7 +40,7 @@ FONTS = {
 PLACES = {
     'south': ('chest', 49.5, 50, 1),
     'south-east': ('chest', 52.5, 50, 1),
-    'north-east': ('back-narrow', 47, 49, 1),
+    'north-east': ('back-narrow', 47, 51, 1),
     'north': ('back', 49.5, 49, 2),
 }
 

@@ -19,7 +19,7 @@ FEATURES = [
     (58, 36, 'xx'), (59, 37, 's'),
     (46, 28, 'oo'), (45, 29, 'oSso'), (45, 30, 'oSxo'), (45, 31, 'oSxo'), (45, 32, 'osso'), (46, 33, 'oo'),
     (47, 34, 'x'), (48, 35, 'x'), (49, 36, 'o'), (50, 37, 'o'), (51, 38, 'oo'), (53, 39, 'oooooooo'),
-    (44, 38, 'osssxxs'), (44, 39, 'ossxxxxxx'), (44, 40, 'osxxxxxxxxxo'), (44, 41, 'osxxxxxxxxxo'),
+    (44, 38, 'osssSSs'), (44, 39, 'ossSSSsxx'), (44, 40, 'osSSSSSssxxo'), (44, 41, 'osSSSSSssssx'),
 ]
 
 

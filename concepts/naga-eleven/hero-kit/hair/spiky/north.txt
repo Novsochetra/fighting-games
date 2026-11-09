@@ -16,7 +16,7 @@
 015 |.....................................ohggggJJJhhgggHhhhhgggghho.....................................|
 016 |...............................oooooogggggJJHhhhgggHHhhhggggggo.oooooooo............................|
 017 |...........................oooohhHHHHgggJgHHgggggggggghhhgghggHoHHhhhgo.............................|
-018 |.............................oohhhhhhggJggHHgHHHhhhhggghhhgghghhhhhhgo..............................|
+018 |.............................oohhhhhhggJJgHHgHHHhhhhggghhhgghghhhhhhgo..............................|
 019 |...............................oohhhhggJggggggHHhhhhgggggggghghhhgooo...............................|
 020 |.................................ooogggggghhggHHhhhhgggHHhggggggoo..................................|
 021 |....................................oggHHhhhggHHhhhhgggHHhhhggHo....................................|
