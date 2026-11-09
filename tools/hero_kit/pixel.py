@@ -5,9 +5,9 @@ import numpy as np
 
 from regions import regions
 
-LIT = 0.28
-CLOTH_LIT = 0.08
-HIGHLIGHT = 2.0
+LIT = 0.36
+CLOTH_LIT = 0.26
+HIGHLIGHT = 0.84
 CREVICE = 0.55
 DEPTH_JUMP = 3.0
 

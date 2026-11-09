@@ -1,67 +1,23 @@
-"""Draws the body grids: the blockout's bake with the hand-drawn art of body_art/ over it."""
+"""Writes the body grids from the hand-painted masters in body_art/, one per drawn direction; the
+three west-facing directions are their mirror images. Each master was seeded from the 3D blockout's
+bake (bake.py) and then painted over pixel by pixel."""
 
-import importlib
 import sys
 from pathlib import Path
 
-from bake import body_rows
-from grid import write_grid
-from mirror import MIRRORS, flipped_runs
+from grid import read_grid, write_grid
+from mirror import MIRRORS
 from render import FACINGS
 
-FAR_LEG = {'east': -1, 'west': 1}
+MASTERS = Path(__file__).parent / 'body_art'
 
 OUT = Path(__file__).resolve().parents[2] / 'concepts' / 'naga-eleven' / 'hero-kit' / 'body'
 
 
-def head_row(left, right, lit, shadow, deep):
-    inner = right - left - 1
-    base = inner - lit - shadow - deep
-
-    return 'o' + 'L' * lit + 'S' * base + 's' * shadow + 'x' * deep + 'o'
-
-
-def put(rows, x, y, run):
-    """A run of letters at (x, y); its underscores leave what is beneath."""
-    for dx, letter in enumerate(run):
-        if letter != '_':
-            rows[y][x + dx] = letter
-
-
 def drawn(direction):
-    rows = [list(row) for row in body_rows(FACINGS[direction], FAR_LEG.get(direction))]
-    module = f'body_art.{MIRRORS.get(direction, direction).replace("-", "_")}'
+    rows = read_grid(MASTERS / f'{MIRRORS.get(direction, direction)}.txt')
 
-    try:
-        art = importlib.import_module(module)
-    except ModuleNotFoundError:
-        return rows
-
-    if hasattr(art, 'drawn_rows'):
-        return art.drawn_rows()
-
-    if direction in MIRRORS:
-        for x, y, run in flipped_runs(getattr(art, 'RUNS', [])):
-            put(rows, x, y, run)
-
-        return art.touch_up(rows, mirrored=True) if hasattr(art, 'touch_up') else rows
-
-    for y, (left, right, lit, shadow, deep) in getattr(art, 'HEAD', {}).items():
-        rows[y][left:right + 1] = head_row(left, right, lit, shadow, deep)
-
-    for x, y, run in getattr(art, 'RUNS', []):
-        put(rows, x, y, run)
-
-    if hasattr(art, 'touch_up'):
-        rows = art.touch_up(rows, mirrored=False)
-
-    for x, top, block in getattr(art, 'BLOCKS', []):
-        for dy, line in enumerate(block):
-            for dx, letter in enumerate(line):
-                if letter != '_':
-                    rows[top + dy][x + dx] = letter
-
-    return rows
+    return [list(row[::-1]) for row in rows] if direction in MIRRORS else [list(row) for row in rows]
 
 
 def main(directions):

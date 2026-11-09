@@ -1,4 +1,5 @@
-"""Bakes the blockout's body: each pixel a letter of its material's ramp, shaded and outlined.
+"""Bakes the blockout's body: each pixel a letter of its material's ramp, shaded and outlined, the
+outline black only round the figure and inside it the darkest shade of the part it bounds.
 body_draw.py lays the hand-drawn art of body_art/ over it."""
 
 from letters import EMPTY, OUTLINE, RAMP_LETTERS, letter_for
@@ -6,40 +7,24 @@ from model import body_parts
 from pixel import edges, materials_of, shades_of, tidy
 from render import render
 
-MATERIAL_GROUPS = {
-    'shirt': {'shirt', 'trim'},
-    'trim': {'shirt', 'trim'},
-    'shorts': {'shorts', 'stripe'},
-    'stripe': {'shorts', 'stripe'},
-}
-
 BOOT_MARKS = {
     'lace': lambda shade, x, y: 'm' if y % 2 == 0 else letter_for('boots', shade - 1),
     'heel': lambda shade, x, y: letter_for('boots', shade - 1),
 }
 
 
-def within_one_material(material, line, y, x):
-    """A line between two parts of the same cloth or skin (the far shoulder behind the chest) is
-    drawn in that material's darkest shade, so only the figure's edge and where materials meet stay
-    black."""
+def on_silhouette(material, y, x):
     height, width = material.shape
-    neighbours = [(y + dy, x + dx) for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))]
 
-    if any(not (0 <= ny < height and 0 <= nx < width) or material[ny, nx] == '' for ny, nx in neighbours):
-        return False
-
-    group = MATERIAL_GROUPS.get(material[y, x], {material[y, x]})
-
-    return all(material[ny, nx] in group for ny, nx in neighbours)
+    return any(not (0 <= y + dy < height and 0 <= x + dx < width) or material[y + dy, x + dx] == ''
+               for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)))
 
 
 LEG_PARTS = ('thigh', 'shin', 'calf', 'boot', 'collar')
 
 
 def without_far_leg(parts, far_side):
-    """Side on, the far leg shows only as a foot floating by the near ankle, so it is left out, as
-    side-on sprites do."""
+    # side on, the far leg shows only as a foot floating by the near ankle, so sprites leave it out
     hidden = {f'{name}{far_side}' for name in LEG_PARTS}
 
     return [part for part in parts if part[0] not in hidden]
@@ -61,8 +46,8 @@ def body_rows(facing, far_side=None):
 
             if ramp == '':
                 row += EMPTY
-            elif line[y, x] and within_one_material(material, line, y, x) and ramp in RAMP_LETTERS:
-                row += RAMP_LETTERS[ramp][1]
+            elif line[y, x] and not on_silhouette(material, y, x) and ramp in RAMP_LETTERS:
+                row += RAMP_LETTERS[ramp][0]
             elif line[y, x]:
                 row += OUTLINE
             elif ramp in BOOT_MARKS:

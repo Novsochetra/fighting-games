@@ -8,7 +8,7 @@ from sdf import smooth_min
 WIDTH = 100
 HEIGHT = 116
 GROUND_ROW = 109
-GROUND_SQUASH = 0.25
+GROUND_SQUASH = 0.0
 BLEND = {'head': 2.5, 'torso': 3.0, 'shorts': 2.0, 'hair': 1.2}
 LIMB_BLEND = 1.6
 LIGHT = np.array([-0.55, -0.5, 0.95])
