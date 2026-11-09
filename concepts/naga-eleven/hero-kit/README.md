@@ -39,7 +39,8 @@ keeps his scar on its own cheek and his armband on his left arm.
   by a quarter) and `pixel.py` turns that into ramp shades and outlines. This keeps him the same
   size and build in every direction.
 - `regions.py` puts the kit's details on the 3D body (the V-neck's trim, the cuffs, the stripes
-  down the shorts, the sock tops, the boots' laces, heels and soles), so they line up in every direction.
+  down the shorts, the raglan trim over the shoulders, the sock tops, the boots' laces, heels and
+  soles), so they line up in every direction.
 - `body_art/<direction>.py` holds what is drawn by hand over that: the faces (front, three-quarter
   and profile), the fists, and the boots from the front.
 - `hair_art/<style>_<direction>.py` draws a hairstyle as locks, polygons painted with a stripe lit
