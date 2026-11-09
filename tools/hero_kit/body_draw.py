@@ -44,13 +44,16 @@ def drawn(direction):
         for x, y, run in flipped_runs(getattr(art, 'RUNS', [])):
             put(rows, x, y, run)
 
-        return rows
+        return art.touch_up(rows, mirrored=True) if hasattr(art, 'touch_up') else rows
 
     for y, (left, right, lit, shadow, deep) in getattr(art, 'HEAD', {}).items():
         rows[y][left:right + 1] = head_row(left, right, lit, shadow, deep)
 
     for x, y, run in getattr(art, 'RUNS', []):
         put(rows, x, y, run)
+
+    if hasattr(art, 'touch_up'):
+        rows = art.touch_up(rows, mirrored=False)
 
     for x, top, block in getattr(art, 'BLOCKS', []):
         for dy, line in enumerate(block):

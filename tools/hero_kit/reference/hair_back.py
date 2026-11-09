@@ -1,7 +1,7 @@
 """The hero's hair from behind: the reference's hair turned round, so its spikes stand where the
 front's do, and the face filled with hair falling to the nape in locks."""
 
-from locks import band, paint
+from locks import paint
 from reference.hair import rows as front_hair
 
 NAPE = 33
@@ -32,7 +32,7 @@ def rows(body):
         if span:
             fill_row(hair, y, span)
 
-    locks = paint(LOCKS, len(hair[0]), len(hair), sheen=band((50, 26), (11, 9), 1.6, left_of=50))
+    locks = paint(LOCKS, len(hair[0]), len(hair))
 
     for y, row in enumerate(locks):
         for x, letter in enumerate(row):

@@ -103,7 +103,7 @@ def lock_shade(padded, x, y, index, lock, sheen):
     if 'side' in lock:
         side = lock['side'](x - 2, y - 2)
 
-        return 'H' if side > 0.3 else ('g' if side < -0.55 else 'h')
+        return 'H' if side > 0.62 else ('g' if side < -0.55 else 'h')
 
     if padded[y - 1, x - 1] != index and padded[y - 1, x] != index and lock.get('rim', True):
         return 'H'

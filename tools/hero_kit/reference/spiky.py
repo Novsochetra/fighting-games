@@ -27,12 +27,12 @@ def main():
     turned = three_quarter_rows()
     back = back_rows(drawn('north'))
     layers = {
+        'north-east': back_rows(drawn('north-east')),
+        'north-west': back_rows(drawn('north-west')),
         'south': front_rows(),
         'south-east': turned,
         'south-west': mirrored(turned),
         'north': back,
-        'north-east': moved(back, -1),
-        'north-west': moved(back, 1),
     }
 
     for direction, rows in layers.items():
