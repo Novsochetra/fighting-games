@@ -656,7 +656,7 @@
     }
 
     if (show('hair') && state.hair !== 'none') {
-      stamp(frame, KIT.hair[state.hair]?.[source], 'hair', state.hair);
+      stamp(frame, KIT.hair[state.hair]?.[sided(state.hair, source, mirrored)], 'hair', state.hair);
     }
 
     if (show('gear')) {

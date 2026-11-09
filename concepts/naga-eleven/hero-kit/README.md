@@ -28,9 +28,10 @@ repaint the same art shade for shade. They stack in this order:
 
 Five directions are drawn (`south`, `south-east`, `east`, `north-east`, `north`); west,
 south-west and north-west are their mirrors. The number is printed after mirroring, so it never
-reads backwards. A mark on one side of him (the scars, the captain band) has a twin on the other
-side, `<direction>.twin.txt`, drawn for the three directions that get mirrored, so a mirrored player
-keeps his scar on its own cheek and his armband on his left arm.
+reads backwards. A part on one side of him (the scars, the captain band, the sweep of the hero's
+hair) has a twin on the other side, `<direction>.twin.txt`, drawn for the three directions that get
+mirrored, so a mirrored player keeps his scar on its cheek, his armband on his left arm and his
+long locks on his right.
 
 ## How the art is made
 

@@ -1,28 +1,15 @@
-"""The hero's spiky hair from behind and to his left: the back of the mop, its locks thrown out,
-the nape's points falling to the collar."""
+"""The hero's spiky hair from behind and to his left (see spiky_back.py); the twin has the sweep
+on the other side, for the mirrored north-west."""
 
+from hair_art.spiky_back import SHEENED, back_locks
 from locks import band
 
-LOCKS = [
-    {'points': [(40.5, 34), (38, 27), (37.5, 20), (40, 15), (45.5, 12.5), (52, 12), (58, 13.5), (61.5, 17.5),
-                (62, 23), (60.5, 29), (58, 32), (55, 33.5), (48, 34.5)]},
-    {'points': [(44, 14.5), (45, 8), (47, 4), (49, 8.5), (51, 13)]},
-    {'points': [(50.5, 13), (54.5, 8), (59.5, 5.5), (58.5, 10.5), (59.5, 15)]},
-    {'points': [(41.5, 16.5), (37, 12), (31.5, 9.5), (36.5, 14.5), (39, 20)]},
-    {'points': [(39, 18.5), (33.5, 18.5), (28.5, 20.5), (33.5, 23), (38.5, 25)]},
-    {'points': [(60, 16), (65, 14.5), (69.5, 15), (65.5, 19), (61.5, 21.5)]},
-    {'points': [(38.5, 24), (34, 27), (30.5, 31.5), (35.5, 30.5), (40, 30)]},
-    {'points': [(61, 21), (64.5, 24), (67, 28.5), (62.5, 28), (60, 27)]},
-    {'points': [(42.5, 15), (49.5, 14.5), (46.5, 21), (40, 28), (40, 21)]},
-    {'points': [(48.5, 14.5), (56.5, 15), (59.5, 21.5), (60, 28), (53.5, 21)]},
-    {'points': [(38, 21), (44.5, 20), (44, 27), (40.5, 33), (38.5, 27.5)]},
-    {'points': [(54, 20), (61, 21), (60.5, 27.5), (58, 33), (54.5, 27)]},
-    {'points': [(44.5, 18), (53.5, 18), (52.5, 25.5), (49.5, 32), (46.5, 25.5)]},
-    {'points': [(42, 30), (43, 35), (45.5, 38.5), (47, 34.5), (48, 31)]},
-    {'points': [(47.5, 30.5), (49.5, 35.5), (52.5, 38.5), (53, 34), (54, 31)]},
-    {'points': [(53.5, 29.5), (57, 33.5), (60, 35.5), (59.5, 31), (59, 27.5)]},
-]
+LOCKS = back_locks(shift=-1)
 
-SHEEN = band((49.5, 24), (11, 9), 1.6, left_of=50)
+TWIN_LOCKS = back_locks(shift=-1, swept_right=False)
 
-SHEENED = [0, 9, 10, 11, 12, 13]
+SHEEN = band((49, 24), (11, 9), 1.6, left_of=50)
+
+SHEENED = SHEENED
+
+TWIN_SHEENED = SHEENED

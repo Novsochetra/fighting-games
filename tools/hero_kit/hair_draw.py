@@ -24,9 +24,18 @@ def over_base(letters, base, direction):
 
 
 def draw(style, direction):
+    """A style's layer for a direction, and its twin (the lopsided style seen with its sides swapped,
+    which the mirrored direction shows) where the art draws one."""
     art = importlib.import_module(f'hair_art.{style}_{direction.replace("-", "_")}')
-    sheened = set(getattr(art, 'SHEENED', range(len(art.LOCKS))))
-    locks = [{**lock, 'sheen': index in sheened} for index, lock in enumerate(art.LOCKS)]
+    write(style, direction, art, art.LOCKS, getattr(art, 'SHEENED', None), f'{direction}.txt')
+
+    if hasattr(art, 'TWIN_LOCKS'):
+        write(style, direction, art, art.TWIN_LOCKS, getattr(art, 'TWIN_SHEENED', None), f'{direction}.twin.txt')
+
+
+def write(style, direction, art, lock_list, sheened, name):
+    sheened = set(range(len(lock_list)) if sheened is None else sheened)
+    locks = [{**lock, 'sheen': index in sheened} for index, lock in enumerate(lock_list)]
     letters = paint(locks, WIDTH, HEIGHT, sheen=getattr(art, 'SHEEN', frozenset()))
 
     if hasattr(art, 'BASE'):
@@ -39,7 +48,7 @@ def draw(style, direction):
     for (x, y), letter in getattr(art, 'PIXELS', {}).items():
         letters[y, x] = letter
 
-    write_grid(OUT / style / f'{direction}.txt', [''.join(row) for row in letters])
+    write_grid(OUT / style / name, [''.join(row) for row in letters])
 
 
 if __name__ == '__main__':
