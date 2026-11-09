@@ -8,7 +8,7 @@ SKINS = {
 }
 
 HAIRS = {
-    'navy': ['#241636', '#36224a', '#4c3468', '#283ca0'],
+    'navy': ['#1a1030', '#2f2456', '#4a3f8c', '#6f86e0'],
     'black': ['#0e0b10', '#1e1a24', '#2f2a38', '#5a5468'],
     'platinum': ['#6b6478', '#a8a0b8', '#e0dcea', '#ffffff'],
     'copper': ['#4a0e12', '#8a1c1c', '#c8382a', '#ff7a4a'],
@@ -31,7 +31,7 @@ KITS = {
 }
 
 BOOTS = {
-    'white': {'boots': ['#5d5a86', '#8980ae', '#dfdae6', '#ffffff'], 'sole': ['#2a2440', '#4a4468']},
+    'white': {'boots': ['#6a6592', '#a7a2c6', '#ebe8f2', '#ffffff'], 'sole': ['#2a2440', '#4a4468']},
     'black': {'boots': ['#0e0c14', '#221e2c', '#3a3448', '#6a6280'], 'sole': ['#c87a1c', '#f2b236']},
     'gold': {'boots': ['#7a4a08', '#c48a14', '#f2c43a', '#fff0a0'], 'sole': ['#2a2440', '#4a4468']},
 }

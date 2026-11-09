@@ -1,7 +1,7 @@
 """Paints hair drawn as clumps: polygons in pixel coordinates, later ones in front. Each clump is lit
 as one plane from the upper left (light, base and dark tones across it), creased in the darkest
 tone where a clump in front meets it, and outlined outside the whole shape so a spike's tip keeps
-its colour. A sheen of the lightest tone runs across the crown, broken where it leaves a clump's lit plane."""
+its colour. Streaks of sheen in the lightest tone run along the lit edges of the locks round the crown."""
 
 from render import HEIGHT, WIDTH
 
@@ -55,7 +55,11 @@ def creased(owner, x, y):
     return any(owner.get((x + dx, y + dy), -1) > owner[(x, y)] for dx, dy in NEIGHBOURS)
 
 
-def painted(clumps, sheen):
+def lit_edge(owner, x, y):
+    return owner.get((x - 1, y)) != owner[(x, y)] or owner.get((x, y - 1)) != owner[(x, y)]
+
+
+def painted(clumps, sheen_rows):
     owner = owners(clumps)
     boxes = bounds(owner)
     rows = [['.'] * WIDTH for _ in range(HEIGHT)]
@@ -63,7 +67,7 @@ def painted(clumps, sheen):
     for (x, y), index in owner.items():
         rows[y][x] = 'g' if creased(owner, x, y) else tone(x, y, boxes[index])
 
-        if (x, y) in sheen and rows[y][x] in 'Hh':
+        if y in sheen_rows and rows[y][x] == 'H' and lit_edge(owner, x, y):
             rows[y][x] = 'J'
 
     for x, y in owner:

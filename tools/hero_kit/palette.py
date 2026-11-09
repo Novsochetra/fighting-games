@@ -10,7 +10,7 @@ RAMPS = {
     'shorts': ['#10123c', '#191c5a', '#283ca0', '#3f58c0'],
     'stripe': ['#8980ae', '#dfdae6'],
     'socks': ['#850d19', '#b7101c', '#df2321', '#f2543a'],
-    'boots': ['#5d5a86', '#8980ae', '#dfdae6', '#ffffff'],
+    'boots': ['#6a6592', '#a7a2c6', '#ebe8f2', '#ffffff'],
     'sole': ['#2a2440', '#4a4468'],
     'gear': ['#7d1730', '#c72a4a', '#f2f0f5', '#ffffff'],
     'metal': ['#8a5a12', '#e0a42a', '#fff2a8'],

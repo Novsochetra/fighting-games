@@ -1,6 +1,6 @@
 """Selective outlining: black stays only where the figure's edge turns from the light (its bottom
 and right) and round small features. Where the edge faces the upper-left light, and where one part
-of the figure is drawn against another, the line takes the darkest shade of the part it bounds."""
+of the figure is drawn against another, the line takes a dark shade of the part it bounds: the darkest between parts, one lighter on the lit edge."""
 
 from letters import EMPTY, LETTERS, OUTLINE, RAMP_LETTERS
 
@@ -32,8 +32,9 @@ def line_colour(rows, x, y):
         return OUTLINE
 
     ramp = next((name for name in DARKEST_FIRST if name in ramps), None)
+    shade = 1 if any(edge) else 0
 
-    return RAMP_LETTERS[ramp][0] if ramp else OUTLINE
+    return RAMP_LETTERS[ramp][shade] if ramp else OUTLINE
 
 
 def sel_out(rows):
