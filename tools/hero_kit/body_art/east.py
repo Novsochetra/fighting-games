@@ -44,3 +44,15 @@ RUNS += [
     (54, 71, 'L'), (55, 72, 'x'), (55, 73, 'x'), (54, 74, 'x'), (54, 75, 'x'), (53, 76, 'x'),
     (49, 70, 'sx'),
 ]
+
+SHORTS_BEHIND_ARM = [(41, y, 'obbBBBBBBBBBBBBbbo') for y in range(65, 80)]
+
+ARM = [
+    (44, 64, 'oSSSSSSsso'), (44, 65, 'oSSSSSSsso'), (45, 66, 'oSSSSSsso'), (45, 67, 'oLSSSSsso'),
+    (46, 68, 'oLSSSsso'), (46, 69, 'oLSSSsso'), (46, 70, 'oSSSSsso'), (47, 71, 'oSSsso'),
+    (46, 72, 'ooLSSSSoo'), (45, 73, 'oLSSSSSLso'), (45, 74, 'oSSSSSSsxo'), (45, 75, 'oSSSSSssxo'),
+    (45, 76, 'oSSSSsssxo'), (46, 77, 'osssssxo'), (47, 78, 'oooooo'),
+]
+
+RUNS = [run for run in RUNS if not (41 <= run[0] <= 58 and 64 <= run[1] <= 79)]
+RUNS += SHORTS_BEHIND_ARM + ARM

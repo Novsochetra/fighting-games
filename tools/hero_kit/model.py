@@ -64,9 +64,9 @@ def leg_parts(side):
         (f'calf{side}', 'skin', f'leg{side}', partial(ellipsoid, centre=mirrored(side, (13.2, -2.6, 19.5)), radii=(4.8, 5, 6.4))),
         (f'boot{side}', 'boots', f'boot{side}', turned(clipped(partial(ellipsoid, centre=mirrored(side, (15.4, 3, 3.2)),
                                                                        radii=(5.4, 9.4, 4.4)), below=0),
-                                                       mirrored(side, (15.4, 0, 0)), side * 30)),
+                                                       mirrored(side, (15.4, 0, 0)), side * 16)),
         (f'collar{side}', 'boots', f'boot{side}', partial(cone, start=mirrored(side, (15.1, -0.8, 3)),
-                                                          end=mirrored(side, (15.1, -0.8, 8.6)), start_radius=4.8, end_radius=4.3)),
+                                                          end=mirrored(side, (15.1, -0.8, 7.4)), start_radius=4.8, end_radius=4.3)),
     ]
 
 

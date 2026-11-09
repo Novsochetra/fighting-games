@@ -34,7 +34,7 @@ def short_stripe(u, v, z):
     return (angle > STRIPE_FROM) & (angle < STRIPE_TO) & (z < 44)
 
 
-BOOT_CENTRE_U, BOOT_TURN = 15.4, 30
+BOOT_CENTRE_U, BOOT_TURN = 15.4, 16
 
 
 def boot_frame(u, v):
