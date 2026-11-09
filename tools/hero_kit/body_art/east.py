@@ -45,7 +45,8 @@ RUNS += [
     (49, 70, 'sx'),
 ]
 
-SHORTS_BEHIND_ARM = [(41, y, 'obbBBBBBBBBBBBBbbo') for y in range(65, 80)]
+SHORTS_BEHIND_ARM = [(41, y, '.obBBBBBBBBBBBBbbo' if y in (65, 78, 79) else 'obbBBBBBBBBBBBBbbo')
+                     for y in range(65, 80)]
 
 ARM = [
     (44, 64, 'oSSSSSSsso'), (44, 65, 'oSSSSSSsso'), (45, 66, 'oSSSSSsso'), (45, 67, 'oLSSSSsso'),
