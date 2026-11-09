@@ -628,12 +628,33 @@
       });
       left += glyph[0].length + gap;
     }
+
+    clearAroundNumber(frame);
   }
 
   // A mark on one side of him is drawn again on the other side for the directions that get mirrored,
   // so a mirrored player keeps his scar or armband on its own side.
   function sided(name, source, mirrored) {
     return mirrored && KIT.twinned.includes(name) ? `${source}.twin` : source;
+  }
+
+  // A seam's trim touching a digit makes it misread (a 1 grows a stroke into a 7), so trim next to
+  // the number turns back to shirt.
+  function clearAroundNumber(frame) {
+    for (let at = 0; at < W * H; at += 1) {
+      if (frame.layer[at] !== 'number') {
+        continue;
+      }
+
+      for (const step of [-W - 1, -W, -W + 1, -1, 1, W - 1, W, W + 1]) {
+        const near = at + step;
+        const cleared = KIT.number.cleared[frame.letter[near]];
+
+        if (cleared && frame.layer[near] === 'body') {
+          frame.letter[near] = cleared;
+        }
+      }
+    }
   }
 
   function compose(turn) {

@@ -40,11 +40,15 @@ FONTS = {
 PLACES = {
     'south': ('chest', 49.5, 50, 1),
     'south-east': ('chest', 52.5, 50, 1),
-    'north-east': ('back-narrow', 47, 51, 1),
+    'north-east': ('back-narrow', 47, 52, 1),
     'north': ('back', 49.5, 49, 2),
 }
 
 PRINTED = {'P': 'Y', 'R': 'Y', 'r': 'T', 'd': 't'}
+
+# A seam's trim touching a digit makes it misread (a 1 grows a stroke into a 7), so trim next to the
+# number turns back to shirt.
+CLEARED = {'t': 'r', 'T': 'R', 'Y': 'R'}
 
 
 def printed(rows, direction, number, mirrored=False):
@@ -59,6 +63,8 @@ def printed(rows, direction, number, mirrored=False):
     left = math.floor(centre - width / 2 + 0.5)
     rows = [list(row) for row in rows]
 
+    inked = set()
+
     for glyph in glyphs:
         for dy, line in enumerate(glyph):
             for dx, cell in enumerate(line):
@@ -66,7 +72,20 @@ def printed(rows, direction, number, mirrored=False):
 
                 if cell == '#' and under in PRINTED:
                     rows[top + dy][left + dx] = PRINTED[under]
+                    inked.add((left + dx, top + dy))
 
         left += len(glyph[0]) + gap
 
+    clear_around(rows, inked)
+
     return [''.join(row) for row in rows]
+
+
+def clear_around(rows, inked):
+    for x, y in inked:
+        for dy in (-1, 0, 1):
+            for dx in (-1, 0, 1):
+                near = (x + dx, y + dy)
+
+                if near not in inked and rows[near[1]][near[0]] in CLEARED:
+                    rows[near[1]][near[0]] = CLEARED[rows[near[1]][near[0]]]

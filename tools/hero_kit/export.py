@@ -8,7 +8,7 @@ from pathlib import Path
 from grid import read_grid
 from letters import LETTERS
 from looks import BOOTS, EYES, GEAR_COLOURS, HAIRS, KITS, PLAYERS, SKINS
-from number import FONTS, PLACES, PRINTED
+from number import CLEARED, FONTS, PLACES, PRINTED
 from palette import OUTLINE, RAMPS
 from render import FACINGS, HEIGHT, WIDTH
 
@@ -46,7 +46,7 @@ def kit():
         'letters': LETTERS, 'outline': OUTLINE, 'ramps': RAMPS,
         'body': {direction: cropped(read_grid(KIT / 'body' / f'{direction}.txt')) for direction in FACINGS},
         'hair': folder_layers('hair'), 'scars': folder_layers('scars'), 'gear': folder_layers('gear'),
-        'number': {'fonts': FONTS, 'places': PLACES, 'printed': PRINTED},
+        'number': {'fonts': FONTS, 'places': PLACES, 'printed': PRINTED, 'cleared': CLEARED},
         'swatches': {'skin': SKINS, 'hair': HAIRS, 'kit': KITS, 'boots': BOOTS, 'eyes': EYES},
         'gearColours': GEAR_COLOURS, 'players': PLAYERS,
         'twinned': sorted(name for folder in ('scars', 'gear', 'hair') for name in folder_layers(folder)

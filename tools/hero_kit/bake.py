@@ -51,7 +51,7 @@ def body_rows(facing):
             if ramp == '':
                 row += EMPTY
             elif line[y, x] and within_one_material(material, line, y, x) and ramp in RAMP_LETTERS:
-                row += RAMP_LETTERS[ramp][0]
+                row += RAMP_LETTERS[ramp][1]
             elif line[y, x]:
                 row += OUTLINE
             elif ramp in BOOT_MARKS:
