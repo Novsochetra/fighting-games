@@ -8,6 +8,7 @@ from pathlib import Path
 from grid import read_grid, write_grid
 from mirror import MIRRORS
 from render import FACINGS
+from selout import sel_out
 
 MASTERS = Path(__file__).parent / 'body_art'
 
@@ -22,7 +23,7 @@ def drawn(direction):
 
 def main(directions):
     for direction in directions or FACINGS:
-        write_grid(OUT / f'{direction}.txt', [''.join(row) for row in drawn(direction)])
+        write_grid(OUT / f'{direction}.txt', sel_out([''.join(row) for row in drawn(direction)]))
 
 
 if __name__ == '__main__':

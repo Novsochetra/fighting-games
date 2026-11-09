@@ -1,7 +1,7 @@
 """Paints hair drawn as clumps: polygons in pixel coordinates, later ones in front. Each clump is lit
 as one plane from the upper left (light, base and dark tones across it), creased in the darkest
 tone where a clump in front meets it, and outlined outside the whole shape so a spike's tip keeps
-its colour. A sheen of the lightest tone runs across the crown."""
+its colour. A sheen of the lightest tone runs across the crown, broken where it leaves a clump's lit plane."""
 
 from render import HEIGHT, WIDTH
 
@@ -63,7 +63,7 @@ def painted(clumps, sheen):
     for (x, y), index in owner.items():
         rows[y][x] = 'g' if creased(owner, x, y) else tone(x, y, boxes[index])
 
-        if (x, y) in sheen and rows[y][x] != 'g':
+        if (x, y) in sheen and rows[y][x] in 'Hh':
             rows[y][x] = 'J'
 
     for x, y in owner:
