@@ -1,0 +1,1135 @@
+<title>Naga Eleven Hero Kit</title>
+<meta name="claude:viewport-fit-sides" content="cover" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+/>
+<style>
+  /* A sprite workbench: the stage on the left, every pixel on a grid; the kit's choices on the right. */
+  :root {
+    --ink: #15131d;
+    --panel: #1e1b29;
+    --raised: #282437;
+    --line: #363149;
+    --chalk: #efebf6;
+    --muted: #a39cb8;
+    --gold: #f2b236;
+    --gold-dim: #8a6a2a;
+    --pitch: #4f8a4a;
+    --pitch-line: #5f9a58;
+    --display: 'Pixelify Sans', 'Courier New', monospace;
+    --body: 'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    color-scheme: dark;
+  }
+
+  html,
+  body {
+    background: var(--ink);
+    color: var(--chalk);
+    font-family: var(--body);
+    font-size: 15px;
+  }
+
+  .page {
+    padding-block: 20px 40px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid;
+    gap: 18px;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 24px;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 30px;
+    letter-spacing: 0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  h1 span {
+    color: var(--gold);
+  }
+
+  .lede {
+    color: var(--muted);
+    margin: 0;
+    max-width: 62ch;
+    line-height: 1.5;
+  }
+
+  .work {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 18px;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .work {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .stage {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .viewport {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: auto;
+    max-height: 78vh;
+    position: relative;
+  }
+
+  #stage-canvas {
+    display: block;
+    image-rendering: pixelated;
+    cursor: crosshair;
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    align-items: center;
+  }
+
+  .turns {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .turn {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 2px 6px;
+    color: var(--muted);
+    font: 500 11px var(--mono);
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    cursor: pointer;
+  }
+
+  .turn canvas {
+    width: 100%;
+    max-width: 100px;
+    image-rendering: pixelated;
+  }
+
+  .turn[aria-pressed='true'] {
+    border-color: var(--gold);
+    color: var(--chalk);
+  }
+
+  .turn small {
+    font-size: 10px;
+    color: var(--gold-dim);
+  }
+
+  aside {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  section.box {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 12px 14px 14px;
+    display: grid;
+    gap: 10px;
+  }
+
+  h2 {
+    font: 700 13px var(--display);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  button,
+  select,
+  input {
+    font: inherit;
+    color: var(--chalk);
+  }
+
+  .chip,
+  .action {
+    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 11px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .action {
+    border-radius: 6px;
+  }
+
+  .chip[aria-pressed='true'] {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  button:focus-visible,
+  select:focus-visible,
+  input:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  .players {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .player {
+    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 6px 8px;
+    text-align: left;
+    cursor: pointer;
+    display: grid;
+    gap: 1px;
+  }
+
+  .player b {
+    font-size: 14px;
+  }
+
+  .player span {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .player[aria-pressed='true'] {
+    border-color: var(--gold);
+  }
+
+  .rows {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 6px 10px;
+    align-items: center;
+    font-size: 13px;
+  }
+
+  .rows label {
+    color: var(--muted);
+  }
+
+  select,
+  input[type='number'] {
+    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 6px;
+    min-width: 0;
+  }
+
+  .ramps {
+    display: grid;
+    gap: 5px;
+  }
+
+  .ramp {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    font: 12px var(--mono);
+    color: var(--muted);
+  }
+
+  .ramp div {
+    display: flex;
+    gap: 3px;
+  }
+
+  .ramp input[type='color'] {
+    width: 26px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: none;
+    cursor: pointer;
+  }
+
+  .readout {
+    font: 13px/1.6 var(--mono);
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0 12px;
+  }
+
+  .readout dt {
+    color: var(--muted);
+  }
+
+  .readout dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .swatch {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 1px solid var(--line);
+    vertical-align: -1px;
+    margin-right: 6px;
+  }
+
+  .note {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .used {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+    gap: 2px 10px;
+    font: 12px/1.7 var(--mono);
+    max-height: 220px;
+    overflow: auto;
+  }
+
+  .used span {
+    color: var(--muted);
+  }
+
+  .toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+  }
+
+  input[type='range'] {
+    accent-color: var(--gold);
+    width: 120px;
+  }
+
+  input[type='checkbox'] {
+    accent-color: var(--gold);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+    }
+  }
+</style>
+
+<div class="page">
+  <header>
+    <h1>Naga Eleven <span>Hero Kit</span></h1>
+    <p class="lede">
+      One face for every player. Change skin, hair, scars, kit and gear, turn him through all eight
+      directions, and hover any pixel to read its layer, ramp, shade and colour.
+    </p>
+  </header>
+
+  <div class="work">
+    <div class="stage">
+      <div class="bar">
+        <label class="toggle" for="zoom"
+          >Zoom <input id="zoom" type="range" min="2" max="16" value="7"
+        /></label>
+        <span id="zoom-value" class="note">7×</span>
+        <label class="toggle" for="grid"
+          ><input id="grid" type="checkbox" checked /> Pixel grid</label
+        >
+        <label class="toggle" for="ground">
+          Ground
+          <select id="ground">
+            <option value="pitch">Pitch</option>
+            <option value="checker">Transparent</option>
+            <option value="ink">Dark</option>
+            <option value="paper">Light</option>
+          </select>
+        </label>
+        <button id="spin" class="action" type="button">Turn him round</button>
+      </div>
+      <div class="viewport" id="viewport"><canvas id="stage-canvas"></canvas></div>
+      <div class="turns" id="turns"></div>
+    </div>
+
+    <aside>
+      <section class="box">
+        <h2>Pixel</h2>
+        <dl class="readout" id="readout">
+          <dt>Where</dt>
+          <dd>Hover the stage; click to pin a pixel</dd>
+        </dl>
+        <button id="copy" class="action" type="button" hidden>Copy pixel reference</button>
+      </section>
+
+      <section class="box">
+        <h2>Players</h2>
+        <div class="players" id="players"></div>
+        <p class="note">Sample players built from the kit. Every choice below can be changed.</p>
+      </section>
+
+      <section class="box">
+        <h2>Hair</h2>
+        <div class="chips" id="hair-styles"></div>
+      </section>
+
+      <section class="box">
+        <h2>Scars</h2>
+        <div class="chips" id="scars"></div>
+      </section>
+
+      <section class="box">
+        <h2>Gear</h2>
+        <div class="chips" id="gear"></div>
+      </section>
+
+      <section class="box">
+        <h2>Colours</h2>
+        <div class="rows">
+          <label for="pick-skin">Skin</label
+          ><select id="pick-skin"></select>
+          <label for="pick-hair">Hair</label
+          ><select id="pick-hair"></select>
+          <label for="pick-eyes">Eyes</label
+          ><select id="pick-eyes"></select>
+          <label for="pick-kit">Kit</label
+          ><select id="pick-kit"></select>
+          <label for="pick-boots">Boots</label
+          ><select id="pick-boots"></select>
+          <label for="pick-number">Number</label
+          ><input id="pick-number" type="number" min="0" max="99" />
+        </div>
+        <details>
+          <summary class="note">Edit each ramp, dark to light</summary>
+          <div class="ramps" id="ramps"></div>
+        </details>
+      </section>
+
+      <section class="box">
+        <h2>Layers</h2>
+        <div class="chips" id="layers"></div>
+        <div class="rows">
+          <label for="highlight">Spotlight</label>
+          <select id="highlight">
+            <option value="">Every layer alike</option>
+            <option value="body">Body and face</option>
+            <option value="hair">Hair</option>
+            <option value="scars">Scars</option>
+            <option value="gear">Gear</option>
+            <option value="number">Number</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="box">
+        <h2>Colours in this view</h2>
+        <div class="used" id="used"></div>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<script id="kit" type="application/json">
+  { "placeholder": true }
+</script>
+<script>
+  const KIT = JSON.parse(document.getElementById('kit').textContent);
+  const W = KIT.width;
+  const H = KIT.height;
+  const RULER = 26;
+  const TURNS = [
+    ['south', 'south', false],
+    ['south-east', 'south-east', false],
+    ['east', 'east', false],
+    ['north-east', 'north-east', false],
+    ['north', 'north', false],
+    ['north-west', 'north-east', true],
+    ['west', 'east', true],
+    ['south-west', 'south-east', true],
+  ];
+  const SHORT = {
+    south: 'S',
+    'south-east': 'SE',
+    east: 'E',
+    'north-east': 'NE',
+    north: 'N',
+    'north-west': 'NW',
+    west: 'W',
+    'south-west': 'SW',
+  };
+  const GROUNDS = { pitch: '#4f8a4a', ink: '#15131d', paper: '#f4f1ea' };
+  const LAYERS = ['body', 'number', 'scars', 'hair', 'gear'];
+
+  const state = {
+    turn: 'south',
+    zoom: 7,
+    grid: true,
+    ground: 'pitch',
+    hair: 'spiky',
+    scars: new Set(),
+    gear: new Set(),
+    number: 10,
+    choice: {},
+    ramps: {},
+    shown: new Set(LAYERS),
+    spotlight: '',
+    pinned: null,
+    hover: null,
+    player: 0,
+  };
+
+  const $ = (id) => document.getElementById(id);
+
+  function hexToRgb(hex) {
+    const value = parseInt(hex.slice(1), 16);
+
+    return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
+  }
+
+  function rampsFor(choice) {
+    const kit = KIT.swatches.kit[choice.kit];
+    const boots = KIT.swatches.boots[choice.boots];
+
+    return {
+      ...KIT.ramps,
+      skin: KIT.swatches.skin[choice.skin],
+      hair: KIT.swatches.hair[choice.hair],
+      eyes: KIT.swatches.eyes[choice.eyes],
+      ...kit,
+      ...boots,
+    };
+  }
+
+  function usePlayer(index) {
+    const player = KIT.players[index];
+
+    state.player = index;
+    state.hair = player.hair;
+    state.scars = new Set(player.scars);
+    state.gear = new Set(player.gear);
+    state.number = player.number;
+    state.choice = {
+      skin: player.skin,
+      hair: player.hairColour,
+      eyes: player.eyes,
+      kit: player.kit,
+      boots: player.boots,
+    };
+    state.ramps = structuredClone(rampsFor(state.choice));
+    syncControls();
+    draw();
+  }
+
+  function stamp(frame, crop, layer, name) {
+    if (!crop) {
+      return;
+    }
+
+    crop.rows.forEach((row, dy) => {
+      for (let dx = 0; dx < row.length; dx += 1) {
+        const letter = row[dx];
+
+        if (letter === '.') {
+          continue;
+        }
+
+        const at = (crop.y + dy) * W + crop.x + dx;
+
+        frame.letter[at] = letter;
+        frame.layer[at] = layer;
+        frame.name[at] = name;
+      }
+    });
+  }
+
+  function mirror(frame) {
+    for (const key of ['letter', 'layer', 'name']) {
+      const flipped = new Array(W * H);
+
+      for (let y = 0; y < H; y += 1) {
+        for (let x = 0; x < W; x += 1) {
+          flipped[y * W + x] = frame[key][y * W + (W - 1 - x)];
+        }
+      }
+
+      frame[key] = flipped;
+    }
+  }
+
+  function printNumber(frame, source, mirrored) {
+    const place = KIT.number.places[source];
+
+    if (!place || state.number === '' || !state.shown.has('number')) {
+      return;
+    }
+
+    const [fontName, centreAt, top, gap] = place;
+    const font = KIT.number.fonts[fontName];
+    const glyphs = String(state.number)
+      .split('')
+      .filter((digit) => font[digit])
+      .map((digit) => font[digit]);
+    const width =
+      glyphs.reduce((sum, glyph) => sum + glyph[0].length, 0) + gap * (glyphs.length - 1);
+    const centre = mirrored ? W - centreAt : centreAt;
+    let left = Math.floor(centre - width / 2 + 0.5);
+
+    for (const glyph of glyphs) {
+      glyph.forEach((line, dy) => {
+        for (let dx = 0; dx < line.length; dx += 1) {
+          const at = (top + dy) * W + left + dx;
+          const under = frame.letter[at];
+
+          if (line[dx] === '#' && frame.layer[at] === 'body' && KIT.number.printed[under]) {
+            frame.letter[at] = KIT.number.printed[under];
+            frame.layer[at] = 'number';
+          }
+        }
+      });
+      left += glyph[0].length + gap;
+    }
+  }
+
+  function compose(turn) {
+    const [, source, mirrored] = TURNS.find(([name]) => name === turn);
+    const frame = {
+      letter: new Array(W * H).fill('.'),
+      layer: new Array(W * H).fill(''),
+      name: new Array(W * H).fill(''),
+    };
+    const show = (layer) => state.shown.has(layer);
+
+    if (show('body')) {
+      stamp(frame, KIT.body[source], 'body', 'body');
+    }
+
+    if (show('scars')) {
+      state.scars.forEach((scar) => stamp(frame, KIT.scars[scar]?.[source], 'scars', scar));
+    }
+
+    if (show('hair') && state.hair !== 'none') {
+      stamp(frame, KIT.hair[state.hair]?.[source], 'hair', state.hair);
+    }
+
+    if (show('gear')) {
+      state.gear.forEach((item) => stamp(frame, KIT.gear[item]?.[source], 'gear', item));
+    }
+
+    if (mirrored) {
+      mirror(frame);
+    }
+
+    printNumber(frame, source, mirrored);
+    frame.source = source;
+    frame.mirrored = mirrored;
+
+    return frame;
+  }
+
+  function colourOf(letter, name) {
+    if (letter === 'o') {
+      return { hex: KIT.outline, ramp: 'outline', shade: 0, of: 1 };
+    }
+
+    const [ramp, shade] = KIT.letters[letter];
+    const isGear = ramp === 'gear' || ramp === 'metal';
+    const colours = isGear
+      ? state.ramps[`gear:${name}`] || KIT.gearColours[name] || KIT.ramps[ramp]
+      : state.ramps[ramp];
+
+    return {
+      hex: colours[Math.min(shade, colours.length - 1)],
+      ramp: isGear ? name : ramp,
+      shade,
+      of: colours.length,
+    };
+  }
+
+  function paint(frame, context, scale, dim) {
+    const image = context.createImageData(W, H);
+
+    for (let at = 0; at < W * H; at += 1) {
+      const letter = frame.letter[at];
+
+      if (letter === '.') {
+        continue;
+      }
+
+      const [r, g, b] = hexToRgb(colourOf(letter, frame.name[at]).hex);
+      const faded = dim && state.spotlight && frame.layer[at] !== state.spotlight;
+
+      image.data.set([r, g, b, faded ? 60 : 255], at * 4);
+    }
+
+    const sprite = document.createElement('canvas');
+
+    sprite.width = W;
+    sprite.height = H;
+    sprite.getContext('2d').putImageData(image, 0, 0);
+    context.imageSmoothingEnabled = false;
+    context.drawImage(sprite, 0, 0, W * scale, H * scale);
+  }
+
+  function ground(context, width, height, scale) {
+    if (state.ground === 'checker') {
+      for (let y = 0; y < H; y += 1) {
+        for (let x = 0; x < W; x += 1) {
+          context.fillStyle = (Math.floor(x / 2) + Math.floor(y / 2)) % 2 ? '#2a2638' : '#34304a';
+          context.fillRect(x * scale, y * scale, scale, scale);
+        }
+      }
+
+      return;
+    }
+
+    context.fillStyle = GROUNDS[state.ground];
+    context.fillRect(0, 0, width, height);
+  }
+
+  function rulers(context, scale) {
+    context.fillStyle = '#1e1b29';
+    context.fillRect(0, 0, W * scale + RULER, RULER);
+    context.fillRect(0, 0, RULER, H * scale + RULER);
+    context.fillStyle = '#a39cb8';
+    context.font = '10px "IBM Plex Mono", monospace';
+    context.textBaseline = 'middle';
+
+    for (let x = 0; x < W; x += 5) {
+      context.fillText(String(x), RULER + x * scale + 2, RULER / 2);
+    }
+
+    for (let y = 0; y < H; y += 5) {
+      context.fillText(String(y), 2, RULER + y * scale + scale / 2);
+    }
+  }
+
+  function gridLines(context, scale) {
+    if (!state.grid || scale < 5) {
+      return;
+    }
+
+    for (let x = 0; x <= W; x += 1) {
+      context.fillStyle =
+        x % 10 === 0 ? 'rgba(0,0,0,0.55)' : x % 5 === 0 ? 'rgba(0,0,0,0.35)' : 'rgba(0,0,0,0.14)';
+      context.fillRect(x * scale, 0, 1, H * scale);
+    }
+
+    for (let y = 0; y <= H; y += 1) {
+      context.fillStyle =
+        y % 10 === 0 ? 'rgba(0,0,0,0.55)' : y % 5 === 0 ? 'rgba(0,0,0,0.35)' : 'rgba(0,0,0,0.14)';
+      context.fillRect(0, y * scale, W * scale, 1);
+    }
+  }
+
+  function mark(context, scale, pixel, colour) {
+    if (!pixel) {
+      return;
+    }
+
+    context.strokeStyle = colour;
+    context.lineWidth = 2;
+    context.strokeRect(pixel.x * scale + 1, pixel.y * scale + 1, scale - 2, scale - 2);
+  }
+
+  function drawStage(frame) {
+    const canvas = $('stage-canvas');
+    const scale = state.zoom;
+    const context = canvas.getContext('2d');
+
+    canvas.width = W * scale + RULER;
+    canvas.height = H * scale + RULER;
+    rulers(context, scale);
+    context.save();
+    context.translate(RULER, RULER);
+    ground(context, W * scale, H * scale, scale);
+    paint(frame, context, scale, true);
+    gridLines(context, scale);
+    mark(context, scale, state.hover, 'rgba(255,255,255,0.9)');
+    mark(context, scale, state.pinned?.turn === state.turn ? state.pinned : null, '#f2b236');
+    context.restore();
+  }
+
+  function drawTurns() {
+    const holder = $('turns');
+
+    if (!holder.children.length) {
+      TURNS.forEach(([turn, source, mirrored]) => {
+        const button = document.createElement('button');
+
+        button.className = 'turn';
+        button.type = 'button';
+        button.dataset.turn = turn;
+        button.innerHTML = `<canvas width="${W}" height="${H}"></canvas>${SHORT[turn]}<small>${mirrored ? `mirrors ${SHORT[source]}` : 'drawn'}</small>`;
+        button.addEventListener('click', () => {
+          state.turn = turn;
+          draw();
+        });
+        holder.append(button);
+      });
+    }
+
+    [...holder.children].forEach((button) => {
+      const context = button.querySelector('canvas').getContext('2d');
+
+      button.setAttribute('aria-pressed', String(button.dataset.turn === state.turn));
+      context.clearRect(0, 0, W, H);
+      ground(context, W, H, 1);
+      paint(compose(button.dataset.turn), context, 1, false);
+    });
+  }
+
+  function drawUsed(frame) {
+    const counts = new Map();
+
+    frame.letter.forEach((letter, at) => {
+      if (letter === '.') {
+        return;
+      }
+
+      const colour = colourOf(letter, frame.name[at]);
+      const key = `${colour.hex}|${colour.ramp} ${colour.ramp === 'outline' ? '' : `${colour.shade + 1}/${colour.of}`}`;
+
+      counts.set(key, (counts.get(key) || 0) + 1);
+    });
+    $('used').innerHTML = [...counts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .map(([key, count]) => {
+        const [hex, label] = key.split('|');
+
+        return `<div><i class="swatch" style="background:${hex}"></i>${hex} <span>${label} ×${count}</span></div>`;
+      })
+      .join('');
+  }
+
+  function describe(pixel) {
+    if (!pixel) {
+      return '<dt>Where</dt><dd>Hover the stage; click to pin a pixel</dd>';
+    }
+
+    const frame = compose(pixel.turn);
+    const at = pixel.y * W + pixel.x;
+    const letter = frame.letter[at];
+    const where = `${SHORT[pixel.turn]} · x ${pixel.x}, y ${pixel.y}`;
+
+    if (letter === '.') {
+      return `<dt>Where</dt><dd>${where}</dd><dt>Layer</dt><dd>empty</dd>`;
+    }
+
+    const colour = colourOf(letter, frame.name[at]);
+    const layer =
+      frame.layer[at] === frame.name[at]
+        ? frame.layer[at]
+        : `${frame.layer[at]} · ${frame.name[at]}`;
+    const shade =
+      colour.ramp === 'outline'
+        ? 'outline'
+        : `${colour.ramp}, shade ${colour.shade + 1} of ${colour.of}`;
+    const drawn = frame.mirrored
+      ? `mirrored from ${SHORT[frame.source]} x ${W - 1 - pixel.x}`
+      : 'drawn';
+
+    return `<dt>Where</dt><dd>${where}</dd><dt>Layer</dt><dd>${layer}</dd><dt>Letter</dt><dd>${letter}</dd><dt>Ramp</dt><dd>${shade}</dd><dt>Colour</dt><dd><i class="swatch" style="background:${colour.hex}"></i>${colour.hex}</dd><dt>Source</dt><dd>${drawn}</dd>`;
+  }
+
+  function drawReadout() {
+    const pixel = state.hover || state.pinned;
+
+    $('readout').innerHTML = describe(pixel);
+    $('copy').hidden = !state.pinned;
+  }
+
+  function draw() {
+    const frame = compose(state.turn);
+
+    drawStage(frame);
+    drawTurns();
+    drawUsed(frame);
+    drawReadout();
+    $('zoom-value').textContent = `${state.zoom}×`;
+  }
+
+  function pixelAt(event) {
+    const canvas = $('stage-canvas');
+    const box = canvas.getBoundingClientRect();
+    const x = Math.floor(
+      ((event.clientX - box.left) * (canvas.width / box.width) - RULER) / state.zoom,
+    );
+    const y = Math.floor(
+      ((event.clientY - box.top) * (canvas.height / box.height) - RULER) / state.zoom,
+    );
+
+    return x >= 0 && y >= 0 && x < W && y < H ? { x, y, turn: state.turn } : null;
+  }
+
+  function chip(label, pressed, onClick) {
+    const button = document.createElement('button');
+
+    button.type = 'button';
+    button.className = 'chip';
+    button.textContent = label;
+    button.setAttribute('aria-pressed', String(pressed));
+    button.addEventListener('click', onClick);
+
+    return button;
+  }
+
+  function nice(name) {
+    return name.replace(/-/g, ' ').replace(/^./, (first) => first.toUpperCase());
+  }
+
+  function fillOptions(select, names) {
+    select.innerHTML = names
+      .map((name) => `<option value="${name}">${nice(name)}</option>`)
+      .join('');
+  }
+
+  function rampEditors() {
+    const names = [
+      'skin',
+      'hair',
+      'eyes',
+      'shirt',
+      'trim',
+      'shorts',
+      'stripe',
+      'socks',
+      'boots',
+      'sole',
+    ];
+    const gear = [...state.gear].map((item) => `gear:${item}`);
+
+    $('ramps').innerHTML = '';
+    [...names, ...gear].forEach((name) => {
+      const ramp = state.ramps[name] || KIT.gearColours[name.slice(5)];
+      const row = document.createElement('div');
+
+      row.className = 'ramp';
+      row.innerHTML = `<span>${nice(name.replace('gear:', ''))}</span><div></div>`;
+      ramp.forEach((hex, shade) => {
+        const input = document.createElement('input');
+
+        input.type = 'color';
+        input.value = hex;
+        input.id = `ramp-${name.replace(':', '-')}-${shade}`;
+        input.setAttribute('aria-label', `${name} shade ${shade + 1}`);
+        input.addEventListener('input', () => {
+          state.ramps[name] = [...ramp];
+          state.ramps[name][shade] = input.value;
+          ramp[shade] = input.value;
+          draw();
+        });
+        row.querySelector('div').append(input);
+      });
+      $('ramps').append(row);
+    });
+  }
+
+  function syncControls() {
+    $('players').innerHTML = '';
+    KIT.players.forEach((player, index) => {
+      const button = document.createElement('button');
+
+      button.type = 'button';
+      button.className = 'player';
+      button.setAttribute('aria-pressed', String(index === state.player));
+      button.innerHTML = `<b>${player.name} · ${player.number}</b><span>${player.role}</span>`;
+      button.addEventListener('click', () => usePlayer(index));
+      $('players').append(button);
+    });
+
+    $('hair-styles').replaceChildren(
+      ...['none', ...Object.keys(KIT.hair)].map((style) =>
+        chip(style === 'none' ? 'Bald' : nice(style), state.hair === style, () => {
+          state.hair = style;
+          syncControls();
+          draw();
+        }),
+      ),
+    );
+
+    const toggles = (holder, names, chosen) =>
+      $(holder).replaceChildren(
+        ...names.map((name) =>
+          chip(nice(name), chosen.has(name), () => {
+            chosen.has(name) ? chosen.delete(name) : chosen.add(name);
+            syncControls();
+            draw();
+          }),
+        ),
+      );
+
+    toggles('scars', Object.keys(KIT.scars), state.scars);
+    toggles('gear', Object.keys(KIT.gear), state.gear);
+    toggles('layers', LAYERS, state.shown);
+
+    for (const [select, key] of [
+      ['pick-skin', 'skin'],
+      ['pick-hair', 'hair'],
+      ['pick-eyes', 'eyes'],
+      ['pick-kit', 'kit'],
+      ['pick-boots', 'boots'],
+    ]) {
+      $(select).value = state.choice[key];
+    }
+
+    $('pick-number').value = state.number;
+    rampEditors();
+  }
+
+  function wire() {
+    fillOptions($('pick-skin'), Object.keys(KIT.swatches.skin));
+    fillOptions($('pick-hair'), Object.keys(KIT.swatches.hair));
+    fillOptions($('pick-eyes'), Object.keys(KIT.swatches.eyes));
+    fillOptions($('pick-kit'), Object.keys(KIT.swatches.kit));
+    fillOptions($('pick-boots'), Object.keys(KIT.swatches.boots));
+
+    for (const [select, key] of [
+      ['pick-skin', 'skin'],
+      ['pick-hair', 'hair'],
+      ['pick-eyes', 'eyes'],
+      ['pick-kit', 'kit'],
+      ['pick-boots', 'boots'],
+    ]) {
+      $(select).addEventListener('change', () => {
+        state.choice[key] = $(select).value;
+        state.ramps = { ...state.ramps, ...structuredClone(rampsFor(state.choice)) };
+        rampEditors();
+        draw();
+      });
+    }
+
+    $('pick-number').addEventListener('input', () => {
+      state.number = $('pick-number').value.replace(/\D/g, '').slice(0, 2);
+      draw();
+    });
+    $('zoom').addEventListener('input', () => {
+      state.zoomChosen = true;
+      state.zoom = Number($('zoom').value);
+      draw();
+    });
+    $('grid').addEventListener('change', () => {
+      state.grid = $('grid').checked;
+      draw();
+    });
+    $('ground').addEventListener('change', () => {
+      state.ground = $('ground').value;
+      draw();
+    });
+    $('highlight').addEventListener('change', () => {
+      state.spotlight = $('highlight').value;
+      draw();
+    });
+
+    const canvas = $('stage-canvas');
+
+    canvas.addEventListener('mousemove', (event) => {
+      state.hover = pixelAt(event);
+      drawStage(compose(state.turn));
+      drawReadout();
+    });
+    canvas.addEventListener('mouseleave', () => {
+      state.hover = null;
+      drawStage(compose(state.turn));
+      drawReadout();
+    });
+    canvas.addEventListener('click', (event) => {
+      state.pinned = pixelAt(event);
+      draw();
+    });
+    $('copy').addEventListener('click', async () => {
+      const pixel = state.pinned;
+      const frame = compose(pixel.turn);
+      const at = pixel.y * W + pixel.x;
+      const text = `${pixel.turn} x${pixel.x} y${pixel.y} (${frame.layer[at] || 'empty'}, letter ${frame.letter[at]})`;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        $('copy').textContent = 'Copied';
+      } catch {
+        $('copy').textContent = text;
+      }
+
+      setTimeout(() => {
+        $('copy').textContent = 'Copy pixel reference';
+      }, 1600);
+    });
+
+    let spinning = null;
+
+    $('spin').addEventListener('click', () => {
+      if (spinning) {
+        clearInterval(spinning);
+        spinning = null;
+        $('spin').textContent = 'Turn him round';
+
+        return;
+      }
+
+      $('spin').textContent = 'Stop turning';
+      spinning = setInterval(() => {
+        const index = TURNS.findIndex(([turn]) => turn === state.turn);
+
+        state.turn = TURNS[(index + 1) % TURNS.length][0];
+        draw();
+      }, 450);
+    });
+  }
+
+  function fitZoom() {
+    const room = $('viewport').clientWidth - RULER - 4;
+    const zoom = Math.max(2, Math.min(9, Math.floor(room / W)));
+
+    state.zoom = zoom;
+    $('zoom').value = String(zoom);
+  }
+
+  wire();
+  fitZoom();
+  usePlayer(0);
+  window.addEventListener('resize', () => {
+    if (!state.zoomChosen) {
+      fitZoom();
+      draw();
+    }
+  });
+</script>

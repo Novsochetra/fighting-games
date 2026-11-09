@@ -7,3 +7,5 @@ SPRITE_PROMPT.md
 **/test/**/__snapshots__/
 **/test/**/fixtures/
 **/assets/**
+concepts/naga-eleven/hero-kit/inspector.html
+concepts/naga-eleven/hero-kit/kit.json

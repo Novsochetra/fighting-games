@@ -1,0 +1,1133 @@
+<title>Naga Eleven Hero Kit</title>
+<meta name="claude:viewport-fit-sides" content="cover" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+/>
+<style>
+  /* A sprite workbench: the stage on the left, every pixel on a grid; the kit's choices on the right. */
+  :root {
+    --ink: #15131d;
+    --panel: #1e1b29;
+    --raised: #282437;
+    --line: #363149;
+    --chalk: #efebf6;
+    --muted: #a39cb8;
+    --gold: #f2b236;
+    --gold-dim: #8a6a2a;
+    --pitch: #4f8a4a;
+    --pitch-line: #5f9a58;
+    --display: 'Pixelify Sans', 'Courier New', monospace;
+    --body: 'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    color-scheme: dark;
+  }
+
+  html,
+  body {
+    background: var(--ink);
+    color: var(--chalk);
+    font-family: var(--body);
+    font-size: 15px;
+  }
+
+  .page {
+    padding-block: 20px 40px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid;
+    gap: 18px;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 24px;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 30px;
+    letter-spacing: 0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  h1 span {
+    color: var(--gold);
+  }
+
+  .lede {
+    color: var(--muted);
+    margin: 0;
+    max-width: 62ch;
+    line-height: 1.5;
+  }
+
+  .work {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 18px;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .work {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .stage {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .viewport {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: auto;
+    max-height: 78vh;
+    position: relative;
+  }
+
+  #stage-canvas {
+    display: block;
+    image-rendering: pixelated;
+    cursor: crosshair;
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    align-items: center;
+  }
+
+  .turns {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .turn {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 2px 6px;
+    color: var(--muted);
+    font: 500 11px var(--mono);
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    cursor: pointer;
+  }
+
+  .turn canvas {
+    width: 100%;
+    max-width: 100px;
+    image-rendering: pixelated;
+  }
+
+  .turn[aria-pressed='true'] {
+    border-color: var(--gold);
+    color: var(--chalk);
+  }
+
+  .turn small {
+    font-size: 10px;
+    color: var(--gold-dim);
+  }
+
+  aside {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  section.box {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 12px 14px 14px;
+    display: grid;
+    gap: 10px;
+  }
+
+  h2 {
+    font: 700 13px var(--display);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  button,
+  select,
+  input {
+    font: inherit;
+    color: var(--chalk);
+  }
+
+  .chip,
+  .action {
+    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 11px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .action {
+    border-radius: 6px;
+  }
+
+  .chip[aria-pressed='true'] {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  button:focus-visible,
+  select:focus-visible,
+  input:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  .players {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .player {
+    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 6px 8px;
+    text-align: left;
+    cursor: pointer;
+    display: grid;
+    gap: 1px;
+  }
+
+  .player b {
+    font-size: 14px;
+  }
+
+  .player span {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .player[aria-pressed='true'] {
+    border-color: var(--gold);
+  }
+
+  .rows {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 6px 10px;
+    align-items: center;
+    font-size: 13px;
+  }
+
+  .rows label {
+    color: var(--muted);
+  }
+
+  select,
+  input[type='number'] {
+    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 6px;
+    min-width: 0;
+  }
+
+  .ramps {
+    display: grid;
+    gap: 5px;
+  }
+
+  .ramp {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    font: 12px var(--mono);
+    color: var(--muted);
+  }
+
+  .ramp div {
+    display: flex;
+    gap: 3px;
+  }
+
+  .ramp input[type='color'] {
+    width: 26px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: none;
+    cursor: pointer;
+  }
+
+  .readout {
+    font: 13px/1.6 var(--mono);
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0 12px;
+  }
+
+  .readout dt {
+    color: var(--muted);
+  }
+
+  .readout dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .swatch {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 1px solid var(--line);
+    vertical-align: -1px;
+    margin-right: 6px;
+  }
+
+  .note {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .used {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+    gap: 2px 10px;
+    font: 12px/1.7 var(--mono);
+    max-height: 220px;
+    overflow: auto;
+  }
+
+  .used span {
+    color: var(--muted);
+  }
+
+  .toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+  }
+
+  input[type='range'] {
+    accent-color: var(--gold);
+    width: 120px;
+  }
+
+  input[type='checkbox'] {
+    accent-color: var(--gold);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+    }
+  }
+</style>
+
+<div class="page">
+  <header>
+    <h1>Naga Eleven <span>Hero Kit</span></h1>
+    <p class="lede">
+      One face for every player. Change skin, hair, scars, kit and gear, turn him through all eight
+      directions, and hover any pixel to read its layer, ramp, shade and colour.
+    </p>
+  </header>
+
+  <div class="work">
+    <div class="stage">
+      <div class="bar">
+        <label class="toggle" for="zoom"
+          >Zoom <input id="zoom" type="range" min="2" max="16" value="7"
+        /></label>
+        <span id="zoom-value" class="note">7×</span>
+        <label class="toggle" for="grid"
+          ><input id="grid" type="checkbox" checked /> Pixel grid</label
+        >
+        <label class="toggle" for="ground">
+          Ground
+          <select id="ground">
+            <option value="pitch">Pitch</option>
+            <option value="checker">Transparent</option>
+            <option value="ink">Dark</option>
+            <option value="paper">Light</option>
+          </select>
+        </label>
+        <button id="spin" class="action" type="button">Turn him round</button>
+      </div>
+      <div class="viewport" id="viewport"><canvas id="stage-canvas"></canvas></div>
+      <div class="turns" id="turns"></div>
+    </div>
+
+    <aside>
+      <section class="box">
+        <h2>Pixel</h2>
+        <dl class="readout" id="readout">
+          <dt>Where</dt>
+          <dd>Hover the stage; click to pin a pixel</dd>
+        </dl>
+        <button id="copy" class="action" type="button" hidden>Copy pixel reference</button>
+      </section>
+
+      <section class="box">
+        <h2>Players</h2>
+        <div class="players" id="players"></div>
+        <p class="note">Sample players built from the kit. Every choice below can be changed.</p>
+      </section>
+
+      <section class="box">
+        <h2>Hair</h2>
+        <div class="chips" id="hair-styles"></div>
+      </section>
+
+      <section class="box">
+        <h2>Scars</h2>
+        <div class="chips" id="scars"></div>
+      </section>
+
+      <section class="box">
+        <h2>Gear</h2>
+        <div class="chips" id="gear"></div>
+      </section>
+
+      <section class="box">
+        <h2>Colours</h2>
+        <div class="rows">
+          <label for="pick-skin">Skin</label
+          ><select id="pick-skin"></select>
+          <label for="pick-hair">Hair</label
+          ><select id="pick-hair"></select>
+          <label for="pick-eyes">Eyes</label
+          ><select id="pick-eyes"></select>
+          <label for="pick-kit">Kit</label
+          ><select id="pick-kit"></select>
+          <label for="pick-boots">Boots</label
+          ><select id="pick-boots"></select>
+          <label for="pick-number">Number</label
+          ><input id="pick-number" type="number" min="0" max="99" />
+        </div>
+        <details>
+          <summary class="note">Edit each ramp, dark to light</summary>
+          <div class="ramps" id="ramps"></div>
+        </details>
+      </section>
+
+      <section class="box">
+        <h2>Layers</h2>
+        <div class="chips" id="layers"></div>
+        <div class="rows">
+          <label for="highlight">Spotlight</label>
+          <select id="highlight">
+            <option value="">Every layer alike</option>
+            <option value="body">Body and face</option>
+            <option value="hair">Hair</option>
+            <option value="scars">Scars</option>
+            <option value="gear">Gear</option>
+            <option value="number">Number</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="box">
+        <h2>Colours in this view</h2>
+        <div class="used" id="used"></div>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<script id="kit" type="application/json">{"width":100,"height":112,"directions":["south","south-east","east","north-east","north"],"letters":{"x":["skin",0],"s":["skin",1],"S":["skin",2],"L":["skin",3],"d":["shirt",0],"r":["shirt",1],"R":["shirt",2],"P":["shirt",3],"t":["trim",0],"T":["trim",1],"Y":["trim",2],"c":["shorts",0],"b":["shorts",1],"B":["shorts",2],"C":["shorts",3],"v":["stripe",0],"V":["stripe",1],"e":["socks",0],"f":["socks",1],"F":["socks",2],"G":["socks",3],"m":["boots",0],"u":["boots",1],"U":["boots",2],"W":["boots",3],"n":["sole",0],"N":["sole",1],"g":["hair",0],"h":["hair",1],"H":["hair",2],"J":["hair",3],"k":["eyes",0],"i":["eyes",1],"E":["eyes",2],"1":["gear",0],"2":["gear",1],"3":["gear",2],"4":["gear",3],"5":["metal",0],"6":["metal",1],"7":["metal",2]},"outline":"#1c0b16","ramps":{"skin":["#7a2e22","#b8562e","#e8853f","#f8ac63"],"hair":["#1f1433","#36234d","#4f3b7a","#3a57c4"],"shirt":["#5c0a1c","#9a1221","#d42528","#ee4a33"],"trim":["#c87a1c","#f2b236","#ffe07a"],"shorts":["#141a52","#1f2c86","#2d45b0","#4a66d0"],"stripe":["#9a98bd","#f2eef7"],"socks":["#5c0a1c","#9a1221","#d42528","#ee4a33"],"boots":["#5d5a86","#9d9ac0","#dcd8ea","#ffffff"],"sole":["#2a2440","#4a4468"],"gear":["#7d1730","#c72a4a","#f2f0f5","#ffffff"],"metal":["#8a5a12","#e0a42a","#fff2a8"],"eyes":["#1c0b16","#8a4a22","#ffffff"]},"body":{"south":{"x":24,"y":17,"rows":[".....................oooooooooo.....................","....................ooLLLLLSSSoo....................","..................oLLLLLLLSSSSSsso..................",".................oLLLLLLLLSSSSSSsso.................","................oLLLLLLLLSSSSSSSssso................","................oLLLLLLLSSSSSSSSssso................","...............oLLLLLLSSSSSSSSSSSssso...............","...............oLLLLLSSSSSSSSSSSSssso...............","...............oLLhgggSSSSSSSSggghsso...............","...............oLLShggggSSSSgggghssso...............","...............oLSooooooSSSSoooooosso...............","..............ooLoEEkkkoSSSSokkkEEosoo..............",".............oSxLSEkEkiSSSSSSiEkkEssxso.............",".............osxLSEiiiSSSSSSSSiiiEssxxo.............",".............osxSSSsssSSSSSSSSssssssxxo.............","..............ooSSSSSSSSSSsSSSSSsssxoo..............","...............oSSSSSSSSSsxSSSSsssxxo...............","...............ooSSSSSSSSSSSSSsssxxoo...............",".................oSSSSSSsxxsSsssxxo.................","..................oSSSSSSsSSsssxxo..................","..................ooSSSSSSSsssxxoo..................","...................oooSSSSSssxooo...................","....................oxooooooooxo....................",".............oooooo.oxxxsssxxxoo.oooooo.............","............oPPPRrrooxxxxxxxxxosorrPPPRo............","...........oPPPPRRrssLssssssssSssrPPPRRRo...........","..........oPPPPRRRRLLLLLssssSSSSLPPPRRRRRo..........",".........ooPPPRRRRRYYYLLLLSSSSTTTPPRRRRRRoo.........",".........oPPRRRRRRRPPYYLLSSSSTTRRRRRRRRRRRo.........","........oPPRRRRRRRRPPPYLSSSSSTRRRRRRRRRRRRro........","........oPPRRRRRRRRPPPPTSSSSTRRRRRRRRRRRRRRo........",".......oPPRRRRRRRRRRRRRRTSSTRRRRRRRRRRRRRRRRo.......","......oPPRRRRRRRRRRRRRRRRTTRRRRRRRRRRRRRRRRRro......","......oPPRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRo......",".....oPPRRRRRRRRRRRRRRRRRRRRRRRRRRrrrrRRRRRRRro.....",".....ooRRRRRRRRRRRRRRRRRRRRRRRRRrrrrrrrRRRRRRoo.....",".....oTTTTTttotRRRRRRRRRRRRRRRRrrrrrrtottttttto.....","....oSSSSoooo.oRRRRRRRRRRRRRRrrrrrrrro.ooooSSsso....","....oSSSSSsso..oRRRRRRRRRRRRrrrrrrrro..oSSSSSsso....","....oSSSSssso..oRRRRRRRRRRRRRrrrrrrro..oSSSSSsso....","....oSSSSsso...oRRRRRRRRRRRRRRRrrrrro...oSSSSsso....","....oSSSSsso...oRRRRRRRRRRRRRRRRrrrro...oSSSSSso....","....oSSSSso....oRRRRRRRRRRRRRRRRRrrro....oSSSSso....","....oSSSSso....oRRRRRRRRRRRRRRRRRrrro....oSSSSso....","....oSSSsso....oRRRRRRRRRRRRRRRRRrrro....oSSSSso....","....oSSSso.....oRRRRRRRRRRRRRRRrrrrro.....oSSSso....","....oSSSso....oCoRRRRRRRRRRRRrrrrrroBo....oSSSSo....","...oLSSSsso..oCCCCRRRRRRRRrrrrrrrrBBBBo..oSSSSSso...","..oLLSSSSso.oCCCCCCCRRrrrrrrrrrrBBBBBBBo.oLSSSSSso..","..oLSSSSSssooCCCCCBBBBrrrrrrrrBBBBBBBBbooLSSSSSSso..",".oLLSSSSSSsooVVCBBBBBBBBBBBBBBBBBBBBBvvooLSSSSSSsso.",".oLSSSSxossooVvBBBBBBBBBBBBBBBBBBBBBBvvooLSoxSSSsso.",".oSSSSsoxssoovvBBBBBBBBBBBBBBBBBBBBBBvvooSxosSSSsso.",".oSSSSssSSsoovvBBBBBBBBBBBBBBBBBBBBBBvvooSSssSSSsso.",".oSSSSSSSssovvBBBBBBBBbbbbbbBBBBBBBBBBvvoSSSSSSSsso.","..ossSSSssoovvBBBBBBBbbbbbbbbBBBBBBBBBvvooSSSSSsso..","...osssssooovvBBBBBBbbbbboobbBBBBBBBBBvvooossssso...","....ooooooovvBBBBBBBbbbbo..oBBBBBBBBBBBvvooooooo....",".........oovvBBBBBBBbbbbo..oBBBBBBBBBBBvvoo.........","........oovvvBBBBBBbbbbo....oBBBBBBBBBBvvvoo........","..........ovBBBBBBBbbbo......oBBBBBBBBBBvo..........","..........oooooooooooo........oooooooooooo..........","..........oSSSSSsssso..........oSSSSSsssso..........",".........oSSSSSSsssso..........oSSSSSSsssso.........",".........oSSLLSSssso............oSSSLLSSsso.........",".........oSSSSSSssso............oSSSSSSSsso.........",".........oSsSSsSssso............oSSsSSsSsso.........",".........oSSssSssso..............oSSssSssso.........",".........oSSSSsssso..............oSSSssssso.........","........oSSSSssssso..............ossssssssso........","........oTTTttttto................otttttttto........","........ooTTTtttto................otttttttoo........","........oFFFFffffo................oFFFfffffo........","........oFFFFffffo................oFFFFffffo........","........oFFFFffffo................oFFFFffffo........","........oFFFFfffo..................oFFFffffo........","........oFFFffffo..................oFFFffffo........","........oFFFfffo....................oFFffffo........","........oFFFfffo....................oFFFfffo........","........oFFFfffo....................oFFFfffo........","........oFFFffo......................oFFfffo........","......oWWWUuumo......................oWWUUuumo......","......oUmUmUuuo......................oUmUmUuuo......",".....oWUUmUUuuo......................oWUUmUUuuo.....",".....oWUmUmUuuo......................oWUmUmUuuo.....","....oWWUUmUUUuuo....................oWWUUmUUUuuo....","...oWWWWUUUUUuuo....................oWWWUUUUUUuuo...","..oWWWWWWUUUUuuo....................oWWWWWUUUUUuuo..",".oWWWWWWWWUUuuuo....................oWWWWWWWUUUUuuo.","oWWWWWWWWUUUuumo....................oWWWWWWWWUUUUumo","oUWWWWWUUUUuuumo....................oWWWWWWUUUUUuumo","oUUUUUUUUuuuumo......................oUUUUUUUUUuuumo",".onNNNNNnnnnno........................onNNNNNNnnnno.","..ooooooooooo..........................ooooooooooo.."]},"south-east":{"x":32,"y":17,"rows":["..............oooooooo...................","............ooLLLLLSSsoo.................","...........oLLLLLLLSSSsso................","..........oLLLLLLLLSSSSsso...............",".........oLLLLLLLLSSSSSSsso..............",".........oLLLLLLLSSSSSSSsso..............","........oLLLLLLSSSSSSSSSSsso.............","........oLLLLLSSSSSSSSSSSsso.............","........oLLhgggSSSSSSSgghsso.............","........oLLLhggggSSSggghSsso.............","........oLLSooooooSSSoooooso.............",".......ooLLoEEkkkoSSokkEEoso.............","......oSxLLSEkEkiSSSSEkkssso.............","......oSxLLSEiiiSSSSSiiSSsso.............","......osxLSSSsssSSSSsssSSsso.............",".......ooLSSSSSSSSSSssSSSsso.............",".........oSSSSSSSSSsxSSSssso.............","..........oSSSSSSSSSSSSSssso.............","...........oSSSSSSsxxsSssso..............","............oSSSSSSsSSSssso..............","..............oSSSSSSSssso...............","................oSSSSsssoo...............",".............oxxooooooooo................","............ooxxxsssxxxosoRRRo...........","............ooxxxxxxxxxoooRRRo...........","........ooooRRosssssssoosoRRRro..........","......ooPPPRRRRooSSSSSSssoooRro..........","......oPPPPRRRRoTTSSSSSSsoRRrrro.........",".....oLoPPRRRRRRoTTTSSSSsorrrrro.........",".....oLLLRRRRRRRRRRRTSSssorrrrro.........","....oLLLSRRRRRrRRRRRRTSsoorrrrrro........","....oLLSRRRRRrrRRRRRRRtttorrrrrro........","...oPPPPRRRRrrrrRRRRRRRtorrrorrrro.......","...oPPPRRRRRrrrRRRRRRRrrrrrrootto........","...oPPPRRRRrrrrRRRRRRrrrrrrroooooo.......","..oPPPRRRRRrrrrRRRRRrrrrrrrroossso.......","..oPPPRRRRrrrrrRRRRrrrrrrrrrosssso.......",".oPPPRRRRRrrrrrRRrrrrrrrrrroosssso.......",".oYYPRRRtttttrrrrrrrrrrrrrroosssso.......",".oYYTTTTttoorrrrrrrrrrrrrrroosssso.......",".oSSSSSsoorrrRRRRrrrrrrrrrrooSSssso......",".oSSSSSssorrRRRRRRRrrrrrrrrroSSSsso......",".oSSSSsssorrRRRRRRRRrrrrrrrrosSSsso......",".oSSSSsssorRRRRRRRRRRrrrrrro.osSssso.....",".oSSSSsssorRRRRRRRRRrrrrrrro.osSSSSo.....",".oSSSSssorrRRRRRRRRrrrrrrrro.osSLSSSoo...",".oSSSSso.oRRRRRRRrrrrrrrrrrooossLLSSSo...","..oSSSssoCCCRRRRrrrrrrrrrroBboosSSSsso...","..oSSSssobCCCCBBrrrrrrrrroBBbbosSSssso...","..oSSSssobCCCBBBBBBorrroBBBBbbossSssso...","..oSSSSsobCCBBBBBBBBBBBBBBbbbbosssssso...",".oLLLSSSobCBvvBBBBBbbbbbbbbbbboossssso...",".oLLLLSSSobBvvBBBBbbbbbbbbbbbbboxssso....","oLLLLSSSSsoBvvBBBbbbbbbbbbbbbbbooooo.....","oSSLSSSsssoBvvBBBbbbbbbbbbbbbbbo.........","oSSSSSssssoBvvBBBbbbbbbbbbbbbbbo.........","oSSSSSssssovvvBBbbbbobbbbbbbbbbo.........","oSSSSSssssovvvBBbbbbobbBBbbbbbbo.........","oSSSSSssssovvvBBbbbobbBBBbbbbbbo.........",".oossssssobvvBBBbbo.obbbbbbbooo..........","...ossssobBvvBBbbbo.oooooooosso..........","....oooobBvvvBBbboo.osssssssssso.........",".....oBCBBvvvBBbo....ossssssssso.........","......ooooooooooo....ossssssssso.........",".....oLLSSSSSsso.....oSSSsssssso.........",".....oLLSSSSSsso......oSSsssssso.........",".....oLLSSSSSsso......oSssssssso.........",".....oLSSSSSssso......osssssssso.........",".....oSSSSSSsso.......otttttttto.........","....oSSSSSSssso......oFFFttttffo.........","....oSSSSSsssso......oFFFFfffffo.........","...oLSSSSSsssso......oFFFFfffffo.........","...oTTTTTtttto........oFFFfffffo.........","...oTTTTTTttto........oFFFfffffo.........","...oFFFFFFffo.........offffffffo.........","...oFFFFFFffo..........offfffffo.........","...oFFFFFfffo...........offffffo.........","...oFFFFFfffo...........oFfffffo.........","...oFFFFFfffo...........oFFffffo.........","....oFFFFffo............oFFffffo.........","....oFFFFffo............oUFFffuo.........","....oFFFFffo............oUUUUUuuo........","....oFFFffo.............oUUUUUUUUoo......","...oFFFFffo............oUUUUUUUUWWWooo...","...oWFFFffo............oUUUUUUWWWWWWUUo..","...oWWUUUuo............oUUUUUWWWWWWUUUUo.","..oUUUUUUuo...........oUUUUUUUUUUUUUUUUUo","..oUUUUUUuo............oUUUUUUUUUUUUUUUuo","..oUWWWWUUo............oUUUUUUUUUUUUUuuuo","..oWWWWWWUUo............onnnnnnnnnnnnnoo.","..oWWWooWWUUo............oonnooooooooo...","..ooooYoWWUUo..............oo............","..oTYYYWWWUUuo...........................","..ooUUWWWUUUuo...........................","..oooooooooooo..........................."]},"east":{"x":39,"y":17,"rows":["......oooooooo...........","....ooLLLLLLSSSoo........","...oLLLLLLLLSSSSSo.......","..oLLLLLLLLLSSSSSSo......",".oLLLLLLLLLSSSSSSSSo.....",".oLLLLLLLLLSSSSSSSSo.....","oLLLLLLLLLSSSSSSSSSSo....","oLLLLLLLLSSSSSSSSSSSo....","oLLLLLLLSSSSSSSSSSSSSo...","oLLLLLLSSSSSSShgggSSSo...","oLLLLLSSSSSSSSSSgggggSo..","oLLLLSSooSSSSSSSoooooo...","oLLLLSoSsoSSSSSSoEkkSo...","oLLLSSoSxoSSSSSSSEiksSo..","oLLSSSoSxoSSSSSSSSssSSso.","oLSSSSossoSSSSSSSSSSSSsso","oSSSSSSooSSSSSSSSSSSSsxo.",".oSSSSSSxSSSSSSSSSSSxso..",".oSSSSSSSxSSSSSSSSSSsso..","..oSSSSSSSoSSSSSSSSxxo...","...oSSSSSSSoSSSSSSSSsso..","....oosssxxsooSSSSSSsso..",".....ossxxxxxxoooooooo...",".....osxxxxxxxxxo........",".....osxxxxxxxxxo........","....oLLoooooooxxo........","....ooooPPPPRRoooo.......","....oPoPPPPPRRRooo.......","...oPoPPPPPRRRRrooo......","...oPoPPPLLRRRRroro......","...ooRPoLLLSSRRroro......","...ooRoLLSSSSsrrooo......","...ooRPPLSSSSRrrorro.....","...ooRPPPPRRRRrrorro.....","...ooRPPPPRRRRrrorro.....","...ooRPPPPRRRRrroro......","...ooRPPPPRRRRrroro......","...ooRPPPPRRRRrorro......","...ooRPPPPRRRRrorro......","...oooPPPPRRRRoorro......","...ooTYYYTTTTttorro......","...oRoLLTTTTssorrro......","...oRoLLSSSSssorrro......","...oRoSSSSSSssorrro......","...oRoSSSSSsssorrro......","...oRoSSSSSsssorrro......","....oRoSSSSSssorro.......","....oRoSSSSSssorro.......","...ooCCoSSSSSssobo.......","...oCCCoSSSSSssoBo.......","...oCCCoSSSSSssoBo.......","...oCCCCoSSSSssovo.......","...oBBCBoSLSSSSsoo.......","...oBBBBoLLSSSSSso.......","...oBBBoLLLSSSSSso.......","...oBBBoSLSSSSSSso.......","...oBBBoSSSSSSSsso.......","....oBBoSSSSSSSsso.......","....oBBoSSSSSSSsso.......","....oBBoSSSSSSSsso.......","....oBBBosssssssso.......","....oBBBosssssssoo.......","....ooBBBooooooovo.......","......oBBBBBBBbbo........","......ooooooooooo........","......oSSSSSSSsso........",".....oSSSSSSSSsso........",".....oSSSSSSSSsso........",".....oSSSSSSSSsso........",".....oSSSSSSSssso........",".....oSSSSSSSssso........",".....oLLSSSSssso.........",".....oLLLSSSssso.........",".....oYYTTTTttto.........",".....oYTTTTTTtto.........",".....oFFFFFFfffo.........",".....oFFFFFFffo..........",".....oFFFFFfffo..........",".....oFFFFFfffo..........",".....oFFFFFfffo..........","......oFFFFffffoo........","......oFFFFFfffoUooo.....","......oFFFFFfffoUUUUo....",".....ooFFFFFfffoUUUUuo...",".....ooFFFFFffoUUUuuuo...",".....oWWWFFFffoUuuuuuo...",".....oWWWWUUUuouuuuuo....",".....oUUUUUUuuuonnoo.....","......oUUUUuuuuooo.......","......oUUUUUUUUUo........",".....oUUUUUUWWWWWoo......",".....oUUUWWWWWWoooUoo....",".....oUUUWWWWWWYYYUUUo...",".....oUUUUWWYYYTTTUUUo...",".....ooooooooooooooooo..."]},"north-east":{"x":32,"y":18,"rows":["...............ooooo.....................",".............ooLLLLSooo..................","...........ooLLLLLLSSSSo.................","..........oLLLLLLLLSSSSSo................",".........oLLLLLLLLLSSSSSSo...............",".........oLLLLLLLLSSSSSSSo...............","........oLLLLLLLLLSSSSSSsso..............","........oLLLLLLLLSSSSSSSsso..............","........oLLLLLLSSSSSSSSSssso.............",".......oSSLLLSSSSSSSSSSsssso.............",".......oSSSSSSSSSSSSSSssssso.............",".......oSSSSSSSSSSSSSSssssso.............",".......oSSSSSSSSSSSSSsssssso.............","........oSSSSSSSSSSSssssssso.............","........oSSSSSSSSSssssssSsoo.............","........oSSSSSSSsssssssSSsoo.............",".........osssssssssssssSsso..............",".........osssssssssssssssso..............","..........ossssssssssssssso..............","...........ossssssssssssso...............","........oooosssssssssssooo...............",".......oPPPosssssssssxxxo................","......oPPPPoLsssssssxxxo.................",".....oPPPPooLLLLSSSssooo.................",".....oPPPPooLLLSSSSSoPPPoooo.............","....oRRPPPooLLLSSSSoPPPPPPRRo............","....oRRRPPoYYYYYYYYPPPPPPPRRoo...........","...oRRRRPPPPPPYPPPPPPPPPPRRRSo...........","...oRRRRRPPPPPPPPPPPPPPPRRSSSSo..........","..oRRRRRRRRPPPPPPPPPRRRRRRSSSso..........","..oRRRRRRRRRRRRRRRRRRRRRRRRSSso..........",".oRRRRRRRRRRRRRRRRRRRRRRRRRRRRRo.........",".oTTTRRRRRRRRRRRRRRRRRRRRRRRRRRo.........",".ooTTTooRRRRRRRRRRRRRRRRRRRRRRRo.........",".oSoooooRRRRRRRRRRRRRRRRRRRRRRRRo........",".oSSSsxooRRRRRRRRRRRRRRRRRRRRRRRo........",".oSSssxxoRRRRRRRRRRRRRRRRRRRRRRRo........",".ossssxxoRRRRRRRRRRRRotTTRRRRRRRo........",".ossssso.oRRRRRRRRRRRRtoTTTTTTTTto.......","..ossssooRRRRRRRRRRRRRodooSTTTTSo........","..ossssoRRRRRRRRRRRRRRRroSSSSSSSso.......","..osssxoRRRRRRRRRRRRRRRroSSSSSSsso.......","..osssxoRRRRRRRRRRRRRRRRroSSSsssso.......",".oSSsxxooRRRRRRRRRRRRRRRrossssssso.......","oLLLSsoCoRRRRRRRRRRRRRRRrrosssssso.......","oLLLSsoCoRRRRRRRRRRRRRRrrrossssssso......","oSSSSoCCCoRRRRRRRRRRRRRobbBosSSssso......","oSSSSoCCCCCRRRRRRRRCCCCCBBbosSSssso......","oSSSSoBCCCCCCCRooCCCCCCBBBbboSSSsso......","oSSSoBBBBBCCCCCCCCCCCCBBBBbboSSSSSso.....",".oSSoBBBBBBBBBCCCCCCBBBBBBbboSSSSSSso....","..oooBBBBBBBBBBBBBBBBBBBBBbboLLLLSSSSo...",".....oBBBBBBBBBBBBBBBBBBBBboSLLLLSSsso...","....oBBBBBBbbBBBBBBBBBBBBBboSSSSSSssso...","....oBBBBBBbbbbBBBBBBBBBBBBoSSSSSSssso...","....oBBBBBBbbbobBBBBBBBBBBBoSSSSSSssso...","....oBBBBBBBbbboBBBBBBBBBBBoSSSSSSssso...","....ooBBBBBBbbbboBBBBBBBBBBboSSSSsssso...","......oobbbbbbbooBBBBBBBBBBBbossooooo....",".....oSSoooooooo.oBBBBBBBBBBbboo.........",".....oSSSsssssso.oooBBBBBBBBBbbo.........",".....oSSSsssssso....oBBBBBBBBBo..........",".....oSSSSssssso....ooooooooooo..........",".....oSSSSsssso.....oSSSSSSSSso..........","....oSSSSssssso......oSSSSSSSsso.........","....oLSSSssssso......oSSSSSSSsso.........","...oLLSSSsssso.......oSSSSSSSsso.........","...oYYTTTTttto.......oSSSSSSSsso.........","...oFTTTTTtffo........oSSSSSssso.........","...oFFFFFfffo.........oSSSSSSsso.........","...oFFFFFfffo.........oSSSSSSsso.........","...oFFFFffffo.........oYYSSSTtto.........","...oFFFfffffo.........oYYTTTTtto.........","...oFffffffo.........oFFFFFFFffo.........","....offffffo.........oFFFFFFfffo.........","....offffffo.........oFFFFFffffo.........","....offffffo..........oFFFFffffo.........","...oFFFfffo...........oFFffffffo.........","...oWFFfffo...........offffffffo.........","...oWWUUuuo............offfffffo.........","..oUUUUUUuo............offfffffo.........","..oUUUUUuuuoo...........oFFFFffo.........","..oUUUUUuuuuo...........oFFFFffo.........","..oUUUUUUuuuuo..........oFFFFFfo.........","..oWWUUUUuuuuo..........oWUUUUUo.........","..oWWUUUUuuuo...........oUUUUUuo.........","..oUUUUUuuuuo...........oUUUUuuuoooo.....","..oUUUUuuuuo............oUUUUuuuUUUUooo..","..onnnnnnnno...........oUUUUUUUUUUUUoTTo.","...oonnnnoo............oWUUUUUUUUUUUTTToo",".....oooo..............oWUUUUUUUUUUTTTuuo","......................oUUUUUUUUUTTTtuuuuo",".......................oUUUUUUttttuuuuuo.",".......................oooooooooooooooo.."]},"north":{"x":26,"y":18,"rows":[".....................oooooo.....................","...................ooLLLLSSoo...................","..................oLLLLLLLSSSo..................",".................oLLLLLLLLSSSSo.................","................oLLLLLLLLSSSSSSo................","...............oLLLLLLLLLSSSSSSso...............","...............oLLLLLLLLSSSSSSSso...............","..............oLLLLLLLLSSSSSSSSsso..............","..............oLLLLLLLSSSSSSSSssso..............","..............oSLLLLSSSSSSSSSSssso..............","..............oSSSSSSSSSSSSSSsssso..............","..............oSSSSSSSSSSSSSssssso..............",".............oSSSSSSSSSSSSSssssssso.............",".............oSSSSSSSSSSSSsssssssso.............","............oSSSSSSSSSSSSsssssssssso............",".............oSSSSSSSSSssssssssssso.............",".............ossssSssssssssssssssso.............",".............ooossssssssssssssssooo.............","................osssssssssssssso................",".................osssssssssssso.................",".................osssssssssssso.................","..................osssssssssso..................","...........ooooo..osssssssssso..ooooo...........","..........oPPPRRooLLLLLSSSSSsSooPPPPRo..........",".........oPPPPRRRPLLLLSSSSSSSSPPPPPRRRo.........","........oPPPPRRRRPLLLSSSSSSSSSPPPPPRRRRo........",".......ooPPPRRRRRPPYYYYTTTTTTRRPPRRRRRRoo.......",".......ooPPRRRRRRPPPPYTTTTTRRRRRRRRRRRRoo.......",".......oPPRRRRRRRRPPPPRRRRRRRRRRRRRRRRRRo.......","......oPPRRRRRRRRRPPPRRRRRRRRRRRRRRRRRRRRo......",".....oPPPRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRo.....",".....oPPRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRo.....","....oPPPRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRo....","....oPPRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRo....","...oPPRRRRRRRRRRRRRRRRRRRRRRRRrrrrRRRRRRRRRRo...","...oYYTTttttttRRRRRRRRRRRRRRRrrrrrttTTTTTTTTo...","...oLTtttttootRRRRRRRRRRRRRrrrrrrrtootttTTTSo...","..oLLSSSooo..oRRRRRRRRRRRRRRrrrrrro..oooSSSSso..","..oSSSSSsso..oRRRRRRRRRRRRRRRrrrrro..oSSSSSsso..","..oSSSSssso..oRRRRRRRRRRRRRRRRrrrro..oSSSsssso..","..oSSsssso...oRRRRRRRRRRRRRRRRRrrro...osssssso..","..oSssssso...oRRRRRRRRRRRRRRRRRRrro...osssssso..","..oSSssso....oRRRRRRRRRRRRRRRRRRrro....ossssso..","..oSsssso....oRRRRRRRRRRRRRRRRRrrro....ossssso..","..oSssso.....oRRRRRRRRRRRRRRRrrrrro.....osssso..","..oSssso....oCoRRRRRRRRRRRRrrrrrroBo....osssso..",".oSSssso...oCCCCCRRRRRRRrrrrrrrBBBBBo...oSsssso.","oLLSSSso..oCCCCCCCBRrrrrrrrrrBBBBBBBBo..oSSSSSSo","oLLSSSSo..oCCCCCCBBBRrrrrrrrBBBBBBBBbo..oSSSSSSo","oSSSSSSo..oCCCCBBBBBBBBBBBBBBBBBBBBBbo..oSSSSSSo","oSSSSSSo.oBBBBBBBBBBBBBBBBBBBBBBBBBbbbo.oSSSSSso","oSSSSSSo.oBBBBBBBBBBBBBBBBBBBBBBBBBBbbo.oSSSSSso","oSSSSSso.oBBBBBBBBBBBBBBBBBBBBBBBBBBbbo.oSSSSSso","oSSSSssooBBBBBBBBBBBbbbbbbBBBBBBBBBBBbbooSSSSsso",".osssso.oBBBBBBBBBbbbbbbbbbbBBBBBBBBBbbo.osssso.","..oooo..oBBBBBBBBBbbbbbbbbbbBBBBBBBBBbbo..oooo..",".......oBBBBBBBBBBbbbbboobbBBBBBBBBBBBbbo.......",".......oBBBBBBBBBbbbbbo..oBBBBBBBBBBBBbbo.......","......ooBBBBBBBBBbbbbo....oBBBBBBBBBBBbboo......","........oBBBBBBBBbbbo......oBBBBBBBBBBBo........","........oooooooooooo........oooooooooooo........","........oSSSSSsssso..........oSSSSssssso........",".......oSSSSSSsssso..........osSSSsssssso.......",".......oSSSSSsssso............oSSSSSSssso.......",".......oSSSSSsssso............oSSSSSSssso.......",".......oSSSSSsssso............oSSSSSSssso.......",".......oSSSSSssso..............oSSSSSSsso.......",".......oLLSSSssso..............oSSSSSSSso.......",".......oLLSSSssso..............oSSSSSSSSo.......","......oYYYTTTtto................oTTTTTTTto......","......oYYTTTTtto................oTTTTTTTto......","......oFFFFFFffo................oFFFFFFffo......","......oFFFFFFffo................oFFFFFFffo......","......oFFFFFfffo................oFFFFFfffo......","......oFFFFfffo..................oFFFffffo......","......oFFFffffo..................oFFfffffo......","......oFffffffo..................offfffffo......","......oFfffffo....................offffffo......","......oFFffffo....................offffffo......","......oFFfffo......................offfffo......",".....oFFFFffo......................oFFFfffo.....",".....oWWUUFfo......................oFFWUUUo.....",".....oWUUUUuo......................oUUUUUUo.....","..oooUUUUUuuo......................oUUUUUuuooo..",".oWoUUUUUUuuo......................oUUUUuuuuoUo.",".oWWUUUUUUuuuo....................oUUUUUuuuuuuo.","ooWWUUUUUUUUuo....................oWWUUUUuuuuuoo",".ooUUUUUUUUUuo....................oWWUUUUuuuuoo.",".oToUUUUUUUUuo....................oWWUUUUuuuoto.","..ooUUUUUUUuuo....................oUUUUUuuuuoo..","...ooUUUUUuuuo....................oUUUUuuuuoo...","....onnnnnnno......................onnnnnnno....",".....ooonnoo........................oonnooo.....","........oo............................oo........"]}},"hair":{"bowl":{"east":{"x":35,"y":12,"rows":[".........ooooooooo.........",".......ooHHHHHHHHHoo.......","......oHHHHHHHHHHHHHoo.....","....ooJJJJHHHHHHHHHHHHo....","...oHJJJJJHHHHHHHHHHHHho...","...oHJJJJJHHHHHHHHHHHHhho..","..oHHJJJJHHHHHHHHHHHHHhho..",".oHHHHJHHHHHHHHHHHHHHHhhho.",".oHHHHHHHHHHHHHHHHHHHhhhho.",".oHHHHHHHHHHHHHHHHHHHhhhhho","oHHHHHHHHHHHHHHHHHHHhhhhoo.","oHHHHHHHHHHHHHHooooooooo...","oHHHHHHHHHHHHHH............","oHHHHHHHHHHHHHH............","oHHHHHHHHHHHHHH............","oHHHHHHHHHHHHHH............",".oHHHHHHHHHHHHh............",".ohHHHHHHHHhhhh............",".ohhhhhhhhhhhhh............","..ohhhhhhhhhhhh............","..ohhhhhhhhhhhh............","...ohhhhhhhoooo............","...oohhhhhho...............","....ooohhhho...............","....ohhhhhho...............",".....ohhhhgo...............","......ohhho................",".......oo.................."]},"north-east":{"x":35,"y":12,"rows":["...........oooooo..........","........oooHHHHHHooo.......","......ooHHHHHHHHHHHHoo.....",".....oHJJJHHHHHHHHHHHHo....","....oHJJJJJHHHHHHHHHHHHo...","...oHJJJJJHHHHHHHHHHHHHho..","..oHHJJJJJHHHHHHHHHHHHHhho.",".oHHHHHHHHHHHHHHHHHHHHHhho.",".oHHHHHHHHHHHHHHHHHHHHHhhho",".oHHHHHHHHHHHHHHHHHHHHhhhho","oHHHHHHHHHHHHHHHHHHHHHhhhho","oHHHHHHHHHHHHHHHHHHHHhhhhho","oHHHHHHHHHHHHHHHHHHHhhhhhho","oHHHHHHHHHHHHHHHHHHhhhhhhho","oHHHHHHHHHHHHHHHHHhhhhhhhho","oHHHHHHHHHHHHHHHHhhhhhhhho.",".oHHHHHHHHHHHHHhhhhhhhhhho.",".ohHHHHHHHHHHhhhhhhhhhhhho.",".ohhhhhHhhhhhhhhhhhhhhhho..","..ohhhhhhhhhhhhhhhhhhhhh...","..ohhhhhhhhhhhhhhhhhhhhh...","...ohhhhhhhhhhhhhhhhhoo....","...ooohhhhhhhhhhhhhho......","....ohohhhhhhhhhhhhho......",".....ohhhhhhhhhhhhho.......",".....ohhhhhhhhhhhhho.......","......hhhhhhhhhhhho........","......ohhhhhhhhhho.........",".......o.ooohhhoo..........","............ooo............"]},"north":{"x":36,"y":12,"rows":["...........oooooo...........","........oooHHHHHHooo........","......ooHHHHHHHHHHHHoo......",".....oHJJJHHHHHHHHHHHHo.....","....oJJJJJHHHHHHHHHHHHHo....","...oHJJJJJHHHHHHHHHHHHHho...","..oHJJJJJHHHHHHHHHHHHHHhho..",".oHHHJJHHHHHHHHHHHHHHHHhhho.",".oHHHHHHHHHHHHHHHHHHHHHhhho.","oHHHHHHHHHHHHHHHHHHHHHhhhhho","oHHHHHHHHHHHHHHHHHHHHHhhhhho","oHHHHHHHHHHHHHHHHHHHHhhhhhho","oHHHHHHHHHHHHHHHHHHHhhhhhhho","oHHHHHHHHHHHHHHHHHHhhhhhhhho","oHHHHHHHHHHHHHHHHHhhhhhhhhho","oHHHHHHHHHHHHHHHhhhhhhhhhhho","oHHHHHHHHHHHHHhhhhhhhhhhhhho","ohHHHHHHHHHHhhhhhhhhhhhhhhho",".ohhhhhhhhhhhhhhhhhhhhhhhho.","..ohhhhhhhhhhhhhhhhhhhhhho..","..ohhhhhhhhhhhhhhhhhhhhhho..","...ohhhhhhhhhhhhhhhhhhhho...","...ohhhhhhhhhhhhhhhhhhhho...","....oohhhhhhhhhhhhhhhhoo....","....ohhhhhhhhhhhhhhhhhho....",".....ohhhhhhhhhhhhhhhho.....","......ohhhhhhhhhhhhhho......",".......ohhhhhhhhhhhho.......",".........oohhhhhhoo.........","...........oooooo..........."]},"south-east":{"x":35,"y":12,"rows":[".........oooooooooo........",".......ooHHHHHHHHHHoo......","......oHHHHHHHHHHHHHHoo....","....ooJJJJHHHHHHHHHHHHHo...","...oHJJJJJHHHHHHHHHHHHHho..","...oHJJJJHHHHHHHHHHHHHHhho.","..oHHJJJHHHHHHHHHHHHHHHhho.",".oHHHHHHHHHHHHHHHHHHHHhhhho",".oHHHHHHHHHHHHHHHHHHHHhhhho",".oHHHHHHHHHHHHHHHHHHHhhhhho","oHHHHHHHHHHHHHHHHHHHhhhhhho","oHHHHHooooooooooooooooo.oo.","oHHHHH.....................","oHHHHH.....................","oHHHHH.....................","oHHHHH.....................",".oHHHH.....................",".ohHHH.....................",".ohhhh.....................","..ohhh.....................","..oho......................","...oo......................","....o......................","....oo.....................",".....o.....................",".....o....................."]},"south":{"x":36,"y":12,"rows":[".........oooooooooo.........",".......ooHHHHHHHHHHoo.......",".....ooHJHHHHHHHHHHHHoo.....","....oHJJJJHHHHHHHHHHHHHo....","...oHJJJJJHHHHHHHHHHHHHho...","..oHJJJJJHHHHHHHHHHHHHHhho..",".oHHHJJJHHHHHHHHHHHHHHHhhho.",".oHHHHHHHHHHHHHHHHHHHHHhhho.","oHHHHHHHHHHHHHHHHHHHHHHhhhho","oHHHHHHHHHHHHHHHHHHHHHhhhhho","oHHHHHHHHHHHHHHHHHHHHhhhhhho","oHhhoooooooooooooooooooohhho","ohhh....................hhho","ohho....................ohho","ohoh....................hoho","ohho....................ohho","ohho....................ohho",".oo......................oo."]}},"buzz":{"east":{"x":38,"y":17,"rows":["........ooooooo....","......ooHHHHHHHoo..",".....oJJJHHHHHHHHo.","....oJJJJHHHHHHHHHo","...oJJJJHHHHHHHHHH.","..oHHJJHHHHHHHHHHHo",".oHHHHHHHHHHoooooo.",".oHHHHHHHHHH.......",".oHHHHHHHHHH.......","oHHHHHHHHHHH.......","oHHHHHHHHHHH.......","oHHHHHHHHHHH.......","oHHHHHHHHHHH.......","oHHHHHHHHHHH.......",".oHHHHHHHHHh.......",".oHHHHHHHHhs.......",".ohhHHHHoss........","..ohhhhg...........","..ohhhhg...........","...ohhhg...........","....ohho...........",".....oh............"]},"north-east":{"x":38,"y":17,"rows":[".........ooooo.......","......oooHHHHHooo....",".....oHJJHHHHHHHHo...","....oJJJJHHHHHHHHHo..","...oHJJJHHHHHHHHHHho.","..oHHJJHHHHHHHHHHHho.","..oHHHHHHHHHHHHHHHhho",".oHHHHHHHHHHHHHHHHhho",".oHHHHHHHHHHHHHHHhhho",".oHHHHHHHHHHHHHHHhhhh",".oHHHHHHHHHHHHHHhhhhh","oHHHHHHHHHHHHHHhhhhho","oHHHHHHHHHHHHHhhhhhho",".oHHHHHHHHHHHhhhhhhho",".oHHHHHHHHHHhhhhhhho.",".oHHHHHHHHhhhhhhhos..",".ohHHHHhhhhhhhhho....","..ohhhhhhhhhhhhho....","..ohhhhhhhhhhhhho....","...ohhhhhhhhhhho.....","....ohhhhhhhhhho.....",".....hhhhhhhhoo......","......hhhhhho........","......oooooo........."]},"north":{"x":39,"y":17,"rows":["........oooooo........","......ooHHHHHHoo......","....ooJJHHHHHHHHoo....","...oHJJJHHHHHHHHHHo...","..oHJJJJHHHHHHHHHHho..","..oHJJJHHHHHHHHHHHho..",".oHHHHHHHHHHHHHHHHhho.",".oHHHHHHHHHHHHHHHhhho.","oHHHHHHHHHHHHHHHHhhhho","oHHHHHHHHHHHHHHHhhhhho","oHHHHHHHHHHHHHHHhhhhho","oHHHHHHHHHHHHHHhhhhhho","oHHHHHHHHHHHHHhhhhhhho","oHHHHHHHHHHHHhhhhhhhho",".HHHHHHHHHHhhhhhhhhhh.","oHHHHHHHHHhhhhhhhhhhho",".hhHHHHhhhhhhhhhhhhhh.",".ohhhhhhhhhhhhhhhhhho.","..ohhhhhhhhhhhhhhhho..","...ohhhhhhhhhhhhhho...","....ohhhhhhhhhhhho....",".....hhhhhhhhhhhh.....","......ohhhhhhhho......",".......oooooooo......."]},"south-east":{"x":38,"y":17,"rows":["........ooooooo......","......ooHHHHHHHoo....",".....oJJJHHHHHHHHoo..","....oJJJJHHHHHHHHHho.","...oHJJJHHHHHHHHHhoo.","..oHHJJHHHHHHHxssssxo","..ooooooooooss.......",".oH..................",".oH..................",".oH..................",".oH..................","oHH..................","oHH..................",".oH..................",".oh..................",".os..................",".o...................",".....................","..o.................."]},"south":{"x":39,"y":17,"rows":[".......oooooooo.......",".....ooHHHHHHHHoo.....","....oHJJHHHHHHHHHo....","...oJJJJHHHHHHHHHHo...","..oHJJJJHHHHHHHHHHho..","..oHJJJgxxxxxxgHHHho..",".ooooSSS......sssoooo.","......................","o....................o","o....................o","o....................o","o....................o"]}},"mohawk":{"east":{"x":36,"y":12,"rows":["..........o......o.....","..........oo.....o.....","...oo.....oo....oo.....","....oo....oHo...oo....o","....oHo...oHo..oHo...oo","oo...oHoo.oHHoooHo..oo.",".ooo.oHHooHHHHHHooooHo.",".oHHoHHHHJHHHHHHHHHoHo.","..oHHHoJJJJHHHHHHHHHho.","...oHHJJJJHHHHHHHHHHo..","....oHHJJHHHHHHHHHHox..","....oHHHHHHHHHoooooo...","...oHHHHHHHHHH.........","...oHHHHHHHHHH.........","...oHHHHHHHHHH.........","...oHHHHHHHHHH.........","...oHHHHHHHHHH.........","...oHHHHHHHHHH.........","...oHHHHHHHHHH.........","...oHHHHHHHHHh.........","...oHHHHHhhhss.........","....ohhHhhss...........","....ohhhhh.............",".....ohhhg.............",".....ohhhg.............","......ohho.............",".......o..............."]},"north-east":{"x":39,"y":12,"rows":["........o....o......","........o....o......","........oo..oo..o...","...o....oo..oo.oo...","...oo...ohooHHooo...","....oo.ohHhoooooo...","....ohoooHoHHHHoo...",".o..ohhhHHHHHHHHo...",".ooohhhhHHHHHHHHHo..","..ohhhHHHHHHHHHHHho.","..ohhhHHHHHHHHHHHho.",".oohhhHHHHHHHHHHHho.",".oohhHHHHHHHHHHHHhho","oHHHHHHHHHHHHHHHhhho","oHHHHHHHHHHHHHHHhhho","oHHHHHHHHHHHHHHhhhho","oHHHHHHHHHHHHHhhhhho","oHHHHHHHHHHHHhhhhhho","oHHHHHHHHHHHhhhhhho.","oHHHHHHHHHHhhhhhhho.","oHHHHHHHHhhhhhhhos..",".ohHHHhhhhhhhhho....",".ohhhhhhhhhhhhho....","..ohhhhhhhhhhho.....","..ohhhhhhhhhhho.....","...ohhhhhhhhho......","....ohhhhhhho.......",".....ohhhhoo........","......oooo.........."]},"north":{"x":39,"y":12,"rows":["..........oo..........","..........oo..........","..........oo..........","..........oo..........",".........oooo.........",".........oHho.........",".......ooohhooo.......",".....ooHoHgghoHoo.....","....oJJJoHoohoHHHo....","...oJJJJoohhooHHHho...","..oHJJJHoHhhhoHHHHho..","..oHHHHHoHhhhoHHHhho..",".oHHHHHHoHhhhoHHHhhho.",".oHHHHHHHHhhhHHHHhhho.","oHHHHHHHHHHHHHHHhhhhho","oHHHHHHHHHHHHHHhhhhhho","oHHHHHHHHHHHHHHhhhhhho","oHHHHHHHHHHHHHhhhhhhho","oHHHHHHHHHHHHhhhhhhhho",".HHHHHHHHHHhhhhhhhhhh.","oHHHHHHHHhhhhhhhhhhhho",".ohHHHhhhhhhhhhhhhhho.",".ohhhhhhhhhhhhhhhhhho.","..ohhhhhhhhhhhhhhhho..","...ohhhhhhhhhhhhhho...","....ohhhhhhhhhhhho....",".....ohhhhhhhhhho.....","......oohhhhhhoo......","........oooooo........"]},"south-east":{"x":39,"y":11,"rows":["........o..........","...o....o..........","....o...oo...o.....",".o..oo..oo...o.....",".oo.oHo.oHo.oo.....",".oHoHHooHHo.oo.....","..ooHoooooooHho.o..","..ooooHHHHoHHhooo..","...oHHJJHHHHooHHo..","...oHJJJHHHHHHHhho.","..oHJJJJHHHHHHHhhoo","..oHJJHHHHHHHxghho.",".ooooooooooss.sss..",".o.................","oH.................","oH.................","oH.................","oH.................","oH.................","oH.................","o..................","o.................."]},"south":{"x":39,"y":11,"rows":["..........oo..........","..........oo..........","..........oo..........","..........oo..........",".........oHho.........",".........oHho.........","........oHooho........","......ooooHhoooo......",".....oJJooHhooHHo.....","...ooJJJoHhhhoHHHoo...","...oJJJJoHhhhoHHHHo...","..oHJJJJoHHhhoHHHhho..",".ooooSSS.Soos.sssoooo.","......................","......................","o....................o","o....................o","o....................o"]}},"spiky":{"east":{"x":28,"y":4,"rows":["..................o...................","..................o...................",".................oho.........oo.......",".................oho.......oogo.......","................ohho......ohho........","................ohhho....ohhho........","....oo..........ohhho...ohhhho........",".....oooo.......ohhhho.ohhhhho........","......ohho......ohhgggoghhhhhho.......",".......ohho....ogggggggggggggho.......","........ohho..ohggggJJJJggggggo.......",".........ohhoohhJJJJJJJJJJJJggo.......",".........ohhgggJJJhhhhhhhgghgJJo......","..........ogggJJhhhhhhhhhgHggggJooo...","......oooogggJJhhhhhhhhhhghhHHggJhho..","...ooohhhhggJJhhhhhhhhhhhgghhhggJJhho.","ooohhhhhhhggJhhhhhhhgggghhghhhgghJJgoo","..oohhhhhhggJhhhhhhhgHHgghgghhgghgoo..","....ooohhhgghhhhhhhhghhgoooohhhgho....",".......ooggghhhhhhhhghho....ohhggo....",".........ogghhhhhhhhghho.....ohgo.....","........oHgghhhhhhhhghgo......oo......",".......ohhgghhhgoooogho.........o.....","......ohhhhghhho....ooo...............",".....ohhhhhgghho......o...............","....ohgoooogghho......o...............","...oooo....ogggo......................","...........ohgo.......................","..........ohhgo.......................",".........ohhgo........................",".........ogooo........................",".........oo...........................","........oo............................"]},"north-east":{"x":28,"y":5,"rows":["..................oo.....................","..................oo.........oo..........",".................ohho......ooho..........",".................ohho.....ohhho..........",".................ohho....ohhhgo..........","....oo...........ohhho..ohhhho...........",".....ooo........ohhhho..ohhhhho..........","......oho.......ohhhggooghhhhho..........",".......oho.....ogggggggggggggho..........","........oho..oohgggggJhhhgggggo..........",".........ohoohJJJJhhhhhhhhhhhggo..ooooooo",".........ohhggJhhhhhhhhhhhhhhhhgoohhhhgo.","..........oggghhhhhhhhhhhhhhhhhgghhhhgo..",".....oooooggghhhhhhhhhhhhhhhhhhhghhhgo...","...oohhhhhgghhhhhhhhhhhhhhhhhhhhghgoo....","ooohhhhhhhgghhhhhhhhhhhhhhhhhhhhggo......","..oohhhhhhgghhhhhhhhhhhhhhhhhhhhgo.......","....ooohhhgghhhhhhhhhhhhhhhhhhhhgho......",".......ooggghhhhhhhhhhhhhhhhhhhgghho.....",".........ogghhhhhhhhhhhhhhhhhhhgHhhho....","........oHgghhhhhhhhhhhhhhhhhhhghhhho....",".......ohhgghhhhhhhhhhhhhhhhhhhgghhhho...","......ohhhhghhhhhhhhhhhhhhhgggghgooooo...",".....ohhhhhgghhhhhhhhhhhggggHHggo........","....ohgoooogggggghhhhhhhggHHhhgo.........","...oooo....ohgHHHgggggggggghhho..........","............oghhhhHgHHHHgggghhho.........","............ogghhhggghhhgggoohho.........","............ooohhhgoohhhgoo..oho.........","...............ohho..ohho.....oo.........","...............ohgo..ohho................","................oo....oho................",".................o.....oo................"]},"north":{"x":27,"y":5,"rows":["...................o.........................","..................oo.........o...............",".................oho.......ooo...............",".................oho......ohho...............",".....o...........ohho....ohhho......ooo......","......ooo.......ohhho...ohhhho...oooho.......","........oooo....ohhhho.ohhhhho..ohhhgo.......",".........ohhoo.ohhggggoggghhhgoohhhho........",".........ohhhhogggggggggggggggHhhhhho........","..........ohhhgggggJJJJJJhggggghhhhgo........","..........ohggggJJJhhhhhhhhhhgggghho.........","....oooooogggggJJhhhhhhhhhhhhhhggggo.oooooooo","oooohhhhhhgggJJhhhhhhhhhhhhhhhhhhggHohhhhhgo.","..oohhhhhhggJJhhhhhhhhhhhhhhhhhhhhghhhhhhgo..","....oohhhhggJhhhhhhhhhhhhhhhhhhhhhghhhgooo...","......ooogggJhhhhhhhhhhhhhhhhhhhhhgggoo......",".........ogghhhhhhhhhhhhhhhhhhhhhhgHo........","........oHgghhhhhhhhhhhhhhhhhhhhhgghho.......","......oohhhghhhhhhhhhhhhhhhhhhhhhgHhhho......",".....ohhhhhgghhhhhhhhhhhhhhhhhhhhghhhhho.....","....ohgoogggghhhhhhhhhhhhhhhhhhhhggghhhho....","...oooo..ogghhhhhhhhhhhhhhhhhhhhhhggoooooo...","..........ohhhhhhhhhhhhhhhhhhhhhhhho.........","..........ohgggghhhhhhhhhhhggggghhgo.........","..........ohgHHHggghhhhhggggHHHggho..........","...........oghhhhHggggggggHHhhhggho..........","...........oghhhhggHHHHHgghhhhhgggo..........","............ohhhhggghhhhggghhhggoo...........",".............ohhhggghhhhgggghhgo.............",".............ohhgooohhhgoooohho..............","..............oho...ohho....oho..............","...............oo....oho.....oo..............","...............o......oo......o.............."]},"south-east":{"x":28,"y":5,"rows":["....................o....................","...................oo.........oo.........","..................oho........ogo.........","..................oho......ooho..........",".....o...........ohho.....ohhho..........","......ooo........ohhho...ohhhho..........","........oooo....ohhhhho.ohhhhho..........",".........ohhoo..ohgggggoghhhhho..........",".........ohhhhoogggggggggggggho......oooo","..........ohhhggggghhJJJhgggggo...ooohhgo","..........ohggggJJJJJJgggggggggooohhhhgo.","....oooooogggggJggggggggHHJJggggghhhhgo..","oooohhhhhhgggggggggHHHHghhhhgJggghhhgo...","..oohhhhhhggggJHHhghhhggghhhghJJgghgo....","....oohhhhggJghhhgoohhgoohhhghhhggoo.....","......ooogggJgghho..oho..ohgohhhgo.......",".........ogghgohho..ogo..oho.ohhggo......","........oHgggo.ogo...o....oo..ogggho.....","......oohhggo...o....o....oo..ogghhho....",".....ohhhhhgo...o.........o...ooghhhho...","....ohhhhhho..............o.....oooooo...","...ooooooogo..............o.....o........","..........o.............................."]},"south":{"x":27,"y":5,"rows":["...................o.........................","..................oo.........o...............",".................oho.......ooo...............",".................oho......ohho...............",".....o...........ohho....ohhho......ooo......","......ooo.......ohhho...ohhhho...oooho.......","........oooo....ohhhho.ohhhhho..ohhhgo.......",".........ohhoo.ohhggggoggghhhgoohhhho........",".........ohhhhogggggggggggggggHhhhhho........","..........ohhhggggghhJJJJhggggghhhhgo........","..........ohggggggggggggggggJgggghho.........","....ooooooggggggJJJHggHHHHHggggggggo.oooooooo","oooohhhhhhgggJJghhhhgghhhhhggHJJgggHohhhhhgo.","..oohhhhhhggJJhgghhhgoohhhggghhhJgghhhhhhgo..","....oohhhhggJhhhghhgo..ohhgoohhhhgghhhgooo...","......ooogggghhgooho...ohho..ohhgggggoo......",".........oggghho..oo...ohgo..ohhgggHo........","........oHgggogo..oo....oo....ogogghho.......","......oohhhgo.o.........oo....oo.oHhhho......",".....ohhhhho..o.........oo........ohhhho.....","....ohgooogo............o.........oghhhho....","...oooo...o.............o..........ooooooo...","..........o........................o........."]}}},"scars":{"cheek-slash":{"east":{"x":51,"y":32,"rows":["Lx..",".Lx.","..Lx"]},"south-east":{"x":43,"y":32,"rows":["Lx..",".Lx.","..Lx"]},"south":{"x":42,"y":32,"rows":["Lx..",".Lx.","..Lx"]}},"eye-scar":{"east":{"x":57,"y":22,"rows":["xL","xL","x.","..","L.","L.","..","..","..","..","x.","x."]},"south-east":{"x":46,"y":22,"rows":["xL","xL","x.","L.","L.","..","..","..","..","..","x.","xL","x."]},"south":{"x":44,"y":22,"rows":["xL","xL","x.","L.","L.","..","..","..","..","..","x.","xL","x."]}},"nose-bridge":{"east":{"x":59,"y":30,"rows":["xx"]},"south-east":{"x":49,"y":31,"rows":["Lxxxx"]},"south":{"x":47,"y":31,"rows":["LxxxxL"]}},"split-brow":{"south-east":{"x":54,"y":23,"rows":["x","x","L","L"]},"south":{"x":55,"y":23,"rows":["x","x","L","L"]}}},"gear":{"captain-band":{"east":null,"north-east":{"x":32,"y":44,"rows":["...o.....","..o......",".oo......",".o4o.....",".o44.....","o3333....","o33333...","o33333o..","o333322o.","o333222o.",".o322221o",".o222221o","..22222o.","...oooo.."]},"north":{"x":28,"y":47,"rows":["...oo......","..o44o.....",".o4444.....",".o44443....",".o443333...","o44333333..","o433333322.","o3333332222","o3333322222","o333332222o","o33222222o.",".2222222o..","..o2222o...","....oo....."]},"south-east":{"x":60,"y":45,"rows":["....o..","....o..","....oo.","....oo.","...o2o.","..o22o.",".o2222o","o2222o.","o2222o.","o2222o.","o222o..","o2o...."]},"south":{"x":61,"y":47,"rows":[".......o...","......33o..",".....3332o.",".....3332o.","....333222o","...3332222o","..33322222o","2222222222o","o222222222o",".o22222222o",".o22222222.","..oo222...."]}},"earrings":{"east":{"x":46,"y":34,"rows":["7","5"]},"north-east":{"x":58,"y":34,"rows":["7","5"]},"north":{"x":38,"y":33,"rows":["7......................7","5......................5"]},"south-east":{"x":38,"y":32,"rows":["7","5"]},"south":{"x":37,"y":32,"rows":["7........................7","5........................5"]}},"headband":{"east":{"x":35,"y":17,"rows":["........ooooooooooooo......","....ooooooo.......ooooooo..","...oooooo...........oooooo.","ooo3ooooooooooooooooooooo3o","o344433oooooooooooooo33332o","o3334444443333333333333322o",".o3o333444433333333332222o.","o3o.o2233333333332222222o..","o3o...oo2222222222222oo....","o3o.....ooooooooooooo......","oo.........................","oo.........................","oo.........................","oo.........................","o.........................."]},"north-east":{"x":37,"y":17,"rows":["......ooooooooooooo......","...ooooooo.....oooooooo..",".ooooooo..........oooooo.","o3ooooooooooooooooooooo3o","o443oooooooooooooooo3332o","o34o43433333333333333322o",".oo44344443333333333222o.","..o3333333333333222222o..","...o3333222222222222o....","...o333ooooooooooooo.....","...3332o.................","...3332o.................","...3332o.................","..o3o32o.................","..o3o22o.................","..o1o22o.................","....o22o.................",".....oo.................."]},"north":{"x":38,"y":17,"rows":["......oooooooooooo......","..ooooooo......ooooooo..",".oooooo..........oooooo.","oooooooooooooooooooooooo","o433oooooooooooooooo333o","o44444333333ooo33333332o","o3334444444444333332222o",".o22333332224333222222o.","...o2222222233222222o...","....oooooooo3332oooo....","...........o3333o.......","...........o3333o.......","...........o3233o.......","...........o32233o......","..........o331o33o......","..........o33oo33o......","..........o32o.o2o......","...........oo...o......."]},"south-east":{"x":36,"y":17,"rows":["......ooooooooooooooo.....","..oooooooo.......ooooooo..","..oooooo...........oooooo.",".o4ooooooooooooooooooooo3o",".o44333ooooooooooooo33332o",".o34444444333333333333322o",".o3333344443333333332222o.",".ooo2223333333322222222o..","o3oo.oo2222222222222oo....","oo.o...ooooooooooooo......","oo........................","o.........................","..........................","..........................","..........................","..........................","..........................","..........................","..........................","..........................","..........................","..........................","..........................","..........................","..........................","..........................","..........................","..........................","..........................","..........................","..........................","..........................","...................o......","..........................","..........................","..........................","..........................","..........................","..........................","........o................."]},"south":{"x":32,"y":16,"rows":["................o...................","..........oooooooooooooooo..........",".......ooooooo........ooooooo.......","......ooooooo..........ooooooo......","......o3oooooooooooooooooooo3o......","......o44333oooooooooooo33332o......","......o3444444433333333333322o......",".......o33334443333333332222o.......","........o333333333332222222o........",".........ooo222222222222ooo.........","............oooooooooooo............","....................................","....................................","....................................","....................................","....................................","....................................","....................................","....................................","....................................","....................................","....................................","....................................","....................................","....................................","....................................","....................................","............o..........o............","....................................","....................................","....................................","....................................","....................................","....................................","....................................","....................................","....................................","....................................","o..................................o"]}},"keeper-gloves":{"east":{"x":45,"y":62,"rows":[".......o....",".....3332o..",".o4443332o..","o344333322o.","o333333322o.","o333333332o.","o3333333322.","o3333333322.","oo444333333o","o3443333333o","o3333333332o","o3333333322o","o3333333322o","o3333333322o","o3333333322o","o3333333322o","o3333333322o",".o222222222o",".o22222222o."]},"north-east":{"x":31,"y":56,"rows":[".........o...............................","..oo....o................................",".o333333o................................",".o333322o................................",".o332221o................................","o4332211o..........................o.....","o433321o..........................3o.....","o333331o.......................33332o....","o33333o....................o33333332o....","o33333o....................o333333322o...","o33333o....................o333333322o...","o3333o......................o333333222o..","o3333o......................o3333333233o.","o3333o......................o33444433332o","o2333o.....................o333444332222o",".oooo......................o333333322222o","...........................o333333322222o","...........................o333333322222o","...........................o333333322222o","...........................o333333322222o","............................o3333332222o.","............................o2333322222o.",".............................o22o22oooo..","..............................o..oo......"]},"north":{"x":25,"y":59,"rows":["..oo..........................................oo..","..o44.....o............................o.....32o..","..o3333322o............................o3333332o..",".o33333222o............................o33333222o.",".o3333222o..............................o3322222o.","o43332222o..............................o33222222o","o44332222o..............................o33222223o","o43333332o..............................o33333333o","o33333332o..............................o33333332o","o333333221..............................233333332o","o333333222..............................233333332o","o33333322o..............................o33333332o","o33333322o..............................o33333332o","o33333322................................23333332o","o33333322................................23333322o","o2222222o................................o2222222o",".oooooo1..................................1oooooo."]},"south-east":{"x":31,"y":55,"rows":["..................................3o.....","................................3333o....",".............................o433332o....",".............................o233332o....",".............................o3333322o...",".............................o2333332o...",".........o...................o22333322oo.","..o4443332o..................o223333333o.","..o4443332....................o223333222o","..o4333322o....................o23332222o",".o34333322o....................o23322222o",".o33333332o....................o22322222o",".o333333322o...................o22322222o",".o333333222o....................o2322222o","o4444443332o....................o2222222o","o44444333222o...................o222222o.","o33333332222o....................o222ooo.","o33333322222o....................oooo....","o33333322222o............................","o33333322222o............................","o33333322222o............................","o33333322222o............................","o33333322222o............................",".oo23222222o.............................","...oooo22oo.............................."]},"south":{"x":25,"y":58,"rows":["...o4........................................3o...","..o444433................................444333o..","..o444333o..............................o443333o..","..o4433322o............................o3333333o..",".o44333322o............................o33333332o.",".o4433332o..............................o3333332o.",".o4433332o..............................o3333332o.","o44333322o..............................o33333333o","o44443333o..............................o44444333o","o43333332o..............................o44333333o","o333333221..............................233333332o","o333333221..............................233333332o","o333333221..............................233333332o","o333333221..............................233333332o","o333333221..............................233333332o","o333333221..............................233333332o","o33222222................................33222222o","oo2222222................................2222222oo","..ooooo....................................ooooo.."]}},"nose-plaster":{"east":{"x":58,"y":30,"rows":["443","332"]},"south-east":{"x":49,"y":31,"rows":["34443","23332"]},"south":{"x":47,"y":31,"rows":["344443","233332"]}},"wristbands":{"east":{"x":45,"y":63,"rows":["......332o.",".o4443332o.","o34433332..","o333333222o","o333333322o",".o33333322o",".o33333322.",".o3333322.."]},"north-east":{"x":33,"y":56,"rows":[".......o............................","o.....o.............................","o33332o.............................","o33322o.............................","o22221o.............................","o22211o.............................","o2221o..........................3o..","..............................3332o.",".........................o33333332o.",".........................o33333222o.","..........................o3333222o.","..........................o33332222o","............................3332222.","............................3333...."]},"north":{"x":27,"y":59,"rows":["oo..........................................oo","o44........................................32o","o333332o..............................o333332o","o333322o..............................o333222o","o332222o..............................o222222o","o332222o..............................o222222o","332222o................................o222222","..322....................................222.."]},"south-east":{"x":33,"y":55,"rows":["................................oo..","..............................333o..","...........................o433332o.","...........................o233322o.","...........................o233222o.","...........................o233322o.","...........................o2233222o","o4443332o...................o23322o.","o4443332....................o12.....","o3333322o...........................","o3333322o...........................","o3333322o...........................","o3333322o...........................","o3333222o...........................",".33o.ooo............................"]},"south":{"x":27,"y":58,"rows":[".oo........................................oo.","o44433..................................44333o","o443333o..............................o443332o","o333332o..............................o333332o","o333322o..............................o333332o","o333322o..............................o333332o","o333322o..............................o333332o","o33332o................................o33332o","......o................................o......"]}}},"number":{"fonts":{"chest":{"0":[".##.","#..#","#..#","#..#","#..#","#..#",".##."],"1":[".#","##",".#",".#",".#",".#",".#"],"2":[".##.","#..#","...#","..#.",".#..","#...","####"],"3":["###.","...#","...#",".##.","...#","...#","###."],"4":["#..#","#..#","#..#","####","...#","...#","...#"],"5":["####","#...","###.","...#","...#","#..#",".##."],"6":[".##.","#...","#...","###.","#..#","#..#",".##."],"7":["####","...#","...#","..#.","..#.",".#..",".#.."],"8":[".##.","#..#","#..#",".##.","#..#","#..#",".##."],"9":[".##.","#..#","#..#",".###","...#","...#",".##."]},"back":{"0":["..####..","..####..","##....##","##....##","##....##","##....##","##....##","..####..","..####.."],"1":["..##","..##","####","..##","..##","..##","..##","..##","..##"],"2":["..####..","..####..","##....##","......##","....##..","..##....","##......","########","########"],"3":["######..","######..","......##","......##","..####..","......##","......##","######..","######.."],"4":["##....##","##....##","##....##","##....##","########","......##","......##","......##","......##"],"5":["########","########","##......","######..","......##","......##","##....##","..####..","..####.."],"6":["..####..","..####..","##......","##......","######..","##....##","##....##","..####..","..####.."],"7":["########","########","......##","......##","....##..","....##..","..##....","..##....","..##...."],"8":["..####..","..####..","##....##","##....##","..####..","##....##","##....##","..####..","..####.."],"9":["..####..","..####..","##....##","##....##","..######","......##","......##","..####..","..####.."]},"back-narrow":{"0":[".##.",".##.","#..#","#..#","#..#","#..#","#..#",".##.",".##."],"1":[".#",".#","##",".#",".#",".#",".#",".#",".#"],"2":[".##.",".##.","#..#","...#","..#.",".#..","#...","####","####"],"3":["###.","###.","...#","...#",".##.","...#","...#","###.","###."],"4":["#..#","#..#","#..#","#..#","####","...#","...#","...#","...#"],"5":["####","####","#...","###.","...#","...#","#..#",".##.",".##."],"6":[".##.",".##.","#...","#...","###.","#..#","#..#",".##.",".##."],"7":["####","####","...#","...#","..#.","..#.",".#..",".#..",".#.."],"8":[".##.",".##.","#..#","#..#",".##.","#..#","#..#",".##.",".##."],"9":[".##.",".##.","#..#","#..#",".###","...#","...#",".##.",".##."]}},"places":{"south":["chest",49.5,50,1],"south-east":["chest",52.5,50,1],"north-east":["back-narrow",47,49,1],"north":["back",49.5,49,2]},"printed":{"P":"Y","R":"Y","r":"T","d":"t"}},"swatches":{"skin":{"tan":["#7a2e22","#b8562e","#e8853f","#f8ac63"],"light":["#8a4a3a","#c97f63","#f0b48e","#ffd8b8"],"olive":["#5a2e1a","#94532c","#c47c45","#e2a466"],"deep":["#2e1410","#5a2a1c","#8a4a2c","#b0703e"]},"hair":{"navy":["#1f1433","#36234d","#4f3b7a","#3a57c4"],"black":["#0e0b10","#1e1a24","#2f2a38","#5a5468"],"platinum":["#6b6478","#a8a0b8","#e0dcea","#ffffff"],"copper":["#4a0e12","#8a1c1c","#c8382a","#ff7a4a"],"brown":["#2a160e","#4a2a18","#734424","#a8683a"]},"kit":{"cambodia":{"shirt":["#5c0a1c","#9a1221","#d42528","#ee4a33"],"trim":["#c87a1c","#f2b236","#ffe07a"],"shorts":["#141a52","#1f2c86","#2d45b0","#4a66d0"],"stripe":["#9a98bd","#f2eef7"],"socks":["#5c0a1c","#9a1221","#d42528","#ee4a33"]},"sky":{"shirt":["#1d4f7a","#2f7fb8","#5cb4e8","#9ad8ff"],"trim":["#8a90b0","#dfe6f5","#ffffff"],"shorts":["#0c0c14","#1a1a26","#2a2a3a","#44445a"],"stripe":["#2f7fb8","#9ad8ff"],"socks":["#1d4f7a","#2f7fb8","#5cb4e8","#9ad8ff"]},"forest":{"shirt":["#0f3d24","#1b6b3a","#2f9a52","#5cc47a"],"trim":["#8a90b0","#dfe6f5","#ffffff"],"shorts":["#7a7896","#b8b6d0","#e8e6f2","#ffffff"],"stripe":["#1b6b3a","#5cc47a"],"socks":["#0f3d24","#1b6b3a","#2f9a52","#5cc47a"]},"keeper":{"shirt":["#7a5a08","#c49a10","#f2cc28","#fff07a"],"trim":["#0c0c14","#2a2a3a","#4a4a5e"],"shorts":["#0c0c14","#1a1a26","#2a2a3a","#44445a"],"stripe":["#c49a10","#fff07a"],"socks":["#0c0c14","#1a1a26","#2a2a3a","#44445a"]}},"boots":{"white":{"boots":["#5d5a86","#9d9ac0","#dcd8ea","#ffffff"],"sole":["#2a2440","#4a4468"]},"black":{"boots":["#0e0c14","#221e2c","#3a3448","#6a6280"],"sole":["#c87a1c","#f2b236"]},"gold":{"boots":["#7a4a08","#c48a14","#f2c43a","#fff0a0"],"sole":["#2a2440","#4a4468"]}},"eyes":{"amber":["#1c0b16","#8a4a22","#ffffff"],"blue":["#101a3a","#2f6fd0","#ffffff"],"green":["#0e2412","#3f8a3a","#ffffff"],"grey":["#16161e","#6a7080","#ffffff"]}},"gearColours":{"wristbands":["#5d5a86","#9d9ac0","#e6e2f0","#ffffff"],"captain-band":["#8a4a0c","#d98a1c","#f6c544","#fff0a0"],"headband":["#6b0f22","#b51d36","#e8404f","#ff8a8a"],"keeper-gloves":["#1a4d2e","#2e8a4f","#56c271","#a8f0b4"],"nose-plaster":["#8a5a3a","#c98f62","#efc39a","#fde3c8"],"earrings":["#8a5a12","#e0a42a","#fff2a8"]},"players":[{"name":"Sochetra","role":"Forward, the hero","skin":"tan","hair":"spiky","hairColour":"navy","eyes":"amber","kit":"cambodia","boots":"white","number":10,"scars":[],"gear":[]},{"name":"Viktor","role":"Rival striker","skin":"light","hair":"buzz","hairColour":"platinum","eyes":"blue","kit":"sky","boots":"black","number":9,"scars":["split-brow"],"gear":["earrings","wristbands"]},{"name":"Dara","role":"Captain, centre back","skin":"deep","hair":"bowl","hairColour":"black","eyes":"amber","kit":"forest","boots":"gold","number":4,"scars":["cheek-slash"],"gear":["captain-band"]},{"name":"Rafa","role":"Goalkeeper","skin":"olive","hair":"mohawk","hairColour":"copper","eyes":"green","kit":"keeper","boots":"black","number":1,"scars":["eye-scar"],"gear":["keeper-gloves","headband"]}]}</script>
+<script>
+  const KIT = JSON.parse(document.getElementById('kit').textContent);
+  const W = KIT.width;
+  const H = KIT.height;
+  const RULER = 26;
+  const TURNS = [
+    ['south', 'south', false],
+    ['south-east', 'south-east', false],
+    ['east', 'east', false],
+    ['north-east', 'north-east', false],
+    ['north', 'north', false],
+    ['north-west', 'north-east', true],
+    ['west', 'east', true],
+    ['south-west', 'south-east', true],
+  ];
+  const SHORT = {
+    south: 'S',
+    'south-east': 'SE',
+    east: 'E',
+    'north-east': 'NE',
+    north: 'N',
+    'north-west': 'NW',
+    west: 'W',
+    'south-west': 'SW',
+  };
+  const GROUNDS = { pitch: '#4f8a4a', ink: '#15131d', paper: '#f4f1ea' };
+  const LAYERS = ['body', 'number', 'scars', 'hair', 'gear'];
+
+  const state = {
+    turn: 'south',
+    zoom: 7,
+    grid: true,
+    ground: 'pitch',
+    hair: 'spiky',
+    scars: new Set(),
+    gear: new Set(),
+    number: 10,
+    choice: {},
+    ramps: {},
+    shown: new Set(LAYERS),
+    spotlight: '',
+    pinned: null,
+    hover: null,
+    player: 0,
+  };
+
+  const $ = (id) => document.getElementById(id);
+
+  function hexToRgb(hex) {
+    const value = parseInt(hex.slice(1), 16);
+
+    return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
+  }
+
+  function rampsFor(choice) {
+    const kit = KIT.swatches.kit[choice.kit];
+    const boots = KIT.swatches.boots[choice.boots];
+
+    return {
+      ...KIT.ramps,
+      skin: KIT.swatches.skin[choice.skin],
+      hair: KIT.swatches.hair[choice.hair],
+      eyes: KIT.swatches.eyes[choice.eyes],
+      ...kit,
+      ...boots,
+    };
+  }
+
+  function usePlayer(index) {
+    const player = KIT.players[index];
+
+    state.player = index;
+    state.hair = player.hair;
+    state.scars = new Set(player.scars);
+    state.gear = new Set(player.gear);
+    state.number = player.number;
+    state.choice = {
+      skin: player.skin,
+      hair: player.hairColour,
+      eyes: player.eyes,
+      kit: player.kit,
+      boots: player.boots,
+    };
+    state.ramps = structuredClone(rampsFor(state.choice));
+    syncControls();
+    draw();
+  }
+
+  function stamp(frame, crop, layer, name) {
+    if (!crop) {
+      return;
+    }
+
+    crop.rows.forEach((row, dy) => {
+      for (let dx = 0; dx < row.length; dx += 1) {
+        const letter = row[dx];
+
+        if (letter === '.') {
+          continue;
+        }
+
+        const at = (crop.y + dy) * W + crop.x + dx;
+
+        frame.letter[at] = letter;
+        frame.layer[at] = layer;
+        frame.name[at] = name;
+      }
+    });
+  }
+
+  function mirror(frame) {
+    for (const key of ['letter', 'layer', 'name']) {
+      const flipped = new Array(W * H);
+
+      for (let y = 0; y < H; y += 1) {
+        for (let x = 0; x < W; x += 1) {
+          flipped[y * W + x] = frame[key][y * W + (W - 1 - x)];
+        }
+      }
+
+      frame[key] = flipped;
+    }
+  }
+
+  function printNumber(frame, source, mirrored) {
+    const place = KIT.number.places[source];
+
+    if (!place || state.number === '' || !state.shown.has('number')) {
+      return;
+    }
+
+    const [fontName, centreAt, top, gap] = place;
+    const font = KIT.number.fonts[fontName];
+    const glyphs = String(state.number)
+      .split('')
+      .filter((digit) => font[digit])
+      .map((digit) => font[digit]);
+    const width =
+      glyphs.reduce((sum, glyph) => sum + glyph[0].length, 0) + gap * (glyphs.length - 1);
+    const centre = mirrored ? W - centreAt : centreAt;
+    let left = Math.floor(centre - width / 2 + 0.5);
+
+    for (const glyph of glyphs) {
+      glyph.forEach((line, dy) => {
+        for (let dx = 0; dx < line.length; dx += 1) {
+          const at = (top + dy) * W + left + dx;
+          const under = frame.letter[at];
+
+          if (line[dx] === '#' && frame.layer[at] === 'body' && KIT.number.printed[under]) {
+            frame.letter[at] = KIT.number.printed[under];
+            frame.layer[at] = 'number';
+          }
+        }
+      });
+      left += glyph[0].length + gap;
+    }
+  }
+
+  function compose(turn) {
+    const [, source, mirrored] = TURNS.find(([name]) => name === turn);
+    const frame = {
+      letter: new Array(W * H).fill('.'),
+      layer: new Array(W * H).fill(''),
+      name: new Array(W * H).fill(''),
+    };
+    const show = (layer) => state.shown.has(layer);
+
+    if (show('body')) {
+      stamp(frame, KIT.body[source], 'body', 'body');
+    }
+
+    if (show('scars')) {
+      state.scars.forEach((scar) => stamp(frame, KIT.scars[scar]?.[source], 'scars', scar));
+    }
+
+    if (show('hair') && state.hair !== 'none') {
+      stamp(frame, KIT.hair[state.hair]?.[source], 'hair', state.hair);
+    }
+
+    if (show('gear')) {
+      state.gear.forEach((item) => stamp(frame, KIT.gear[item]?.[source], 'gear', item));
+    }
+
+    if (mirrored) {
+      mirror(frame);
+    }
+
+    printNumber(frame, source, mirrored);
+    frame.source = source;
+    frame.mirrored = mirrored;
+
+    return frame;
+  }
+
+  function colourOf(letter, name) {
+    if (letter === 'o') {
+      return { hex: KIT.outline, ramp: 'outline', shade: 0, of: 1 };
+    }
+
+    const [ramp, shade] = KIT.letters[letter];
+    const isGear = ramp === 'gear' || ramp === 'metal';
+    const colours = isGear
+      ? state.ramps[`gear:${name}`] || KIT.gearColours[name] || KIT.ramps[ramp]
+      : state.ramps[ramp];
+
+    return {
+      hex: colours[Math.min(shade, colours.length - 1)],
+      ramp: isGear ? name : ramp,
+      shade,
+      of: colours.length,
+    };
+  }
+
+  function paint(frame, context, scale, dim) {
+    const image = context.createImageData(W, H);
+
+    for (let at = 0; at < W * H; at += 1) {
+      const letter = frame.letter[at];
+
+      if (letter === '.') {
+        continue;
+      }
+
+      const [r, g, b] = hexToRgb(colourOf(letter, frame.name[at]).hex);
+      const faded = dim && state.spotlight && frame.layer[at] !== state.spotlight;
+
+      image.data.set([r, g, b, faded ? 60 : 255], at * 4);
+    }
+
+    const sprite = document.createElement('canvas');
+
+    sprite.width = W;
+    sprite.height = H;
+    sprite.getContext('2d').putImageData(image, 0, 0);
+    context.imageSmoothingEnabled = false;
+    context.drawImage(sprite, 0, 0, W * scale, H * scale);
+  }
+
+  function ground(context, width, height, scale) {
+    if (state.ground === 'checker') {
+      for (let y = 0; y < H; y += 1) {
+        for (let x = 0; x < W; x += 1) {
+          context.fillStyle = (Math.floor(x / 2) + Math.floor(y / 2)) % 2 ? '#2a2638' : '#34304a';
+          context.fillRect(x * scale, y * scale, scale, scale);
+        }
+      }
+
+      return;
+    }
+
+    context.fillStyle = GROUNDS[state.ground];
+    context.fillRect(0, 0, width, height);
+  }
+
+  function rulers(context, scale) {
+    context.fillStyle = '#1e1b29';
+    context.fillRect(0, 0, W * scale + RULER, RULER);
+    context.fillRect(0, 0, RULER, H * scale + RULER);
+    context.fillStyle = '#a39cb8';
+    context.font = '10px "IBM Plex Mono", monospace';
+    context.textBaseline = 'middle';
+
+    for (let x = 0; x < W; x += 5) {
+      context.fillText(String(x), RULER + x * scale + 2, RULER / 2);
+    }
+
+    for (let y = 0; y < H; y += 5) {
+      context.fillText(String(y), 2, RULER + y * scale + scale / 2);
+    }
+  }
+
+  function gridLines(context, scale) {
+    if (!state.grid || scale < 5) {
+      return;
+    }
+
+    for (let x = 0; x <= W; x += 1) {
+      context.fillStyle =
+        x % 10 === 0 ? 'rgba(0,0,0,0.55)' : x % 5 === 0 ? 'rgba(0,0,0,0.35)' : 'rgba(0,0,0,0.14)';
+      context.fillRect(x * scale, 0, 1, H * scale);
+    }
+
+    for (let y = 0; y <= H; y += 1) {
+      context.fillStyle =
+        y % 10 === 0 ? 'rgba(0,0,0,0.55)' : y % 5 === 0 ? 'rgba(0,0,0,0.35)' : 'rgba(0,0,0,0.14)';
+      context.fillRect(0, y * scale, W * scale, 1);
+    }
+  }
+
+  function mark(context, scale, pixel, colour) {
+    if (!pixel) {
+      return;
+    }
+
+    context.strokeStyle = colour;
+    context.lineWidth = 2;
+    context.strokeRect(pixel.x * scale + 1, pixel.y * scale + 1, scale - 2, scale - 2);
+  }
+
+  function drawStage(frame) {
+    const canvas = $('stage-canvas');
+    const scale = state.zoom;
+    const context = canvas.getContext('2d');
+
+    canvas.width = W * scale + RULER;
+    canvas.height = H * scale + RULER;
+    rulers(context, scale);
+    context.save();
+    context.translate(RULER, RULER);
+    ground(context, W * scale, H * scale, scale);
+    paint(frame, context, scale, true);
+    gridLines(context, scale);
+    mark(context, scale, state.hover, 'rgba(255,255,255,0.9)');
+    mark(context, scale, state.pinned?.turn === state.turn ? state.pinned : null, '#f2b236');
+    context.restore();
+  }
+
+  function drawTurns() {
+    const holder = $('turns');
+
+    if (!holder.children.length) {
+      TURNS.forEach(([turn, source, mirrored]) => {
+        const button = document.createElement('button');
+
+        button.className = 'turn';
+        button.type = 'button';
+        button.dataset.turn = turn;
+        button.innerHTML = `<canvas width="${W}" height="${H}"></canvas>${SHORT[turn]}<small>${mirrored ? `mirrors ${SHORT[source]}` : 'drawn'}</small>`;
+        button.addEventListener('click', () => {
+          state.turn = turn;
+          draw();
+        });
+        holder.append(button);
+      });
+    }
+
+    [...holder.children].forEach((button) => {
+      const context = button.querySelector('canvas').getContext('2d');
+
+      button.setAttribute('aria-pressed', String(button.dataset.turn === state.turn));
+      context.clearRect(0, 0, W, H);
+      ground(context, W, H, 1);
+      paint(compose(button.dataset.turn), context, 1, false);
+    });
+  }
+
+  function drawUsed(frame) {
+    const counts = new Map();
+
+    frame.letter.forEach((letter, at) => {
+      if (letter === '.') {
+        return;
+      }
+
+      const colour = colourOf(letter, frame.name[at]);
+      const key = `${colour.hex}|${colour.ramp} ${colour.ramp === 'outline' ? '' : `${colour.shade + 1}/${colour.of}`}`;
+
+      counts.set(key, (counts.get(key) || 0) + 1);
+    });
+    $('used').innerHTML = [...counts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .map(([key, count]) => {
+        const [hex, label] = key.split('|');
+
+        return `<div><i class="swatch" style="background:${hex}"></i>${hex} <span>${label} ×${count}</span></div>`;
+      })
+      .join('');
+  }
+
+  function describe(pixel) {
+    if (!pixel) {
+      return '<dt>Where</dt><dd>Hover the stage; click to pin a pixel</dd>';
+    }
+
+    const frame = compose(pixel.turn);
+    const at = pixel.y * W + pixel.x;
+    const letter = frame.letter[at];
+    const where = `${SHORT[pixel.turn]} · x ${pixel.x}, y ${pixel.y}`;
+
+    if (letter === '.') {
+      return `<dt>Where</dt><dd>${where}</dd><dt>Layer</dt><dd>empty</dd>`;
+    }
+
+    const colour = colourOf(letter, frame.name[at]);
+    const layer =
+      frame.layer[at] === frame.name[at]
+        ? frame.layer[at]
+        : `${frame.layer[at]} · ${frame.name[at]}`;
+    const shade =
+      colour.ramp === 'outline'
+        ? 'outline'
+        : `${colour.ramp}, shade ${colour.shade + 1} of ${colour.of}`;
+    const drawn = frame.mirrored
+      ? `mirrored from ${SHORT[frame.source]} x ${W - 1 - pixel.x}`
+      : 'drawn';
+
+    return `<dt>Where</dt><dd>${where}</dd><dt>Layer</dt><dd>${layer}</dd><dt>Letter</dt><dd>${letter}</dd><dt>Ramp</dt><dd>${shade}</dd><dt>Colour</dt><dd><i class="swatch" style="background:${colour.hex}"></i>${colour.hex}</dd><dt>Source</dt><dd>${drawn}</dd>`;
+  }
+
+  function drawReadout() {
+    const pixel = state.hover || state.pinned;
+
+    $('readout').innerHTML = describe(pixel);
+    $('copy').hidden = !state.pinned;
+  }
+
+  function draw() {
+    const frame = compose(state.turn);
+
+    drawStage(frame);
+    drawTurns();
+    drawUsed(frame);
+    drawReadout();
+    $('zoom-value').textContent = `${state.zoom}×`;
+  }
+
+  function pixelAt(event) {
+    const canvas = $('stage-canvas');
+    const box = canvas.getBoundingClientRect();
+    const x = Math.floor(
+      ((event.clientX - box.left) * (canvas.width / box.width) - RULER) / state.zoom,
+    );
+    const y = Math.floor(
+      ((event.clientY - box.top) * (canvas.height / box.height) - RULER) / state.zoom,
+    );
+
+    return x >= 0 && y >= 0 && x < W && y < H ? { x, y, turn: state.turn } : null;
+  }
+
+  function chip(label, pressed, onClick) {
+    const button = document.createElement('button');
+
+    button.type = 'button';
+    button.className = 'chip';
+    button.textContent = label;
+    button.setAttribute('aria-pressed', String(pressed));
+    button.addEventListener('click', onClick);
+
+    return button;
+  }
+
+  function nice(name) {
+    return name.replace(/-/g, ' ').replace(/^./, (first) => first.toUpperCase());
+  }
+
+  function fillOptions(select, names) {
+    select.innerHTML = names
+      .map((name) => `<option value="${name}">${nice(name)}</option>`)
+      .join('');
+  }
+
+  function rampEditors() {
+    const names = [
+      'skin',
+      'hair',
+      'eyes',
+      'shirt',
+      'trim',
+      'shorts',
+      'stripe',
+      'socks',
+      'boots',
+      'sole',
+    ];
+    const gear = [...state.gear].map((item) => `gear:${item}`);
+
+    $('ramps').innerHTML = '';
+    [...names, ...gear].forEach((name) => {
+      const ramp = state.ramps[name] || KIT.gearColours[name.slice(5)];
+      const row = document.createElement('div');
+
+      row.className = 'ramp';
+      row.innerHTML = `<span>${nice(name.replace('gear:', ''))}</span><div></div>`;
+      ramp.forEach((hex, shade) => {
+        const input = document.createElement('input');
+
+        input.type = 'color';
+        input.value = hex;
+        input.id = `ramp-${name.replace(':', '-')}-${shade}`;
+        input.setAttribute('aria-label', `${name} shade ${shade + 1}`);
+        input.addEventListener('input', () => {
+          state.ramps[name] = [...ramp];
+          state.ramps[name][shade] = input.value;
+          ramp[shade] = input.value;
+          draw();
+        });
+        row.querySelector('div').append(input);
+      });
+      $('ramps').append(row);
+    });
+  }
+
+  function syncControls() {
+    $('players').innerHTML = '';
+    KIT.players.forEach((player, index) => {
+      const button = document.createElement('button');
+
+      button.type = 'button';
+      button.className = 'player';
+      button.setAttribute('aria-pressed', String(index === state.player));
+      button.innerHTML = `<b>${player.name} · ${player.number}</b><span>${player.role}</span>`;
+      button.addEventListener('click', () => usePlayer(index));
+      $('players').append(button);
+    });
+
+    $('hair-styles').replaceChildren(
+      ...['none', ...Object.keys(KIT.hair)].map((style) =>
+        chip(style === 'none' ? 'Bald' : nice(style), state.hair === style, () => {
+          state.hair = style;
+          syncControls();
+          draw();
+        }),
+      ),
+    );
+
+    const toggles = (holder, names, chosen) =>
+      $(holder).replaceChildren(
+        ...names.map((name) =>
+          chip(nice(name), chosen.has(name), () => {
+            chosen.has(name) ? chosen.delete(name) : chosen.add(name);
+            syncControls();
+            draw();
+          }),
+        ),
+      );
+
+    toggles('scars', Object.keys(KIT.scars), state.scars);
+    toggles('gear', Object.keys(KIT.gear), state.gear);
+    toggles('layers', LAYERS, state.shown);
+
+    for (const [select, key] of [
+      ['pick-skin', 'skin'],
+      ['pick-hair', 'hair'],
+      ['pick-eyes', 'eyes'],
+      ['pick-kit', 'kit'],
+      ['pick-boots', 'boots'],
+    ]) {
+      $(select).value = state.choice[key];
+    }
+
+    $('pick-number').value = state.number;
+    rampEditors();
+  }
+
+  function wire() {
+    fillOptions($('pick-skin'), Object.keys(KIT.swatches.skin));
+    fillOptions($('pick-hair'), Object.keys(KIT.swatches.hair));
+    fillOptions($('pick-eyes'), Object.keys(KIT.swatches.eyes));
+    fillOptions($('pick-kit'), Object.keys(KIT.swatches.kit));
+    fillOptions($('pick-boots'), Object.keys(KIT.swatches.boots));
+
+    for (const [select, key] of [
+      ['pick-skin', 'skin'],
+      ['pick-hair', 'hair'],
+      ['pick-eyes', 'eyes'],
+      ['pick-kit', 'kit'],
+      ['pick-boots', 'boots'],
+    ]) {
+      $(select).addEventListener('change', () => {
+        state.choice[key] = $(select).value;
+        state.ramps = { ...state.ramps, ...structuredClone(rampsFor(state.choice)) };
+        rampEditors();
+        draw();
+      });
+    }
+
+    $('pick-number').addEventListener('input', () => {
+      state.number = $('pick-number').value.replace(/\D/g, '').slice(0, 2);
+      draw();
+    });
+    $('zoom').addEventListener('input', () => {
+      state.zoomChosen = true;
+      state.zoom = Number($('zoom').value);
+      draw();
+    });
+    $('grid').addEventListener('change', () => {
+      state.grid = $('grid').checked;
+      draw();
+    });
+    $('ground').addEventListener('change', () => {
+      state.ground = $('ground').value;
+      draw();
+    });
+    $('highlight').addEventListener('change', () => {
+      state.spotlight = $('highlight').value;
+      draw();
+    });
+
+    const canvas = $('stage-canvas');
+
+    canvas.addEventListener('mousemove', (event) => {
+      state.hover = pixelAt(event);
+      drawStage(compose(state.turn));
+      drawReadout();
+    });
+    canvas.addEventListener('mouseleave', () => {
+      state.hover = null;
+      drawStage(compose(state.turn));
+      drawReadout();
+    });
+    canvas.addEventListener('click', (event) => {
+      state.pinned = pixelAt(event);
+      draw();
+    });
+    $('copy').addEventListener('click', async () => {
+      const pixel = state.pinned;
+      const frame = compose(pixel.turn);
+      const at = pixel.y * W + pixel.x;
+      const text = `${pixel.turn} x${pixel.x} y${pixel.y} (${frame.layer[at] || 'empty'}, letter ${frame.letter[at]})`;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        $('copy').textContent = 'Copied';
+      } catch {
+        $('copy').textContent = text;
+      }
+
+      setTimeout(() => {
+        $('copy').textContent = 'Copy pixel reference';
+      }, 1600);
+    });
+
+    let spinning = null;
+
+    $('spin').addEventListener('click', () => {
+      if (spinning) {
+        clearInterval(spinning);
+        spinning = null;
+        $('spin').textContent = 'Turn him round';
+
+        return;
+      }
+
+      $('spin').textContent = 'Stop turning';
+      spinning = setInterval(() => {
+        const index = TURNS.findIndex(([turn]) => turn === state.turn);
+
+        state.turn = TURNS[(index + 1) % TURNS.length][0];
+        draw();
+      }, 450);
+    });
+  }
+
+  function fitZoom() {
+    const room = $('viewport').clientWidth - RULER - 4;
+    const zoom = Math.max(2, Math.min(9, Math.floor(room / W)));
+
+    state.zoom = zoom;
+    $('zoom').value = String(zoom);
+  }
+
+  wire();
+  fitZoom();
+  usePlayer(0);
+  window.addEventListener('resize', () => {
+    if (!state.zoomChosen) {
+      fitZoom();
+      draw();
+    }
+  });
+</script>
