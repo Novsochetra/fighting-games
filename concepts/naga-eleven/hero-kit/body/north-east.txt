@@ -64,13 +64,13 @@
 063 |..............................sSSSsso....rrrrrrrrrrCCCCBBBb.c....sssSSSo............................|
 064 |.............................sSSSSso.....crrrrrrrCCCCBBBBBbbo.....sxSSSSso..........................|
 065 |.............................sSSSsxo.....CCddddCcCCCBBBBBBBb......sxSSSsxo..........................|
-066 |............................sLLLLSSso....cCCCCCCcBBBBBBBBBBbo.....sLLLLSSso.........................|
+066 |............................sLLLLLSso....cCCCCCCcBBBBBBBBBBbo.....sLLLLLSso.........................|
 067 |...........................sLLLLLLSSxo..ccCCCCCBcBBBBBBBBBBb.o...sLLLLLLSSxo........................|
 068 |...........................sLSSSSSSSxo..cBBBBBBBcBBBBBBBBBBb.o...sLSSSSSSSxo........................|
 069 |...........................sSSSSSSssxo.cBBBBBBBBcBBBBBBBBBBb.c...sSSSSSSssxo........................|
 070 |...........................sSSSSSssxxcBcBBBBBBBBcBBBBBBBBBBbbco..sSSSSSssxxo........................|
-071 |...........................sSSSSsxxxxoBcBbbbbbbbcBBBBBBBBBBBbco..sSSSSsxxxxo........................|
-072 |............................sossxxxoo.cBBbbbbbbbcBBBBBBBBBBBBc.o..sossxxxoo.........................|
+071 |...........................sxxxxsxxxxoBcBbbbbbbbcBBBBBBBBBBBbco..sxxxxsxxxxo........................|
+072 |............................soxxxxxoo.cBBbbbbbbbcBBBBBBBBBBBBc.o..soxxxxxoo.........................|
 073 |..............................soooo...cBBbbbbbbbcBBBBBBBBBBBBc.o....soooo...........................|
 074 |....................................ocBBBbbbbbbbcBBBBBBBBBBBBcco....................................|
 075 |....................................ocBBBbbbbbbbcBBBBBBBBBBBBcco....................................|
