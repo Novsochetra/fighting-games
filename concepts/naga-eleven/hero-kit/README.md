@@ -39,14 +39,17 @@ so it stays on its own side as he turns.
 - `model.py` builds the hero from rounded shapes in 3D. `render.py` looks at it through the game's
   camera and `pixel.py` turns it into flat shades and outlines (`bake.py`). That bake seeded each
   painted direction; `regions.py` puts the kit's trims on it so they agree in every direction.
-- `tools/hero_kit/body_art/<direction>.txt` are the painted masters: the bake painted over pixel by
-  pixel, with the face, fists, knees, sock cuffs and boots drawn by hand. Edit a master directly to
-  change a pixel.
+- `tools/hero_kit/body_art/<direction>.txt` are the painted masters. The front is `reference.png`
+  itself, its colours matched to the kit's ramps, its stray pixels cleaned and its hair lifted off
+  onto a bald skull; the back is that figure turned round. The three-quarter and side views are the
+  bake painted over pixel by pixel to the same pose, faces and proportions. Edit a master directly
+  to change a pixel.
 - `selout.py` outlines selectively: black where the figure turns from the light, a dark shade of the
   part's own colour on its lit edges and between parts.
-- `hair_art/spiky.py` draws the hero's hair as clumps (`hair_clumps.py`): polygons with a light rim
-  on their upper-left edges, a dark one on the lower right, creases where they overlap and a sheen
-  band over the lit side of the crown. `hair_art/<style>_<direction>.py` draws the bowl and the
-  mohawk's crest as locks (`locks.py`), the crest over the 3D head of `shaved`.
+- `hair_art/spiky_<direction>.txt` are the hero's hair: the front is the reference's own hair, and
+  the three-quarter, side and back views are drawn from it, filled down to a ragged nape where the
+  head turns away. `hair_art/spiky.py` writes them out, mirrored for the west-facing views, and still
+  paints any direction without a master as clumps (`hair_clumps.py`). `hair_art/<style>_<direction>.py`
+  draws the bowl and the mohawk's crest as locks (`locks.py`), the crest over the 3D head of `shaved`.
 - `marks_art.py` holds the scars, the earrings and the plaster.
 - `looks.py` holds the sample players and the swatches the inspector offers.

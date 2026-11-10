@@ -6,7 +6,7 @@ its colour. A band of sheen, lightest tone over a lit one, arcs over the lit sid
 
 from render import HEIGHT, WIDTH
 
-LIT, DARK = 0.55, 0.26
+LIT, DARK = 0.72, 0.42
 ACROSS, DOWN = 0.6, 0.55
 NEIGHBOURS = ((1, 0), (-1, 0), (0, 1), (0, -1))
 

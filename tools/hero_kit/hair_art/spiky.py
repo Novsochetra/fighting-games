@@ -4,7 +4,7 @@ west-facing three are drawn from their mirror images, lit again from the upper l
 
 from pathlib import Path
 
-from grid import write_grid
+from grid import read_grid, write_grid
 from hair_clumps import painted
 from mirror import MIRRORS
 from render import WIDTH
@@ -98,9 +98,21 @@ def mirrored(clumps):
     return [[(WIDTH - x, y) for x, y in clump] for clump in clumps]
 
 
+# the front is the reference's own hair, cleaned, and the three-quarter and back views are drawn
+# from it; only the side views are painted as clumps
+MASTERS = Path(__file__).parent
+
+
+def master(direction):
+    path = MASTERS / f'spiky_{direction}.txt'
+
+    return read_grid(path) if path.exists() else None
+
+
 def layers():
-    drawn = {direction: painted(clumps, CROWNS[direction]) for direction, clumps in DRAWN.items()}
-    turned = {direction: painted(mirrored(DRAWN[source]), (WIDTH - CROWNS[source][0], CROWNS[source][1]))
+    drawn = {direction: master(direction) or painted(clumps, CROWNS[direction]) for direction, clumps in DRAWN.items()}
+    turned = {direction: [row[::-1] for row in master(source)] if master(source)
+              else painted(mirrored(DRAWN[source]), (WIDTH - CROWNS[source][0], CROWNS[source][1]))
               for direction, source in MIRRORS.items()}
 
     return {**drawn, **turned}
