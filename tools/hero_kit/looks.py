@@ -37,7 +37,7 @@ BOOTS = {
 }
 
 EYES = {
-    'amber': ['#180411', '#5a2a1e', '#e6e2ee'],
+    'amber': ['#180411', '#b0602a', '#f2eef6'],
     'blue': ['#101a3a', '#2f6fd0', '#ffffff'],
     'green': ['#0e2412', '#3f8a3a', '#ffffff'],
     'grey': ['#16161e', '#6a7080', '#ffffff'],
