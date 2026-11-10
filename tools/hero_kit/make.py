@@ -9,6 +9,7 @@ import body_draw
 import export
 import hair_draw
 import marks_draw
+import scalp
 from hair_art import spiky
 from render import FACINGS
 
@@ -18,6 +19,7 @@ DRAWN_HAIR = sorted({path.stem.split('_')[0] for path in (Path(__file__).parent 
 def main():
     body_draw.main([])
     bake_hair.main([])
+    scalp.main()
 
     for style in DRAWN_HAIR:
         for direction in FACINGS:

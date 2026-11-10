@@ -8,6 +8,7 @@ from pathlib import Path
 import numpy as np
 
 import bake_hair
+import scalp
 from grid import write_grid
 from hairstyles import STYLES
 from locks import paint
@@ -19,7 +20,7 @@ OUT = Path(__file__).resolve().parents[2] / 'concepts' / 'naga-eleven' / 'hero-k
 
 def over_base(letters, base, direction):
     """Drawn locks over a style baked in 3D, as the mohawk's crest over its stubble."""
-    rows = bake_hair.clear_face(bake_hair.hair_rows(STYLES()[base], FACINGS[direction]), direction)
+    rows = scalp.layer(direction, scalp.SHAVED if base == 'shaved' else scalp.BUZZ)
     under = np.array([list(row) for row in rows])
 
     return np.where(letters == '.', under, letters)
