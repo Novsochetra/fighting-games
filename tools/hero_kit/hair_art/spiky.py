@@ -10,6 +10,7 @@ from mirror import MIRRORS
 from render import WIDTH
 from despeckle import despeckled
 from selout import sel_out
+from body_draw import relit_row
 
 OUT = Path(__file__).resolve().parents[3] / 'concepts' / 'naga-eleven' / 'hero-kit' / 'hair' / 'spiky'
 
@@ -111,7 +112,7 @@ def master(direction):
 
 def layers():
     drawn = {direction: master(direction) or painted(clumps, CROWNS[direction]) for direction, clumps in DRAWN.items()}
-    turned = {direction: [row[::-1] for row in master(source)] if master(source)
+    turned = {direction: [''.join(relit_row(row[::-1])) for row in master(source)] if master(source)
               else painted(mirrored(DRAWN[source]), (WIDTH - CROWNS[source][0], CROWNS[source][1]))
               for direction, source in MIRRORS.items()}
 
