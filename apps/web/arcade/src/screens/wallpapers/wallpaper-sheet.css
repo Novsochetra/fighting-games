@@ -1,0 +1,122 @@
+/* One size for both cuts, so the sheet never changes size as Phone and Computer swap: the
+   computer's own shape on a sheet with room, where its cut fills it edge to edge, and square on a
+   phone, where the phone's cut, the one a phone saves, stands tall. */
+.wallpaper-preview {
+  position: relative;
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  min-block-size: 0;
+  overflow: hidden;
+  background: var(--color-card-blank);
+}
+
+@media (max-width: 39.99rem) {
+  .wallpaper-preview {
+    aspect-ratio: 1 / 1;
+    max-block-size: 56dvh;
+  }
+}
+
+.wallpaper-preview__behind {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  filter: var(--blur-wallpaper-behind);
+  scale: 1.2;
+}
+
+/* The cuts lie on one another and swap by opacity and scale alone, which the compositor plays: the
+   computer's settles in from a little closer over the blurred picture, and the phone's grows up
+   from a little smaller over the computer's, each going the way it came. */
+.wallpaper-preview__image {
+  position: relative;
+  display: block;
+  grid-area: 1 / 1;
+  object-fit: cover;
+  opacity: 0;
+  transition:
+    opacity var(--duration-fade) var(--easing-standard),
+    scale var(--duration-sheet) var(--easing-spring);
+}
+
+.wallpaper-preview__image[data-active='true'][data-loaded='true'] {
+  opacity: 1;
+  scale: 1;
+}
+
+.wallpaper-preview__image[data-shape='desktop'] {
+  inline-size: 100%;
+  block-size: 100%;
+  scale: var(--scale-preview-away);
+}
+
+.wallpaper-preview__image[data-shape='phone'] {
+  inline-size: auto;
+  block-size: calc(100% - 2 * var(--space-4));
+  aspect-ratio: 720 / 1560;
+  border-radius: var(--radius-phone-preview);
+  box-shadow: var(--shadow-card);
+  scale: var(--scale-phone-preview-away);
+}
+
+.wallpaper-sheet__body {
+  gap: var(--space-4);
+}
+
+.wallpaper-sheet__body .sheet__title,
+.wallpaper-sheet__body .sheet__meta {
+  margin: 0;
+}
+
+.wallpaper-sheet__body .sheet__meta {
+  margin-block-start: calc(-1 * var(--space-3));
+}
+
+.wallpaper-save {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  inline-size: 100%;
+}
+
+.wallpaper-save__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.wallpaper-save__button {
+  flex: 1 1 10rem;
+  gap: var(--space-2);
+}
+
+.wallpaper-save__button[aria-busy='true'] {
+  color: var(--color-label-secondary);
+  cursor: progress;
+}
+
+.wallpaper-save__size,
+.wallpaper-save__hint {
+  margin: 0;
+  font-size: var(--font-size-apple-footnote);
+  color: var(--color-label-muted);
+}
+
+.wallpaper-save__size {
+  font-variant-numeric: tabular-nums;
+}
+
+.wallpaper-save__hint {
+  flex-basis: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wallpaper-preview__image[data-shape] {
+    scale: 1;
+    transition: opacity var(--duration-fade) var(--easing-standard);
+  }
+}

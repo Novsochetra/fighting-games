@@ -105,12 +105,13 @@ version it now is.
 ## Layout of the arcade
 
 `apps/web/` holds the arcade (`arcade/`), the games (`games/`) and the packages (`packages/`) side
-by side. The arcade, `apps/web/arcade/`, holds `pages/` (its four pages, Vite's root), `public/`
+by side. The arcade, `apps/web/arcade/`, holds `pages/` (its five pages, Vite's root), `public/`
 (sent as it is at the root of the arcade's address: `assets/`, `robots.txt`, `sitemap.xml`,
 `appearance-early.js`), `src/`, `test/`, `build-steps/` and `vite.config.ts`; paths below and in
 "Pages of the arcade" are under it. `src/` holds `main.tsx`, `App.tsx` and these folders:
 
-- `screens/`: one folder per screen (`home/`, `leaderboard/`, `supporters/`, `credits/`), a folder
+- `screens/`: one folder per screen (`home/`, `leaderboard/`, `supporters/`, `credits/`,
+  `wallpapers/`), a folder
   per feature inside (`home/carousel/`, `home/details/`, `supporters/donate/`), and
   `render-screen.tsx`,
 - `components/`: the UI parts two or more screens show (`page-bar/`, `sheet/`, `notice/`,

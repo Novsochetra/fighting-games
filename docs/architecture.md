@@ -24,9 +24,9 @@ apps/
       build-version.js    the version each build of the arcade carries (see A new build)
     test/{unit,integration}
   web/                    everything the browser loads: the arcade, the games and the packages
-    arcade/               the arcade, one React app of four screens (see One app)
-      pages/              its four pages, Vite's root: index.html, and leaderboard/, supporters/ and
-                          credits/ each with its own index.html
+    arcade/               the arcade, one React app of five screens (see One app)
+      pages/              its five pages, Vite's root: index.html, and leaderboard/, supporters/,
+                          credits/ and wallpapers/ each with its own index.html
       public/             sent as it is at the root of the arcade's address, with appearance-early.js,
                           the classic script that sets light or dark before the first paint
         assets/           the arcade's icons, launch screens and manifest (tools/arcade_icons.py and
@@ -38,7 +38,8 @@ apps/
         sitemap.xml       every page this server sends (see Search and link previews)
       src/                the app, @/ in its imports; a page loads it as /src/main.tsx
         main.tsx          the app every page starts, on the screen the page names (App.tsx beside it)
-        screens/          one folder per screen (home/, leaderboard/, supporters/, credits/), a folder
+        screens/          one folder per screen (home/, leaderboard/, supporters/, credits/,
+                          wallpapers/), a folder
                           per feature inside (home/carousel/, supporters/donate/), and
                           render-screen.tsx, the one file outside them that loads a screen
         components/       the UI parts two or more screens show: page-bar/, sheet/, notice/,
@@ -58,7 +59,7 @@ apps/
       test/{unit,integration,regression,support}
                           the arcade's tests, mirroring src/ (support/render-arcade.tsx renders it)
       build-steps/        the build's own steps: bundle-game.js joins each game's scripts into bundles
-      vite.config.ts      the build: the four pages into dist/, the as-is files copied beside them
+      vite.config.ts      the build: the five pages into dist/, the as-is files copied beside them
     packages/
       <name>/             code more than one game uses (input: the gamepad, keys, rumble;
                           touch-pad: the touch controls drawn from a skin; screen: the stage fit,
@@ -187,7 +188,7 @@ shell's bezel round its screen). A game's tests check each skin it ships (`skinP
 
 ## One app
 
-The arcade, its leaderboard, its supporters and its credits are screens of one React app, so a tap
+The arcade, its leaderboard, its supporters, its credits and its wallpapers are screens of one React app, so a tap
 between them changes the screen in the page, never through a load: on a phone's link a move to the
 supporters took about 1.3 s, 47 files coming again every time, and now shows at once. Each still has
 a page of its own on disk, in `arcade/pages/` (`index.html`, `leaderboard/index.html`,
@@ -274,7 +275,7 @@ every browser sends. A script outside a browser can write any header, so the gif
 rate limit and the checks below.
 
 **The build.** `npm run build` (`vite build --config apps/web/arcade/vite.config.ts`) has Vite build
-the four pages of `arcade/pages/` into `dist/` (`base: './'`, so the same files work under any path)
+the five pages of `arcade/pages/` into `dist/` (`base: './'`, so the same files work under any path)
 and copy what it never touches beside them, each from where it lives (`AS_IS` and `sourceOfAsIs` in
 `as-is-files.js`: the games from `games/`, and the art, `robots.txt`, `sitemap.xml` and
 `appearance-early.js` from `arcade/public/`), then builds the service worker (see Offline). `dist/`
@@ -415,11 +416,13 @@ the week's (`game, created_at`), both without hidden rows.
 ## File storage
 
 The server can keep files in S3 and send them from CloudFront (`src/storage/`), where it keeps the
-runs' posters (see Leaderboard API); `main.js` opens it (`open-storage.js`). It is on once
+runs' posters (see Leaderboard API) and the wallpapers (see Wallpapers page); `main.js` opens it
+(`open-storage.js`). It is on once
 `S3_BUCKET` is set, with `AWS_REGION` and
 `CLOUDFRONT_URL` (an `https:` address), and signs in with the AWS key in `AWS_ACCESS_KEY_ID` and
 `AWS_SECRET_ACCESS_KEY` (on a Mac, the one in `~/.aws`). `putFile` takes a key, the file and its
-type, and answers the file's CloudFront address.
+type, and answers the file's CloudFront address; with `downloadAs` (letters, digits, `. _ -`) it is
+sent as an attachment under that name.
 
 - A key is letters, digits, `. _ -` and `/`, with no part that starts with a dot, at most 300
   characters (`file-keys.js`), so it is its own address and cannot climb out of its folder.
@@ -438,7 +441,7 @@ The arcade works offline like an installed app, and so does each game once it ha
 `npm run dev` runs without it). Morodok Angkor lives on its own site and is not kept.
 
 - **The arcade** (`arcade-cache.js`): the build writes the worker with the list of what it keeps
-  (vite-plugin-pwa's `injectManifest`, in `vite.config.ts`): the four pages, the built modules and
+  (vite-plugin-pwa's `injectManifest`, in `vite.config.ts`): the five pages, the built modules and
   styles, the arcade's art, `appearance-early.js` and each game's card art (`catalog-art.js`), each
   with a revision. Installing fills one cache named by that list and, once it is all in, takes over
   at once; a page open on the old build keeps what it loaded, its next load is the new one, and the
@@ -941,6 +944,62 @@ wear the edge. The games keep their own screens.
 
 The arcade and the screens over it change like screens in an iOS navigation stack, in one page (see
 One app): a push slides the screen arrived at in over the one left, and a pop plays it backwards.
+
+## Wallpapers page
+
+`wallpapers/` (`WallpapersScreen.tsx` in `arcade/src/screens/wallpapers/`, its page
+`arcade/pages/wallpapers/index.html`) gives away wallpapers of the arcade's world for a phone and a
+computer, pushed over the arcade like the credits (see One app). The home page leads there from a
+card under its library (`WallpapersCallout.tsx`, `wallpapers-callout.css` in `screens/home/library/`),
+like a story in the App Store's Today tab: on a phone the picture over the words, and from 48rem the
+picture filling the card with the words on it, over a dark wash in their corner only, and a white See
+all pill. Its picture turns through six wallpapers (`BANNERS`), each fading in over the one before
+as it drifts closer, every six seconds (`use-banner-turn.ts`), and only while the card is on the
+screen, the page is in view and no pointer or focus rests on it; with reduced motion it stays on the
+first. Only the banner shown, the one under it and the next are drawn (`banner-turn.js`), so a
+visitor loads three pictures, the next before its turn.
+
+The pictures are 5K and 8K PNGs, 300 MB in all, so none of them ships with the arcade.
+`tools/wallpapers/make_wallpapers.py` cuts each one (`tools/wallpapers/sources.json` names its file,
+its place, its time of day and `focus`, where across the picture the phone's upright cut is centred)
+into six files, each named by a hash of its bytes:
+
+- `thumb` (640 wide WebP, about 25 KB) and `view` (1280) for the grid, which a phone fills two
+  across from the small one (`srcset` and `sizes` in `WallpaperGrid.tsx`); the first two rows load at
+  once and the rest as they come near (`loading="lazy"`);
+- `view` and `large` (2560) for the sheet's preview of the computer's picture, and `phone-view`
+  (720 x 1560) for the phone's, which stands upright over the whole picture blurred, as a lock screen;
+- `desktop`, the computer's download: the PNG itself, every pixel as it was made (4K to 8K, 5 to
+  18 MB; it holds no text or EXIF), and `phone` (9 by 19.5, up to 1440 x 3120, JPEG at 92 with every
+  pixel's colour, about 0.5 MB), progressive so a slow phone draws it blurred first.
+
+It writes the screen's list, `screens/wallpapers/wallpapers.json` (the CloudFront `base`, then each
+wallpaper's files and the downloads' sizes), the link preview `assets/social/wallpapers.jpg` and the
+home card's banners `assets/wallpapers/banner-<id>-<width>.webp` (960, 1600 and 2400 wide, 21 by 9,
+each dark enough in its lower left for the words; the worker keeps none of them, as the wallpapers
+they lead to never work offline). `tools/wallpapers/upload-wallpapers.js` puts
+the files in S3 under `wallpapers/<id>/` with the storage's `putFile` (see File storage), the two
+downloads as attachments (`downloadAs`), so a tap on Download saves the file, though a link's
+`download` attribute is ignored for another site's file. CloudFront keeps every file a year, so a
+changed picture goes up under its new hash, and the list names it. The worker leaves CloudFront's
+files to the network, so the wallpapers are never saved for offline.
+
+A tap on a tile opens a sheet (`WallpaperSheet.tsx`) with the picture cut for a phone or a computer
+(the phone's first on a touch screen, `firstShape`), its kind and size and Download. The preview
+(`WallpaperPreview.tsx`) has one size for both cuts, the computer's own 16 by 9 on a sheet with room
+and square on a phone, so the sheet never changes size as they swap: the computer's cut fills it
+edge to edge, and the phone's stands upright over the whole picture blurred, as a lock screen.
+Switching fades one into the other by opacity and scale alone, each once its file is in, and the
+other cut's file comes down only once a visitor switches to it
+(`test/regression/bugs/wallpaper-sheet-height.test.js`). An iPhone sets a
+wallpaper only from Photos, which a download never reaches, so a touch screen that can share files
+also gets Share (`use-wallpaper-share.ts`, `wallpaper-share.js`): it fetches the chosen file and
+hands it to the share sheet, whose Save Image puts it in Photos. The sheet opens only just after a
+tap, so a download that outlasts it keeps the file and asks for one more tap (Share now). All, Day
+and Night filter the grid (`mood`: a sun or a moon in the sky).
+
+`arcade/test/integration/screens/wallpapers/wallpapers-page.test.js` holds the page to all this, and
+`screens/home/home-wallpapers-banner.test.js` the banner.
 
 ## Game: Steel & Dust
 

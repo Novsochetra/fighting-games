@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ARCADE_SRC } from '../../../../../server/src/paths.js';
 import { CREDITS_ENTRANCES } from '@/screens/credits/CreditsScreen.tsx';
 import { SUPPORTERS_ENTRANCES } from '@/screens/supporters/SupportersScreen.tsx';
+import { WALLPAPERS_ENTRANCES } from '@/screens/wallpapers/WallpapersScreen.tsx';
 import {
   changed,
   homeLoaded,
@@ -18,7 +19,7 @@ import {
 // over the slide, as they do while the page first loads, so the cards came in late and the slide
 // dropped frames at its start; the credits rose in over every slide too. A screen that slides in now
 // arrives drawn, as an iOS screen does, and only a page that loads plays its entrance.
-const ENTRANCES = ['place-rise', 'row-rise', 'credits-rise', 'portrait-in'];
+const ENTRANCES = ['place-rise', 'row-rise', 'credits-rise', 'portrait-in', 'wallpaper-rise'];
 const OTHERS = ['spin', 'tier-glint', 'cover-zoom', 'bar-condense'];
 
 // happy-dom plays no CSS, so each screen stands in for its animations with these
@@ -86,6 +87,14 @@ describe('a screen sliding in', () => {
     expect(finishedOn('credits')).toEqual(['credits-rise', 'portrait-in']);
   });
 
+  it('arrives with the wallpapers drawn', async () => {
+    startArcadeAt('home');
+    await homeLoaded();
+    await openFromHome('wallpapers-link');
+
+    expect(finishedOn('wallpapers')).toEqual(['wallpaper-rise']);
+  });
+
   it('still plays its entrance where the page loads on it', () => {
     startArcadeAt('credits');
 
@@ -94,13 +103,25 @@ describe('a screen sliding in', () => {
 
   it('names the entrances its CSS plays', async () => {
     const css = await Promise.all(
-      ['supporters/podium.css', 'supporters/roll.css', 'credits/credits.css', 'credits/maker.css']
+      [
+        'supporters/podium.css',
+        'supporters/roll.css',
+        'credits/credits.css',
+        'credits/maker.css',
+        'wallpapers/wallpapers.css',
+      ]
         .map((file) => path.join(ARCADE_SRC, 'screens', file))
         .map((file) => readFile(file, 'utf8')),
     );
     const keyframes = css.join('\n').matchAll(/@keyframes ([\w-]+)/g);
     const names = [...keyframes].map(([, name]) => name);
 
-    expect(names).toEqual(expect.arrayContaining([...SUPPORTERS_ENTRANCES, ...CREDITS_ENTRANCES]));
+    expect(names).toEqual(
+      expect.arrayContaining([
+        ...SUPPORTERS_ENTRANCES,
+        ...CREDITS_ENTRANCES,
+        ...WALLPAPERS_ENTRANCES,
+      ]),
+    );
   });
 });

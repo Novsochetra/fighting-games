@@ -96,6 +96,24 @@ describe('createS3Storage', () => {
     ]);
   });
 
+  it('sends a file as an attachment under the name it is given to download as', async () => {
+    const client = fakeClient();
+    const storage = createS3Storage(CONFIG, client);
+    const file = { key: 'w/a.jpg', body: 'jpg', contentType: 'image/jpeg', downloadAs: 'dawn.jpg' };
+
+    await storage.putFile(file);
+    expect(client.sent[0].ContentDisposition).toBe('attachment; filename="dawn.jpg"');
+  });
+
+  it('refuses a download name that could break out of its header', async () => {
+    const client = fakeClient();
+    const storage = createS3Storage(CONFIG, client);
+    const file = { key: 'w/a.jpg', body: 'jpg', contentType: 'image/jpeg', downloadAs: 'a".jpg' };
+
+    await expect(storage.putFile(file)).rejects.toThrow(/not a download name/);
+    expect(client.sent).toEqual([]);
+  });
+
   it('refuses a key that is not a file key before sending anything', async () => {
     const client = fakeClient();
     const storage = createS3Storage(CONFIG, client);

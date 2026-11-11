@@ -9,6 +9,7 @@ import './details/trailer.css';
 import './spotlight/hints.css';
 import './banners/support.css';
 import './library/made-by.css';
+import './library/wallpapers-callout.css';
 import './launch/launch.css';
 import './banners/install.css';
 import './coffee/coffee.css';

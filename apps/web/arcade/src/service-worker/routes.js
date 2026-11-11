@@ -1,5 +1,5 @@
 // The arcade's own pages, under the worker's scope, which it keeps with the arcade's files.
-const PAGES = ['', 'leaderboard/', 'supporters/', 'credits/'];
+const PAGES = ['', 'leaderboard/', 'supporters/', 'credits/', 'wallpapers/'];
 // the API's reads (api-cache.js keeps their last answers, the leaderboard's for each game it names)
 const CATALOG = 'api/games';
 const LIVE_READS = ['api/supporters', 'api/leaderboard'];

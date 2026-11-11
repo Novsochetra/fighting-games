@@ -118,8 +118,10 @@ const offline = VitePWA({
       'assets/**/*',
       'appearance-early.js',
     ],
-    // iOS takes its launch screen as the arcade is added to the Home Screen, so no save keeps them.
-    globIgnores: ['games/**', 'assets/splash/**'],
+    // iOS takes its launch screen as the arcade is added to the Home Screen, only a link preview
+    // reads the social pictures, and the wallpapers' banners (1 MB) lead to files kept on
+    // CloudFront, which never work offline, so no save keeps them.
+    globIgnores: ['games/**', 'assets/splash/**', 'assets/social/**', 'assets/wallpapers/**'],
     additionalManifestEntries: await catalogArtEntries({
       webRoot: WEB_ROOT,
       gamesRoot: GAMES_ROOT,
@@ -127,7 +129,7 @@ const offline = VitePWA({
   },
 });
 
-// The arcade's four pages, each with its own head for search and link previews, around one React
+// The arcade's five pages, each with its own head for search and link previews, around one React
 // app. Relative addresses (base './') keep the build working under any path, as the pages always have.
 // Vite's own files go to build/, as assets/ is the arcade's art.
 export default defineConfig({
@@ -160,6 +162,7 @@ export default defineConfig({
         leaderboard: path.join(PAGES_ROOT, 'leaderboard', 'index.html'),
         supporters: path.join(PAGES_ROOT, 'supporters', 'index.html'),
         credits: path.join(PAGES_ROOT, 'credits', 'index.html'),
+        wallpapers: path.join(PAGES_ROOT, 'wallpapers', 'index.html'),
       },
     },
   },
