@@ -19,7 +19,7 @@ password never goes in the repo.
 | Build      | `npm run build && NPM_CONFIG_PRODUCTION= npm prune --omit=dev` | Vite builds the arcade into `dist/`, which the server sends; then the build, test and lint tools go. Railpack sets `NPM_CONFIG_PRODUCTION=false`. |
 | Pre-deploy | `node apps/server/src/db/migrate-cli.js`                       | Applies new migrations before the new server starts. If one fails, the deploy stops and the old server keeps serving.                             |
 | Start      | `node apps/server/src/main.js`                                 | Node itself, not `npm start`, so it gets Railway's SIGTERM.                                                                                       |
-| Health     | `GET /api/health` must answer 200 within 120 s                 | It reads the supporters and scores tables, so a database that is down or never migrated keeps traffic on the old server.                          |
+| Health     | `GET /api/health` must answer 200 within 120 s                 | It reads the supporters, scores and wallpaper tables, so a database that is down or never migrated keeps traffic on the old server.               |
 | Stop       | SIGTERM, then SIGKILL after 15 s                               | The old server takes no new requests, finishes the ones under way, then closes the database pool.                                                 |
 | Region     | `asia-southeast1-eqsg3a` (Singapore), 1 copy                   | Closest to Cambodia. Keep one copy: the rate limit lives in the server's memory, so a second copy would not see the first one's.                  |
 

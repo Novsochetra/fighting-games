@@ -55,6 +55,9 @@ export function wallpaperCards({ base, wallpapers }, locale) {
   return wallpapers.map((wallpaper) => cardOf(wallpaper, base, locale));
 }
 
+export const downloadsLabel = (count, locale) =>
+  `${new Intl.NumberFormat(locale).format(count)} ${count === 1 ? 'download' : 'downloads'}`;
+
 export const byMood = (cards, mood) =>
   mood === 'all' ? cards : cards.filter((card) => card.mood === mood);
 

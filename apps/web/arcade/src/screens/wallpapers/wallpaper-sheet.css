@@ -67,13 +67,50 @@
   gap: var(--space-4);
 }
 
+.wallpaper-sheet__heading {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  justify-content: space-between;
+  inline-size: 100%;
+}
+
+.wallpaper-sheet__names {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-inline-size: 0;
+}
+
 .wallpaper-sheet__body .sheet__title,
 .wallpaper-sheet__body .sheet__meta {
   margin: 0;
 }
 
-.wallpaper-sheet__body .sheet__meta {
-  margin-block-start: calc(-1 * var(--space-3));
+/* The heart empty until it is liked, then filled in the arcade's heart pink, popping as it fills
+   (scale alone, which the compositor plays). */
+.like-button {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.like-button__heart {
+  transition: fill var(--duration-normal) var(--easing-standard);
+}
+
+.like-button[aria-pressed='true'] {
+  color: var(--color-heart);
+}
+
+.like-button[aria-pressed='true'] .like-button__heart {
+  fill: currentcolor;
+  animation: heart-pop var(--duration-ring) var(--easing-spring);
+}
+
+@keyframes heart-pop {
+  40% {
+    scale: var(--scale-heart-pop);
+  }
 }
 
 .wallpaper-save {
@@ -115,6 +152,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .like-button[aria-pressed='true'] .like-button__heart {
+    animation: none;
+  }
+
   .wallpaper-preview__image[data-shape] {
     scale: 1;
     transition: opacity var(--duration-fade) var(--easing-standard);

@@ -257,7 +257,10 @@ without a load.
 5. Steel & Dust reads and posts its online leaderboard: `GET /api/leaderboard?game=<id>`,
    `POST /api/leaderboard/tickets` as a run starts and `POST /api/leaderboard` as one is posted (see
    Leaderboard API).
-6. `GET /api/health` answers `{"ok":true}` once the supporters and scores tables answer (Railway's
+6. The wallpapers screen reads every wallpaper's likes and downloads, `GET /api/wallpapers`, and
+   sends a like or its taking back, `POST /api/wallpapers/likes`, and each download,
+   `POST /api/wallpapers/downloads` (see Wallpapers page).
+7. `GET /api/health` answers `{"ok":true}` once the supporters, scores and wallpaper tables answer (Railway's
    health check).
 
 The arcade runs on Railway as one service: the same server sends the pages and the API, from one
@@ -997,6 +1000,21 @@ also gets Share (`use-wallpaper-share.ts`, `wallpaper-share.js`): it fetches the
 hands it to the share sheet, whose Save Image puts it in Photos. The sheet opens only just after a
 tap, so a download that outlasts it keeps the file and asks for one more tap (Share now). All, Day
 and Night filter the grid (`mood`: a sun or a moon in the sky).
+
+**Likes and downloads.** A heart in the sheet likes a wallpaper, and the sheet and each tile say how
+many have, and how many times it was saved (`api/wallpapers/`: `wallpapers-client.js`,
+`use-wallpaper-counts.ts`). The server keeps them in Postgres (`0005_wallpapers`):
+`wallpaper_likes`, one row a visitor, keyed by the random id their browser makes at its first like
+(`randomId`, kept in `preferences`), so a like sent twice counts once and taking it back takes back
+only theirs, and `wallpaper_downloads`, a row for each Download tapped or Share that went through,
+with its shape. `GET /api/wallpapers` answers `{ "wallpapers": { "<id>": { "likes", "downloads" } } }`
+for each wallpaper with any; `POST /api/wallpapers/likes` takes `{ wallpaper, visitor, liked }` and
+answers the wallpaper's likes, and `POST /api/wallpapers/downloads` takes `{ wallpaper, shape }` and
+answers its downloads (`routes/wallpapers-api.js`). Each checks the wallpaper is one the list names
+(`WALLPAPER_LIST`), comes only from the arcade's own pages, and holds back a burst from one address
+(60 likes and 40 downloads in 10 minutes), as nothing proves a visitor or a download is real. A tap
+shows at once and the server's count takes its place as it answers; a like that fails is taken back,
+and the worker reads the counts from the network first, as it does the supporters.
 
 `arcade/test/integration/screens/wallpapers/wallpapers-page.test.js` holds the page to all this, and
 `screens/home/home-wallpapers-banner.test.js` the banner.

@@ -1,5 +1,9 @@
 import type { CSSProperties } from 'react';
+import { useArcade } from '@/services/arcade-context';
+import { formatCompact } from '@/utils/format.js';
+import { TileHeartIcon, TileDownloadIcon } from './wallpaper-icons';
 import type { WallpaperCard } from './wallpaper-types';
+import type { WallpaperStats } from './use-wallpaper-stats';
 
 // two tiles across a phone, three across a tablet, four from 64rem (wallpapers.css), where its
 // min-width already holds at exactly 64rem
@@ -9,10 +13,32 @@ const EAGER_TILES = 8;
 
 interface GridProps {
   cards: WallpaperCard[];
+  stats: WallpaperStats;
   onOpen: (card: WallpaperCard) => void;
 }
 
-export function WallpaperGrid({ cards, onOpen }: GridProps) {
+// how many liked it and saved it, once the counts are in, small at the tile's foot
+function TileStats({ card, stats }: { card: WallpaperCard; stats: WallpaperStats }) {
+  const { locale } = useArcade();
+  const { likes, downloads } = stats.countOf(card.id);
+
+  return stats.hasCounts ? (
+    <span className="wallpaper-tile__stats" data-liked={stats.isLiked(card.id)}>
+      <span className="wallpaper-tile__stat">
+        <TileHeartIcon />
+        {formatCompact(likes, locale)}
+        <span className="wallpaper-tile__unseen"> likes,</span>
+      </span>
+      <span className="wallpaper-tile__stat">
+        <TileDownloadIcon />
+        {formatCompact(downloads, locale)}
+        <span className="wallpaper-tile__unseen"> downloads</span>
+      </span>
+    </span>
+  ) : null;
+}
+
+export function WallpaperGrid({ cards, stats, onOpen }: GridProps) {
   return (
     <ul className="wallpaper-grid" id="wallpaper-grid">
       {cards.map((card, index) => (
@@ -39,7 +65,10 @@ export function WallpaperGrid({ cards, onOpen }: GridProps) {
               decoding="async"
             />
             <span className="wallpaper-tile__place">{card.place}</span>
-            <span className="wallpaper-tile__time">{card.time}</span>
+            <span className="wallpaper-tile__foot">
+              <span className="wallpaper-tile__time">{card.time}</span>
+              <TileStats card={card} stats={stats} />
+            </span>
           </button>
         </li>
       ))}

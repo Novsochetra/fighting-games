@@ -57,4 +57,24 @@ export const MIGRATIONS = [
         CHECK (poster ~ '^posters/[a-z0-9]+(-[a-z0-9]+)*/[0-9a-f]{24}$') NOT VALID`,
     ],
   },
+  {
+    name: '0005_wallpapers',
+    statements: [
+      // one like a visitor, kept by the random id their browser made for it, so a like sent twice
+      // counts once and taking it back takes back only their own
+      `CREATE TABLE wallpaper_likes (
+        wallpaper text NOT NULL CHECK (wallpaper ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
+        visitor uuid NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now(),
+        PRIMARY KEY (wallpaper, visitor)
+      )`,
+      `CREATE TABLE wallpaper_downloads (
+        id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        wallpaper text NOT NULL CHECK (wallpaper ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
+        shape text NOT NULL CHECK (shape IN ('phone', 'desktop')),
+        created_at timestamptz NOT NULL DEFAULT now()
+      )`,
+      'CREATE INDEX wallpaper_downloads_by_wallpaper ON wallpaper_downloads (wallpaper)',
+    ],
+  },
 ];

@@ -4,7 +4,9 @@ import { Segmented } from '@/components/segmented/Segmented';
 import { SheetClose } from '@/components/sheet/SheetClose';
 import { useSheet } from '@/components/sheet/use-sheet';
 import { firstShape } from './wallpaper-list.js';
+import { WallpaperHeading } from './WallpaperHeading';
 import { WallpaperPreview } from './WallpaperPreview';
+import type { WallpaperStats } from './use-wallpaper-stats';
 import { WallpaperSave } from './WallpaperSave';
 import type { Shape, WallpaperCard } from './wallpaper-types';
 import './wallpaper-sheet.css';
@@ -16,12 +18,13 @@ const SHAPES = [
 
 interface SheetProps {
   card: WallpaperCard | null;
+  stats: WallpaperStats;
   isOpen: boolean;
   onClose: () => void;
 }
 
 // A wallpaper opened from the grid: how it looks on a phone or a computer, and its download.
-export function WallpaperSheet({ card, isOpen, onClose }: SheetProps) {
+export function WallpaperSheet({ card, stats, isOpen, onClose }: SheetProps) {
   const { window, sound } = useArcade();
   const dialog = useRef<HTMLDialogElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
@@ -42,10 +45,7 @@ export function WallpaperSheet({ card, isOpen, onClose }: SheetProps) {
       <SheetClose id="wallpaper-close" closeRef={closeButton} />
       {card ? (
         <div className="sheet__body wallpaper-sheet__body">
-          <h2 className="sheet__title" id="wallpaper-title">
-            {card.place}
-          </h2>
-          <p className="sheet__meta">{card.time}</p>
+          <WallpaperHeading card={card} stats={stats} />
           <Segmented
             id="wallpaper-shape"
             label="Wallpaper for"
@@ -56,7 +56,11 @@ export function WallpaperSheet({ card, isOpen, onClose }: SheetProps) {
               sound.play('switch');
             }}
           />
-          <WallpaperSave card={card} shape={shape} />
+          <WallpaperSave
+            card={card}
+            shape={shape}
+            onSaved={() => stats.countDownload(card.id, shape)}
+          />
         </div>
       ) : null}
     </dialog>

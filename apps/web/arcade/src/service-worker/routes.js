@@ -2,7 +2,7 @@
 const PAGES = ['', 'leaderboard/', 'supporters/', 'credits/', 'wallpapers/'];
 // the API's reads (api-cache.js keeps their last answers, the leaderboard's for each game it names)
 const CATALOG = 'api/games';
-const LIVE_READS = ['api/supporters', 'api/leaderboard'];
+const LIVE_READS = ['api/supporters', 'api/leaderboard', 'api/wallpapers'];
 const GAME = /^games\/([\w-]+)\//;
 // where the arcade asks how much of a game is kept (GET), saves it (POST) and removes it (DELETE);
 // only the worker answers it, so without one the arcade finds nothing there and offers no save

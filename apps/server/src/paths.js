@@ -9,6 +9,8 @@ export const WEB_ROOT = path.resolve(SOURCE_FOLDER, '../../web');
 export const ARCADE_ROOT = path.join(WEB_ROOT, 'arcade');
 export const ARCADE_SRC = path.join(ARCADE_ROOT, 'src');
 export const PAGES_ROOT = path.join(ARCADE_ROOT, 'pages');
+// The wallpapers the arcade gives away (tools/wallpapers writes it), whose ids a like must name.
+export const WALLPAPER_LIST = path.join(ARCADE_SRC, 'screens', 'wallpapers', 'wallpapers.json');
 export const PUBLIC_ROOT = path.join(ARCADE_ROOT, 'public');
 export const GAMES_ROOT = path.join(WEB_ROOT, 'games');
 // The packages the games share (input: the gamepad, keys, rumble), joined into each game by the build.

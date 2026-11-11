@@ -191,7 +191,7 @@ describe('the poster key check, as it is deployed', () => {
       const scores = createPostgresScoresStore(older);
       const saved = await scores.add(run('DARA', 338314), 'nonce-1');
       await older.query("UPDATE scores SET poster = '1' WHERE id = $1", [saved.id]);
-      expect(await migrate(older)).toEqual(['0004_poster_key_shape']);
+      expect(await migrate(older, MIGRATIONS.slice(0, 4))).toEqual(['0004_poster_key_shape']);
       const { rows } = await older.query('SELECT poster FROM scores WHERE id = $1', [saved.id]);
       expect(rows[0].poster).toBe('1');
       const again = older.query("UPDATE scores SET poster = '2' WHERE id = $1", [saved.id]);

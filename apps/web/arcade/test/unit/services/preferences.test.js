@@ -63,6 +63,32 @@ describe('createPreferences', () => {
   });
 });
 
+describe('the wallpapers this device liked', () => {
+  it('keeps each like and its taking back, across visits', () => {
+    const storage = createMemoryStorage();
+    const preferences = createPreferences(storage);
+
+    preferences.setLikedWallpaper('kulen-night', true);
+    preferences.setLikedWallpaper('kulen-night', true);
+    expect(storage.read(STORAGE_KEYS.likedWallpapers)).toEqual(['kulen-night']);
+    expect(createPreferences(storage).isLikedWallpaper('kulen-night')).toBe(true);
+
+    preferences.setLikedWallpaper('kulen-night', false);
+    expect(createPreferences(storage).isLikedWallpaper('kulen-night')).toBe(false);
+  });
+
+  it('makes the id its likes go under once, at the first like, and keeps it', () => {
+    const storage = createMemoryStorage();
+    let made = 0;
+    const makeId = () => `visitor-${(made += 1)}`;
+
+    expect(storage.read(STORAGE_KEYS.wallpaperVisitor)).toBeNull();
+    expect(createPreferences(storage).wallpaperVisitor(makeId)).toBe('visitor-1');
+    expect(createPreferences(storage).wallpaperVisitor(makeId)).toBe('visitor-1');
+    expect(made).toBe(1);
+  });
+});
+
 describe('createBrowserStorage', () => {
   it('keeps values as JSON in localStorage', () => {
     const values = new Map();

@@ -14,11 +14,13 @@ const SHARE_LABELS: Record<ShareState, string> = {
 interface SaveProps {
   card: WallpaperCard;
   shape: Shape;
+  // a download or a share that went through, which the wallpaper's download count takes in
+  onSaved: () => void;
 }
 
-function ShareButton({ card, shape }: SaveProps) {
+function ShareButton({ card, shape, onSaved }: SaveProps) {
   const { analytics } = useArcade();
-  const { isOffered, state, share } = useWallpaperShare(card.downloads[shape]);
+  const { isOffered, state, share } = useWallpaperShare(card.downloads[shape], onSaved);
 
   return isOffered ? (
     <>
@@ -43,7 +45,7 @@ function ShareButton({ card, shape }: SaveProps) {
 
 // The download is sent as an attachment (upload-wallpapers.js), so a tap saves it rather than
 // opening it, though it comes from CloudFront, where a link's download attribute is ignored.
-export function WallpaperSave({ card, shape }: SaveProps) {
+export function WallpaperSave({ card, shape, onSaved }: SaveProps) {
   const { analytics } = useArcade();
   const download = card.downloads[shape];
 
@@ -55,12 +57,15 @@ export function WallpaperSave({ card, shape }: SaveProps) {
           id="wallpaper-download"
           href={download.url}
           download={download.name}
-          onClick={() => analytics.track(EVENTS.wallpaperDownload, { wallpaper: card.id, shape })}
+          onClick={() => {
+            onSaved();
+            analytics.track(EVENTS.wallpaperDownload, { wallpaper: card.id, shape });
+          }}
         >
           <DownloadIcon />
           Download
         </a>
-        <ShareButton key={download.url} card={card} shape={shape} />
+        <ShareButton key={download.url} card={card} shape={shape} onSaved={onSaved} />
       </div>
       <p className="wallpaper-save__size" id="wallpaper-size">
         {download.sizeLabel}

@@ -132,9 +132,44 @@
   font-weight: var(--font-weight-semibold);
 }
 
-.wallpaper-tile__time {
+.wallpaper-tile__foot {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: space-between;
   font-size: var(--font-size-apple-footnote);
   color: var(--color-label-muted);
+}
+
+.wallpaper-tile__stats {
+  display: flex;
+  gap: var(--space-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.wallpaper-tile__stat {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+}
+
+.wallpaper-tile__icon {
+  inline-size: 0.85em;
+  block-size: 0.85em;
+}
+
+.wallpaper-tile__stats[data-liked='true'] .wallpaper-tile__stat:first-child {
+  color: var(--color-heart);
+}
+
+/* the counts' words for a screen reader, which reads the icons as nothing */
+.wallpaper-tile__unseen {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
 }
 
 @media (prefers-reduced-motion: reduce) {
