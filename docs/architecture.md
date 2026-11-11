@@ -29,7 +29,8 @@ apps/
                           credits/ each with its own index.html
       public/             sent as it is at the root of the arcade's address, with appearance-early.js,
                           the classic script that sets light or dark before the first paint
-        assets/           the arcade's icons and manifest (tools/arcade_icons.py draws the icons),
+        assets/           the arcade's icons, launch screens and manifest (tools/arcade_icons.py and
+                          arcade_splash.py draw them),
                           donate/khqr.jpg, the KHQR code the donate sheet shows,
                           social/entry-screen.jpg, the picture a shared link shows, and
                           credits/, the maker's photos the credits screen shows
@@ -645,7 +646,12 @@ everything through one master gain and a limiter. The speaker button in the top 
 The arcade installs as an app (`arcade/public/assets/manifest.webmanifest`, standalone, its scope
 the whole arcade with every game in it). Its logo is a white joystick on an orange to pink gradient,
 in front of the title in the top bar and on every icon; `tools/arcade_icons.py` draws all sizes into
-`arcade/public/assets/icons/`, run it again after changing the design. An install banner floats at the bottom (`InstallBanner.tsx`, `use-install.ts`,
+`arcade/public/assets/icons/`, run it again after changing the design. Opening the installed arcade shows the
+icon in the middle of black: Android draws that screen itself from the manifest, while iOS shows only
+an image the page links for its exact screen and orientation, so `tools/arcade_splash.py` draws one
+for each iPhone and iPad into `arcade/public/assets/splash/` and the build links them all from every
+page (`arcade/build-steps/startup-images.js`), named by the screen they fit. The worker keeps none:
+iOS takes its launch screen as the arcade is added to the Home Screen. An install banner floats at the bottom (`InstallBanner.tsx`, `use-install.ts`,
 `install.css`):
 where the browser hands over its install prompt (`beforeinstallprompt`, Chrome and Edge) it offers
 Install, and on an iPhone or iPad, where Safari installs only from its Share menu, it says where to

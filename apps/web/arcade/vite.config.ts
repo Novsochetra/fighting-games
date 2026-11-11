@@ -7,9 +7,17 @@ import { AS_IS, BUILD_FOLDER, sourceOfAsIs } from '../../server/src/as-is-files.
 import { buildVersion } from '../../server/src/build-version.js';
 import { catalogArtEntries } from '../../server/src/offline/catalog-art.js';
 import { offlineListOf } from '../../server/src/offline/game-files.js';
-import { ARCADE_SRC, DIST_ROOT, GAMES_ROOT, PAGES_ROOT, WEB_ROOT } from '../../server/src/paths.js';
+import {
+  ARCADE_SRC,
+  DIST_ROOT,
+  GAMES_ROOT,
+  PAGES_ROOT,
+  PUBLIC_ROOT,
+  WEB_ROOT,
+} from '../../server/src/paths.js';
 import { isPublishedPath } from '../../server/src/public-files.js';
 import { bundleGame } from './build-steps/bundle-game.js';
+import { startupImages } from './build-steps/startup-images.js';
 import { versionIcons } from './build-steps/version-icons.js';
 
 // The games played here, each with a page of its own (a game on its own site keeps only its art).
@@ -110,7 +118,8 @@ const offline = VitePWA({
       'assets/**/*',
       'appearance-early.js',
     ],
-    globIgnores: ['games/**'],
+    // iOS takes its launch screen as the arcade is added to the Home Screen, so no save keeps them.
+    globIgnores: ['games/**', 'assets/splash/**'],
     additionalManifestEntries: await catalogArtEntries({
       webRoot: WEB_ROOT,
       gamesRoot: GAMES_ROOT,
@@ -133,7 +142,14 @@ export default defineConfig({
       { find: /^\/src\/main\.tsx$/, replacement: path.join(ARCADE_SRC, 'main.tsx') },
     ],
   },
-  plugins: [react(), stampVersion(), copyAsIs(), watchSource(), offline],
+  plugins: [
+    react(),
+    stampVersion(),
+    startupImages(path.join(PUBLIC_ROOT, 'assets', 'splash')),
+    copyAsIs(),
+    watchSource(),
+    offline,
+  ],
   build: {
     outDir: DIST_ROOT,
     emptyOutDir: true,
