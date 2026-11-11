@@ -93,6 +93,34 @@ describe('liking a wallpaper and counting its downloads', () => {
     expect(byId('wallpaper-like').getAttribute('aria-pressed')).toBe('false');
   });
 
+  it('celebrates a like round the heart and over the picture, and not its taking back', async () => {
+    const played = [];
+    const { style } = document.documentElement;
+    const original = Element.prototype.animate;
+
+    style.setProperty('--duration-like-burst', '600ms');
+    style.setProperty('--duration-like-float', '1000ms');
+    Element.prototype.animate = vi.fn(function animate() {
+      played.push(this.getAttribute('class'));
+    });
+
+    try {
+      await openKulen(wallpapersServer());
+      await act(async () => byId('wallpaper-like').click());
+      expect(played.filter((name) => name === 'like-spark')).toHaveLength(6);
+      expect(played).toContain('wallpaper-preview__heart');
+
+      played.length = 0;
+      await act(async () => byId('wallpaper-like').click());
+      expect(played).not.toContain('like-spark');
+      expect(played).not.toContain('wallpaper-preview__heart');
+    } finally {
+      Element.prototype.animate = original;
+      style.removeProperty('--duration-like-burst');
+      style.removeProperty('--duration-like-float');
+    }
+  });
+
   it('takes the like back when it does not go through', async () => {
     const server = wallpapersServer({ failLikes: true });
 

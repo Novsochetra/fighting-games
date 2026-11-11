@@ -104,13 +104,39 @@
 
 .like-button[aria-pressed='true'] .like-button__heart {
   fill: currentcolor;
-  animation: heart-pop var(--duration-ring) var(--easing-spring);
 }
 
-@keyframes heart-pop {
-  40% {
-    scale: var(--scale-heart-pop);
-  }
+/* The little hearts wait unseen at the big one's middle until a like flies them out (like-motion.js). */
+.like-button__mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.like-spark {
+  position: absolute;
+  inline-size: var(--size-like-spark);
+  block-size: var(--size-like-spark);
+  fill: var(--color-heart);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.like-button__count {
+  display: inline-block;
+}
+
+/* The big heart over the picture waits unseen in its middle until a like pops it. */
+.wallpaper-preview__heart {
+  position: absolute;
+  inset: 0;
+  inline-size: var(--size-like-heart);
+  block-size: var(--size-like-heart);
+  margin: auto;
+  fill: var(--color-like-heart);
+  filter: var(--shadow-like-heart);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .wallpaper-save {
@@ -152,10 +178,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .like-button[aria-pressed='true'] .like-button__heart {
-    animation: none;
-  }
-
   .wallpaper-preview__image[data-shape] {
     scale: 1;
     transition: opacity var(--duration-fade) var(--easing-standard);

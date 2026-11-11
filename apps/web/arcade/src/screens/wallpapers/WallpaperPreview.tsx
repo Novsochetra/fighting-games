@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { HEART_PATH } from '@/components/icons';
 import type { Shape, WallpaperCard } from './wallpaper-types';
 
 // the computer's cut fills the preview, the sheet's whole width: the screen on a phone, else
@@ -60,6 +61,9 @@ export function WallpaperPreview({ card, shape }: { card: WallpaperCard; shape: 
       {seen.map((each) => (
         <PreviewPicture key={each} card={card} shape={each} isActive={each === shape} />
       ))}
+      <svg className="wallpaper-preview__heart" viewBox="0 0 24 24" aria-hidden="true">
+        <path d={HEART_PATH} />
+      </svg>
     </div>
   );
 }

@@ -110,6 +110,8 @@
   --color-banner-scrim-clear: rgb(0 0 0 / 0%);
   --color-banner-pill: var(--color-white);
   --color-on-banner-pill: var(--color-black);
+  --color-like-heart: var(--color-white);
+  --shadow-like-heart: drop-shadow(0 6px 24px rgb(0 0 0 / 35%));
   --color-banner-fallback: rgb(44 36 92);
   --text-shadow-banner: 0 1px 14px rgb(0 0 0 / 35%);
   --color-medal-gold-top: #ffe17a;
@@ -242,6 +244,8 @@
   --size-glass-button-large: 3.25rem;
   --size-carousel-arrow: 3rem;
   --size-pill-button: 3.25rem;
+  --size-like-spark: 0.6rem;
+  --size-like-heart: clamp(4.5rem, 20vw, 7rem);
   --size-banner-height: clamp(19rem, 30vw, 27rem);
   --size-segment-height: 2.75rem;
   --size-segment-width: 23.75rem;
@@ -365,6 +369,8 @@
   --radius-tip: 10px;
   --delay-tip: 450ms;
   --offset-rise: 12px;
+  --offset-like-spark: 26px;
+  --offset-like-float: 36px;
   --offset-card-enter: 2.5rem;
   --offset-banner: 1.5rem;
   --offset-nudge: 3px;
@@ -398,6 +404,8 @@
   --duration-carousel: 550ms;
   --duration-enter: 700ms;
   --duration-crossfade: 700ms;
+  --duration-like-burst: 600ms;
+  --duration-like-float: 1000ms;
   /* a banner's turn (BANNER_TURN_MS in use-banner-turn.ts) and the crossfade after it */
   --duration-banner-drift: 6700ms;
   --duration-pulse: 800ms;

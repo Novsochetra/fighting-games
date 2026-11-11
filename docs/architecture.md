@@ -1014,7 +1014,11 @@ answers its downloads (`routes/wallpapers-api.js`). Each checks the wallpaper is
 (`WALLPAPER_LIST`), comes only from the arcade's own pages, and holds back a burst from one address
 (60 likes and 40 downloads in 10 minutes), as nothing proves a visitor or a download is real. A tap
 shows at once and the server's count takes its place as it answers; a like that fails is taken back,
-and the worker reads the counts from the network first, as it does the supporters.
+and the worker reads the counts from the network first, as it does the supporters. A like plays out
+at the tap (`like-motion.js`, the Web Animations API on the arcade's tokens, so it never replays as
+the sheet opens again): the heart pops as it fills, six little hearts fly out round it, a big white
+heart pops up over the picture and floats away, and the count rolls up, or down for taking a like
+back, which plays nothing else; with reduced motion none of it plays.
 
 `arcade/test/integration/screens/wallpapers/wallpapers-page.test.js` holds the page to all this, and
 `screens/home/home-wallpapers-banner.test.js` the banner.
