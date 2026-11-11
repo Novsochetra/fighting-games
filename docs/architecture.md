@@ -648,8 +648,9 @@ the whole arcade with every game in it). Its logo is a white joystick on an oran
 in front of the title in the top bar and on every icon; `tools/arcade_icons.py` draws all sizes into
 `arcade/public/assets/icons/`, run it again after changing the design. Opening the installed arcade shows the
 icon in the middle of black: Android draws that screen itself from the manifest, while iOS shows only
-an image the page links for its exact screen and orientation, so `tools/arcade_splash.py` draws one
-for each iPhone and iPad into `arcade/public/assets/splash/` and the build links them all from every
+an image the page links for its exact screen, orientation and appearance, so `tools/arcade_splash.py`
+draws one for each iPhone and iPad, on black and on white for light mode (each the page's own
+background), into `arcade/public/assets/splash/` and the build links them all from every
 page (`arcade/build-steps/startup-images.js`), named by the screen they fit. The worker keeps none:
 iOS takes its launch screen as the arcade is added to the Home Screen. An install banner floats at the bottom (`InstallBanner.tsx`, `use-install.ts`,
 `install.css`):

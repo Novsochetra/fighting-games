@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""The installed arcade's launch screens on iPhone and iPad: the app icon in the middle of black.
+"""The installed arcade's launch screens on iPhone and iPad: the app icon on black, or white in light.
 
     python3 tools/arcade_splash.py [OUT_DIR]
 
 Android draws its own from the manifest (background_color and the 512 icon); iOS shows only an
-image the page links for the exact screen, so this draws one per screen and orientation into
-apps/web/arcade/public/assets/splash/ (or OUT_DIR), named splash-<width>x<height>@<ratio>x.png in
-CSS pixels as the screen is held. The build links each one from the pages (build-steps/startup-images.js).
+image the page links for the exact screen, so this draws one per screen, orientation and appearance
+into apps/web/arcade/public/assets/splash/ (or OUT_DIR), named
+splash-<width>x<height>@<ratio>x-<dark|light>.png in CSS pixels as the screen is held. The build
+links each one from the pages (build-steps/startup-images.js).
 """
 import os
 import shutil
@@ -16,7 +17,8 @@ from PIL import Image
 
 from arcade_icons import render
 
-BACKGROUND = (0, 0, 0)
+# The page's own background in each appearance (--color-launcher-background), so nothing flashes.
+BACKGROUNDS = {'dark': (0, 0, 0), 'light': (255, 255, 255)}
 ICON_POINTS = 128
 
 # Portrait CSS size and pixel ratio of each iPhone and iPad screen iOS 16 and later runs on.
@@ -28,8 +30,8 @@ SCREENS = [
 ]
 
 
-def splash(width, height, ratio, icon):
-    image = Image.new('RGB', (width * ratio, height * ratio), BACKGROUND)
+def splash(width, height, ratio, icon, background):
+    image = Image.new('RGB', (width * ratio, height * ratio), background)
     left = (image.width - icon.width) // 2
     top = (image.height - icon.height) // 2
     image.paste(icon, (left, top), icon)
@@ -40,7 +42,9 @@ def splashes():
     icons = {ratio: render(ICON_POINTS * ratio, rounded=True) for _, _, ratio in SCREENS}
     for width, height, ratio in SCREENS:
         for shown in ((width, height), (height, width)):
-            yield f'splash-{shown[0]}x{shown[1]}@{ratio}x.png', splash(*shown, ratio, icons[ratio])
+            for appearance, background in BACKGROUNDS.items():
+                name = f'splash-{shown[0]}x{shown[1]}@{ratio}x-{appearance}.png'
+                yield name, splash(*shown, ratio, icons[ratio], background)
 
 
 def main():

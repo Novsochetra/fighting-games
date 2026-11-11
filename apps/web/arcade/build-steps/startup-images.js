@@ -1,7 +1,7 @@
 import { readdir } from 'node:fs/promises';
 import path from 'node:path';
 
-const SPLASH_NAME = /^splash-(\d+)x(\d+)@(\d)x\.png$/;
+const SPLASH_NAME = /^splash-(\d+)x(\d+)@(\d)x-(dark|light)\.png$/;
 
 export function startupMedia(fileName) {
   const match = SPLASH_NAME.exec(fileName);
@@ -10,7 +10,8 @@ export function startupMedia(fileName) {
     return null;
   }
 
-  const [width, height, ratio] = match.slice(1).map(Number);
+  const [width, height, ratio] = match.slice(1, 4).map(Number);
+  const appearance = match[4];
   const orientation = width < height ? 'portrait' : 'landscape';
 
   return [
@@ -18,6 +19,7 @@ export function startupMedia(fileName) {
     `(device-height: ${Math.max(width, height)}px)`,
     `(-webkit-device-pixel-ratio: ${ratio})`,
     `(orientation: ${orientation})`,
+    `(prefers-color-scheme: ${appearance})`,
   ].join(' and ');
 }
 
@@ -35,7 +37,7 @@ export const assetsHrefFrom = (pagePath) =>
   path.posix.relative(path.posix.dirname(pagePath), '/assets/splash');
 
 // iOS shows no launch screen for an installed web app but an image the page links for the exact
-// screen and orientation it opens in, so every page names one for each (tools/arcade_splash.py).
+// screen, orientation and appearance it opens in, so every page names one for each (tools/arcade_splash.py).
 export function startupImages(splashRoot) {
   return {
     name: 'arcade-startup-images',

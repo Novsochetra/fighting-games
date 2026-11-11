@@ -28,14 +28,16 @@ describe('the installed arcade’s launch screens', () => {
     expect(names.length).toBeGreaterThan(0);
 
     for (const name of names) {
-      const [, width, height, ratio] = /^splash-(\d+)x(\d+)@(\d)x\.png$/.exec(name).map(Number);
+      const [, width, height, ratio] = /^splash-(\d+)x(\d+)@(\d)x-(?:dark|light)\.png$/
+        .exec(name)
+        .map(Number);
 
       expect(await pngSize(path.join(SPLASH_ROOT, name))).toEqual([width * ratio, height * ratio]);
     }
   });
 
-  it('has every screen held both ways', async () => {
-    const shown = (await readdir(SPLASH_ROOT)).map((name) => name.match(/(\d+)x(\d+)(@\dx)/));
+  it('has every screen held both ways, in both appearances', async () => {
+    const shown = (await readdir(SPLASH_ROOT)).map((name) => name.match(/(\d+)x(\d+)(@\dx-\w+)/));
     const portraits = shown.filter(([, width, height]) => Number(width) < Number(height));
 
     expect(portraits.length * 2).toBe(shown.length);
