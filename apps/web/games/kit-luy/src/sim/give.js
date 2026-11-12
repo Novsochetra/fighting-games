@@ -1,6 +1,7 @@
 import { STAGES, stageOf } from '../data/stages.js';
 import { TUNING } from '../data/tuning.js';
 import { sit } from './arrivals.js';
+import { keepApart } from './customers.js';
 import { clothCount, clothPieces, clothTotal, fewestPieces } from './pieces.js';
 
 function extraFor(streak) {
@@ -23,6 +24,7 @@ function rewardFor(run, answer) {
 function sendNextDoor(run) {
   if (run.queue.length >= 2) {
     run.events.push({ type: 'left', customer: run.queue.pop() });
+    keepApart(run);
   }
 }
 

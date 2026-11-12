@@ -26,6 +26,7 @@ export const EN = {
   'ask.div': 'How much each?',
   'over.title': 'Closed',
   'over.served': '{count} customers served',
+  'over.servedOne': '{count} customer served',
   'over.takings': 'Today you took',
   'over.newBest': 'Best day!',
   'settings.sound': 'Sound',

@@ -141,18 +141,19 @@ describe('the lock', () => {
     expect(snapshot(run)).toBe(before);
   });
 
-  it('holds the clock and whoever is walking up', () => {
+  it('costs time: the clock and whoever is walking up go on through it', () => {
     const run = startedRun();
     const { left } = run.arriving;
 
     giveWrong(run, run.queue[0].question.answer === 500 ? 1000 : 500);
     advance(run, LOCK - 100);
 
-    expect(run.elapsed).toBe(0);
-    expect(run.arriving.left).toBe(left);
+    expect(run.phase).toBe('locked');
+    expect(run.elapsed).toBe(LOCK - 100);
+    expect(run.arriving.left).toBe(left - (LOCK - 100));
   });
 
-  it('gives what a step has left after it to the clock', () => {
+  it('gives the whole of a step that ends it to the clock', () => {
     const run = startedRun();
     const { left } = run.arriving;
 
@@ -160,8 +161,20 @@ describe('the lock', () => {
     advance(run, LOCK + 250);
 
     expect(run.phase).toBe('serving');
-    expect(run.elapsed).toBe(250);
-    expect(run.arriving.left).toBe(left - 250);
+    expect(run.elapsed).toBe(LOCK + 250);
+    expect(run.arriving.left).toBe(left - LOCK - 250);
+  });
+
+  it('seats a customer who arrives during it', () => {
+    const run = startedRun();
+
+    advance(run, run.arriving.left - 100);
+    drainEvents(run);
+    giveWrong(run, run.queue[0].question.answer === 500 ? 1000 : 500);
+    advance(run, 200);
+
+    expect(eventsOf(run, 'arrive')).toHaveLength(1);
+    expect(run.phase).toBe('locked');
   });
 
   it('lets the bill be paid once it is over', () => {

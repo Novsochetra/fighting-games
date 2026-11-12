@@ -33,6 +33,26 @@ function nextQuestion(run) {
   });
 }
 
+const sameSum = (left, right) =>
+  left.op === right.op && left.left === right.left && left.right === right.right;
+
+// Bills are made a customer ahead, each kept apart from the one made before it. When the customer
+// at the back goes next door, the one walking up comes straight after the new back of the row,
+// and must be kept apart from that bill instead.
+export function keepApart(run) {
+  const before = run.queue[run.queue.length - 1]?.question;
+  const walker = run.arriving.customer;
+
+  if (before && sameSum(before, walker.question)) {
+    walker.question = makeQuestion(run, {
+      stage: stageOf(run.served),
+      op: walker.question.op,
+      previous: before,
+    });
+    run.lastSum = walker.question;
+  }
+}
+
 export function nextCustomer(run) {
   const question = nextQuestion(run);
 

@@ -7,6 +7,22 @@
   aspect-ratio: 5 / 1.2;
   margin: 0 calc(-1 * var(--space-2));
   overflow: hidden;
+  pointer-events: none;
+}
+
+/* held sideways the row's column is wide but short: the row keeps to its own height */
+@media (orientation: landscape) and (max-height: 560px) {
+  .stools {
+    aspect-ratio: auto;
+    height: clamp(52px, 19vh, 92px);
+  }
+}
+
+/* a very short phone held upright: lower stools */
+@media (orientation: portrait) and (max-height: 600px) {
+  .stools {
+    aspect-ratio: 5 / 0.9;
+  }
 }
 
 .stool {
@@ -140,8 +156,9 @@
   animation: step var(--duration-step) steps(2, jump-none) infinite;
 }
 
+/* backwards only: held at its end, the settle would outrank the front customer's lean */
 .guest.is-seated .guest-body {
-  animation: settle var(--duration-medium) var(--ease-thump) both;
+  animation: settle var(--duration-medium) var(--ease-thump) backwards;
 }
 
 /* the one being served leans in to the counter; the rest wait a little back */
@@ -209,9 +226,21 @@
 
 @media (prefers-reduced-motion: reduce) {
   .guest,
+  .guest.is-leaving,
+  .guest.is-going,
   .guest.is-walking .guest-body,
-  .guest.is-seated .guest-body {
+  .guest.is-seated .guest-body,
+  .stool.is-last::after {
     transition: none;
     animation: none;
+  }
+
+  .guest.is-leaving,
+  .guest.is-going {
+    display: none;
+  }
+
+  .stool.is-last::after {
+    opacity: 1;
   }
 }

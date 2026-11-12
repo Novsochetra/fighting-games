@@ -55,8 +55,17 @@ function installButtons(stage, actions) {
   });
 }
 
+const pressesButton = (event) =>
+  (event.code === 'Enter' || event.code === 'Space') && !!event.target.closest?.('button');
+
+// Enter or Space on a focused bundle, pile or button presses that button, as the browser's own
+// click does: only with nothing focused do they give the count
 function counterKey(event, actions) {
   const piece = Math.max(DIGITS.indexOf(event.code), PAD.indexOf(event.code));
+
+  if (pressesButton(event)) {
+    return;
+  }
 
   if (piece >= 0) {
     actions.deal(RIEL.pieces[piece]);

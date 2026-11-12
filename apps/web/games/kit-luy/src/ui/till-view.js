@@ -55,7 +55,13 @@ export function createTillView({ till, text }) {
     write,
     show,
     bundle: (value) => till.querySelector(`[data-value="${value}"]`),
-    pull: (value) => replay(till.querySelector(`[data-value="${value}"]`), 'is-pulled'),
+    // a bundle that has just snapped in would keep that motion, which outranks the pull
+    pull(value) {
+      const bundle = till.querySelector(`[data-value="${value}"]`);
+
+      bundle.classList.remove('is-new');
+      replay(bundle, 'is-pulled');
+    },
 
     snapIn(values) {
       values.forEach((value) => replay(till.querySelector(`[data-value="${value}"]`), 'is-new'));

@@ -1,3 +1,4 @@
+import { clothTotal } from '../sim/pieces.js';
 import { applyText } from '../ui/text.js';
 import { openStall } from './flow.js';
 
@@ -22,8 +23,9 @@ export function createSettingsChanged(stage) {
     stage.cloth.show(run.cloth);
     stage.sign.showBest(game.records.best);
 
-    if (run.queue.length > 0 && run.phase !== 'closed') {
-      stage.slip.show(run.queue[0], run.served + 1);
+    if (run.queue.length > 0 && run.phase !== 'closed' && !stage.nextSlip) {
+      stage.slip.rewrite(run.queue[0], run.served + 1);
+      stage.slip.count(run.showTotal ? clothTotal(run.cloth) : null);
     }
   };
 }

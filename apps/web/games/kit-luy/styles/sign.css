@@ -97,6 +97,24 @@
   outline-offset: 2px;
 }
 
+.plate-icon {
+  display: none;
+  width: 20px;
+  height: 20px;
+  fill: var(--color-blue-deep);
+  stroke: var(--color-paper);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.plate-glyph {
+  place-items: center;
+  font-family: var(--font-sign);
+  font-size: var(--font-size-md);
+  line-height: var(--leading-digits);
+}
+
 .plate-pause {
   min-width: 44px;
   font-family: var(--font-sign);
@@ -129,5 +147,48 @@
   (min-width: 900px) and (min-aspect-ratio: 5/4) {
   .sign-best {
     min-height: 0;
+  }
+}
+
+/* Wherever the big painted name would leave the till below the screen, the title packs the name
+   and its plates into one row, the plates shown as their icons and named by their labels. */
+@media (orientation: portrait) and (max-height: 820px),
+  (orientation: landscape) and (max-height: 560px) {
+  #app[data-view='title'] .sign {
+    grid-template-columns: 1fr auto;
+  }
+
+  #app[data-view='title'] .sign-name {
+    grid-column: 1;
+    text-align: left;
+  }
+
+  #app[data-view='title'] .sign-title {
+    font-size: var(--font-size-xl);
+    transform: none;
+  }
+
+  #app[data-view='title'] .sign-best {
+    min-height: 0;
+    font-size: var(--font-size-xs);
+  }
+
+  .plate-word {
+    display: none;
+  }
+
+  .plate-icon {
+    display: grid;
+  }
+
+  .plates .plate {
+    min-width: 40px;
+    padding: 0 var(--space-2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .takings.is-bumped {
+    animation: none;
   }
 }

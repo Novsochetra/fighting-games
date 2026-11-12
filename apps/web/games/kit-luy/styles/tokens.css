@@ -101,6 +101,15 @@
   --ease-shutter: cubic-bezier(0.5, 0, 0.3, 1);
 }
 
+/* a very short phone held upright: the bill's figures come down a size */
+@media (orientation: portrait) and (max-height: 600px) {
+  :root {
+    --font-size-sum: min(9vw, 34px);
+    --font-size-sum-long: min(7.4vw, 28px);
+    --font-size-total: min(7vw, 24px);
+  }
+}
+
 /* held sideways the bill is half the screen wide, so its sum is set against that half */
 @media (orientation: landscape) and (max-height: 560px),
   (min-width: 900px) and (min-aspect-ratio: 5/4) {

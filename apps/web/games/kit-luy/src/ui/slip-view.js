@@ -3,6 +3,14 @@ import { createPiece } from './piece.js';
 import { writeSum } from './sum-text.js';
 
 const SERIAL_DIGITS = 4;
+const MOTIONS = ['is-torn', 'is-refused', 'is-thumped'];
+
+// the bill moves one way at a time: a motion left on it would outrank the next, which then
+// would not play
+function move(slip, motion) {
+  slip.classList.remove(...MOTIONS);
+  replay(slip, motion);
+}
 const TORN_OFF_MS = 560;
 
 const serialOf = (number) => String(number).padStart(SERIAL_DIGITS, '0');
@@ -44,7 +52,7 @@ function writeBill(at, text, customer, number) {
 
   at.blank.classList.remove('is-paid', 'is-extra');
   setText(at.slipAsk, text.t(`ask.${question.op}`));
-  setText(at.serial, text.t('play.serial', { number: serialOf(number) }));
+  setText(at.serial, text.t('play.serial', { number: text.digits(serialOf(number)) }));
   setText(at.total, '');
   setText(at.mend, '');
   writeSum(at.sum, question, text);
@@ -55,7 +63,14 @@ function writeBill(at, text, customer, number) {
 
 export function createSlipView(at, text) {
   return {
-    show: (customer, number) => writeBill(at, text, customer, number),
+    // written again as it stands, in the language and numerals just chosen
+    rewrite(customer, number) {
+      const mend = at.mend.textContent;
+
+      writeBill(at, text, customer, number);
+      setText(at.mend, mend);
+    },
+
     isPaid: () => at.blank.classList.contains('is-paid'),
 
     turnPage(customer, number) {
@@ -64,7 +79,7 @@ export function createSlipView(at, text) {
       }
 
       writeBill(at, text, customer, number);
-      replay(at.slip, 'is-torn');
+      move(at.slip, 'is-torn');
       replay(at.sum, 'is-written');
     },
 
@@ -81,13 +96,13 @@ export function createSlipView(at, text) {
       setText(at.total, text.number(paid.amount));
       setText(at.mend, earned(paid, text));
       replay(at.mend, 'is-written');
-      replay(at.slip, 'is-thumped');
+      move(at.slip, 'is-thumped');
     },
 
     refuse(wrong) {
       setText(at.mend, refusal(wrong, text));
       replay(at.mend, 'is-written');
-      replay(at.slip, 'is-refused');
+      move(at.slip, 'is-refused');
     },
   };
 }

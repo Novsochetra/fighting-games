@@ -15,8 +15,22 @@ function showCount(stage) {
 }
 
 function showCloth(stage) {
-  stage.cloth.show(stage.game.run.cloth);
+  const { cloth } = stage.game.run;
+
+  stage.cloth.show(cloth);
+  stage.at.cloth.classList.toggle('has-pieces', Object.keys(cloth).length > 0);
   showCount(stage);
+}
+
+// A count given while the next bill still waits behind the stamp is judged against that bill, so
+// it is put in front at once, and the refusal or stamp lands on it.
+function turnPageNow(stage, number) {
+  const next = stage.nextSlip;
+
+  if (next) {
+    stage.nextSlip = null;
+    stage.slip.turnPage(next.customer, number);
+  }
 }
 
 function opened(stage) {
@@ -48,6 +62,8 @@ function dealt(stage, { value }) {
 function paid(stage, event) {
   const amount = event.pieces.reduce((sum, value) => sum + value, 0);
 
+  turnPageNow(stage, event.served);
+
   stage.cloth.handOver(stage.at.blank);
   stage.slip.stamp({ ...event, amount });
   replay(stage.at.takings, 'is-bumped');
@@ -57,6 +73,7 @@ function paid(stage, event) {
 }
 
 function wrong(stage, event) {
+  turnPageNow(stage, stage.game.run.served + 1);
   stage.slip.refuse(event);
   stage.cloth.hop();
   stage.audio.play('wrong');

@@ -26,6 +26,7 @@ export const KM = {
   'ask.div': 'ម្នាក់ប៉ុន្មាន?',
   'over.title': 'បិទតូប',
   'over.served': 'ភ្ញៀវ {count} នាក់',
+  'over.servedOne': 'ភ្ញៀវ {count} នាក់',
   'over.takings': 'ថ្ងៃនេះលក់បាន',
   'over.newBest': 'កំណត់ត្រាថ្មី!',
   'settings.sound': 'សំឡេង',

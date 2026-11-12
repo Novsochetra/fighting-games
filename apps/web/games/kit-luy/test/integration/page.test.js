@@ -129,7 +129,7 @@ describe('the stall on its page', () => {
 
     page.wait(1200);
     expect(page.openMenu()).toBe('m-over');
-    expect(page.text('overServed')).toBe('1 customers served');
+    expect(page.text('overServed')).toBe('1 customer served');
     expect(page.text('overTakings')).toBe('1,500៛');
     expect(page.text('overStamp')).toBe('Best day!');
     expect(page.saved().records).toEqual({ best: 1500, bestServed: 1, plays: 1 });
@@ -174,5 +174,20 @@ describe('keys pressed faster than the page draws', () => {
     page.step();
 
     expect(page.game.run.cloth).toEqual({ 500: 1 });
+  });
+});
+
+describe('a keyboard on a focused button', () => {
+  it('counts the piece of the bundle Enter is pressed on, and gives nothing', () => {
+    const page = openPage();
+    const bundle = page.bundle(1000);
+
+    bundle.focus();
+    bundle.dispatchEvent(new window.KeyboardEvent('keydown', { code: 'Enter', bubbles: true }));
+    bundle.click();
+    page.step();
+
+    expect(page.game.run.cloth).toEqual({ 1000: 1 });
+    expect(page.game.run.served).toBe(0);
   });
 });

@@ -76,6 +76,9 @@
   line-height: var(--leading-sign);
   color: var(--color-stamp);
   transform: rotate(9deg);
+}
+
+.tally-stamp.is-stamped {
   animation: thump-new var(--duration-fast) var(--ease-thump) both;
 }
 
@@ -124,7 +127,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .tally-pieces .piece,
-  .tally-stamp {
+  .tally-stamp.is-stamped {
     animation: none;
   }
 }

@@ -1,5 +1,5 @@
 import { piecesFor } from '../../src/sim/pieces.js';
-import { advance, createRun, deal, drainEvents, give } from '../../src/sim/run.js';
+import { advance, createRun, deal, drainEvents, give, takeBack } from '../../src/sim/run.js';
 
 const STEP_MS = 16;
 // far past any run the tuning allows, so a bot the stall cannot close still ends
@@ -52,19 +52,21 @@ function dealAll(play, values) {
   }
 }
 
+// A miss counts one piece too many, the smallest in the till, gives, and takes it back: one too
+// few would be no count at all when the answer is a single piece.
 function serveBill(play, isMiss) {
   wait(play, play.thinkMs);
 
   const { run } = play;
   const way = piecesFor(run.queue[0].question.answer, run.pieces);
-  const held = isMiss ? way.slice(-1) : [];
+  const extra = Math.min(...run.pieces);
 
-  dealAll(play, way.slice(0, way.length - held.length));
+  dealAll(play, isMiss ? [...way, extra] : way);
 
   if (isMiss) {
     tap(play, give);
     waitOutLock(play);
-    dealAll(play, held);
+    tap(play, (now) => takeBack(now, extra));
   }
 
   tap(play, give);
@@ -75,14 +77,17 @@ export function playRecorded({ seed, ops, thinkMs, tapMs, missEvery }) {
 
   collect(play);
 
-  for (let bill = 1; !isOver(play.run); bill++) {
-    serveBill(play, missEvery > 0 && bill % missEvery === 0);
+  let bills = 0;
+
+  while (!isOver(play.run)) {
+    bills += 1;
+    serveBill(play, missEvery > 0 && bills % missEvery === 0);
   }
 
   const { takings, served, bestStreak, stage, elapsed } = play.run;
 
   return {
-    result: { takings, served, bestStreak, stage, elapsed, wrongs: play.wrongs },
+    result: { takings, served, bestStreak, stage, elapsed, bills, wrongs: play.wrongs },
     asked: play.asked,
     events: play.events,
   };

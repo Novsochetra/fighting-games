@@ -44,4 +44,13 @@ describe('recorded runs', () => {
     expect(result.elapsed).toBeLessThanOrEqual(MOST_PLAY_MS);
     expect(result.served).toBeGreaterThan(5);
   });
+
+  // the bill the stall closed on may have been a miss not yet given
+  it.each(Object.entries(BOTS))('makes every mistake the %s plans', (_name, bot) => {
+    const { result } = playRecorded(bot);
+    const planned = Math.floor(result.bills / bot.missEvery);
+
+    expect(result.wrongs).toBeGreaterThanOrEqual(planned - 1);
+    expect(result.wrongs).toBeLessThanOrEqual(planned);
+  });
 });

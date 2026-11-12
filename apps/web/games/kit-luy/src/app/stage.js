@@ -26,6 +26,7 @@ const ELEMENT_IDS = [
   'total',
   'mend',
   'extraStamp',
+  'cloth',
   'piles',
   'give',
   'till',

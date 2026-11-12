@@ -22,7 +22,22 @@ export function writeSum(element, question, text) {
   sign.className = 'sign-of';
   sign.textContent = parts.sign;
   element.dataset.size = sumSize(parts);
+  element.style.fontSize = '';
   element.replaceChildren(parts.left, sign, parts.right);
+  shrinkToFit(element);
+}
+
+// the size tiers go by how many figures a sum has, but a hand's figures differ in width: a sum
+// that still runs past the paper comes down until it fits
+function shrinkToFit(element) {
+  const room = element.clientWidth;
+  const needed = element.scrollWidth;
+
+  if (room > 0 && needed > room) {
+    const size = parseFloat(element.ownerDocument.defaultView.getComputedStyle(element).fontSize);
+
+    element.style.fontSize = `${Math.floor((size * room) / needed)}px`;
+  }
 }
 
 export const answerLine = (question, text) => {

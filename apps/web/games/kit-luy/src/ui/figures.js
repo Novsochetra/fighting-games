@@ -65,6 +65,8 @@ function draw(document, viewBox, shapes, className) {
   const svg = document.createElementNS(SVG, 'svg');
 
   svg.setAttribute('viewBox', viewBox);
+  // drawn on the floor of its box, so a stool is never lifted off the ground or a sitter off it
+  svg.setAttribute('preserveAspectRatio', 'xMidYMax meet');
   svg.setAttribute('class', className);
   svg.setAttribute('aria-hidden', 'true');
 

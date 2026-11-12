@@ -1,7 +1,7 @@
 import { RIEL } from '../data/currency.js';
 import { countUp } from '../lib/count-up.js';
 import { piecesFor } from '../sim/pieces.js';
-import { setText } from './dom.js';
+import { replay, setText } from './dom.js';
 import { createPiece } from './piece.js';
 import { answerLine } from './sum-text.js';
 
@@ -34,11 +34,17 @@ export function createResultsView(at, text) {
         nextAt: now,
       };
       at.overStamp.hidden = !summary.isNewBest;
+      replay(at.overStamp, 'is-stamped');
       at.overPieces.replaceChildren();
       at.overMissed.replaceChildren(
         ...summary.missed.map((missed) => missedLine(document, missed, text)),
       );
-      setText(at.overServed, text.t('over.served', { count: text.number(summary.served) }));
+      setText(
+        at.overServed,
+        text.t(summary.served === 1 ? 'over.servedOne' : 'over.served', {
+          count: text.number(summary.served),
+        }),
+      );
     },
 
     // answers with the value counted out this frame, if any, so the page can sound it

@@ -30,14 +30,20 @@
   right: -8px;
 }
 
+/* the piles, always inside the cloth (see fit in cloth-view.js) */
 .piles {
   position: absolute;
-  inset: var(--space-3);
+  inset: var(--space-2) var(--space-3);
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-4) var(--space-3);
   place-content: center;
-  align-items: flex-start;
+  align-items: center;
+}
+
+.pile-break {
+  flex-basis: 100%;
+  height: 0;
 }
 
 /* a pile is a button: a tap takes its top piece back. Its pieces fan out a little each, so
@@ -47,8 +53,9 @@
   --piece-h: 36px;
 
   position: relative;
+  flex: none;
   width: calc(var(--piece-w) + (var(--n, 1) - 1) * 5px);
-  height: calc(var(--piece-h) + (var(--n, 1) - 1) * 6px);
+  height: calc(var(--piece-h) + (var(--n, 1) - 1) * var(--fan-y, 6px));
   padding: 0;
   border: 0;
   background: none;
@@ -62,13 +69,13 @@
   width: var(--piece-w);
   height: var(--piece-h);
   box-shadow: var(--shadow-lift);
-  transform: translate(calc(var(--i) * 5px), calc(var(--i) * 6px)) rotate(var(--tilt));
+  transform: translate(calc(var(--i) * 5px), calc(var(--i) * var(--fan-y, 6px))) rotate(var(--tilt));
 }
 
 .pile-count {
   position: absolute;
-  top: -14px;
-  right: -10px;
+  top: -10px;
+  right: -8px;
   z-index: 1;
   padding: 0 var(--space-1);
   border-radius: var(--radius-sm);
@@ -109,10 +116,12 @@
   line-height: var(--leading-text);
   color: var(--color-blue);
   text-align: center;
+  pointer-events: none;
   animation: nudge var(--duration-pulse) var(--ease-out) infinite;
 }
 
-#app:not([data-view='title']) .lesson {
+#app:not([data-view='title']) .lesson,
+.cloth.has-pieces .lesson {
   display: none;
 }
 
@@ -121,18 +130,20 @@
     opacity: 0.6;
     transform: translate(
         calc(var(--i) * 5px + var(--from-x, 0px)),
-        calc(var(--i) * 6px + var(--from-y, 80px))
+        calc(var(--i) * var(--fan-y, 6px) + var(--from-y, 80px))
       )
       rotate(-14deg) scale(0.86);
   }
 
   55% {
     opacity: 1;
-    transform: translate(calc(var(--i) * 5px), calc(var(--i) * 6px - 14px)) rotate(8deg) scale(1.08);
+    transform: translate(calc(var(--i) * 5px), calc(var(--i) * var(--fan-y, 6px) - 14px))
+      rotate(8deg) scale(1.08);
   }
 
   100% {
-    transform: translate(calc(var(--i) * 5px), calc(var(--i) * 6px)) rotate(var(--tilt));
+    transform: translate(calc(var(--i) * 5px), calc(var(--i) * var(--fan-y, 6px)))
+      rotate(var(--tilt));
   }
 }
 
@@ -177,8 +188,11 @@
 @media (prefers-reduced-motion: reduce) {
   .pile .piece.is-dealt,
   .pile.is-refused,
-  .piles.is-given,
   .lesson {
     animation: none;
+  }
+
+  .piles.is-given {
+    display: none;
   }
 }

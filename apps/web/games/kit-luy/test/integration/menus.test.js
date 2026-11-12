@@ -103,14 +103,23 @@ describe('the stall’s shutter and its menus', () => {
     expect(document.querySelector('.bundle[data-value="1000"] .piece').textContent).toBe('១០០០');
   });
 
-  it('keeps the pencilled total from the third stage on, if the player asks', () => {
-    const page = openPage();
+  it.each([
+    ['always', 'Always', true],
+    ['early', 'At first', false],
+  ])('pencils the total on the third stage’s bills only if set to %s', (_value, label, shown) => {
+    const page = openPage({ settings: { total: _value } });
 
     page.click('#app [data-act="settings"]');
-    page.click('[data-setting="total"]');
+    expect(rowValue('total')).toBe(label);
+    page.click('#m-settings [data-act="back"]');
 
-    expect(rowValue('total')).toBe('Always');
-    expect(page.game.run.totalAlways).toBe(true);
+    while (page.game.run.stage < 3) {
+      page.serve();
+    }
+
+    page.deal(500);
+    page.step();
+    expect(page.text('total')).toBe(shown ? '500' : '');
   });
 
   it('takes a sum out of the mix and opens the stall afresh with what is left', () => {

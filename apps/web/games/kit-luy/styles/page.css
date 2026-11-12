@@ -155,25 +155,25 @@ ul {
     padding-top: calc(var(--space-5) + env(safe-area-inset-top, 0px));
   }
 
-  .cloth {
+  .counter .cloth {
     min-height: 64px;
   }
 
-  .give {
+  .counter .give {
     min-height: 44px;
   }
 
-  .bundle {
+  .counter .bundle {
     height: 46px;
   }
 
-  .slip {
+  .counter .slip {
     margin-top: var(--space-1);
     padding-top: var(--space-1);
     padding-bottom: 0;
   }
 
-  .mend:empty {
+  .counter .mend:empty {
     min-height: 0;
   }
 
@@ -187,5 +187,36 @@ ul {
 
   #app[data-view='title'] .plate {
     min-height: 34px;
+  }
+}
+
+@media (orientation: portrait) and (max-height: 600px) {
+  .counter {
+    padding-top: calc(var(--space-4) + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .counter .sign {
+    min-height: 38px;
+  }
+
+  .counter .slip-answer {
+    min-height: 36px;
+  }
+
+  .counter .blank {
+    height: 34px;
+  }
+
+  .counter .give {
+    min-height: 40px;
+  }
+
+  .counter .bundle {
+    height: 42px;
+  }
+
+  .counter .cloth {
+    min-height: 52px;
   }
 }

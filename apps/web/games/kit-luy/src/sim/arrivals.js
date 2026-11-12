@@ -38,7 +38,7 @@ function walk(run, ms) {
   run.elapsed += ms;
   run.arriving.left -= ms;
 
-  while (run.phase === 'serving' && run.arriving.left <= 0) {
+  while (run.phase !== 'closed' && run.arriving.left <= 0) {
     const late = -run.arriving.left;
 
     arrive(run);
@@ -53,18 +53,12 @@ function walk(run, ms) {
 }
 
 function countLockDown(run, ms) {
-  const over = ms - run.lockLeft;
+  run.lockLeft = Math.max(0, run.lockLeft - ms);
 
-  run.lockLeft = Math.max(0, -over);
-
-  if (over < 0) {
-    return 0;
+  if (run.lockLeft === 0) {
+    run.phase = 'serving';
+    run.events.push({ type: 'unlock' });
   }
-
-  run.phase = 'serving';
-  run.events.push({ type: 'unlock' });
-
-  return over;
 }
 
 export function advance(run, ms) {
@@ -72,10 +66,13 @@ export function advance(run, ms) {
     return;
   }
 
-  const left = run.phase === 'locked' ? countLockDown(run, ms) : ms;
+  if (run.phase === 'locked') {
+    countLockDown(run, ms);
+  }
 
-  // a wrong give on the very first bill must still unlock, though the clock has yet to start
-  if (run.started && left > 0) {
-    walk(run, left);
+  // A wrong count costs time: customers keep walking up through the lock. Were they held, giving
+  // a wrong count again the moment each lock ended would keep the day still for good.
+  if (run.started) {
+    walk(run, ms);
   }
 }

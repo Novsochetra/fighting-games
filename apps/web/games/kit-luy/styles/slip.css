@@ -296,7 +296,7 @@
   .sum.is-written,
   .mend.is-written,
   .blank.is-paid::after,
-  .blank.is-paid .stamp,
+  .blank.is-paid .stamp:not(.stamp-extra),
   .blank.is-extra .stamp-extra {
     animation: none;
   }
