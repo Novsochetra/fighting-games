@@ -1,5 +1,3 @@
-// One menu shows at a time, on the shutter: the screen's own (pause, over), or a sheet opened
-// over it (settings, help), which Back closes. With none open the shutter is up.
 export function createMenus(shutter) {
   const sections = [...shutter.querySelectorAll('.menu')];
   let screenMenu = null;

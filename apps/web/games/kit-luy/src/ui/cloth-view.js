@@ -37,8 +37,6 @@ const largestFirst = (cloth) =>
 
 const centre = (box) => ({ x: box.left + box.width / 2, y: box.top + box.height / 2 });
 
-// The cloth is drawn from the run's count each time it changes: a fanned pile a value, largest at
-// the left, a tap on a pile taking its top piece back.
 export function createClothView({ piles, text, window }) {
   const document = piles.ownerDocument;
 
@@ -47,7 +45,6 @@ export function createClothView({ piles, text, window }) {
       piles.replaceChildren(...largestFirst(cloth).map((entry) => pileOf(document, entry, text)));
     },
 
-    // the piece just counted flies in from where its bundle lies
     land(value, bundle) {
       const pile = piles.querySelector(`.pile[data-value="${value}"]`);
       const piece = pile?.querySelectorAll('.piece');

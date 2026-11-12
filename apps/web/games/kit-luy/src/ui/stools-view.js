@@ -81,7 +81,6 @@ function createDepartures() {
   };
 }
 
-// the last free stool warns that the next customer to come will find none
 function markLastStool(stools, run) {
   const last = run.phase !== 'closed' && run.queue.length === stools.length - 1;
 

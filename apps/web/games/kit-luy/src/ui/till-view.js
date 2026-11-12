@@ -6,7 +6,6 @@ import { createPiece } from './piece.js';
 const PLACES = [100, 10000, 20000, 50000, 500, 1000, 2000, 5000];
 const WAD = 3;
 
-// a bundle is a wad of pieces under a rubber band, the top one square, the rest askew beneath
 function bundleOf(document, value, text) {
   const bundle = document.createElement('button');
   const key = document.createElement('kbd');

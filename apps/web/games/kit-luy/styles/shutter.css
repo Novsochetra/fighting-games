@@ -38,7 +38,6 @@
   }
 }
 
-/* the handle a hand pulls it down by */
 .shutter::before {
   position: absolute;
   bottom: calc(14px + env(safe-area-inset-bottom, 0px));
@@ -53,7 +52,6 @@
   content: '';
 }
 
-/* the bar along its foot */
 .shutter::after {
   position: absolute;
   right: 0;

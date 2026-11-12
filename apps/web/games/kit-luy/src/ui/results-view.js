@@ -18,8 +18,7 @@ function missedLine(document, { question }, text) {
   return line;
 }
 
-// The takings as the fewest pieces that make them, largest first: what is counted out at closing.
-// A day too good to count in a dozen pieces is counted in its dozen largest.
+// a day too good to count out in a dozen pieces is counted in its dozen largest
 export const closingCount = (takings) => piecesFor(takings, RIEL.pieces).slice(0, MOST_PIECES);
 
 export function createResultsView(at, text) {
@@ -42,8 +41,7 @@ export function createResultsView(at, text) {
       setText(at.overServed, text.t('over.served', { count: text.number(summary.served) }));
     },
 
-    // each frame: the figure rolls up, and the next piece is counted out when its turn comes,
-    // answering with the value counted so the page can sound it
+    // answers with the value counted out this frame, if any, so the page can sound it
     count(now) {
       tally.shown = countUp(tally.shown, tally.takings, RIEL.step);
       setText(at.overTakings, text.money(tally.shown));

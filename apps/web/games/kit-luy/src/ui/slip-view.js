@@ -21,7 +21,6 @@ function earned({ gain, clean, tip }, text) {
   return [`+${text.money(gain)}`, ...words].join('  ');
 }
 
-// a copy of the paid bill is torn off the pad and thrown aside, the page under it already new
 function tearOff(slip) {
   const copy = slip.cloneNode(true);
   const box = slip.getBoundingClientRect();
@@ -54,14 +53,11 @@ function writeBill(at, text, customer, number) {
   );
 }
 
-// The bill in front: whose it is, its sum, the piece they paid with, and the blank the count
-// goes in. The pad's serial is the number of the customer being served.
 export function createSlipView(at, text) {
   return {
     show: (customer, number) => writeBill(at, text, customer, number),
     isPaid: () => at.blank.classList.contains('is-paid'),
 
-    // a paid bill comes off the pad stamp and all, and the next is written in front of the player
     turnPage(customer, number) {
       if (at.blank.classList.contains('is-paid')) {
         tearOff(at.slip);
