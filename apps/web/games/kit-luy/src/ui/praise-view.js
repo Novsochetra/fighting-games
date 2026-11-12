@@ -26,7 +26,6 @@ function chipOf(document, { kind, amount, word }, text) {
   return chip;
 }
 
-// where each chip of a row starts, side by side and the row centred on `middle`
 export function rowLefts(widths, middle) {
   const row = widths.reduce((sum, width) => sum + width, 0) + CHIP_SPACE_PX * (widths.length - 1);
   let left = middle - row / 2;

@@ -18,7 +18,7 @@ const keyFor = (keypad, code) => {
   return figure === undefined ? null : keypad.querySelector(`.key[data-key="${figure}"]`);
 };
 
-// a key sunk from the keyboard comes up as the key is let go, or as the window loses the keys
+// a key still held as the window loses focus never sends its keyup
 function liftKeys(keypad) {
   const window = keypad.ownerDocument.defaultView;
   const liftAll = () =>
