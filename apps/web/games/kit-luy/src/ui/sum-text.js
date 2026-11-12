@@ -1,19 +1,32 @@
-import { COUNTS_BY, SIGNS } from '../data/operations.js';
+import { SIGNS } from '../data/operations.js';
 
-const SHORT_SUM = 13;
-const MEDIUM_SUM = 16;
+const LONG_SUM = 13;
+const COUNTED = { mul: true, div: true };
 
-export function sumText(question, text) {
-  const right = COUNTS_BY[question.op] ? text.number(question.right) : text.money(question.right);
+// a bill is written without the riel sign, as a seller writes one; the sign follows the blank
+export function sumParts(question, text) {
+  const right = COUNTED[question.op]
+    ? text.digits(String(question.right))
+    : text.number(question.right);
 
-  return `${text.money(question.left)} ${SIGNS[question.op]} ${right}`;
+  return { left: text.number(question.left), sign: SIGNS[question.op], right };
 }
 
-// a note holds 13 Khmer digits and signs across at full size; a longer sum is set smaller
-export function sumSize(sum) {
-  if (sum.length <= SHORT_SUM) {
-    return 'short';
-  }
+export const sumSize = ({ left, right }) =>
+  left.length + right.length + 3 > LONG_SUM ? 'long' : 'short';
 
-  return sum.length <= MEDIUM_SUM ? 'medium' : 'long';
+export function writeSum(element, question, text) {
+  const parts = sumParts(question, text);
+  const sign = element.ownerDocument.createElement('span');
+
+  sign.className = 'sign-of';
+  sign.textContent = parts.sign;
+  element.dataset.size = sumSize(parts);
+  element.replaceChildren(parts.left, sign, parts.right);
 }
+
+export const answerLine = (question, text) => {
+  const { left, sign, right } = sumParts(question, text);
+
+  return `${left} ${sign} ${right}`;
+};

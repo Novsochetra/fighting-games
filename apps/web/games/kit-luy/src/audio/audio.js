@@ -1,79 +1,51 @@
-import { SONG } from '../data/song.js';
-import { SOUNDS } from '../data/sounds.js';
-import { createMusic } from './music.js';
+import { openRig } from './rig.js';
+import { voicesFor } from './strikes.js';
 import { playVoice } from './voice.js';
 
-const MASTER_VOLUME = 0.9;
+// a phone may refuse (a call in progress); the next tap asks again
+const settle = (asked) => Promise.resolve(asked).catch(() => {});
 
-function openContext(window) {
-  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+// A context that has yet to start plays what the first tap asked for as soon as it does. One that
+// stopped later (the page hidden, a phone call) would play all it missed in one burst when it woke.
+function isListening(rig) {
+  const running = rig.context.state === 'running';
 
-  try {
-    // iPhone: play like a music app, so the silent switch does not mute the game (Safari 17+)
-    if (window.navigator.audioSession) {
-      window.navigator.audioSession.type = 'playback';
-    }
-  } catch {
-    // older WebKit exposes audioSession read-only; the context still works
-  }
+  rig.hasRun = rig.hasRun || running;
 
-  return new AudioContextClass({ latencyHint: 'interactive' });
+  return running || !rig.hasRun;
 }
 
-function build(window) {
-  const context = openContext(window);
-  const master = context.createGain();
-
-  master.gain.value = MASTER_VOLUME;
-  master.connect(context.destination);
-
-  return {
-    context,
-    master,
-    music: createMusic({ context, output: master, song: SONG, timers: window }),
-  };
-}
-
-// Sound starts at the first tap, as a page may not open it sooner, and stays silent where the
-// browser has no Web Audio. `settings` is read on every sound, so a switch flipped takes at once.
 export function createAudio({ window, settings }) {
-  let chain = null;
+  let rig = null;
+
+  function resume() {
+    if (rig && rig.context.state !== 'running') {
+      settle(rig.context.resume());
+    }
+  }
 
   function unlock() {
-    try {
-      chain ??= build(window);
+    rig = rig || openRig(window);
+    resume();
+  }
 
-      if (chain.context.state !== 'running') {
-        chain.context.resume().catch(() => {});
-      }
-    } catch {
-      chain = null;
+  function suspend() {
+    if (rig && rig.context.state === 'running') {
+      settle(rig.context.suspend());
     }
   }
 
-  return {
-    unlock,
+  function play(name, detail = {}) {
+    if (!rig || !settings.sound || !isListening(rig)) {
+      return;
+    }
 
-    play(name, transpose = 0) {
-      if (chain && settings.sound) {
-        for (const voice of SOUNDS[name]) {
-          playVoice(chain.context, chain.master, voice, {
-            at: chain.context.currentTime,
-            transpose,
-          });
-        }
-      }
-    },
+    const now = rig.context.currentTime;
 
-    startMusic() {
-      if (chain && settings.music) {
-        chain.music.start();
-      }
-    },
+    for (const voice of voicesFor(name, detail)) {
+      playVoice(rig, voice, now);
+    }
+  }
 
-    stopMusic: () => chain?.music.stop(),
-    hurryMusic: (rate) => chain?.music.setRate(rate),
-    suspend: () => chain?.context.suspend().catch(() => {}),
-    resume: () => chain?.context.resume().catch(() => {}),
-  };
+  return { unlock, play, suspend, resume };
 }

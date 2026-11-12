@@ -1,43 +1,36 @@
-import { rankOf } from './rank.js';
-import { accuracyOf } from './scoring.js';
+import { TUNING } from '../data/tuning.js';
 
-export const NO_RECORDS = { best: 0, bestStreak: 0, savings: 0, plays: 0 };
+export const NO_RECORDS = { best: 0, bestServed: 0, plays: 0 };
 
-const count = (value) => (Number.isFinite(value) && value > 0 ? Math.floor(value) : 0);
+const count = (value) => (Number.isSafeInteger(value) && value > 0 ? value : 0);
 
 export function sanitizeRecords(saved) {
   const from = saved && typeof saved === 'object' ? saved : {};
 
   return {
     best: count(from.best),
-    bestStreak: count(from.bestStreak),
-    savings: count(from.savings),
+    bestServed: count(from.bestServed),
     plays: count(from.plays),
   };
 }
 
 export function recordRun(records, run) {
   return {
-    best: Math.max(records.best, run.score),
-    bestStreak: Math.max(records.bestStreak, run.bestStreak),
-    savings: records.savings + run.score,
+    best: Math.max(records.best, run.takings),
+    bestServed: Math.max(records.bestServed, run.served),
     plays: records.plays + 1,
   };
 }
 
 // what the results screen tells of a run, against the records as they stood before it
 export function summarize(records, run) {
-  const after = recordRun(records, run);
-
   return {
-    score: run.score,
-    correct: run.correct,
-    accuracy: accuracyOf(run),
+    takings: run.takings,
+    served: run.served,
     bestStreak: run.bestStreak,
-    level: run.level,
-    best: after.best,
-    savings: after.savings,
-    isNewBest: run.score > records.best,
-    rankUp: rankOf(after.savings) !== rankOf(records.savings),
+    stage: run.stage,
+    missed: run.missed.slice(0, TUNING.missedShown),
+    best: recordRun(records, run).best,
+    isNewBest: run.takings > records.best && run.takings > 0,
   };
 }

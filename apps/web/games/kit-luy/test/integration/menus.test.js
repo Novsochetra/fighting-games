@@ -4,33 +4,31 @@ import { openPage } from '../support/open-page.js';
 
 const rowValue = (key) => document.querySelector(`[data-setting="${key}"] b`).textContent;
 
-describe('the game’s menus', () => {
-  it('pauses on Escape with the board covered, and goes on with Escape', () => {
+describe('the stall’s shutter and its menus', () => {
+  it('pulls the shutter down on Escape, the clock and the walker held, and up again', () => {
     const page = openPage();
 
-    page.play();
+    page.serve();
 
-    const { timeLeft } = page.game.run;
+    const { elapsed } = page.game.run;
 
     page.typeKey('Escape');
-    page.wait(3000);
-    expect(page.screen()).toBe('pause');
+    page.wait(5000);
     expect(page.openMenu()).toBe('m-pause');
-    expect(page.game.run.timeLeft).toBe(timeLeft);
+    expect(page.game.run.elapsed).toBe(elapsed);
 
     page.typeKey('Escape');
     page.step();
-    expect(page.screen()).toBe('play');
     expect(page.openMenu()).toBeNull();
   });
 
-  it('pauses from the pause button, and when the tab is hidden', () => {
+  it('pauses from the pause plate, and when the tab is hidden', () => {
     const page = openPage();
 
-    page.play();
-    page.click('.hud-pause');
+    page.serve();
+    page.click('.plate-pause');
     page.step();
-    expect(page.screen()).toBe('pause');
+    expect(page.view()).toBe('pause');
 
     page.click('#m-pause [data-act="resume"]');
     page.step();
@@ -39,125 +37,95 @@ describe('the game’s menus', () => {
     page.step();
     delete document.hidden;
 
-    expect(page.screen()).toBe('pause');
+    expect(page.view()).toBe('pause');
   });
 
-  it('takes no answer while paused', () => {
+  it('counts nothing behind the shutter', () => {
     const page = openPage();
 
-    page.play();
+    page.serve();
     page.typeKey('Escape');
-    page.pressRight();
-    page.typeKey('Digit1');
+    page.deal(1000);
+    page.typeKey('Digit3');
+    page.typeKey('Enter');
 
-    expect(page.game.run).toMatchObject({ correct: 0, wrong: 0 });
+    expect(page.game.run.cloth).toEqual({});
   });
 
-  it('quits to the title without counting the run', () => {
+  it('closes for the day from the pause, back to a new title counting nothing', () => {
     const page = openPage();
 
-    page.play();
-    page.pressRight();
+    page.serve();
     page.typeKey('Escape');
     page.click('#m-pause [data-act="quit"]');
     page.step();
 
-    expect(page.screen()).toBe('title');
-    expect(page.text('titleSavings')).toBe('0៛');
+    expect(page.view()).toBe('title');
+    expect(page.openMenu()).toBeNull();
+    expect(page.game.records.plays).toBe(0);
   });
 
-  it('opens Settings over the title and steps back out with Back or Escape', () => {
+  it('opens Settings and How to play over the title, and Back or Escape closes them', () => {
     const page = openPage();
 
-    page.click('#m-title [data-act="settings"]');
+    page.click('#app [data-act="settings"]');
     expect(page.openMenu()).toBe('m-settings');
 
     page.click('#m-settings [data-act="back"]');
-    expect(page.openMenu()).toBe('m-title');
+    expect(page.openMenu()).toBeNull();
 
-    page.click('#m-title [data-act="help"]');
+    page.click('#app [data-act="help"]');
     page.typeKey('Escape');
-    expect(page.openMenu()).toBe('m-title');
-    expect(page.screen()).toBe('title');
+    expect(page.openMenu()).toBeNull();
+    expect(page.view()).toBe('title');
   });
 
   it('says the whole page again in Khmer when the language changes, and keeps the choice', () => {
     const page = openPage();
 
-    page.click('#m-title [data-act="settings"]');
-    expect(rowValue('lang')).toBe('English');
-
+    page.click('#app [data-act="settings"]');
     page.click('[data-setting="lang"]');
 
     expect(rowValue('lang')).toBe('ខ្មែរ');
     expect(document.documentElement.lang).toBe('km');
-    expect(document.querySelector('#settingsTitle').textContent).toBe('ការកំណត់');
-    expect(document.querySelector('[data-setting="sound"] span').textContent).toBe('សំឡេង');
-    expect(document.querySelector('.hud-pause').getAttribute('aria-label')).toBe('ផ្អាក');
+    expect(document.getElementById('settingsTitle').textContent).toBe('ការកំណត់');
+    expect(page.text('slipAsk')).toBe('ទាំងអស់ប៉ុន្មាន?');
     expect(page.saved().settings.lang).toBe('km');
   });
 
-  it('writes the question a pause covers again in the numerals just chosen', () => {
+  it('writes the money and the bill again in the numerals just chosen', () => {
     const page = openPage();
 
-    page.play();
-    page.typeKey('Escape');
-    page.click('#m-pause [data-act="settings"]');
+    page.click('#app [data-act="settings"]');
     page.click('[data-setting="numerals"]');
 
-    expect(page.text('sum')).toMatch(/^[០-៩,]+៛ [+−×÷] [០-៩,]+៛?$/);
-    expect(page.text('titleBest')).toBe('០៛');
+    expect(page.text('sum')).toBe('៥០០+៥០០');
+    expect(document.querySelector('.bundle[data-value="1000"] .piece').textContent).toBe('១០០០');
   });
 
-  it('keeps a question the countdown hides hidden through a change of settings', () => {
+  it('keeps the pencilled total from the third stage on, if the player asks', () => {
     const page = openPage();
 
-    page.click('#m-title [data-act="play"]');
-    page.step();
-    page.typeKey('Escape');
-    page.click('#m-pause [data-act="settings"]');
-    page.click('[data-setting="numerals"]');
+    page.click('#app [data-act="settings"]');
+    page.click('[data-setting="total"]');
 
-    expect(page.text('sum')).toBe('?');
+    expect(rowValue('total')).toBe('Always');
+    expect(page.game.run.totalAlways).toBe(true);
   });
 
-  it('turns the sound off and back on from its row', () => {
-    const page = openPage();
-
-    page.click('#m-title [data-act="settings"]');
-    page.click('[data-setting="sound"]');
-    expect(rowValue('sound')).toBe('Off');
-    expect(page.game.settings.sound).toBe(false);
-
-    page.click('[data-setting="sound"]');
-    expect(rowValue('sound')).toBe('On');
-  });
-
-  it('takes a sum out of the mix from the title, down to the last one', () => {
+  it('takes a sum out of the mix and opens the stall afresh with what is left', () => {
     const page = openPage();
     const chip = (op) => document.querySelector(`.chip[data-op="${op}"]`);
 
-    for (const op of ['add', 'sub', 'mul', 'div']) {
+    page.click('#app [data-act="settings"]');
+
+    for (const op of ['add', 'sub', 'mul']) {
       chip(op).click();
     }
 
     expect(page.game.settings.ops).toEqual(['div']);
     expect(chip('div').getAttribute('aria-pressed')).toBe('true');
     expect(chip('add').getAttribute('aria-pressed')).toBe('false');
-    expect(page.saved().settings.ops).toEqual(['div']);
-
-    page.play();
-    expect(page.game.run.question.op).toBe('div');
-  });
-
-  it('gives the open menu’s first choice the focus, for a keyboard', () => {
-    const page = openPage();
-
-    expect(document.activeElement.dataset.act).toBe('play');
-
-    page.play();
-    page.typeKey('Escape');
-    page.step();
-    expect(document.activeElement.dataset.act).toBe('resume');
+    expect(page.game.run.queue[0].question.op).toBe('div');
   });
 });

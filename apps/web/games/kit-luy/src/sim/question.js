@@ -1,52 +1,57 @@
 import { RIEL } from '../data/currency.js';
-import { levelSpec } from '../data/levels.js';
+import { SURE_SUMS } from '../data/stages.js';
+import { TUNING } from '../data/tuning.js';
 import { nextRandom, pick, randomInt } from '../lib/rng.js';
+import { fewestPieces } from './pieces.js';
 
-const RETRIES = 6;
-const PAID_WITH_A_NOTE = 0.5;
+const stepped = (rng, low, high, step) =>
+  randomInt(rng, Math.ceil(low / step), Math.floor(high / step)) * step;
 
-const stepped = (rng, low, high, step) => randomInt(rng, low / step, high / step) * step;
-
-// Change is mostly counted back from a banknote, so half the take-aways start from one.
-function amountPaid(rng, spec) {
-  const notes = RIEL.notes.filter((note) => note >= spec.step * 2 && note <= spec.max);
-
-  if (notes.length > 0 && nextRandom(rng) < PAID_WITH_A_NOTE) {
-    return pick(rng, notes);
+function paidWith(rng, stage) {
+  if (stage.oftenPaid && nextRandom(rng) < TUNING.oftenPaidChance) {
+    return stage.oftenPaid;
   }
 
-  return stepped(rng, spec.step * 2, spec.max, spec.step);
+  return pick(rng, stage.paidWith);
 }
 
 const MAKERS = {
-  add(rng, spec) {
-    const left = stepped(rng, spec.step, spec.max - spec.step, spec.step);
-    const right = stepped(rng, spec.step, spec.max - left, spec.step);
+  add(rng, stage) {
+    const answer = stepped(rng, 2 * stage.priceStep, stage.most, stage.priceStep);
+    const left = stepped(rng, stage.priceStep, answer - stage.priceStep, stage.priceStep);
 
-    return { left, right, answer: left + right };
+    return { left, right: answer - left, answer };
   },
 
-  sub(rng, spec) {
-    const left = amountPaid(rng, spec);
-    const right = stepped(rng, spec.step, left - spec.step, spec.step);
+  sub(rng, stage) {
+    const left = paidWith(rng, stage);
+    const mostChange = Math.min(stage.most, left - stage.priceStep);
+    const answer = stepped(rng, stage.least, mostChange, stage.priceStep);
 
-    return { left, right, answer: left - right };
+    return { left, right: left - answer, answer };
   },
 
-  mul(rng, spec) {
-    const left = stepped(rng, spec.step, spec.unitMax, spec.step);
-    const right = randomInt(rng, spec.times[0], spec.times[1]);
+  mul(rng, stage) {
+    const right = randomInt(rng, stage.times[0], stage.times[1]);
+    const left = stepped(rng, stage.priceStep, stage.most / right, stage.priceStep);
 
     return { left, right, answer: left * right };
   },
 
-  div(rng, spec) {
-    const answer = stepped(rng, spec.step, spec.unitMax, spec.step);
-    const right = randomInt(rng, spec.times[0], spec.times[1]);
+  div(rng, stage) {
+    const right = randomInt(rng, stage.shares[0], stage.shares[1]);
+    const answer = stepped(rng, stage.least, stage.most, stage.priceStep);
 
     return { left: answer * right, right, answer };
   },
 };
+
+export const suitsStage = (answer, stage) =>
+  answer >= stage.least &&
+  answer <= stage.most &&
+  answer % RIEL.step === 0 &&
+  stage.hundreds.includes(Math.floor(answer / 100) % 10) &&
+  fewestPieces(answer, stage.pieces) <= stage.mostPieces;
 
 const isSame = (question, previous) =>
   !!previous &&
@@ -54,19 +59,16 @@ const isSame = (question, previous) =>
   question.left === previous.left &&
   question.right === previous.right;
 
-function drawQuestion(rng, level, ops) {
-  const spec = levelSpec(level);
-  const op = pick(rng, ops);
+export function makeQuestion(rng, { stage, op, previous }) {
+  const sum = MAKERS[op] ? op : 'add';
 
-  return { op, step: spec.step, ...MAKERS[op](rng, spec) };
-}
+  for (let i = 0; i < TUNING.drawTries; i++) {
+    const question = { op: sum, ...MAKERS[sum](rng, stage) };
 
-export function makeQuestion(rng, { level, ops, previous }) {
-  let question = drawQuestion(rng, level, ops);
-
-  for (let i = 0; i < RETRIES && isSame(question, previous); i++) {
-    question = drawQuestion(rng, level, ops);
+    if (suitsStage(question.answer, stage) && !isSame(question, previous)) {
+      return question;
+    }
   }
 
-  return question;
+  return { ...SURE_SUMS[sum].find((sure) => !isSame(sure, previous)) };
 }

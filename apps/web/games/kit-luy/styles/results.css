@@ -1,60 +1,113 @@
-.results {
+/* Closing time: the day's tally on a long strip of the pad, in the seller's hand */
+.tally {
   position: relative;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  width: min(100%, 360px);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-radius: var(--radius-sm);
+  background:
+    repeating-linear-gradient(0deg, var(--color-clear) 0 31px, var(--color-rule) 31px 32px),
+    var(--color-paper);
+  box-shadow: var(--shadow-copy);
+  color: var(--color-blue);
+  transform: rotate(0.8deg);
 }
 
-.results-label {
+.tally-served,
+.tally-label {
   font-size: var(--font-size-sm);
-  line-height: var(--leading-body);
-  color: var(--color-text-muted);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-text);
 }
 
-.results-score {
-  font-family: var(--font-display);
-  font-size: var(--font-size-score);
-  line-height: var(--leading-digits);
-  color: var(--color-gold);
-  text-shadow: var(--text-shadow-hard);
+.tally-takings {
+  font-family: var(--font-hand);
+  font-size: var(--font-size-sum);
+  line-height: var(--leading-hand);
   white-space: nowrap;
 }
 
-.results-stamp {
+.tally-pieces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  justify-content: center;
+  min-height: 30px;
+  margin: var(--space-2) 0;
+}
+
+.tally-pieces .piece {
+  animation: count-out var(--duration-fast) var(--ease-thump) both;
+}
+
+.tally-missed {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  list-style: none;
+  font-family: var(--font-hand);
+  font-size: var(--font-size-lg);
+  line-height: var(--leading-hand);
+}
+
+.tally-missed li {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: space-between;
+  white-space: nowrap;
+}
+
+.tally-missed b {
+  font-weight: var(--font-weight-regular);
+  color: var(--color-red);
+}
+
+.tally-stamp {
   position: absolute;
-  top: -18px;
-  right: -8px;
+  top: var(--space-2);
+  right: calc(-1 * var(--space-2));
   padding: 0 var(--space-2);
-  border: var(--edge) solid var(--color-ink);
-  border-radius: var(--radius-sm);
-  background: var(--color-rose);
-  box-shadow: var(--shadow-hard);
-  font-family: var(--font-display);
+  border: 3px solid var(--color-stamp);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sign);
   font-size: var(--font-size-sm);
-  line-height: var(--leading-display);
-  color: var(--color-white);
-  transform: rotate(6deg);
-  animation: stamp-down var(--duration-medium) var(--ease-spring) both;
+  line-height: var(--leading-sign);
+  color: var(--color-stamp);
+  transform: rotate(9deg);
+  animation: thump-new var(--duration-fast) var(--ease-thump) both;
 }
 
-.stats-four {
-  grid-template-columns: repeat(4, 1fr);
-}
-
-@keyframes stamp-down {
+@keyframes count-out {
   0% {
     opacity: 0;
-    transform: rotate(6deg) scale(2.4);
+    transform: translateY(-14px);
   }
 
   100% {
     opacity: 1;
-    transform: rotate(6deg) scale(1);
+    transform: translateY(0);
   }
 }
 
-@media (orientation: landscape) and (max-height: 560px) {
+@keyframes thump-new {
+  0% {
+    opacity: 0;
+    transform: rotate(9deg) scale(1.8);
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotate(9deg) scale(1);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 560px),
+  (min-width: 900px) and (min-aspect-ratio: 5/4) {
   #m-over {
     flex-flow: row wrap;
-    gap: var(--space-3) var(--space-5);
+    gap: var(--space-2) var(--space-5);
     align-content: center;
     justify-content: center;
   }
@@ -64,13 +117,14 @@
     margin-bottom: 0;
   }
 
-  #m-over .mtitle {
+  #m-over .shutter-title {
     width: 100%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .results-stamp {
+  .tally-pieces .piece,
+  .tally-stamp {
     animation: none;
   }
 }

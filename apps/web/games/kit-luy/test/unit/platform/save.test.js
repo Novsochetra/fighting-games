@@ -21,8 +21,8 @@ describe('the save', () => {
 
   it('brings back the records and settings it stored', () => {
     const storage = memoryStorage();
-    const records = { best: 4200, bestStreak: 11, savings: 56000, plays: 9 };
-    const settings = { ...loadSave(storage, []).settings, music: false, ops: ['add', 'mul'] };
+    const records = { best: 42000, bestServed: 31, plays: 9 };
+    const settings = { ...loadSave(storage, []).settings, total: 'always', ops: ['add', 'mul'] };
 
     storeSave(storage, { records, settings });
 

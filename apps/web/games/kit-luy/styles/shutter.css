@@ -1,0 +1,276 @@
+/* Every menu is on the stall's roller shutter: it comes down over the counter to pause, to change
+   a setting and to close for the day, so a covered counter is never time to think. */
+.shutter {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: repeating-linear-gradient(
+    0deg,
+    var(--color-blue-deep) 0 15px,
+    var(--color-slat) 15px 17px,
+    var(--color-blue-dark) 17px 18px
+  );
+  transform: translateY(-101%);
+  transition: transform var(--duration-shutter) var(--ease-shutter);
+}
+
+.shutter.is-down {
+  transform: translateY(0);
+  animation: roll-down var(--duration-shutter) var(--ease-shutter) both;
+}
+
+/* rolled down hard, it bounces once on the counter */
+@keyframes roll-down {
+  0% {
+    transform: translateY(-101%);
+  }
+
+  78% {
+    transform: translateY(0);
+  }
+
+  88% {
+    transform: translateY(-2.5%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* the handle a hand pulls it down by */
+.shutter::before {
+  position: absolute;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  width: 64px;
+  height: 10px;
+  margin-left: -32px;
+  border: var(--edge) solid var(--color-blue-dark);
+  border-bottom: 0;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: var(--color-pencil);
+  content: '';
+}
+
+/* the bar along its foot */
+.shutter::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: calc(14px + env(safe-area-inset-bottom, 0px));
+  border-top: var(--edge) solid var(--color-blue-dark);
+  background: var(--color-pencil);
+  content: '';
+}
+
+.menu {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: center;
+  padding: calc(var(--space-4) + env(safe-area-inset-top, 0px))
+    calc(var(--space-4) + env(safe-area-inset-right, 0px))
+    calc(var(--space-5) + env(safe-area-inset-bottom, 0px))
+    calc(var(--space-4) + env(safe-area-inset-left, 0px));
+  overflow-y: auto;
+  touch-action: pan-y;
+}
+
+/* Auto margins centre a menu and still let one taller than the screen scroll from its top, which
+   plain centring cuts off and `safe center` only does in new browsers */
+.menu > :first-child {
+  margin-top: auto;
+}
+
+.menu > :last-child {
+  margin-bottom: auto;
+}
+
+.menu.open {
+  display: flex;
+}
+
+/* painted on the shutter itself, as a shop paints its name there */
+.shutter-title {
+  font-family: var(--font-sign);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-sign);
+  text-align: center;
+  text-shadow: var(--text-shadow-block);
+}
+
+.mlist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: min(100%, 320px);
+}
+
+.mbtn {
+  min-height: 48px;
+  padding: 0 var(--space-4);
+  border: var(--edge) solid var(--color-paper);
+  border-radius: var(--radius-sm);
+  background: var(--color-blue);
+  box-shadow: var(--shadow-plate);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-text);
+  color: var(--color-paper);
+  cursor: pointer;
+}
+
+.mbtn.primary {
+  border-width: 3px;
+  background: var(--color-red);
+  box-shadow: var(--shadow-press);
+  font-family: var(--font-sign);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-sign);
+}
+
+.mbtn:active,
+.row:active {
+  box-shadow: none;
+  transform: translateY(3px);
+}
+
+/* a sheet of the bill pad taped to the shutter */
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: min(100%, 440px);
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-paper);
+  box-shadow: var(--shadow-paper);
+  color: var(--color-blue);
+}
+
+.sheet-head {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sheet-head h2 {
+  font-family: var(--font-sign);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-sign);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 0 var(--space-1);
+  border: 0;
+  border-bottom: 1px solid var(--color-rule);
+  background: none;
+  font-size: var(--font-size-md);
+  line-height: var(--leading-text);
+  color: var(--color-blue);
+  text-align: left;
+  cursor: pointer;
+}
+
+.row b {
+  font-family: var(--font-hand);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-hand);
+  color: var(--color-red);
+  white-space: nowrap;
+}
+
+.row[data-off] b {
+  color: var(--color-pencil);
+}
+
+/* which sums the customers ask: each a rubber stamp, inked when it is in the mix */
+.mix {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.mix-label {
+  margin-right: auto;
+  font-size: var(--font-size-md);
+  line-height: var(--leading-text);
+}
+
+.chip {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: var(--edge) solid var(--color-pencil);
+  border-radius: var(--radius-md);
+  background: none;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-digits);
+  color: var(--color-pencil);
+  cursor: pointer;
+}
+
+.chip[aria-pressed='true'] {
+  border-color: var(--color-red);
+  color: var(--color-red);
+  transform: rotate(-5deg);
+}
+
+.help {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-left: 1.4em;
+  font-size: var(--font-size-sm);
+  line-height: var(--leading-text);
+}
+
+.help li::marker {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-red);
+}
+
+.help-keys {
+  display: none;
+}
+
+.help-note {
+  font-size: var(--font-size-xs);
+  line-height: var(--leading-text);
+  color: var(--color-pencil);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .help-keys {
+    display: list-item;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shutter,
+  .shutter.is-down {
+    transition: none;
+    animation: none;
+  }
+}

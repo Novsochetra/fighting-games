@@ -1,56 +1,80 @@
-const param = () => ({
-  value: 0,
-  setValueAtTime() {},
-  exponentialRampToValueAtTime() {},
-});
+function param(value) {
+  return {
+    value,
+    setValueAtTime(next) {
+      this.value = next;
+    },
+    linearRampToValueAtTime() {},
+    exponentialRampToValueAtTime() {},
+  };
+}
 
-// a Web Audio context that only remembers each oscillator started on it
+function node(kind, more) {
+  return {
+    kind,
+    next: null,
+    connect(next) {
+      this.next = next;
+
+      return next;
+    },
+    ...more,
+  };
+}
+
+function filterAfter(started) {
+  for (let at = started.next; at; at = at.next) {
+    if (at.kind === 'filter') {
+      return { type: at.type, frequency: at.frequency.value, q: at.Q.value };
+    }
+  }
+
+  return null;
+}
+
+function source(started, kind, more) {
+  const made = node(kind, {
+    ...more,
+    start(at = 0) {
+      const frequency = made.frequency ? made.frequency.value : null;
+
+      started.push({ kind, frequency, at, filter: filterAfter(made) });
+    },
+    stop() {},
+  });
+
+  return made;
+}
+
 export function fakeAudioContext() {
+  const started = [];
   const context = {
+    started,
     currentTime: 0,
-    state: 'running',
-    destination: {},
-    started: [],
-    resume: () => Promise.resolve(),
-    suspend: () => Promise.resolve(),
-    createGain: () => ({ gain: param(), connect() {} }),
-    createOscillator() {
-      const oscillator = {
-        type: 'sine',
-        frequency: {
-          ...param(),
-          setValueAtTime(hertz) {
-            oscillator.hertz = hertz;
-          },
-        },
-        connect() {},
-        start(at) {
-          context.started.push({ wave: oscillator.type, hertz: oscillator.hertz, at });
-        },
-        stop() {},
-      };
+    state: 'suspended',
+    sampleRate: 8000,
+    destination: node('destination'),
+    createGain: () => node('gain', { gain: param(1) }),
+    createBiquadFilter: () =>
+      node('filter', { type: 'lowpass', frequency: param(350), Q: param(1) }),
+    createOscillator: () => source(started, 'oscillator', { type: 'sine', frequency: param(440) }),
+    createBufferSource: () => source(started, 'noise', { buffer: null }),
+    createBuffer(channels, length) {
+      const samples = new Float32Array(length);
 
-      return oscillator;
+      return { length, getChannelData: () => samples };
+    },
+    resume() {
+      context.state = 'running';
+
+      return Promise.resolve();
+    },
+    suspend() {
+      context.state = 'suspended';
+
+      return Promise.resolve();
     },
   };
 
   return context;
-}
-
-// timers that fire only when the test says so
-export function fakeTimers() {
-  const timers = { callback: null, cleared: 0 };
-
-  return {
-    timers,
-    setInterval(callback) {
-      timers.callback = callback;
-
-      return 1;
-    },
-    clearInterval() {
-      timers.cleared += 1;
-      timers.callback = null;
-    },
-  };
 }

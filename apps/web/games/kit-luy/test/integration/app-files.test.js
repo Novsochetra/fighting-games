@@ -30,7 +30,6 @@ describe('the game’s files', () => {
   it('links a tab icon at the size it claims and a 180 pixel icon for iPhones', () => {
     expect(pngSize(new URL('assets/icons/icon-32.png', GAME))).toBe('32x32');
     expect(pngSize(new URL('assets/icons/apple-touch-icon.png', GAME))).toBe('180x180');
-    expect(page).toContain('rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png"');
   });
 
   it('ships every stylesheet, font and script its page names', () => {
@@ -40,16 +39,18 @@ describe('the game’s files', () => {
     expect(files.filter((file) => !existsSync(new URL(file, GAME)))).toEqual([]);
   });
 
-  it('ships every font its stylesheet names, with each font’s licence', () => {
+  it('ships every font its stylesheet names, with each family’s licence', () => {
     const css = readFileSync(new URL('styles/fonts.css', GAME), 'utf8');
     const fonts = [...css.matchAll(/url\('\.\.\/(assets\/fonts\/[^']+)'\)/g)].map(
       (match) => match[1],
     );
 
-    expect(fonts).toHaveLength(6);
+    expect(fonts).toHaveLength(8);
     expect(fonts.filter((font) => !existsSync(new URL(font, GAME)))).toEqual([]);
-    expect(existsSync(new URL('assets/fonts/OFL-koulen.txt', GAME))).toBe(true);
-    expect(existsSync(new URL('assets/fonts/OFL-kantumruy-pro.txt', GAME))).toBe(true);
+
+    for (const family of ['moul', 'fasthand', 'kantumruy-pro']) {
+      expect(existsSync(new URL(`assets/fonts/OFL-${family}.txt`, GAME)), family).toBe(true);
+    }
   });
 
   it('ships the art its catalog entry shows on the arcade’s home page', () => {

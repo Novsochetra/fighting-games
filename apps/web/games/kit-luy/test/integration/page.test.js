@@ -3,189 +3,176 @@ import { describe, expect, it } from 'vitest';
 import { TUNING } from '../../src/data/tuning.js';
 import { openPage } from '../support/open-page.js';
 
-describe('the game on its page', () => {
-  it('opens on the title with what the player has saved up', () => {
-    const page = openPage({ records: { best: 4200, bestStreak: 9, savings: 30000, plays: 5 } });
+describe('the stall on its page', () => {
+  it('opens on the title with the first customer’s bill and the four everyday bundles', () => {
+    const page = openPage({ records: { best: 42000, bestServed: 20, plays: 3 } });
 
-    expect(page.screen()).toBe('title');
-    expect(page.openMenu()).toBe('m-title');
-    expect(page.text('titleBest')).toBe('4,200៛');
-    expect(page.text('titleSavings')).toBe('30,000៛');
-    expect(page.text('titleRank')).toBe('Snack seller');
-    expect(page.text('titleNext')).toBe('20,000៛ to Market vendor');
-    expect(document.getElementById('titleRankFill').style.transform).toBe('scaleX(0.5)');
+    expect(page.view()).toBe('title');
+    expect(page.openMenu()).toBeNull();
+    expect(page.text('sum')).toBe('500+500');
+    expect(page.text('signBest')).toBe('Best day: 42,000៛');
+    expect(document.querySelectorAll('.bundle:not(.is-bare)')).toHaveLength(4);
+    expect(document.querySelectorAll('.guest')).toHaveLength(2);
   });
 
   it('opens in Khmer, in Khmer numerals, for a player who chose them', () => {
     const page = openPage({ settings: { lang: 'km', numerals: 'khmer' } });
 
     expect(document.documentElement.lang).toBe('km');
-    expect(document.querySelector('#m-title [data-act="play"]').textContent).toBe('លេង');
-    expect(page.text('titleBest')).toBe('០៛');
+    expect(page.text('give')).toBe('ឲ្យលុយ');
+    expect(page.text('sum')).toBe('៥០០+៥០០');
+    expect(document.querySelector('.bundle[data-value="5000"] .piece').textContent).toBe('៥០០០');
   });
 
-  it('counts down over a covered question, then asks the first one', () => {
+  it('holds the clock until the first customer is paid: paying them starts the day', () => {
     const page = openPage();
 
-    page.click('#m-title [data-act="play"]');
+    page.wait(20000);
+    expect(page.game.run.elapsed).toBe(0);
+
+    page.deal(1000);
+    page.give();
     page.step();
-    expect(page.screen()).toBe('countdown');
-    expect(page.openMenu()).toBeNull();
-    expect(page.text('banner')).toBe('3');
-    expect(page.text('sum')).toBe('?');
-    expect(page.keys().map((key) => key.lastElementChild.textContent)).toEqual(['', '', '', '']);
+    expect(page.view()).toBe('play');
 
-    page.wait(2400);
-    expect(page.screen()).toBe('play');
-    expect(page.text('banner')).toBe('Go!');
-    expect(page.text('sum')).toMatch(/^[\d,]+៛ [+−×÷] [\d,]+៛?$/);
-    expect(page.keys().every((key) => /^[\d,]+៛$/.test(key.lastElementChild.textContent))).toBe(
-      true,
-    );
+    page.wait(1000);
+    expect(page.game.run.elapsed).toBeGreaterThan(900);
   });
 
-  it('pays a right answer: the key lights, coins fly and the score rolls up', () => {
+  it('lays each piece dealt on the cloth, fanned in a pile with its count, and pencils the total', () => {
     const page = openPage();
 
-    page.play();
-
-    const index = page.game.run.question.correctIndex;
-
-    page.pressRight();
-    page.step();
-    expect(page.keys()[index].classList.contains('is-right')).toBe(true);
-    expect(page.stage.fx.particles.some((particle) => particle.kind === 'coin')).toBe(true);
-    expect(document.querySelector('.pop-gain').textContent).toBe('+200៛');
-
-    page.wait(400);
-    expect(page.text('score')).toBe('200៛');
-    expect(document.querySelectorAll('#streakPips .on')).toHaveLength(1);
-    expect(page.keys().some((key) => key.classList.contains('is-right'))).toBe(false);
-  });
-
-  it('shows a wrong answer for what it is, and which key was right', () => {
-    const page = openPage();
-
-    page.play();
-
-    const { correctIndex } = page.game.run.question;
-    const pressed = (correctIndex + 1) % 4;
-
-    page.pressWrong();
+    page.deal(500);
+    page.deal(500);
     page.step();
 
-    expect(page.keys()[pressed].classList.contains('is-wrong')).toBe(true);
-    expect(page.keys()[correctIndex].classList.contains('is-answer')).toBe(true);
-    expect(document.querySelectorAll('.answer.is-dim')).toHaveLength(2);
-    expect(document.getElementById('stage').classList.contains('is-shaken')).toBe(true);
-    expect(document.querySelector('.pop-penalty').textContent).toBe('−4s');
-    expect(page.text('clockSeconds')).toBe(String(TUNING.startTimeMs / 1000 - 4));
+    const pile = document.querySelector('.pile[data-value="500"]');
+
+    expect(pile.querySelectorAll('.piece')).toHaveLength(2);
+    expect(pile.querySelector('.pile-count').textContent).toBe('×2');
+    expect(page.text('total')).toBe('1,000');
   });
 
-  it('stamps the multiplier on the note at five in a row', () => {
+  it('takes a piece back off the cloth when its pile is tapped', () => {
     const page = openPage();
 
-    page.play();
-
-    for (let i = 0; i < TUNING.streakPerCombo; i++) {
-      page.pressRight();
-      page.wait(200);
-    }
-
-    expect(document.getElementById('combo').hidden).toBe(false);
-    expect(page.text('combo')).toBe('×2');
-  });
-
-  it('raises the level where it is written, with sparks and nothing over the board', () => {
-    const page = openPage();
-
-    page.play();
-
-    for (let i = 0; i < TUNING.answersPerLevel - 1; i++) {
-      page.pressRight();
-      page.wait(200);
-    }
-
-    page.pressRight();
+    page.deal(500);
+    page.deal(1000);
+    page.step();
+    page.take(500);
     page.step();
 
-    expect(document.getElementById('level').classList.contains('is-raised')).toBe(true);
-    expect(page.stage.fx.particles.some((particle) => particle.kind === 'spark')).toBe(true);
-    expect(page.stage.fx.particles.some((particle) => particle.kind === 'note')).toBe(false);
-    expect(page.text('banner')).toBe('Go!');
-
-    page.wait(200);
-    expect(page.text('level')).toBe('Level 2');
+    expect(document.querySelector('.pile[data-value="500"]')).toBeNull();
+    expect(page.text('total')).toBe('1,000');
   });
 
-  it('answers from the keyboard, keys 1 to 4', () => {
+  it('stamps a right count, says what it earned, and brings the next bill', () => {
     const page = openPage();
 
-    page.play();
-    page.typeKey(`Digit${page.game.run.question.correctIndex + 1}`);
+    page.deal(1000);
+    page.give();
+    page.step();
+    expect(document.getElementById('blank').classList.contains('is-paid')).toBe(true);
+    expect(page.text('mend')).toBe('+1,500៛  neat  quick');
 
-    expect(page.game.run.correct).toBe(1);
+    page.wait(320);
+    expect(page.text('serial')).toBe('No 0002');
+    expect(document.getElementById('blank').classList.contains('is-paid')).toBe(false);
+    expect(document.querySelectorAll('.pile')).toHaveLength(0);
   });
 
-  it('answers when a focused key is pressed with Enter, which comes as a click', () => {
+  it('refuses a wrong count, says it is short, and leaves the pieces to be put right', () => {
     const page = openPage();
 
-    page.play();
-    page.keys()[page.game.run.question.correctIndex].click();
+    page.deal(500);
+    page.give();
+    page.step();
 
-    expect(page.game.run.correct).toBe(1);
+    expect(page.text('mend')).toBe('Short!');
+    expect(document.querySelector('.pile[data-value="500"]')).not.toBeNull();
+
+    page.wait(TUNING.wrongLockMs + 50);
+    page.deal(500);
+    page.give();
+    page.step();
+    expect(page.text('mend')).toMatch(/^\+/);
   });
 
-  it('ends on the results, and keeps the run', () => {
+  it('says by how much from the second wrong count on a bill', () => {
     const page = openPage();
 
-    page.play();
-    page.pressRight();
-    page.wait(TUNING.maxTimeMs + 1000);
+    page.deal(500);
+    page.give();
+    page.wait(TUNING.wrongLockMs + 50);
+    page.give();
+    page.step();
 
-    expect(page.screen()).toBe('over');
+    expect(page.text('mend')).toBe('Short 500៛');
+  });
+
+  it('seats each customer who walks up, and rolls the takings up on the sign', () => {
+    const page = openPage();
+
+    page.serve();
+    page.wait(TUNING.firstArrivalMs);
+
+    expect(document.querySelectorAll('.guest').length).toBeGreaterThanOrEqual(3);
+    expect(page.text('takings')).toBe('1,500៛');
+  });
+
+  it('closes when a customer finds every stool taken, then brings the shutter down on the tally', () => {
+    const page = openPage();
+
+    page.serve();
+    page.wait(60000);
+    expect(page.view()).toBe('over');
+
+    page.wait(1200);
     expect(page.openMenu()).toBe('m-over');
-    expect(page.text('overScore')).toBe('200៛');
-    expect(page.text('overCorrect')).toBe('1');
-    expect(page.text('overAccuracy')).toBe('100%');
-    expect(page.text('overStamp')).toBe('New best!');
-    expect(page.saved().records).toEqual({ best: 200, bestStreak: 1, savings: 200, plays: 1 });
+    expect(page.text('overServed')).toBe('1 customers served');
+    expect(page.text('overTakings')).toBe('1,500៛');
+    expect(page.text('overStamp')).toBe('Best day!');
+    expect(page.saved().records).toEqual({ best: 1500, bestServed: 1, plays: 1 });
+    expect(document.querySelectorAll('#overPieces .piece').length).toBeGreaterThan(0);
   });
 
-  it('plays again from the results, from nothing', () => {
+  it('counts at the keyboard: 1 to 8 a piece, Backspace one back, Enter to give', () => {
     const page = openPage();
 
-    page.play();
-    page.pressRight();
-    page.wait(TUNING.maxTimeMs + 1000);
-    page.click('#m-over [data-act="play"]');
-    page.wait(2400);
+    page.typeKey('Digit3');
+    page.typeKey('Digit2');
+    page.typeKey('Backspace');
+    page.typeKey('Enter');
+    page.step();
 
-    expect(page.screen()).toBe('play');
-    expect(page.text('score')).toBe('0៛');
-    expect(page.game.records.plays).toBe(1);
+    expect(document.getElementById('blank').classList.contains('is-paid')).toBe(true);
+  });
+
+  it('opens a new day from the tally, from nothing', () => {
+    const page = openPage();
+
+    page.serve();
+    page.wait(62000);
+    page.click('#m-over [data-act="again"]');
+    page.step();
+
+    expect(page.view()).toBe('title');
+    expect(page.game.run).toMatchObject({ served: 0, takings: 0 });
+    expect(page.text('serial')).toBe('No 0001');
   });
 });
 
-describe('a new best', () => {
-  it('showers notes over the results, where nothing is left to read against the clock', () => {
+describe('keys pressed faster than the page draws', () => {
+  it('still take back the piece just dealt', () => {
     const page = openPage();
 
-    page.play();
-    page.pressRight();
-    page.wait(TUNING.maxTimeMs + 500);
+    page.typeKey('Digit2');
+    page.typeKey('Digit2');
+    page.typeKey('Digit3');
+    page.typeKey('Backspace');
+    page.typeKey('Backspace');
+    page.step();
 
-    expect(page.stage.fx.particles.some((particle) => particle.kind === 'note')).toBe(true);
-  });
-
-  it('showers nothing for a run that beat no record', () => {
-    const page = openPage({ records: { best: 9000, bestStreak: 5, savings: 9000, plays: 2 } });
-
-    page.play();
-    page.pressRight();
-    page.wait(TUNING.maxTimeMs + 500);
-
-    expect(page.text('overStamp')).toBe('');
-    expect(page.stage.fx.particles.some((particle) => particle.kind === 'note')).toBe(false);
+    expect(page.game.run.cloth).toEqual({ 500: 1 });
   });
 });

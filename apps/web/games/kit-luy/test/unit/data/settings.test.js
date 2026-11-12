@@ -9,37 +9,43 @@ describe('settings', () => {
     expect(defaultSettings(['KM'])).toMatchObject({ lang: 'km' });
   });
 
-  it('starts in English otherwise, every sum in the mix and all sound on', () => {
+  it('starts in English otherwise, every sum in the mix, the total shown only at first', () => {
     expect(defaultSettings(['fr-FR'])).toEqual({
       sound: true,
-      music: true,
       vibrate: true,
       lang: 'en',
       numerals: 'latin',
+      total: 'early',
       ops: OPERATIONS,
     });
     expect(defaultSettings().lang).toBe('en');
   });
 
   it('keeps what was saved and fills the rest from the defaults', () => {
-    const saved = { sound: false, lang: 'km', ops: ['div', 'add'] };
+    const saved = { sound: false, lang: 'km', total: 'always', ops: ['div', 'add'] };
 
     expect(sanitizeSettings(saved, defaultSettings())).toEqual({
       sound: false,
-      music: true,
       vibrate: true,
       lang: 'km',
       numerals: 'latin',
+      total: 'always',
       ops: ['add', 'div'],
     });
   });
 
-  it.each([null, 7, { lang: 'xx', numerals: 3, sound: 'yes', ops: ['pow'] }, { ops: [] }])(
-    'reads broken saved settings (%j) as the defaults',
-    (saved) => {
-      expect(sanitizeSettings(saved, defaultSettings())).toEqual(defaultSettings());
-    },
-  );
+  it('drops a setting the game no longer has, as the first version’s music', () => {
+    expect(sanitizeSettings({ music: false }, defaultSettings())).toEqual(defaultSettings());
+  });
+
+  it.each([
+    null,
+    7,
+    { lang: 'xx', numerals: 3, sound: 'yes', total: 9, ops: ['pow'] },
+    { ops: [] },
+  ])('reads broken saved settings (%j) as the defaults', (saved) => {
+    expect(sanitizeSettings(saved, defaultSettings())).toEqual(defaultSettings());
+  });
 
   it('takes a sum out of the mix and puts it back in its place', () => {
     expect(toggledOps(OPERATIONS, 'sub')).toEqual(['add', 'mul', 'div']);
@@ -51,10 +57,10 @@ describe('settings', () => {
   });
 
   it('steps a row through its values and round again', () => {
-    const lang = SETTINGS_ROWS.find((row) => row.key === 'lang');
+    const total = SETTINGS_ROWS.find((row) => row.key === 'total');
 
-    expect(nextValue(lang, 'km')).toBe('en');
-    expect(nextValue(lang, 'en')).toBe('km');
+    expect(nextValue(total, 'early')).toBe('always');
+    expect(nextValue(total, 'always')).toBe('early');
   });
 
   it('shows Vibration only on a phone that can buzz', () => {

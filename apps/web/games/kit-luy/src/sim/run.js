@@ -1,138 +1,100 @@
+import { OPERATIONS } from '../data/operations.js';
+import { STAGES } from '../data/stages.js';
 import { TUNING } from '../data/tuning.js';
-import { makeChoices } from './choices.js';
-import { makeQuestion } from './question.js';
-import { comboOf, gainOf, levelOf, timeGainOf } from './scoring.js';
+import { setOut } from './arrivals.js';
+import { nextCustomer } from './customers.js';
+import { clothCount } from './pieces.js';
 
-function ask(run) {
-  const question = makeQuestion(run, { level: run.level, ops: run.ops, previous: run.question });
+export { advance } from './arrivals.js';
+export { give } from './give.js';
 
-  run.question = { ...question, ...makeChoices(run, question) };
-  run.askedAt = run.elapsed;
-  run.events.push({ type: 'ask' });
+function mixOf(ops) {
+  const mix = OPERATIONS.filter((op) => Array.isArray(ops) && ops.includes(op));
+
+  return mix.length > 0 ? mix : [...OPERATIONS];
 }
 
-export function createRun({ seed, ops }) {
-  const run = {
-    seed,
-    ops,
-    phase: 'asking',
-    timeLeft: TUNING.startTimeMs,
+function emptyRun({ seed, ops, totalAlways }) {
+  const stage = STAGES[0];
+
+  return {
+    seed: Number.isFinite(seed) ? seed : 0,
+    ops: mixOf(ops),
+    totalAlways: !!totalAlways,
+    phase: 'serving',
+    started: false,
     elapsed: 0,
-    askedAt: 0,
-    settleLeft: 0,
-    score: 0,
-    correct: 0,
-    wrong: 0,
+    served: 0,
+    takings: 0,
     streak: 0,
     bestStreak: 0,
-    level: 1,
-    question: null,
+    stage: stage.number,
+    pieces: [...stage.pieces],
+    showTotal: !!totalAlways || stage.showTotal,
+    queue: [],
+    arriving: null,
+    cloth: {},
+    tries: 0,
+    lockLeft: 0,
+    missed: [],
     events: [],
+    bag: [],
+    made: 0,
+    lastSum: null,
+    tip: true,
   };
+}
 
-  ask(run);
+export function createRun(options) {
+  const run = emptyRun(options || {});
+
+  run.queue.push(nextCustomer(run));
+  run.events.push({ type: 'ask', customer: run.queue[0] });
+  setOut(run);
 
   return run;
 }
 
-function settle(run, ms) {
-  run.phase = 'settling';
-  run.settleLeft = ms;
-}
+export function deal(run, value) {
+  const hasRoom = clothCount(run.cloth) < TUNING.clothMost;
 
-function answeredRight(run, index) {
-  const fast = run.elapsed - run.askedAt <= TUNING.fastAnswerMs;
-
-  run.streak += 1;
-  run.correct += 1;
-  run.bestStreak = Math.max(run.bestStreak, run.streak);
-
-  const gain = gainOf({ level: run.level, streak: run.streak, fast });
-
-  run.score += gain;
-  run.timeLeft = Math.min(TUNING.maxTimeMs, run.timeLeft + timeGainOf(run.level));
-  run.events.push({
-    type: 'correct',
-    index,
-    gain,
-    fast,
-    streak: run.streak,
-    combo: comboOf(run.streak),
-  });
-
-  if (levelOf(run.correct) > run.level) {
-    run.level = levelOf(run.correct);
-    run.events.push({ type: 'levelUp', level: run.level });
-  }
-
-  settle(run, TUNING.rightPauseMs);
-}
-
-function answeredWrong(run, index) {
-  run.wrong += 1;
-  run.streak = 0;
-  run.timeLeft = Math.max(0, run.timeLeft - TUNING.wrongPenaltyMs);
-  run.events.push({ type: 'wrong', index, correctIndex: run.question.correctIndex });
-  settle(run, TUNING.wrongRevealMs);
-}
-
-export function answer(run, index) {
-  if (run.phase !== 'asking' || !Number.isInteger(index) || !(index in run.question.choices)) {
+  if (run.phase !== 'serving' || !run.pieces.includes(value) || !hasRoom) {
     return;
   }
 
-  if (index === run.question.correctIndex) {
-    answeredRight(run, index);
-  } else {
-    answeredWrong(run, index);
-  }
+  run.cloth[value] = (run.cloth[value] || 0) + 1;
+  run.events.push({ type: 'deal', value, count: run.cloth[value] });
 }
 
-function end(run) {
-  run.timeLeft = 0;
-  run.phase = 'over';
-  run.events.push({ type: 'over' });
-}
-
-// The clock stands still while an answer settles, so the reveal of a wrong one costs only its fine.
-function settleOn(run, ms) {
-  run.settleLeft -= ms;
-
-  if (run.settleLeft > 0) {
+export function takeBack(run, value) {
+  if (run.phase === 'closed' || !(run.cloth[value] > 0)) {
     return;
   }
 
-  if (run.timeLeft <= 0) {
-    end(run);
+  const count = run.cloth[value] - 1;
+
+  if (count > 0) {
+    run.cloth[value] = count;
   } else {
-    run.phase = 'asking';
-    ask(run);
+    delete run.cloth[value];
   }
+
+  run.events.push({ type: 'take', value, count });
 }
 
-const secondsLeft = (ms) => Math.ceil(ms / 1000);
-
-function runClock(run, ms) {
-  const before = run.timeLeft;
-
-  run.elapsed += ms;
-  run.timeLeft -= ms;
-
-  if (run.timeLeft <= 0) {
-    end(run);
-  } else if (run.timeLeft <= TUNING.lowTimeMs && secondsLeft(run.timeLeft) < secondsLeft(before)) {
-    run.events.push({ type: 'tick', seconds: secondsLeft(run.timeLeft) });
+export function clearCloth(run) {
+  if (run.phase === 'closed' || clothCount(run.cloth) === 0) {
+    return;
   }
-}
 
-export function advance(run, ms) {
-  if (run.phase === 'settling') {
-    settleOn(run, ms);
-  } else if (run.phase === 'asking') {
-    runClock(run, ms);
-  }
+  run.cloth = {};
+  run.events.push({ type: 'clear' });
 }
 
 export function drainEvents(run) {
-  return run.events.splice(0);
+  const events = run.events;
+
+  run.events = [];
+
+  return events;
 }

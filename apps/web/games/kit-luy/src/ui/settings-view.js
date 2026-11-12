@@ -5,6 +5,10 @@ function valueName(row, value, text) {
     return row.names[value];
   }
 
+  if (row.words) {
+    return text.t(row.words[value]);
+  }
+
   return text.t(value ? 'settings.on' : 'settings.off');
 }
 

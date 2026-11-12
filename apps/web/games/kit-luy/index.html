@@ -6,18 +6,18 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
     />
-    <title>គិតលុយ · Kit Luy, a free riel math game</title>
+    <title>គិតលុយ · Kit Luy, a free riel counting game</title>
     <meta
       name="description"
-      content="គិតលុយ (Kit Luy) is a fast mental-math game in Khmer riel: add, take away, multiply and divide prices against the clock, chain right answers and fill your piggy bank. In Khmer and English."
+      content="គិតលុយ (Kit Luy): keep the money at a Cambodian market stall. Work out each bill in riel and count it out piece by piece before the stools fill up. Adding, change, so many at a price and sharing a bill. In Khmer and English."
     />
     <link rel="canonical" href="https://www.khmerarcade.games/games/kit-luy/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Retro Arcade" />
-    <meta property="og:title" content="គិតលុយ · Kit Luy, a riel math rush" />
+    <meta property="og:title" content="គិតលុយ · Kit Luy, count out the riel" />
     <meta
       property="og:description"
-      content="Add, take away, multiply and divide prices in Khmer riel against the clock. Chain right answers, beat your best and fill your piggy bank. Free to play in your browser."
+      content="Keep the money at a market stall: work out each bill in riel and count it out before the stools fill up. Free to play in your browser, in Khmer and English."
     />
     <meta property="og:url" content="https://www.khmerarcade.games/games/kit-luy/" />
     <meta
@@ -28,10 +28,10 @@
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="The គិតលុយ title screen: its gold logo and a pink piggy bank under market lights at dusk"
+      content="The គិតលុយ counter: a hand-painted blue sign, a bill on a checked cloth and bundles of money pieces in a till"
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#120a24" />
+    <meta name="theme-color" content="#1f4fa0" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -42,14 +42,14 @@
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
     <link
       rel="preload"
-      href="assets/fonts/koulen-khmer-400-normal.woff2"
+      href="assets/fonts/moul-khmer-400-normal.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="assets/fonts/koulen-latin-400-normal.woff2"
+      href="assets/fonts/fasthand-khmer-400-normal.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -57,173 +57,133 @@
     <link rel="stylesheet" href="styles/fonts.css" />
     <link rel="stylesheet" href="styles/tokens.css" />
     <link rel="stylesheet" href="styles/page.css" />
-    <link rel="stylesheet" href="styles/hud.css" />
-    <link rel="stylesheet" href="styles/note.css" />
-    <link rel="stylesheet" href="styles/answers.css" />
-    <link rel="stylesheet" href="styles/pops.css" />
-    <link rel="stylesheet" href="styles/menus.css" />
-    <link rel="stylesheet" href="styles/title.css" />
+    <link rel="stylesheet" href="styles/awning.css" />
+    <link rel="stylesheet" href="styles/sign.css" />
+    <link rel="stylesheet" href="styles/stools.css" />
+    <link rel="stylesheet" href="styles/slip.css" />
+    <link rel="stylesheet" href="styles/pieces.css" />
+    <link rel="stylesheet" href="styles/cloth.css" />
+    <link rel="stylesheet" href="styles/till.css" />
+    <link rel="stylesheet" href="styles/shutter.css" />
     <link rel="stylesheet" href="styles/results.css" />
     <script type="module" src="src/main.js"></script>
   </head>
   <body>
+    <svg class="defs" width="0" height="0" aria-hidden="true">
+      <defs>
+        <pattern id="krama" width="6" height="6" patternUnits="userSpaceOnUse">
+          <rect class="krama-paper" width="6" height="6" />
+          <rect class="krama-check" width="3" height="6" />
+          <rect class="krama-check" width="6" height="3" />
+        </pattern>
+      </defs>
+    </svg>
     <div id="app" data-view="title">
-      <canvas id="backdrop" aria-hidden="true"></canvas>
-
-      <main class="stage" id="stage">
-        <header class="hud">
-          <button class="hud-pause" data-act="pause" data-i18n-label="hud.pause">II</button>
-          <div class="hud-till">
-            <canvas class="piggy" id="hudPiggy" width="24" height="22" aria-hidden="true"></canvas>
-            <output class="hud-score" id="score">0៛</output>
+      <div class="awning" aria-hidden="true"></div>
+      <main class="counter" id="counter">
+        <header class="sign">
+          <div class="sign-name">
+            <h1 class="sign-title">គិតលុយ</h1>
+            <p class="sign-best" id="signBest"></p>
           </div>
-          <div class="hud-level">
-            <span id="level"></span>
-            <span class="pips" id="levelPips" aria-hidden="true"></span>
-          </div>
+          <output class="takings" id="takings"></output>
+          <nav class="plates">
+            <button class="plate" data-act="help" data-i18n="menu.help"></button>
+            <button class="plate" data-act="settings" data-i18n="menu.settings"></button>
+            <button class="plate" data-act="arcade" data-i18n="menu.arcade"></button>
+            <button class="plate plate-pause" data-act="pause" data-i18n-label="menu.pause">
+              II
+            </button>
+          </nav>
         </header>
 
-        <div class="clock" id="clock" role="timer">
-          <span class="clock-seconds" id="clockSeconds"></span>
-          <span class="clock-bar"><i class="clock-fill" id="clockFill"></i></span>
-        </div>
+        <div class="stools" id="stools" aria-hidden="true"></div>
 
-        <div class="board">
-          <section class="note" id="note" aria-live="polite">
-            <span class="note-sign" aria-hidden="true"></span>
-            <span class="combo" id="combo" hidden></span>
-            <p class="note-caption" id="caption"></p>
-            <p class="note-sum" id="sum">?</p>
-            <span class="pips streak" id="streakPips" aria-hidden="true"></span>
-          </section>
-
-          <div class="answers" id="answers">
-            <button class="answer" data-answer="0"><kbd>1</kbd><span></span></button>
-            <button class="answer" data-answer="1"><kbd>2</kbd><span></span></button>
-            <button class="answer" data-answer="2"><kbd>3</kbd><span></span></button>
-            <button class="answer" data-answer="3"><kbd>4</kbd><span></span></button>
+        <section class="slip" id="slip" aria-live="polite">
+          <p class="slip-head">
+            <span id="slipAsk"></span><span class="serial" id="serial"></span>
+          </p>
+          <p class="sum" id="sum"></p>
+          <div class="slip-answer">
+            <span class="held" id="held"></span>
+            <span class="equals" aria-hidden="true">=</span>
+            <span class="blank" id="blank">
+              <output class="total" id="total"></output>
+              <span class="stamp" id="stamp" data-i18n="play.paid"></span>
+              <span class="stamp stamp-extra" id="extraStamp"></span>
+            </span>
+            <span class="riel" aria-hidden="true">៛</span>
           </div>
-        </div>
-      </main>
-
-      <div class="pops" id="pops" aria-hidden="true"></div>
-      <p class="banner" id="banner" aria-hidden="true"></p>
-      <canvas id="fx" aria-hidden="true"></canvas>
-
-      <div id="menus">
-        <section class="menu" id="m-title" aria-label="គិតលុយ">
-          <div class="title-head">
-            <h1 class="logo">គិតលុយ<span data-i18n="title.tagline"></span></h1>
-            <canvas
-              class="piggy piggy-big"
-              id="titlePiggy"
-              width="24"
-              height="22"
-              aria-hidden="true"
-            ></canvas>
-            <dl class="stats">
-              <div>
-                <dt data-i18n="title.best"></dt>
-                <dd id="titleBest"></dd>
-              </div>
-              <div>
-                <dt data-i18n="title.savings"></dt>
-                <dd id="titleSavings"></dd>
-              </div>
-            </dl>
-            <div class="rank">
-              <span class="rank-name" id="titleRank"></span>
-              <span class="rank-bar"><i id="titleRankFill"></i></span>
-              <span class="rank-next" id="titleNext"></span>
-            </div>
-          </div>
-          <div class="title-actions">
-            <div class="mix" role="group" aria-labelledby="mixLabel">
-              <span class="mix-label" id="mixLabel" data-i18n="title.mix"></span>
-              <button class="chip" data-op="add" data-i18n-label="op.add">+</button>
-              <button class="chip" data-op="sub" data-i18n-label="op.sub">−</button>
-              <button class="chip" data-op="mul" data-i18n-label="op.mul">×</button>
-              <button class="chip" data-op="div" data-i18n-label="op.div">÷</button>
-            </div>
-            <div class="mlist mlist-paired">
-              <button class="mbtn primary" data-act="play" data-i18n="menu.play"></button>
-              <button class="mbtn half" data-act="help" data-i18n="menu.help"></button>
-              <button class="mbtn half" data-act="settings" data-i18n="menu.settings"></button>
-              <button class="mbtn" data-act="arcade" data-i18n="menu.arcade"></button>
-            </div>
-          </div>
+          <p class="mend" id="mend"></p>
         </section>
 
-        <section class="menu dim" id="m-pause" aria-labelledby="pauseTitle">
-          <h2 class="mtitle" id="pauseTitle" data-i18n="menu.paused"></h2>
+        <section class="cloth" id="cloth">
+          <div class="piles" id="piles"></div>
+          <p class="lesson" id="lesson" data-i18n="title.lesson"></p>
+        </section>
+
+        <button class="give" id="give" data-i18n="play.give"></button>
+
+        <div class="till" id="till"></div>
+      </main>
+
+      <div class="shutter" id="menus">
+        <section class="menu" id="m-pause" aria-labelledby="pauseTitle">
+          <h2 class="shutter-title" id="pauseTitle" data-i18n="menu.paused"></h2>
           <div class="mlist">
             <button class="mbtn primary" data-act="resume" data-i18n="menu.resume"></button>
-            <button class="mbtn" data-act="play" data-i18n="menu.restart"></button>
             <button class="mbtn" data-act="settings" data-i18n="menu.settings"></button>
             <button class="mbtn" data-act="quit" data-i18n="menu.quit"></button>
           </div>
         </section>
 
-        <section class="menu dim" id="m-over" aria-labelledby="overTitle">
-          <h2 class="mtitle" id="overTitle" data-i18n="over.title"></h2>
-          <div class="panel results">
-            <p class="results-stamp" id="overStamp" hidden></p>
-            <p class="results-label" data-i18n="over.earned"></p>
-            <p class="results-score" id="overScore"></p>
-            <dl class="stats stats-four">
-              <div>
-                <dt data-i18n="over.correct"></dt>
-                <dd id="overCorrect"></dd>
-              </div>
-              <div>
-                <dt data-i18n="over.accuracy"></dt>
-                <dd id="overAccuracy"></dd>
-              </div>
-              <div>
-                <dt data-i18n="over.streak"></dt>
-                <dd id="overStreak"></dd>
-              </div>
-              <div>
-                <dt data-i18n="over.level"></dt>
-                <dd id="overLevel"></dd>
-              </div>
-            </dl>
-            <div class="rank">
-              <span class="rank-name" id="overRank"></span>
-              <span class="rank-bar"><i id="overRankFill"></i></span>
-              <span class="rank-next" id="overNext"></span>
-            </div>
+        <section class="menu" id="m-over" aria-labelledby="overTitle">
+          <h2 class="shutter-title" id="overTitle" data-i18n="over.title"></h2>
+          <div class="tally">
+            <p class="tally-stamp" id="overStamp" data-i18n="over.newBest" hidden></p>
+            <p class="tally-served" id="overServed"></p>
+            <p class="tally-label" data-i18n="over.takings"></p>
+            <p class="tally-takings" id="overTakings"></p>
+            <div class="tally-pieces" id="overPieces" aria-hidden="true"></div>
+            <ul class="tally-missed" id="overMissed"></ul>
           </div>
           <div class="mlist">
-            <button class="mbtn primary" data-act="play" data-i18n="menu.again"></button>
-            <button class="mbtn" data-act="quit" data-i18n="menu.quit"></button>
+            <button class="mbtn primary" data-act="again" data-i18n="menu.again"></button>
             <button class="mbtn" data-act="arcade" data-i18n="menu.arcade"></button>
           </div>
         </section>
 
-        <section class="menu dim" id="m-settings" aria-labelledby="settingsTitle">
-          <div class="panel">
-            <header class="panel-head">
+        <section class="menu" id="m-settings" aria-labelledby="settingsTitle">
+          <div class="sheet">
+            <header class="sheet-head">
               <h2 id="settingsTitle" data-i18n="menu.settings"></h2>
-              <button class="xbtn" data-act="back" data-i18n="menu.back"></button>
+              <button class="plate plate-ink" data-act="back" data-i18n="menu.back"></button>
             </header>
             <div class="rows" id="settingsRows"></div>
+            <div class="mix" role="group" aria-labelledby="mixLabel">
+              <span class="mix-label" id="mixLabel" data-i18n="settings.mix"></span>
+              <button class="chip" data-op="add" data-i18n-label="op.add">+</button>
+              <button class="chip" data-op="sub" data-i18n-label="op.sub">−</button>
+              <button class="chip" data-op="mul" data-i18n-label="op.mul">×</button>
+              <button class="chip" data-op="div" data-i18n-label="op.div">÷</button>
+            </div>
           </div>
         </section>
 
-        <section class="menu dim" id="m-help" aria-labelledby="helpTitle">
-          <div class="panel">
-            <header class="panel-head">
+        <section class="menu" id="m-help" aria-labelledby="helpTitle">
+          <div class="sheet">
+            <header class="sheet-head">
               <h2 id="helpTitle" data-i18n="menu.help"></h2>
-              <button class="xbtn" data-act="back" data-i18n="menu.back"></button>
+              <button class="plate plate-ink" data-act="back" data-i18n="menu.back"></button>
             </header>
             <ol class="help">
-              <li data-i18n="help.answer"></li>
-              <li data-i18n="help.time"></li>
-              <li data-i18n="help.combo"></li>
-              <li data-i18n="help.fast"></li>
+              <li data-i18n="help.bill"></li>
+              <li data-i18n="help.count"></li>
+              <li data-i18n="help.stools"></li>
+              <li data-i18n="help.pay"></li>
               <li class="help-keys" data-i18n="help.keys"></li>
             </ol>
+            <p class="help-note" data-i18n="help.pieces"></p>
           </div>
         </section>
       </div>

@@ -1,0 +1,184 @@
+/* The counting cloth: a blue and white krama, two sets of stripes that darken where they cross,
+   a fringe at both ends. One cloth, used as a cloth. */
+.cloth {
+  position: relative;
+  flex: 1;
+  min-height: 96px;
+  margin: 0 7px;
+  border: var(--edge) solid var(--color-ink);
+  background:
+    repeating-linear-gradient(0deg, var(--color-check) 0 7px, var(--color-clear) 7px 14px),
+    repeating-linear-gradient(90deg, var(--color-check) 0 7px, var(--color-clear) 7px 14px),
+    var(--color-paper);
+}
+
+.cloth::before,
+.cloth::after {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 6px;
+  background: repeating-linear-gradient(0deg, var(--color-paper) 0 2px, var(--color-clear) 2px 5px);
+  content: '';
+}
+
+.cloth::before {
+  left: -8px;
+}
+
+.cloth::after {
+  right: -8px;
+}
+
+.piles {
+  position: absolute;
+  inset: var(--space-3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-3);
+  place-content: center;
+  align-items: flex-start;
+}
+
+/* a pile is a button: a tap takes its top piece back. Its pieces fan out a little each, so
+   every one of them can be counted. */
+.pile {
+  --piece-w: 104px;
+  --piece-h: 36px;
+
+  position: relative;
+  width: calc(var(--piece-w) + (var(--n, 1) - 1) * 5px);
+  height: calc(var(--piece-h) + (var(--n, 1) - 1) * 6px);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.pile .piece {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--piece-w);
+  height: var(--piece-h);
+  box-shadow: var(--shadow-lift);
+  transform: translate(calc(var(--i) * 5px), calc(var(--i) * 6px)) rotate(var(--tilt));
+}
+
+.pile-count {
+  position: absolute;
+  top: -14px;
+  right: -10px;
+  z-index: 1;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--color-paper);
+  font-family: var(--font-hand);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-digits);
+  color: var(--color-red);
+  transform: rotate(6deg);
+}
+
+/* thrown from its bundle, it turns once in the air and lands on the pile */
+.pile .piece.is-dealt {
+  animation: land var(--duration-medium) var(--ease-out) both;
+}
+
+.pile.is-refused {
+  animation: hop var(--duration-medium) var(--ease-thump);
+}
+
+/* handed over: the whole count is carried up into the blank on the bill */
+.piles.is-given {
+  pointer-events: none;
+  animation: hand-over var(--duration-tear) var(--ease-out) both;
+}
+
+.lesson {
+  position: absolute;
+  right: var(--space-2);
+  bottom: var(--space-2);
+  left: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-paper);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-text);
+  color: var(--color-blue);
+  text-align: center;
+  animation: nudge var(--duration-pulse) var(--ease-out) infinite;
+}
+
+#app:not([data-view='title']) .lesson {
+  display: none;
+}
+
+@keyframes land {
+  0% {
+    opacity: 0.6;
+    transform: translate(
+        calc(var(--i) * 5px + var(--from-x, 0px)),
+        calc(var(--i) * 6px + var(--from-y, 80px))
+      )
+      rotate(-14deg) scale(0.86);
+  }
+
+  55% {
+    opacity: 1;
+    transform: translate(calc(var(--i) * 5px), calc(var(--i) * 6px - 14px)) rotate(8deg) scale(1.08);
+  }
+
+  100% {
+    transform: translate(calc(var(--i) * 5px), calc(var(--i) * 6px)) rotate(var(--tilt));
+  }
+}
+
+@keyframes hop {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-10px) rotate(-3deg);
+  }
+}
+
+@keyframes hand-over {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translate(var(--to-x), var(--to-y)) scale(0.42);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(var(--to-x), var(--to-y)) scale(0.3);
+  }
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pile .piece.is-dealt,
+  .pile.is-refused,
+  .piles.is-given,
+  .lesson {
+    animation: none;
+  }
+}

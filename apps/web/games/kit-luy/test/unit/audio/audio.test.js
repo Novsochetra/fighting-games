@@ -1,136 +1,213 @@
 import { describe, expect, it } from 'vitest';
 import { createAudio } from '../../../src/audio/audio.js';
-import { createMusic } from '../../../src/audio/music.js';
-import { SONG } from '../../../src/data/song.js';
-import { SOUNDS } from '../../../src/data/sounds.js';
-import { fakeAudioContext, fakeTimers } from '../../support/fake-audio.js';
+import { fakeAudioContext } from '../../support/fake-audio.js';
+import { unlockedAudio, windowWith } from './open-audio.js';
 
-function openAudio(settings = { sound: true, music: true }) {
-  const context = fakeAudioContext();
-  const clock = fakeTimers();
-  const window = {
-    AudioContext: function AudioContext() {
-      return context;
-    },
-    navigator: {},
-    ...clock,
-  };
+const EVERY_SOUND = [
+  ['deal', { value: 500 }],
+  ['take', { value: 500 }],
+  ['clear', undefined],
+  ['paid', { pieces: [2000, 500] }],
+  ['stamp', undefined],
+  ['wrong', undefined],
+  ['arrive', { kind: 'cook' }],
+  ['stage', undefined],
+  ['extra', undefined],
+  ['left', undefined],
+  ['closed', undefined],
+  ['count', { value: 1000 }],
+  ['best', undefined],
+  ['tap', undefined],
+];
 
-  return { audio: createAudio({ window, settings }), context, settings, timers: clock.timers };
+function useAll(audio) {
+  audio.unlock();
+  audio.play('paid', { pieces: [1000] });
+  audio.suspend();
+  audio.resume();
 }
 
-describe('the audio', () => {
-  it('is silent until the first tap opens it', () => {
-    const { audio, context } = openAudio();
+describe('the sound before it may play', () => {
+  it('is silent, with no context opened, until the first tap', () => {
+    const context = fakeAudioContext();
+    const window = windowWith(context);
+    const audio = createAudio({ window, settings: { sound: true } });
 
-    audio.play('right');
+    audio.play('tap');
+    audio.suspend();
+    audio.resume();
+
+    expect(window.opened).toBe(0);
     expect(context.started).toEqual([]);
+  });
+
+  it('opens one context at the first tap and keeps it', () => {
+    const { audio, context, window } = unlockedAudio();
 
     audio.unlock();
-    audio.play('right');
-    expect(context.started).toHaveLength(SOUNDS.right.length);
-  });
-
-  it('plays a sound higher when asked to', () => {
-    const { audio, context } = openAudio();
-
     audio.unlock();
-    audio.play('tick');
-    audio.play('tick', 12);
 
-    expect(context.started[1].hertz).toBeCloseTo(context.started[0].hertz * 2, 5);
+    expect(window.opened).toBe(1);
+    expect(context.state).toBe('running');
   });
 
-  it('plays nothing with Sound off, and takes the switch at once', () => {
-    const { audio, context, settings } = openAudio({ sound: false, music: true });
+  it.each([
+    ['no Web Audio at all', {}],
+    [
+      'a context that will not open',
+      {
+        AudioContext: function AudioContext() {
+          throw new Error('no audio hardware');
+        },
+      },
+    ],
+  ])('is silent and safe with %s', (_case, window) => {
+    const audio = createAudio({ window, settings: { sound: true } });
 
-    audio.unlock();
-    audio.play('wrong');
-    expect(context.started).toEqual([]);
-
-    settings.sound = true;
-    audio.play('wrong');
-    expect(context.started).toHaveLength(SOUNDS.wrong.length);
+    expect(() => useAll(audio)).not.toThrow();
   });
 
-  it('plays the tune only with Music on', () => {
-    const off = openAudio({ sound: true, music: false });
-    const on = openAudio({ sound: true, music: true });
-
-    off.audio.unlock();
-    off.audio.startMusic();
-    on.audio.unlock();
-    on.audio.startMusic();
-
-    expect(off.context.started).toEqual([]);
-    expect(on.context.started.length).toBeGreaterThan(0);
-  });
-
-  it('stays silent, and breaks nothing, where the browser has no Web Audio', () => {
+  it('opens the older webkitAudioContext where that is all there is', () => {
+    const context = fakeAudioContext();
+    const { AudioContext } = windowWith(context);
     const audio = createAudio({
-      window: { navigator: {} },
-      settings: { sound: true, music: true },
+      window: { webkitAudioContext: AudioContext, navigator: {} },
+      settings: { sound: true },
     });
 
-    audio.unlock();
-    audio.play('right');
-    audio.startMusic();
-    audio.stopMusic();
-    audio.hurryMusic(1.1);
-    expect(audio.suspend()).toBeUndefined();
+    useAll(audio);
+
+    expect(context.started.length).toBeGreaterThan(0);
   });
 });
 
-describe('the music', () => {
-  function openMusic() {
+describe('the sound on an iPhone', () => {
+  it('plays in a window that has no navigator', () => {
     const context = fakeAudioContext();
-    const clock = fakeTimers();
+    const window = windowWith(context, { navigator: undefined });
 
-    return {
-      music: createMusic({ context, output: {}, song: SONG, timers: clock }),
-      context,
-      clock,
+    useAll(createAudio({ window, settings: { sound: true } }));
+
+    expect(context.started.length).toBeGreaterThan(0);
+  });
+
+  it('plays with the silent switch on', () => {
+    const audioSession = { type: 'auto' };
+    const window = windowWith(fakeAudioContext(), { navigator: { audioSession } });
+
+    createAudio({ window, settings: { sound: true } }).unlock();
+
+    expect(audioSession.type).toBe('playback');
+  });
+
+  it('still plays where an older WebKit will not let the session be set', () => {
+    const context = fakeAudioContext();
+    const audioSession = {
+      set type(_value) {
+        throw new TypeError('read-only');
+      },
     };
-  }
+    const window = windowWith(context, { navigator: { audioSession } });
+    const audio = createAudio({ window, settings: { sound: true } });
 
-  it('writes the tune a little ahead of the clock, and more as the clock moves', () => {
-    const { music, context, clock } = openMusic();
+    expect(() => useAll(audio)).not.toThrow();
+    expect(context.started.length).toBeGreaterThan(0);
+  });
+});
 
-    music.start();
+describe('playing a sound', () => {
+  it.each(EVERY_SOUND)('%s plays at least one voice, from now on', (name, detail) => {
+    const { audio, context } = unlockedAudio();
 
-    const first = context.started.length;
+    context.currentTime = 3;
+    audio.play(name, detail);
 
-    expect(first).toBeGreaterThan(0);
-    expect(context.started.every((note) => note.at <= 0.4)).toBe(true);
-
-    context.currentTime = 2;
-    clock.timers.callback();
-    expect(context.started.length).toBeGreaterThan(first);
+    expect(context.started.length).toBeGreaterThan(0);
+    expect(Math.min(...context.started.map((voice) => voice.at))).toBe(3);
   });
 
-  it('stops writing when stopped', () => {
-    const { music, clock } = openMusic();
+  it.each(['fanfare', '', 'constructor', 'toString', undefined])(
+    'plays nothing for the unknown name %s',
+    (name) => {
+      const { audio, context } = unlockedAudio();
 
-    music.start();
-    expect(music.playing).toBe(true);
+      expect(() => audio.play(name, { value: 500 })).not.toThrow();
+      expect(context.started).toEqual([]);
+    },
+  );
 
-    music.stop();
-    expect(music.playing).toBe(false);
-    expect(clock.timers.callback).toBeNull();
+  it.each(['deal', 'take', 'paid', 'arrive', 'count'])(
+    '%s still plays when the page gives it no detail',
+    (name) => {
+      const { audio, context } = unlockedAudio();
+
+      expect(() => audio.play(name)).not.toThrow();
+      expect(() => audio.play(name, null)).not.toThrow();
+      expect(() => audio.play(name, { value: 'lots', pieces: 7, kind: 'toString' })).not.toThrow();
+      expect(context.started.length).toBeGreaterThan(0);
+      expect(context.started.every((voice) => Number.isFinite(voice.at))).toBe(true);
+    },
+  );
+
+  it('reads the sound switch on every play', () => {
+    const { audio, context, settings } = unlockedAudio({ sound: false });
+
+    audio.play('tap');
+
+    expect(context.started).toEqual([]);
+
+    settings.sound = true;
+    audio.play('tap');
+
+    expect(context.started.length).toBeGreaterThan(0);
+
+    const heard = context.started.length;
+
+    settings.sound = false;
+    audio.play('tap');
+
+    expect(context.started).toHaveLength(heard);
+  });
+});
+
+describe('the sound of a page that is put away', () => {
+  it('stops with the page and comes back with it', () => {
+    const { audio, context } = unlockedAudio();
+
+    audio.play('tap');
+    audio.suspend();
+
+    expect(context.state).toBe('suspended');
+
+    const heard = context.started.length;
+
+    audio.play('closed');
+
+    expect(context.started).toHaveLength(heard);
+
+    audio.resume();
+    audio.play('tap');
+
+    expect(context.state).toBe('running');
+    expect(context.started.length).toBeGreaterThan(heard);
   });
 
-  it('plays faster when hurried', () => {
-    const steady = openMusic();
-    const hurried = openMusic();
+  it('plays what the first tap asked for in a browser that starts its context late', () => {
+    const { audio, context } = unlockedAudio();
 
-    steady.music.start();
-    hurried.music.start();
-    hurried.music.setRate(2);
-    steady.context.currentTime = 4;
-    hurried.context.currentTime = 4;
-    steady.clock.timers.callback();
-    hurried.clock.timers.callback();
+    context.state = 'suspended';
+    audio.play('tap');
 
-    expect(hurried.context.started.length).toBeGreaterThan(steady.context.started.length);
+    expect(context.started.length).toBeGreaterThan(0);
+  });
+
+  it('survives a phone that will not wake its sound', async () => {
+    const { audio, context } = unlockedAudio();
+
+    context.state = 'interrupted';
+    context.resume = () => Promise.reject(new Error('a call is in progress'));
+
+    expect(() => audio.resume()).not.toThrow();
+    await Promise.resolve();
   });
 });

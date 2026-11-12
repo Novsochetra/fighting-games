@@ -1,6 +1,5 @@
 # Link preview
 
 `title-screen.jpg` (1200×630) is the picture a shared link to the game shows: `og:image` in
-`index.html` names it. It is the title screen as it first comes up for a new player, in Khmer,
-taken in an 800×420 browser window at 3× and scaled down to 1200×630 as a JPEG. Take it again
-after the title screen changes.
+`index.html` names it. It is the title screen as it first comes up, in Khmer, taken in an 800×420
+browser window at 3× and scaled down to 1200×630 as a JPEG. Take it again after the title changes.

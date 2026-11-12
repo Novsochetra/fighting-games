@@ -1,0 +1,217 @@
+/* Five low plastic stools before the stall, red and blue, and the customers on them seen from
+   behind the counter. Whoever is still walking up is the only clock the game has. */
+.stools {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  aspect-ratio: 5 / 1.2;
+  margin: 0 calc(-1 * var(--space-2));
+  overflow: hidden;
+}
+
+.stool {
+  position: relative;
+}
+
+.stool-art {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 82%;
+  height: 40%;
+  transform: translateX(-50%);
+  overflow: visible;
+}
+
+.stool-art path {
+  stroke: var(--color-ink);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.stool-seat,
+.stool-legs {
+  fill: var(--color-red);
+}
+
+.stool:nth-child(even) .stool-seat,
+.stool:nth-child(even) .stool-legs {
+  fill: var(--color-blue-deep);
+}
+
+.stool .stool-rib {
+  stroke: var(--color-seat-paper);
+}
+
+/* only one stool left: the next customer to come will find none */
+.stool::after {
+  position: absolute;
+  inset: auto 6% 0;
+  height: 44%;
+  border: 3px solid var(--color-paper);
+  border-radius: var(--radius-md);
+  content: '';
+  opacity: 0;
+}
+
+.stool.is-last::after {
+  animation: warn var(--duration-warn) var(--ease-out) infinite;
+}
+
+/* a customer takes a fifth of the row, and slides along it by whole seats */
+.guest {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 20%;
+  transform: translateX(calc(var(--seat, 0) * 100%));
+  transition: transform var(--duration-medium) var(--ease-out);
+  pointer-events: none;
+}
+
+.guest.is-walking {
+  transition: none;
+}
+
+.guest-body {
+  position: absolute;
+  bottom: 31%;
+  left: 50%;
+  width: 78%;
+  height: 66%;
+  transform: translateX(-50%);
+}
+
+.person {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.person * {
+  stroke: var(--color-ink);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.fig-skin {
+  fill: var(--color-skin);
+}
+
+.guest:nth-child(odd) .fig-skin {
+  fill: var(--color-skin-deep);
+}
+
+.fig-red {
+  fill: var(--color-red);
+}
+
+.fig-blue {
+  fill: var(--color-blue-deep);
+}
+
+.fig-ink {
+  fill: var(--color-ink);
+}
+
+.fig-paper {
+  fill: var(--color-paper);
+}
+
+.fig-visor {
+  fill: var(--color-ink);
+  stroke: var(--color-paper);
+}
+
+.fig-krama {
+  fill: url('#krama');
+}
+
+.krama-paper {
+  fill: var(--color-paper);
+}
+
+.krama-check {
+  fill: var(--color-check);
+}
+
+/* walking up the row: a step's bob, then a little settle on the stool */
+.guest.is-walking .guest-body {
+  animation: step var(--duration-step) steps(2, jump-none) infinite;
+}
+
+.guest.is-seated .guest-body {
+  animation: settle var(--duration-medium) var(--ease-thump) both;
+}
+
+/* the one being served leans in to the counter; the rest wait a little back */
+.guest:not(.is-front, .is-walking) .person {
+  opacity: 0.82;
+}
+
+.guest.is-front .guest-body {
+  transform: translateX(-50%) scale(1.1);
+  transform-origin: 50% 100%;
+}
+
+.guest.is-leaving {
+  animation: leave var(--duration-medium) var(--ease-out) both;
+}
+
+.guest.is-going {
+  animation: go-next-door var(--duration-slow) var(--ease-out) both;
+}
+
+@keyframes step {
+  0% {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(-6%);
+  }
+}
+
+@keyframes settle {
+  0% {
+    transform: translateX(-50%) scaleY(0.88);
+  }
+
+  100% {
+    transform: translateX(-50%) scaleY(1);
+  }
+}
+
+@keyframes leave {
+  100% {
+    opacity: 0;
+    transform: translateX(calc(var(--seat, 0) * 100%)) translateY(-40%);
+  }
+}
+
+@keyframes go-next-door {
+  100% {
+    opacity: 0;
+    transform: translateX(calc(var(--seat, 0) * 100% + 180%));
+  }
+}
+
+@keyframes warn {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guest,
+  .guest.is-walking .guest-body,
+  .guest.is-seated .guest-body {
+    transition: none;
+    animation: none;
+  }
+}

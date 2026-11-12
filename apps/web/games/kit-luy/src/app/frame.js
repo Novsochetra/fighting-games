@@ -1,60 +1,50 @@
-import { TUNING } from '../data/tuning.js';
-import { stepFx, takeBanked } from '../fx/particles.js';
-import { gulp, piggyPose, stepPiggy } from '../fx/piggy-mood.js';
-import { paintPiggy } from '../render/paint-piggy.js';
+import { clothCount, clothTotal } from '../sim/pieces.js';
+import { CLOSING_BEAT_MS } from './present.js';
 
-const MENU_OF = { title: 'title', pause: 'pause', over: 'over' };
-const HURRIED = 1.12;
+const MENU_OF = { pause: 'pause', over: 'over' };
 
-function showScreen(stage) {
-  const { game } = stage;
+function showView(stage) {
+  const { screen } = stage.game;
+  const closing = screen === 'over' && stage.now < stage.closedAt + CLOSING_BEAT_MS;
 
-  if (game.screen === stage.screen) {
-    return;
-  }
+  stage.at.counter.classList.toggle('is-closing', screen === 'over');
 
-  stage.screen = game.screen;
-  stage.at.app.dataset.view = game.screen;
-  stage.menus.showFor(MENU_OF[game.screen] ?? null);
-
-  if (game.screen === 'title') {
-    stage.showTitle(game, stage.text);
+  if (screen !== stage.view && !closing) {
+    stage.view = screen;
+    stage.at.app.dataset.view = screen;
+    stage.menus.showFor(MENU_OF[screen] ?? null);
   }
 }
 
-function showRun(stage) {
-  const { run } = stage.game;
+function tearNextSlip(stage) {
+  const next = stage.nextSlip;
 
-  if (run) {
-    stage.hud.update(run, stage.text);
-    stage.audio.hurryMusic(run.timeLeft <= TUNING.lowTimeMs ? HURRIED : 1);
+  if (next && stage.now >= next.at) {
+    stage.nextSlip = null;
+    stage.slip.turnPage(next.customer, stage.game.run.served + 1);
+    stage.slip.count(stage.game.run.showTotal ? clothTotal(stage.game.run.cloth) : null);
   }
 }
 
-function movePiggy(stage, seconds) {
-  if (takeBanked(stage.fx) > 0) {
-    gulp(stage.piggy);
+function countTakings(stage) {
+  const value = stage.results.count(stage.now);
+
+  if (value !== null) {
+    stage.audio.play('count', { value });
   }
-
-  stepPiggy(stage.piggy, seconds);
-
-  const pose = piggyPose(stage.piggy);
-
-  stage.piggies.forEach((context) => paintPiggy(context, pose));
 }
 
 export function drawFrame(stage, ms) {
-  const seconds = ms / 1000;
+  const { run, screen } = stage.game;
 
-  showScreen(stage);
-  showRun(stage);
+  stage.now += ms;
+  showView(stage);
+  tearNextSlip(stage);
+  stage.sign.roll(run.takings);
+  stage.stools.sync(run, stage.now);
+  stage.at.give.classList.toggle('is-empty', clothCount(run.cloth) === 0);
 
-  if (stage.game.screen === 'over') {
-    stage.results.roll(stage.text);
+  if (screen === 'over') {
+    countTakings(stage);
   }
-
-  stage.seconds += seconds;
-  stepFx(stage.fx, seconds);
-  movePiggy(stage, seconds);
-  stage.canvases.draw(stage.seconds, stage.fx);
 }

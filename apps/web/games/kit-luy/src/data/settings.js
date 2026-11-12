@@ -2,16 +2,17 @@ import { OPERATIONS } from './operations.js';
 
 const LANGUAGES = ['km', 'en'];
 const NUMERALS = ['khmer', 'latin'];
+const TOTALS = ['early', 'always'];
 
 export function defaultSettings(languages = []) {
   const speaksKhmer = languages.some((language) => language.toLowerCase().startsWith('km'));
 
   return {
     sound: true,
-    music: true,
     vibrate: true,
     lang: speaksKhmer ? 'km' : 'en',
     numerals: speaksKhmer ? 'khmer' : 'latin',
+    total: 'early',
     ops: [...OPERATIONS],
   };
 }
@@ -30,10 +31,10 @@ export function sanitizeSettings(saved, defaults) {
 
   return {
     sound: flag(from.sound, defaults.sound),
-    music: flag(from.music, defaults.music),
     vibrate: flag(from.vibrate, defaults.vibrate),
     lang: oneOf(LANGUAGES, from.lang, defaults.lang),
     numerals: oneOf(NUMERALS, from.numerals, defaults.numerals),
+    total: oneOf(TOTALS, from.total, defaults.total),
     ops: savedOps(from.ops, defaults.ops),
   };
 }

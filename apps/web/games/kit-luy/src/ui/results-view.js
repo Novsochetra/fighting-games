@@ -1,39 +1,63 @@
 import { RIEL } from '../data/currency.js';
 import { countUp } from '../lib/count-up.js';
+import { piecesFor } from '../sim/pieces.js';
 import { setText } from './dom.js';
-import { showRank } from './rank-view.js';
+import { createPiece } from './piece.js';
+import { answerLine } from './sum-text.js';
 
-function stampOf(summary, text) {
-  if (summary.isNewBest && summary.score > 0) {
-    return text.t('over.newBest');
-  }
+const COUNT_EVERY_MS = 130;
+const MOST_PIECES = 12;
 
-  return summary.rankUp ? text.t('over.rankUp') : '';
+function missedLine(document, { question }, text) {
+  const line = document.createElement('li');
+  const answer = document.createElement('b');
+
+  answer.textContent = `= ${text.number(question.answer)}`;
+  line.append(answerLine(question, text), answer);
+
+  return line;
 }
 
-export function createResultsView(elements) {
-  const { score, correct, accuracy, streak, level, stamp, rank } = elements;
-  let shown = 0;
-  let target = 0;
+// The takings as the fewest pieces that make them, largest first: what is counted out at closing.
+// A day too good to count in a dozen pieces is counted in its dozen largest.
+export const closingCount = (takings) => piecesFor(takings, RIEL.pieces).slice(0, MOST_PIECES);
+
+export function createResultsView(at, text) {
+  const document = at.overPieces.ownerDocument;
+  let tally = { takings: 0, shown: 0, toCount: [], nextAt: 0 };
 
   return {
-    show(summary, text) {
-      const words = stampOf(summary, text);
-
-      shown = 0;
-      target = summary.score;
-      stamp.hidden = words === '';
-      setText(stamp, words);
-      setText(correct, text.number(summary.correct));
-      setText(accuracy, `${text.number(summary.accuracy)}%`);
-      setText(streak, text.number(summary.bestStreak));
-      setText(level, text.number(summary.level));
-      showRank(rank, summary.savings, text);
+    show(summary, now) {
+      tally = {
+        takings: summary.takings,
+        shown: 0,
+        toCount: closingCount(summary.takings),
+        nextAt: now,
+      };
+      at.overStamp.hidden = !summary.isNewBest;
+      at.overPieces.replaceChildren();
+      at.overMissed.replaceChildren(
+        ...summary.missed.map((missed) => missedLine(document, missed, text)),
+      );
+      setText(at.overServed, text.t('over.served', { count: text.number(summary.served) }));
     },
 
-    roll(text) {
-      shown = countUp(shown, target, RIEL.step);
-      setText(score, text.money(shown));
+    // each frame: the figure rolls up, and the next piece is counted out when its turn comes,
+    // answering with the value counted so the page can sound it
+    count(now) {
+      tally.shown = countUp(tally.shown, tally.takings, RIEL.step);
+      setText(at.overTakings, text.money(tally.shown));
+
+      if (tally.toCount.length === 0 || now < tally.nextAt) {
+        return null;
+      }
+
+      const value = tally.toCount.shift();
+
+      tally.nextAt = now + COUNT_EVERY_MS;
+      at.overPieces.append(createPiece(document, value, text, { small: true }));
+
+      return value;
     },
   };
 }

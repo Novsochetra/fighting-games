@@ -1,28 +1,40 @@
 import { installGestureGuards } from '../../../../packages/screen/src/gesture-guards.js';
+import { RIEL } from '../data/currency.js';
 
-const ANSWER_CODES = ['Digit1', 'Digit2', 'Digit3', 'Digit4'];
-const NUMPAD_CODES = ['Numpad1', 'Numpad2', 'Numpad3', 'Numpad4'];
+const DIGITS = ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8'];
+const PAD = [
+  'Numpad1',
+  'Numpad2',
+  'Numpad3',
+  'Numpad4',
+  'Numpad5',
+  'Numpad6',
+  'Numpad7',
+  'Numpad8',
+];
+const COUNTER_KEYS = { Backspace: 'takeLast', Delete: 'clear', Enter: 'give', Space: 'give' };
 const ESCAPE_CODES = ['Escape', 'KeyP'];
 
-const answerOf = (event) => {
-  const key = event.target.closest?.('[data-answer]');
+// A press acts at once, without waiting for the finger to lift; a key press on a focused button
+// comes only as a click that no pointer made (detail 0).
+function onPress(element, selector, act) {
+  const valueOf = (event) => event.target.closest?.(selector)?.dataset.value;
 
-  return key ? Number(key.dataset.answer) : null;
-};
-
-// A press answers at once, without waiting for the finger to lift; a key press on a focused
-// answer comes only as a click that no pointer made (detail 0).
-function installAnswers(answers, actions) {
-  answers.addEventListener('pointerdown', (event) => {
-    if (event.button === 0 && answerOf(event) !== null) {
-      actions.answer(answerOf(event));
+  element.addEventListener('pointerdown', (event) => {
+    if (event.button === 0 && valueOf(event) !== undefined) {
+      act(Number(valueOf(event)));
     }
   });
-  answers.addEventListener('click', (event) => {
-    if (event.detail === 0 && answerOf(event) !== null) {
-      actions.answer(answerOf(event));
+  element.addEventListener('click', (event) => {
+    if (event.detail === 0 && valueOf(event) !== undefined) {
+      act(Number(valueOf(event)));
     }
   });
+}
+
+function installGive(give, actions) {
+  give.dataset.value = '0';
+  onPress(give, '.give', actions.give);
 }
 
 function installButtons(stage, actions) {
@@ -43,18 +55,28 @@ function installButtons(stage, actions) {
   });
 }
 
-function installKeys(window, actions) {
-  window.addEventListener('keydown', (event) => {
-    const index = Math.max(ANSWER_CODES.indexOf(event.code), NUMPAD_CODES.indexOf(event.code));
+function counterKey(event, actions) {
+  const piece = Math.max(DIGITS.indexOf(event.code), PAD.indexOf(event.code));
 
+  if (piece >= 0) {
+    actions.deal(RIEL.pieces[piece]);
+  } else if (event.code in COUNTER_KEYS) {
+    event.preventDefault();
+    actions[COUNTER_KEYS[event.code]]();
+  }
+}
+
+// with the shutter down, Enter and Space belong to the menu's own buttons
+function installKeys(stage, actions) {
+  stage.window.addEventListener('keydown', (event) => {
     if (event.repeat) {
       return;
     }
 
-    if (index >= 0) {
-      actions.answer(index);
-    } else if (ESCAPE_CODES.includes(event.code)) {
+    if (ESCAPE_CODES.includes(event.code)) {
       actions.escape();
+    } else if (!stage.menus.isDown) {
+      counterKey(event, actions);
     }
   });
 }
@@ -62,10 +84,12 @@ function installKeys(window, actions) {
 export function installInput(stage, actions) {
   const { window, document, at } = stage;
 
-  installAnswers(at.answers, actions);
+  onPress(at.till, '.bundle', actions.deal);
+  onPress(at.piles, '.pile', actions.take);
+  installGive(at.give, actions);
   installButtons(stage, actions);
-  installKeys(window, actions);
-  installGestureGuards({ window, document, root: at.app, surfaces: [at.answers] });
+  installKeys(stage, actions);
+  installGestureGuards({ window, document, root: at.app, surfaces: [at.till, at.piles, at.give] });
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       actions.pause();

@@ -1,0 +1,307 @@
+/* The bill: a page of a duplicate receipt pad. Blue rules, a red serial, figures in ballpoint,
+   the carbon copy showing under it. */
+.slip {
+  position: relative;
+  margin: var(--space-2) var(--space-1) var(--space-1);
+  padding: var(--space-2) var(--space-4) var(--space-2);
+  border-radius: var(--radius-sm);
+  background:
+    repeating-linear-gradient(0deg, var(--color-clear) 0 31px, var(--color-rule) 31px 32px),
+    var(--color-paper);
+  box-shadow: var(--shadow-copy);
+  color: var(--color-blue);
+  transform: rotate(-1.2deg);
+}
+
+/* the edge the page was torn off the pad by */
+.slip::before {
+  position: absolute;
+  top: -5px;
+  right: 0;
+  left: 0;
+  height: 6px;
+  background: radial-gradient(circle at 5px 0, var(--color-clear) 3px, var(--color-paper) 3.5px) 0
+    0 / 10px 6px repeat-x;
+  content: '';
+}
+
+.slip.is-torn {
+  animation: tear-in var(--duration-fast) var(--ease-out) both;
+}
+
+.slip.is-refused {
+  animation: refuse var(--duration-medium) steps(4, end);
+}
+
+/* the stamp coming down jolts the pad */
+.slip.is-thumped {
+  animation: jolt var(--duration-fast) var(--ease-out);
+}
+
+/* the paid bill, torn off and thrown aside */
+.slip-torn {
+  position: fixed;
+  z-index: 6;
+  margin: 0;
+  pointer-events: none;
+  animation: torn-off var(--duration-tear) var(--ease-out) both;
+}
+
+/* the ballpoint crossing the line as the figures are written */
+.sum.is-written,
+.mend.is-written {
+  animation: write var(--duration-write) linear both;
+}
+
+.slip-head {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-text);
+}
+
+.serial {
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--tracking-serial);
+  color: var(--color-red);
+  white-space: nowrap;
+}
+
+.sum {
+  font-family: var(--font-hand);
+  font-size: var(--font-size-sum);
+  line-height: var(--leading-hand);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.sum[data-size='long'] {
+  font-size: var(--font-size-sum-long);
+}
+
+/* the hand has no × ÷ − of its own, so the signs are set in the text face on purpose */
+.sum .sign-of {
+  margin: 0 0.18em;
+  font-family: var(--font-text);
+  font-weight: var(--font-weight-bold);
+}
+
+.slip-answer {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 46px;
+  font-family: var(--font-hand);
+  font-size: var(--font-size-total);
+  line-height: var(--leading-hand);
+}
+
+/* the piece the customer paid with, held against the bill */
+.held {
+  margin-right: auto;
+  transform: rotate(-4deg);
+}
+
+.blank {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(46%, 170px);
+  height: 42px;
+  border: var(--edge) dashed var(--color-blue);
+  border-radius: var(--radius-sm);
+}
+
+/* what lies on the cloth so far, in pencil: only while the stall still counts for you */
+.total {
+  color: var(--color-pencil);
+  white-space: nowrap;
+}
+
+.blank.is-paid .total {
+  color: var(--color-blue);
+}
+
+.stamp {
+  position: absolute;
+  inset: -7px -6px;
+  display: none;
+  place-items: center;
+  border: 3px solid var(--color-stamp);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sign);
+  font-size: var(--font-size-md);
+  line-height: var(--leading-sign);
+  color: var(--color-stamp);
+  transform: rotate(-8deg);
+}
+
+.blank.is-paid .stamp:not(.stamp-extra),
+.blank.is-extra .stamp-extra {
+  display: grid;
+  animation: thump var(--duration-fast) var(--ease-thump) both;
+}
+
+/* every fifth right in a row: a second stamp across the first */
+.stamp-extra {
+  inset: auto -18px -26px auto;
+  padding: 0 var(--space-2);
+  border-color: var(--color-blue);
+  background: var(--color-paper);
+  font-size: var(--font-size-sm);
+  color: var(--color-blue);
+  white-space: nowrap;
+  transform: rotate(7deg);
+}
+
+.blank.is-extra .stamp-extra {
+  animation-name: thump-extra;
+  animation-delay: var(--duration-fast);
+}
+
+/* the ink the stamp squeezes out round its edge */
+.blank::after {
+  position: absolute;
+  inset: -10px;
+  border: 3px solid var(--color-stamp);
+  border-radius: var(--radius-md);
+  content: '';
+  opacity: 0;
+  pointer-events: none;
+}
+
+.blank.is-paid::after {
+  animation: ink var(--duration-medium) var(--ease-out) both;
+}
+
+/* red ballpoint: what was wrong with the money handed over, and what a right answer earned */
+.mend {
+  min-height: 1.3em;
+  font-family: var(--font-hand);
+  font-size: var(--font-size-lg);
+  line-height: var(--leading-hand);
+  color: var(--color-red);
+  text-align: right;
+  white-space: nowrap;
+}
+
+@keyframes tear-in {
+  0% {
+    opacity: 0;
+    transform: rotate(-1.2deg) translateY(-18px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotate(-1.2deg) translateY(0);
+  }
+}
+
+@keyframes refuse {
+  0%,
+  100% {
+    transform: rotate(-1.2deg);
+  }
+
+  25% {
+    transform: rotate(-3.4deg);
+  }
+
+  75% {
+    transform: rotate(1deg);
+  }
+}
+
+@keyframes write {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes jolt {
+  0%,
+  100% {
+    transform: rotate(-1.2deg) translateY(0);
+  }
+
+  40% {
+    transform: rotate(-1.2deg) translateY(4px);
+  }
+}
+
+@keyframes torn-off {
+  0% {
+    opacity: 1;
+    transform: rotate(-1.2deg);
+  }
+
+  30% {
+    transform: translate(-6%, -10%) rotate(-6deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-115%, -30%) rotate(-28deg);
+  }
+}
+
+@keyframes ink {
+  0% {
+    opacity: 0.8;
+    transform: rotate(-8deg) scale(0.7);
+  }
+
+  100% {
+    opacity: 0;
+    transform: rotate(-8deg) scale(1.35);
+  }
+}
+
+@keyframes thump-extra {
+  0% {
+    opacity: 0;
+    transform: rotate(7deg) scale(1.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotate(7deg) scale(1);
+  }
+}
+
+@keyframes thump {
+  0% {
+    opacity: 0;
+    transform: rotate(-8deg) scale(1.7);
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotate(-8deg) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slip.is-torn,
+  .slip.is-refused,
+  .slip.is-thumped,
+  .slip-torn,
+  .sum.is-written,
+  .mend.is-written,
+  .blank.is-paid::after,
+  .blank.is-paid .stamp,
+  .blank.is-extra .stamp-extra {
+    animation: none;
+  }
+
+  .slip-torn {
+    display: none;
+  }
+}

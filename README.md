@@ -11,7 +11,7 @@ It runs on Railway, with Postgres for the supporters list (`docs/deploy-railway.
 | Game                              | Folder                                                                      |
 | --------------------------------- | --------------------------------------------------------------------------- |
 | Steel & Dust, a pixel-art brawler | [`apps/web/games/steel-and-dust/`](apps/web/games/steel-and-dust/README.md) |
-| គិតលុយ (Kit Luy), riel maths      | [`apps/web/games/kit-luy/`](apps/web/games/kit-luy/README.md)               |
+| គិតលុយ (Kit Luy), riel counting   | [`apps/web/games/kit-luy/`](apps/web/games/kit-luy/README.md)               |
 
 ## Run it
 
