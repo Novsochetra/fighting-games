@@ -1,0 +1,330 @@
+{
+  "result": {
+    "score": 2800,
+    "correct": 10,
+    "wrong": 5,
+    "bestStreak": 2,
+    "level": 2,
+    "elapsed": 28080
+  },
+  "asked": [
+    {
+      "op": "sub",
+      "left": 1000,
+      "right": 900,
+      "choices": [
+        300,
+        1100,
+        1900,
+        100
+      ],
+      "correctIndex": 3
+    },
+    {
+      "op": "sub",
+      "left": 1000,
+      "right": 300,
+      "choices": [
+        700,
+        1700,
+        800,
+        500
+      ],
+      "correctIndex": 0
+    },
+    {
+      "op": "mul",
+      "left": 500,
+      "right": 3,
+      "choices": [
+        2500,
+        1700,
+        500,
+        1500
+      ],
+      "correctIndex": 3
+    },
+    {
+      "op": "mul",
+      "left": 200,
+      "right": 2,
+      "choices": [
+        500,
+        400,
+        200,
+        1400
+      ],
+      "correctIndex": 1
+    },
+    {
+      "op": "sub",
+      "left": 1000,
+      "right": 900,
+      "choices": [
+        100,
+        300,
+        200,
+        1100
+      ],
+      "correctIndex": 0
+    },
+    {
+      "op": "sub",
+      "left": 200,
+      "right": 100,
+      "choices": [
+        1100,
+        300,
+        100,
+        200
+      ],
+      "correctIndex": 2
+    },
+    {
+      "op": "mul",
+      "left": 200,
+      "right": 3,
+      "choices": [
+        600,
+        400,
+        700,
+        800
+      ],
+      "correctIndex": 0
+    },
+    {
+      "op": "sub",
+      "left": 300,
+      "right": 200,
+      "choices": [
+        500,
+        200,
+        300,
+        100
+      ],
+      "correctIndex": 3
+    },
+    {
+      "op": "mul",
+      "left": 2000,
+      "right": 2,
+      "choices": [
+        5000,
+        4500,
+        4000,
+        3500
+      ],
+      "correctIndex": 2
+    },
+    {
+      "op": "sub",
+      "left": 1000,
+      "right": 500,
+      "choices": [
+        1500,
+        1000,
+        5500,
+        500
+      ],
+      "correctIndex": 3
+    },
+    {
+      "op": "mul",
+      "left": 1500,
+      "right": 3,
+      "choices": [
+        5000,
+        4500,
+        5500,
+        3000
+      ],
+      "correctIndex": 1
+    },
+    {
+      "op": "mul",
+      "left": 1500,
+      "right": 4,
+      "choices": [
+        6000,
+        1000,
+        5500,
+        4500
+      ],
+      "correctIndex": 0
+    },
+    {
+      "op": "sub",
+      "left": 1000,
+      "right": 500,
+      "choices": [
+        5500,
+        500,
+        1500,
+        1000
+      ],
+      "correctIndex": 1
+    },
+    {
+      "op": "sub",
+      "left": 5000,
+      "right": 2500,
+      "choices": [
+        2500,
+        3000,
+        1500,
+        7500
+      ],
+      "correctIndex": 0
+    },
+    {
+      "op": "mul",
+      "left": 1000,
+      "right": 3,
+      "choices": [
+        8000,
+        3500,
+        3000,
+        2500
+      ],
+      "correctIndex": 2
+    }
+  ],
+  "events": [
+    {
+      "type": "correct",
+      "index": 3,
+      "gain": 200,
+      "fast": true,
+      "streak": 1,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 0,
+      "gain": 200,
+      "fast": true,
+      "streak": 2,
+      "combo": 1
+    },
+    {
+      "type": "wrong",
+      "index": 0,
+      "correctIndex": 3
+    },
+    {
+      "type": "correct",
+      "index": 1,
+      "gain": 200,
+      "fast": true,
+      "streak": 1,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 0,
+      "gain": 200,
+      "fast": true,
+      "streak": 2,
+      "combo": 1
+    },
+    {
+      "type": "wrong",
+      "index": 3,
+      "correctIndex": 2
+    },
+    {
+      "type": "correct",
+      "index": 0,
+      "gain": 200,
+      "fast": true,
+      "streak": 1,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 3,
+      "gain": 200,
+      "fast": true,
+      "streak": 2,
+      "combo": 1
+    },
+    {
+      "type": "levelUp",
+      "level": 2
+    },
+    {
+      "type": "wrong",
+      "index": 3,
+      "correctIndex": 2
+    },
+    {
+      "type": "correct",
+      "index": 3,
+      "gain": 400,
+      "fast": true,
+      "streak": 1,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 1,
+      "gain": 400,
+      "fast": true,
+      "streak": 2,
+      "combo": 1
+    },
+    {
+      "type": "wrong",
+      "index": 1,
+      "correctIndex": 0
+    },
+    {
+      "type": "tick",
+      "seconds": 4
+    },
+    {
+      "type": "tick",
+      "seconds": 3
+    },
+    {
+      "type": "correct",
+      "index": 1,
+      "gain": 400,
+      "fast": true,
+      "streak": 1,
+      "combo": 1
+    },
+    {
+      "type": "tick",
+      "seconds": 4
+    },
+    {
+      "type": "tick",
+      "seconds": 3
+    },
+    {
+      "type": "correct",
+      "index": 0,
+      "gain": 400,
+      "fast": true,
+      "streak": 2,
+      "combo": 1
+    },
+    {
+      "type": "tick",
+      "seconds": 5
+    },
+    {
+      "type": "tick",
+      "seconds": 4
+    },
+    {
+      "type": "wrong",
+      "index": 3,
+      "correctIndex": 2
+    },
+    {
+      "type": "over"
+    }
+  ]
+}

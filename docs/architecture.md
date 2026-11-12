@@ -63,7 +63,8 @@ apps/
     packages/
       <name>/             code more than one game uses (input: the gamepad, keys, rumble;
                           touch-pad: the touch controls drawn from a skin; screen: the stage fit,
-                          folds, notches, gesture guards, full screen), which knows no game;
+                          folds, notches, gesture guards, full screen; host: the way back to the
+                          arcade, JSON kept in storage), which knows no game;
                           src/ and test/{unit,integration}, joined into each game
     games/
       <game-id>/          one self-contained app: it loads nothing from outside its folder but the
@@ -135,6 +136,15 @@ the stage inside it, clear of the controls beside or under it, unless a fold or 
 being off says otherwise. Steel & Dust passes its 768x432 view and its controls' height
 (`src/ui/screen/stage-layout.js`), and keeps where the stick rests, the menus' box on a fold and
 the pause plaque, which are its own.
+
+### Host
+
+`packages/host/` is what a game needs from the page it runs on. `arcade-exit.js`
+(`createArcadeExit`) is a game's way back to the arcade: one step back in the tab's history when
+the arcade opened the game, so the arcade comes back as it was left, else the arcade's address
+(`../../`). `json-storage.js` (`readJson`, `writeJson`) reads and writes JSON in a storage that may
+be missing, blocked or hold bad data, giving a fallback instead of throwing. Steel & Dust and
+គិតលុយ both use them; each keeps its own keys and its own checks of what it reads back.
 
 ### Touch pad and skins
 
@@ -637,8 +647,8 @@ flies from the carousel card, or from the library tile when the carousel has scr
 (`launch-geometry.js`), and their timing comes from `--duration-launch` and `--easing-launch` in
 `arcade/src/styles/tokens.css`. When the browser brings the page back from its back/forward cache, the panel
 shrinks back into the card and the Recent list catches up. A game's own way back should go back in
-the tab's history when the arcade opened it, as Steel & Dust's Back to arcade does
-(`src/ui/menus/arcade-exit.js`); loading the arcade again would start it over. With reduced motion the game opens at
+the tab's history when the arcade opened it, as the games' Back to arcade does
+(`packages/host/src/arcade-exit.js`); loading the arcade again would start it over. With reduced motion the game opens at
 once, and the zoom, the slides and the rises are off.
 
 Every interaction has a short sound (`sound-cues.js`, in the arcade's sound service,
@@ -1764,6 +1774,91 @@ The replays swap `Math.sin` and `Math.cos` for a port of V8's fdlibm (`test/supp
 on Apple Silicon the native ones round about one result in 200 differently from x64, where the
 fixtures were recorded and CI runs, so without it a Mac fails runs no change touched.
 
+## Game: គិតលុយ
+
+គិតលុយ (Kit Luy, `games/kit-luy/`) is quick mental maths in Khmer riel: a sum on a banknote, four
+amounts under it, a clock running. It keeps Steel & Dust's split, smaller:
+
+| Folder          | Job                                                                    | May touch the DOM, canvas or audio? |
+| --------------- | ---------------------------------------------------------------------- | ----------------------------------- |
+| `src/data/`     | tuning, levels, the riel, ranks, both languages, sounds, the tune      | no                                  |
+| `src/art/`      | canvas colours and pixel art (the only JS allowed to hold hex values)  | no                                  |
+| `src/lib/`      | the seeded random source, numerals, the rolling count                  | no                                  |
+| `src/sim/`      | the run: questions, choices, scoring, ranks, records                   | no                                  |
+| `src/fx/`       | the effects' motion (coins, sparks, notes) and the pig's moods         | no                                  |
+| `src/app/`      | the flow between screens, and what shows and sounds each event         | yes                                 |
+| `src/render/`   | paints the market, the pig and the effects on a 2D context it is given | canvas only                         |
+| `src/audio/`    | synthesized sounds and the tune                                        | Web Audio only                      |
+| `src/ui/`       | the page's views: HUD, question, menus, results, the two canvases      | yes                                 |
+| `src/input/`    | presses, keys, the hidden-tab pause (`packages/screen`)                | yes                                 |
+| `src/platform/` | the save (`packages/host`) and the phone's buzz (`packages/input`)     | yes                                 |
+| `src/main.js`   | boots the page (`src/app/boot.js`)                                     | yes                                 |
+
+**The run** (`src/sim/run.js`) is plain data stepped by two functions, `answer(run, index)` and
+`advance(run, ms)`, and says what happened as events (`ask`, `correct`, `wrong`, `levelUp`, `tick`,
+`over`) the page drains. Its random numbers come from a seed it carries (`src/lib/rng.js`), so the
+same seed plays the same run, which the recorded runs rely on. It is `asking` while the clock runs,
+`settling` for a moment after an answer (140 ms after a right one, 850 ms after a wrong one, while
+the right key is shown), and `over` when the clock is out. The clock stands still while an answer
+settles, so a wrong answer costs its fine and no more. `src/data/tuning.js` holds every number: 25
+seconds to start and at most, 4 off for a wrong answer, 2.4 back for a right one on level 1 and
+0.14 less a level down to 0.9, which is what ends every run; six right answers a level, five in a
+row a step of the multiplier up to ×5, and a bonus for an answer inside 2 seconds. A right answer
+pays 100៛ times the level times the multiplier, and the level again when fast.
+
+**Questions** (`src/sim/question.js`) are riel as a market uses it, in steps of 100៛
+(`src/data/currency.js`, where another currency would be another entry): two prices added, change
+from an amount paid (half the time a banknote), a price bought several times over, a bill shared.
+Each level (`src/data/levels.js`) sets the step prices move by, the largest sum and how many times
+over; a level past the last plays the last. The three wrong answers (`src/sim/choices.js`) are the
+ones a hurried head lands on: a step or ten either side, the other sum (adding where it said take
+away), one time too many or too few. The player's own mix (`settings.ops`, the chips on the title)
+says which of the four sums a run asks; the last one cannot be taken out.
+
+**Flow.** `src/app/flow.js` moves a `game` (`src/app/game.js`) between `title`, `countdown`,
+`play`, `pause` and `over`, and collects the run's events with its own (`start`, `beat`, `go`,
+`paused`, `resumed`, `finished`, `quit`). The loop (`src/app/loop.js`, `boot.js`) steps the game,
+hands the events to `present` (`present-flow.js`, `present-run.js`), which is the one place that
+turns an event into sound, a buzz, effects and marks on the page, then draws a frame (`frame.js`).
+The first question is asked only when the countdown ends, and the board is covered while paused, so
+neither is time to think. Leaving the tab pauses. A run's end counts it into the records
+(`src/sim/records.js`: best score, best streak, plays, and the savings every run adds to), which
+with the settings are one entry in `localStorage` (`kit_luy`, `src/platform/save.js`), each read
+back through its own check. The savings give the rank (`src/data/ranks.js`, `src/sim/rank.js`),
+Student to Tycoon, shown on the title and the results with the way to the next.
+
+**The page** is DOM over two full-screen canvases (`src/ui/canvases.js`): the market at dusk behind
+(`src/render/scene.js` lays it out for the screen's size, `paint-still.js` paints what never moves
+once, `paint-live.js` the stars, string lights, lamps and drifting gold each frame) and the effects
+in front. Both are sized in whole art pixels (`src/render/fit.js`: three screen pixels to one on a
+phone), so a spot on the page is the same spot on either, and a coin flies from the key pressed to
+the pig in the HUD. The question is a banknote (`styles/note.css`): paper, a ruled frame in its
+sum's colour, the sign in its corner, the multiplier stamped on it; the answers are four slabs in a
+riel note's colours each (`styles/answers.css`). Text is real text, set in Koulen and Kantumruy Pro
+(`assets/fonts/`, both OFL, shipped so Khmer reads the same on every phone and offline). Held
+sideways on a phone the note and the keys stand side by side, and the sum is sized by how many
+characters it has (`sumSize`, the `--font-size-sum*` tokens), so the longest stays on one line.
+
+Nothing may cover a question while the clock runs: what an answer won rises off the top edge of
+its key, a new level flashes where the level is written, and notes only shower over the results of
+a new best. A wrong answer shakes the stage, lights the right key and dims the others.
+
+**Words and numbers.** `src/ui/text.js` gives every string in Khmer or English
+(`src/data/strings/`, the page's own marked `data-i18n`) and every amount in Khmer or Latin
+numerals (`src/lib/numerals.js`), read from the settings each time, so a change in Settings says
+the whole page again at once. A new player starts in Khmer where the browser reads Khmer.
+
+**Sound** is synthesized (`src/audio/`): each sound a few oscillator voices (`src/data/sounds.js`),
+a right answer a step higher up a major scale with each one in a row, and a four-bar pentatonic
+tune (`src/data/song.js`, written as note names) scheduled a quarter second ahead of the audio
+clock, a little faster under five seconds. The context opens at the first tap and is suspended
+while the tab is hidden. A phone buzzes for an answer where it can (`src/data/haptics.js`).
+
+**Art.** The pig and the coin are rows of letters in `src/art/`, a letter a pixel, painted by
+`src/render/sprite.js`; `tools/kit_luy_icons.js` draws the icons from the same rows. The arcade's
+card art and the link preview are the game itself in a browser (`assets/screenshots/README.md`,
+`assets/social/README.md`).
+
 ## Tests
 
 Each app keeps its tests next to it, split by kind, and Vitest runs them as three projects:
@@ -1775,7 +1870,9 @@ Each app keeps its tests next to it, split by kind, and Vitest runs them as thre
 | `test/regression/`  | `regression`  | the recorded game runs and sound bank, and one test per fixed bug (`regression/bugs/`, `regression/past-fixes/`)                                                                                       |
 
 `apps/web/games/steel-and-dust/test/support/` holds the scenario bot, the recording canvas and the
-game drivers the regression and integration tests share. The arcade's tests mirror its `src/`
+game drivers the regression and integration tests share. `apps/web/games/kit-luy/test/support/`
+holds its bot, which plays a seeded run for the recorded runs, and `open-page.js`, which boots the
+game's own page in happy-dom on canvases that only remember, with frames the test steps. The arcade's tests mirror its `src/`
 (`arcade/test/unit/api/catalog/view-models.test.js` tests `arcade/src/api/catalog/view-models.js`),
 and `arcade/test/support/` holds its harnesses, its fakes and `arcade-files.js`, which finds the file
 an address names as the server does. `arcade/test/integration/layout.test.js` holds `arcade/src/` to

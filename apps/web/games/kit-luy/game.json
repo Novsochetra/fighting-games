@@ -1,0 +1,15 @@
+{
+  "id": "kit-luy",
+  "title": "គិតលុយ",
+  "tagline": "Riel math rush",
+  "description": "Kit Luy: quick mental maths in Khmer riel. Add up prices, count the change, multiply and share out against the clock; right answers in a row multiply your pay and every run fills your piggy bank. In Khmer and English.",
+  "genre": "Brain game",
+  "players": "1 player",
+  "year": 2026,
+  "controls": ["Touch", "Keyboard", "Mouse"],
+  "pixelArt": false,
+  "cover": "assets/icons/icon-512.png",
+  "banner": "assets/screenshots/banner.jpg",
+  "poster": "assets/screenshots/poster.jpg",
+  "screenshot": "assets/screenshots/change-for-a-note.jpg"
+}

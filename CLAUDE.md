@@ -166,9 +166,9 @@ A game hosted on its own site keeps only `game.json` (with an `https:` `url`) an
 
 ## Shared packages
 
-Code more than one game uses (input, controls, screen fit) is a package, `apps/web/packages/<name>/`
-with `src/` and `test/`, instead of a copy in each game (see "Shared packages" in
-`docs/architecture.md`):
+Code more than one game uses (input, controls, screen fit, the way back to the arcade) is a package,
+`apps/web/packages/<name>/` with `src/` and `test/`, instead of a copy in each game (see "Shared
+packages" in `docs/architecture.md`):
 
 - it knows no game: it loads only packages, and the game passes in what is its own (its actions, its
   key and button maps, its cues),

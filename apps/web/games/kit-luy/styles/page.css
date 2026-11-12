@@ -1,0 +1,181 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--color-night);
+  color: var(--color-text);
+  overflow: hidden;
+  overscroll-behavior: none;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  line-height: var(--leading-body);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: var(--color-clear);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: var(--color-clear);
+}
+
+p,
+h1,
+h2,
+dl,
+dd,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+#app {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--color-night);
+}
+
+#backdrop,
+#fx {
+  position: absolute;
+  left: 0;
+  top: 0;
+  image-rendering: pixelated;
+}
+
+/* the market steps back behind a run, so the board reads at a glance */
+#backdrop {
+  transition: opacity var(--duration-medium) var(--ease-out);
+}
+
+#app:not([data-view='title']) #backdrop {
+  opacity: 0.5;
+}
+
+#fx {
+  z-index: 5;
+  pointer-events: none;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: min(100%, 560px);
+  margin: 0 auto;
+  padding: calc(var(--space-3) + env(safe-area-inset-top, 0px))
+    calc(var(--space-3) + env(safe-area-inset-right, 0px))
+    calc(var(--space-4) + env(safe-area-inset-bottom, 0px))
+    calc(var(--space-3) + env(safe-area-inset-left, 0px));
+}
+
+/* the board is covered while a run is not on, so a pause is no time to think */
+#app[data-view='title'] .stage,
+#app[data-view='over'] .stage,
+#app[data-view='pause'] .board {
+  visibility: hidden;
+}
+
+.stage.is-shaken {
+  animation: shake var(--duration-medium) steps(6, end);
+}
+
+.board {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 0;
+}
+
+.piggy {
+  width: 48px;
+  height: 44px;
+  image-rendering: pixelated;
+}
+
+.pips {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.pips i {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-pip-light);
+}
+
+.pips i.on {
+  background: var(--color-gold);
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  20% {
+    transform: translate(-9px, 3px);
+  }
+
+  40% {
+    transform: translate(8px, -3px);
+  }
+
+  60% {
+    transform: translate(-6px, 2px);
+  }
+
+  80% {
+    transform: translate(4px, -1px);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 560px) {
+  .stage {
+    gap: var(--space-2);
+    width: min(100%, 980px);
+  }
+
+  .board {
+    flex-direction: row;
+  }
+
+  .board .note {
+    flex: 1.1 1 0;
+  }
+
+  .board .answers {
+    flex: 1 1 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage.is-shaken {
+    animation: none;
+  }
+}

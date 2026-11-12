@@ -1,0 +1,738 @@
+{
+  "result": {
+    "score": 18000,
+    "correct": 30,
+    "wrong": 5,
+    "bestStreak": 6,
+    "level": 6,
+    "elapsed": 61120
+  },
+  "asked": [
+    {
+      "op": "sub",
+      "left": 1000,
+      "right": 600,
+      "choices": [
+        400,
+        1400,
+        1600,
+        200
+      ],
+      "correctIndex": 0
+    },
+    {
+      "op": "add",
+      "left": 600,
+      "right": 200,
+      "choices": [
+        1800,
+        1000,
+        800,
+        600
+      ],
+      "correctIndex": 2
+    },
+    {
+      "op": "add",
+      "left": 200,
+      "right": 300,
+      "choices": [
+        400,
+        500,
+        600,
+        700
+      ],
+      "correctIndex": 1
+    },
+    {
+      "op": "sub",
+      "left": 1000,
+      "right": 800,
+      "choices": [
+        1800,
+        200,
+        400,
+        300
+      ],
+      "correctIndex": 1
+    },
+    {
+      "op": "div",
+      "left": 800,
+      "right": 2,
+      "choices": [
+        1400,
+        500,
+        300,
+        400
+      ],
+      "correctIndex": 3
+    },
+    {
+      "op": "add",
+      "left": 900,
+      "right": 100,
+      "choices": [
+        1200,
+        800,
+        1000,
+        1100
+      ],
+      "correctIndex": 2
+    },
+    {
+      "op": "div",
+      "left": 6000,
+      "right": 3,
+      "choices": [
+        2500,
+        1500,
+        2000,
+        1000
+      ],
+      "correctIndex": 2
+    },
+    {
+      "op": "mul",
+      "left": 2000,
+      "right": 3,
+      "choices": [
+        8000,
+        6000,
+        7000,
+        1000
+      ],
+      "correctIndex": 1
+    },
+    {
+      "op": "mul",
+      "left": 1000,
+      "right": 4,
+      "choices": [
+        3000,
+        3500,
+        5000,
+        4000
+      ],
+      "correctIndex": 3
+    },
+    {
+      "op": "add",
+      "left": 3000,
+      "right": 1500,
+      "choices": [
+        4500,
+        1500,
+        4000,
+        5500
+      ],
+      "correctIndex": 0
+    },
+    {
+      "op": "div",
+      "left": 6000,
+      "right": 3,
+      "choices": [
+        7000,
+        1500,
+        1000,
+        2000
+      ],
+      "correctIndex": 3
+    },
+    {
+      "op": "mul",
+      "left": 500,
+      "right": 2,
+      "choices": [
+        1000,
+        1500,
+        6000,
+        2000
+      ],
+      "correctIndex": 0
+    },
+    {
+      "op": "sub",
+      "left": 4500,
+      "right": 1000,
+      "choices": [
+        4500,
+        5500,
+        3500,
+        3000
+      ],
+      "correctIndex": 2
+    },
+    {
+      "op": "mul",
+      "left": 300,
+      "right": 2,
+      "choices": [
+        400,
+        600,
+        300,
+        900
+      ],
+      "correctIndex": 1
+    },
+    {
+      "op": "div",
+      "left": 4400,
+      "right": 4,
+      "choices": [
+        1100,
+        900,
+        1500,
+        1200
+      ],
+      "correctIndex": 0
+    },
+    {
+      "op": "div",
+      "left": 1000,
+      "right": 5,
+      "choices": [
+        200,
+        100,
+        400,
+        300
+      ],
+      "correctIndex": 0
+    },
+    {
+      "op": "sub",
+      "left": 600,
+      "right": 200,
+      "choices": [
+        300,
+        800,
+        400,
+        200
+      ],
+      "correctIndex": 2
+    },
+    {
+      "op": "mul",
+      "left": 900,
+      "right": 5,
+      "choices": [
+        5400,
+        4500,
+        3600,
+        4400
+      ],
+      "correctIndex": 1
+    },
+    {
+      "op": "add",
+      "left": 900,
+      "right": 1500,
+      "choices": [
+        2300,
+        3400,
+        2400,
+        2200
+      ],
+      "correctIndex": 2
+    },
+    {
+      "op": "mul",
+      "left": 400,
+      "right": 2,
+      "choices": [
+        400,
+        800,
+        900,
+        1000
+      ],
+      "correctIndex": 1
+    },
+    {
+      "op": "sub",
+      "left": 6000,
+      "right": 2000,
+      "choices": [
+        4500,
+        9000,
+        3000,
+        4000
+      ],
+      "correctIndex": 3
+    },
+    {
+      "op": "add",
+      "left": 9500,
+      "right": 500,
+      "choices": [
+        15000,
+        10000,
+        11000,
+        9000
+      ],
+      "correctIndex": 1
+    },
+    {
+      "op": "add",
+      "left": 6500,
+      "right": 1500,
+      "choices": [
+        3000,
+        8000,
+        9000,
+        13000
+      ],
+      "correctIndex": 1
+    },
+    {
+      "op": "sub",
+      "left": 6000,
+      "right": 5000,
+      "choices": [
+        2000,
+        6000,
+        1500,
+        1000
+      ],
+      "correctIndex": 3
+    },
+    {
+      "op": "div",
+      "left": 10500,
+      "right": 3,
+      "choices": [
+        3500,
+        5300,
+        3000,
+        2500
+      ],
+      "correctIndex": 0
+    },
+    {
+      "op": "div",
+      "left": 12000,
+      "right": 4,
+      "choices": [
+        2500,
+        3000,
+        3500,
+        2400
+      ],
+      "correctIndex": 1
+    },
+    {
+      "op": "mul",
+      "left": 4500,
+      "right": 2,
+      "choices": [
+        9500,
+        10000,
+        14000,
+        9000
+      ],
+      "correctIndex": 3
+    },
+    {
+      "op": "div",
+      "left": 6900,
+      "right": 3,
+      "choices": [
+        1300,
+        2300,
+        2100,
+        1700
+      ],
+      "correctIndex": 1
+    },
+    {
+      "op": "add",
+      "left": 6800,
+      "right": 2800,
+      "choices": [
+        10600,
+        9400,
+        4000,
+        9600
+      ],
+      "correctIndex": 3
+    },
+    {
+      "op": "mul",
+      "left": 1600,
+      "right": 4,
+      "choices": [
+        6500,
+        6300,
+        5400,
+        6400
+      ],
+      "correctIndex": 3
+    },
+    {
+      "op": "div",
+      "left": 4800,
+      "right": 2,
+      "choices": [
+        2400,
+        2600,
+        1600,
+        3400
+      ],
+      "correctIndex": 0
+    },
+    {
+      "op": "div",
+      "left": 4500,
+      "right": 3,
+      "choices": [
+        500,
+        1500,
+        1100,
+        1300
+      ],
+      "correctIndex": 1
+    },
+    {
+      "op": "sub",
+      "left": 2900,
+      "right": 1100,
+      "choices": [
+        1800,
+        1600,
+        2800,
+        1700
+      ],
+      "correctIndex": 0
+    },
+    {
+      "op": "mul",
+      "left": 1300,
+      "right": 3,
+      "choices": [
+        3900,
+        4900,
+        2600,
+        3800
+      ],
+      "correctIndex": 0
+    },
+    {
+      "op": "add",
+      "left": 9000,
+      "right": 9900,
+      "choices": [
+        900,
+        18800,
+        18900,
+        17900
+      ],
+      "correctIndex": 2
+    },
+    {
+      "op": "div",
+      "left": 4500,
+      "right": 3,
+      "choices": [
+        1700,
+        1100,
+        1500,
+        500
+      ],
+      "correctIndex": 2
+    }
+  ],
+  "events": [
+    {
+      "type": "correct",
+      "index": 0,
+      "gain": 200,
+      "fast": true,
+      "streak": 1,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 2,
+      "gain": 200,
+      "fast": true,
+      "streak": 2,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 1,
+      "gain": 200,
+      "fast": true,
+      "streak": 3,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 1,
+      "gain": 200,
+      "fast": true,
+      "streak": 4,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 3,
+      "gain": 300,
+      "fast": true,
+      "streak": 5,
+      "combo": 2
+    },
+    {
+      "type": "correct",
+      "index": 2,
+      "gain": 300,
+      "fast": true,
+      "streak": 6,
+      "combo": 2
+    },
+    {
+      "type": "levelUp",
+      "level": 2
+    },
+    {
+      "type": "wrong",
+      "index": 3,
+      "correctIndex": 2
+    },
+    {
+      "type": "correct",
+      "index": 1,
+      "gain": 400,
+      "fast": true,
+      "streak": 1,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 3,
+      "gain": 400,
+      "fast": true,
+      "streak": 2,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 0,
+      "gain": 400,
+      "fast": true,
+      "streak": 3,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 3,
+      "gain": 400,
+      "fast": true,
+      "streak": 4,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 0,
+      "gain": 600,
+      "fast": true,
+      "streak": 5,
+      "combo": 2
+    },
+    {
+      "type": "correct",
+      "index": 2,
+      "gain": 600,
+      "fast": true,
+      "streak": 6,
+      "combo": 2
+    },
+    {
+      "type": "levelUp",
+      "level": 3
+    },
+    {
+      "type": "wrong",
+      "index": 2,
+      "correctIndex": 1
+    },
+    {
+      "type": "correct",
+      "index": 0,
+      "gain": 600,
+      "fast": true,
+      "streak": 1,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 0,
+      "gain": 600,
+      "fast": true,
+      "streak": 2,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 2,
+      "gain": 600,
+      "fast": true,
+      "streak": 3,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 1,
+      "gain": 600,
+      "fast": true,
+      "streak": 4,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 2,
+      "gain": 900,
+      "fast": true,
+      "streak": 5,
+      "combo": 2
+    },
+    {
+      "type": "correct",
+      "index": 1,
+      "gain": 900,
+      "fast": true,
+      "streak": 6,
+      "combo": 2
+    },
+    {
+      "type": "levelUp",
+      "level": 4
+    },
+    {
+      "type": "wrong",
+      "index": 0,
+      "correctIndex": 3
+    },
+    {
+      "type": "correct",
+      "index": 1,
+      "gain": 800,
+      "fast": true,
+      "streak": 1,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 1,
+      "gain": 800,
+      "fast": true,
+      "streak": 2,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 3,
+      "gain": 800,
+      "fast": true,
+      "streak": 3,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 0,
+      "gain": 800,
+      "fast": true,
+      "streak": 4,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 1,
+      "gain": 1200,
+      "fast": true,
+      "streak": 5,
+      "combo": 2
+    },
+    {
+      "type": "correct",
+      "index": 3,
+      "gain": 1200,
+      "fast": true,
+      "streak": 6,
+      "combo": 2
+    },
+    {
+      "type": "levelUp",
+      "level": 5
+    },
+    {
+      "type": "wrong",
+      "index": 2,
+      "correctIndex": 1
+    },
+    {
+      "type": "correct",
+      "index": 3,
+      "gain": 500,
+      "fast": false,
+      "streak": 1,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 3,
+      "gain": 500,
+      "fast": false,
+      "streak": 2,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 0,
+      "gain": 500,
+      "fast": false,
+      "streak": 3,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 1,
+      "gain": 500,
+      "fast": false,
+      "streak": 4,
+      "combo": 1
+    },
+    {
+      "type": "correct",
+      "index": 0,
+      "gain": 1000,
+      "fast": false,
+      "streak": 5,
+      "combo": 2
+    },
+    {
+      "type": "correct",
+      "index": 0,
+      "gain": 1000,
+      "fast": false,
+      "streak": 6,
+      "combo": 2
+    },
+    {
+      "type": "levelUp",
+      "level": 6
+    },
+    {
+      "type": "wrong",
+      "index": 3,
+      "correctIndex": 2
+    },
+    {
+      "type": "tick",
+      "seconds": 1
+    },
+    {
+      "type": "over"
+    }
+  ]
+}
