@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { createArcadeExit } from '../../../src/ui/menus/arcade-exit.js';
+import { createArcadeExit } from '../../src/arcade-exit.js';
 
 const GAME = 'https://arcade.example/games/steel-and-dust/';
 

@@ -6,7 +6,7 @@ import { installCarouselEvents } from '../ui/heroes/carousel-events.js';
 import { createHeroPanel } from '../ui/heroes/hero-panel.js';
 import { installBoardEvents } from '../ui/leaderboard/board-events.js';
 import { createLeaderboardPanel } from '../ui/leaderboard/leaderboard-panel.js';
-import { createArcadeExit } from '../ui/menus/arcade-exit.js';
+import { createArcadeExit } from '../../../../packages/host/src/arcade-exit.js';
 import { createMenuActions } from '../ui/menus/menu-actions.js';
 import { MenuController } from '../ui/menus/menu-controller.js';
 import { installMenuEvents } from '../ui/menus/menu-events.js';

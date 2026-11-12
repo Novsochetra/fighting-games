@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { loadSaved, persistencePorts } from '../../../src/platform/persistence.js';
-import { readJson, writeJson } from '../../../src/platform/storage.js';
 import { memoryStorage } from '../../support/memory-storage.js';
 
 const brokenStorage = {
@@ -13,12 +12,6 @@ const brokenStorage = {
 };
 
 describe('storage', () => {
-  it('falls back when storage is blocked or holds bad data', () => {
-    expect(readJson(brokenStorage, 'key', { safe: true })).toEqual({ safe: true });
-    expect(readJson(memoryStorage({ key: '{oops' }), 'key', 1)).toBe(1);
-    expect(writeJson(brokenStorage, 'key', 1)).toBe(false);
-  });
-
   it('loads old saved settings and records', () => {
     const storage = memoryStorage({
       sd_settings: '{"btn":2,"music":20}',

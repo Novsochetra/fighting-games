@@ -1,4 +1,4 @@
-import { readJson, writeJson } from '../platform/storage.js';
+import { readJson, writeJson } from '../../../../packages/host/src/json-storage.js';
 
 const TICKET_KEY = 'sd_ticket';
 const MAX_TICKET_LENGTH = 200;
