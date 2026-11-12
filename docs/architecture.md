@@ -1801,20 +1801,42 @@ hundreds, teeth for thousands, scallops for ten-thousands) and its place in the 
 the three upper values sits over the value a tenth its size. No word in the game calls a piece a
 note but the line in How to play that says it is not one.
 
-**The day** (`src/sim/run.js`, with `give.js` and `arrivals.js`) is plain data changed by
-`deal`, `takeBack`, `clearCloth`, `give` and `advance`, which say what happened as events (`ask`,
-`deal`, `take`, `clear`, `paid`, `wrong`, `unlock`, `stage`, `left`, `approach`, `arrive`,
-`closed`) the page drains. Its random numbers come from the seed it carries (`src/lib/rng.js`), so a
+**The day** (`src/sim/run.js`, with `give.js`, `arrivals.js`, `storm.js` and `keypad.js`) is plain
+data changed by `deal`, `takeBack`, `clearCloth`, `typeDigits`, `eraseDigit`, `clearTyped`, `give`
+and `advance`, which say what happened as events (`ask`, `deal`, `take`, `clear`, `type`, `paid`,
+`wrong`, `unlock`, `stage`, `left`, `stormed`, `approach`, `arrive`, `closed`) the page drains. Its random numbers come from the seed it carries (`src/lib/rng.js`), so a
 seed replays a day. The clock stands still until the first customer is paid, which is what the
 title's lesson asks for (500 + 500). Then one customer is always walking up, and arrives
 `max(minArrivalMs, firstArrivalMs - arrivalDropMs * served)` later (8,000 ms falling 150 a
 customer, to 1,500); one who arrives to five taken stools closes the stall, at that moment. A
-wrong count locks the counter 600 ms and stays on the cloth to be put right. Bills come from a
+wrong count locks the counter 600 ms and stays on the cloth to be put right; customers keep walking
+up through the lock, so a wrong count costs time. The customer in front has a patience
+(`src/sim/patience.js`, each stage's `patience`, 15 to 20 s) that runs while the day does; at its
+end they storm off unpaid (`storm.js`), the cloth goes back to the till, the streak breaks and the
+stall loses a trust stamp, the third (`TUNING.trust`) closing it. A payment's speed is the share of
+the patience left: 60% and more is `perfect`, 30% `great`, less `good`, adding twice, once or no
+times the stage's pay (`TUNING.speedShares`, `speedTimes`) to the pay, the clean count's and the
+extra for every fifth in a row. A day is played counting money or on the number pad (`mode`, from
+Settings' Answer with): the pad's figures are typed into `run.typed` and given as one amount, which
+earns no clean pay, and each mode keeps its own records (`src/platform/save.js`, where a save from
+before there were two counts as money). Bills come from a
 shuffled bag of the player's mix, so every four customers ask one of each sum left in it, and each
 sum has its customer (`src/data/customers.js`): a shopper adds, a moto driver wants change, a cook
 buys so many at a price, students share a bill. Stages (`src/data/stages.js`) add pieces to the
 till and widen the sums, every answer reachable in the stage's most pieces and ending in hundreds
 the stage allows; the pencilled total on the bill goes at the third, unless Settings keeps it.
+
+**Speed and the score** (`src/ui/fuse-view.js`, `praise-view.js`, `src/app/present-speed.js`). The
+fuse along the top of the bill is the patience, drawn each frame from the run; under a third it
+turns red, ticks each of its last three seconds a step higher on a wood block, and the customer in
+front fidgets. One who storms off leaves with a bubble (អត់ចាំទេ!) and a groan, and a trust stamp
+on the sign is crossed out. A payment's praise (លឿនណាស់! / ល្អ! / បាន) is stamped over the
+customers, never over the bill, with rays behind the best and the seconds it took, and rings its own
+run of bars and bells; its earnings burst out of it as chips (sale, fast, neat, extra) that fly to
+the sign, which counts up only as each lands. Chips land on the frame clock, not timers. The run of
+right answers is stamped beside the takings. The number pad (`keypad-view.js`,
+`src/input/keypad-input.js`) is a calculator's big keys in place of the cloth and the till, its
+figures following Settings' numerals, typed in ballpoint into the bill's blank.
 
 **The page** is the counter (`styles/page.css`) under the stall's striped awning: a painted sign
 (`sign.css`) with the takings, which rolls up to each payment; the stools, drawn as SVG from the

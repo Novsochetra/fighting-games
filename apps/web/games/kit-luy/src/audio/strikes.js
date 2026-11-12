@@ -3,6 +3,7 @@ import {
   BAR_PITCH,
   BELL_PITCH,
   CALL_PITCH,
+  HURRY_PITCH,
   INSTRUMENTS,
   MOST_BARS,
   PAPER_PITCH,
@@ -55,6 +56,7 @@ const BUILT = {
   paid: ({ pieces }) => countedBack(pieces),
   arrive: ({ kind }) => call(kind),
   count: ({ value }) => [{ play: 'bar', freq: pitchFor(BAR_PITCH, value) }],
+  hurry: ({ seconds }) => [{ play: 'block', freq: own(HURRY_PITCH, seconds) || HURRY_PITCH[3] }],
 };
 
 const hertz = (part, pitch) => (part.ratio ? part.ratio * pitch : part.freq);

@@ -9,6 +9,6 @@ a JPEG.
 | --------------------- | --------- | ------------ | ------------------------------------------------------------------ |
 | `banner.jpg`          | 1920×1080 | `banner`     | the title held sideways: the painted sign, the first customer, the first bill |
 | `poster.jpg`          | 720×1560  | `poster`     | the title held upright, in a 360×780 window                        |
-| `counting-change.jpg` | 960×540   | `screenshot` | the eighth customer's change from a 10,000 piece, counted out, three stools taken; taken at 960×540 and scaled down |
+| `counting-change.jpg` | 960×540   | `screenshot` | the eighth customer's bill half-way down its fuse, 6,000 counted onto the cloth, seven right in a row and all three trust stamps; taken at 960×540 and scaled down |
 
 The money in the game is game pieces, not banknotes: nothing here may show a riel banknote.

@@ -23,10 +23,8 @@ function refusal({ direction, by }, text) {
   return text.t(direction === 'short' ? 'play.shortBy' : 'play.overBy', { amount: text.money(by) });
 }
 
-function earned({ gain, clean, tip }, text) {
-  const words = [clean && text.t('play.clean'), tip && text.t('play.tip')].filter(Boolean);
-
-  return [`+${text.money(gain)}`, ...words].join('  ');
+function earned({ gain, clean }, text) {
+  return [`+${text.money(gain)}`, clean && text.t('play.clean')].filter(Boolean).join('  ');
 }
 
 function tearOff(slip) {

@@ -64,6 +64,8 @@
     <link rel="stylesheet" href="styles/pieces.css" />
     <link rel="stylesheet" href="styles/cloth.css" />
     <link rel="stylesheet" href="styles/till.css" />
+    <link rel="stylesheet" href="styles/keypad.css" />
+    <link rel="stylesheet" href="styles/speed.css" />
     <link rel="stylesheet" href="styles/shutter.css" />
     <link rel="stylesheet" href="styles/results.css" />
     <script type="module" src="src/main.js"></script>
@@ -86,7 +88,11 @@
             <h1 class="sign-title">គិតលុយ</h1>
             <p class="sign-best" id="signBest"></p>
           </div>
-          <output class="takings" id="takings"></output>
+          <div class="till-sign">
+            <output class="takings" id="takings"></output>
+            <span class="streak" id="streak" hidden></span>
+            <span class="trust" id="trust"><i></i><i></i><i></i></span>
+          </div>
           <nav class="plates">
             <button class="plate" data-act="help" data-i18n-label="menu.help">
               <span class="plate-icon plate-glyph" aria-hidden="true">?</span
@@ -116,6 +122,9 @@
         <div class="stools" id="stools" aria-hidden="true"></div>
 
         <section class="slip" id="slip" aria-live="polite">
+          <span class="fuse" id="fuse" aria-hidden="true"
+            ><i class="fuse-left" id="fuseLeft"></i><i class="fuse-spark" id="fuseSpark"></i
+          ></span>
           <p class="slip-head">
             <span id="slipAsk"></span><span class="serial" id="serial"></span>
           </p>
@@ -131,6 +140,7 @@
             <span class="riel" aria-hidden="true">៛</span>
           </div>
           <p class="mend" id="mend"></p>
+          <p class="lesson-keypad" data-i18n="title.lessonKeypad"></p>
         </section>
 
         <section class="cloth" id="cloth">
@@ -141,7 +151,16 @@
         <button class="give" id="give" data-i18n="play.give"></button>
 
         <div class="till" id="till"></div>
+        <div class="keypad" id="keypad"></div>
       </main>
+
+      <div class="flyers" id="flyers" aria-hidden="true">
+        <div class="praise" id="praise">
+          <span class="praise-rays"></span>
+          <b class="praise-word" id="praiseWord"></b>
+          <span class="praise-time" id="praiseTime"></span>
+        </div>
+      </div>
 
       <div class="shutter" id="menus">
         <section class="menu" id="m-pause" aria-labelledby="pauseTitle">
@@ -161,6 +180,8 @@
             <p class="tally-label" data-i18n="over.takings"></p>
             <p class="tally-takings" id="overTakings"></p>
             <div class="tally-pieces" id="overPieces" aria-hidden="true"></div>
+            <p class="tally-speeds" id="overSpeeds"></p>
+            <p class="tally-reason" id="overReason"></p>
             <ul class="tally-missed" id="overMissed"></ul>
           </div>
           <div class="mlist">
@@ -196,6 +217,7 @@
               <li data-i18n="help.bill"></li>
               <li data-i18n="help.count"></li>
               <li data-i18n="help.stools"></li>
+              <li data-i18n="help.patience"></li>
               <li data-i18n="help.pay"></li>
               <li class="help-keys" data-i18n="help.keys"></li>
             </ol>

@@ -1,0 +1,361 @@
+/* The fuse along the top of the bill: the customer's patience, burning down from the right. */
+.fuse {
+  position: absolute;
+  top: 3px;
+  right: var(--space-3);
+  left: var(--space-3);
+  height: 6px;
+  border-radius: var(--radius-sm);
+  background: var(--color-fuse);
+}
+
+.fuse-left {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-blue);
+  transform-origin: left center;
+}
+
+.fuse-spark {
+  position: absolute;
+  top: -5px;
+  left: -8px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-round);
+  background: radial-gradient(
+    circle,
+    var(--color-paper) 0 3px,
+    var(--color-red) 3.5px 5px,
+    var(--color-clear) 5.5px
+  );
+}
+
+.fuse.is-hurry .fuse-left {
+  background: var(--color-red);
+}
+
+.fuse.is-hurry .fuse-spark {
+  animation: spark var(--duration-restless) steps(2, jump-none) infinite;
+}
+
+#app[data-view='title'] .fuse {
+  visibility: hidden;
+}
+
+/* the trust the stall still has: a red stamp a customer, crossed out as each walks off */
+.till-sign {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  min-width: 0;
+}
+
+.trust {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.streak[hidden] + .trust {
+  margin-left: auto;
+}
+
+.trust i {
+  width: 16px;
+  height: 16px;
+  border: 3px solid var(--color-red);
+  border-radius: var(--radius-round);
+  background: var(--color-paper);
+}
+
+.trust i.is-lost {
+  border-color: var(--color-guide);
+  background: var(--color-clear);
+  animation: lose-trust var(--duration-slow) var(--ease-thump);
+}
+
+#app[data-view='title'] .till-sign {
+  display: none;
+}
+
+/* the run of right answers, stamped beside the takings */
+.streak {
+  margin-left: auto;
+  padding: 0 var(--space-2);
+  border: var(--edge) solid var(--color-paper);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sign);
+  font-size: var(--font-size-sm);
+  line-height: var(--leading-sign);
+  white-space: nowrap;
+  transform: rotate(-6deg);
+}
+
+.streak.is-bumped {
+  animation: bump var(--duration-medium) var(--ease-thump);
+}
+
+/* praise and score chips fly over everything, and are never pressed */
+.flyers {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* a point over the bill's middle, everything in it centred on that point */
+.praise {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.praise.is-shown {
+  animation: praise var(--duration-praise) var(--ease-out) both;
+}
+
+.praise-rays {
+  position: absolute;
+  top: -120px;
+  left: -120px;
+  width: 240px;
+  height: 240px;
+  border-radius: var(--radius-round);
+  background: repeating-conic-gradient(var(--color-ray) 0 10deg, var(--color-ray-gap) 10deg 30deg);
+  mask-image: radial-gradient(circle, var(--color-ink) 30%, var(--color-clear) 70%);
+  animation: rays var(--duration-rays) linear infinite;
+}
+
+.praise[data-speed='good'] .praise-rays {
+  display: none;
+}
+
+.praise-word {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-family: var(--font-sign);
+  font-size: var(--font-size-praise);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-sign);
+  color: var(--color-red);
+  text-shadow: var(--text-shadow-praise);
+  white-space: nowrap;
+  transform: translate(-50%, -70%) rotate(-6deg);
+}
+
+.praise[data-speed='great'] .praise-word {
+  color: var(--color-blue);
+}
+
+.praise[data-speed='good'] .praise-word {
+  font-size: var(--font-size-xl);
+  color: var(--color-blue);
+}
+
+.praise-time {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-paper);
+  font-family: var(--font-hand);
+  font-size: var(--font-size-lg);
+  line-height: var(--leading-hand);
+  color: var(--color-red);
+  white-space: nowrap;
+  transform: translate(-50%, 60%) rotate(4deg);
+}
+
+/* what a payment earned, a chip a reason, carried up into the takings on the sign */
+.score-chip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  gap: var(--space-1);
+  align-items: baseline;
+  padding: 0 var(--space-2);
+  border: var(--edge) solid var(--color-ink);
+  border-radius: var(--radius-md);
+  background: var(--color-paper);
+  box-shadow: var(--shadow-press);
+  font-family: var(--font-sign);
+  font-size: var(--font-size-lg);
+  line-height: var(--leading-sign);
+  color: var(--color-blue);
+  white-space: nowrap;
+  animation: score-chip var(--duration-chip) var(--ease-out) both;
+}
+
+.score-chip small {
+  font-family: var(--font-text);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-red);
+}
+
+.score-chip[data-kind='speed'] {
+  border-color: var(--color-red);
+  color: var(--color-red);
+}
+
+/* the customer in front fidgets as the fuse burns short, and storms off when it is out */
+.guest.is-restless .guest-body {
+  animation: restless var(--duration-restless) steps(2, jump-none) infinite;
+}
+
+.guest.is-storming {
+  animation: storm-off var(--duration-storm) var(--ease-out) both;
+}
+
+/* on the customer, as the row above the stools is cut off at the top */
+.guest-bubble {
+  position: absolute;
+  top: 4%;
+  left: 50%;
+  z-index: 1;
+  padding: 0 var(--space-1);
+  border: var(--edge) solid var(--color-ink);
+  border-radius: var(--radius-md);
+  background: var(--color-paper);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-text);
+  color: var(--color-red);
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+@keyframes spark {
+  0% {
+    transform: scale(0.8);
+  }
+
+  100% {
+    transform: scale(1.3);
+  }
+}
+
+@keyframes lose-trust {
+  0% {
+    transform: scale(1.8) rotate(-30deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes praise {
+  0% {
+    opacity: 0;
+    transform: translate(var(--at-x), var(--at-y)) scale(2.4) rotate(-10deg);
+  }
+
+  18% {
+    opacity: 1;
+    transform: translate(var(--at-x), var(--at-y)) scale(0.92) rotate(2deg);
+  }
+
+  28% {
+    transform: translate(var(--at-x), var(--at-y)) scale(1.06) rotate(0);
+  }
+
+  75% {
+    opacity: 1;
+    transform: translate(var(--at-x), var(--at-y)) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(var(--at-x), calc(var(--at-y) - 40px)) scale(0.9);
+  }
+}
+
+@keyframes rays {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes score-chip {
+  0% {
+    opacity: 0;
+    transform: translate(var(--from-x), var(--from-y)) scale(0.4);
+  }
+
+  25% {
+    opacity: 1;
+    transform: translate(var(--from-x), calc(var(--from-y) - 34px)) scale(1.1);
+  }
+
+  45% {
+    transform: translate(var(--from-x), calc(var(--from-y) - 30px)) scale(1);
+  }
+
+  100% {
+    opacity: 0.6;
+    transform: translate(var(--to-x), var(--to-y)) scale(0.5);
+  }
+}
+
+@keyframes restless {
+  0% {
+    transform: translateX(-52%) rotate(-3deg);
+  }
+
+  100% {
+    transform: translateX(-48%) rotate(3deg);
+  }
+}
+
+@keyframes storm-off {
+  0%,
+  30% {
+    transform: translateX(calc(var(--seat, 0) * 100%)) rotate(0);
+  }
+
+  10%,
+  20% {
+    transform: translateX(calc(var(--seat, 0) * 100% - 6%)) rotate(-4deg);
+  }
+
+  15%,
+  25% {
+    transform: translateX(calc(var(--seat, 0) * 100% + 6%)) rotate(4deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(calc(var(--seat, 0) * 100% + 420%));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fuse.is-hurry .fuse-spark,
+  .trust i.is-lost,
+  .streak.is-bumped,
+  .praise-rays,
+  .guest.is-restless .guest-body,
+  .guest.is-storming {
+    animation: none;
+  }
+
+  .praise.is-shown {
+    animation: none;
+    opacity: 1;
+    transform: translate(var(--at-x), var(--at-y));
+  }
+
+  .score-chip {
+    display: none;
+  }
+}

@@ -1,10 +1,19 @@
 import { piecesFor } from '../../src/sim/pieces.js';
-import { advance, createRun, deal, drainEvents, give, takeBack } from '../../src/sim/run.js';
+import {
+  advance,
+  clearTyped,
+  createRun,
+  deal,
+  drainEvents,
+  give,
+  takeBack,
+  typeDigits,
+} from '../../src/sim/run.js';
 
 const STEP_MS = 16;
 // far past any run the tuning allows, so a bot the stall cannot close still ends
 const MOST_MS = 30 * 60 * 1000;
-const TAPS = ['deal', 'take'];
+const TAPS = ['deal', 'take', 'type'];
 
 function collect(play) {
   for (const event of drainEvents(play.run)) {
@@ -52,10 +61,34 @@ function dealAll(play, values) {
   }
 }
 
+// on the pad, a figure a tap; a miss types the answer and a hundred more first
+function typeBill(play, isMiss) {
+  const { answer } = play.run.queue[0].question;
+  const typeAll = (amount) =>
+    [...String(amount)].forEach((figure) => tap(play, (now) => typeDigits(now, figure)));
+
+  typeAll(isMiss ? answer + 100 : answer);
+
+  if (isMiss) {
+    tap(play, give);
+    waitOutLock(play);
+    tap(play, clearTyped);
+    typeAll(answer);
+  }
+
+  tap(play, give);
+}
+
 // A miss counts one piece too many, the smallest in the till, gives, and takes it back: one too
 // few would be no count at all when the answer is a single piece.
 function serveBill(play, isMiss) {
   wait(play, play.thinkMs);
+
+  if (play.run.mode === 'keypad') {
+    typeBill(play, isMiss);
+
+    return;
+  }
 
   const { run } = play;
   const way = piecesFor(run.queue[0].question.answer, run.pieces);
@@ -72,8 +105,9 @@ function serveBill(play, isMiss) {
   tap(play, give);
 }
 
-export function playRecorded({ seed, ops, thinkMs, tapMs, missEvery }) {
-  const play = { run: createRun({ seed, ops }), thinkMs, tapMs, asked: [], events: [], wrongs: 0 };
+export function playRecorded({ seed, ops, mode, thinkMs, tapMs, missEvery }) {
+  const run = createRun({ seed, ops, mode });
+  const play = { run, thinkMs, tapMs, asked: [], events: [], wrongs: 0 };
 
   collect(play);
 

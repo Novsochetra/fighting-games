@@ -15,9 +15,16 @@ home page, or go straight to `games/kit-luy/` on the dev server (`npm run dev` a
 
 - The title is the stall already open: the first customer asks 500 + 500. Counting out 1,000 and
   giving it starts the day.
-- A right count is stamped and paid: more on later stages, extra for counting it in the fewest
-  pieces, for paying before the next customer sits, and for every fifth right in a row (when the
-  customer at the back of the row also goes to the stall next door).
+- A fuse burns along the top of every bill: the customer's patience, longer on later stages. It
+  turns red and ticks through its last three seconds while the customer fidgets. Burnt out, the
+  customer storms off unpaid and the stall loses one of its three trust stamps; the third to go
+  closes it.
+- A right count is stamped and paid: more on later stages, and more the faster it came. Paid in the
+  first 40% of the patience it is ពូកែ-fast (Lightning, twice the stage's pay on top), by 70% Quick
+  (once more), later just Paid. Counting in the fewest pieces earns its own, and every fifth right
+  in a row an extra (and the customer at the back of the row goes to the stall next door). The
+  praise bursts over the customers with the seconds it took, and the earnings fly up to the sign a
+  chip at a time.
 - A wrong count is refused, short or over, and stays on the cloth to be put right; from the second
   try on a bill the seller is told by how much.
 - The till starts with 500, 1,000, 2,000 and 5,000; 10,000, then 100 and 20,000, then 50,000 snap
@@ -25,15 +32,24 @@ home page, or go straight to `games/kit-luy/` on the dev server (`npm run dev` a
   third stage, unless Settings keeps it.
 - A day lasts two to three minutes for most players.
 
+Settings' **Answer with** picks counting money (the default) or a number pad: a market calculator
+in place of the cloth and the till, the amount typed into the bill. Each keeps its own best day, as
+typing is the quicker.
+
+Settings' Answer with picks counting money (the default) or a number pad: a market calculator in
+place of the cloth and the till, the amount typed into the bill. Each keeps its own best day, as
+typing is the quicker.
+
 ## Controls
 
-| Action                | Touch or mouse   | Keyboard                       |
-| --------------------- | ---------------- | ------------------------------ |
-| Count a piece out     | press its bundle | 1 to 8 (100 up to 50,000)      |
-| Take a piece back     | press its pile   | Backspace (the last one dealt) |
-| Clear the cloth       |                  | Delete                         |
-| Hand the count over   | Give             | Enter or Space                 |
-| Pull the shutter down | II               | Esc or P                       |
+| Action                 | Touch or mouse   | Keyboard                       |
+| ---------------------- | ---------------- | ------------------------------ |
+| Count a piece out      | press its bundle | 1 to 8 (100 up to 50,000)      |
+| Take a piece back      | press its pile   | Backspace (the last one dealt) |
+| Clear the cloth        |                  | Delete                         |
+| Hand the count over    | Give             | Enter or Space                 |
+| Type on the number pad | its keys         | 0 to 9, Backspace, Delete      |
+| Pull the shutter down  | II               | Esc or P                       |
 
 Settings holds Sound, Vibration (on phones that can), Language (ខ្មែរ or English), Numerals (១២៣
 or 123), the running total, and which of the four sums customers ask.

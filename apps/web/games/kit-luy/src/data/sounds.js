@@ -66,6 +66,19 @@ export const INSTRUMENTS = {
   twang: [
     { wave: 'sawtooth', freq: 300, to: 120, slide: 0.08, gain: 0.14, attack: 0.002, decay: 0.16 },
   ],
+  block: [{ wave: 'sine', ratio: 1, gain: 0.18, attack: 0.001, decay: 0.05 }, MALLET],
+  groan: [
+    {
+      wave: 'sawtooth',
+      freq: 220,
+      to: 104,
+      slide: 0.26,
+      filter: { type: 'lowpass', freq: 900 },
+      gain: 0.12,
+      attack: 0.01,
+      decay: 0.3,
+    },
+  ],
   slat: [
     {
       wave: 'noise',
@@ -89,6 +102,8 @@ export const BAR_PITCH = pitchOfEach(barAt);
 export const TICK_PITCH = pitchOfEach((steps) => 4 * barAt(steps));
 
 export const BELL_PITCH = 1760;
+// the last seconds of a customer's patience, each a step higher: 3, 2, 1
+export const HURRY_PITCH = { 3: 880, 2: 1047, 1: 1319 };
 export const PAPER_PITCH = 3500;
 export const BAR_GAP = 0.055;
 export const MOST_BARS = 8;
@@ -132,4 +147,22 @@ export const SOUNDS = {
     at: i * 0.16,
   })),
   tap: [{ play: 'tick', freq: 1000 }],
+  key: [
+    { play: 'tick', freq: 1500 },
+    { play: 'dullPaper', gain: 0.6 },
+  ],
+  chip: [{ play: 'tick', freq: 2600, gain: 0.7 }],
+  stormed: [{ play: 'knock' }, { play: 'knock', at: 0.1 }, { play: 'groan', at: 0.18 }],
+  great: [
+    { play: 'bar', freq: barAt(7) },
+    { play: 'bar', freq: barAt(9), at: 0.07 },
+    { play: 'bell', freq: BELL_PITCH, at: 0.14 },
+  ],
+  perfect: [
+    { play: 'bar', freq: barAt(7) },
+    { play: 'bar', freq: barAt(9), at: 0.06 },
+    { play: 'bar', freq: barAt(11), at: 0.12 },
+    { play: 'bell', freq: BELL_PITCH, at: 0.18 },
+    { play: 'bell', freq: BELL_PITCH * 2 ** (4 / STEPS_TO_THE_OCTAVE), at: 0.3 },
+  ],
 };

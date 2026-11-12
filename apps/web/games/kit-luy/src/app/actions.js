@@ -1,6 +1,17 @@
 import { toggledOps } from '../data/settings.js';
 import { clothCount } from '../sim/pieces.js';
-import { clearPieces, dealPiece, givePieces, openStall, pause, resume, takePiece } from './flow.js';
+import {
+  clearKeys,
+  clearPieces,
+  dealPiece,
+  eraseKey,
+  givePieces,
+  openStall,
+  pause,
+  resume,
+  takePiece,
+  typeKeys,
+} from './flow.js';
 
 // The order the pieces went down in is kept here, as the keys act between frames: Backspace must
 // take back the piece just dealt even before the page has drawn it.
@@ -40,6 +51,7 @@ function counterActions(stage) {
 
     clear() {
       clearPieces(game);
+      clearKeys(game);
       settle();
     },
 
@@ -50,12 +62,33 @@ function counterActions(stage) {
   };
 }
 
+// on the pad, Backspace takes back the last figure instead of the last piece
+function padActions(stage, counter) {
+  const { game } = stage;
+
+  return {
+    takeLast: () => (game.run.mode === 'keypad' ? eraseKey(game) : counter.takeLast()),
+
+    type(digits) {
+      typeKeys(game, digits);
+      stage.audio.play('key');
+    },
+
+    erase() {
+      eraseKey(game);
+      stage.audio.play('key');
+    },
+  };
+}
+
 export function createActions(stage, { leaveForArcade, renderSettings }) {
   const { game, menus } = stage;
+  const counter = counterActions(stage);
   const open = () => openStall(game, stage.window.Date.now() >>> 0);
 
   return {
-    ...counterActions(stage),
+    ...counter,
+    ...padActions(stage, counter),
     again: open,
     quit: open,
     pause: () => pause(game),

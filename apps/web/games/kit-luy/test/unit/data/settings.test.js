@@ -16,13 +16,20 @@ describe('settings', () => {
       lang: 'en',
       numerals: 'latin',
       total: 'early',
+      input: 'money',
       ops: OPERATIONS,
     });
     expect(defaultSettings().lang).toBe('en');
   });
 
   it('keeps what was saved and fills the rest from the defaults', () => {
-    const saved = { sound: false, lang: 'km', total: 'always', ops: ['div', 'add'] };
+    const saved = {
+      sound: false,
+      lang: 'km',
+      total: 'always',
+      input: 'keypad',
+      ops: ['div', 'add'],
+    };
 
     expect(sanitizeSettings(saved, defaultSettings())).toEqual({
       sound: false,
@@ -30,6 +37,7 @@ describe('settings', () => {
       lang: 'km',
       numerals: 'latin',
       total: 'always',
+      input: 'keypad',
       ops: ['add', 'div'],
     });
   });

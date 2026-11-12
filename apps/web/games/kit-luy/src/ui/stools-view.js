@@ -4,6 +4,8 @@ import { drawPerson, drawStool } from './figures.js';
 const DOOR = 6.2;
 const LEAVING_MS = 320;
 const GOING_MS = 640;
+const STORMING_MS = 760;
+const LEAVING_FOR = { 'is-going': GOING_MS, 'is-storming': STORMING_MS };
 
 function guestOf(document, customer) {
   const guest = document.createElement('span');
@@ -56,17 +58,39 @@ function buildStools(row) {
 
 // those who got up go on being drawn until their walk away is over
 function createDepartures() {
-  const going = new Set();
+  const how = new Map();
+  const words = new Map();
   let leaving = [];
 
+  function sayOnTheWay(guest, said) {
+    const bubble = guest.ownerDocument.createElement('span');
+
+    bubble.className = 'guest-bubble';
+    bubble.textContent = said;
+    guest.append(bubble);
+  }
+
   return {
-    nextDoor: (customer) => going.add(customer.id),
+    nextDoor: (customer) => how.set(customer.id, 'is-going'),
+
+    // an angry customer says so on their way out
+    storming(customer, said) {
+      how.set(customer.id, 'is-storming');
+      words.set(customer.id, said);
+    },
 
     send(guest, id, now) {
-      const nextDoor = going.delete(id);
+      const way = how.get(id) ?? 'is-leaving';
 
-      guest.classList.add(nextDoor ? 'is-going' : 'is-leaving');
-      leaving.push({ guest, at: now + (nextDoor ? GOING_MS : LEAVING_MS) });
+      if (words.has(id)) {
+        sayOnTheWay(guest, words.get(id));
+      }
+
+      how.delete(id);
+      words.delete(id);
+      guest.classList.remove('is-front', 'is-restless');
+      guest.classList.add(way);
+      leaving.push({ guest, at: now + (LEAVING_FOR[way] ?? LEAVING_MS) });
     },
 
     sweep(now) {
@@ -75,7 +99,8 @@ function createDepartures() {
     },
 
     clear() {
-      going.clear();
+      how.clear();
+      words.clear();
       leaving = [];
     },
   };
@@ -104,6 +129,12 @@ export function createStoolsView({ row }) {
 
   return {
     nextDoor: departures.nextDoor,
+    storming: departures.storming,
+
+    // the customer in front fidgets while their fuse burns short
+    restless(isRestless) {
+      row.querySelector('.guest.is-front')?.classList.toggle('is-restless', isRestless);
+    },
 
     sync(run, now) {
       const here = new Set(run.queue.map((customer) => customer.id));

@@ -1,5 +1,6 @@
 import { TUNING } from '../data/tuning.js';
 import { nextCustomer } from './customers.js';
+import { drainPatience } from './storm.js';
 
 export const arrivalMs = (served) =>
   Math.max(TUNING.minArrivalMs, TUNING.firstArrivalMs - TUNING.arrivalDropMs * served);
@@ -23,14 +24,14 @@ export function sit(run) {
 function arrive(run) {
   if (run.queue.length >= TUNING.seats) {
     run.phase = 'closed';
+    run.closedBy = 'stools';
     run.arriving.left = 0;
-    run.events.push({ type: 'closed', customer: run.arriving.customer });
+    run.events.push({ type: 'closed', customer: run.arriving.customer, reason: 'stools' });
 
     return;
   }
 
   sit(run);
-  run.tip = false;
 }
 
 // A step longer than a walk (a tab coming back) seats everyone who arrived in it.
@@ -74,5 +75,6 @@ export function advance(run, ms) {
   // a wrong count again the moment each lock ended would keep the day still for good.
   if (run.started) {
     walk(run, ms);
+    drainPatience(run, ms);
   }
 }

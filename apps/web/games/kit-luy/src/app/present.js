@@ -1,5 +1,7 @@
 import { clothTotal } from '../sim/pieces.js';
+import { TUNING } from '../data/tuning.js';
 import { replay } from '../ui/dom.js';
+import { praisePayment, SPEED_HANDLERS } from './present-speed.js';
 
 // The stamp is seen landing, then the bill is torn off and carries it away: the next customer is
 // already the one being served, so their bill must not wait long behind the last one's.
@@ -11,7 +13,9 @@ export const CLOSING_BEAT_MS = 900;
 function showCount(stage) {
   const { run } = stage.game;
 
-  stage.slip.count(run.showTotal ? clothTotal(run.cloth) : null);
+  if (run.mode === 'money') {
+    stage.slip.count(run.showTotal ? clothTotal(run.cloth) : null);
+  }
 }
 
 function showCloth(stage) {
@@ -36,12 +40,18 @@ function turnPageNow(stage, number) {
 function opened(stage) {
   const { run, records } = stage.game;
 
+  stage.praise.clear();
+  stage.banked = 0;
   stage.nextSlip = null;
   stage.lastDealt = [];
+  stage.at.app.dataset.input = run.mode;
   stage.stools.clear();
   stage.sign.reset();
-  stage.sign.showBest(records.best);
+  stage.sign.showBest(records[run.mode].best);
+  stage.sign.showTrust(0, TUNING.trust);
+  stage.sign.showStreak(0);
   stage.till.show(run.pieces);
+  stage.keypad.show('');
   showCloth(stage);
 }
 
@@ -66,7 +76,7 @@ function paid(stage, event) {
 
   stage.cloth.handOver(stage.at.blank);
   stage.slip.stamp({ ...event, amount });
-  replay(stage.at.takings, 'is-bumped');
+  praisePayment(stage, event);
   stage.audio.play('stamp');
   stage.audio.play(event.extra > 0 ? 'extra' : 'paid', { pieces: event.pieces });
   stage.buzz('paid');
@@ -75,6 +85,7 @@ function paid(stage, event) {
 function wrong(stage, event) {
   turnPageNow(stage, stage.game.run.served + 1);
   stage.slip.refuse(event);
+  stage.sign.showStreak(0);
   stage.cloth.hop();
   stage.audio.play('wrong');
   stage.buzz('wrong');
@@ -100,6 +111,7 @@ function finished(stage, { summary }) {
 }
 
 const HANDLERS = {
+  ...SPEED_HANDLERS,
   opened,
   ask,
   deal: dealt,

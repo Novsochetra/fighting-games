@@ -1,5 +1,6 @@
 import { installGestureGuards } from '../../../../packages/screen/src/gesture-guards.js';
 import { RIEL } from '../data/currency.js';
+import { installKeypad, typedFigure } from './keypad-input.js';
 
 const DIGITS = ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8'];
 const PAD = [
@@ -60,14 +61,18 @@ const pressesButton = (event) =>
 
 // Enter or Space on a focused bundle, pile or button presses that button, as the browser's own
 // click does: only with nothing focused do they give the count
-function counterKey(event, actions) {
+function counterKey(event, stage, actions) {
   const piece = Math.max(DIGITS.indexOf(event.code), PAD.indexOf(event.code));
+  const typing = stage.game.run.mode === 'keypad';
+  const figure = typing ? typedFigure(event, stage.at.keypad) : undefined;
 
   if (pressesButton(event)) {
     return;
   }
 
-  if (piece >= 0) {
+  if (figure !== undefined) {
+    actions.type(figure);
+  } else if (piece >= 0 && !typing) {
     actions.deal(RIEL.pieces[piece]);
   } else if (event.code in COUNTER_KEYS) {
     event.preventDefault();
@@ -85,7 +90,7 @@ function installKeys(stage, actions) {
     if (ESCAPE_CODES.includes(event.code)) {
       actions.escape();
     } else if (!stage.menus.isDown) {
-      counterKey(event, actions);
+      counterKey(event, stage, actions);
     }
   });
 }
@@ -95,10 +100,16 @@ export function installInput(stage, actions) {
 
   onPress(at.till, '.bundle', actions.deal);
   onPress(at.piles, '.pile', actions.take);
+  installKeypad(at.keypad, actions);
   installGive(at.give, actions);
   installButtons(stage, actions);
   installKeys(stage, actions);
-  installGestureGuards({ window, document, root: at.app, surfaces: [at.till, at.piles, at.give] });
+  installGestureGuards({
+    window,
+    document,
+    root: at.app,
+    surfaces: [at.till, at.piles, at.give, at.keypad],
+  });
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       actions.pause();

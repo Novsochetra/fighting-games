@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { TUNING } from '../../../src/data/tuning.js';
 import { arrivalMs } from '../../../src/sim/arrivals.js';
-import { deal, drainEvents, give } from '../../../src/sim/run.js';
+import { STAGES } from '../../../src/data/stages.js';
+import { advance, deal, drainEvents, give } from '../../../src/sim/run.js';
 import {
   ask,
   dealAll,
@@ -13,7 +14,6 @@ import {
   snapshot,
   startedRun,
   typesOf,
-  waitForArrival,
 } from './serving.js';
 
 const lastPaid = (run) => eventsOf(run, 'paid').pop();
@@ -29,14 +29,16 @@ describe('give, with the right money', () => {
 
     expect(run).toMatchObject({ served: 1, started: true, streak: 1, bestStreak: 1, tries: 0 });
     expect(run.cloth).toEqual({});
-    expect(run.takings).toBe(1500);
+    expect(run.takings).toBe(2000);
     expect(lastPaid(run)).toEqual({
       type: 'paid',
       customer,
       pieces: [1000],
-      gain: 1500,
+      gain: 2000,
       clean: true,
-      tip: true,
+      speed: 'perfect',
+      speedPay: 1000,
+      waitedMs: 0,
       extra: 0,
       streak: 1,
       served: 1,
@@ -73,7 +75,7 @@ describe('give, with the right money', () => {
     dealAll(run, [500, 500]);
     give(run);
 
-    expect(lastPaid(run)).toMatchObject({ clean: false, pieces: [500, 500], gain: 1000 });
+    expect(lastPaid(run)).toMatchObject({ clean: false, pieces: [500, 500], gain: 1500 });
   });
 
   it('calls the fewest pieces of the till clean, and lists them largest first', () => {
@@ -86,30 +88,41 @@ describe('give, with the right money', () => {
     expect(lastPaid(run)).toMatchObject({ clean: true, pieces: [2000, 1000, 500] });
   });
 
-  it('tips for a bill nobody sat down during, the one seated at once included', () => {
+  it.each([
+    [0, 'perfect', 2],
+    [0.39, 'perfect', 2],
+    [0.41, 'great', 1],
+    [0.69, 'great', 1],
+    [0.71, 'good', 0],
+  ])(
+    'pays a bill given after %s of the patience as %s, %i times the pay more',
+    (share, speed, times) => {
+      const run = startedRun();
+
+      run.patience.left = Math.round(run.patience.total * (1 - share));
+      payFront(run);
+
+      expect(lastPaid(run)).toMatchObject({ speed, speedPay: 500 * times });
+      expect(lastPaid(run).gain).toBe(500 + TUNING.cleanPay + 500 * times);
+    },
+  );
+
+  it('says how long the customer waited for their money', () => {
     const run = startedRun();
 
+    advance(run, 2500);
     payFront(run);
 
-    expect(lastPaid(run)).toMatchObject({ tip: true, gain: 500 + TUNING.cleanPay + TUNING.tipPay });
+    expect(lastPaid(run).waitedMs).toBe(2500);
   });
 
-  it('loses the tip when someone takes a stool while the bill is in front', () => {
+  it('gives the next customer their whole patience', () => {
     const run = startedRun();
 
-    waitForArrival(run);
+    advance(run, 3000);
     payFront(run);
 
-    expect(lastPaid(run)).toMatchObject({ tip: false, gain: 500 + TUNING.cleanPay });
-  });
-
-  it('starts the next bill with its tip whole', () => {
-    const run = startedRun();
-
-    waitForArrival(run);
-    serve(run, 2);
-
-    expect(lastPaid(run).tip).toBe(true);
+    expect(run.patience).toEqual({ left: STAGES[0].patience, total: STAGES[0].patience });
   });
 
   it('adds an extra on every fifth right give in a row, growing to its most', () => {
@@ -127,7 +140,7 @@ describe('give, with the right money', () => {
       [25, 5000],
       [30, 5000],
     ]);
-    expect(extras[0].gain).toBe(500 + TUNING.cleanPay + TUNING.tipPay + 1000);
+    expect(extras[0].gain).toBe(500 + TUNING.cleanPay + 1000 + 1000);
     expect(run.bestStreak).toBe(30);
   });
 
@@ -190,10 +203,10 @@ describe('give, with the right money', () => {
 
     payFront(run);
     expect([run.stage, run.pieces.includes(10000)]).toEqual([2, true]);
-    expect(lastPaid(run).gain).toBe(500 + TUNING.cleanPay + TUNING.tipPay);
+    expect(lastPaid(run).gain).toBe(500 + TUNING.cleanPay + 1000);
 
     payFront(run);
-    expect(lastPaid(run).gain).toBe(1000 + TUNING.cleanPay + TUNING.tipPay);
+    expect(lastPaid(run).gain).toBe(1000 + TUNING.cleanPay + 2000);
   });
 
   it('tells of a payment in order: paid, who left, the stage, who is asked', () => {

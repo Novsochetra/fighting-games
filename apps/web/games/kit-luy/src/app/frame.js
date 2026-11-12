@@ -1,5 +1,6 @@
 import { clothCount, clothTotal } from '../sim/pieces.js';
 import { CLOSING_BEAT_MS } from './present.js';
+import { bankLanded } from './present-speed.js';
 
 const MENU_OF = { pause: 'pause', over: 'over' };
 
@@ -16,13 +17,24 @@ function showView(stage) {
   }
 }
 
+// what is on the counter so far, in the bill's blank: typed figures, or the cloth's pencilled total
+function showCount(stage) {
+  const { run } = stage.game;
+
+  if (run.mode === 'keypad') {
+    stage.keypad.show(run.typed);
+  } else {
+    stage.slip.count(run.showTotal ? clothTotal(run.cloth) : null);
+  }
+}
+
 function tearNextSlip(stage) {
   const next = stage.nextSlip;
 
   if (next && stage.now >= next.at) {
     stage.nextSlip = null;
     stage.slip.turnPage(next.customer, stage.game.run.served + 1);
-    stage.slip.count(stage.game.run.showTotal ? clothTotal(stage.game.run.cloth) : null);
+    showCount(stage);
   }
 }
 
@@ -34,15 +46,32 @@ function countTakings(stage) {
   }
 }
 
+// the last seconds of a customer's patience tick, and the one in front fidgets through them
+function burnFuse(stage) {
+  const { run, screen } = stage.game;
+  const second = stage.fuse.show(run.patience);
+
+  if (second !== null && screen === 'play') {
+    stage.audio.play('hurry', { seconds: second });
+  }
+
+  stage.stools.restless(screen === 'play' && stage.fuse.isHurry());
+}
+
+const nothingToGive = (run) =>
+  run.mode === 'money' ? clothCount(run.cloth) === 0 : run.typed === '';
+
 export function drawFrame(stage, ms) {
   const { run, screen } = stage.game;
 
   stage.now += ms;
   showView(stage);
   tearNextSlip(stage);
-  stage.sign.roll(run.takings);
+  bankLanded(stage);
+  stage.sign.roll(stage.banked);
   stage.stools.sync(run, stage.now);
-  stage.at.give.classList.toggle('is-empty', clothCount(run.cloth) === 0);
+  burnFuse(stage);
+  stage.at.give.classList.toggle('is-empty', nothingToGive(run));
 
   if (screen === 'over') {
     countTakings(stage);

@@ -3,6 +3,7 @@ import { OPERATIONS } from './operations.js';
 const LANGUAGES = ['km', 'en'];
 const NUMERALS = ['khmer', 'latin'];
 const TOTALS = ['early', 'always'];
+export const INPUTS = ['money', 'keypad'];
 
 export function defaultSettings(languages = []) {
   const speaksKhmer = languages.some((language) => language.toLowerCase().startsWith('km'));
@@ -13,6 +14,7 @@ export function defaultSettings(languages = []) {
     lang: speaksKhmer ? 'km' : 'en',
     numerals: speaksKhmer ? 'khmer' : 'latin',
     total: 'early',
+    input: 'money',
     ops: [...OPERATIONS],
   };
 }
@@ -35,6 +37,7 @@ export function sanitizeSettings(saved, defaults) {
     lang: oneOf(LANGUAGES, from.lang, defaults.lang),
     numerals: oneOf(NUMERALS, from.numerals, defaults.numerals),
     total: oneOf(TOTALS, from.total, defaults.total),
+    input: oneOf(INPUTS, from.input, defaults.input),
     ops: savedOps(from.ops, defaults.ops),
   };
 }

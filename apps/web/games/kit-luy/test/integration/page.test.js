@@ -73,7 +73,7 @@ describe('the stall on its page', () => {
     page.give();
     page.step();
     expect(document.getElementById('blank').classList.contains('is-paid')).toBe(true);
-    expect(page.text('mend')).toBe('+1,500៛  neat  quick');
+    expect(page.text('mend')).toBe('+2,000៛  neat');
 
     page.wait(320);
     expect(page.text('serial')).toBe('No 0002');
@@ -117,10 +117,10 @@ describe('the stall on its page', () => {
     page.wait(TUNING.firstArrivalMs);
 
     expect(document.querySelectorAll('.guest').length).toBeGreaterThanOrEqual(3);
-    expect(page.text('takings')).toBe('1,500៛');
+    expect(page.text('takings')).toBe('2,000៛');
   });
 
-  it('closes when a customer finds every stool taken, then brings the shutter down on the tally', () => {
+  it('closes when the third customer walks off unpaid, then brings the shutter down on the tally', () => {
     const page = openPage();
 
     page.serve();
@@ -130,9 +130,10 @@ describe('the stall on its page', () => {
     page.wait(1200);
     expect(page.openMenu()).toBe('m-over');
     expect(page.text('overServed')).toBe('1 customer served');
-    expect(page.text('overTakings')).toBe('1,500៛');
+    expect(page.text('overTakings')).toBe('2,000៛');
     expect(page.text('overStamp')).toBe('Best day!');
-    expect(page.saved().records).toEqual({ best: 1500, bestServed: 1, plays: 1 });
+    expect(page.text('overReason')).toBe('Counting money · Three customers walked off unpaid');
+    expect(page.saved().records.money).toEqual({ best: 2000, bestServed: 1, plays: 1 });
     expect(document.querySelectorAll('#overPieces .piece').length).toBeGreaterThan(0);
   });
 

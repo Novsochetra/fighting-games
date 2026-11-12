@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { STAGES } from '../../../src/data/stages.js';
 import { TUNING } from '../../../src/data/tuning.js';
 import { advance, deal, give } from '../../../src/sim/run.js';
 import { startedRun } from '../../unit/sim/serving.js';
@@ -19,6 +20,6 @@ describe('giving a wrong count again and again', () => {
     }
 
     expect(run.phase).toBe('closed');
-    expect(run.elapsed).toBeLessThan(TUNING.firstArrivalMs * TUNING.seats);
+    expect(run.elapsed).toBeLessThan(STAGES[0].patience * TUNING.trust + 1000);
   });
 });

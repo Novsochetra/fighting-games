@@ -3,7 +3,10 @@ import { canBuzz, createHaptics } from '../platform/haptics.js';
 import { storeSave } from '../platform/save.js';
 import { createClothView } from '../ui/cloth-view.js';
 import { byIds } from '../ui/dom.js';
+import { createFuseView } from '../ui/fuse-view.js';
+import { createKeypadView } from '../ui/keypad-view.js';
 import { createMenus } from '../ui/menus.js';
+import { createPraiseView } from '../ui/praise-view.js';
 import { createResultsView } from '../ui/results-view.js';
 import { createSignView } from '../ui/sign-view.js';
 import { createSlipView } from '../ui/slip-view.js';
@@ -26,6 +29,18 @@ const ELEMENT_IDS = [
   'total',
   'mend',
   'extraStamp',
+  'fuse',
+  'fuseLeft',
+  'fuseSpark',
+  'trust',
+  'streak',
+  'flyers',
+  'praise',
+  'praiseWord',
+  'praiseTime',
+  'keypad',
+  'overSpeeds',
+  'overReason',
   'cloth',
   'piles',
   'give',
@@ -48,6 +63,9 @@ function views(at, text, window) {
     till: createTillView({ till: at.till, text }),
     results: createResultsView(at, text),
     menus: createMenus(at.menus),
+    fuse: createFuseView(at),
+    praise: createPraiseView(at, text),
+    keypad: createKeypadView(at, text),
   };
 }
 
@@ -63,6 +81,7 @@ export function createStage({ window, document, game, storage }) {
     at,
     text,
     now: 0,
+    banked: 0,
     closedAt: 0,
     view: null,
     // the next bill waits here while the stamp on the last one is still being read

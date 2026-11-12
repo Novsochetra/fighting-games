@@ -2,6 +2,11 @@ const SWITCH = [true, false];
 
 // a row's value is named as it is (`names`) or by a word of the game's text (`words`)
 export const SETTINGS_ROWS = [
+  {
+    key: 'input',
+    values: ['money', 'keypad'],
+    words: { money: 'settings.input.money', keypad: 'settings.input.keypad' },
+  },
   { key: 'sound', values: SWITCH },
   { key: 'vibrate', values: SWITCH, needs: 'buzz' },
   { key: 'lang', values: ['km', 'en'], names: { km: 'ខ្មែរ', en: 'English' } },

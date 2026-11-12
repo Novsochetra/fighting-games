@@ -1,9 +1,27 @@
 import { recordRun, summarize } from '../sim/records.js';
-import { advance, clearCloth, createRun, deal, drainEvents, give, takeBack } from '../sim/run.js';
+import {
+  advance,
+  clearCloth,
+  clearTyped,
+  createRun,
+  deal,
+  drainEvents,
+  eraseDigit,
+  give,
+  takeBack,
+  typeDigits,
+} from '../sim/run.js';
 
 function finish(game) {
-  game.summary = summarize(game.records, game.run);
-  game.records = recordRun(game.records, game.run);
+  const { mode } = game.run;
+
+  game.summary = {
+    ...summarize(game.records[mode], game.run),
+    mode,
+    reason: game.run.closedBy,
+    speeds: { ...game.run.speeds },
+  };
+  game.records = { ...game.records, [mode]: recordRun(game.records[mode], game.run) };
   game.screen = 'over';
   game.events.push({ type: 'finished', summary: game.summary });
 }
@@ -23,9 +41,9 @@ function collect(game) {
 }
 
 export function openStall(game, seed) {
-  const { ops, total } = game.settings;
+  const { ops, total, input } = game.settings;
 
-  game.run = createRun({ seed, ops, totalAlways: total === 'always' });
+  game.run = createRun({ seed, ops, totalAlways: total === 'always', mode: input });
   game.screen = 'title';
   game.summary = null;
   game.events.push({ type: 'opened' });
@@ -52,6 +70,9 @@ export const dealPiece = (game, value) => atCounter(game, (run) => deal(run, val
 export const takePiece = (game, value) => atCounter(game, (run) => takeBack(run, value));
 export const clearPieces = (game) => atCounter(game, clearCloth);
 export const givePieces = (game) => atCounter(game, give);
+export const typeKeys = (game, digits) => atCounter(game, (run) => typeDigits(run, digits));
+export const eraseKey = (game) => atCounter(game, eraseDigit);
+export const clearKeys = (game) => atCounter(game, clearTyped);
 
 export function pause(game) {
   if (game.screen === 'play') {

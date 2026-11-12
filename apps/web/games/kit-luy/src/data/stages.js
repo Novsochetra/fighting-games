@@ -1,13 +1,15 @@
 const WHOLE_OR_HALF = [0, 5];
 const WITH_SMALL_CHANGE = [0, 1, 2, 5, 6, 7];
 
-// `from`: customers served when the stage opens. `mostPieces` and `hundreds` (the digits an
+// `patience`: ms the customer in front waits for their money. `from`: customers served when the
+// stage opens. `mostPieces` and `hundreds` (the digits an
 // answer's hundreds may be) keep every answer quick to count out of `pieces`. `least` to `most`
 // bounds an answer, `priceStep` a price, `times` a ×, `shares` a ÷, and `paidWith` the piece a
 // customer holds up for change, half the time `oftenPaid` where a stage names one.
 export const STAGES = [
   {
     number: 1,
+    patience: 15000,
     from: 0,
     pay: 500,
     pieces: [500, 1000, 2000, 5000],
@@ -24,6 +26,7 @@ export const STAGES = [
   },
   {
     number: 2,
+    patience: 16000,
     from: 8,
     pay: 1000,
     pieces: [500, 1000, 2000, 5000, 10000],
@@ -40,6 +43,7 @@ export const STAGES = [
   },
   {
     number: 3,
+    patience: 18000,
     from: 18,
     pay: 1500,
     pieces: [100, 500, 1000, 2000, 5000, 10000, 20000],
@@ -56,6 +60,7 @@ export const STAGES = [
   },
   {
     number: 4,
+    patience: 20000,
     from: 30,
     pay: 2000,
     pieces: [100, 500, 1000, 2000, 5000, 10000, 20000, 50000],
@@ -72,6 +77,7 @@ export const STAGES = [
   },
   {
     number: 5,
+    patience: 20000,
     from: 44,
     pay: 2500,
     pieces: [100, 500, 1000, 2000, 5000, 10000, 20000, 50000],

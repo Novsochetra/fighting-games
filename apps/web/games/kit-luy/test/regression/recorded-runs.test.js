@@ -7,6 +7,15 @@ const MOST_PLAY_MS = 12 * 60 * 1000;
 const BOTS = {
   'careful-beginner': { seed: 11, ops: ALL, thinkMs: 4500, tapMs: 700, missEvery: 6 },
   'steady-player': { seed: 2026, ops: ALL, thinkMs: 2200, tapMs: 450, missEvery: 11 },
+  // slow enough that some customers walk off unpaid
+  'slow-number-pad': {
+    seed: 31,
+    ops: ALL,
+    mode: 'keypad',
+    thinkMs: 9500,
+    tapMs: 450,
+    missEvery: 3,
+  },
   'fast-change-and-times': {
     seed: 7,
     ops: ['sub', 'mul'],
@@ -42,7 +51,7 @@ describe('recorded runs', () => {
 
     expect(events[events.length - 1].type).toBe('closed');
     expect(result.elapsed).toBeLessThanOrEqual(MOST_PLAY_MS);
-    expect(result.served).toBeGreaterThan(5);
+    expect(result.served).toBeGreaterThan(2);
   });
 
   // the bill the stall closed on may have been a miss not yet given

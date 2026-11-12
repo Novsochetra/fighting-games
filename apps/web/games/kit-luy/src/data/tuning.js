@@ -7,7 +7,13 @@ export const TUNING = {
   wrongLockMs: 600,
   clothMost: 12,
   cleanPay: 500,
-  tipPay: 500,
+  // a payment's share of the patience left decides its speed, and the speed how many times the
+  // stage's pay it adds
+  speedShares: { perfect: 0.6, great: 0.3 },
+  speedTimes: { perfect: 2, great: 1, good: 0 },
+  // customers who may storm off unpaid in a day: the next one closes the stall
+  trust: 3,
+  mostTyped: 6,
   streakPerExtra: 5,
   extraPay: 1000,
   mostExtraPay: 5000,

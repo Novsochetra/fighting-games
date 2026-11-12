@@ -49,6 +49,7 @@ function installPage(stage) {
 
   document.documentElement.lang = game.settings.lang;
   applyText(document, stage.text);
+  stage.keypad.write();
   installInput(stage, createActions(stage, { leaveForArcade, renderSettings }));
   installAudioUnlock({ window, document, audio: stage.audio });
 }

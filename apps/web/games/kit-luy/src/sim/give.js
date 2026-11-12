@@ -1,8 +1,9 @@
 import { STAGES, stageOf } from '../data/stages.js';
 import { TUNING } from '../data/tuning.js';
-import { sit } from './arrivals.js';
 import { keepApart } from './customers.js';
-import { clothCount, clothPieces, clothTotal, fewestPieces } from './pieces.js';
+import { speedOf, waitedMs } from './patience.js';
+import { clothCount, clothPieces, clothTotal, fewestPieces, piecesFor } from './pieces.js';
+import { askNext } from './serve-next.js';
 
 function extraFor(streak) {
   if (streak % TUNING.streakPerExtra !== 0) {
@@ -12,13 +13,20 @@ function extraFor(streak) {
   return Math.min(TUNING.mostExtraPay, (TUNING.extraPay * streak) / TUNING.streakPerExtra);
 }
 
+// counting out in the fewest pieces earns its own pay; typing an amount counts no pieces
+function isClean(run, answer) {
+  return run.mode === 'money' && clothCount(run.cloth) === fewestPieces(answer, run.pieces);
+}
+
 function rewardFor(run, answer) {
-  const clean = clothCount(run.cloth) === fewestPieces(answer, run.pieces);
+  const clean = isClean(run, answer);
+  const speed = speedOf(run);
   const extra = extraFor(run.streak);
   const pay = STAGES[run.stage - 1].pay;
-  const gain = pay + (clean ? TUNING.cleanPay : 0) + (run.tip ? TUNING.tipPay : 0) + extra;
+  const speedPay = pay * TUNING.speedTimes[speed];
+  const gain = pay + (clean ? TUNING.cleanPay : 0) + speedPay + extra;
 
-  return { gain, clean, tip: run.tip, extra };
+  return { gain, clean, speed, speedPay, waitedMs: waitedMs(run), extra };
 }
 
 function sendNextDoor(run) {
@@ -43,18 +51,10 @@ function openStage(run) {
   run.events.push({ type: 'stage', stage: stage.number, added });
 }
 
-function askNext(run) {
-  if (run.queue.length === 0) {
-    sit(run);
-  }
-
-  run.tip = true;
-  run.events.push({ type: 'ask', customer: run.queue[0] });
-}
-
 function payCustomer(run) {
   const customer = run.queue.shift();
-  const pieces = clothPieces(run.cloth);
+  const pieces =
+    run.mode === 'money' ? clothPieces(run.cloth) : piecesFor(customer.question.answer, run.pieces);
 
   run.streak += 1;
   run.bestStreak = Math.max(run.bestStreak, run.streak);
@@ -62,9 +62,11 @@ function payCustomer(run) {
   const reward = rewardFor(run, customer.question.answer);
 
   run.takings += reward.gain;
+  run.speeds[reward.speed] += 1;
   run.served += 1;
   run.started = true;
   run.cloth = {};
+  run.typed = '';
   run.tries = 0;
   run.events.push({
     type: 'paid',
@@ -102,12 +104,16 @@ function refuse(run, given, answer) {
   }
 }
 
+const givenOf = (run) => (run.mode === 'money' ? clothTotal(run.cloth) : Number(run.typed));
+
+const hasGiven = (run) => (run.mode === 'money' ? clothCount(run.cloth) > 0 : run.typed !== '');
+
 export function give(run) {
-  if (run.phase !== 'serving' || clothCount(run.cloth) === 0) {
+  if (run.phase !== 'serving' || !hasGiven(run)) {
     return;
   }
 
-  const given = clothTotal(run.cloth);
+  const given = givenOf(run);
   const { answer } = run.queue[0].question;
 
   if (given === answer) {

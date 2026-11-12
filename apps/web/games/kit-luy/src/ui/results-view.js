@@ -21,6 +21,19 @@ function missedLine(document, { question }, text) {
 // a day too good to count out in a dozen pieces is counted in its dozen largest
 export const closingCount = (takings) => piecesFor(takings, RIEL.pieces).slice(0, MOST_PIECES);
 
+const SPEEDS = ['perfect', 'great', 'good'];
+
+// how quick the day's payments were, the mode it was played in, and why the stall closed
+function describeDay(at, summary, text) {
+  const speeds = SPEEDS.filter((speed) => summary.speeds?.[speed] > 0).map(
+    (speed) => `${text.t(`speed.${speed}`)} ×${text.number(summary.speeds[speed])}`,
+  );
+  const reason = summary.reason === 'trust' ? 'over.byTrust' : 'over.byStools';
+
+  setText(at.overSpeeds, speeds.join('   '));
+  setText(at.overReason, `${text.t(`over.mode.${summary.mode ?? 'money'}`)} · ${text.t(reason)}`);
+}
+
 export function createResultsView(at, text) {
   const document = at.overPieces.ownerDocument;
   let tally = { takings: 0, shown: 0, toCount: [], nextAt: 0 };
@@ -33,6 +46,7 @@ export function createResultsView(at, text) {
         toCount: closingCount(summary.takings),
         nextAt: now,
       };
+      describeDay(at, summary, text);
       at.overStamp.hidden = !summary.isNewBest;
       replay(at.overStamp, 'is-stamped');
       at.overPieces.replaceChildren();

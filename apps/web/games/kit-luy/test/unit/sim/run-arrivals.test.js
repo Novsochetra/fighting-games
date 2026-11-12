@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { STAGES } from '../../../src/data/stages.js';
 import { TUNING } from '../../../src/data/tuning.js';
 import { arrivalMs } from '../../../src/sim/arrivals.js';
 import { advance, clearCloth, deal, give, takeBack } from '../../../src/sim/run.js';
@@ -12,6 +13,21 @@ import {
   typesOf,
   waitForArrival,
 } from './serving.js';
+
+// these days are about the stools alone: nobody in them ever tires of waiting
+const patienceOf = STAGES.map((stage) => stage.patience);
+
+beforeEach(() => {
+  STAGES.forEach((stage) => {
+    stage.patience = Infinity;
+  });
+});
+
+afterEach(() => {
+  STAGES.forEach((stage, i) => {
+    stage.patience = patienceOf[i];
+  });
+});
 
 function closedRun() {
   const run = startedRun();
@@ -126,7 +142,7 @@ describe('closing', () => {
     expect(run.phase).toBe('closed');
     expect(run.queue).toHaveLength(TUNING.seats);
     expect(run.queue).not.toContain(walker);
-    expect(run.events.pop()).toEqual({ type: 'closed', customer: walker });
+    expect(run.events.pop()).toEqual({ type: 'closed', customer: walker, reason: 'stools' });
     expect(eventsOf(run, 'closed')).toEqual([]);
   });
 
@@ -160,7 +176,7 @@ describe('closing', () => {
   it('keeps the day as it stood', () => {
     const run = closedRun();
 
-    expect(run).toMatchObject({ served: 1, takings: 1500, stage: 1 });
+    expect(run).toMatchObject({ served: 1, takings: 2000, stage: 1 });
     expect(run.elapsed).toBe(arrivalMs(1) * TUNING.seats);
   });
 });

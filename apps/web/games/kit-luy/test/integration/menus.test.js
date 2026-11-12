@@ -62,7 +62,7 @@ describe('the stall’s shutter and its menus', () => {
 
     expect(page.view()).toBe('title');
     expect(page.openMenu()).toBeNull();
-    expect(page.game.records.plays).toBe(0);
+    expect(page.game.records.money.plays).toBe(0);
   });
 
   it('opens Settings and How to play over the title, and Back or Escape closes them', () => {
