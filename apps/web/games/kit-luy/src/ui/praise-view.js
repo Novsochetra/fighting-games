@@ -22,7 +22,6 @@ function chipOf(document, { kind, amount, word }, text) {
   return chip;
 }
 
-// what a payment earned, a chip a reason, largest first
 export function chipsOf(paid, text, pay) {
   return [
     { kind: 'pay', amount: pay, word: text.t('chip.pay') },
@@ -74,7 +73,6 @@ export function createPraiseView(at, text) {
     });
   }
 
-  // the chips that reach the sign by `now`, taken off the page
   function land(now) {
     const landed = flying.filter((flight) => flight.at <= now);
 

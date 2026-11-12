@@ -5,7 +5,6 @@ import { chipsOf } from '../ui/praise-view.js';
 
 const PRAISED = { perfect: 'perfect', great: 'great' };
 
-// the takings on the sign grow as each chip lands on it
 export function bankLanded(stage) {
   for (const chip of stage.praise.land(stage.now)) {
     stage.banked += chip.amount;

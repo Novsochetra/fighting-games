@@ -57,7 +57,6 @@
   color: var(--color-red);
 }
 
-/* what is typed is written in ballpoint, not pencil */
 #app[data-input='keypad'] .total {
   color: var(--color-blue);
 }

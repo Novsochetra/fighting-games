@@ -1,6 +1,5 @@
 import { setText } from './dom.js';
 
-// the calculator's keys, row by row: what each types, or what it does
 const KEYS = [
   ['7', '8', '9', 'erase'],
   ['4', '5', '6', 'clear'],
@@ -34,7 +33,6 @@ export function createKeypadView({ keypad, total }, text) {
       keypad.replaceChildren(...KEYS.flat().map((key) => keyOf(document, key, text)));
     },
 
-    // what is typed goes in the bill's blank, in the numerals of the settings
     show(typed) {
       setText(total, typed === '' ? '' : text.number(Number(typed)));
     },

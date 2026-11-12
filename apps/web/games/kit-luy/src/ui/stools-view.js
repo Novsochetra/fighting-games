@@ -73,7 +73,6 @@ function createDepartures() {
   return {
     nextDoor: (customer) => how.set(customer.id, 'is-going'),
 
-    // an angry customer says so on their way out
     storming(customer, said) {
       how.set(customer.id, 'is-storming');
       words.set(customer.id, said);
@@ -131,7 +130,6 @@ export function createStoolsView({ row }) {
     nextDoor: departures.nextDoor,
     storming: departures.storming,
 
-    // the customer in front fidgets while their fuse burns short
     restless(isRestless) {
       row.querySelector('.guest.is-front')?.classList.toggle('is-restless', isRestless);
     },

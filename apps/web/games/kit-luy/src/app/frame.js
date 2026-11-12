@@ -17,7 +17,6 @@ function showView(stage) {
   }
 }
 
-// what is on the counter so far, in the bill's blank: typed figures, or the cloth's pencilled total
 function showCount(stage) {
   const { run } = stage.game;
 
@@ -46,7 +45,6 @@ function countTakings(stage) {
   }
 }
 
-// the last seconds of a customer's patience tick, and the one in front fidgets through them
 function burnFuse(stage) {
   const { run, screen } = stage.game;
   const second = stage.fuse.show(run.patience);

@@ -23,7 +23,6 @@ export const closingCount = (takings) => piecesFor(takings, RIEL.pieces).slice(0
 
 const SPEEDS = ['perfect', 'great', 'good'];
 
-// how quick the day's payments were, the mode it was played in, and why the stall closed
 function describeDay(at, summary, text) {
   const speeds = SPEEDS.filter((speed) => summary.speeds?.[speed] > 0).map(
     (speed) => `${text.t(`speed.${speed}`)} ×${text.number(summary.speeds[speed])}`,

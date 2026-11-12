@@ -80,7 +80,6 @@
   display: none;
 }
 
-/* the run of right answers, stamped beside the takings */
 .streak {
   margin-left: auto;
   padding: 0 var(--space-2);
@@ -97,7 +96,6 @@
   animation: bump var(--duration-medium) var(--ease-thump);
 }
 
-/* praise and score chips fly over everything, and are never pressed */
 .flyers {
   position: absolute;
   inset: 0;
@@ -106,7 +104,7 @@
   pointer-events: none;
 }
 
-/* a point over the bill's middle, everything in it centred on that point */
+/* a point, everything in it centred on that point (praise-view.js places it) */
 .praise {
   position: absolute;
   top: 0;
