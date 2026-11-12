@@ -63,7 +63,6 @@ function writeBill(at, text, customer, number) {
 
 export function createSlipView(at, text) {
   return {
-    // written again as it stands, in the language and numerals just chosen
     rewrite(customer, number) {
       const mend = at.mend.textContent;
 

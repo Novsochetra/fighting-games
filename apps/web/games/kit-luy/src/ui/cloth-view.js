@@ -47,7 +47,6 @@ const largestFirst = (cloth) =>
 const widthOf = (row, gap) =>
   row.reduce((sum, pile) => sum + pile.offsetWidth, 0) + gap * (row.length - 1);
 
-// a row that would run past the cloth's edges closes up, each pile over the last as a hand of cards
 function closeUp(row, room, gap) {
   const needed = widthOf(row, gap);
 
