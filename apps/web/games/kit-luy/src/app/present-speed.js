@@ -1,4 +1,3 @@
-import { STAGES } from '../data/stages.js';
 import { TUNING } from '../data/tuning.js';
 import { replay } from '../ui/dom.js';
 import { chipsOf } from '../ui/praise-view.js';
@@ -14,11 +13,10 @@ export function bankLanded(stage) {
 }
 
 export function praisePayment(stage, paid) {
-  const pay = STAGES[stage.game.run.stage - 1].pay;
   const sound = PRAISED[paid.speed];
 
-  stage.praise.praise(paid);
-  stage.praise.fly(chipsOf(paid, stage.text, pay), stage.now);
+  stage.praise.praise(paid, stage.now);
+  stage.praise.fly(chipsOf(paid, stage.text), stage.now);
   stage.sign.showStreak(paid.streak);
 
   if (sound) {
@@ -40,5 +38,6 @@ export const SPEED_HANDLERS = {
 
   type(stage, { typed }) {
     stage.keypad.show(typed);
+    stage.audio.play('key');
   },
 };

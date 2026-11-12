@@ -35,6 +35,7 @@ describe('give, with the right money', () => {
       customer,
       pieces: [1000],
       gain: 2000,
+      pay: 500,
       clean: true,
       speed: 'perfect',
       speedPay: 1000,

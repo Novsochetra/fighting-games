@@ -41,15 +41,20 @@ describe('the save', () => {
     expect(save.records).toEqual({ money: saved.records, keypad: NO_RECORDS });
   });
 
-  it.each(['{oops', '7', 'null', '{"records":[],"settings":"loud"}'])(
-    'starts afresh from a broken save (%s)',
-    (stored) => {
-      const save = loadSave(memoryStorage({ kit_luy: stored }), []);
+  it.each([
+    '{oops',
+    '7',
+    'null',
+    '{"records":[],"settings":"loud"}',
+    '{"records":7}',
+    '{"records":"x"}',
+    '{"records":true}',
+  ])('starts afresh from a broken save (%s)', (stored) => {
+    const save = loadSave(memoryStorage({ kit_luy: stored }), []);
 
-      expect(save.records).toEqual(NONE);
-      expect(save.settings.lang).toBe('en');
-    },
-  );
+    expect(save.records).toEqual(NONE);
+    expect(save.settings.lang).toBe('en');
+  });
 
   it('plays on with no storage at all, forgetting between visits', () => {
     expect(loadSave(null, []).records).toEqual(NONE);

@@ -13,6 +13,11 @@ function close(run, customer) {
 function stormOff(run) {
   const customer = run.queue.shift();
 
+  // a bill already counted wrong is listed by that first wrong count
+  if (run.tries === 0) {
+    run.missed.push({ question: customer.question, given: null, direction: 'late' });
+  }
+
   run.strikes += 1;
   run.streak = 0;
   run.cloth = {};
@@ -20,7 +25,6 @@ function stormOff(run) {
   run.tries = 0;
   run.lockLeft = 0;
   run.phase = 'serving';
-  run.missed.push({ question: customer.question, given: null, direction: 'late' });
   run.events.push({ type: 'stormed', customer, strikes: run.strikes });
 
   if (run.strikes >= TUNING.trust) {

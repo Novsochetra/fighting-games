@@ -66,6 +66,7 @@ export function drawFrame(stage, ms) {
   showView(stage);
   tearNextSlip(stage);
   bankLanded(stage);
+  stage.praise.fade(stage.now);
   stage.sign.roll(stage.banked);
   stage.stools.sync(run, stage.now);
   burnFuse(stage);

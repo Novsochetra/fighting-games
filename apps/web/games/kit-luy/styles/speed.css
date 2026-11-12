@@ -127,6 +127,9 @@
   border-radius: var(--radius-round);
   background: repeating-conic-gradient(var(--color-ray) 0 10deg, var(--color-ray-gap) 10deg 30deg);
   mask-image: radial-gradient(circle, var(--color-ink) 30%, var(--color-clear) 70%);
+}
+
+.praise.is-shown .praise-rays {
   animation: rays var(--duration-rays) linear infinite;
 }
 
@@ -341,7 +344,7 @@
   .fuse.is-hurry .fuse-spark,
   .trust i.is-lost,
   .streak.is-bumped,
-  .praise-rays,
+  .praise.is-shown .praise-rays,
   .guest.is-restless .guest-body,
   .guest.is-storming {
     animation: none;

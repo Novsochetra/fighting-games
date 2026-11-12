@@ -69,15 +69,8 @@ function padActions(stage, counter) {
   return {
     takeLast: () => (game.run.mode === 'keypad' ? eraseKey(game) : counter.takeLast()),
 
-    type(digits) {
-      typeKeys(game, digits);
-      stage.audio.play('key');
-    },
-
-    erase() {
-      eraseKey(game);
-      stage.audio.play('key');
-    },
+    type: (digits) => typeKeys(game, digits),
+    erase: () => eraseKey(game),
   };
 }
 

@@ -139,7 +139,7 @@
 
 #app[data-view='title'] .takings,
 #app[data-view='title'] .plate-pause,
-#app:not([data-view='title']) .plate:not(.plate-pause) {
+#app:not([data-view='title']) .plates .plate:not(.plate-pause) {
   display: none;
 }
 

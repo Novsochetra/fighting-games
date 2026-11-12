@@ -26,7 +26,7 @@ function rewardFor(run, answer) {
   const speedPay = pay * TUNING.speedTimes[speed];
   const gain = pay + (clean ? TUNING.cleanPay : 0) + speedPay + extra;
 
-  return { gain, clean, speed, speedPay, waitedMs: waitedMs(run), extra };
+  return { gain, pay, clean, speed, speedPay, waitedMs: waitedMs(run), extra };
 }
 
 function sendNextDoor(run) {

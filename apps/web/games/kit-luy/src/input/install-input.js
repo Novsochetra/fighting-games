@@ -95,6 +95,14 @@ function installKeys(stage, actions) {
   });
 }
 
+// A clicked bundle, pile or key would keep the focus, and Enter would press it again instead of
+// giving the count; the keyboard still reaches them with Tab.
+function keepFocusOff(surfaces) {
+  for (const surface of surfaces) {
+    surface.addEventListener('mousedown', (event) => event.preventDefault());
+  }
+}
+
 export function installInput(stage, actions) {
   const { window, document, at } = stage;
 
@@ -104,6 +112,7 @@ export function installInput(stage, actions) {
   installGive(at.give, actions);
   installButtons(stage, actions);
   installKeys(stage, actions);
+  keepFocusOff([at.till, at.piles, at.keypad, at.give]);
   installGestureGuards({
     window,
     document,

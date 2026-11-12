@@ -62,6 +62,20 @@ function countLockDown(run, ms) {
   }
 }
 
+// The step is cut where the customer in front gives up, so a stool they free is there for a walker
+// who comes later in the same step, and each customer of a long step gives up in turn.
+function passTime(run, ms) {
+  let left = ms;
+
+  while (left > 0 && run.phase !== 'closed') {
+    const part = Math.min(left, run.patience.left);
+
+    walk(run, part);
+    drainPatience(run, part);
+    left -= part;
+  }
+}
+
 export function advance(run, ms) {
   if (run.phase === 'closed' || typeof ms !== 'number' || !Number.isFinite(ms) || ms <= 0) {
     return;
@@ -74,7 +88,6 @@ export function advance(run, ms) {
   // A wrong count costs time: customers keep walking up through the lock. Were they held, giving
   // a wrong count again the moment each lock ended would keep the day still for good.
   if (run.started) {
-    walk(run, ms);
-    drainPatience(run, ms);
+    passTime(run, ms);
   }
 }

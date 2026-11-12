@@ -7,8 +7,9 @@ const KEY = 'kit_luy';
 // Counting money and typing on the pad are kept apart, as typing is the quicker. A save from
 // before there were two holds the money's records alone.
 function recordsOf(saved) {
-  const byInput = saved && typeof saved === 'object' && !('best' in saved) ? saved : {};
-  const money = 'best' in (saved || {}) ? saved : byInput.money;
+  const stored = saved && typeof saved === 'object' ? saved : {};
+  const byInput = 'best' in stored ? {} : stored;
+  const money = 'best' in stored ? stored : byInput.money;
 
   return Object.fromEntries(
     INPUTS.map((input) => [input, sanitizeRecords(input === 'money' ? money : byInput[input])]),
