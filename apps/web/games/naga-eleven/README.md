@@ -610,6 +610,26 @@ kept on the device; **Copy changes** copies every list changed, to paste back in
 The build bundles it beside its page, apart from the game's own bundles; search engines are asked
 not to index it, and a game saved for offline never downloads it.
 
+**The Naga Shot study** (`dev/camera-lab/src/naga-shot/`): the lab opens on a cinematic Naga
+Shot, a study for the special apart from the duel's show, in side view in eight timed beats, each a
+stage of the timeline: **awakening** (he dribbles in and plants), **charge** (the ball rises in
+emerald and gold, rings turning round it, two eyes opening in the dark behind him), **manifest**
+(the Naga rears up behind him, a shadow first, then lit, its eyes igniting, a pulse as it is whole),
+**impact** (it pours into the ball as the boot lands, a hit-stop and a flash), **flight** (the ball
+rides in the Naga's jaws, its body of light trailing), **keeper** (a cut to the keeper, lit by it, in
+slow motion), **collision** (the crash, held, and its burst) and **aftermath** (the Naga breaks into
+sparks and the camera eases back to the play). Its world is in art pixels, one to a pixel of a
+player's sprite (`world.js`); its camera draws one a whole number of the lab's pixels wide and shakes
+in whole pixels (`camera/`), so the art stays square. Where everything is, frame by frame, is a plain
+function of the frame (`tracks/`), so a frame scrubbed back to draws the same; the layers draw from
+it (`draw/`), and each (Sochetra, the keeper, the ball, the Naga rising, the Naga in flight, the
+effects, the flashes, the shake, the film bars, the titles) can be hidden from the panel to look at
+the rest. The panel picks its ending (a goal, a catch, a punch, a parry or the bar); on a Short or
+Off camera it plays without the holds at the kick and the crash and with half the keeper's slow
+look, and seen before, its build-up plays at half length. **Camera shots** edits its shots stage by
+stage (`camera/shots.js`, steps 0 to 4), its timings (`sequence.js`) and its shakes as "Naga Shot:
+…". Its colours are the game's own (`colors.js`): it adds none.
+
 ### The story brings them in
 
 One at a time (`SYSTEMS_FROM`, each duo's `needs` or `from`); both sides play each from there on.
