@@ -6,13 +6,22 @@ export const easeOut = (share) => 1 - (1 - clamp01(share)) ** 3;
 
 export const easeIn = (share) => clamp01(share) ** 2;
 
+export const easeOutSoft = (share) => 1 - (1 - clamp01(share)) ** 2;
+
 export const easeInOut = (share) => {
   const value = clamp01(share);
 
   return value * value * (3 - 2 * value);
 };
 
-export const phaseOf = (ticks, from, length) => clamp01((ticks - from) / Math.max(1, length));
+// how far through a span from `from` lasting `length` (ticks or a share of a stage), 0 to 1
+export function phaseOf(value, from, length) {
+  if (length <= 0) {
+    return value >= from ? 1 : 0;
+  }
+
+  return clamp01((value - from) / length);
+}
 
 export const between = (from, to, share) => ({
   x: lerp(from.x, to.x, share),

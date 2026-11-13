@@ -1,6 +1,6 @@
 import { movingTicks } from '../sequence.js';
 import { CONTACTS, GOAL, GROUND } from '../world.js';
-import { bezier, between, easeIn, easeOut, phaseOf } from './ease.js';
+import { bezier, between, easeIn, easeOut, easeOutSoft, phaseOf } from './ease.js';
 
 const FLOOR = GROUND - 6;
 
@@ -24,7 +24,7 @@ function hopsOn({ land, rest, ticks }) {
 
 function arcThenRoll({ from, control, land, rest, flight }, ticks) {
   if (ticks < flight) {
-    return bezier(from, control, land, easeOut(ticks / flight));
+    return bezier(from, control, land, easeOutSoft(ticks / flight));
   }
 
   return hopsOn({ land, rest, ticks: ticks - flight });

@@ -17,11 +17,12 @@ export const GOAL = { line: 640, height: 78, depth: 34 };
 
 export const KEEPER_SPOT = { x: 616, y: GROUND };
 
+// a save meets the ball at the keeper's gloves at the top of his dive (tracks/keeper.js)
 export const CONTACTS = {
   goal: { x: GOAL.line + 2, y: GROUND - 46 },
-  catch: { x: KEEPER_SPOT.x - 14, y: GROUND - 40 },
-  punch: { x: KEEPER_SPOT.x - 14, y: GROUND - 50 },
-  parry: { x: KEEPER_SPOT.x - 14, y: GROUND - 34 },
+  catch: { x: KEEPER_SPOT.x - 32, y: GROUND - 42 },
+  punch: { x: KEEPER_SPOT.x - 32, y: GROUND - 48 },
+  parry: { x: KEEPER_SPOT.x - 32, y: GROUND - 36 },
   post: { x: GOAL.line, y: GROUND - GOAL.height + 2 },
 };
 

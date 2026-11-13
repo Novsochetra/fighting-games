@@ -17,9 +17,12 @@ const KEYS = Object.keys(EDITABLE);
 afterEach(() => KEYS.forEach(resetValue));
 
 describe("the camera lab's shot lists", () => {
-  it.each(KEYS.filter((key) => key !== 'cinema'))("reads the game's own %s as right", (key) => {
-    expect(shotsProblem(EDITABLE[key].value)).toBeNull();
-  });
+  it.each(KEYS.filter((key) => !EDITABLE[key].timings))(
+    "reads the game's own %s as right",
+    (key) => {
+      expect(shotsProblem(EDITABLE[key].value, EDITABLE[key].most)).toBeNull();
+    },
+  );
 
   it("lays a list that reads right into the game's own, and keeps it as a change", () => {
     const shots = [

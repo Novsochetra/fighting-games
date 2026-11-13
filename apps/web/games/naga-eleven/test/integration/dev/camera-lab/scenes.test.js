@@ -5,8 +5,9 @@ import { createPlayer, seek } from '../../../../dev/camera-lab/src/player.js';
 import { createScene } from '../../../../dev/camera-lab/src/scenes.js';
 import { strictContext } from '../../render/duel/strict-context.js';
 
+// the shows of the game's own duel and save cam; the lab now opens on the Naga Shot
 const playerFor = (changes) => {
-  const settings = { ...DEFAULT_SETTINGS, ...changes };
+  const settings = { ...DEFAULT_SETTINGS, scene: 'shot', ...changes };
 
   return createPlayer(() => createScene(settings));
 };

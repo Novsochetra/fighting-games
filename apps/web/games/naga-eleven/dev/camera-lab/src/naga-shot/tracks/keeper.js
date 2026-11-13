@@ -1,54 +1,66 @@
 import { KEEPER_SPOT } from '../world.js';
 import { afterTicks } from './after.js';
-import { phaseOf } from './ease.js';
+import { clamp01, easeIn, easeOut, phaseOf } from './ease.js';
 
-// the dive's frames from the sheet as the keeper sees it coming: crouch and push, then flying
-// (3 to 5) and down on the grass (6, 7); a goal beats him, so he goes late
-const FLYING = [3, 4, 5];
+// the dive sheet's frames: 0 set, 1 crouch, 2 push, 3 to 5 flying, 6 and 7 down on the grass; he
+// is at the top of his flight (frame 3) as the Naga meets him, but a goal beats him, so he goes late
+const FRAME_TICKS = 9;
 
 const LATE = { goal: 8 };
 
+// lifted to meet the ball: CONTACTS in world.js puts each save's ball at his gloves here
 const LIFT = { catch: 18, punch: 24, parry: 12, goal: 8, post: 4 };
 
-function diveFrame(clock, ending) {
+const GLOVES = { across: 24, up: 24, upLying: 8 };
+
+const SET = 0.55;
+
+const BEFORE = ['awakening', 'charge', 'manifest', 'impact', 'flight'];
+
+// how far into the dive, in ticks from the top of his flight; the keeper's stage leads up to it
+function sinceTop(clock, ending) {
   if (clock.stage === 'keeper') {
-    const share = phaseOf(clock.share, 0.55, 0.45);
-
-    return share <= 0 ? null : Math.min(2, Math.floor(share * 3));
+    return -FRAME_TICKS * 3 * (1 - phaseOf(clock.share, SET, 1 - SET));
   }
 
-  const since = afterTicks(clock) - (LATE[ending] ?? 0);
-
-  return since < 0 ? 2 : Math.min(7, 3 + Math.floor(since / 9));
+  return afterTicks(clock) - (LATE[ending] ?? 0);
 }
 
-function liftOf(frame, ending) {
-  if (!FLYING.includes(frame) && frame !== 2) {
-    return 0;
-  }
+const frameOf = (since) => Math.max(0, Math.min(7, 3 + Math.floor(since / FRAME_TICKS)));
 
-  const shape = { 2: 0.45, 3: 1, 4: 0.8, 5: 0.35 }[frame];
-
-  return Math.round((LIFT[ending] ?? 10) * shape);
-}
-
-const REACH = [0, 0, 3, 8, 12, 15, 17, 18];
-
-export function keeperAt(clock, ending) {
-  const before = ['awakening', 'charge', 'manifest', 'impact', 'flight'].includes(clock.stage);
-  const frame = before ? null : diveFrame(clock, ending);
-  const x = KEEPER_SPOT.x - (frame === null ? 0 : REACH[frame]);
-  const y = KEEPER_SPOT.y - (frame === null ? 0 : liftOf(frame, ending));
-  const lying = frame !== null && frame >= 6;
+function bodyOf(since, ending) {
+  const lift = LIFT[ending] ?? 10;
+  const rising = easeOut(phaseOf(since, -FRAME_TICKS, FRAME_TICKS));
+  const falling = easeIn(phaseOf(since, 0, FRAME_TICKS * 3));
+  const reach =
+    since < 0 ? 8 * clamp01(1 + since / (FRAME_TICKS * 3)) : 8 + 10 * easeOut(since / 36);
 
   return {
-    x,
-    y,
-    animation: frame === null ? 'idle' : 'dive',
-    frame: frame ?? 0,
+    x: KEEPER_SPOT.x - reach,
+    y: KEEPER_SPOT.y - Math.round(lift * rising * (1 - falling)),
+    down: phaseOf(since, FRAME_TICKS * 2, FRAME_TICKS),
+  };
+}
+
+export function keeperAt(clock, ending) {
+  const lit = litOf(clock);
+
+  if (BEFORE.includes(clock.stage)) {
+    return { ...KEEPER_SPOT, animation: 'idle', frame: 0, direction: 'west', lit, hands: null };
+  }
+
+  const since = sinceTop(clock, ending);
+  const body = bodyOf(since, ending);
+  const up = GLOVES.up + (GLOVES.upLying - GLOVES.up) * body.down;
+
+  return {
+    x: Math.round(body.x),
+    y: body.y,
+    animation: since <= -FRAME_TICKS * 3 ? 'idle' : 'dive',
+    frame: frameOf(since),
     direction: 'west',
-    lit: litOf(clock),
-    hands: { x: x - 24, y: y - (lying ? 8 : 24) },
+    lit,
+    hands: { x: body.x - GLOVES.across, y: body.y - up },
   };
 }
 
