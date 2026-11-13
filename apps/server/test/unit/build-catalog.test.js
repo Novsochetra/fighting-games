@@ -49,6 +49,18 @@ describe('buildCatalog', () => {
     );
   });
 
+  it('keeps a game not ready yet off the list, without a warning', () => {
+    const warn = vi.fn();
+    const records = [
+      { folder: 'ready', entry: entryFor('ready', 'Ready') },
+      { folder: 'soon', entry: { ...entryFor('soon', 'Soon'), listed: false } },
+      { folder: 'shown', entry: { ...entryFor('shown', 'Shown'), listed: true } },
+    ];
+    const { games } = buildCatalog(records, warn);
+    expect(games.map((game) => game.id)).toEqual(['ready', 'shown']);
+    expect(warn).not.toHaveBeenCalled();
+  });
+
   it('returns an empty list when there are no games', () => {
     expect(buildCatalog([])).toEqual({ games: [] });
   });

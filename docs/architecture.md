@@ -246,7 +246,9 @@ without a load.
 1. `GET /` serves the built `index.html`, which loads the app (`build/main-<hash>.js` and its
    stylesheet). The arcade fetches `api/games`.
 2. `GET /api/games` reads every `apps/web/games/*/game.json` and returns `{ games: [...] }`. The
-   list needs no database: adding a game folder adds it.
+   list needs no database: adding a game folder adds it. A game not ready yet says
+   `"listed": false` (Naga Eleven, for now): it is built and played at its own address, but the
+   catalog leaves it out, so neither the home page nor the sitemap shows it.
 3. Play opens `games/<id>/`, which serves that game's `index.html`, or the `url` of a game hosted
    on its own site.
 4. The supporters screen fetches `GET /api/supporters`; its donate sheet sends `POST /api/supporters`.

@@ -6,7 +6,7 @@ export function buildCatalog(records, warn = () => {}) {
     const problems = record.error ? [record.error] : validateGameEntry(record.entry, record.folder);
     if (problems.length > 0) {
       warn(`Skipping games/${record.folder}/game.json: ${problems.join('; ')}`);
-    } else {
+    } else if (record.entry.listed !== false) {
       games.push(toCatalogGame(record.entry));
     }
   }

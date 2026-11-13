@@ -160,6 +160,12 @@ describe('validateGameEntry', () => {
     ]);
   });
 
+  it.each(['false', 0, null])('rejects listed %j', (listed) => {
+    expect(validateGameEntry({ ...validEntry(), listed }, 'demo-game')).toEqual([
+      '"listed" must be true or false',
+    ]);
+  });
+
   it('reports every problem at once', () => {
     const entry = { id: 'demo-game', cover: '../x.png' };
     expect(validateGameEntry(entry, 'demo-game')).toHaveLength(6);

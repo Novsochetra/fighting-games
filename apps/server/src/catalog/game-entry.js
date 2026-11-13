@@ -65,6 +65,15 @@ function checkPixelArt(entry) {
   return ['"pixelArt" must be true or false'];
 }
 
+// a game not ready yet says "listed": false: it is built and played at its address, but no list
+// shows it (the catalog, the home page, the sitemap)
+function checkListed(entry) {
+  if (entry.listed === undefined || typeof entry.listed === 'boolean') {
+    return [];
+  }
+  return ['"listed" must be true or false'];
+}
+
 const CHECKS = [
   checkRequiredFields,
   checkId,
@@ -73,6 +82,7 @@ const CHECKS = [
   checkControls,
   checkUrl,
   checkPixelArt,
+  checkListed,
   checkLeaderboard,
 ];
 
