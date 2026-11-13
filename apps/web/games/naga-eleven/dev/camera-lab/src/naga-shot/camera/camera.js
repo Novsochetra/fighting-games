@@ -6,7 +6,6 @@ import { UNITS, VIEW, WORLD } from '../world.js';
 import { pointsAt } from './points.js';
 import { NAGA_SHAKES, NAGA_SHOTS } from './shots.js';
 
-// a camera that holds still frames the play as the match does, following the ball across
 function stillView(points) {
   return { x: points.ball.x + 30, y: points.play.y, step: 0 };
 }
@@ -29,7 +28,6 @@ const SINCE = {
   aftermath: (clock) => ({ kind: 'crash', ticks: clock.lengths.collision + clock.ticks }),
 };
 
-// whole art pixels this way and that, the hit's strength dying away
 export function shakeAt(clock) {
   const since = SINCE[clock.stage]?.(clock);
   const shake = since && NAGA_SHAKES[since.kind];
@@ -46,7 +44,6 @@ export function shakeAt(clock) {
   };
 }
 
-// where the camera looks, how many of the lab's pixels it draws an art pixel, and its shake
 export function cameraAt(clock, { ending, camera, shake = true }) {
   const points = pointsAt(clock, ending);
   const moving = camera !== 'off';

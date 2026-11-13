@@ -3,7 +3,6 @@ import { KICK_SPOT } from '../world.js';
 import { ballAt } from './ball.js';
 import { easeIn, easeOut, lerp, phaseOf } from './ease.js';
 
-// the great head rears behind Sochetra, over his shoulder, jaws toward the goal
 export const MANIFEST = { x: KICK_SPOT.x - 6, y: KICK_SPOT.y - 96, size: 5.5, rise: 44 };
 
 const HIDDEN = { shown: false };
@@ -21,7 +20,6 @@ function charge(clock) {
 
 const rest = () => ({ x: MANIFEST.x, y: MANIFEST.y, size: MANIFEST.size, pulse: -1, compress: 0 });
 
-// rising as a shadow, lit from within, its eyes igniting, then a pulse as it is whole
 function manifest(clock) {
   const rise = easeOut(phaseOf(clock.share, 0, 0.35));
   const whole = 0.72;
@@ -38,7 +36,6 @@ function manifest(clock) {
   };
 }
 
-// it pours itself into the ball as the boot swings, gone into it at the contact
 function impact(clock) {
   const pour = easeIn(phaseOf(clock.ticks, 0, NAGA_TIMINGS.contact));
 
@@ -63,7 +60,5 @@ function impact(clock) {
 
 const BY_STAGE = { charge, manifest, impact };
 
-// the summoned Naga behind the striker: where its head is, how big, and how far it has come
-// into being (0 to 1 for its shadow, its colour and its eyes); after the kick it rides the ball
-// instead (draw/projectile.js)
+// after the kick the Naga rides the ball instead (draw/projectile.js)
 export const nagaAt = (clock) => BY_STAGE[clock.stage]?.(clock) ?? HIDDEN;

@@ -12,7 +12,7 @@ import { isShown } from './layers.js';
 import { momentOf } from './moment.js';
 import { clockAt, planFor } from './sequence.js';
 
-// back to front: each layer the lab can hide, by its name, and the ones always drawn by null
+// back to front; a null layer is never hidden
 const WORLD_LAYERS = [
   ['naga', drawSummonedNaga],
   ['effects', drawEffectsBehind],
@@ -44,8 +44,6 @@ export function drawNagaShot(context, moment) {
   SCREEN_LAYERS.filter(shown(moment.settings)).forEach(([, draw]) => draw(context, moment));
 }
 
-// the Naga Shot as a scene of the lab: stepped a frame at a time, every frame drawn from the
-// frame alone
 export function nagaShotScene(settings) {
   const plan = planFor(settings);
   let frame = 0;

@@ -1,7 +1,5 @@
-// The Naga Shot's camera, stage by stage, written as the game's shots are (src/data/shots.js): from
-// `from` (ticks into the stage at full length) look at `on`, `step` zoom steps in, and with `glide`
-// ease there over that many ticks. Step 0 is the play's own framing, two of the lab's pixels to an
-// art pixel; each step is one more, up to 4
+// written as the game's shots are (src/data/shots.js), but step 0 here is the play's own framing,
+// two of the lab's pixels to an art pixel, so a whole step more zooms in up to 4
 export const NAGA_SHOTS = {
   awakening: [
     { from: 0, on: 'play', step: 0 },
@@ -41,7 +39,7 @@ export const NAGA_SHOTS = {
 
 export const MOST_NAGA_STEP = 4;
 
-// the camera shakes with the hits, in art pixels at their start, dying away over `ticks`
+// strength in art pixels
 export const NAGA_SHAKES = {
   pulse: { strength: 2, ticks: 10 },
   hit: { strength: 3, ticks: 16 },

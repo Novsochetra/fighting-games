@@ -34,12 +34,11 @@ const STAGE_SHARE = {
   aftermath: () => 1,
 };
 
-// how far along its flight the ball is, 0 at the boot to 1 at the contact; null before the kick
+// 0 at the boot to 1 at the contact; null before the kick
 export function flightShare(clock) {
   return STAGE_SHARE[clock.stage]?.(clock) ?? null;
 }
 
-// a point the ball passed `back` of the flight behind where it is now, for the serpent's body
 export function trailPoint(ending, share, back) {
   return flightPoint(ending, Math.max(0, share - back));
 }

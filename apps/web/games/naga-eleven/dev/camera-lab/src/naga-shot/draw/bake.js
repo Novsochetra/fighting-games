@@ -25,7 +25,6 @@ function keep(key, canvas) {
   return canvas;
 }
 
-// `paint(pen)` drawn once on a canvas of art pixels, one canvas pixel each, kept under `key`
 export function baked(key, { width, height, paint }) {
   if (!makeCanvas) {
     return null;
@@ -43,8 +42,6 @@ export function baked(key, { width, height, paint }) {
   return kept.get(key);
 }
 
-// a baked canvas changed pixel by pixel: `change(rgba, x, y)` gives the pixel's new [r, g, b, a],
-// or null to leave it; kept under its own key
 export function rebaked(key, source, change) {
   if (!makeCanvas || !source) {
     return null;
@@ -75,8 +72,6 @@ function changePixels(image, change) {
   }
 }
 
-// a baked canvas laid on the pen with its top left at an art point, each of its pixels one art
-// pixel, so it lines up with everything the pen draws; `flip` mirrors it about its middle
 export function stamp(pen, canvas, { left, top, flip = false, alpha = 1 }) {
   if (!canvas || alpha <= 0) {
     return;
@@ -95,5 +90,4 @@ export function stamp(pen, canvas, { left, top, flip = false, alpha = 1 }) {
   context.restore();
 }
 
-// a colour of the palette as the [r, g, b] a pixel holds
 export const rgbOf = (color) => [1, 3, 5].map((at) => parseInt(color.slice(at, at + 2), 16));

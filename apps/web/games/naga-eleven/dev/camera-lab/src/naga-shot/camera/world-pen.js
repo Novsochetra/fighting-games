@@ -1,8 +1,6 @@
 import { createPen } from '../../../../../src/render/duel/pen.js';
 import { VIEW } from '../world.js';
 
-// a pen on the world as the camera sees it: an art pixel `unit` of the lab's pixels square, the
-// look-at point in the middle of the view, moved by the shake in whole art pixels
 export function worldPen(context, { x, y, unit, shake }) {
   return createPen(context, {
     unit,

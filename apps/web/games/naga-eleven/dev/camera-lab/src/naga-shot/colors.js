@@ -7,8 +7,7 @@ import {
   WORD_RAMPS,
 } from '../../../../src/art/duel/palette.js';
 
-// the Naga Shot's colours, all of them the game's own: the Naga's emerald and gold, the night's
-// purples, and the red and orange held back for the hits
+// only the game's own colours: hex lives in src/art/ alone, and the lab draws in the Naga's
 export const NAGA_ART = LOOK_ART.naga;
 
 export const SHOT_ART = {

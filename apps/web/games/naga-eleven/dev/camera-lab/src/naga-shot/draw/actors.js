@@ -2,8 +2,7 @@ import { rowFor } from '../../../../../src/render/actors/directions.js';
 import { looksOf } from '../../../../../src/render/actors/looks.js';
 import { sheetOf } from '../../../../../src/render/actors/sheets.js';
 
-// Sochetra in Cambodia's red, blue and red, and Iran's Farhad in goal, dressed by the game's own
-// kits as a match would dress them
+// dressed by the game's own kits, so the lab shows the hero exactly as a match draws him
 const CAST = {
   teams: [
     { id: 'cambodia', kit: 'cambodia' },
@@ -21,8 +20,6 @@ export const STRIKER_LOOK = LOOKS[0];
 
 export const KEEPER_LOOK = LOOKS[1];
 
-// a frame of the sprite laid on the pen, its anchor (between the feet) on the world point, each
-// of its pixels one art pixel
 export function drawSprite(pen, actors, { look, pose }) {
   const animation = actors?.manifest.animations[pose.animation];
   const sheet = animation && sheetOf(actors, look, pose.animation);

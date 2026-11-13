@@ -5,7 +5,6 @@ import { flightPoint, flightShare, LIFT } from './flight.js';
 import { keeperAt } from './keeper.js';
 import { playerAt, RUN_SHARE } from './player.js';
 
-// the ball hovers on the Naga's breath once lifted, a pixel up and down
 const bob = (ticks) => (Math.floor(ticks / 10) % 2 === 0 ? 0 : -1);
 
 function dribbled(clock, ending) {
@@ -16,7 +15,6 @@ function dribbled(clock, ending) {
   return { x: playerAt(clock, ending).x + 13, y: BALL_REST.y, spin: true };
 }
 
-// charged, it rises off the grass and drifts a pixel or two toward the boot's swing
 function charged(clock) {
   const rise = easeOut(phaseOf(clock.share, 0.15, 0.6));
 
@@ -54,5 +52,4 @@ const BY_STAGE = {
   aftermath: afterward,
 };
 
-// the ball's middle in the world, and whether it spins
 export const ballAt = (clock, ending) => BY_STAGE[clock.stage](clock, ending);

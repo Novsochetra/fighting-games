@@ -15,7 +15,6 @@ export function afterTicks(clock) {
   return clock.stage === 'aftermath' ? movingTicks(clock.lengths.collision, hold) + clock.ticks : 0;
 }
 
-// a ball come down from a hit hops lower each time as it rolls on to where it stops
 function hopsOn({ land, rest, ticks }) {
   const share = phaseOf(ticks, 0, 60);
   const hop = Math.abs(Math.sin(share * Math.PI * 3)) * 12 * (1 - share) ** 2;

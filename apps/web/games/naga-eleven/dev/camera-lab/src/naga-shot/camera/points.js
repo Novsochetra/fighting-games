@@ -3,7 +3,6 @@ import { MANIFEST } from '../tracks/naga.js';
 import { playerAt } from '../tracks/player.js';
 import { CONTACTS, GOAL, GROUND, KEEPER_SPOT } from '../world.js';
 
-// the points a shot may look at, in the world's art pixels, for this moment of the show
 export function pointsAt(clock, ending) {
   const player = playerAt(clock, ending);
   const ball = ballAt(clock, ending);

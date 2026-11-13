@@ -22,7 +22,6 @@ function diveFrame(clock, ending) {
   return since < 0 ? 2 : Math.min(7, 3 + Math.floor(since / 9));
 }
 
-// lifted off the grass through his flight, highest at its middle
 function liftOf(frame, ending) {
   if (!FLYING.includes(frame) && frame !== 2) {
     return 0;
@@ -33,10 +32,8 @@ function liftOf(frame, ending) {
   return Math.round((LIFT[ending] ?? 10) * shape);
 }
 
-// how far toward the ball he has flown, out from his line
 const REACH = [0, 0, 3, 8, 12, 15, 17, 18];
 
-// the keeper's pose, how strongly the Naga's light falls on him (0 to 1), and where his gloves are
 export function keeperAt(clock, ending) {
   const before = ['awakening', 'charge', 'manifest', 'impact', 'flight'].includes(clock.stage);
   const frame = before ? null : diveFrame(clock, ending);

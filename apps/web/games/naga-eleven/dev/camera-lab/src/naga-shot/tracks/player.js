@@ -2,7 +2,6 @@ import { NAGA_TIMINGS } from '../sequence.js';
 import { KICK_SPOT } from '../world.js';
 import { easeOut, phaseOf } from './ease.js';
 
-// the share of the awakening Sochetra runs in for, the ball at his feet, before he plants
 export const RUN_SHARE = 0.55;
 
 const RUN_FROM = 76;
@@ -26,8 +25,6 @@ function awakening(clock) {
   return pose('run', Math.floor(clock.ticks / 4) % 6, { x: KICK_SPOT.x - RUN_FROM * (1 - run) });
 }
 
-// back-swing, then the strike a few ticks before the boot meets the ball and held through the
-// hit-stop, then the follow-through
 function impact(clock) {
   const { contact } = NAGA_TIMINGS;
 
@@ -55,6 +52,5 @@ const BY_STAGE = {
   aftermath,
 };
 
-// Sochetra's pose: where his feet stand, and the frame of the game's own sprite he shows
 export const playerAt = (clock, ending) =>
   (BY_STAGE[clock.stage] ?? (() => pose('idle', 0)))(clock, ending);

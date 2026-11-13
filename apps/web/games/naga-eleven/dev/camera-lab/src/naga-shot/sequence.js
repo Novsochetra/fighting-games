@@ -1,5 +1,4 @@
-// The Naga Shot as eight timed beats, each its own stage of the lab's timeline. Every length is in
-// ticks (60 a second) at full length; the camera lab edits them as JSON ("Naga Shot: timings")
+// in ticks, 60 a second, at full length
 export const NAGA_TIMINGS = {
   stages: {
     awakening: 60,
@@ -41,7 +40,6 @@ function lengthOf(id, { repeat }, holds) {
   return Math.max(1, Math.round(full * share - Math.abs(cut)));
 }
 
-// the stages in order, where each starts and how long it runs for these settings
 export function planFor(settings) {
   const holds = holdsFor(settings.camera);
   let from = 0;
@@ -57,8 +55,7 @@ export function planFor(settings) {
   return { stages, holds: { hit: holds.hit, crash: holds.crash }, total: from };
 }
 
-// where a frame of the show falls: its stage, the ticks into it, the share of it gone, and the
-// ticks as they would be at full length, which the camera's shots are written in
+// `full` is the ticks as they would be at full length, which the camera's shots are written in
 export function clockAt(plan, frame) {
   const at = Math.max(0, Math.min(plan.total - 1, frame));
   const stage = plan.stages.findLast((entry) => entry.from <= at);
@@ -76,8 +73,7 @@ export function clockAt(plan, frame) {
   };
 }
 
-// ticks of motion in a stage that holds still for `hold` ticks from `at`: the world stands while
-// the camera shakes and the light flashes
+// the world stands still through a hold while the camera shakes and the light flashes
 export function movingTicks(ticks, { at, hold }) {
   if (ticks <= at) {
     return ticks;

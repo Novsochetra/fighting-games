@@ -1,6 +1,5 @@
-// The side view's own world, in art pixels: one pixel of a player's sprite is one of them, and the
-// camera draws each `unit` of the lab's 768 by 432 space wide, a whole number, so nothing is ever
-// drawn at a share of a pixel
+// one art pixel is one pixel of a player's sprite, and the camera draws it a whole number of the
+// lab's pixels wide (UNITS), never a share of one, so the art stays square
 export const WORLD = { width: 760, height: 300 };
 
 export const VIEW = { width: 768, height: 432 };
@@ -18,7 +17,6 @@ export const GOAL = { line: 640, height: 78, depth: 34 };
 
 export const KEEPER_SPOT = { x: 616, y: GROUND };
 
-// where the shot is aimed at the goal: the keeper meets it in his dive, or it beats him to the net
 export const CONTACTS = {
   goal: { x: GOAL.line + 2, y: GROUND - 46 },
   catch: { x: KEEPER_SPOT.x - 14, y: GROUND - 40 },
