@@ -7,6 +7,7 @@ import {
   SAVE_CAM_SHOTS,
 } from '../../../src/data/shots.js';
 import { MOST_STEPS } from '../../../src/render/duel/lens/lens-pen.js';
+import { NAGA_EDITABLE } from './naga-shot/editable.js';
 
 // what the lab can tune while the game draws: the game's own shot lists and timings, changed in
 // place, so the next frame plays them
@@ -23,7 +24,8 @@ export const EDITABLE = {
     ]),
   ),
   finale: { label: 'Finale', value: FINALE_SHOTS },
-  cinema: { label: 'Timings (CINEMA)', value: CINEMA },
+  cinema: { label: 'Timings (CINEMA)', value: CINEMA, timings: true },
+  ...NAGA_EDITABLE,
 };
 
 const clone = (value) => JSON.parse(JSON.stringify(value));
@@ -38,12 +40,12 @@ const isShot = (shot) => typeof shot === 'object' && shot !== null && typeof sho
 const inOrder = (shot, i, shots) =>
   Number.isFinite(shot.from) && (i === 0 ? shot.from >= 0 : shot.from > shots[i - 1].from);
 
-const stepOk = (shot) => Number.isInteger(shot.step) && shot.step >= 0 && shot.step <= MOST_STEPS;
+const stepOk = (shot, most) => Number.isInteger(shot.step) && shot.step >= 0 && shot.step <= most;
 
 const glideOk = (shot) =>
   shot.glide === undefined || (Number.isFinite(shot.glide) && shot.glide > 0);
 
-function shotProblem(shot, i, shots) {
+function shotProblem(shot, i, shots, most) {
   if (!isShot(shot)) {
     return `shot ${i + 1} is not { "from", "on", "step" }`;
   }
@@ -52,17 +54,17 @@ function shotProblem(shot, i, shots) {
     return `shot ${i + 1}: "from" is 0 or more, each later than the last`;
   }
 
-  return stepOk(shot) && glideOk(shot)
+  return stepOk(shot, most) && glideOk(shot)
     ? null
-    : `shot ${i + 1}: "step" 0 to ${MOST_STEPS}, "glide" over 0`;
+    : `shot ${i + 1}: "step" 0 to ${most}, "glide" over 0`;
 }
 
-export function shotsProblem(shots) {
+export function shotsProblem(shots, most = MOST_STEPS) {
   if (!Array.isArray(shots) || shots.length === 0) {
     return 'a list of shots: [{ "from": 0, "on": "middle", "step": 0 }, ...]';
   }
 
-  return shots.map((shot, i) => shotProblem(shot, i, shots)).find(Boolean) ?? null;
+  return shots.map((shot, i) => shotProblem(shot, i, shots, most)).find(Boolean) ?? null;
 }
 
 export function timingsProblem(value, original) {
@@ -98,10 +100,13 @@ function fillIn(target, value) {
 }
 
 export function applyValue(key, value) {
-  const problem = key === 'cinema' ? timingsProblem(value, ORIGINAL.cinema) : shotsProblem(value);
+  const entry = EDITABLE[key];
+  const problem = entry.timings
+    ? timingsProblem(value, ORIGINAL[key])
+    : shotsProblem(value, entry.most);
 
   if (!problem) {
-    fillIn(EDITABLE[key].value, value);
+    fillIn(entry.value, value);
   }
 
   return problem;

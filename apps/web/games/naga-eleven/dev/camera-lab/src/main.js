@@ -6,6 +6,7 @@ import { prepareSaveCam } from '../../../src/render/save-cam/index.js';
 import { useUiSpace } from '../../../src/render/spaces.js';
 import { installEditor } from './editor.js';
 import { loadLab, saveLab } from './lab-store.js';
+import { setBakeCanvas } from './naga-shot/draw/bake.js';
 import { DEFAULT_SETTINGS } from './options.js';
 import { fillChoices, onSettings, showFor, writeSettings } from './panel.js';
 import { advance, createPlayer, seek } from './player.js';
@@ -77,6 +78,7 @@ function onDisplayFrame() {
 }
 
 setPortraitCanvasFactory(createCanvas);
+setBakeCanvas(createCanvas);
 fillChoices(document);
 writeSettings(document, lab.settings);
 onSettings(document, (settings) => {

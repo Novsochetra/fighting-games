@@ -121,6 +121,12 @@ fieldset label.lab-check {
   grid-template-columns: auto 1fr;
 }
 
+.lab-layers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 12px;
+}
+
 #shots {
   min-height: 14rem;
   font-family: var(--font-code);

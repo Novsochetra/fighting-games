@@ -12,6 +12,7 @@ import {
 } from '../../../src/render/save-cam/index.js';
 import { forceFieldRound, forceKeeperRound, saveCamMoment } from './forced.js';
 import { forwardOf, giveBall, keeperOf, labMatch } from './lab-match.js';
+import { nagaShotScene } from './naga-shot/scene.js';
 
 // a move seen before in the match plays short, as it does the second time in a game
 function markSeen(match, settings) {
@@ -124,6 +125,6 @@ function saveCamScene(settings) {
   };
 }
 
-const SCENES = { shot: shotScene, clash: clashScene, saveCam: saveCamScene };
+const SCENES = { naga: nagaShotScene, shot: shotScene, clash: clashScene, saveCam: saveCamScene };
 
 export const createScene = (settings) => SCENES[settings.scene](settings);

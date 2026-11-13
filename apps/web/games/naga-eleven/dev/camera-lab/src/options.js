@@ -1,6 +1,8 @@
 import { FIELD_RESULTS } from '../../../src/data/duels.js';
 import { MOVES } from '../../../src/data/moves.js';
 import { SAVE_CAM_VENUES } from '../../../src/render/save-cam/backdrops/index.js';
+import { layerKey, NAGA_LAYERS } from './naga-shot/layers.js';
+import { ENDINGS } from './naga-shot/world.js';
 
 const movesWhere = (test) =>
   Object.values(MOVES)
@@ -10,7 +12,7 @@ const movesWhere = (test) =>
 const ofKinds = (kinds) => movesWhere((move) => kinds.includes(move.kind));
 
 export const CHOICES = {
-  scene: ['shot', 'clash', 'saveCam'],
+  scene: ['naga', 'shot', 'clash', 'saveCam'],
   camera: ['full', 'short', 'off'],
   lang: ['en', 'km'],
   shot: ofKinds(['shot']),
@@ -21,10 +23,11 @@ export const CHOICES = {
   defend: ['tackle', 'block', 'intercept', ...ofKinds(['tackle', 'block'])],
   word: [...new Set(Object.values(FIELD_RESULTS).flat())],
   venue: SAVE_CAM_VENUES,
+  ending: ENDINGS,
 };
 
 export const DEFAULT_SETTINGS = {
-  scene: 'shot',
+  scene: 'naga',
   camera: 'full',
   lang: 'en',
   shot: 'naga-shot',
@@ -38,6 +41,8 @@ export const DEFAULT_SETTINGS = {
   word: 'stolen',
   venue: 'world-stadium',
   repeat: false,
+  ending: 'goal',
+  ...Object.fromEntries(NAGA_LAYERS.map((layer) => [layerKey(layer), true])),
 };
 
 // the side a field duel's word goes to: the first of each kind's pair is the attack's win
