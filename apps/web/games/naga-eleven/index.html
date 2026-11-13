@@ -542,6 +542,35 @@
                 class="option-row"
                 role="slider"
                 tabindex="0"
+                aria-labelledby="setting-camera"
+                data-nav
+                data-adjust="camera"
+              >
+                <span class="option-label" id="setting-camera" data-text="cinematicCamera"
+                  >Cinematic camera</span
+                >
+                <button
+                  class="step-button step-back"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="-1"
+                  data-label="previous"
+                ></button>
+                <span class="option-value" data-slot="camera"></span>
+                <button
+                  class="step-button step-on"
+                  type="button"
+                  tabindex="-1"
+                  data-action="adjust"
+                  data-by="1"
+                  data-label="next"
+                ></button>
+              </div>
+              <div
+                class="option-row"
+                role="slider"
+                tabindex="0"
                 aria-labelledby="setting-touch"
                 data-nav
                 data-adjust="touch"

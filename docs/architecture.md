@@ -1692,7 +1692,13 @@ holds the content: `story/` (four chapters of stages and scenes), `teams/`, `cha
   `assets/sprites/`, its kit ramps in `src/art/sprite-kit.js`), effects, the HUD and minimap, and
   the canvas screens: portraits built from pixel-map parts (`portraits/`), the dialogue box
   (`dialogue/`), backdrops and the title art, duel cut-ins (`duel/`), drills (`training/`), and
-  television's intro, goal replay and boards (`cinematics/`, `replay/`).
+  television's intro, goal replay and boards (`cinematics/`, `replay/`). A cinematic camera moves
+  through the shows (the bible's "The cinematic camera"): a lens that zooms the cut-ins' art grid
+  by whole canvas pixels (`duel/lens/`) along shot lists that are data (`src/data/shots.js`), the
+  ball's chase to the goal (`duel/chase/`), and in open play a punch-in on a skill's player with
+  slow motion that holds the sim's steps, never slows the sim (`src/ui/flow/match-pace.js`), kept
+  to a fifth of a match's real time (`cinema/budget.js`); the player's Cinematic camera setting
+  says how much (`cinema/mode.js`).
 - **Sound** (`src/audio/`): every effect and the pinpeat-coloured music synthesized with Web Audio,
   from the match's events.
 - **The app** (`src/ui/`): the DOM screens over the canvas (`screens/`: title, menu, chapters,

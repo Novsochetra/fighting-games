@@ -7,6 +7,7 @@ export const SETTING_CHOICES = Object.freeze({
   sound: VOLUMES,
   music: VOLUMES,
   matchLength: ['short', 'normal'],
+  camera: ['auto', 'full', 'short', 'off'],
   touch: ['auto', 'on', 'off'],
 });
 
@@ -17,6 +18,7 @@ export const DEFAULT_SETTINGS = Object.freeze({
   sound: 8,
   music: 6,
   matchLength: 'normal',
+  camera: 'auto',
   touch: 'auto',
 });
 

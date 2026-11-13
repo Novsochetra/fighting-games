@@ -1,8 +1,10 @@
+import { lensPen } from '../duel/lens/lens-pen.js';
 import { createPen, shiftedPen } from '../duel/pen.js';
 import { drawBars } from '../duel/bars.js';
 import { UNIT } from '../duel/layout.js';
 import { drawBackdrop, goalStyleOf, skyOf } from './backdrop.js';
 import { drawCamBall } from './ball.js';
+import { saveCamView } from './camera.js';
 import { drawContact, drawContactBurst, drawFlash, shakeOf } from './effects.js';
 import { drawFrame, drawNet } from './goal.js';
 import { drawCamFocus, focusLight } from './focus.js';
@@ -73,7 +75,8 @@ export function drawCamScene(pen, cam, { actors, tick }) {
 }
 
 // the save cam on a pen of the cut-ins' art grid, shaking at the contact and flashing white
-export function drawSaveCamOn(pen, cam, { actors = null, tick = cam.ticks } = {}) {
+export function drawSaveCamOn(base, cam, { actors = null, tick = cam.ticks } = {}) {
+  const pen = lensPen(base, saveCamView(cam, tick));
   const shake = shakeOf(cam.ticks);
 
   // the shaken scene leaves a strip at the view's edge uncovered, where the match under the cam
@@ -83,7 +86,7 @@ export function drawSaveCamOn(pen, cam, { actors = null, tick = cam.ticks } = {}
   }
 
   drawCamScene(shiftedPen(pen, shake.x, shake.y), cam, { actors, tick });
-  drawFlash(pen, cam.ticks);
+  drawFlash(base, cam.ticks);
 }
 
 // the save cam fills the view; in open play it has the film's bars and calls out the save itself

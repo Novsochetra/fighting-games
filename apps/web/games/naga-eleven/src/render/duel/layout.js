@@ -5,6 +5,8 @@ export const BAR = 14;
 
 export const INNER = { top: BAR, bottom: ART.height - BAR };
 
+export const CUTIN_BAND = { top: 34, height: 76 };
+
 // the menu sits between the two name plates, its gold frame clear of theirs; `row` and `head` in
 // art pixels, `rows` the most it shows at once, `arrow` the widths of the rows of its scroll arrows
 export const MENU = { x: 73, y: 58, width: 110, row: 10, head: 12, rows: 5, arrow: [3, 5] };

@@ -1,5 +1,15 @@
+import { CINEMA } from '../../data/cinema.js';
 import { isSaveCamDone, updateSaveCam } from '../save-cam/index.js';
-import { beginCutin, beginMeeting, cutinLength, specialsIn, versusLength } from './beats.js';
+import {
+  beginChase,
+  beginCutin,
+  beginMeeting,
+  cutinLength,
+  nextCutinOrMeeting,
+  specialsIn,
+  versusLength,
+} from './beats.js';
+import { clashLength } from './clash-clock.js';
 import { hasFinale } from './finale.js';
 import { openMenu, stepMenu } from './menu.js';
 import { enter, pendingSide, shownRound } from './show.js';
@@ -42,12 +52,12 @@ function cutin(show) {
     return;
   }
 
+  const shown = show.cutins[show.cutin];
+
   show.cutin += 1;
 
-  if (show.cutin < show.cutins.length) {
-    beginCutin(show);
-  } else {
-    beginMeeting(show);
+  if (shown !== 'attack' || !beginChase(show)) {
+    nextCutinOrMeeting(show);
   }
 }
 
@@ -57,8 +67,18 @@ function clash(show) {
     show.flash = 8;
   }
 
-  if (show.stageTicks >= STAGE_TICKS.clash) {
+  if (show.stageTicks >= clashLength(show)) {
     enter(show, hasFinale(show) ? 'finale' : 'result');
+  }
+}
+
+// a flash cuts away from the chase as the ball arrives
+function chase(show, input) {
+  const hurried = input.pressed?.pass && show.stageTicks > CINEMA.chase.skipAfter;
+
+  if (show.stageTicks >= show.chaseLength || hurried) {
+    show.flash = 5;
+    nextCutinOrMeeting(show);
   }
 }
 
@@ -101,6 +121,7 @@ const STAGES = {
   wait,
   cutin,
   clash,
+  chase,
   saveCam,
   finale: after('finale', 'result'),
   result,

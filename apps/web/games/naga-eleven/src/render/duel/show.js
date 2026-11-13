@@ -2,8 +2,12 @@ import { currentRound, humanSideOf } from '../../sim/duel/index.js';
 import { seenOf } from './seen.js';
 
 // a show keeps the duel it was made for, which the match lets go of once the show finishes it;
-// `venue` is the match's, whose goal its save cam shows
-export function createDuelShow(match, { heroAge = null, venue = null } = {}) {
+// `venue` is the match's, whose goal its save cam shows; `cinema` the player's cinematic camera
+// (src/render/cinema/mode.js) and `budget` the match's real time it may spend (budget.js)
+export function createDuelShow(
+  match,
+  { heroAge = null, venue = null, cinema = 'off', budget = null } = {},
+) {
   const seen = seenOf(match);
   const repeat = match.duel ? seen.duels > 0 : false;
 
@@ -16,6 +20,11 @@ export function createDuelShow(match, { heroAge = null, venue = null } = {}) {
     duel: match.duel,
     heroAge,
     venue,
+    cinema,
+    budget,
+    freeze: 0,
+    chaseLength: 0,
+    chased: -1,
     stage: match.duel ? 'intro' : 'done',
     stageTicks: 0,
     ticks: 0,

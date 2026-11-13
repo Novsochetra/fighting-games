@@ -5,6 +5,7 @@ import { drawDuelShow, drawPenaltyShow } from '../../render/duel/index.js';
 import { drawMinimap } from '../../render/minimap.js';
 import { drawSaveCam } from '../../render/save-cam/index.js';
 import { drawReplayChrome, replayCamera, replayFrameMatch } from '../../render/replay/index.js';
+import { zoomOf } from './match-zoom.js';
 import { drawSceneSession } from './scene-session.js';
 
 function drawReplay(context, session, { tick, actors }) {
@@ -39,7 +40,7 @@ function drawTv(context, session, tick) {
 const frameOptionsOf = (session) =>
   session.overlay
     ? { effects: { ...session.effects, held: true }, minimap: null }
-    : { effects: session.effects, minimap: drawMinimap };
+    : { effects: session.effects, minimap: drawMinimap, zoom: zoomOf(session) };
 
 // a frame of a match session: the shootout alone once it starts, a replay alone while it rolls,
 // else the match with television's cards, a duel's cut-in or a story scene over it; `still` is the

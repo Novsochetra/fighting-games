@@ -522,6 +522,81 @@ pixels, each drawn once for its size and stamped (`trails/head-stamps.js`).
   has the ball come at him: the cam moves its aim in to within his reach (`standingAim` in
   `src/render/save-cam/moment.js`), and a wall rises under the ball wherever it comes.
 
+### The cinematic camera
+
+The shows used to be still frames: only a shake and the panels sliding in moved. Now a camera
+moves through them the way the 1990s football anime games framed a special: it punches in from
+play, pushes in on the shout, rides the ball to the goal, crashes in on the contact and shows
+what came of it. The player picks how much in Settings, **Cinematic camera**
+(`src/render/cinema/mode.js`):
+
+- **Auto** (the default): Full, or Off on a device that asks for less motion
+  (`prefers-reduced-motion`).
+- **Full**: every camera move, and the three beats that add time: the chase, the freeze at a
+  clash's impact and open play's slow motion.
+- **Short**: the camera moves, which cost no time, without the beats that add it.
+- **Off**: the shows exactly as they were (`test/regression/cinematic-show.test.js`).
+
+A change in the pause menu plays on at once (`src/ui/app/cinema-of.js`).
+
+**The lens** (`src/render/duel/lens/`): a show's camera is a pen (`lensPen(pen, { x, y, step })`)
+that draws what the stage draws, looking at a point of the art grid, `step` zoom steps in (0 to 3).
+A step draws each art pixel one more canvas pixel wide (unit 3 to 6), never a share of one, so
+the art stays square; step 0 is the pen itself. The view never leaves the art grid across, nor
+the part between the bars up and down, so the match under a show never shows at its edge. The
+bars, the captions, the duel menu and a stage's titles (a cut-in's name and stamp, the result's
+word) are drawn over the lens, still, as a film's titles are. Nothing rolls: a tilted grid breaks
+the pixels.
+
+**The shots** (`src/data/shots.js`): each stage is a list of shots in ticks of the stage at its
+full length (`{ from, on, step, glide }`): from `from` the camera looks at `on`, a point the stage
+names, and with `glide` it eases there over that many ticks from where the shot before looked;
+without, it cuts. A stage played short (a repeated cut-in, a repeated chase) runs through its
+shots faster (`fullTicks`).
+
+| stage    | points it names                           | what the camera does                                                                                                      |
+| -------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| cut-in   | `band`, `face`, `ahead`, `boot`           | cuts in on the face under the band's flash and drifts with the move; Sochetra's strike punches in on the boot as it lands |
+| clash    | `middle`, `meeting`, `impact`, `ball`     | leans in as the two close, crashes in on the impact, backs off                                                            |
+| chase    | `ball`                                    | rides with the ball, closing in as the goal comes up                                                                      |
+| save cam | `goal`, `aim`, `ball`, `gloves`, `keeper` | close on the goalmouth, leaning to the aim, then by the outcome below                                                     |
+| finale   | `middle`, `keeper`                        | the ball fills the view, the net tears across it, the keeper flung back                                                   |
+
+The save cam's contact (tick 40) is shot by what comes of it: a **catch** closes on the gloves
+and closer still, held, before he lands with it; a **parry** follows the ball off him; a **punch**
+crashes in on the fist and whips after the ball flying out; a **wall** knocks the camera back to
+the whole goal; a **goal** crashes in on the ball in the net and pulls back; a miss follows the
+ball past the post. The same shots play in a duel's keeper round and in open play's save cam.
+
+**The chase** (`src/render/duel/chase/`): a keeper round of a special, a finisher, a duo or a
+chain rides the ball across the screen once, after the shooter's cut-in and before the keeper's
+(or before the save cam where the keeper has none): the ball held near the middle, the move's own
+shape round it (its look's `back` and `front`, drawn from a scene of a clash late in its run up),
+lines rushing in on it, and the stand, the grass and streaks rushing back behind it, each at its
+own pace. `CINEMA.chase` (`src/data/cinema.js`): 40 ticks the first time a move is struck in a
+match, half after (`REPEAT_SHARE`), a press after 18 goes on; a flash cuts away as the ball
+arrives.
+
+**The freeze**: a clash holds on its impact for `CINEMA.clashFreeze` (6) ticks
+(`src/render/duel/clash-clock.js`), the camera crashed in on it.
+
+**In open play** (`src/ui/flow/match-pace.js`, `match-zoom.js`): a skill (`{ type: 'skill' }`)
+punches the camera in on its player, the world drawn twice as big about him
+(`src/render/camera/punch-in.js`, `inWorldSpace`'s `zoom`: twice, never a share more, so the
+sprites keep their pixels), for `CINEMA.punchIn.ticks` (30) frames, the first `slowTicks` (20) at
+half speed. The names over heads, the pointers and the HUD wait it out. As a duel is called, the
+camera punches in on the ball through the duel's intro, before the cut-ins take the screen. No
+sooner than `gapTicks` (600) after the last punch-in, no more than `mostPerHalf` (6) a half. **The
+sim is never slowed itself**: the session steps it on every other frame, so a match plays the
+same ticks however it is watched, and a frame held is a frame of show.
+
+**The budget** (`src/render/cinema/budget.js`): the session counts each frame as play or show (a
+duel's show, a save cam, a frame slow motion held). A beat that adds time (the chase, the freeze,
+slow motion) plays only while the shows stay within `CINEMA.budget.share` (a fifth) of the
+match's real time, counted from `headStart` (2400) ticks of play so the first duel has room; once
+spent, the camera still moves but adds nothing. On the chapter 3 final, with the player only
+tapping PASS for the duels' menus, the shows took 12% of its real time on Full.
+
 ### The story brings them in
 
 One at a time (`SYSTEMS_FROM`, each duo's `needs` or `from`); both sides play each from there on.
@@ -1151,7 +1226,8 @@ camera, match, { venue, tick })` draws what stands in front. `drawMinimap(contex
 - `src/render/dialogue/`: in a full-screen scene the name plate stands on the box's edge beside the
   speaker, toward the middle; a name too long slides back over their shoulder, never into the
   crest; the portrait shows down to the box's edge.
-- `src/render/duel/`: the cut-ins: `createDuelShow(match, { venue })`,
+- `src/render/duel/`: the cut-ins: `createDuelShow(match, { venue, cinema, budget })` (the
+  cinematic camera and the match's budget, "The cinematic camera"),
   `updateDuelShow(show, input)`, `drawDuelShow(context, show, { lang })`. The field duel's clash
   draws both players from the footballer's sheets, one sheet pixel to one of the cut-in's, each in
   his own kit, skin, hair and chest number (`src/render/duel/clash/`): the run and the defender's

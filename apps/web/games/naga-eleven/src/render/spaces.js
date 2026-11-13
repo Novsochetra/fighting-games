@@ -6,10 +6,11 @@ export function useUiSpace(context) {
   context.imageSmoothingEnabled = false;
 }
 
-// the match world is drawn at the canvas's own pixels (WORLD_VIEW); the UI's scale comes back after
-export function inWorldSpace(context, draw) {
+// the match world is drawn at the canvas's own pixels (WORLD_VIEW), or a camera's punch-in on
+// them ({ scale, x, y }, src/render/camera/punch-in.js); the UI's scale comes back after
+export function inWorldSpace(context, draw, zoom = null) {
   context.save();
-  context.setTransform(1, 0, 0, 1, 0, 0);
+  context.setTransform(zoom?.scale ?? 1, 0, 0, zoom?.scale ?? 1, zoom?.x ?? 0, zoom?.y ?? 0);
   context.imageSmoothingEnabled = false;
   draw();
   context.restore();

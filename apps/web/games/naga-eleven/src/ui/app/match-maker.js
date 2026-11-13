@@ -8,6 +8,7 @@ import { createMatchSession } from '../flow/match-session.js';
 import { createPlayedMatch } from '../flow/match-setup.js';
 import { createTv } from '../flow/match-tv.js';
 import { sceneOf } from '../flow/story-run.js';
+import { cinemaOf } from './cinema-of.js';
 import { rivalOf } from './match-cards.js';
 
 const QUICK_VENUE = 'national-stadium';
@@ -44,6 +45,7 @@ export function storyMatchSession(app, world) {
     heroAge: stage.at.heroAge,
     lang: app.settings.lang,
     knockout: stage.rule === 'knockout',
+    cinema: cinemaOf(app),
   });
 
   Object.assign(session, { specs });
@@ -79,7 +81,12 @@ function quickMatch(app, specs) {
 
 export function quickMatchSession(app, specs) {
   const match = quickMatch(app, specs);
-  const session = createMatchSession({ match, venue: QUICK_VENUE, lang: app.settings.lang });
+  const session = createMatchSession({
+    match,
+    venue: QUICK_VENUE,
+    lang: app.settings.lang,
+    cinema: cinemaOf(app),
+  });
 
   session.specs = match.teams.map((team, i) => (specs[i]?.players ? specs[i] : team));
   session.tv = createTv(session, { rival: rivalOf(session.specs[1], 'adult') });

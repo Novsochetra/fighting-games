@@ -1,7 +1,10 @@
 import { LOOK_ART } from '../../art/duel/looks.js';
+import { FINALE_SHOTS } from '../../data/shots.js';
 import { drawCutinBall, drawCutinFigure } from './cutin-figure.js';
 import { drawFocusLines } from './focus-lines.js';
 import { ART, INNER } from './layout.js';
+import { lensPen } from './lens/lens-pen.js';
+import { shotView } from './lens/shot-view.js';
 import { portraitOf } from './portrait-card.js';
 import { playerIn, shownRound } from './show.js';
 
@@ -46,9 +49,12 @@ function keeper(pen, show, ticks) {
   });
 }
 
-export function drawFinale(pen, show, { tick }) {
+const FLUNG = { x: MIDDLE.x, y: INNER.bottom - 30 };
+
+export function drawFinale(base, show, { tick }) {
   const art = LOOK_ART[shownRound(show).picked.attack.look] ?? LOOK_ART.plain;
   const ticks = show.stageTicks;
+  const pen = lensPen(base, shotView(show.cinema, FINALE_SHOTS, ticks, { keeper: FLUNG }));
 
   stage(pen, { art, tick });
 

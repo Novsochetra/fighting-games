@@ -48,6 +48,8 @@ export const MENU_STRINGS = {
   matchLength: ['Match length', 'រយៈពេលប្រកួត'],
   short: ['Short', 'ខ្លី'],
   normal: ['Normal', 'ធម្មតា'],
+  cinematicCamera: ['Cinematic camera', 'កាមេរ៉ាបែបភាពយន្ត'],
+  full: ['Full', 'ពេញ'],
   touchControls: ['Touch controls', 'ប៊ូតុងប៉ះ'],
   auto: ['Auto', 'ស្វ័យប្រវត្តិ'],
   on: ['On', 'បើក'],

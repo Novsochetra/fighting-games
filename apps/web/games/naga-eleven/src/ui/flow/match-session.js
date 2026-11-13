@@ -1,4 +1,5 @@
 import { createCamera, updateCamera } from '../../render/camera.js';
+import { createBudget } from '../../render/cinema/budget.js';
 import { createEffects, updateEffects } from '../../render/effects/index.js';
 import { prepareSaveCam } from '../../render/save-cam/index.js';
 import { drainEvents } from '../../sim/events.js';
@@ -6,6 +7,7 @@ import { tick } from '../../sim/tick.js';
 import { createEdges, pressedOf } from './input-edges.js';
 import { createLedger, recordEvents, resultOf } from './match-ledger.js';
 import { createMoments, hearMoments, nextMomentScene } from './match-moments.js';
+import { countFrame, createPace, hearSkills, holdsFrame } from './match-pace.js';
 import { penaltiesWon, startPenalties, stepMatchShows, stepPenaltyShow } from './match-shows.js';
 import { maybeStartReplay, stepIntro, stepReplayTv, watchTv } from './match-tv.js';
 import {
@@ -18,9 +20,12 @@ import {
 // full time stays on screen a moment before the match hands back
 const END_HOLD_TICKS = 120;
 
-// `sceneOf(id)` finds a story scene the match's triggers name; a quick match has none. The save
-// cam's view of the venue is painted now, while a card is up, so its first show never stalls
-export function createMatchSession({ match, venue, triggers, sceneOf, heroAge, lang, knockout }) {
+// `sceneOf(id)` finds a story scene the match's triggers name; a quick match has none; `cinema`
+// is the player's cinematic camera (src/render/cinema/mode.js). The save cam's view of the venue
+// is painted now, while a card is up, so its first show never stalls
+export function createMatchSession(options) {
+  const { match, venue, triggers, sceneOf, heroAge, lang, knockout, cinema = 'off' } = options;
+
   prepareSaveCam(venue);
 
   return {
@@ -28,6 +33,9 @@ export function createMatchSession({ match, venue, triggers, sceneOf, heroAge, l
     venue,
     lang,
     heroAge,
+    cinema,
+    budget: createBudget(),
+    pace: createPace(),
     knockout: Boolean(knockout),
     sceneOf: sceneOf ?? (() => null),
     camera: createCamera(match),
@@ -85,6 +93,7 @@ function stepPlay(session, pressed, hear) {
   recordEvents(session.ledger, match, events);
   hearMoments(session.moments, { match, ledger: session.ledger, events });
   hear?.(events, match);
+  hearSkills(session, events);
   session.overlay = openMoment(session);
 
   if (session.tv) {
@@ -121,13 +130,14 @@ function stepperOf(session) {
 }
 
 export function stepMatchSession(session, input, { hear } = {}) {
-  if (session.done) {
+  const stepper = stepperOf(session);
+
+  if (session.done || (!stepper && holdsFrame(session))) {
     return;
   }
 
   const pressed = pressedOf(session.edges, input);
   const pressedOrTapped = { ...pressed, pass: pressed.pass || Boolean(session.tap) };
-  const stepper = stepperOf(session);
 
   if (stepper) {
     stepper(pressedOrTapped, input);
@@ -135,6 +145,7 @@ export function stepMatchSession(session, input, { hear } = {}) {
     stepPlay(session, pressed, hear);
   }
 
+  countFrame(session);
   session.tap = null;
 }
 

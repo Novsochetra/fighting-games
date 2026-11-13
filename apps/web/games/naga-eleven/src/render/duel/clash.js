@@ -6,6 +6,8 @@ import { drawClashGround } from './clash-ground.js';
 import { drawFigure } from './figure.js';
 import { drawGoalFrame } from './goal-frame.js';
 import { drawImpact } from './impact.js';
+import { clashView } from './lens/clash-view.js';
+import { lensPen } from './lens/lens-pen.js';
 import { lookOf } from './looks/index.js';
 import { clashScene } from './scene.js';
 
@@ -71,9 +73,10 @@ function guardAndBall(pen, scene, looks) {
 
 // back to front: the ground, the goal, the attack's move behind, the two figures, the guard's
 // move, the attack's move in front and the ball, then the light where they meet
-export function drawClash(pen, show, { tick, actors }) {
+export function drawClash(base, show, { tick, actors }) {
   const scene = clashScene(show, tick);
   const looks = looksOf(scene);
+  const pen = lensPen(base, clashView(show, scene));
 
   // a guard's move drawn in front of the defender is a wall between the two
   scene.walled = Boolean(looks.guard.guard);

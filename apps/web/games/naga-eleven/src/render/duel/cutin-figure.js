@@ -37,7 +37,7 @@ function drawPart(pen, { part, at, key, colourOf }) {
   const left = pen.origin.x + (at.x - Math.round(part.anchor.x)) * pen.unit;
   const top = pen.origin.y + (at.y - Math.round(part.anchor.y)) * pen.unit;
   const size = Math.max(part.width, part.height) * pen.unit;
-  const canvas = cachedCanvas(key, size, (context) =>
+  const canvas = cachedCanvas(`${key}|${pen.unit}`, size, (context) =>
     paintPart(context, part, { colourOf, unit: pen.unit }),
   );
 

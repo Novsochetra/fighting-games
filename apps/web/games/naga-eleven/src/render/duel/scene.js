@@ -1,4 +1,5 @@
 import { LOOK_ART } from '../../art/duel/looks.js';
+import { clashClock } from './clash-clock.js';
 import { easeIn, easeOut, phaseOf } from './hash.js';
 import { afterPath, approachPath, bezier } from './paths.js';
 import { shownRound } from './show.js';
@@ -19,7 +20,7 @@ function ballOf(scene) {
 // everything a clash frame needs, worked out from the round and how far into the clash it is
 export function clashScene(show, tick) {
   const round = shownRound(show);
-  const ticks = show.stage === 'clash' ? show.stageTicks : STAGE_TICKS.clash + show.stageTicks;
+  const ticks = clashClock(show);
   const attack = round.picked.attack;
   const defend = round.picked.defend;
   const keeper = round.kind === 'keeper';

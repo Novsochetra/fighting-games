@@ -1,6 +1,7 @@
 import { DUEL_UI } from '../../art/duel/palette.js';
 import { textOf } from '../text.js';
 import { drawBars, drawCaption } from './bars.js';
+import { drawChase } from './chase/draw-chase.js';
 import { drawClash } from './clash.js';
 import { drawCutin } from './cutin.js';
 import { drawFinale } from './finale.js';
@@ -45,6 +46,7 @@ const SCENES = {
   wait: drawVersus,
   cutin: drawCutin,
   clash: drawClash,
+  chase: drawChase,
   saveCam: (pen, show, options) => drawSaveCamOn(pen, show.saveCam, options),
   finale: drawFinale,
   result: drawResult,

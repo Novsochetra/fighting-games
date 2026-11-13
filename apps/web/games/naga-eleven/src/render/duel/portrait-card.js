@@ -1,7 +1,7 @@
 import { DUEL_SIDES } from '../../art/duel/palette.js';
 import { footballerAge, footballerOf } from '../portraits/footballer-of.js';
 import { drawPortrait, GROWING_UP, hasPortrait } from '../portraits/index.js';
-import { PORTRAIT_ART, toCanvas } from './layout.js';
+import { PORTRAIT_ART } from './layout.js';
 import { goldFrame, namePlate, spiritGauge } from './plates.js';
 
 // a plain player has no face of his own: he shows as a footballer of his side, of the hero's age
@@ -26,9 +26,9 @@ export function drawPortraitAt(pen, { x, y, look, flip }) {
   drawPortrait(pen.context, {
     ...look,
     kit: true,
-    x: pen.origin.x + toCanvas(x),
-    y: pen.origin.y + toCanvas(y),
-    scale: 3,
+    x: pen.origin.x + x * pen.unit,
+    y: pen.origin.y + y * pen.unit,
+    scale: pen.unit,
     flip,
   });
 }

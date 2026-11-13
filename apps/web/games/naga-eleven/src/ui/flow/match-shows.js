@@ -20,7 +20,12 @@ export function stepDuelShow(session, menuInput) {
   const { match } = session;
 
   if (match.phase === 'duel' && !session.duelShow) {
-    session.duelShow = createDuelShow(match, { heroAge: session.heroAge, venue: session.venue });
+    session.duelShow = createDuelShow(match, {
+      heroAge: session.heroAge,
+      venue: session.venue,
+      cinema: session.cinema,
+      budget: session.budget,
+    });
   }
 
   if (!session.duelShow) {
@@ -44,6 +49,7 @@ export function stepSaveCamShow(session, input) {
     session.saveCamShow = createSaveCam(match, match.saveCam, {
       length: SAVE_CAM_TICKS.open,
       venue: session.venue,
+      cinema: session.cinema,
     });
   }
 

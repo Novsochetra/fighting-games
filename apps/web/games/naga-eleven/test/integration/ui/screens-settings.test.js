@@ -38,25 +38,30 @@ describe('the settings', () => {
       sound: 8,
       music: 6,
       matchLength: 'normal',
+      camera: 'auto',
       touch: 'auto',
     });
 
     stepRow('matchLength', 'on');
     stepRow('touch', 'back');
     stepRow('music', 'on');
+    stepRow('camera', 'back');
 
     expect(JSON.parse(storage.store.get(SETTINGS_KEY))).toMatchObject({
       matchLength: 'short',
       touch: 'off',
       music: 7,
+      camera: 'off',
     });
     expect(heard).toEqual([
       ['setting', { key: 'matchLength', value: 'short' }],
       ['setting', { key: 'touch', value: 'off' }],
       ['setting', { key: 'music', value: 7 }],
+      ['setting', { key: 'camera', value: 'off' }],
     ]);
     expect(valueOf('matchLength')).toBe('Short');
     expect(valueOf('touch')).toBe('Off');
+    expect(valueOf('camera')).toBe('Off');
   });
 
   it('reads what was kept, and turns down a value it does not know', () => {
@@ -68,6 +73,7 @@ describe('the settings', () => {
       sound: 3,
       music: 6,
       matchLength: 'normal',
+      camera: 'auto',
       touch: 'on',
     });
     expect(document.getElementById('screens').lang).toBe('km');

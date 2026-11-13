@@ -21,6 +21,7 @@ import {
   tapTrainingSession,
   trainingResultOf,
 } from '../flow/training-session.js';
+import { cinemaOf } from './cinema-of.js';
 
 // Each canvas screen answers the same few calls, so the app runs whichever is up: `step(input,
 // app)` once a tick, `draw(context, tick, app)` each frame, `tap(point)`, `isDone()` and
@@ -91,7 +92,10 @@ export const matchScreen = (session) => ({
   },
   session,
   venue: session.venue,
-  step: (input, app) => stepMatchSession(session, input, { hear: app.hear }),
+  step: (input, app) => {
+    session.cinema = cinemaOf(app);
+    stepMatchSession(session, input, { hear: app.hear });
+  },
   draw: (context, tick, app) => drawMatchSession(context, session, { tick, actors: app.actors }),
   tap: (point) => tapMatchSession(session, point),
   isDone: () => isMatchSessionDone(session),

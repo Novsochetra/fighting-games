@@ -7,16 +7,18 @@ export { roundMoment } from './moment.js';
 export { SAVE_CAM_TICKS } from './timing.js';
 
 // a save cam for a moment (README "Contract additions": the shooter, the keeper, the move, his
-// skill, the aim, the dive, the style and the result); `length` is the duel's or open play's, and
-// `venue` the match's, whose goal and what stands behind it the cam shows
+// skill, the aim, the dive, the style and the result); `length` is the duel's or open play's,
+// `venue` the match's, whose goal and what stands behind it the cam shows, and `cinema` the
+// player's cinematic camera (src/render/cinema/mode.js)
 export function createSaveCam(
   match,
   moment,
-  { length = SAVE_CAM_TICKS.open, seed, venue = null } = {},
+  { length = SAVE_CAM_TICKS.open, seed, venue = null, cinema = 'off' } = {},
 ) {
   return {
     match,
     venue,
+    cinema,
     moment: camMoment(
       moment,
       seed ?? (moment.shooter ?? 0) * 131 + (moment.keeper ?? 0) * 17 + (match.tick ?? 0),

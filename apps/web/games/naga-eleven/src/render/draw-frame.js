@@ -59,9 +59,9 @@ function drawWorld(context, match, camera, { art, venue, effects, tick }) {
 // `actors` is createActorArt's (src/render/actors/index.js), with the loaded sprites in it;
 // `effects` is createEffects', fed once a tick by updateEffects; `minimap` draws the minimap in
 // the corner the HUD keeps for it; `tv` is true when television's cards are drawn over the frame
-// (the HUD then leaves them its moments); `createCanvas` is the venue's, else the actors'. The
-// world is drawn at the canvas's pixels; the names, pointers, flash and HUD in the context's own
-// (UI) space.
+// (the HUD then leaves them its moments); `createCanvas` is the venue's, else the actors';
+// `zoom` a camera's punch-in (src/render/camera/punch-in.js). The world is drawn at the canvas's
+// pixels; the names, pointers, flash and HUD in the context's own (UI) space.
 export function drawFrame(context, match, camera, options = {}) {
   const { tick = match.tick, lang = 'en', effects = null } = options;
   const art = options.actors ?? defaultArt();
@@ -70,8 +70,21 @@ export function drawFrame(context, match, camera, options = {}) {
   const createCanvas = options.createCanvas ?? art.createCanvas;
   const venue = venueOptionsOf({ ...options, tick, createCanvas });
 
-  inWorldSpace(context, () => drawWorld(context, match, camera, { art, venue, effects, tick }));
+  inWorldSpace(
+    context,
+    () => drawWorld(context, match, camera, { art, venue, effects, tick }),
+    options.zoom,
+  );
   context.imageSmoothingEnabled = false;
+
+  // what is laid over the world in the UI's space would not keep to a punched-in world: the
+  // names, the pointers and the HUD wait the moment out
+  if (options.zoom) {
+    drawFlash(context, effects, match.tick);
+
+    return;
+  }
+
   drawPointers(context, match, camera, { art, tick, lang });
   drawOverHeads(context, effects, { match, camera, lang, standHeight: art.standHeight });
   drawFlash(context, effects, match.tick);

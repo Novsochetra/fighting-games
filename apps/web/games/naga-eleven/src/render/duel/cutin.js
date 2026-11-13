@@ -5,7 +5,9 @@ import { castOf } from './cutin-cast.js';
 import { drawCutinName } from './cutin-names.js';
 import { drawCutinStamp } from './cutin-stamp.js';
 import { easeOut, hash, phaseOf } from './hash.js';
-import { ART, INNER } from './layout.js';
+import { ART, CUTIN_BAND as BAND, INNER } from './layout.js';
+import { cutinView } from './lens/cutin-view.js';
+import { lensPen } from './lens/lens-pen.js';
 import { lookOf } from './looks/index.js';
 import { reliefArt } from './looks/relief.js';
 import { tagOf } from './menu-rows.js';
@@ -13,8 +15,6 @@ import { drawPortraitAt, portraitOf } from './portrait-card.js';
 import { polygon } from './shapes.js';
 import { shownRound } from './show.js';
 import { drawStrike, strikeFrameAt, strikesIn } from './strike.js';
-
-const BAND = { top: 34, height: 76 };
 
 // diagonal light runs along the band the way the move is going
 function bandFill(pen, { art, offset, facing, tick }) {
@@ -89,22 +89,14 @@ function nameRoom(side, cast) {
     : { left: 8, room: ART.width - portraitsWidth - 8 };
 }
 
-// the move's owner thrown across the screen in a band of its colour, the look's own figure in it,
-// its name stamped beside, and a combo's stamp on the band's edge
-export function drawCutin(pen, show, { lang, tick }) {
-  const side = show.cutins[show.cutin];
-  const round = shownRound(show);
-  const option = round.picked[side];
-  const tag = tagOf(option);
-  const art = LOOK_ART[option.look] ?? LOOK_ART.plain;
+// the move's owner thrown across the screen in a band of its colour, the look's own figure in it
+function drawFilm(film, { show, option, cast, side, art, offset, tick }) {
   const facing = side === 'attack' ? 1 : -1;
   const ticks = show.stageTicks;
-  const offset = Math.round(-facing * ART.width * (1 - easeOut(phaseOf(ticks, 0, 9))));
-  const cast = castOf(show, round, side, { option, tag });
-  const band = clippedPen(pen, { x: 0, y: BAND.top, width: ART.width, height: BAND.height });
+  const band = clippedPen(film, { x: 0, y: BAND.top, width: ART.width, height: BAND.height });
 
-  pen.rect([0, INNER.top, ART.width, INNER.bottom - INNER.top], art.sky[0]);
-  bandFill(pen, { art, offset, facing, tick });
+  film.rect([0, INNER.top, ART.width, INNER.bottom - INNER.top], art.sky[0]);
+  bandFill(film, { art, offset, facing, tick });
   lookOf(option.look).band?.(band, {
     art,
     relief: reliefArt(art),
@@ -117,10 +109,27 @@ export function drawCutin(pen, show, { lang, tick }) {
   });
 
   if (strikesIn(cast, option)) {
-    strike(pen, { show, cast, offset, ticks });
+    strike(film, { show, cast, offset, ticks });
   } else {
     portraits(band, { show, cast, side, offset, ticks });
   }
+}
+
+// the band as the camera sees it; the move's name and a combo's stamp hold still over it, as a
+// film's titles do, so they read however close the camera goes
+export function drawCutin(pen, show, { lang, tick }) {
+  const side = show.cutins[show.cutin];
+  const round = shownRound(show);
+  const option = round.picked[side];
+  const tag = tagOf(option);
+  const art = LOOK_ART[option.look] ?? LOOK_ART.plain;
+  const ticks = show.stageTicks;
+  const facing = side === 'attack' ? 1 : -1;
+  const offset = Math.round(-facing * ART.width * (1 - easeOut(phaseOf(ticks, 0, 9))));
+  const cast = castOf(show, round, side, { option, tag });
+  const film = lensPen(pen, cutinView(show, { side, strikes: strikesIn(cast, option) }));
+
+  drawFilm(film, { show, option, cast, side, art, offset, tick });
 
   if (ticks >= 10) {
     drawCutinName(pen, { option, tag, lang, ...nameRoom(side, cast), art, band: BAND });
