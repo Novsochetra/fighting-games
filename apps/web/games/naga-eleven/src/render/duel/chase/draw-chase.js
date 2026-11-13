@@ -7,12 +7,12 @@ import { fullTicks } from '../lens/track.js';
 import { lookOf } from '../looks/index.js';
 import { chaseScene } from './chase-scene.js';
 import { drawChaseWorld } from './chase-world.js';
-import { CHASE_FULL } from './chase-length.js';
+import { chaseFull } from './chase-length.js';
 
 export function drawChase(base, show, { tick }) {
   const scene = chaseScene(show, tick);
   const look = lookOf(scene.look);
-  const ticks = fullTicks(show.stageTicks, { length: show.chaseLength, full: CHASE_FULL });
+  const ticks = fullTicks(show.stageTicks, { length: show.chaseLength, full: chaseFull() });
   const pen = lensPen(base, shotView(show.cinema, CHASE_SHOTS, ticks, { ball: scene.ball }));
 
   drawChaseWorld(pen, { art: scene.art, ticks: show.stageTicks });

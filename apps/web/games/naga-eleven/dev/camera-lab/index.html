@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Naga Eleven · Camera lab</title>
+    <link rel="stylesheet" href="../../styles/fonts.css" />
+    <link rel="stylesheet" href="../../styles/tokens.css" />
+    <link rel="stylesheet" href="lab.css" />
+    <script type="module" src="src/main.js"></script>
+  </head>
+  <body>
+    <main class="lab">
+      <section class="lab-stage" aria-label="The show">
+        <canvas id="view" width="1536" height="864"></canvas>
+        <div class="lab-transport">
+          <button type="button" data-do="play">Pause</button>
+          <button type="button" data-do="back" title="One tick back (←)">◀ 1</button>
+          <button type="button" data-do="on" title="One tick on (→)">1 ▶</button>
+          <button type="button" data-do="restart" title="From the start (Home)">⏮</button>
+          <label
+            >Speed
+            <select data-do="speed">
+              <option value="1">1×</option>
+              <option value="0.5">½×</option>
+              <option value="0.25">¼×</option>
+              <option value="0.1">⅒×</option>
+            </select>
+          </label>
+          <output id="readout"></output>
+        </div>
+        <input id="scrub" type="range" min="0" max="0" value="0" aria-label="Frame" />
+        <ol id="timeline" class="lab-timeline" aria-label="Stages"></ol>
+      </section>
+      <aside class="lab-panel">
+        <fieldset>
+          <legend>Scene</legend>
+          <label
+            >Show
+            <select data-pick="scene"></select
+          ></label>
+          <label
+            >Camera
+            <select data-pick="camera"></select
+          ></label>
+          <label
+            >Language
+            <select data-pick="lang"></select
+          ></label>
+          <label
+            >Venue
+            <select data-pick="venue"></select
+          ></label>
+          <label class="lab-check"
+            ><input type="checkbox" data-pick="repeat" /> Seen before in the match</label
+          >
+        </fieldset>
+        <fieldset data-for="shot saveCam">
+          <legend>Shot at the keeper</legend>
+          <label
+            >Shot
+            <select data-pick="shot"></select
+          ></label>
+          <label
+            >Keeper's skill
+            <select data-pick="guard"></select
+          ></label>
+          <label
+            >Outcome
+            <select data-pick="outcome"></select
+          ></label>
+          <label
+            >Aim across
+            <input type="range" data-pick="side" min="-1.4" max="1.4" step="0.05" />
+          </label>
+          <label
+            >Aim height <input type="range" data-pick="height" min="0" max="1" step="0.05"
+          /></label>
+          <label
+            >Dive
+            <select data-pick="dive"></select
+          ></label>
+        </fieldset>
+        <fieldset data-for="clash">
+          <legend>One on one</legend>
+          <label
+            >Attack
+            <select data-pick="attack"></select
+          ></label>
+          <label
+            >Defence
+            <select data-pick="defend"></select
+          ></label>
+          <label
+            >Result
+            <select data-pick="word"></select
+          ></label>
+        </fieldset>
+        <fieldset class="lab-editor">
+          <legend>Camera shots</legend>
+          <label
+            >List
+            <select id="list"></select
+          ></label>
+          <textarea id="shots" spellcheck="false" rows="12" aria-label="Shots"></textarea>
+          <p id="problem" class="lab-problem" role="status"></p>
+          <div class="lab-buttons">
+            <button type="button" data-do="reset-list">Reset list</button>
+            <button type="button" data-do="reset-all">Reset all</button>
+            <button type="button" data-do="copy">Copy changes</button>
+          </div>
+          <p class="lab-note">
+            Each shot: from <code>from</code> (ticks into the stage) look at <code>on</code>,
+            <code>step</code> 0 to 3 zoom steps in; <code>glide</code> eases there over that many
+            ticks. Changes play at once and stay on this device.
+          </p>
+        </fieldset>
+      </aside>
+    </main>
+  </body>
+</html>

@@ -3,7 +3,8 @@ import { affords } from '../../cinema/budget.js';
 import { addsTime } from '../../cinema/mode.js';
 import { REPEAT_SHARE } from '../stages.js';
 
-export const CHASE_FULL = CINEMA.chase.ticks;
+// read as each chase begins, so a length tuned while the game runs (the camera lab) plays at once
+export const chaseFull = () => CINEMA.chase.ticks;
 
 const keyOf = (option) => `chase:${option.move ?? option.id}`;
 
@@ -14,9 +15,8 @@ export function chaseLengthOf(show, round) {
     return 0;
   }
 
-  const length = show.seen.moves.has(keyOf(attack))
-    ? Math.round(CHASE_FULL * REPEAT_SHARE)
-    : CHASE_FULL;
+  const full = chaseFull();
+  const length = show.seen.moves.has(keyOf(attack)) ? Math.round(full * REPEAT_SHARE) : full;
 
   return affords(show.budget, length) ? length : 0;
 }

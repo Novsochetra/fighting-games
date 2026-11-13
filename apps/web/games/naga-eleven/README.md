@@ -597,6 +597,17 @@ match's real time, counted from `headStart` (2400) ticks of play so the first du
 spent, the camera still moves but adds nothing. On the chapter 3 final, with the player only
 tapping PASS for the duels' menus, the shows took 12% of its real time on Full.
 
+**The camera lab** (`dev/camera-lab/`): with `npm run dev` running, open
+http://localhost:8765/games/naga-eleven/dev/camera-lab/ to work on the camera. It plays the game's
+own shows from the game's own code: a special at the keeper (any shot, any keeper's skill, the
+outcome, the aim and the dive picked), a one on one (attack, defence and result picked) or open
+play's save cam, at any camera setting, in English or Khmer, at any venue, as the first showing or a
+repeat. Play, pause, a tick at a time (← →), from the start (Home), slowed to a tenth, or scrubbed;
+the timeline under the view shows each stage and how long it runs. **Camera shots** edits the shot
+lists of `src/data/shots.js` and the timings of `src/data/cinema.js` as JSON, played at once and
+kept on the device; **Copy changes** copies every list changed, to paste back into those files.
+The build leaves the lab out, so no player loads it.
+
 ### The story brings them in
 
 One at a time (`SYSTEMS_FROM`, each duo's `needs` or `from`); both sides play each from there on.

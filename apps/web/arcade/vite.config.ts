@@ -8,7 +8,7 @@ import { buildVersion } from '../../server/src/build-version.js';
 import { catalogArtEntries } from '../../server/src/offline/catalog-art.js';
 import { offlineListOf } from '../../server/src/offline/game-files.js';
 import { ARCADE_SRC, DIST_ROOT, GAMES_ROOT, PAGES_ROOT, WEB_ROOT } from '../../server/src/paths.js';
-import { isPublishedPath } from '../../server/src/public-files.js';
+import { isGameDevPath, isPublishedPath } from '../../server/src/public-files.js';
 import { bundleGame } from './build-steps/bundle-game.js';
 import { versionIcons } from './build-steps/version-icons.js';
 
@@ -47,7 +47,8 @@ function copyAsIs(): Plugin {
 
         return cp(source, path.join(DIST_ROOT, entry), {
           recursive: true,
-          filter: (file) => isPublishedPath(source, file),
+          filter: (file) =>
+            isPublishedPath(source, file) && !(entry === 'games' && isGameDevPath(source, file)),
         });
       });
 

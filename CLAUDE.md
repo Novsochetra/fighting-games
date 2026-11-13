@@ -157,7 +157,9 @@ builds the pages it names, and an address in `public/sitemap.xml`), its folder
 ## Layout of a game
 
 `apps/web/games/<id>/` holds `game.json` (the catalog entry), `index.html`, `assets/`, `styles/`
-(with the game's own `tokens.css`), `src/` and `test/`. Adding a folder with a valid `game.json` adds the game to the home page.
+(with the game's own `tokens.css`), `src/` and `test/`, and may keep `dev/`: pages to work on the
+game with (Naga Eleven's camera lab), which `npm run dev` serves and the build leaves out. Adding a
+folder with a valid `game.json` adds the game to the home page.
 A trailer is an `.mp4` (H.264 and AAC) in `assets/trailer/` or at an `https:` address (a CDN), named
 by `game.json`'s `trailer`, with `trailerSmall` a lighter copy for phones; the details sheet plays it
 in place of the game's art, and no offline save keeps it.

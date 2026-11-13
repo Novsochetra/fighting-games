@@ -42,6 +42,8 @@
   --font-khmer:
     'Khmer Sangam MN', 'Noto Sans Khmer', 'Khmer UI', 'Khmer OS', 'Leelawadee UI', sans-serif;
   --font-ui: var(--font-pixel);
+  /* the camera lab's shot lists (dev/camera-lab/), code that has to read letter for letter */
+  --font-code: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   /* only the touch pad's pause key still reads the micro size, at twice it (touch.css) */
   --font-size-micro: 8px;
   --font-size-note: 16px;
@@ -293,6 +295,8 @@
 
 :lang(en) {
   --font-ui: var(--font-pixel);
+  /* the camera lab's shot lists (dev/camera-lab/), code that has to read letter for letter */
+  --font-code: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   --font-size-micro: 8px;
   --font-size-note: 16px;
   --font-size-body: 16px;

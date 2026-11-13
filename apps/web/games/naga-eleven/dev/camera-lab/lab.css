@@ -1,0 +1,148 @@
+/* the camera lab: a page to work on the cinematic camera with, served by npm run dev only */
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--color-night);
+  color: var(--color-chalk);
+  font-family: var(--font-pixel);
+  font-size: var(--font-size-note);
+}
+
+.lab {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 26rem;
+  gap: 16px;
+  padding: 16px;
+}
+
+.lab-stage {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+#view {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--color-ink);
+  image-rendering: pixelated;
+}
+
+.lab-transport,
+.lab-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+button,
+select,
+input,
+textarea {
+  font: inherit;
+  color: var(--color-chalk);
+  background: var(--color-panel);
+  border: 1px solid var(--color-rim);
+}
+
+button {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--color-panel-light);
+}
+
+#readout {
+  color: var(--color-gold);
+  margin-left: auto;
+}
+
+#scrub {
+  width: 100%;
+}
+
+.lab-timeline {
+  display: flex;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
+}
+
+.lab-timeline li {
+  flex-grow: var(--length);
+  flex-basis: 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 4px;
+  background: var(--color-panel-deep);
+  color: var(--color-chalk-muted);
+  font-size: var(--font-size-micro);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.lab-timeline li.is-now {
+  background: var(--color-panel-shine);
+  color: var(--color-gold-light);
+}
+
+.lab-panel {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+fieldset {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  border: 1px solid var(--color-rim);
+}
+
+legend {
+  color: var(--color-gold);
+}
+
+fieldset label {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+fieldset label.lab-check {
+  grid-template-columns: auto 1fr;
+}
+
+#shots {
+  min-height: 14rem;
+  font-family: var(--font-code);
+  white-space: pre;
+}
+
+.lab-problem {
+  min-height: 1em;
+  margin: 0;
+  color: var(--color-red-light);
+}
+
+.lab-note {
+  margin: 0;
+  color: var(--color-chalk-muted);
+  font-size: var(--font-size-micro);
+  line-height: var(--leading-body);
+}
+
+@media (width <= 60rem) {
+  .lab {
+    grid-template-columns: 1fr;
+  }
+}

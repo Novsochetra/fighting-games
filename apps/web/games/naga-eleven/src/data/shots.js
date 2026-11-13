@@ -41,12 +41,11 @@ export const CHASE_SHOTS = [
 ];
 
 // the save cam's contact is at tick 40 (src/render/save-cam/timing.js)
-const OPENING = [
-  { from: 0, on: 'goal', step: 1 },
-  { from: 14, on: 'aim', step: 1, glide: 24 },
-];
-
-const CONTACT = {
+export const SAVE_CAM_SHOTS = {
+  opening: [
+    { from: 0, on: 'goal', step: 1 },
+    { from: 14, on: 'aim', step: 1, glide: 24 },
+  ],
   catch: [
     { from: 40, on: 'gloves', step: 2 },
     { from: 50, on: 'gloves', step: 3 },
@@ -80,6 +79,6 @@ const CONTACT = {
 const MISSES = { wide: 'miss', post: 'miss' };
 
 export const saveCamShots = (outcome) => [
-  ...OPENING,
-  ...(CONTACT[MISSES[outcome] ?? outcome] ?? CONTACT.catch),
+  ...SAVE_CAM_SHOTS.opening,
+  ...(SAVE_CAM_SHOTS[MISSES[outcome] ?? outcome] ?? SAVE_CAM_SHOTS.catch),
 ];
