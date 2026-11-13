@@ -17,7 +17,6 @@ const SET = 0.55;
 
 const BEFORE = ['awakening', 'charge', 'manifest', 'impact', 'flight'];
 
-// how far into the dive, in ticks from the top of his flight; the keeper's stage leads up to it
 function sinceTop(clock, ending) {
   if (clock.stage === 'keeper') {
     return -FRAME_TICKS * 3 * (1 - phaseOf(clock.share, SET, 1 - SET));

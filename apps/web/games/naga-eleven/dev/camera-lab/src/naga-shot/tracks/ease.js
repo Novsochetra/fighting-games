@@ -14,7 +14,6 @@ export const easeInOut = (share) => {
   return value * value * (3 - 2 * value);
 };
 
-// how far through a span from `from` lasting `length` (ticks or a share of a stage), 0 to 1
 export function phaseOf(value, from, length) {
   if (length <= 0) {
     return value >= from ? 1 : 0;
