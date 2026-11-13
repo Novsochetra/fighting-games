@@ -1,13 +1,24 @@
-import { SHOT_ART } from '../colors.js';
-import { GROUND, VIEW, WORLD } from '../world.js';
-import { worldPen } from '../camera/world-pen.js';
+import { drawBoards } from './stadium/boards.js';
+import { drawFlashes } from './stadium/flashes.js';
+import { cheerOf, duskOf, flashesOf, poolOf } from './stadium/light.js';
+import { drawPitch } from './stadium/pitch.js';
+import { drawSky, drawStars } from './stadium/sky.js';
+import { drawStand } from './stadium/stand.js';
+import { drawTowers } from './stadium/towers.js';
 
-// a placeholder until the stadium is drawn: the night, the stand and the grass
-export function drawBackdrop(context, { camera }) {
-  const pen = worldPen(context, camera);
+export function drawBackdrop(context, moment) {
+  const { camera, clock } = moment;
+  const dusk = duskOf(clock);
+  const cheer = dusk === 0 ? cheerOf(moment) : 0;
+  const frame = clock.frame;
 
-  context.fillStyle = SHOT_ART.sky[0];
-  context.fillRect(0, 0, VIEW.width, VIEW.height);
-  pen.rect([0, GROUND - 90, WORLD.width, 70], SHOT_ART.sky[2]);
-  pen.rect([0, GROUND - 14, WORLD.width, WORLD.height], SHOT_ART.grass[1]);
+  drawSky(context, { camera, dusk });
+  drawStars(context, { camera, frame });
+  drawTowers(context, { camera, dusk });
+
+  const standPen = drawStand(context, { camera, dusk, cheer });
+
+  drawFlashes(standPen, { frame, rate: flashesOf(moment) });
+  drawPitch(context, { moment, dusk, pool: poolOf(moment) });
+  drawBoards(context, { camera, dusk, frame, cheer });
 }

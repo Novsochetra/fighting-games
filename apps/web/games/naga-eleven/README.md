@@ -618,13 +618,16 @@ emerald and gold, rings turning round it, two eyes opening in the dark behind hi
 **impact** (it pours into the ball as the boot lands, a hit-stop and a flash), **flight** (the ball
 rides in the Naga's jaws, its body of light trailing), **keeper** (a cut to the keeper, lit by it, in
 slow motion), **collision** (the crash, held, and its burst) and **aftermath** (the Naga breaks into
-sparks and the camera eases back to the play). Its world is in art pixels, one to a pixel of a
-player's sprite (`world.js`); its camera draws one a whole number of the lab's pixels wide and shakes
-in whole pixels (`camera/`), so the art stays square. Where everything is, frame by frame, is a plain
-function of the frame (`tracks/`), so a frame scrubbed back to draws the same; the layers draw from
-it (`draw/`), and each (Sochetra, the keeper, the ball, the Naga rising, the Naga in flight, the
-effects, the flashes, the shake, the film bars, the titles) can be hidden from the panel to look at
-the rest. The panel picks its ending (a goal, a catch, a punch, a parry or the bar); on a Short or
+sparks; a goal cuts to Sochetra celebrating, a save stays on the keeper, and the camera eases back
+to the play). It plays at night: the floodlights fail step by step as the Naga rises and blaze back
+at the kick. Its world is in art pixels, one to a pixel of a player's sprite (`world.js`); its camera
+draws one a whole number of the lab's pixels wide and shakes in whole pixels (`camera/`), so the art
+stays square. Where everything is, frame by frame, is a plain function of the frame (`tracks/`), so a
+frame scrubbed back to draws the same; the layers draw from it (`draw/`, a folder each for the
+stadium, the goal, the players' light, the Naga rising, the Naga in flight and the effects), and
+each (Sochetra, the keeper, the ball, the Naga rising, the Naga in flight, the effects, the flashes,
+the shake, the film bars, the titles) can be hidden from the panel to look at the rest. Its light is
+pixel art's own, dithers and stepped rings, never a blur. The panel picks its ending (a goal, a catch, a punch, a parry or the bar); on a Short or
 Off camera it plays without the holds at the kick and the crash and with half the keeper's slow
 look, and seen before, its build-up plays at half length. **Camera shots** edits its shots stage by
 stage (`camera/shots.js`, steps 0 to 4), its timings (`sequence.js`) and its shakes as "Naga Shot:

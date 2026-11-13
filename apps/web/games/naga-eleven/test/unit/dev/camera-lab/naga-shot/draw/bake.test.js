@@ -4,6 +4,7 @@ import { createPen } from '../../../../../../src/render/duel/pen.js';
 import {
   baked,
   canBake,
+  MOST_KEPT,
   rebaked,
   rgbOf,
   setBakeCanvas,
@@ -38,6 +39,23 @@ describe("the Naga Shot's baked layers", () => {
     expect(paints).toBe(1);
     expect(pixelAt(first, 1, 0)).toEqual([255, 0, 0, 255]);
     expect(pixelAt(first, 0, 0)[3]).toBe(0);
+  });
+
+  it('lets go of the layer least lately used once it keeps too many', () => {
+    const bakeOf = (key) => baked(key, { width: 1, height: 1, paint: () => {} });
+
+    setBakeCanvas(createPixelCanvas);
+
+    const early = bakeOf('early');
+    const forgotten = bakeOf('forgotten');
+
+    for (let i = 0; i < MOST_KEPT; i += 1) {
+      bakeOf('early');
+      bakeOf(`filler-${i}`);
+    }
+
+    expect(bakeOf('early')).toBe(early);
+    expect(bakeOf('forgotten')).not.toBe(forgotten);
   });
 
   it('changes a baked layer pixel by pixel', () => {

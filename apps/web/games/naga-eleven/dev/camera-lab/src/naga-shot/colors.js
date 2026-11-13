@@ -6,8 +6,9 @@ import {
   PENALTY_ART,
   WORD_RAMPS,
 } from '../../../../src/art/duel/palette.js';
+import { WORLD_STADIUM } from '../../../../src/art/venues/world-stadium.js';
 
-// only the game's own colours: hex lives in src/art/ alone, and the lab draws in the Naga's
+// only the game's own colours, as hex lives in src/art/ alone
 export const NAGA_ART = LOOK_ART.naga;
 
 export const SHOT_ART = {
@@ -28,4 +29,5 @@ export const SHOT_ART = {
   post: GOAL_ART.post,
   mesh: GOAL_ART.mesh,
   ball: BALL_ART,
+  stadium: WORLD_STADIUM,
 };

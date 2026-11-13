@@ -45,7 +45,7 @@ function intoNet(ticks) {
 const AWAY = {
   punch: {
     from: CONTACTS.punch,
-    control: { x: 556, y: GROUND - 170 },
+    control: { x: 556, y: GROUND - 140 },
     land: { x: 488, y: FLOOR },
     rest: { x: 430, y: FLOOR },
     flight: 40,

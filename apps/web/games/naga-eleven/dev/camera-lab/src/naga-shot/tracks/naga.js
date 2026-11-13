@@ -1,38 +1,75 @@
+import { jawsOffset } from '../../../../../src/render/duel/looks/naga-head.js';
 import { NAGA_TIMINGS } from '../sequence.js';
-import { KICK_SPOT } from '../world.js';
+import { GROUND, KICK_SPOT } from '../world.js';
 import { ballAt } from './ball.js';
-import { easeIn, easeOut, lerp, phaseOf } from './ease.js';
+import { bezier, easeIn, easeOut, lerp, phaseOf } from './ease.js';
 
-export const MANIFEST = { x: KICK_SPOT.x - 6, y: KICK_SPOT.y - 96, size: 5.5, rise: 44 };
+export const MANIFEST = { x: KICK_SPOT.x - 28, y: GROUND - 91, size: 3.4, rise: 64 };
+
+// the charge's close view on the ball shows only a strip at his height, so the eyes open there,
+// low in the dark behind him
+export const LURK = { x: KICK_SPOT.x - 33, y: GROUND - 47 };
+
+// in shares of the stage: the rise, the colour coming in, the eyes catching fire, whole
+const BEATS = {
+  rise: [0, 0.4],
+  silhouette: [0, 0.14],
+  colour: [0.34, 0.24],
+  eyes: [0.6, 0.08],
+  whole: 0.72,
+  lurk: [0.74, 0.2],
+};
+
+// it swings out past his head, so it comes down on the ball in the open, jaws first
+const POURED = { size: 0.6, swing: { x: 34, y: 10 } };
 
 const HIDDEN = { shown: false };
 
-// the eyes open in the dark behind him late in the charge, before anything else of it shows
+function since(clock, share) {
+  const at = Math.round(share * clock.length);
+
+  return clock.ticks >= at ? clock.ticks - at : -1;
+}
+
+const rest = () => ({ x: MANIFEST.x, y: MANIFEST.y, size: MANIFEST.size, pulse: -1, compress: 0 });
+
 function charge(clock) {
-  const eyes = phaseOf(clock.share, 0.78, 0.22);
+  const eyes = phaseOf(clock.share, ...BEATS.lurk);
 
   if (eyes <= 0) {
     return HIDDEN;
   }
 
-  return { ...rest(), shown: true, silhouette: 0, colour: 0, eyes, eyesOnly: true };
+  const lit = since(clock, BEATS.lurk[0] + BEATS.lurk[1]);
+
+  return { ...rest(), ...LURK, shown: true, silhouette: 0, colour: 0, eyes, lit, eyesOnly: true };
 }
 
-const rest = () => ({ x: MANIFEST.x, y: MANIFEST.y, size: MANIFEST.size, pulse: -1, compress: 0 });
-
 function manifest(clock) {
-  const rise = easeOut(phaseOf(clock.share, 0, 0.35));
-  const whole = 0.72;
+  const rise = easeOut(phaseOf(clock.share, ...BEATS.rise));
 
   return {
     ...rest(),
     shown: true,
     y: MANIFEST.y + Math.round(MANIFEST.rise * (1 - rise)),
-    silhouette: phaseOf(clock.share, 0, 0.12),
-    colour: phaseOf(clock.share, 0.35, 0.25),
-    eyes: phaseOf(clock.share, 0.58, 0.12),
-    pulse: clock.share >= whole ? clock.ticks - Math.round(whole * clock.length) : -1,
+    silhouette: phaseOf(clock.share, ...BEATS.silhouette),
+    colour: phaseOf(clock.share, ...BEATS.colour),
+    eyes: phaseOf(clock.share, ...BEATS.eyes),
+    lit: since(clock, BEATS.eyes[0] + BEATS.eyes[1]),
+    pulse: since(clock, BEATS.whole),
     breath: clock.ticks,
+  };
+}
+
+// its timers run on into the kick, so its flames and glint carry on through the cut
+function carriedOn(clock) {
+  const length = clock.lengths.manifest;
+  const after = (share) => length - Math.round(share * length) + clock.ticks;
+
+  return {
+    pulse: after(BEATS.whole),
+    lit: after(BEATS.eyes[0] + BEATS.eyes[1]),
+    breath: length + clock.ticks,
   };
 }
 
@@ -44,6 +81,14 @@ function impact(clock) {
   }
 
   const ball = ballAt(clock, 'goal');
+  const size = lerp(MANIFEST.size, POURED.size, Math.sqrt(pour));
+  const path = bezier(
+    MANIFEST,
+    { x: ball.x + POURED.swing.x, y: MANIFEST.y + POURED.swing.y },
+    ball,
+    pour,
+  );
+  const jaws = jawsOffset({ size });
 
   return {
     ...rest(),
@@ -52,9 +97,11 @@ function impact(clock) {
     colour: 1,
     eyes: 1,
     compress: pour,
-    x: lerp(MANIFEST.x, ball.x - 10, pour),
-    y: lerp(MANIFEST.y, ball.y, pour),
-    size: lerp(MANIFEST.size, 1.2, pour),
+    x: path.x - jaws.x * pour,
+    y: path.y - jaws.y * pour,
+    size,
+    ball,
+    ...carriedOn(clock),
   };
 }
 

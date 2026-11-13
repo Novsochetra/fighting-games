@@ -12,16 +12,16 @@ export const NAGA_SHOTS = {
   ],
   manifest: [
     { from: 0, on: 'naga', step: 1 },
-    { from: 30, on: 'rise', step: 1, glide: 30 },
+    { from: 6, on: 'rise', step: 1, glide: 34 },
   ],
   impact: [
     { from: 0, on: 'ball', step: 3 },
     { from: 8, on: 'ball', step: 4 },
-    { from: 22, on: 'ahead', step: 2, glide: 16 },
+    { from: 22, on: 'trail', step: 2, glide: 16 },
   ],
   flight: [
-    { from: 0, on: 'ahead', step: 2 },
-    { from: 34, on: 'ahead', step: 1, glide: 22 },
+    { from: 0, on: 'trail', step: 2 },
+    { from: 34, on: 'trail', step: 1, glide: 22 },
   ],
   keeper: [
     { from: 0, on: 'keeper', step: 2 },
@@ -29,11 +29,12 @@ export const NAGA_SHOTS = {
   ],
   collision: [
     { from: 0, on: 'contact', step: 3 },
-    { from: 14, on: 'contact', step: 2, glide: 22 },
+    { from: 14, on: 'rebound', step: 1, glide: 22 },
   ],
   aftermath: [
-    { from: 0, on: 'settle', step: 2 },
-    { from: 34, on: 'rest', step: 0, glide: 56 },
+    { from: 0, on: 'rebound', step: 1 },
+    { from: 36, on: 'hero', step: 1 },
+    { from: 58, on: 'rest', step: 0, glide: 40 },
   ],
 };
 

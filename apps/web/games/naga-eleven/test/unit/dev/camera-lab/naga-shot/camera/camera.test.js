@@ -1,8 +1,16 @@
 import { describe, expect, it } from 'vitest';
 
 import { cameraAt, shakeAt } from '../../../../../../dev/camera-lab/src/naga-shot/camera/camera.js';
+import { NAGA_SHOTS } from '../../../../../../dev/camera-lab/src/naga-shot/camera/shots.js';
 import { NAGA_TIMINGS } from '../../../../../../dev/camera-lab/src/naga-shot/sequence.js';
-import { UNITS, VIEW, WORLD } from '../../../../../../dev/camera-lab/src/naga-shot/world.js';
+import { ballAt } from '../../../../../../dev/camera-lab/src/naga-shot/tracks/ball.js';
+import {
+  ENDINGS,
+  UNITS,
+  VIEW,
+  WORLD,
+} from '../../../../../../dev/camera-lab/src/naga-shot/world.js';
+import { BAR } from '../../../../../../src/render/duel/layout.js';
 import { everyClock, EVERY_CASE } from '../every-clock.js';
 
 const camerasOf = (settings) =>
@@ -56,6 +64,33 @@ describe("the Naga Shot's camera", () => {
     ).toBe(true);
     expect(shakeAt(flying)).toEqual({ x: 0, y: 0 });
   });
+
+  // the film bars are the duel's, three of the lab's pixels to one of theirs
+  const shows = (camera, { x, y }) =>
+    Math.abs(x - camera.x) <= VIEW.width / 2 / camera.unit &&
+    Math.abs(y - camera.y) <= (VIEW.height / 2 - BAR * 3) / camera.unit;
+
+  const watchesTheBall = (clock, ending) => {
+    const cut = NAGA_SHOTS.aftermath.find((shot) => shot.on === 'hero').from;
+    const onTheScorer = ending === 'goal' && clock.stage === 'aftermath' && clock.full >= cut;
+
+    return clock.stage === 'keeper' ? clock.share >= 0.2 : !onTheScorer;
+  };
+
+  it.each(ENDINGS)(
+    "keeps the ball between the film bars from the keeper's look on, on a full camera (%s)",
+    (ending) => {
+      const settings = { camera: 'full', ending };
+      const keeper = everyClock(settings).findIndex((clock) => clock.stage === 'keeper');
+      const clocks = everyClock(settings).slice(keeper);
+
+      for (const clock of clocks.filter((each) => watchesTheBall(each, ending))) {
+        expect(shows(cameraAt(clock, { ...settings, shake: false }), ballAt(clock, ending))).toBe(
+          true,
+        );
+      }
+    },
+  );
 
   it('holds still when the shake is hidden', () => {
     const clock = everyClock({ camera: 'full' }).find((each) => each.stage === 'collision');

@@ -6,7 +6,9 @@ let makeCanvas = null;
 
 const kept = new Map();
 
-const MOST_KEPT = 240;
+// rims, Naga looks and stadium plates all share it; the least lately used goes first, so a look
+// baked early in the build-up is still there when the Naga rises
+export const MOST_KEPT = 320;
 
 export function setBakeCanvas(factory) {
   makeCanvas = factory;
@@ -14,6 +16,17 @@ export function setBakeCanvas(factory) {
 }
 
 export const canBake = () => makeCanvas !== null;
+
+function recall(key) {
+  const canvas = kept.get(key);
+
+  if (canvas) {
+    kept.delete(key);
+    kept.set(key, canvas);
+  }
+
+  return canvas;
+}
 
 function keep(key, canvas) {
   if (kept.size >= MOST_KEPT) {
@@ -30,16 +43,19 @@ export function baked(key, { width, height, paint }) {
     return null;
   }
 
-  if (!kept.has(key)) {
-    const canvas = makeCanvas(Math.max(1, Math.ceil(width)), Math.max(1, Math.ceil(height)));
-    const context = canvas.getContext('2d');
+  const known = recall(key);
 
-    context.imageSmoothingEnabled = false;
-    paint(createPen(context, { unit: 1 }));
-    keep(key, canvas);
+  if (known) {
+    return known;
   }
 
-  return kept.get(key);
+  const canvas = makeCanvas(Math.max(1, Math.ceil(width)), Math.max(1, Math.ceil(height)));
+  const context = canvas.getContext('2d');
+
+  context.imageSmoothingEnabled = false;
+  paint(createPen(context, { unit: 1 }));
+
+  return keep(key, canvas);
 }
 
 export function rebaked(key, source, change) {
@@ -47,17 +63,20 @@ export function rebaked(key, source, change) {
     return null;
   }
 
-  if (!kept.has(key)) {
-    const canvas = makeCanvas(source.width, source.height);
-    const context = canvas.getContext('2d');
-    const image = source.getContext('2d').getImageData(0, 0, source.width, source.height);
+  const known = recall(key);
 
-    changePixels(image, change);
-    context.putImageData(image, 0, 0);
-    keep(key, canvas);
+  if (known) {
+    return known;
   }
 
-  return kept.get(key);
+  const canvas = makeCanvas(source.width, source.height);
+  const context = canvas.getContext('2d');
+  const image = source.getContext('2d').getImageData(0, 0, source.width, source.height);
+
+  changePixels(image, change);
+  context.putImageData(image, 0, 0);
+
+  return keep(key, canvas);
 }
 
 function changePixels(image, change) {
