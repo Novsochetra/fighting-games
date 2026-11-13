@@ -1,6 +1,5 @@
 import { seek } from './player.js';
 
-// the stages along the show, each as wide as it runs; a click goes to its start
 export function renderTimeline(document, player, onPick) {
   const list = document.getElementById('timeline');
   const items = player.stages.map((entry) => {
@@ -17,7 +16,6 @@ export function renderTimeline(document, player, onPick) {
   list.replaceChildren(...items);
 }
 
-// where the show is: its stage and tick, the frame of all of them, the scrubber and the timeline
 export function showPlace(document, player) {
   const scrub = document.getElementById('scrub');
   const { scene, frame, total } = player;
@@ -51,7 +49,6 @@ function stepBy(player, by) {
 
 const isTyping = (target) => ['TEXTAREA', 'INPUT', 'SELECT'].includes(target?.tagName);
 
-// play, pause, a tick at a time, from the start, at a speed, scrubbed, and from the keys
 export function installTransport(document, playerOf) {
   const on = (name, handle) =>
     document.querySelector(`[data-do="${name}"]`).addEventListener('click', handle);

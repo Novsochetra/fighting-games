@@ -1,7 +1,6 @@
 // the most frames a scene may run, should one never end
 const MOST_FRAMES = 5000;
 
-// every stage a scene plays, in order, with the frame it starts on and how long it runs
 export function timelineOf(scene) {
   const stages = [];
   let frame = 0;
@@ -44,7 +43,6 @@ export function seek(player, frame) {
   }
 }
 
-// once a display frame: on by the speed's share of a tick, round to the start at the end
 export function advance(player) {
   if (!player.playing) {
     return;

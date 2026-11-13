@@ -57,7 +57,6 @@ function shotProblem(shot, i, shots) {
     : `shot ${i + 1}: "step" 0 to ${MOST_STEPS}, "glide" over 0`;
 }
 
-// what is wrong with a list of shots, or null
 export function shotsProblem(shots) {
   if (!Array.isArray(shots) || shots.length === 0) {
     return 'a list of shots: [{ "from": 0, "on": "middle", "step": 0 }, ...]';
@@ -66,7 +65,6 @@ export function shotsProblem(shots) {
   return shots.map((shot, i) => shotProblem(shot, i, shots)).find(Boolean) ?? null;
 }
 
-// timings keep the shape and the kind of every value they had
 export function timingsProblem(value, original) {
   if (typeof original === 'number') {
     return Number.isFinite(value) && value >= 0 ? null : 'a number of 0 or more';
@@ -99,7 +97,6 @@ function fillIn(target, value) {
   }
 }
 
-// a list's new value laid into the game's own, or what is wrong with it
 export function applyValue(key, value) {
   const problem = key === 'cinema' ? timingsProblem(value, ORIGINAL.cinema) : shotsProblem(value);
 
@@ -115,7 +112,6 @@ export const resetValue = (key) => fillIn(EDITABLE[key].value, ORIGINAL[key]);
 export const isEdited = (key) =>
   JSON.stringify(EDITABLE[key].value) !== JSON.stringify(ORIGINAL[key]);
 
-// every list changed from the file, as the lab keeps them and hands them on
 export const editsOf = () =>
   Object.fromEntries(
     Object.keys(EDITABLE)
@@ -123,7 +119,6 @@ export const editsOf = () =>
       .map((key) => [key, clone(EDITABLE[key].value)]),
   );
 
-// a list as the editor shows it: a shot a line
 export function textOf(key) {
   const value = EDITABLE[key].value;
 

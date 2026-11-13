@@ -23,7 +23,6 @@ function parsed(text) {
   }
 }
 
-// the shot editor: a list of the game's shots as JSON, played as soon as it reads right
 export function installEditor(document, { onChange }) {
   const select = document.getElementById('list');
   const text = document.getElementById('shots');

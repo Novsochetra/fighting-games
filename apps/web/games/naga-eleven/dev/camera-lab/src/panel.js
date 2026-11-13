@@ -4,7 +4,6 @@ const NONE = '(none)';
 
 const picks = (document) => [...document.querySelectorAll('[data-pick]')];
 
-// every picker offers what the lab can play
 export function fillChoices(document) {
   for (const select of document.querySelectorAll('select[data-pick]')) {
     const options = CHOICES[select.dataset.pick].map((value) =>
@@ -38,7 +37,6 @@ export function writeSettings(document, settings) {
   }
 }
 
-// only the pickers of the scene shown are on view
 export function showFor(document, scene) {
   for (const set of document.querySelectorAll('[data-for]')) {
     set.hidden = !set.dataset.for.split(' ').includes(scene);

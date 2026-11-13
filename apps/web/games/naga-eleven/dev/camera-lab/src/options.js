@@ -9,7 +9,6 @@ const movesWhere = (test) =>
 
 const ofKinds = (kinds) => movesWhere((move) => kinds.includes(move.kind));
 
-// what each of the lab's pickers offers
 export const CHOICES = {
   scene: ['shot', 'clash', 'saveCam'],
   camera: ['full', 'short', 'off'],

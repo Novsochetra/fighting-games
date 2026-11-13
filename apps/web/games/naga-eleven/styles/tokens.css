@@ -295,8 +295,6 @@
 
 :lang(en) {
   --font-ui: var(--font-pixel);
-  /* the camera lab's shot lists (dev/camera-lab/), code that has to read letter for letter */
-  --font-code: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   --font-size-micro: 8px;
   --font-size-note: 16px;
   --font-size-body: 16px;

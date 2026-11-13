@@ -72,7 +72,6 @@ function showScene(match, settings, { onStep = () => {}, decided = false } = {})
   };
 }
 
-// Sochetra lets go of his shot at the keeper; once the duel is drawn it is made to come out as asked
 function shotScene(settings) {
   const match = newMatch(settings);
   const { shooter } = sides(match, settings);
@@ -95,7 +94,6 @@ function shotScene(settings) {
   return showScene(match, settings, { onStep });
 }
 
-// Sochetra on the ball meets Rithy, the duel decided as asked
 function clashScene(settings) {
   const match = newMatch(settings);
   const carrier = Object.assign(forwardOf(match, 0), { star: 'sochetra', x: 840 });
@@ -109,7 +107,6 @@ function clashScene(settings) {
   return showScene(match, settings, { decided: true });
 }
 
-// open play's save cam for the same shot and keeper, with the film's bars and its word
 function saveCamScene(settings) {
   const match = newMatch(settings);
   const cam = createSaveCam(match, saveCamMoment(sides(match, settings), settings), {

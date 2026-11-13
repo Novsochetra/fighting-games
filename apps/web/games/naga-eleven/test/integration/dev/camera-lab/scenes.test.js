@@ -13,7 +13,6 @@ const playerFor = (changes) => {
 
 const stagesOf = (player) => player.stages.map((entry) => entry.stage);
 
-// the scene drawn every few frames from start to end, and anything drawn that was not a number
 function drawnThrough(player) {
   const { context, bad } = strictContext();
 
