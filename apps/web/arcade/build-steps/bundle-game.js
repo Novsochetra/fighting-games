@@ -69,23 +69,53 @@ async function removeEmptyFolders(folder) {
   }
 }
 
+// A game's own page, and the pages it is worked on with in its dev/ folder (Naga Eleven's camera
+// lab), each with its own bundles beside it, so the game's bundles and download stay as they are.
+async function pagesOf(gameRoot) {
+  const tools = await readdir(path.join(gameRoot, 'dev'), { withFileTypes: true }).catch(() => []);
+  const devPages = tools
+    .filter((tool) => tool.isDirectory())
+    .map((tool) => path.join('dev', tool.name, 'index.html'));
+  const found = await Promise.all(
+    devPages.map((page) => readFile(path.join(gameRoot, page)).then(Boolean, () => false)),
+  );
+
+  return ['index.html', ...devPages.filter((_, i) => found[i])];
+}
+
+// A page's scripts are named from its own folder; the build knows them from the game's.
+async function bundlePage({ sourceRoot, gameRoot, page }) {
+  const pagePath = path.join(gameRoot, page);
+  const folder = path.dirname(page);
+  const html = await readFile(pagePath, 'utf8');
+  const scripts = entriesOf(html);
+  const fromGame = (script) => path.posix.join(folder.split(path.sep).join('/'), script);
+
+  if (scripts.length === 0) {
+    return [];
+  }
+
+  const outDir = path.join(gameRoot, folder, GAME_BUILD_FOLDER);
+  const entries = scripts.map(fromGame);
+  const { bundles, bundled } = await buildBundles({ sourceRoot, outDir, entries });
+  const pageBundles = new Map(scripts.map((script) => [script, bundles.get(fromGame(script))]));
+
+  await writeFile(pagePath, pointAtBundles(html, pageBundles));
+
+  return bundled;
+}
+
 // A game's thousand modules came down one request at a time, thirty imports deep, each through the
 // arcade's worker: slow on a phone, and one that failed held the game's start. The build joins
 // the modules each of its page's scripts loads into a few bundles in the game's own folder, points
 // the page at them and leaves the modules out; npm run dev still serves them as they are written.
 export async function bundleGame({ sourceRoot, gameRoot }) {
-  const pagePath = path.join(gameRoot, 'index.html');
-  const page = await readFile(pagePath, 'utf8');
-  const entries = entriesOf(page);
+  const bundled = [];
 
-  if (entries.length === 0) {
-    return;
+  for (const page of await pagesOf(gameRoot)) {
+    bundled.push(...(await bundlePage({ sourceRoot, gameRoot, page })));
   }
 
-  const outDir = path.join(gameRoot, GAME_BUILD_FOLDER);
-  const { bundles, bundled } = await buildBundles({ sourceRoot, outDir, entries });
-
-  await writeFile(pagePath, pointAtBundles(page, bundles));
   await Promise.all(bundled.map((file) => rm(path.join(gameRoot, file), { force: true })));
   await removeEmptyFolders(gameRoot);
 }

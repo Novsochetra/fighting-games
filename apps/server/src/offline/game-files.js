@@ -4,8 +4,15 @@ import path from 'node:path';
 import { isHiddenName } from '../public-files.js';
 
 // What a game is shared by, which it never loads itself: the shots the arcade's card and a link
-// preview show, the trailer the arcade plays (megabytes a saved game has no use for), and its notes.
-const NOT_PLAYED = [/^assets\/screenshots\//, /^assets\/social\//, /^assets\/trailer\//, /\.md$/];
+// preview show, the trailer the arcade plays (megabytes a saved game has no use for), its notes,
+// and the pages it is worked on with (dev/, Naga Eleven's camera lab), which a player never opens.
+const NOT_PLAYED = [
+  /^assets\/screenshots\//,
+  /^assets\/social\//,
+  /^assets\/trailer\//,
+  /\.md$/,
+  /^dev\//,
+];
 
 async function exists(file) {
   return stat(file).then(

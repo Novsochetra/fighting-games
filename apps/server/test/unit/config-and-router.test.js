@@ -7,7 +7,7 @@ import {
   readServerConfig,
 } from '../../src/config.js';
 import { chooseRoute } from '../../src/router.js';
-import { isGameDevPath, isPublishedPath } from '../../src/public-files.js';
+import { isPublishedPath } from '../../src/public-files.js';
 
 describe('readServerConfig', () => {
   it('defaults to port 8765 on the loopback address', () => {
@@ -122,21 +122,5 @@ describe('isPublishedPath', () => {
     ['.DS_Store'],
   ])('leaves out %j', (...parts) => {
     expect(isPublishedPath(webRoot, at(...parts))).toBe(false);
-  });
-});
-
-describe('isGameDevPath', () => {
-  const gamesRoot = path.resolve('/repo/apps/web/games');
-  const at = (...parts) => path.join(gamesRoot, ...parts);
-
-  it("finds a game's dev pages, which the build leaves out", () => {
-    expect(isGameDevPath(gamesRoot, at('demo', 'dev'))).toBe(true);
-    expect(isGameDevPath(gamesRoot, at('demo', 'dev', 'camera-lab', 'index.html'))).toBe(true);
-  });
-
-  it('keeps everything else of a game, a folder named dev deeper in it too', () => {
-    expect(isGameDevPath(gamesRoot, at('demo'))).toBe(false);
-    expect(isGameDevPath(gamesRoot, at('demo', 'index.html'))).toBe(false);
-    expect(isGameDevPath(gamesRoot, at('demo', 'assets', 'dev', 'a.png'))).toBe(false);
   });
 });

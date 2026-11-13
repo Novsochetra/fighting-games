@@ -13,12 +13,3 @@ export function isPublishedPath(webRoot, sourcePath) {
 
   return relative === '' || relative.split(path.sep).every((name) => !isHiddenName(name));
 }
-
-// a game's dev/ folder holds the pages it is worked on with, such as Naga Eleven's camera lab:
-// npm run dev serves them as it serves the rest, and the build leaves them out, so no player ever
-// loads one or downloads it for offline
-export function isGameDevPath(gamesRoot, sourcePath) {
-  const [, folder] = path.relative(gamesRoot, sourcePath).split(path.sep);
-
-  return folder === 'dev';
-}

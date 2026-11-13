@@ -74,8 +74,8 @@ apps/
         assets/           sprites, icons, manifest
         styles/           the game page CSS; tokens.css holds the game's own design tokens
         src/              game modules
-        dev/              pages to work on the game with (Naga Eleven's camera lab): npm run dev
-                          serves them, the build leaves them out (isGameDevPath, public-files.js)
+        dev/              pages to work on the game with (Naga Eleven's camera lab), each bundled
+                          beside itself (bundle-game.js), never in the game's offline download
         test/{unit,integration,regression,support}
     package.json          the arcade's packages from npm (React, React Router, TanStack Query, Vite…)
 .railway/railway.ts       the Railway service's settings (docs/deploy-railway.md)
@@ -1812,7 +1812,7 @@ holds the content: `story/` (four chapters of stages and scenes), `teams/`, `cha
   slow motion that holds the sim's steps, never slows the sim (`src/ui/flow/match-pace.js`), kept
   to a fifth of a match's real time (`cinema/budget.js`); the player's Cinematic camera setting
   says how much (`cinema/mode.js`). The camera lab (`dev/camera-lab/`, at
-  `games/naga-eleven/dev/camera-lab/` under `npm run dev`) plays any special, keeper outcome or one
+  `games/naga-eleven/dev/camera-lab/`, on the live site too) plays any special, keeper outcome or one
   on one frame by frame and tunes its shots live.
 - **Sound** (`src/audio/`): every effect and the pinpeat-coloured music synthesized with Web Audio,
   from the match's events.

@@ -27,6 +27,8 @@ beforeEach(async () => {
     'assets/trailer/trailer.mp4': 'video',
     'assets/sprites/README.md': 'notes',
     'test/unit/main.test.js': 'test',
+    'dev/camera-lab/index.html': 'lab',
+    'dev/camera-lab/build/lab.js': 'lab code',
   });
 });
 
@@ -40,6 +42,15 @@ describe('the files a game is played with', () => {
       'index.html',
       'src/main.js',
     ]);
+  });
+
+  it('leave out the pages the game is worked on with, which a player never opens', async () => {
+    const before = await offlineListOf(gameRoot);
+
+    await writeGame({ 'dev/camera-lab/build/lab.js': 'new lab code' });
+
+    expect(before.files.filter((file) => file.startsWith('dev/'))).toEqual([]);
+    expect((await offlineListOf(gameRoot)).revision).toBe(before.revision);
   });
 
   it('come with a revision that changes with any of them, and only with them', async () => {
