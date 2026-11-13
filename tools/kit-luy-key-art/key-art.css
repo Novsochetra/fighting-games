@@ -1,0 +1,309 @@
+/* The arcade lays its own carousel and title over this, so it paints the stall and none of the
+   game's buttons. */
+:root {
+  --u: min(1vh, 2.2vw);
+  --horizon: 47%;
+  --floor: 73%;
+  --counter: 79%;
+  --color-glow: color-mix(in srgb, var(--color-piece-50000) 70%, var(--color-paper));
+  --color-haze: color-mix(in srgb, var(--color-piece-100) 45%, var(--color-blue));
+  --color-far: color-mix(in srgb, var(--color-blue-dark) 60%, var(--color-blue-deep));
+  --seat: 17;
+}
+
+/* a phone's hero frosts its lower half under the title, so the stools stand higher on the poster */
+@media (orientation: portrait) {
+  :root {
+    --horizon: 37%;
+    --floor: 57%;
+    --counter: 76%;
+    --seat: 14;
+    --skyline: 17;
+  }
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--color-blue-dark);
+}
+
+.defs {
+  position: absolute;
+}
+
+.scene {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.scene > * {
+  position: absolute;
+}
+
+.sky {
+  inset: 0 0 calc(100% - var(--horizon));
+  background: linear-gradient(
+    var(--color-blue-dark) 0%,
+    var(--color-blue-deep) 45%,
+    var(--color-blue) 80%,
+    var(--color-haze) 100%
+  );
+}
+
+.moon {
+  top: calc(var(--horizon) * 0.36);
+  right: 13%;
+  width: calc(var(--u) * 11);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-paper);
+  box-shadow:
+    0 0 0 calc(var(--u) * 2) color-mix(in srgb, var(--color-paper) 12%, transparent),
+    0 0 0 calc(var(--u) * 5) color-mix(in srgb, var(--color-paper) 6%, transparent);
+}
+
+.stars,
+.lights {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.skyline {
+  left: 0;
+  bottom: calc(100% - var(--horizon) + var(--u) * 7);
+  width: 100%;
+  height: calc(var(--u) * var(--skyline, 26));
+}
+
+.street {
+  inset: var(--horizon) 0 0;
+  background:
+    repeating-linear-gradient(
+      var(--color-clear) 0 calc(var(--u) * 5.4),
+      var(--color-guide) calc(var(--u) * 5.4) calc(var(--u) * 5.6)
+    ),
+    linear-gradient(var(--color-blue) 0%, var(--color-blue-deep) 40%, var(--color-blue-dark) 100%);
+}
+
+.stalls {
+  left: 50%;
+  bottom: calc(100% - var(--horizon) - var(--u) * 3);
+  display: flex;
+  gap: calc(var(--u) * 2.4);
+  align-items: flex-end;
+  transform: translateX(-50%);
+}
+
+.stall {
+  position: relative;
+  flex: none;
+  width: calc(var(--u) * var(--wide, 15));
+  height: calc(var(--u) * 11);
+  border: calc(var(--u) * 0.3) solid var(--color-ink);
+  border-top: 0;
+  background:
+    linear-gradient(var(--color-clear) 72%, var(--color-far) 72%),
+    radial-gradient(ellipse at 50% 30%, var(--color-glow), var(--color-piece-100) 90%);
+}
+
+.stall::before {
+  position: absolute;
+  inset: calc(var(--u) * -3) calc(var(--u) * -1.2) auto;
+  height: calc(var(--u) * 3);
+  border: calc(var(--u) * 0.3) solid var(--color-ink);
+  background: repeating-linear-gradient(
+    90deg,
+    var(--stripe, var(--color-red)) 0 calc(var(--u) * 2),
+    var(--color-paper) calc(var(--u) * 2) calc(var(--u) * 4)
+  );
+  content: '';
+}
+
+.stall:nth-child(3n + 2) {
+  --stripe: var(--color-blue);
+}
+
+.stall:nth-child(5n + 4) {
+  --stripe: var(--color-piece-2000);
+}
+
+.stall-goods {
+  position: absolute;
+  inset: auto 6% 28%;
+  height: 62%;
+}
+
+.seats {
+  left: 50%;
+  bottom: calc(100% - var(--floor));
+  display: flex;
+  transform: translateX(-50%);
+}
+
+.seats .stool {
+  flex: none;
+  width: calc(var(--u) * var(--seat));
+  aspect-ratio: 1 / 1.2;
+}
+
+.seats .guest-body {
+  position: absolute;
+  bottom: 31%;
+  left: 50%;
+  width: 78%;
+  height: 66%;
+  transform: translateX(-50%);
+}
+
+.seats .stool:nth-child(odd) .fig-skin {
+  fill: var(--color-skin-deep);
+}
+
+.counter {
+  inset: var(--counter) 0 0;
+  border-top: calc(var(--u) * 0.6) solid var(--color-ink);
+  background:
+    repeating-linear-gradient(
+      90deg,
+      var(--color-clear) 0 calc(var(--u) * 12),
+      var(--color-band) calc(var(--u) * 12) calc(var(--u) * 12.3)
+    ),
+    linear-gradient(
+      var(--color-blue-deep),
+      color-mix(in srgb, var(--color-blue-dark) 70%, var(--color-ink))
+    );
+}
+
+/* the title and its buttons sit over the middle of the counter, so a phone's narrow crop keeps
+   the counter bare */
+@media (orientation: portrait) {
+  .pile,
+  .slip {
+    display: none;
+  }
+}
+
+.pile {
+  position: absolute;
+  transform-origin: 0 100%;
+}
+
+.pile .piece {
+  position: absolute;
+}
+
+.slip {
+  right: 4%;
+  top: calc(var(--u) * -1);
+  position: absolute;
+  padding: calc(var(--u) * 0.8) calc(var(--u) * 2);
+  border: calc(var(--u) * 0.3) solid var(--color-ink);
+  background:
+    repeating-linear-gradient(
+      var(--color-clear) 0 calc(var(--u) * 3.4),
+      var(--color-rule) calc(var(--u) * 3.4) calc(var(--u) * 3.6)
+    ),
+    var(--color-paper);
+  font-family: var(--font-hand);
+  color: var(--color-blue);
+  transform: rotate(-4deg);
+}
+
+.slip p {
+  margin: 0;
+  font-size: calc(var(--u) * 3.4);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.slip-total {
+  color: var(--color-red);
+}
+
+.awning {
+  inset: 0 0 auto;
+  height: calc(var(--u) * 6);
+  border-bottom: calc(var(--u) * 0.4) solid var(--color-ink);
+  background:
+    linear-gradient(var(--color-clear) 55%, var(--color-awning-shade)),
+    repeating-linear-gradient(
+      90deg,
+      var(--color-red) 0 calc(var(--u) * 5),
+      var(--color-paper) calc(var(--u) * 5) calc(var(--u) * 10)
+    );
+}
+
+.awning::after {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  height: calc(var(--u) * 2.5);
+  background:
+    radial-gradient(
+        circle at calc(var(--u) * 2.5) 0,
+        var(--color-red) 0 calc(var(--u) * 2.4),
+        var(--color-clear) calc(var(--u) * 2.5)
+      )
+      0 0 / calc(var(--u) * 10) 100% repeat-x,
+    radial-gradient(
+        circle at calc(var(--u) * 7.5) 0,
+        var(--color-paper) 0 calc(var(--u) * 2.4),
+        var(--color-clear) calc(var(--u) * 2.5)
+      )
+      0 0 / calc(var(--u) * 10) 100% repeat-x;
+  content: '';
+}
+
+.wire {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 1.5;
+}
+
+.bulb {
+  fill: var(--color-glow);
+  stroke: var(--color-ink);
+  stroke-width: 1.2;
+  filter: drop-shadow(0 0 6px var(--color-piece-100));
+}
+
+.star {
+  fill: var(--color-paper);
+}
+
+.far {
+  fill: var(--color-far);
+}
+
+.near {
+  fill: var(--color-blue-dark);
+}
+
+.stall-goods .fruit {
+  stroke: var(--color-ink);
+  stroke-width: 0.6;
+}
+
+.vendor {
+  fill: var(--color-far);
+  stroke: none;
+}
+
+.fruit-a {
+  fill: var(--color-piece-2000);
+}
+
+.fruit-b {
+  fill: var(--color-piece-100);
+}
+
+.fruit-c {
+  fill: var(--color-red);
+}
