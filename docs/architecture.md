@@ -79,6 +79,7 @@ apps/
 .railway/railway.ts       the Railway service's settings (docs/deploy-railway.md)
 tools/eslint-rules/       the project's own lint rules
 tools/claude-hooks/       the Claude Code hook that shows Claude each comment it adds
+tools/kit-luy-key-art/    paints គិតលុយ's banner and poster from the game's own styles and figures
 docs/                     this file, deploy-railway.md and boss-kits.md
 ```
 

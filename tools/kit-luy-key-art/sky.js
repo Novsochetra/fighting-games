@@ -24,20 +24,43 @@ export function seededRandom(seed) {
   };
 }
 
-function paintStars(document, svg, { width, height, horizon }) {
+function moonOf({ width, horizon, unit }) {
+  const radius = unit * 5.5;
+
+  return { cx: width * 0.84, cy: horizon * 0.36 + radius, radius, halo: radius + unit * 5 };
+}
+
+function paintMoon(document, svg, moon) {
+  const rings = [
+    [moon.halo, 'moon-halo'],
+    [moon.radius + (moon.halo - moon.radius) * 0.4, 'moon-halo'],
+    [moon.radius, 'moon'],
+  ];
+
+  for (const [radius, className] of rings) {
+    svg.append(
+      svgShape(document, 'circle', { cx: moon.cx, cy: moon.cy, r: radius, class: className }),
+    );
+  }
+}
+
+function paintStars(document, svg, frame) {
+  const { width, height, horizon } = frame;
+  const moon = moonOf(frame);
   const random = seededRandom(7);
   const count = Math.round((width * height) / 5200);
 
   svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
 
   for (let i = 0; i < count; i++) {
-    const y = random() * horizon * 0.7;
-    const radius = 0.6 + random() * 1.1;
+    const star = { cx: random() * width, cy: random() * horizon * 0.7, r: 0.6 + random() * 1.1 };
 
-    svg.append(
-      svgShape(document, 'circle', { cx: random() * width, cy: y, r: radius, class: 'star' }),
-    );
+    if (Math.hypot(star.cx - moon.cx, star.cy - moon.cy) > moon.halo) {
+      svg.append(svgShape(document, 'circle', { ...star, class: 'star' }));
+    }
   }
+
+  paintMoon(document, svg, moon);
 }
 
 const wat = (cx) =>
@@ -74,7 +97,7 @@ function farRoofs(width, random) {
 
 function paintSkyline(document, svg, width) {
   const random = seededRandom(11);
-  const spots = width < 80 ? [0.06, 0.94] : [0.08, 0.17, 0.62, 0.86, 0.94];
+  const spots = width < 80 ? [0.06, 0.55] : [0.08, 0.17, 0.62, 0.72, 0.95];
   const palms = spots.map((at, i) => sugarPalm(width * at, 6 + (i % 3) * 3));
 
   svg.setAttribute('viewBox', `0 0 ${width} ${SKYLINE_HEIGHT}`);
@@ -88,7 +111,13 @@ function paintSkyline(document, svg, width) {
 
 export function paintSky(document, frame) {
   const skyline = document.getElementById('skyline');
+  const box = skyline.getBoundingClientRect();
 
   paintStars(document, document.getElementById('stars'), frame);
-  paintSkyline(document, skyline, (skyline.clientWidth / skyline.clientHeight) * SKYLINE_HEIGHT);
+
+  if (box.height <= 0) {
+    throw new Error('the skyline has no height');
+  }
+
+  paintSkyline(document, skyline, (box.width / box.height) * SKYLINE_HEIGHT);
 }

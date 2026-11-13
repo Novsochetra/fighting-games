@@ -40,7 +40,7 @@ apps/web/            everything the browser loads, in three folders side by side
                      the screens share)
   games/             the games, each its own app with its own tokens
   packages/          code more than one game uses (input, touch-pad, screen)
-tools/               the project's own ESLint rules and Claude Code hook
+tools/               the project's own ESLint rules, Claude Code hook and art tools
 docs/                architecture notes
 ```
 

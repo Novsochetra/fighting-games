@@ -1,24 +1,38 @@
 /* The arcade lays its own carousel and title over this, so it paints the stall and none of the
    game's buttons. */
 :root {
-  --u: min(1vh, 2.2vw);
-  --horizon: 47%;
+  --horizon: 58%;
   --floor: 73%;
-  --counter: 79%;
+  --counter: 80%;
+  --stall-wide: 15;
+  --stall-gap: 2.4;
+  --skyline-lift: 7;
   --color-glow: color-mix(in srgb, var(--color-piece-50000) 70%, var(--color-paper));
   --color-haze: color-mix(in srgb, var(--color-piece-100) 45%, var(--color-blue));
-  --color-far: color-mix(in srgb, var(--color-blue-dark) 60%, var(--color-blue-deep));
+  --color-far: color-mix(in srgb, var(--color-blue-dark) 75%, var(--color-ink));
+  --color-night: color-mix(in srgb, var(--color-blue-dark) 70%, var(--color-ink));
+  --color-awning-dusk: color-mix(in srgb, var(--color-blue-dark) 55%, transparent);
+  --color-awning-dusk-low: color-mix(in srgb, var(--color-blue-dark) 30%, transparent);
+  --color-moon-halo: color-mix(in srgb, var(--color-paper) 8%, transparent);
+  --color-spill: color-mix(in srgb, var(--color-glow) 30%, transparent);
   --seat: 17;
 }
 
-/* a phone's hero frosts its lower half under the title, so the stools stand higher on the poster */
+/* On a phone the selected card covers the poster from about 26% to 49% and the frost starts under
+   it, so the skyline stands above the card, the customers just below it, and no stall peeks out
+   beside it. */
 @media (orientation: portrait) {
   :root {
-    --horizon: 37%;
-    --floor: 57%;
-    --counter: 76%;
-    --seat: 14;
+    --horizon: 27%;
+    --floor: 62%;
+    --counter: 78%;
+    --seat: 11;
     --skyline: 17;
+    --skyline-lift: 0;
+  }
+
+  .scene .stalls {
+    display: none;
   }
 }
 
@@ -48,23 +62,11 @@ body {
 .sky {
   inset: 0 0 calc(100% - var(--horizon));
   background: linear-gradient(
-    var(--color-blue-dark) 0%,
-    var(--color-blue-deep) 45%,
-    var(--color-blue) 80%,
+    var(--color-night) 0%,
+    var(--color-blue-dark) 40%,
+    var(--color-blue-deep) 80%,
     var(--color-haze) 100%
   );
-}
-
-.moon {
-  top: calc(var(--horizon) * 0.36);
-  right: 13%;
-  width: calc(var(--u) * 11);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--color-paper);
-  box-shadow:
-    0 0 0 calc(var(--u) * 2) color-mix(in srgb, var(--color-paper) 12%, transparent),
-    0 0 0 calc(var(--u) * 5) color-mix(in srgb, var(--color-paper) 6%, transparent);
 }
 
 .stars,
@@ -76,7 +78,7 @@ body {
 
 .skyline {
   left: 0;
-  bottom: calc(100% - var(--horizon) + var(--u) * 7);
+  bottom: calc(100% - var(--horizon) + var(--u) * var(--skyline-lift));
   width: 100%;
   height: calc(var(--u) * var(--skyline, 26));
 }
@@ -84,18 +86,15 @@ body {
 .street {
   inset: var(--horizon) 0 0;
   background:
-    repeating-linear-gradient(
-      var(--color-clear) 0 calc(var(--u) * 5.4),
-      var(--color-guide) calc(var(--u) * 5.4) calc(var(--u) * 5.6)
-    ),
-    linear-gradient(var(--color-blue) 0%, var(--color-blue-deep) 40%, var(--color-blue-dark) 100%);
+    radial-gradient(ellipse 70% 25% at 50% 0, var(--color-spill), var(--color-clear)),
+    linear-gradient(var(--color-blue-deep) 0%, var(--color-blue-dark) 50%, var(--color-night) 100%);
 }
 
 .stalls {
   left: 50%;
   bottom: calc(100% - var(--horizon) - var(--u) * 3);
   display: flex;
-  gap: calc(var(--u) * 2.4);
+  gap: calc(var(--u) * var(--stall-gap));
   align-items: flex-end;
   transform: translateX(-50%);
 }
@@ -103,13 +102,14 @@ body {
 .stall {
   position: relative;
   flex: none;
-  width: calc(var(--u) * var(--wide, 15));
-  height: calc(var(--u) * 11);
+  width: calc(var(--u) * var(--wide, var(--stall-wide)));
+  height: calc(var(--u) * var(--tall, 11));
   border: calc(var(--u) * 0.3) solid var(--color-ink);
   border-top: 0;
   background:
     linear-gradient(var(--color-clear) 72%, var(--color-far) 72%),
     radial-gradient(ellipse at 50% 30%, var(--color-glow), var(--color-piece-100) 90%);
+  box-shadow: 0 calc(var(--u) * 2) calc(var(--u) * 6) var(--color-spill);
 }
 
 .stall::before {
@@ -152,112 +152,55 @@ body {
   aspect-ratio: 1 / 1.2;
 }
 
-.seats .guest-body {
-  position: absolute;
-  bottom: 31%;
-  left: 50%;
-  width: 78%;
-  height: 66%;
-  transform: translateX(-50%);
-}
-
 .seats .stool:nth-child(odd) .fig-skin {
   fill: var(--color-skin-deep);
 }
 
 .counter {
   inset: var(--counter) 0 0;
-  border-top: calc(var(--u) * 0.6) solid var(--color-ink);
-  background:
-    repeating-linear-gradient(
-      90deg,
-      var(--color-clear) 0 calc(var(--u) * 12),
-      var(--color-band) calc(var(--u) * 12) calc(var(--u) * 12.3)
-    ),
-    linear-gradient(
-      var(--color-blue-deep),
-      color-mix(in srgb, var(--color-blue-dark) 70%, var(--color-ink))
-    );
-}
-
-/* the title and its buttons sit over the middle of the counter, so a phone's narrow crop keeps
-   the counter bare */
-@media (orientation: portrait) {
-  .pile,
-  .slip {
-    display: none;
-  }
-}
-
-.pile {
-  position: absolute;
-  transform-origin: 0 100%;
-}
-
-.pile .piece {
-  position: absolute;
-}
-
-.slip {
-  right: 4%;
-  top: calc(var(--u) * -1);
-  position: absolute;
-  padding: calc(var(--u) * 0.8) calc(var(--u) * 2);
-  border: calc(var(--u) * 0.3) solid var(--color-ink);
-  background:
-    repeating-linear-gradient(
-      var(--color-clear) 0 calc(var(--u) * 3.4),
-      var(--color-rule) calc(var(--u) * 3.4) calc(var(--u) * 3.6)
-    ),
-    var(--color-paper);
-  font-family: var(--font-hand);
-  color: var(--color-blue);
-  transform: rotate(-4deg);
-}
-
-.slip p {
-  margin: 0;
-  font-size: calc(var(--u) * 3.4);
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-.slip-total {
-  color: var(--color-red);
+  background: linear-gradient(var(--color-clear), var(--color-night) calc(var(--u) * 6));
 }
 
 .awning {
   inset: 0 0 auto;
-  height: calc(var(--u) * 6);
-  border-bottom: calc(var(--u) * 0.4) solid var(--color-ink);
+  height: calc(var(--u) * 4);
+  border-bottom: calc(var(--u) * 0.3) solid var(--color-ink);
   background:
-    linear-gradient(var(--color-clear) 55%, var(--color-awning-shade)),
+    linear-gradient(var(--color-awning-dusk), var(--color-awning-dusk-low)),
     repeating-linear-gradient(
       90deg,
-      var(--color-red) 0 calc(var(--u) * 5),
-      var(--color-paper) calc(var(--u) * 5) calc(var(--u) * 10)
+      var(--color-red) 0 calc(var(--u) * 3.5),
+      var(--color-paper) calc(var(--u) * 3.5) calc(var(--u) * 7)
     );
 }
 
+/* the bar's logo and buttons sit on the awning, so it hangs in the night's shade, scallops too */
 .awning::after {
   position: absolute;
   top: 100%;
   right: 0;
   left: 0;
-  height: calc(var(--u) * 2.5);
+  height: calc(var(--u) * 1.8);
   background:
+    linear-gradient(var(--color-awning-dusk-low), var(--color-awning-dusk-low)),
     radial-gradient(
-        circle at calc(var(--u) * 2.5) 0,
-        var(--color-red) 0 calc(var(--u) * 2.4),
-        var(--color-clear) calc(var(--u) * 2.5)
+        circle at calc(var(--u) * 1.75) 0,
+        var(--color-red) 0 calc(var(--u) * 1.7),
+        var(--color-clear) calc(var(--u) * 1.8)
       )
-      0 0 / calc(var(--u) * 10) 100% repeat-x,
+      0 0 / calc(var(--u) * 7) 100% repeat-x,
     radial-gradient(
-        circle at calc(var(--u) * 7.5) 0,
-        var(--color-paper) 0 calc(var(--u) * 2.4),
-        var(--color-clear) calc(var(--u) * 2.5)
+        circle at calc(var(--u) * 5.25) 0,
+        var(--color-paper) 0 calc(var(--u) * 1.7),
+        var(--color-clear) calc(var(--u) * 1.8)
       )
-      0 0 / calc(var(--u) * 10) 100% repeat-x;
+      0 0 / calc(var(--u) * 7) 100% repeat-x;
+  mask: radial-gradient(
+      circle at calc(var(--u) * 1.75) 0,
+      var(--color-ink) 0 calc(var(--u) * 1.8),
+      var(--color-clear) calc(var(--u) * 1.8)
+    )
+    0 0 / calc(var(--u) * 3.5) 100% repeat-x;
   content: '';
 }
 
@@ -269,13 +212,16 @@ body {
 
 .bulb {
   fill: var(--color-glow);
-  stroke: var(--color-ink);
-  stroke-width: 1.2;
-  filter: drop-shadow(0 0 6px var(--color-piece-100));
+  filter: drop-shadow(0 0 calc(var(--u) * 1.5) var(--color-glow));
 }
 
-.star {
+.star,
+.moon {
   fill: var(--color-paper);
+}
+
+.moon-halo {
+  fill: var(--color-moon-halo);
 }
 
 .far {
