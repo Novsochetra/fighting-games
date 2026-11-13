@@ -1,4 +1,4 @@
-import { readJson, writeJson } from '../platform/storage.js';
+import { readJson, writeJson } from '../../../../packages/host/src/json-storage.js';
 import { OFFLINE_MESSAGE, BoardRefusal } from './board-api.js';
 import { cleanName, nameProblem, readStoredName } from './player-name.js';
 import { readBoard } from './read-board.js';

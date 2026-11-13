@@ -4,6 +4,7 @@ import { HeartIcon } from '@/components/icons';
 import { EVENTS } from '@/services/analytics/analytics-events.js';
 import { PrivacyChoices } from '@/screens/home/banners/Banners';
 import { ChevronIcon } from '@/screens/home/home-icons';
+import { WallpapersCallout } from './WallpapersCallout';
 
 function SupportCallout() {
   const { analytics } = useArcade();
@@ -86,6 +87,7 @@ function MadeBy() {
 export function LibraryFooter() {
   return (
     <>
+      <WallpapersCallout />
       <SupportCallout />
       <Hints />
       <MadeBy />

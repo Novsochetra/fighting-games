@@ -1,0 +1,15 @@
+{
+  "id": "kit-luy",
+  "title": "គិតលុយ",
+  "tagline": "Count out the riel",
+  "description": "Kit Luy: keep the money at a Cambodian market stall. Work out each customer's bill in riel (a total, the change from their money, so many at a price, a bill shared) and count it out piece by piece before every stool is taken. In Khmer and English.",
+  "genre": "Brain game",
+  "players": "1 player",
+  "year": 2026,
+  "controls": ["Touch", "Keyboard", "Mouse"],
+  "pixelArt": false,
+  "cover": "assets/icons/icon-512.png",
+  "banner": "assets/screenshots/banner.jpg",
+  "poster": "assets/screenshots/poster.jpg",
+  "screenshot": "assets/screenshots/counting-change.jpg"
+}

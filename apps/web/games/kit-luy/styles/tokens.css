@@ -1,0 +1,136 @@
+/* Two inks on paper, as a bill pad and a painted shop sign are printed: blue and red. The money
+   pieces are the only other colours on the screen, one hue a value. */
+:root {
+  --color-blue: #1f4fa0;
+  --color-blue-deep: #173b7a;
+  --color-blue-dark: #0f2a58;
+  --color-paper: #f3eddf;
+  --color-paper-shade: #e2d9c4;
+  --color-red: #c9382c;
+  --color-red-deep: #8f241b;
+  --color-ink: #2f2b33;
+  --color-pencil: #77727a;
+  --color-skin: #c4906a;
+  --color-skin-deep: #9c6a4a;
+  --color-clear: transparent;
+
+  --color-piece-100: #e39a6b;
+  --color-piece-500: #d4747a;
+  --color-piece-1000: #7f8fc0;
+  --color-piece-2000: #8fa35a;
+  --color-piece-5000: #b48cb8;
+  --color-piece-10000: #86bdc0;
+  --color-piece-20000: #a8686c;
+  --color-piece-50000: #c4a46c;
+
+  --color-guide: color-mix(in srgb, var(--color-paper) 20%, transparent);
+  --color-rule: color-mix(in srgb, var(--color-blue) 26%, transparent);
+  --color-check: color-mix(in srgb, var(--color-blue) 46%, transparent);
+  --color-copy: color-mix(in srgb, var(--color-red) 30%, var(--color-blue));
+  --color-fold: color-mix(in srgb, var(--color-paper) 46%, transparent);
+  --color-band: color-mix(in srgb, var(--color-ink) 26%, transparent);
+  --color-slot: color-mix(in srgb, var(--color-ink) 9%, transparent);
+  --color-slot-line: color-mix(in srgb, var(--color-ink) 34%, transparent);
+  --color-seat-ink: color-mix(in srgb, var(--color-ink) 42%, transparent);
+  --color-seat-paper: color-mix(in srgb, var(--color-paper) 38%, transparent);
+  --color-slat: color-mix(in srgb, var(--color-blue-dark) 55%, var(--color-blue-deep));
+  --color-stamp: color-mix(in srgb, var(--color-red) 88%, transparent);
+  --color-awning-shade: color-mix(in srgb, var(--color-ink) 22%, transparent);
+  --color-ghost: color-mix(in srgb, var(--color-ink) 18%, transparent);
+  --color-ray: color-mix(in srgb, var(--color-paper) 70%, transparent);
+  --color-ray-gap: color-mix(in srgb, var(--color-paper) 0%, transparent);
+  --color-fuse: color-mix(in srgb, var(--color-blue) 22%, transparent);
+
+  --font-sign: 'Moul', 'Kantumruy Pro', 'Khmer Sangam MN', serif;
+  --font-text: 'Kantumruy Pro', 'Noto Sans Khmer', 'Khmer Sangam MN', system-ui, sans-serif;
+  --font-hand: 'Fasthand', 'Kantumruy Pro', cursive;
+  --font-size-xs: clamp(11px, 3vmin, 13px);
+  --font-size-sm: clamp(13px, 3.5vmin, 15px);
+  --font-size-md: clamp(15px, 4.2vmin, 18px);
+  --font-size-lg: clamp(19px, 5.4vmin, 24px);
+  --font-size-xl: clamp(24px, 7vmin, 32px);
+  --font-size-name: clamp(40px, 13.5vmin, 62px);
+  --font-size-praise: clamp(30px, 9.5vmin, 50px);
+  --font-size-key: clamp(22px, 6.4vmin, 30px);
+  --font-size-sum: min(10.4vw, 44px);
+  --font-size-sum-long: min(8.2vw, 36px);
+  --font-size-total: min(8vw, 30px);
+  --font-size-piece: 21px;
+  --font-size-piece-rest: 12px;
+  --font-size-piece-small: 17px;
+  --font-size-piece-small-rest: 10px;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+  --leading-sign: 1.75;
+  --leading-digits: 1.2;
+  --leading-hand: 1.3;
+  --leading-text: 1.65;
+  --leading-piece: 30px;
+  --leading-piece-small: 24px;
+  --tracking-serial: 0.08em;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --edge: 2px;
+
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-seat: 9px;
+  --radius-fold: 3px 9px 3px 3px;
+  --radius-round: 50%;
+
+  --shadow-copy: 4px 5px 0 var(--color-copy);
+  --shadow-press: 0 4px 0 var(--color-ink);
+  --shadow-plate: 0 3px 0 var(--color-blue-dark);
+  --shadow-paper: 0 4px 0 var(--color-blue-dark);
+  --shadow-ring: 0 0 0 3px var(--color-paper);
+  --shadow-lift: 0 6px 0 var(--color-band);
+  --shadow-key: 0 4px 0 var(--color-ink);
+  --text-shadow-praise:
+    3px 0 0 var(--color-paper), -3px 0 0 var(--color-paper), 0 3px 0 var(--color-paper),
+    0 -3px 0 var(--color-paper), 4px 6px 0 var(--color-ink);
+  --text-shadow-block: 2px 2px 0 var(--color-red), 3px 3px 0 var(--color-red);
+
+  --duration-instant: 70ms;
+  --duration-fast: 140ms;
+  --duration-medium: 260ms;
+  --duration-shutter: 420ms;
+  --duration-slow: 600ms;
+  --duration-step: 240ms;
+  --duration-write: 320ms;
+  --duration-tear: 520ms;
+  --duration-warn: 900ms;
+  --duration-pulse: 1.6s;
+  --duration-praise: 1100ms;
+  --duration-chip: 760ms;
+  --duration-rays: 2.4s;
+  --duration-restless: 220ms;
+  --duration-storm: 720ms;
+  --duration-paint: 900ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-thump: cubic-bezier(0.2, 1.6, 0.4, 1);
+  --ease-shutter: cubic-bezier(0.5, 0, 0.3, 1);
+}
+
+/* a very short phone held upright: the bill's figures come down a size */
+@media (orientation: portrait) and (max-height: 600px) {
+  :root {
+    --font-size-sum: min(9vw, 34px);
+    --font-size-sum-long: min(7.4vw, 28px);
+    --font-size-total: min(7vw, 24px);
+  }
+}
+
+/* held sideways the bill is half the screen wide, so its sum is set against that half */
+@media (orientation: landscape) and (max-height: 560px),
+  (min-width: 900px) and (min-aspect-ratio: 5/4) {
+  :root {
+    --font-size-sum: min(5.2vw, 40px);
+    --font-size-sum-long: min(4.2vw, 32px);
+    --font-size-total: min(4vw, 26px);
+    --font-size-name: clamp(28px, 11vmin, 44px);
+  }
+}

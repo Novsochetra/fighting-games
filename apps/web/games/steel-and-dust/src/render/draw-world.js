@@ -1,7 +1,9 @@
 import { HERO_THEMES } from '../art/hero-themes.js';
 import { VIEW_HEIGHT, VIEW_WIDTH } from '../config.js';
 import { heroById } from '../data/heroes.js';
+import { propsShown } from '../data/missions/props-layout.js';
 import { dimForBossUltimate, isBossUltimate } from './fighters/boss-ultimate.js';
+import { drawInDoorway, drawWallOverHero } from './fighters/doorway.js';
 import { drawFighter } from './fighters/draw-fighter.js';
 import { heroSheetFor } from './fighters/hero-sheets.js';
 import { drawSinking } from './fighters/sinking.js';
@@ -63,16 +65,18 @@ function drawOne(painter, { game, view, fighter, sheet, cameraX }) {
   if (isBossUltimate(fighter)) {
     dimForBossUltimate(painter, fighter, cameraX);
   }
-  drawSinking(painter, fighter, () =>
-    drawFighter(painter, {
-      fighter,
-      sheet,
-      enemySheets: view.enemySheets,
-      tickCount: game.tickCount,
-      floor: floorBelow(game.terrain, fighter.x, fighter.y),
-    }),
-  );
-  drawTrail(painter, { fighter, sheet });
+  drawInDoorway(painter, { game, fighter }, () => {
+    drawSinking(painter, fighter, () =>
+      drawFighter(painter, {
+        fighter,
+        sheet,
+        enemySheets: view.enemySheets,
+        tickCount: game.tickCount,
+        floor: floorBelow(game.terrain, fighter.x, fighter.y),
+      }),
+    );
+    drawTrail(painter, { fighter, sheet });
+  });
 }
 
 // loot lies on the road over the fallen but under everyone still standing
@@ -104,6 +108,7 @@ function drawFighters(painter, { game, view, cameraX }) {
   if (!lootDrawn) {
     drawLootOnRoad(painter, { game, view, cameraX });
   }
+  drawWallOverHero(painter, { game, sheets: view.propSheets });
 }
 
 // a drop spot's shadow falls on whatever is under the open sky in each column: a deck, or the turf
@@ -134,7 +139,8 @@ export function drawWorld(painter, { game, view, cameraX }) {
     sheets: view.fxSheets,
   });
   drawGround(painter, { cameraX, colors, tick, terrain, backdrop });
-  drawProps(painter, { cameraX, props: mission.props, sheets: view.propSheets });
+  const props = propsShown(mission, game.wallSmashed);
+  drawProps(painter, { cameraX, props, sheets: view.propSheets });
   drawTrees(painter, view.fxSheets, { trees: game.trees, cameraX });
   drawNestTrees(painter, view.fxSheets, { nests: game.nests, backdrop, cameraX });
   drawPlatforms(painter, { cameraX, terrain: game.terrain, sheets: view.platformSheets });

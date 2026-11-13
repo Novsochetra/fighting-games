@@ -1,0 +1,57 @@
+/* The stall's striped awning along the top of the screen, its edge cut in scallops. */
+.awning {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  height: calc(14px + env(safe-area-inset-top, 0px));
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-red) 0 28px,
+    var(--color-paper) 28px 56px
+  );
+  pointer-events: none;
+}
+
+.awning::after {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  height: 10px;
+  background:
+    radial-gradient(circle at 14px 0, var(--color-red) 0 13px, var(--color-clear) 13.5px) 0 0 / 56px
+      10px repeat-x,
+    radial-gradient(circle at 42px 0, var(--color-paper) 0 13px, var(--color-clear) 13.5px) 0 0 /
+      56px 10px repeat-x;
+  content: '';
+}
+
+.awning::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(var(--color-clear) 55%, var(--color-awning-shade));
+  content: '';
+}
+
+/* the painter's brush crossing the sign once, as the stall opens */
+#app[data-view='title'] .sign-title {
+  animation: paint var(--duration-paint) var(--ease-out) both;
+}
+
+@keyframes paint {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #app[data-view='title'] .sign-title {
+    animation: none;
+  }
+}

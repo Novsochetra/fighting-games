@@ -1,0 +1,145 @@
+import { clothTotal } from '../sim/pieces.js';
+import { TUNING } from '../data/tuning.js';
+import { replay } from '../ui/dom.js';
+import { praisePayment, SPEED_HANDLERS } from './present-speed.js';
+
+// The stamp is seen landing, then the bill is torn off and carries it away: the next customer is
+// already the one being served, so their bill must not wait long behind the last one's.
+const STAMP_READ_MS = 180;
+
+// the full row is seen a moment before the shutter comes down on it
+export const CLOSING_BEAT_MS = 900;
+
+function showCount(stage) {
+  const { run } = stage.game;
+
+  if (run.mode === 'money') {
+    stage.slip.count(run.showTotal ? clothTotal(run.cloth) : null);
+  }
+}
+
+function showCloth(stage) {
+  const { cloth } = stage.game.run;
+
+  stage.cloth.show(cloth);
+  stage.at.cloth.classList.toggle('has-pieces', Object.keys(cloth).length > 0);
+  showCount(stage);
+}
+
+// A count given while the next bill still waits behind the stamp is judged against that bill, so
+// it is put in front at once, and the refusal or stamp lands on it.
+function turnPageNow(stage, number) {
+  const next = stage.nextSlip;
+
+  if (next) {
+    stage.nextSlip = null;
+    stage.slip.turnPage(next.customer, number);
+  }
+}
+
+function opened(stage) {
+  const { run, records } = stage.game;
+
+  stage.praise.clear();
+  stage.banked = 0;
+  stage.nextSlip = null;
+  stage.lastDealt = [];
+  stage.at.app.dataset.input = run.mode;
+  stage.stools.clear();
+  stage.sign.reset();
+  stage.sign.showBest(records[run.mode].best);
+  stage.sign.showTrust(0, TUNING.trust);
+  stage.sign.showStreak(0);
+  stage.till.show(run.pieces);
+  stage.keypad.show('');
+  showCloth(stage);
+}
+
+function ask(stage, { customer }) {
+  const wait = stage.slip.isPaid() ? STAMP_READ_MS : 0;
+
+  stage.nextSlip = { customer, at: stage.now + wait };
+}
+
+function dealt(stage, { value }) {
+  showCloth(stage);
+  stage.till.pull(value);
+  stage.cloth.land(value, stage.till.bundle(value));
+  stage.audio.play('deal', { value });
+  stage.buzz('deal');
+}
+
+function paid(stage, event) {
+  const amount = event.pieces.reduce((sum, value) => sum + value, 0);
+
+  turnPageNow(stage, event.served);
+
+  stage.cloth.handOver(stage.at.blank);
+  stage.slip.stamp({ ...event, amount });
+  praisePayment(stage, event);
+  stage.audio.play('stamp');
+  stage.audio.play(event.extra > 0 ? 'extra' : 'paid', { pieces: event.pieces });
+  stage.buzz('paid');
+}
+
+function wrong(stage, event) {
+  turnPageNow(stage, stage.game.run.served + 1);
+  stage.slip.refuse(event);
+  stage.sign.showStreak(0);
+  stage.cloth.hop();
+  stage.audio.play('wrong');
+  stage.buzz('wrong');
+  replay(stage.at.counter, 'is-knocked');
+}
+
+function newStage(stage, { added }) {
+  stage.till.show(stage.game.run.pieces);
+  stage.till.snapIn(added);
+  stage.audio.play('stage');
+}
+
+function finished(stage, { summary }) {
+  stage.closedAt = stage.now;
+  stage.results.show(summary, stage.now + CLOSING_BEAT_MS);
+  stage.save();
+  stage.audio.play('closed');
+  stage.buzz('closed');
+
+  if (summary.isNewBest) {
+    stage.audio.play('best');
+  }
+}
+
+const HANDLERS = {
+  ...SPEED_HANDLERS,
+  opened,
+  ask,
+  deal: dealt,
+  paid,
+  wrong,
+  finished,
+  stage: newStage,
+
+  take(stage, { value }) {
+    showCloth(stage);
+    stage.audio.play('take', { value });
+  },
+
+  clear(stage) {
+    showCloth(stage);
+    stage.audio.play('clear');
+  },
+
+  arrive: (stage, { customer }) => stage.audio.play('arrive', { kind: customer.kind }),
+
+  left(stage, { customer }) {
+    stage.stools.nextDoor(customer);
+    stage.audio.play('left');
+  },
+};
+
+export function present(stage, events) {
+  for (const event of events) {
+    HANDLERS[event.type]?.(stage, event);
+  }
+}

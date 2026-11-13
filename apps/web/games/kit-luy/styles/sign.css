@@ -1,0 +1,194 @@
+/* A hand-painted metal sign: white round letters on blue, the painter's ruled guide lines left
+   showing. On the title it carries the stall's name; in a run, the day's takings. */
+.sign {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-2);
+  align-items: center;
+  min-height: 46px;
+  background: repeating-linear-gradient(
+    0deg,
+    var(--color-clear) 0 22px,
+    var(--color-guide) 22px 23px
+  );
+}
+
+.sign-name {
+  display: none;
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.sign-title {
+  font-family: var(--font-sign);
+  font-size: var(--font-size-name);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-sign);
+  text-shadow: var(--text-shadow-block);
+  white-space: nowrap;
+  transform: rotate(-1deg);
+}
+
+.sign-best {
+  min-height: 1.65em;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-text);
+}
+
+.takings {
+  display: inline-block;
+  transform-origin: 0 60%;
+  font-family: var(--font-sign);
+  font-size: var(--font-size-xl);
+  line-height: var(--leading-sign);
+  white-space: nowrap;
+}
+
+.takings.is-bumped {
+  animation: bump var(--duration-medium) var(--ease-thump);
+}
+
+@keyframes bump {
+  0% {
+    transform: scale(1.18) rotate(-2deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+.plates {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+}
+
+/* a small painted plate, screwed on beside the sign */
+.plate {
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  border: var(--edge) solid var(--color-paper);
+  border-radius: var(--radius-sm);
+  background: var(--color-blue-deep);
+  box-shadow: var(--shadow-plate);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-text);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.plate:active {
+  box-shadow: none;
+  transform: translateY(3px);
+}
+
+.plate:focus-visible,
+.give:focus-visible,
+.bundle:focus-visible,
+.pile:focus-visible,
+.mbtn:focus-visible,
+.row:focus-visible {
+  outline: 3px solid var(--color-paper);
+  outline-offset: 2px;
+}
+
+.plate-icon {
+  display: none;
+  width: 20px;
+  height: 20px;
+  fill: var(--color-blue-deep);
+  stroke: var(--color-paper);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.plate-glyph {
+  place-items: center;
+  font-family: var(--font-sign);
+  font-size: var(--font-size-md);
+  line-height: var(--leading-digits);
+}
+
+.plate-pause {
+  min-width: 44px;
+  font-family: var(--font-sign);
+  line-height: var(--leading-digits);
+}
+
+.plate-ink {
+  border-color: var(--color-blue);
+  background: var(--color-paper);
+  box-shadow: none;
+  color: var(--color-blue);
+}
+
+/* the title: the name across the sign, the plates under it; a run: the takings and Pause */
+#app[data-view='title'] .sign {
+  grid-template-columns: 1fr;
+}
+
+#app[data-view='title'] .sign-name {
+  display: block;
+}
+
+#app[data-view='title'] .takings,
+#app[data-view='title'] .plate-pause,
+#app:not([data-view='title']) .plates .plate:not(.plate-pause) {
+  display: none;
+}
+
+@media (orientation: landscape) and (max-height: 560px),
+  (min-width: 900px) and (min-aspect-ratio: 5/4) {
+  .sign-best {
+    min-height: 0;
+  }
+}
+
+/* Wherever the big painted name would leave the till below the screen, the title packs the name
+   and its plates into one row, the plates shown as their icons and named by their labels. */
+@media (orientation: portrait) and (max-height: 820px),
+  (orientation: landscape) and (max-height: 560px) {
+  #app[data-view='title'] .sign {
+    grid-template-columns: 1fr auto;
+  }
+
+  #app[data-view='title'] .sign-name {
+    grid-column: 1;
+    text-align: left;
+  }
+
+  #app[data-view='title'] .sign-title {
+    font-size: var(--font-size-xl);
+    transform: none;
+  }
+
+  #app[data-view='title'] .sign-best {
+    min-height: 0;
+    font-size: var(--font-size-xs);
+  }
+
+  .plate-word {
+    display: none;
+  }
+
+  .plate-icon {
+    display: grid;
+  }
+
+  .plates .plate {
+    min-width: 40px;
+    padding: 0 var(--space-2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .takings.is-bumped {
+    animation: none;
+  }
+}

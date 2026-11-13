@@ -7,6 +7,7 @@ export const EMBER_WOODS = {
   boss: 'queen',
   reinforcements: ['scorpion', 'sentry', 'jackal'],
   crates: ['spear', 'ration', 'axe', 'sword', 'ration'],
+  entry: 'palisadeBroken',
   endWall: 'palisade',
   zones: [
     {

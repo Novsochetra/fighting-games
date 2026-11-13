@@ -7,6 +7,10 @@ export function formatMoney(amount, { currency, locale }) {
 
 export const formatCount = (count, locale) => new Intl.NumberFormat(locale).format(count);
 
+// as the App Store counts ratings: 950, 1.2K, 3.4M
+export const formatCompact = (count, locale) =>
+  new Intl.NumberFormat(locale, { notation: 'compact', maximumFractionDigits: 1 }).format(count);
+
 // a run's time as its game's own clock showed it
 export function formatClock(seconds) {
   const hours = Math.floor(seconds / 3600);

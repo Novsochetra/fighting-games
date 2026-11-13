@@ -1,7 +1,8 @@
 import { sanitizeLeaderboard } from '../data/leaderboard.js';
 import { sanitizeSavedRun } from '../data/saved-run.js';
 import { defaultSettings, migrateSettings } from '../data/settings.js';
-import { loadRecords, readJson, saveRecords, writeJson } from './storage.js';
+import { readJson, writeJson } from '../../../../packages/host/src/json-storage.js';
+import { loadRecords, saveRecords } from './storage.js';
 
 const SETTINGS_KEY = 'sd_settings';
 const HINTS_KEY = 'sd_hints';

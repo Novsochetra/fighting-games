@@ -69,6 +69,8 @@ function resetScore(game) {
     goArrowTime: 0,
     lootTime: 0,
     clearTime: 0,
+    gateRun: null,
+    wallSmashed: false,
     continues: 0,
     lives: START_LIVES,
     combo: { count: 0, timer: 0, damage: 0, bump: 0 },

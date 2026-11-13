@@ -1,0 +1,178 @@
+/* On a phone, a card with the picture on top and the words under it. */
+.wallpapers-callout {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  background: var(--color-launcher-surface);
+  border: var(--border-width-hairline) solid var(--color-launcher-separator);
+  border-radius: var(--radius-card);
+  outline: none;
+  -webkit-touch-callout: none;
+  transition: scale var(--duration-press) var(--easing-standard);
+}
+
+.wallpapers-callout:active {
+  scale: var(--scale-pressed);
+}
+
+.wallpapers-callout:focus-visible {
+  outline: var(--border-width-ring) solid var(--color-focus-ring);
+  outline-offset: var(--border-width-ring);
+}
+
+/* The banners lie on one another: the one shown fades in over the one it follows, which stays whole
+   under it, and each drifts closer while it shows, as the arcade's backdrops do. The frame keeps
+   their order to itself, so the words stay over them. */
+.wallpapers-callout__frame {
+  display: grid;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  background: var(--color-banner-fallback);
+  isolation: isolate;
+}
+
+.wallpapers-callout__art {
+  display: block;
+  grid-area: 1 / 1;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--duration-crossfade) var(--easing-standard);
+}
+
+.wallpapers-callout__art[data-state='leaving'],
+.wallpapers-callout__art[data-state='shown'] {
+  opacity: 1;
+  animation: banner-drift var(--duration-banner-drift) linear forwards;
+}
+
+.wallpapers-callout__art[data-state='shown'] {
+  z-index: 1;
+}
+
+@keyframes banner-drift {
+  to {
+    scale: var(--scale-ken-burns);
+  }
+}
+
+.wallpapers-callout__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: flex-start;
+  padding: var(--space-4) var(--space-5) var(--space-5);
+}
+
+.wallpapers-callout__eyebrow {
+  font-size: var(--font-size-apple-footnote);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-label-muted);
+}
+
+.wallpapers-callout__title {
+  font-size: var(--font-size-apple-title-1);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-apple-title);
+  letter-spacing: var(--tracking-tight);
+}
+
+.wallpapers-callout__body {
+  max-inline-size: var(--layout-banner-text-width);
+  font-size: var(--font-size-apple-subheadline);
+  line-height: var(--leading-apple-subheadline);
+  color: var(--color-label-muted);
+}
+
+.wallpapers-callout__more {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+  margin-block-start: var(--space-2);
+  font-size: var(--font-size-apple-subheadline);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-tint);
+}
+
+.wallpapers-callout__more .icon {
+  inline-size: 1em;
+  block-size: 1em;
+}
+
+/* On a big screen, the picture fills the whole card and the words stand on it, over a dark wash
+   in the bottom left corner, the rest of the picture left bright, with a white pill to see them
+   all, as a story in the App Store. The words are positioned, so they stay over the frame. */
+@media (min-width: 48rem) {
+  .wallpapers-callout {
+    display: grid;
+    background: var(--color-card-blank);
+    border: 0;
+  }
+
+  .wallpapers-callout > * {
+    grid-area: 1 / 1;
+  }
+
+  .wallpapers-callout__frame {
+    aspect-ratio: auto;
+    block-size: var(--size-banner-height);
+  }
+
+  .wallpapers-callout__art {
+    object-position: 70% 50%;
+  }
+
+  .wallpapers-callout__text {
+    position: relative;
+    gap: var(--space-2);
+    justify-content: flex-end;
+    padding: var(--space-10);
+    color: var(--color-banner-label);
+    text-shadow: var(--text-shadow-banner);
+    background: radial-gradient(
+      ellipse 70% 120% at 0 100%,
+      var(--color-banner-scrim),
+      var(--color-banner-scrim-clear)
+    );
+  }
+
+  .wallpapers-callout__eyebrow,
+  .wallpapers-callout__body {
+    color: var(--color-banner-label-secondary);
+  }
+
+  .wallpapers-callout__title {
+    font-size: var(--font-size-display);
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
+  }
+
+  .wallpapers-callout__body {
+    font-size: var(--font-size-apple-body);
+    line-height: var(--leading-apple-body);
+  }
+
+  .wallpapers-callout__more {
+    block-size: var(--size-pill-button);
+    margin-block-start: var(--space-4);
+    padding-inline: var(--space-6) var(--space-5);
+    color: var(--color-on-banner-pill);
+    text-shadow: none;
+    background: var(--color-banner-pill);
+    border-radius: var(--radius-pill);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wallpapers-callout,
+  .wallpapers-callout__art {
+    transition: none;
+  }
+
+  .wallpapers-callout__art[data-state] {
+    animation: none;
+  }
+}

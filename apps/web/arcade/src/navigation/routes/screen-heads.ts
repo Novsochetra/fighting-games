@@ -32,6 +32,12 @@ export const SCREEN_HEADS: Record<ScreenId, ScreenHead> = {
       'Nov Sochetra makes Retro Arcade, free Khmer games in your browser. Find them on Buy Me a Coffee, GitHub and Facebook.',
     canonical: 'https://www.khmerarcade.games/credits/',
   },
+  wallpapers: {
+    title: 'Wallpapers · Retro Arcade',
+    description:
+      'Free wallpapers of temples, hills and moonlit nights for your phone and computer, up to 8K.',
+    canonical: 'https://www.khmerarcade.games/wallpapers/',
+  },
 };
 
 export function applyHead(document: Document, { title, description, canonical }: ScreenHead) {

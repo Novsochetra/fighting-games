@@ -2,8 +2,13 @@
 
 The walls set on a painted road, one PNG per kind in `src/data/prop-sprites.js`, drawn at half
 scale like the fighters; `feetX`, `feetY` is the pixel set on the road. A road's closing wall stands
-whole on screen at its end, and its way in, the last road's wall broken open, stands at its start
-with its left edge on the road's edge. These are the temple roads' pieces and how they were made.
+whole on screen at its end until the hero smashes it open to leave the road, and its way in, the last
+road's wall broken open, stands at its start with its left edge on the road's edge. A wall and its
+broken sprite must stay the same width, as the broken one is drawn over the same columns when the
+wall is smashed. Each broken sprite's `doorway` in `src/data/prop-sprites.js` marks, in its pixels,
+where the hero goes through: a door's black hole, which the hero steps into and fades into, or a
+fence's broken gap, which the hero jumps over; measure it again when a sprite is redrawn. These are
+the temple roads' pieces and how they were made.
 
 | Sprite | Where | `feetX`, `feetY` | Made with |
 | --- | --- | --- | --- |

@@ -1,0 +1,170 @@
+[
+  {
+    "id": "entry-afternoon",
+    "file": "entryafternoon8k.png",
+    "place": "Entry",
+    "time": "Afternoon",
+    "focus": 0.5
+  },
+  {
+    "id": "entry-sunset",
+    "file": "entrysunset8k.png",
+    "place": "Entry",
+    "time": "Sunset",
+    "focus": 0.5
+  },
+  {
+    "id": "entry-night",
+    "file": "entrynight8k.png",
+    "place": "Entry",
+    "time": "Night",
+    "focus": 0.5
+  },
+  {
+    "id": "entry-wide-dawn",
+    "file": "EntryWideViewDawn5K.png",
+    "place": "Entry Wide",
+    "time": "Dawn",
+    "focus": 0.47
+  },
+  {
+    "id": "entry-wide-night",
+    "file": "EntryViewNightWide5K.png",
+    "place": "Entry Wide",
+    "time": "Night",
+    "focus": 0.5
+  },
+  {
+    "id": "entry-close-dawn",
+    "file": "entrywallapaperdawn.png",
+    "place": "Entry Close",
+    "time": "Dawn",
+    "focus": 0.5
+  },
+  {
+    "id": "entry-close-night",
+    "file": "EntryView5K.png",
+    "place": "Entry Close",
+    "time": "Night",
+    "focus": 0.48
+  },
+  {
+    "id": "ta-prohm-afternoon",
+    "file": "taprohmafternoon.png",
+    "place": "Ta Prohm",
+    "time": "Afternoon",
+    "focus": 0.35
+  },
+  {
+    "id": "ta-prohm-sunset",
+    "file": "taprohmsunset (1).png",
+    "place": "Ta Prohm",
+    "time": "Sunset",
+    "focus": 0.34
+  },
+  {
+    "id": "ta-prohm-night",
+    "file": "taprohmnight2.png",
+    "place": "Ta Prohm",
+    "time": "Night",
+    "focus": 0.35
+  },
+  {
+    "id": "ta-prohm-hill-sunset",
+    "file": "taprohmsunset.png",
+    "place": "Ta Prohm Hill",
+    "time": "Sunset",
+    "focus": 0.36
+  },
+  {
+    "id": "ta-prohm-lookout-afternoon",
+    "file": "taprohmafternoon2.png",
+    "place": "Ta Prohm Lookout",
+    "time": "Afternoon",
+    "focus": 0.1
+  },
+  {
+    "id": "ta-prohm-lookout-night",
+    "file": "taprohmnight5.png",
+    "place": "Ta Prohm Lookout",
+    "time": "Night",
+    "focus": 0.1
+  },
+  {
+    "id": "kulen-moonrise",
+    "file": "kulenmoonrise8k.png",
+    "place": "Kulen",
+    "time": "Moonrise",
+    "focus": 0.3
+  },
+  {
+    "id": "kulen-night",
+    "file": "kulennight8k.png",
+    "place": "Kulen",
+    "time": "Night",
+    "focus": 0.28
+  },
+  {
+    "id": "highlands-afternoon",
+    "file": "highlands-afternoon.png",
+    "place": "Highlands",
+    "time": "Afternoon",
+    "focus": 0.6
+  },
+  {
+    "id": "highlands-moonrise",
+    "file": "highlands-moonrise.png",
+    "place": "Highlands",
+    "time": "Moonrise",
+    "focus": 0.6
+  },
+  {
+    "id": "highlands-moonset",
+    "file": "highlands-moonset.png",
+    "place": "Highlands",
+    "time": "Moonset",
+    "focus": 0.6
+  },
+  {
+    "id": "highlands-night",
+    "file": "highlands-night.png",
+    "place": "Highlands",
+    "time": "Night",
+    "focus": 0.6
+  },
+  {
+    "id": "worlds-edge-afternoon",
+    "file": "otherangleworldafternoon2.png",
+    "place": "World's Edge",
+    "time": "Afternoon",
+    "focus": 0.6
+  },
+  {
+    "id": "worlds-edge-sunset",
+    "file": "otherangleworldsunset.png",
+    "place": "World's Edge",
+    "time": "Sunset",
+    "focus": 0.6
+  },
+  {
+    "id": "worlds-edge-moonrise",
+    "file": "otherangleworldmoonrise2.png",
+    "place": "World's Edge",
+    "time": "Moonrise",
+    "focus": 0.58
+  },
+  {
+    "id": "worlds-edge-night",
+    "file": "otherangleworldnight.png",
+    "place": "World's Edge",
+    "time": "Night",
+    "focus": 0.58
+  },
+  {
+    "id": "river-gate-night",
+    "file": "rivergatenight.png",
+    "place": "River Gate",
+    "time": "Night",
+    "focus": 0.62
+  }
+]

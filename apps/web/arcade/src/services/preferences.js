@@ -7,11 +7,14 @@ export const STORAGE_KEYS = {
   supportSnoozedUntil: 'arcade.support-snoozed-until',
   supportSeenPlays: 'arcade.support-seen-plays',
   gaveAt: 'arcade.gave-at',
+  likedWallpapers: 'arcade.liked-wallpapers',
+  wallpaperVisitor: 'arcade.wallpaper-visitor',
 };
 export const RECENT_LIMIT = 12;
 
 const isIdList = (value) => Array.isArray(value) && value.every((id) => typeof id === 'string');
 const numberOr = (value, fallback) => (Number.isFinite(value) ? value : fallback);
+const textOr = (value, fallback) => (typeof value === 'string' && value ? value : fallback);
 
 export function toggleId(ids, id) {
   return ids.includes(id) ? ids.filter((other) => other !== id) : [...ids, id];
@@ -64,6 +67,26 @@ const supportPreferences = ({ state, save, storage }) => ({
   recordGift: (time) => storage.write(STORAGE_KEYS.gaveAt, time),
 });
 
+// The wallpapers this device liked, and the random id its likes go under, made at its first like
+// (makeId), so the server counts a like once and lets only its giver take it back.
+const wallpaperPreferences = ({ state, save }) => ({
+  isLikedWallpaper: (id) => state.likedWallpapers.includes(id),
+  setLikedWallpaper: (id, liked) =>
+    save(
+      'likedWallpapers',
+      liked === state.likedWallpapers.includes(id)
+        ? state.likedWallpapers
+        : toggleId(state.likedWallpapers, id),
+    ),
+  wallpaperVisitor(makeId) {
+    if (!state.wallpaperVisitor) {
+      save('wallpaperVisitor', makeId());
+    }
+
+    return state.wallpaperVisitor;
+  },
+});
+
 export function createPreferences(storage) {
   const readIds = (key) => {
     const value = storage.read(key);
@@ -75,6 +98,8 @@ export function createPreferences(storage) {
     sound: storage.read(STORAGE_KEYS.sound) !== false,
     installDismissedAt: storage.read(STORAGE_KEYS.installDismissedAt),
     plays: numberOr(storage.read(STORAGE_KEYS.plays), 0),
+    likedWallpapers: readIds(STORAGE_KEYS.likedWallpapers),
+    wallpaperVisitor: textOr(storage.read(STORAGE_KEYS.wallpaperVisitor), null),
     ...readSupportState(storage),
   };
   const save = (name, value) => {
@@ -97,5 +122,6 @@ export function createPreferences(storage) {
     installDismissedAt: () => state.installDismissedAt,
     dismissInstall: (time) => save('installDismissedAt', time),
     ...supportPreferences({ state, save, storage }),
+    ...wallpaperPreferences({ state, save }),
   };
 }

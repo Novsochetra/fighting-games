@@ -24,12 +24,13 @@ apps/
       build-version.js    the version each build of the arcade carries (see A new build)
     test/{unit,integration}
   web/                    everything the browser loads: the arcade, the games and the packages
-    arcade/               the arcade, one React app of four screens (see One app)
-      pages/              its four pages, Vite's root: index.html, and leaderboard/, supporters/ and
-                          credits/ each with its own index.html
+    arcade/               the arcade, one React app of five screens (see One app)
+      pages/              its five pages, Vite's root: index.html, and leaderboard/, supporters/,
+                          credits/ and wallpapers/ each with its own index.html
       public/             sent as it is at the root of the arcade's address, with appearance-early.js,
                           the classic script that sets light or dark before the first paint
-        assets/           the arcade's icons and manifest (tools/arcade_icons.py draws the icons),
+        assets/           the arcade's icons, launch screens and manifest (tools/arcade_icons.py and
+                          arcade_splash.py draw them),
                           donate/khqr.jpg, the KHQR code the donate sheet shows,
                           social/entry-screen.jpg, the picture a shared link shows, and
                           credits/, the maker's photos the credits screen shows
@@ -37,7 +38,8 @@ apps/
         sitemap.xml       every page this server sends (see Search and link previews)
       src/                the app, @/ in its imports; a page loads it as /src/main.tsx
         main.tsx          the app every page starts, on the screen the page names (App.tsx beside it)
-        screens/          one folder per screen (home/, leaderboard/, supporters/, credits/), a folder
+        screens/          one folder per screen (home/, leaderboard/, supporters/, credits/,
+                          wallpapers/), a folder
                           per feature inside (home/carousel/, supporters/donate/), and
                           render-screen.tsx, the one file outside them that loads a screen
         components/       the UI parts two or more screens show: page-bar/, sheet/, notice/,
@@ -57,11 +59,12 @@ apps/
       test/{unit,integration,regression,support}
                           the arcade's tests, mirroring src/ (support/render-arcade.tsx renders it)
       build-steps/        the build's own steps: bundle-game.js joins each game's scripts into bundles
-      vite.config.ts      the build: the four pages into dist/, the as-is files copied beside them
+      vite.config.ts      the build: the five pages into dist/, the as-is files copied beside them
     packages/
       <name>/             code more than one game uses (input: the gamepad, keys, rumble;
                           touch-pad: the touch controls drawn from a skin; screen: the stage fit,
-                          folds, notches, gesture guards, full screen), which knows no game;
+                          folds, notches, gesture guards, full screen; host: the way back to the
+                          arcade, JSON kept in storage), which knows no game;
                           src/ and test/{unit,integration}, joined into each game
     games/
       <game-id>/          one self-contained app: it loads nothing from outside its folder but the
@@ -78,6 +81,7 @@ apps/
 .railway/railway.ts       the Railway service's settings (docs/deploy-railway.md)
 tools/eslint-rules/       the project's own lint rules
 tools/claude-hooks/       the Claude Code hook that shows Claude each comment it adds
+tools/kit-luy-key-art/    paints គិតលុយ's banner and poster from the game's own styles and figures
 docs/                     this file, deploy-railway.md and boss-kits.md
 ```
 
@@ -136,6 +140,15 @@ being off says otherwise. Steel & Dust passes its 768x432 view and its controls'
 (`src/ui/screen/stage-layout.js`), and keeps where the stick rests, the menus' box on a fold and
 the pause plaque, which are its own.
 
+### Host
+
+`packages/host/` is what a game needs from the page it runs on. `arcade-exit.js`
+(`createArcadeExit`) is a game's way back to the arcade: one step back in the tab's history when
+the arcade opened the game, so the arcade comes back as it was left, else the arcade's address
+(`../../`). `json-storage.js` (`readJson`, `writeJson`) reads and writes JSON in a storage that may
+be missing, blocked or hold bad data, giving a fallback instead of throwing. Steel & Dust and
+គិតលុយ both use them; each keeps its own keys and its own checks of what it reads back.
+
 ### Touch pad and skins
 
 `packages/touch-pad/` draws a game's touch controls from a skin and answers the thumbs on them, as
@@ -188,7 +201,7 @@ shell's bezel round its screen). A game's tests check each skin it ships (`skinP
 
 ## One app
 
-The arcade, its leaderboard, its supporters and its credits are screens of one React app, so a tap
+The arcade, its leaderboard, its supporters, its credits and its wallpapers are screens of one React app, so a tap
 between them changes the screen in the page, never through a load: on a phone's link a move to the
 supporters took about 1.3 s, 47 files coming again every time, and now shows at once. Each still has
 a page of its own on disk, in `arcade/pages/` (`index.html`, `leaderboard/index.html`,
@@ -259,7 +272,10 @@ without a load.
 5. Steel & Dust reads and posts its online leaderboard: `GET /api/leaderboard?game=<id>`,
    `POST /api/leaderboard/tickets` as a run starts and `POST /api/leaderboard` as one is posted (see
    Leaderboard API).
-6. `GET /api/health` answers `{"ok":true}` once the supporters and scores tables answer (Railway's
+6. The wallpapers screen reads every wallpaper's likes and downloads, `GET /api/wallpapers`, and
+   sends a like or its taking back, `POST /api/wallpapers/likes`, and each download,
+   `POST /api/wallpapers/downloads` (see Wallpapers page).
+7. `GET /api/health` answers `{"ok":true}` once the supporters, scores and wallpaper tables answer (Railway's
    health check).
 
 The arcade runs on Railway as one service: the same server sends the pages and the API, from one
@@ -277,7 +293,7 @@ every browser sends. A script outside a browser can write any header, so the gif
 rate limit and the checks below.
 
 **The build.** `npm run build` (`vite build --config apps/web/arcade/vite.config.ts`) has Vite build
-the four pages of `arcade/pages/` into `dist/` (`base: './'`, so the same files work under any path)
+the five pages of `arcade/pages/` into `dist/` (`base: './'`, so the same files work under any path)
 and copy what it never touches beside them, each from where it lives (`AS_IS` and `sourceOfAsIs` in
 `as-is-files.js`: the games from `games/`, and the art, `robots.txt`, `sitemap.xml` and
 `appearance-early.js` from `arcade/public/`), then builds the service worker (see Offline). `dist/`
@@ -418,11 +434,13 @@ the week's (`game, created_at`), both without hidden rows.
 ## File storage
 
 The server can keep files in S3 and send them from CloudFront (`src/storage/`), where it keeps the
-runs' posters (see Leaderboard API); `main.js` opens it (`open-storage.js`). It is on once
+runs' posters (see Leaderboard API) and the wallpapers (see Wallpapers page); `main.js` opens it
+(`open-storage.js`). It is on once
 `S3_BUCKET` is set, with `AWS_REGION` and
 `CLOUDFRONT_URL` (an `https:` address), and signs in with the AWS key in `AWS_ACCESS_KEY_ID` and
 `AWS_SECRET_ACCESS_KEY` (on a Mac, the one in `~/.aws`). `putFile` takes a key, the file and its
-type, and answers the file's CloudFront address.
+type, and answers the file's CloudFront address; with `downloadAs` (letters, digits, `. _ -`) it is
+sent as an attachment under that name.
 
 - A key is letters, digits, `. _ -` and `/`, with no part that starts with a dot, at most 300
   characters (`file-keys.js`), so it is its own address and cannot climb out of its folder.
@@ -441,14 +459,23 @@ The arcade works offline like an installed app, and so does each game once it ha
 `npm run dev` runs without it). Morodok Angkor lives on its own site and is not kept.
 
 - **The arcade** (`arcade-cache.js`): the build writes the worker with the list of what it keeps
-  (vite-plugin-pwa's `injectManifest`, in `vite.config.ts`): the four pages, the built modules and
+  (vite-plugin-pwa's `injectManifest`, in `vite.config.ts`): the five pages, the built modules and
   styles, the arcade's art, `appearance-early.js` and each game's card art (`catalog-art.js`), each
   with a revision. Installing fills one cache named by that list and, once it is all in, takes over
   at once; a page open on the old build keeps what it loaded, its next load is the new one, and the
   builds before go. The pages and files come from that cache, so the arcade opens without the network.
-- **The API** (`api-cache.js`): the games and the supporters are read from the network first, and
-  the last answer stands in offline; the worker reads them once as it installs, since the first
-  visit read them before it was there. A gift sent offline fails as it always did, saying so.
+- **A slow network** opens the arcade as fast as none: no page waits on another site before it
+  draws (`test/regression/bugs/arcade-on-a-slow-network.test.js`), since a stylesheet from one held
+  the page, and the app's module with it, as long as a slow network took, while offline it failed at
+  once. So the arcade's font, Inter, ships with it (`src/styles/fonts.css` and `fonts/`, latin and
+  latin-ext cut as Google Fonts serves them, with its `OFL.txt`), kept with the build's files.
+- **The API** (`api-cache.js`): the games change only with a deploy, so the worker answers
+  `api/games` from its last answer at once and reads the network behind it for the next visit (the
+  network's answer only when it has none). The supporters and the leaderboard change with each gift
+  and score, so they are read from the network first, and the last answer stands in offline or once
+  the network has taken `NETWORK_LIMIT_MS` (3 s); its late answer is still kept for the next read.
+  The worker reads the games and the supporters once as it installs, since the first visit read them
+  before it was there. A gift sent offline fails as it always did, saying so.
 - **A game** (`game-cache.js`): a game is kept once the player saves it (see Saving a game), and
   the whole of it comes down: the build writes each game's `offline.json` (`game-files.js`), every file it may load
   as it is played (not its screenshots, link-preview art, trailer or notes, nor a sprite that has a packed
@@ -506,7 +533,8 @@ controls do in `home-context.tsx` and `home-actions.ts`, and a folder for each o
 `launch/`, `banners/`, `coffee/` and `inputs/`, its keys and pad) is a game hub like the Apple TV app: the selected game's key art fills the top of the
 screen behind a carousel of 16:9 cards, and a library of every game sits below. Type follows Apple's
 text styles (Large Title, Title, Body, Subheadline, Footnote) in SF Pro on Apple devices, with Inter
-standing in for it elsewhere; buttons are Apple's Play pill and frosted glass ones (`buttons.css`).
+standing in for it elsewhere (see Offline: it ships with the arcade); buttons are Apple's Play pill
+and frosted glass ones (`buttons.css`).
 
 It comes in Apple's dark and light appearances. Dark is the default set of tokens in `tokens.css`;
 `:root[data-appearance='light']` swaps in the light colors, a lighter shadow, side cards that dim
@@ -588,9 +616,9 @@ light screen never shows dark first; a test holds it to the same choice as `reso
   sheet of the arcade works through `use-sheet.ts` over `sheet.js`: it shows while its screen asks
   for it, Escape and a tap on the dimmed page close it with its animation, and a screen that goes
   takes its sheet down at once. On a phone (`sheet-phone.css`) it is UIKit's page sheet: it slides up
-  opaque under a grabber, and the screen under it recedes into a card on black instead of blurring.
+  opaque under a grabber, and the screen under it dims and blurs, staying its full size.
   A finger pulls it down from its top (`sheet-gesture.js` over the plain `sheet-drag.js`): the sheet
-  follows it, the page comes back as it goes, and on letting go it closes past a third of its height
+  follows it, the dimming lifts as it goes, and on letting go it closes past a third of its height
   or on a flick, else springs back. The first move decides, since iOS Safari ignores a
   `preventDefault` once a touch scrolls: down from the top pulls, anything else scrolls.
 - **Trailer** (`DetailsMedia.tsx`, `trailer-player.js`, `trailer.css`): a game's `game.json` may
@@ -624,8 +652,8 @@ flies from the carousel card, or from the library tile when the carousel has scr
 (`launch-geometry.js`), and their timing comes from `--duration-launch` and `--easing-launch` in
 `arcade/src/styles/tokens.css`. When the browser brings the page back from its back/forward cache, the panel
 shrinks back into the card and the Recent list catches up. A game's own way back should go back in
-the tab's history when the arcade opened it, as Steel & Dust's Back to arcade does
-(`src/ui/menus/arcade-exit.js`); loading the arcade again would start it over. With reduced motion the game opens at
+the tab's history when the arcade opened it, as the games' Back to arcade does
+(`packages/host/src/arcade-exit.js`); loading the arcade again would start it over. With reduced motion the game opens at
 once, and the zoom, the slides and the rises are off.
 
 Every interaction has a short sound (`sound-cues.js`, in the arcade's sound service,
@@ -639,7 +667,13 @@ everything through one master gain and a limiter. The speaker button in the top 
 The arcade installs as an app (`arcade/public/assets/manifest.webmanifest`, standalone, its scope
 the whole arcade with every game in it). Its logo is a white joystick on an orange to pink gradient,
 in front of the title in the top bar and on every icon; `tools/arcade_icons.py` draws all sizes into
-`arcade/public/assets/icons/`, run it again after changing the design. An install banner floats at the bottom (`InstallBanner.tsx`, `use-install.ts`,
+`arcade/public/assets/icons/`, run it again after changing the design. Opening the installed arcade shows the
+icon in the middle of black: Android draws that screen itself from the manifest, while iOS shows only
+an image the page links for its exact screen, orientation and appearance, so `tools/arcade_splash.py`
+draws one for each iPhone and iPad, on black and on white for light mode (each the page's own
+background), into `arcade/public/assets/splash/` and the build links them all from every
+page (`arcade/build-steps/startup-images.js`), named by the screen they fit. The worker keeps none:
+iOS takes its launch screen as the arcade is added to the Home Screen. An install banner floats at the bottom (`InstallBanner.tsx`, `use-install.ts`,
 `install.css`):
 where the browser hands over its install prompt (`beforeinstallprompt`, Chrome and Edge) it offers
 Install, and on an iPhone or iPad, where Safari installs only from its Share menu, it says where to
@@ -928,6 +962,81 @@ wear the edge. The games keep their own screens.
 
 The arcade and the screens over it change like screens in an iOS navigation stack, in one page (see
 One app): a push slides the screen arrived at in over the one left, and a pop plays it backwards.
+
+## Wallpapers page
+
+`wallpapers/` (`WallpapersScreen.tsx` in `arcade/src/screens/wallpapers/`, its page
+`arcade/pages/wallpapers/index.html`) gives away wallpapers of the arcade's world for a phone and a
+computer, pushed over the arcade like the credits (see One app). The home page leads there from a
+card under its library (`WallpapersCallout.tsx`, `wallpapers-callout.css` in `screens/home/library/`),
+like a story in the App Store's Today tab: on a phone the picture over the words, and from 48rem the
+picture filling the card with the words on it, over a dark wash in their corner only, and a white See
+all pill. Its picture turns through six wallpapers (`BANNERS`), each fading in over the one before
+as it drifts closer, every six seconds (`use-banner-turn.ts`), and only while the card is on the
+screen, the page is in view and no pointer or focus rests on it; with reduced motion it stays on the
+first. Only the banner shown, the one under it and the next are drawn (`banner-turn.js`), so a
+visitor loads three pictures, the next before its turn.
+
+The pictures are 5K and 8K PNGs, 300 MB in all, so none of them ships with the arcade.
+`tools/wallpapers/make_wallpapers.py` cuts each one (`tools/wallpapers/sources.json` names its file,
+its place, its time of day and `focus`, where across the picture the phone's upright cut is centred)
+into six files, each named by a hash of its bytes:
+
+- `thumb` (640 wide WebP, about 25 KB) and `view` (1280) for the grid, which a phone fills two
+  across from the small one (`srcset` and `sizes` in `WallpaperGrid.tsx`); the first two rows load at
+  once and the rest as they come near (`loading="lazy"`);
+- `view` and `large` (2560) for the sheet's preview of the computer's picture, and `phone-view`
+  (720 x 1560) for the phone's, which stands upright over the whole picture blurred, as a lock screen;
+- `desktop`, the computer's download: the PNG itself, every pixel as it was made (4K to 8K, 5 to
+  18 MB; it holds no text or EXIF), and `phone` (9 by 19.5, up to 1440 x 3120, JPEG at 92 with every
+  pixel's colour, about 0.5 MB), progressive so a slow phone draws it blurred first.
+
+It writes the screen's list, `screens/wallpapers/wallpapers.json` (the CloudFront `base`, then each
+wallpaper's files and the downloads' sizes), the link preview `assets/social/wallpapers.jpg` and the
+home card's banners `assets/wallpapers/banner-<id>-<width>.webp` (960, 1600 and 2400 wide, 21 by 9,
+each dark enough in its lower left for the words; the worker keeps none of them, as the wallpapers
+they lead to never work offline). `tools/wallpapers/upload-wallpapers.js` puts
+the files in S3 under `wallpapers/<id>/` with the storage's `putFile` (see File storage), the two
+downloads as attachments (`downloadAs`), so a tap on Download saves the file, though a link's
+`download` attribute is ignored for another site's file. CloudFront keeps every file a year, so a
+changed picture goes up under its new hash, and the list names it. The worker leaves CloudFront's
+files to the network, so the wallpapers are never saved for offline.
+
+A tap on a tile opens a sheet (`WallpaperSheet.tsx`) with the picture cut for a phone or a computer
+(the phone's first on a touch screen, `firstShape`), its kind and size and Download. The preview
+(`WallpaperPreview.tsx`) has one size for both cuts, the computer's own 16 by 9 on a sheet with room
+and square on a phone, so the sheet never changes size as they swap: the computer's cut fills it
+edge to edge, and the phone's stands upright over the whole picture blurred, as a lock screen.
+Switching fades one into the other by opacity and scale alone, each once its file is in, and the
+other cut's file comes down only once a visitor switches to it
+(`test/regression/bugs/wallpaper-sheet-height.test.js`). An iPhone sets a
+wallpaper only from Photos, which a download never reaches, so a touch screen that can share files
+also gets Share (`use-wallpaper-share.ts`, `wallpaper-share.js`): it fetches the chosen file and
+hands it to the share sheet, whose Save Image puts it in Photos. The sheet opens only just after a
+tap, so a download that outlasts it keeps the file and asks for one more tap (Share now). All, Day
+and Night filter the grid (`mood`: a sun or a moon in the sky).
+
+**Likes and downloads.** A heart in the sheet likes a wallpaper, and the sheet and each tile say how
+many have, and how many times it was saved (`api/wallpapers/`: `wallpapers-client.js`,
+`use-wallpaper-counts.ts`). The server keeps them in Postgres (`0005_wallpapers`):
+`wallpaper_likes`, one row a visitor, keyed by the random id their browser makes at its first like
+(`randomId`, kept in `preferences`), so a like sent twice counts once and taking it back takes back
+only theirs, and `wallpaper_downloads`, a row for each Download tapped or Share that went through,
+with its shape. `GET /api/wallpapers` answers `{ "wallpapers": { "<id>": { "likes", "downloads" } } }`
+for each wallpaper with any; `POST /api/wallpapers/likes` takes `{ wallpaper, visitor, liked }` and
+answers the wallpaper's likes, and `POST /api/wallpapers/downloads` takes `{ wallpaper, shape }` and
+answers its downloads (`routes/wallpapers-api.js`). Each checks the wallpaper is one the list names
+(`WALLPAPER_LIST`), comes only from the arcade's own pages, and holds back a burst from one address
+(60 likes and 40 downloads in 10 minutes), as nothing proves a visitor or a download is real. A tap
+shows at once and the server's count takes its place as it answers; a like that fails is taken back,
+and the worker reads the counts from the network first, as it does the supporters. A like plays out
+at the tap (`like-motion.js`, the Web Animations API on the arcade's tokens, so it never replays as
+the sheet opens again): the heart pops as it fills, six little hearts fly out round it, a big white
+heart pops up over the picture and floats away, and the count rolls up, or down for taking a like
+back, which plays nothing else; with reduced motion none of it plays.
+
+`arcade/test/integration/screens/wallpapers/wallpapers-page.test.js` holds the page to all this, and
+`screens/home/home-wallpapers-banner.test.js` the banner.
 
 ## Game: Steel & Dust
 
@@ -1717,6 +1826,96 @@ holds the content: `story/` (four chapters of stages and scenes), `teams/`, `cha
 `test/support/pixel-canvas.js` draws any renderer into plain pixels in Node and writes a png, which
 is how the art was checked without a browser.
 
+## Game: គិតលុយ
+
+គិតលុយ (Kit Luy, `games/kit-luy/`) is a Cambodian market stall seen from behind its counter: five
+plastic stools of customers, each with a bill to settle in riel, a checked krama to count the money
+onto, and a till of banded pieces. The player answers by counting money out, never by picking a
+number. It keeps Steel & Dust's split, smaller:
+
+| Folder          | Job                                                                 | May touch the DOM or audio? |
+| --------------- | ------------------------------------------------------------------- | --------------------------- |
+| `src/data/`     | the riel's pieces, stages, tuning, sounds, both languages, settings | no                          |
+| `src/lib/`      | the seeded random source, numerals, the rolling count               | no                          |
+| `src/sim/`      | the day: customers, bills, the cloth, giving, arrivals, records     | no                          |
+| `src/app/`      | the flow between screens, and what each event shows and sounds      | yes                         |
+| `src/ui/`       | the views: the sign, stools, bill, cloth, till, shutter and tally   | yes                         |
+| `src/audio/`    | the synthesized sounds                                              | Web Audio only              |
+| `src/input/`    | presses, keys, the hidden-tab pause (`packages/screen`)             | yes                         |
+| `src/platform/` | the save (`packages/host`) and the phone's buzz (`packages/input`)  | yes                         |
+
+**The money** is game pieces, never pictures of banknotes: the central bank's law forbids objects
+that imitate riel notes, and Cambodia's notes carry royal portraits. A piece is a flat strip with
+one corner cut (`styles/pieces.css`, `src/ui/piece.js`), told apart four ways at once: its hue (one
+a value, the only hues on the screen), its figure set in Moul with the thousands large and the
+zeros small (៥ over ០០០, so 1,000 is never read as 10,000), the pattern of its end band (beads for
+hundreds, teeth for thousands, scallops for ten-thousands) and its place in the till, where each of
+the three upper values sits over the value a tenth its size. No word in the game calls a piece a
+note but the line in How to play that says it is not one.
+
+**The day** (`src/sim/run.js`, with `give.js`, `arrivals.js`, `storm.js` and `keypad.js`) is plain
+data changed by `deal`, `takeBack`, `clearCloth`, `typeDigits`, `eraseDigit`, `clearTyped`, `give`
+and `advance`, which say what happened as events (`ask`, `deal`, `take`, `clear`, `type`, `paid`,
+`wrong`, `unlock`, `stage`, `left`, `stormed`, `approach`, `arrive`, `closed`) the page drains. Its random numbers come from the seed it carries (`src/lib/rng.js`), so a
+seed replays a day. The clock stands still until the first customer is paid, which is what the
+title's lesson asks for (500 + 500). Then one customer is always walking up, and arrives
+`max(minArrivalMs, firstArrivalMs - arrivalDropMs * served)` later (8,000 ms falling 150 a
+customer, to 1,500); one who arrives to five taken stools closes the stall, at that moment. A
+wrong count locks the counter 600 ms and stays on the cloth to be put right; customers keep walking
+up through the lock, so a wrong count costs time. The customer in front has a patience
+(`src/sim/patience.js`, each stage's `patience`, 15 to 20 s) that runs while the day does; at its
+end they storm off unpaid (`storm.js`), the cloth goes back to the till, the streak breaks and the
+stall loses a trust stamp, the third (`TUNING.trust`) closing it. A payment's speed is the share of
+the patience left: 60% and more is `perfect`, 30% `great`, less `good`, adding twice, once or no
+times the stage's pay (`TUNING.speedShares`, `speedTimes`) to the pay, the clean count's and the
+extra for every fifth in a row. A day is played counting money or on the number pad (`mode`, from
+Settings' Answer with): the pad's figures are typed into `run.typed` and given as one amount, which
+earns no clean pay, and each mode keeps its own records (`src/platform/save.js`, where a save from
+before there were two counts as money). Bills come from a
+shuffled bag of the player's mix, so every four customers ask one of each sum left in it, and each
+sum has its customer (`src/data/customers.js`): a shopper adds, a moto driver wants change, a cook
+buys so many at a price, students share a bill. Stages (`src/data/stages.js`) add pieces to the
+till and widen the sums, every answer reachable in the stage's most pieces and ending in hundreds
+the stage allows; the pencilled total on the bill goes at the third, unless Settings keeps it.
+
+**Speed and the score** (`src/ui/fuse-view.js`, `praise-view.js`, `src/app/present-speed.js`). The
+fuse along the top of the bill is the patience, drawn each frame from the run; under a third it
+turns red, ticks each of its last three seconds a step higher on a wood block, and the customer in
+front fidgets. One who storms off leaves with a bubble (អត់ចាំទេ!) and a groan, and a trust stamp
+on the sign is crossed out. A payment's praise (លឿនណាស់! / ល្អ! / បាន) is stamped over the
+customers, never over the bill, with rays behind the best and the seconds it took, and rings its own
+run of bars and bells; its earnings burst out of it as chips (sale, fast, neat, extra) that fly to
+the sign, which counts up only as each lands. Chips land on the frame clock, not timers. The run of
+right answers is stamped beside the takings. The number pad (`keypad-view.js`,
+`src/input/keypad-input.js`) is a calculator's big keys in place of the cloth and the till, its
+figures following Settings' numerals, typed in ballpoint into the bill's blank.
+
+**The page** is the counter (`styles/page.css`) under the stall's striped awning: a painted sign
+(`sign.css`) with the takings, which rolls up to each payment; the stools, drawn as SVG from the
+front with their customers (`src/ui/figures.js`, `stools-view.js`), the one walking up placed each
+frame from the run, so a pause holds them where they stand; the bill, a page of a duplicate pad
+written in ballpoint (Fasthand) whose serial is the customer's number; the cloth, where each value
+lies in its own fanned pile with its count; Give; and the till of wads under rubber bands. Every
+menu is on the stall's roller shutter (`shutter.css`), which comes down over the counter, so a
+covered counter is never time to think, and closes for the day on a tally of the takings counted
+out in their fewest pieces and the first bills got wrong.
+
+**Motion.** Only transform, opacity and, once per bill, a clip that writes it, ever move. A piece
+counted out is thrown from its bundle and turns once before it lands on its pile; given, the count
+is carried up into the blank, the stamp comes down with a ring of ink and jolts the pad, the earnings
+are written in red, the paid bill is torn off and thrown aside with its stamp, and the next is
+written in front of the player 180 ms later. A wrong count knocks the counter, hops the piles and
+writes what was wrong. Customers bob as they walk up, settle on their stool, and stand up and go,
+or walk to the stall next door; the last free stool flashes. When the stall closes the counter
+dims, and the shutter comes down a beat later and bounces once. With reduced motion none of it
+moves.
+
+**Sound** is synthesized (`src/audio/`, voices as data in `src/data/sounds.js`): paper and a wooden
+tick for each piece, lower for a bigger value; the count handed over replayed as a rising run on
+roneat-like wooden bars with a cart's bell; a rubber stamp; two knocks on wood for a wrong count; a
+megaphone call in each customer's own two pitches as they sit; a rubber band's twang for new
+bundles; the shutter coming down. No music track: the money is the melody.
+
 ## Tests
 
 Each app keeps its tests next to it, split by kind, and Vitest runs them as three projects:
@@ -1728,7 +1927,9 @@ Each app keeps its tests next to it, split by kind, and Vitest runs them as thre
 | `test/regression/`  | `regression`  | the recorded game runs and sound bank, and one test per fixed bug (`regression/bugs/`, `regression/past-fixes/`)                                                                                       |
 
 `apps/web/games/steel-and-dust/test/support/` holds the scenario bot, the recording canvas and the
-game drivers the regression and integration tests share. The arcade's tests mirror its `src/`
+game drivers the regression and integration tests share. `apps/web/games/kit-luy/test/support/`
+holds its bot, which plays a seeded day for the recorded runs, and `open-page.js`, which boots the
+game's own page in happy-dom with frames the test steps. The arcade's tests mirror its `src/`
 (`arcade/test/unit/api/catalog/view-models.test.js` tests `arcade/src/api/catalog/view-models.js`),
 and `arcade/test/support/` holds its harnesses, its fakes and `arcade-files.js`, which finds the file
 an address names as the server does. `arcade/test/integration/layout.test.js` holds `arcade/src/` to

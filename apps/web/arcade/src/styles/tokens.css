@@ -69,7 +69,6 @@
   --color-on-tag: var(--color-white);
   --color-sheet-backdrop: rgb(0 0 0 / 55%);
   --color-sheet-grabber: rgb(235 235 245 / 45%);
-  --color-sheet-underlay: var(--color-black);
   --color-chip: var(--color-apple-gray-5);
   --color-soon-top: var(--color-apple-gray-5);
   --color-soon-bottom: var(--color-black);
@@ -103,6 +102,18 @@
   --color-trophy-badge-bottom: var(--color-apple-orange);
   --color-trophy: var(--color-medal-gold-bottom);
   --color-leaderboard-glow: rgb(255 204 0 / 18%);
+  --color-wallpapers-glow: rgb(94 92 230 / 24%);
+  /* words over a picture stay white in either appearance, over a dark wash from their side */
+  --color-banner-label: var(--color-white);
+  --color-banner-label-secondary: rgb(255 255 255 / 80%);
+  --color-banner-scrim: rgb(0 0 0 / 58%);
+  --color-banner-scrim-clear: rgb(0 0 0 / 0%);
+  --color-banner-pill: var(--color-white);
+  --color-on-banner-pill: var(--color-black);
+  --color-like-heart: var(--color-white);
+  --shadow-like-heart: drop-shadow(0 6px 24px rgb(0 0 0 / 35%));
+  --color-banner-fallback: rgb(44 36 92);
+  --text-shadow-banner: 0 1px 14px rgb(0 0 0 / 35%);
   --color-medal-gold-top: #ffe17a;
   --color-medal-gold-bottom: #d9a30f;
   --color-medal-silver-top: #f2f2f7;
@@ -155,6 +166,9 @@
   --color-brand-github: #24292f;
   --color-brand-coffee: #ffdd00;
   --color-on-brand-coffee: #0d0c22;
+  --color-brand-youtube: #f00;
+  --color-brand-x: #000;
+  --color-brand-tiktok: #000;
   --color-brand-facebook: #0866ff;
   --color-coffee: #ff813f;
   --color-on-coffee: var(--color-white);
@@ -216,6 +230,8 @@
   --layout-hero-min-height: 40rem;
   --layout-supporters-max-width: 52rem;
   --layout-leaderboard-max-width: 46rem;
+  --layout-wallpapers-max-width: 72rem;
+  --layout-banner-text-width: 30rem;
   --layout-credits-max-width: 40rem;
   --layout-cover-max-width: 48rem;
 
@@ -228,6 +244,9 @@
   --size-glass-button-large: 3.25rem;
   --size-carousel-arrow: 3rem;
   --size-pill-button: 3.25rem;
+  --size-like-spark: 0.6rem;
+  --size-like-heart: clamp(4.5rem, 20vw, 7rem);
+  --size-banner-height: clamp(19rem, 30vw, 27rem);
   --size-segment-height: 2.75rem;
   --size-segment-width: 23.75rem;
   --size-segment-width-two: 13rem;
@@ -294,10 +313,10 @@
   --radius-card: 28px;
   --radius-card-ring: 38px;
   --radius-sheet: 1.75rem;
-  --radius-sheet-recede: 12px;
   --radius-pill: 999px;
   --radius-banner: 22px;
   --radius-icon-tile: 8px;
+  --radius-phone-preview: 20px;
 
   --shadow-card: 0 24px 60px rgb(0 0 0 / 50%);
   --shadow-card-edge: inset 0 0 0 1px var(--color-card-edge);
@@ -322,6 +341,7 @@
   --blur-hero-floor: none;
   --blur-launch: blur(48px) saturate(160%) brightness(70%);
   --blur-halo: blur(26px) saturate(150%);
+  --blur-wallpaper-behind: blur(28px) saturate(140%);
 
   --dim-pressed: 0.85;
   --dim-strength: 1;
@@ -330,14 +350,14 @@
   --scale-pressed: 0.96;
   --scale-tile-hover: 1.03;
   --scale-ken-burns: 1.07;
+  --scale-preview-away: 1.06;
+  --scale-phone-preview-away: 0.88;
   --scale-launch-backdrop: 1.2;
   --scale-ring-rest: 0.94;
   --scale-heart-pop: 1.28;
   --scale-tile-press: 1.08;
   --scale-enter: 0.82;
-  --scale-sheet-recede: 0.92;
   --offset-sheet-grabber: 5px;
-  --offset-sheet-recede: calc(env(safe-area-inset-top) + var(--space-2));
   --opacity-halo: 0.6;
   --opacity-ring-track: 0.25;
   --offset-tip: 6px;
@@ -349,6 +369,8 @@
   --radius-tip: 10px;
   --delay-tip: 450ms;
   --offset-rise: 12px;
+  --offset-like-spark: 26px;
+  --offset-like-float: 36px;
   --offset-card-enter: 2.5rem;
   --offset-banner: 1.5rem;
   --offset-nudge: 3px;
@@ -362,6 +384,8 @@
   --scroll-supporters-condense-end: calc(var(--size-heart-badge) + 5rem);
   --scroll-leaderboard-condense-start: calc(var(--size-trophy-badge) + 2.5rem);
   --scroll-leaderboard-condense-end: calc(var(--size-trophy-badge) + 5rem);
+  --scroll-wallpapers-condense-start: 1.5rem;
+  --scroll-wallpapers-condense-end: 4rem;
   --scroll-home-condense-start: 0;
   --scroll-home-condense-end: 2.5rem;
 
@@ -380,6 +404,10 @@
   --duration-carousel: 550ms;
   --duration-enter: 700ms;
   --duration-crossfade: 700ms;
+  --duration-like-burst: 600ms;
+  --duration-like-float: 1000ms;
+  /* a banner's turn (BANNER_TURN_MS in use-banner-turn.ts) and the crossfade after it */
+  --duration-banner-drift: 6700ms;
   --duration-pulse: 800ms;
   --duration-nudge: 420ms;
   --duration-sheen: 3.6s;
@@ -480,6 +508,7 @@
   --color-heart-badge-bottom: var(--color-apple-pink-light);
   --color-supporters-glow: rgb(255 45 85 / 12%);
   --color-leaderboard-glow: rgb(255 204 0 / 16%);
+  --color-wallpapers-glow: rgb(88 86 214 / 12%);
   --color-podium-glow: rgb(255 204 0 / 16%);
   --color-credits-glow: rgb(255 149 0 / 14%);
   --color-row-hover: rgb(118 118 128 / 7%);

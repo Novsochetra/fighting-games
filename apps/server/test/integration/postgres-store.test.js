@@ -23,6 +23,7 @@ describe('migrate', () => {
       '0002_scores',
       '0003_score_posters',
       '0004_poster_key_shape',
+      '0005_wallpapers',
     ]);
   });
 

@@ -1,28 +1,50 @@
 export const API_CACHE = 'arcade-api';
 const READS = ['api/games', 'api/supporters'];
+// long enough for a phone's slow connection to answer, short of a screen that seems stuck
+export const NETWORK_LIMIT_MS = 3000;
 
-// The games and the supporters come from the server while it answers, and the last answer stands
-// in for it offline, so the arcade still lists them.
-export async function apiNetworkFirst({ caches, fetch, request }) {
-  const cache = await caches.open(API_CACHE);
+const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const lastAnswer = async ({ caches, request }) => (await caches.open(API_CACHE)).match(request);
 
-  try {
+// The network's answer is kept even once the page has been given the last one in its place, so
+// the next read has it.
+function readAndKeep(event, { caches, fetch, request }) {
+  const reading = (async () => {
     const response = await fetch(request);
 
     if (response.ok) {
-      await cache.put(request, response.clone());
+      await (await caches.open(API_CACHE)).put(request, response.clone());
     }
 
     return response;
-  } catch (error) {
-    const kept = await cache.match(request);
+  })();
 
-    if (kept) {
-      return kept;
-    }
+  event.waitUntil(reading.catch(() => {}));
 
-    throw error;
+  return reading;
+}
+
+// The games change only with a deploy, whose worker reads them again as it comes in, so the last
+// answer shows at once, on a network however slow, and the network's is for the next visit.
+export async function apiKeptFirst(event, context) {
+  const reading = readAndKeep(event, context);
+
+  return (await lastAnswer(context)) ?? reading;
+}
+
+// The supporters and the boards change with each gift and score, so the network's answer comes
+// first while it comes in time; past the limit, or offline, the last answer stands in.
+export async function apiNetworkFirst(event, context) {
+  const reading = readAndKeep(event, context);
+  const kept = await lastAnswer(context);
+
+  if (!kept) {
+    return reading;
   }
+
+  const late = pause(NETWORK_LIMIT_MS).then(() => kept);
+
+  return Promise.race([reading.catch(() => kept), late]);
 }
 
 // The arcade's first visit read its games before the worker was there to keep them, so the worker

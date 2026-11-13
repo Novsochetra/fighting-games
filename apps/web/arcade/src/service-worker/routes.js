@@ -1,7 +1,8 @@
 // The arcade's own pages, under the worker's scope, which it keeps with the arcade's files.
-const PAGES = ['', 'leaderboard/', 'supporters/', 'credits/'];
+const PAGES = ['', 'leaderboard/', 'supporters/', 'credits/', 'wallpapers/'];
 // the API's reads (api-cache.js keeps their last answers, the leaderboard's for each game it names)
-const API_READS = ['api/games', 'api/supporters', 'api/leaderboard'];
+const CATALOG = 'api/games';
+const LIVE_READS = ['api/supporters', 'api/leaderboard', 'api/wallpapers'];
 const GAME = /^games\/([\w-]+)\//;
 // where the arcade asks how much of a game is kept (GET), saves it (POST) and removes it (DELETE);
 // only the worker answers it, so without one the arcade finds nothing there and offers no save
@@ -24,7 +25,11 @@ function sameOriginRoute(request, path) {
     return { kind: 'game', id: game[1], key: path };
   }
 
-  if (API_READS.includes(path)) {
+  if (path === CATALOG) {
+    return { kind: 'catalog' };
+  }
+
+  if (LIVE_READS.includes(path)) {
     return { kind: 'api' };
   }
 

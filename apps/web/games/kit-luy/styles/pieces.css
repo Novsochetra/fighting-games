@@ -1,0 +1,110 @@
+/* A money piece: a flat strip with one clipped corner, as a wad is carried folded lengthwise. It
+   is told apart four ways at once: its hue, its numeral (the thousands large, the zeros small),
+   the pattern of its end band (beads for hundreds, teeth for thousands, scallops for
+   ten-thousands) and where it lies in the till. It is a game piece and imitates no banknote. */
+.piece {
+  --hue: var(--color-piece-1000);
+
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: baseline;
+  width: 96px;
+  height: 34px;
+  padding-left: 7px;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: var(--edge) solid var(--color-ink);
+  border-radius: var(--radius-fold);
+  background: linear-gradient(var(--color-fold) 0 5px, var(--color-clear) 5px), var(--hue);
+  font-family: var(--font-sign);
+  font-size: var(--font-size-piece);
+  line-height: var(--leading-piece);
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.piece small {
+  margin-left: 1px;
+  font-size: var(--font-size-piece-rest);
+}
+
+.piece::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 20px;
+  background-color: var(--color-band);
+  content: '';
+}
+
+.piece[data-order='hundreds']::after {
+  background-image: radial-gradient(circle, var(--color-ink) 0 1.8px, var(--color-clear) 2.3px);
+  background-size: 7px 7px;
+}
+
+.piece[data-order='thousands']::after {
+  background-image:
+    linear-gradient(135deg, var(--color-ink) 25%, var(--color-clear) 25%),
+    linear-gradient(225deg, var(--color-ink) 25%, var(--color-clear) 25%);
+  background-size: 8px 8px;
+}
+
+.piece[data-order='ten-thousands']::after {
+  background-image: radial-gradient(
+    circle at 50% 100%,
+    var(--color-clear) 0 3.5px,
+    var(--color-ink) 4px 5.5px,
+    var(--color-clear) 6px
+  );
+  background-size: 10px 8px;
+}
+
+.piece[data-value='100'] {
+  --hue: var(--color-piece-100);
+}
+
+.piece[data-value='500'] {
+  --hue: var(--color-piece-500);
+}
+
+.piece[data-value='1000'] {
+  --hue: var(--color-piece-1000);
+}
+
+.piece[data-value='2000'] {
+  --hue: var(--color-piece-2000);
+}
+
+.piece[data-value='5000'] {
+  --hue: var(--color-piece-5000);
+}
+
+.piece[data-value='10000'] {
+  --hue: var(--color-piece-10000);
+}
+
+.piece[data-value='20000'] {
+  --hue: var(--color-piece-20000);
+}
+
+.piece[data-value='50000'] {
+  --hue: var(--color-piece-50000);
+}
+
+.piece-small {
+  width: 72px;
+  height: 28px;
+  padding-left: 5px;
+  font-size: var(--font-size-piece-small);
+  line-height: var(--leading-piece-small);
+}
+
+.piece-small small {
+  font-size: var(--font-size-piece-small-rest);
+}
+
+.piece-small::after {
+  width: 13px;
+}

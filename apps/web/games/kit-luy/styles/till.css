@@ -1,0 +1,166 @@
+.give {
+  min-height: 52px;
+  padding: 0 var(--space-4);
+  border: 3px solid var(--color-paper);
+  border-radius: var(--radius-md);
+  background: var(--color-red);
+  box-shadow: var(--shadow-press);
+  font-family: var(--font-sign);
+  font-size: var(--font-size-lg);
+  line-height: var(--leading-sign);
+  color: var(--color-paper);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.give:active {
+  box-shadow: none;
+  transform: translateY(4px);
+}
+
+/* nothing on the cloth yet: the button waits, outlined, until there is a count to hand over */
+.give.is-empty {
+  border-style: dashed;
+  background: var(--color-blue-deep);
+  box-shadow: none;
+  color: var(--color-guide);
+}
+
+/* The till: bundles of pieces, each in its own place. The thumb's row holds the four everyday
+   values, and the row above stacks ten times each of the three beside it. */
+.till {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border: var(--edge) solid var(--color-ink);
+  border-radius: var(--radius-sm);
+  background: var(--color-paper-shade);
+}
+
+.bundle {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  height: clamp(54px, 9vh, 80px);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.wad {
+  position: relative;
+  width: min(92%, 104px);
+  height: 34px;
+}
+
+.wad .piece small {
+  font-size: var(--font-size-piece-small-rest);
+}
+
+.wad .piece {
+  position: absolute;
+  inset: 0;
+  padding-left: 5px;
+  font-size: var(--font-size-piece-small);
+  line-height: var(--leading-piece);
+  width: 100%;
+  height: 100%;
+  transform: translate(calc(var(--under) * 2px), calc(var(--under) * 4px))
+    rotate(calc(var(--under) * -2deg));
+}
+
+/* the rubber band round the wad, across its end band so it never hides the figure */
+.wad::after {
+  position: absolute;
+  top: -5px;
+  right: 3px;
+  bottom: -11px;
+  z-index: 1;
+  width: 6px;
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-sm);
+  background: var(--color-red);
+  content: '';
+}
+
+.bundle:active .wad,
+.bundle.is-pulled .wad {
+  animation: pull var(--duration-fast) var(--ease-thump);
+}
+
+/* a place whose bundle has not come yet: the money to come, faint as a pencil outline */
+.bundle.is-bare {
+  background: var(--color-slot);
+  cursor: default;
+}
+
+.bundle.is-bare .wad {
+  opacity: 0.22;
+}
+
+.bundle.is-bare .wad .piece:not(:last-child),
+.bundle.is-bare .wad::after {
+  display: none;
+}
+
+.bundle.is-new .wad {
+  animation: snap-in var(--duration-medium) var(--ease-thump) both;
+}
+
+.bundle kbd {
+  position: absolute;
+  bottom: 1px;
+  left: 4px;
+  display: none;
+  font-family: var(--font-text);
+  font-size: var(--font-size-xs);
+  line-height: var(--leading-digits);
+  color: var(--color-pencil);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bundle kbd {
+    display: block;
+  }
+
+  .bundle.is-bare kbd {
+    display: none;
+  }
+}
+
+@keyframes pull {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  40% {
+    transform: translateY(-5px) scale(1.04);
+  }
+}
+
+@keyframes snap-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px) scale(1.4) rotate(-8deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bundle.is-new .wad,
+  .bundle.is-pulled .wad,
+  .bundle:active .wad {
+    animation: none;
+  }
+}

@@ -1,11 +1,12 @@
 // The arcade's screens and where each lives under the arcade. The arcade is the root of the stack;
-// the leaderboard, the supporters and the credits are pushed over it, as screens of an iOS
+// the leaderboard, the supporters, the credits and the wallpapers are pushed over it, as screens of an iOS
 // navigation stack. Each also has a page of its own on disk, which a visitor can open directly.
 export const SCREENS = [
   { id: 'home', path: '', depth: 0 },
   { id: 'leaderboard', path: 'leaderboard/', depth: 1 },
   { id: 'supporters', path: 'supporters/', depth: 1 },
   { id: 'credits', path: 'credits/', depth: 1 },
+  { id: 'wallpapers', path: 'wallpapers/', depth: 1 },
 ] as const;
 
 export type ScreenId = (typeof SCREENS)[number]['id'];

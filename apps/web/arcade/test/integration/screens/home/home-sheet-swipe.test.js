@@ -11,7 +11,7 @@ import {
 // A phone's sheet pulls down like a UIKit sheet: it follows the finger from its top, closes past a
 // third of its height or on a flick, and otherwise goes back into place.
 const sheet = () => byId('details');
-const pull = () => document.documentElement.style.getPropertyValue('--sheet-pull');
+const pull = () => sheet().style.getPropertyValue('--sheet-pull');
 
 // happy-dom lays nothing out, so the sheet is given a phone's box: 600 tall from y 244 to the bottom.
 function openOnPhone() {
@@ -53,7 +53,7 @@ beforeEach(() => {
 afterEach(stopHomes);
 
 describe('pulling the sheet down', () => {
-  it('moves the sheet with the finger and lets the page under it come back', async () => {
+  it('moves the sheet with the finger and lifts the dimming as it goes', async () => {
     await bootWithSteelAndDust();
     openOnPhone();
 

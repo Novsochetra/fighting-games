@@ -1,7 +1,7 @@
 import { VIEW_WIDTH } from '../../config.js';
 import { lastOf } from '../../lib/lists.js';
 import { layoutRoadProps } from './hazards-layout.js';
-import { layoutProps } from './props-layout.js';
+import { layoutProps, layoutWayIn, layoutWayOut } from './props-layout.js';
 import { groundAt, layoutTerrain } from './terrain.js';
 
 // weapon crates are off for now so every hero fights with the weapon they start with; the rations
@@ -70,6 +70,8 @@ export function layoutMission(spec, index) {
   const zones = layoutZones(spec, index + 1);
   const length = lastOf(zones).right;
   const terrain = layoutTerrain(spec.zones, zones, length);
+  const props = layoutProps(spec, { length, terrain });
+
   return {
     ...spec,
     index,
@@ -79,6 +81,8 @@ export function layoutMission(spec, index) {
     terrain,
     crates: layoutCrates(zones, spec.crates, terrain),
     ...layoutRoadProps(spec.zones, zones, terrain),
-    props: layoutProps(spec, { length, terrain }),
+    props,
+    wayIn: layoutWayIn(spec, props),
+    wayOut: layoutWayOut(lastOf(props)),
   };
 }

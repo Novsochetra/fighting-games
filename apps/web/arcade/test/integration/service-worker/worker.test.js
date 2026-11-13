@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { NETWORK_LIMIT_MS } from '@/service-worker/api-cache.js';
 import {
   caught,
   GAME,
@@ -12,6 +13,9 @@ import {
   startWorker,
   text,
 } from '../../support/offline-worker.js';
+
+const SUPPORTERS = '{"supporters":[{"name":"Dara"}]}';
+const MORE_SUPPORTERS = '{"supporters":[{"name":"Dara"},{"name":"Sokha"}]}';
 
 describe('the arcade offline', () => {
   it('opens its pages from the build it keeps, with any query or fragment', async () => {
@@ -42,21 +46,104 @@ describe('the arcade offline', () => {
     expect(await text(worker.request('api/games'))).toBe('{"games":[]}');
   });
 
-  it('lists the games and supporters it last read, and says so when it read none', async () => {
+  it('lists the supporters it last read, and says so when it read none', async () => {
     const worker = await startWorker();
 
-    worker.files[`${SCOPE}api/games`] = '{"games":[{"id":"new"}]}';
-    expect(await text(worker.request('api/games'))).toBe('{"games":[{"id":"new"}]}');
+    worker.network.online = false;
+    await expect(worker.request('api/supporters')).rejects.toThrow('Failed to fetch');
+    worker.network.online = true;
+    worker.files[`${SCOPE}api/supporters`] = SUPPORTERS;
+
+    expect(await text(worker.request('api/supporters'))).toBe(SUPPORTERS);
     worker.network.online = false;
 
-    expect(await text(worker.request('api/games'))).toBe('{"games":[{"id":"new"}]}');
-    await expect(worker.request('api/supporters')).rejects.toThrow('Failed to fetch');
+    expect(await text(worker.request('api/supporters'))).toBe(SUPPORTERS);
   });
 
   it('leaves a gift sent to the network', async () => {
     const worker = await startWorker();
 
     expect(await worker.request('api/supporters', { method: 'POST' })).toBeNull();
+  });
+});
+
+describe('the arcade on a slow network', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  const slowWorker = async (files = server()) => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    const worker = await startWorker(files);
+    const held = Promise.withResolvers();
+
+    worker.network.hold = held.promise;
+
+    return { worker, answerNow: held.resolve };
+  };
+
+  it('lists the games the network answers late with on the next visit', async () => {
+    const { worker, answerNow } = await slowWorker();
+
+    worker.files[`${SCOPE}api/games`] = '{"games":[{"id":"new"}]}';
+    const { response, settled } = worker.answer('api/games');
+
+    expect(await text(response)).toBe('{"games":[]}');
+    answerNow();
+    await settled;
+    worker.network.online = false;
+
+    expect(await text(worker.request('api/games'))).toBe('{"games":[{"id":"new"}]}');
+  });
+
+  it('shows the supporters the network gives within the time limit', async () => {
+    const { worker, answerNow } = await slowWorker({
+      ...server(),
+      [`${SCOPE}api/supporters`]: SUPPORTERS,
+    });
+
+    worker.files[`${SCOPE}api/supporters`] = MORE_SUPPORTERS;
+    const { response } = worker.answer('api/supporters');
+
+    await vi.advanceTimersByTimeAsync(NETWORK_LIMIT_MS - 1);
+    answerNow();
+
+    expect(await text(response)).toBe(MORE_SUPPORTERS);
+  });
+
+  it('keeps the supporters the network gives past the time limit for the next read', async () => {
+    const { worker, answerNow } = await slowWorker({
+      ...server(),
+      [`${SCOPE}api/supporters`]: SUPPORTERS,
+    });
+
+    worker.files[`${SCOPE}api/supporters`] = MORE_SUPPORTERS;
+    const { response, settled } = worker.answer('api/supporters');
+
+    await vi.advanceTimersByTimeAsync(NETWORK_LIMIT_MS);
+
+    expect(await text(response)).toBe(SUPPORTERS);
+    answerNow();
+    await settled;
+    worker.network.online = false;
+
+    expect(await text(worker.request('api/supporters'))).toBe(MORE_SUPPORTERS);
+  });
+
+  it('waits for the network as long as it takes for what it has never read', async () => {
+    const { worker, answerNow } = await slowWorker();
+    const given = vi.fn();
+
+    worker.files[`${SCOPE}api/supporters`] = SUPPORTERS;
+    const { response } = worker.answer('api/supporters');
+
+    response.then(given);
+    await vi.advanceTimersByTimeAsync(NETWORK_LIMIT_MS * 10);
+
+    expect(given).not.toHaveBeenCalled();
+    answerNow();
+
+    expect(await text(response)).toBe(SUPPORTERS);
   });
 });
 

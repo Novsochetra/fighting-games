@@ -4,6 +4,7 @@ import { clamp } from '../../lib/math.js';
 const MARGIN = 6;
 // a boss keeps his whole body on the screen: half his width, in his own units (body-point.js)
 const BOSS_HALF_WIDTH = 24;
+const FREE = { min: -999, max: 99999 };
 
 function isLockedScreen(arena) {
   return arena.right - arena.left <= VIEW_WIDTH;
@@ -31,14 +32,17 @@ export function onScreen(game, x, margin) {
 }
 
 // raiders walking in from off screen are free until they are well inside; checking that here
-// is what ends their entrance
+// is what ends their entrance. Between two roads the hero runs off screen and back on
 export function arenaBounds(game, fighter) {
+  if (fighter === game.player && game.gateRun?.free) {
+    return FREE;
+  }
   const { left, right } = screenEdges(game);
   if (fighter.side === 'enemy' && fighter.entering) {
     if (fighter.x > left + 10 && fighter.x < right - 10) {
       fighter.entering = false;
     }
-    return { min: -999, max: 99999 };
+    return FREE;
   }
   const margin = fighter.def?.boss ? BOSS_HALF_WIDTH * fighter.scale : MARGIN;
   return { min: left + margin, max: right - margin };

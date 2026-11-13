@@ -92,16 +92,9 @@ describe('the twelve missions', () => {
     }
   });
 
-  it("come in through the last road's wall broken open, where a road has a way in", () => {
+  it("come in through the last road's wall broken open, every road after the first", () => {
     const entered = MISSIONS.filter((mission) => mission.entry);
-    expect(entered.map((mission) => mission.name)).toEqual([
-      'Sandstorm Pass',
-      'Iron Works',
-      'Mirage Temple',
-      "Warden's Fortress",
-      'Angkor Wat',
-      'Bayon',
-    ]);
+    expect(entered).toEqual(MISSIONS.slice(1));
     for (const mission of entered) {
       const before = MISSIONS[mission.index - 1];
       expect(mission.entry, mission.name).toBe(`${before.endWall}Broken`);

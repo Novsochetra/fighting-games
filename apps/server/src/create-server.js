@@ -9,12 +9,14 @@ import { isFromOtherSite } from './security/request-origin.js';
 import { splitRequestTarget } from './static-path.js';
 import { createMemoryScoresStore } from './leaderboard/memory-store.js';
 import { createMemorySupportersStore } from './supporters/memory-store.js';
+import { createMemoryWallpapersStore } from './wallpapers/memory-store.js';
 
 // without a database (a laptop, the tests) what is sent is kept in memory until the server stops
-function storesOrMemory({ supporters, scores, storage }) {
+function storesOrMemory({ supporters, scores, wallpapers, storage }) {
   return {
     supporters: supporters ?? createMemorySupportersStore(),
     scores: scores ?? createMemoryScoresStore(),
+    wallpapers: wallpapers ?? createMemoryWallpapersStore(),
     storage: storage ?? null,
   };
 }

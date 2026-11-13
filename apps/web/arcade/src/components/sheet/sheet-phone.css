@@ -1,11 +1,6 @@
-/* A phone's sheet is UIKit's page sheet, which slides without fading and sets the screen under it
-   back onto black rather than blurring it; sheet-gesture.js lets a finger pull it down. */
+/* A phone's sheet is UIKit's page sheet, which slides without fading; sheet-gesture.js lets a finger
+   pull it down. */
 @media (max-width: 40rem) {
-  :root.has-open-sheet,
-  :root.has-open-sheet body {
-    background: var(--color-sheet-underlay);
-  }
-
   .sheet {
     --sheet-enter: 0 100%;
     --sheet-scale: 1;
@@ -49,8 +44,6 @@
 
   .sheet::backdrop {
     opacity: calc(1 - var(--sheet-pull, 0));
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
   }
 
   .sheet.is-settling::backdrop {
@@ -60,32 +53,11 @@
   .sheet__body {
     padding-block-end: max(var(--space-8), env(safe-area-inset-bottom));
   }
-
-  .screen-stack {
-    transition:
-      scale var(--duration-sheet) var(--easing-sheet-phone),
-      translate var(--duration-sheet) var(--easing-sheet-phone),
-      border-radius var(--duration-sheet) var(--easing-sheet-phone);
-    transform-origin: 50% 0;
-  }
-
-  :root:has(.sheet[open]:not(.is-closing)) .screen-stack {
-    --sheet-recede: calc(1 - var(--sheet-pull, 0));
-
-    scale: calc(1 - (1 - var(--scale-sheet-recede)) * var(--sheet-recede));
-    border-radius: calc(var(--radius-sheet-recede) * var(--sheet-recede));
-    translate: 0 calc(var(--offset-sheet-recede) * var(--sheet-recede));
-  }
-
-  :root:has(.sheet.is-dragging) .screen-stack {
-    transition: none;
-  }
 }
 
 @media (max-width: 40rem) and (prefers-reduced-motion: reduce) {
   .sheet.is-settling,
-  .sheet.is-settling::backdrop,
-  .screen-stack {
+  .sheet.is-settling::backdrop {
     transition: none;
   }
 }

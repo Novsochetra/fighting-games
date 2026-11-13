@@ -14,6 +14,7 @@ import { saveCheckpoint } from './checkpoint.js';
 import { hasLivesLeft } from './lives.js';
 import { missionOf } from './mission.js';
 import { REVEAL_FRAMES } from './stage-clear.js';
+import { startWayIn } from './way-in.js';
 
 function announceMission(game) {
   const mission = missionOf(game);
@@ -44,11 +45,12 @@ export function startPlay(game) {
 }
 
 // the score, the purse, the clock, the continues, the lives and the ULT bar carry over; the hero
-// starts fresh
+// starts fresh, running in through the wall smashed open on the road before
 export function enterNextMission(game) {
   const { score, coins, playTime, continues, lives, ultMeter } = game;
   resetRun(game, game.missionIndex + 1);
   Object.assign(game, { score, coins, playTime, continues, lives, ultMeter });
+  startWayIn(game);
   announceMission(game);
 }
 

@@ -7,9 +7,17 @@ import { AS_IS, BUILD_FOLDER, sourceOfAsIs } from '../../server/src/as-is-files.
 import { buildVersion } from '../../server/src/build-version.js';
 import { catalogArtEntries } from '../../server/src/offline/catalog-art.js';
 import { offlineListOf } from '../../server/src/offline/game-files.js';
-import { ARCADE_SRC, DIST_ROOT, GAMES_ROOT, PAGES_ROOT, WEB_ROOT } from '../../server/src/paths.js';
+import {
+  ARCADE_SRC,
+  DIST_ROOT,
+  GAMES_ROOT,
+  PAGES_ROOT,
+  PUBLIC_ROOT,
+  WEB_ROOT,
+} from '../../server/src/paths.js';
 import { isGameDevPath, isPublishedPath } from '../../server/src/public-files.js';
 import { bundleGame } from './build-steps/bundle-game.js';
+import { startupImages } from './build-steps/startup-images.js';
 import { versionIcons } from './build-steps/version-icons.js';
 
 // The games played here, each with a page of its own (a game on its own site keeps only its art).
@@ -111,7 +119,10 @@ const offline = VitePWA({
       'assets/**/*',
       'appearance-early.js',
     ],
-    globIgnores: ['games/**'],
+    // iOS takes its launch screen as the arcade is added to the Home Screen, only a link preview
+    // reads the social pictures, and the wallpapers' banners (1 MB) lead to files kept on
+    // CloudFront, which never work offline, so no save keeps them.
+    globIgnores: ['games/**', 'assets/splash/**', 'assets/social/**', 'assets/wallpapers/**'],
     additionalManifestEntries: await catalogArtEntries({
       webRoot: WEB_ROOT,
       gamesRoot: GAMES_ROOT,
@@ -119,7 +130,7 @@ const offline = VitePWA({
   },
 });
 
-// The arcade's four pages, each with its own head for search and link previews, around one React
+// The arcade's five pages, each with its own head for search and link previews, around one React
 // app. Relative addresses (base './') keep the build working under any path, as the pages always have.
 // Vite's own files go to build/, as assets/ is the arcade's art.
 export default defineConfig({
@@ -134,7 +145,14 @@ export default defineConfig({
       { find: /^\/src\/main\.tsx$/, replacement: path.join(ARCADE_SRC, 'main.tsx') },
     ],
   },
-  plugins: [react(), stampVersion(), copyAsIs(), watchSource(), offline],
+  plugins: [
+    react(),
+    stampVersion(),
+    startupImages(path.join(PUBLIC_ROOT, 'assets', 'splash')),
+    copyAsIs(),
+    watchSource(),
+    offline,
+  ],
   build: {
     outDir: DIST_ROOT,
     emptyOutDir: true,
@@ -145,6 +163,7 @@ export default defineConfig({
         leaderboard: path.join(PAGES_ROOT, 'leaderboard', 'index.html'),
         supporters: path.join(PAGES_ROOT, 'supporters', 'index.html'),
         credits: path.join(PAGES_ROOT, 'credits', 'index.html'),
+        wallpapers: path.join(PAGES_ROOT, 'wallpapers', 'index.html'),
       },
     },
   },

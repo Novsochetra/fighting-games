@@ -52,22 +52,26 @@ export async function startWorker(files = server()) {
   // as the worker installs (sw.js)
   await Promise.all([keepArcade(services), keepApiReads(services)]);
 
-  const request = async (path, { mode = 'cors', method = 'GET', headers = new Headers() } = {}) => {
+  const answer = (path, { mode = 'cors', method = 'GET', headers = new Headers() } = {}) => {
     const waits = [];
     const event = {
       request: { url: `${SCOPE}${path}`, mode, method, headers },
       waitUntil: (promise) => waits.push(promise),
     };
-    const response = await respondTo(event, services);
+    const response = Promise.resolve(respondTo(event, services));
+    const settled = response.then(async (given) => {
+      await Promise.all(waits);
 
-    await Promise.all(waits);
+      return given;
+    });
 
-    return response;
+    return { response, settled };
   };
 
+  const request = (path, options) => answer(path, options).settled;
   const open = (path) => request(path, { mode: 'navigate' });
 
-  return { caches, clock, network, files, request, open };
+  return { caches, clock, network, files, answer, request, open };
 }
 
 export const text = async (response) => (await response).text();
