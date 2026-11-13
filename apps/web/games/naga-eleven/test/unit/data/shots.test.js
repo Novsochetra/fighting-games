@@ -9,7 +9,6 @@ import {
 } from '../../../src/data/shots.js';
 import { MOST_STEPS } from '../../../src/render/duel/lens/lens-pen.js';
 
-// what each stage can point its camera at
 const TARGETS = {
   cutin: ['middle', 'band', 'face', 'ahead', 'boot'],
   clash: ['middle', 'meeting', 'impact', 'ball'],

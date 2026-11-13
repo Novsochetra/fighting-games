@@ -21,7 +21,6 @@ function rested(pace, match) {
   return gapOver && pace.inHalf < RULES.mostPerHalf;
 }
 
-// the first skill of a tick's events, while the camera rests, punches in on its player
 export function hearSkills(session, events) {
   const { pace, match } = session;
   const skill = events.find((event) => event.type === 'skill');
@@ -37,7 +36,6 @@ export function hearSkills(session, events) {
   pace.inHalf += 1;
 }
 
-// once a frame: whether the match steps this frame; slow motion holds it on every other one
 export function stepPace(session) {
   const { pace, match } = session;
   const punch = pace.punchIn;
@@ -57,7 +55,7 @@ export function stepPace(session) {
   return punch.frames > punch.slow || punch.frames % 2 === 0;
 }
 
-// whether slow motion holds the match still this frame; a frame held is a frame of show
+// a frame slow motion holds is a frame of show, counted against the match's budget
 export function holdsFrame(session) {
   if (stepPace(session)) {
     return false;

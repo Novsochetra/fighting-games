@@ -72,7 +72,6 @@ function clash(show) {
   }
 }
 
-// a flash cuts away from the chase as the ball arrives
 function chase(show, input) {
   const hurried = input.pressed?.pass && show.stageTicks > CINEMA.chase.skipAfter;
 

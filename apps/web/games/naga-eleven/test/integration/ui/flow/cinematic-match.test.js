@@ -7,7 +7,6 @@ import { createPlayedMatch } from '../../../../src/ui/flow/match-setup.js';
 import { zoomOf } from '../../../../src/ui/flow/match-zoom.js';
 import { sidesOf, storyMatch } from '../../../support/story-matches.js';
 
-// the chapter 3 final under a cinematic camera
 function finalSession(cinema) {
   const entry = storyMatch('ch3-final');
   const input = createInput();
@@ -27,8 +26,6 @@ function finalSession(cinema) {
   });
 }
 
-// what one frame did: whether the match jumped ticks, was held still in play, was zoomed, began a
-// chase or a punch-in
 function noteFrame(seen, session, { before, punchIn }) {
   const { match, duelShow } = session;
   const counts = {

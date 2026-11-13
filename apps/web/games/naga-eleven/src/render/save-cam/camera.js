@@ -25,7 +25,6 @@ function targetsOf(scene) {
   };
 }
 
-// the camera's view of the save cam `cam.ticks` in, by its shots for what came of the shot
 export function saveCamView(cam, tick) {
   if (!movesCamera(cam.cinema)) {
     return null;

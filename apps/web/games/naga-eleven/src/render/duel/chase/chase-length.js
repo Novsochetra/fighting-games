@@ -7,9 +7,6 @@ export const CHASE_FULL = CINEMA.chase.ticks;
 
 const keyOf = (option) => `chase:${option.move ?? option.id}`;
 
-// how long the chase of a keeper round runs: in full the first time its move is struck in a
-// match, shorter after; none for a plain shot, where the player's camera adds no time, or where
-// the match has spent its share of real time on shows
 export function chaseLengthOf(show, round) {
   const attack = round.picked.attack;
 

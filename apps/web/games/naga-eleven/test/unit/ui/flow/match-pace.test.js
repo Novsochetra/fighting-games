@@ -20,7 +20,6 @@ const sessionOf = (cinema, { tick = 1000, half = 1 } = {}) => ({
 
 const SKILL = [{ type: 'skill', player: 7, move: 'kite-cross' }];
 
-// how many frames of a punch-in step the match, of how many it runs
 function framesOf(session) {
   let stepped = 0;
   let frames = 0;

@@ -21,8 +21,7 @@ export function clampedCentre({ x, y }, zoom) {
   };
 }
 
-// a pen that draws what `pen` would, seen by a camera looking at `view` ({ x, y } on the art grid)
-// `view.step` zoom steps in; step 0 is the pen itself
+// step 0 is the pen itself, so a show whose camera holds still draws as it always did
 export function lensPen(pen, view) {
   const step = Math.max(0, Math.min(MOST_STEPS, Math.round(view?.step ?? 0)));
 

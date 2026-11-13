@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import { WORLD_VIEW } from '../../../../src/config.js';
 import { PUNCH_SCALE, punchTransform } from '../../../../src/render/camera/punch-in.js';
 
-// the part of the canvas's world a punch-in shows, in world pixels
 const shownBy = ({ scale, x, y }) => ({
   left: -x / scale,
   top: -y / scale,

@@ -1,7 +1,5 @@
 import { IMPACT_TICK, STAGE_TICKS } from './stages.js';
 
-// the clash's own clock: it holds on the impact for the show's `freeze`, and runs on into the
-// result
 export function clashClock(show) {
   if (show.stage !== 'clash') {
     return STAGE_TICKS.clash + show.stageTicks;

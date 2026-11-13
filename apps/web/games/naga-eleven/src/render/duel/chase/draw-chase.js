@@ -9,8 +9,6 @@ import { chaseScene } from './chase-scene.js';
 import { drawChaseWorld } from './chase-world.js';
 import { CHASE_FULL } from './chase-length.js';
 
-// the camera rides along with the struck ball: the world rushes past behind it, lines rush in on
-// it, and the move's own shape carries it
 export function drawChase(base, show, { tick }) {
   const scene = chaseScene(show, tick);
   const look = lookOf(scene.look);

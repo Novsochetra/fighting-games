@@ -7,7 +7,6 @@ export const CINEMA = {
   // the ball rides across the screen between the cut-ins and the save cam; a press after
   // `skipAfter` goes on
   chase: { ticks: 40, skipAfter: 18 },
-  // the clash holds still on the impact
   clashFreeze: 6,
   // in open play a skill zooms the camera in on its player for `ticks`, the first `slowTicks` at
   // half speed; no sooner than `gapTicks` after the last, nor more than `mostPerHalf` a half

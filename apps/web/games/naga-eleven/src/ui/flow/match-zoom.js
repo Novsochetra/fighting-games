@@ -18,7 +18,6 @@ function focusOf(session) {
   return calling ? chestOf(project(camera, match.ball.x, match.ball.y)) : null;
 }
 
-// the punch-in drawFrame takes, or none
 export function zoomOf(session) {
   const focus = focusOf(session);
 

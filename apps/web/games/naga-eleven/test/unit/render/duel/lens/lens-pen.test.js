@@ -10,7 +10,6 @@ import {
 } from '../../../../../src/render/duel/lens/lens-pen.js';
 import { createPen } from '../../../../../src/render/duel/pen.js';
 
-// a pen that notes the boxes it fills, in canvas pixels
 function notingPen() {
   const boxes = [];
   const context = {

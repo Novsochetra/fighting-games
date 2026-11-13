@@ -7,8 +7,6 @@ import { fullTicks } from './track.js';
 
 const BAND_MIDDLE = CUTIN_BAND.top + CUTIN_BAND.height / 2;
 
-// the side's portrait, a little ahead of it the way the move goes, and the boot of a striker drawn
-// whole as he kicks
 function cutinTargets(side) {
   const facing = side === 'attack' ? 1 : -1;
   const face = { x: ART.width / 2 - facing * 32, y: BAND_MIDDLE };

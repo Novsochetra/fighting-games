@@ -3,7 +3,6 @@ import { bezier } from '../paths.js';
 import { shownRound } from '../show.js';
 import { IMPACT_TICK } from '../stages.js';
 
-// the ball held near the middle of the view as the camera rides along with it, bobbing a little
 export const BALL_AT = { x: 150, y: 74 };
 
 const TRAIL_FROM = { x: -140, y: 104 };
@@ -16,8 +15,7 @@ export function chaseBall(ticks) {
   return { x: BALL_AT.x, y: BALL_AT.y + Math.round(Math.sin(ticks * 0.3) * 2) };
 }
 
-// a clash's scene (scene.js) for the looks to draw the move around a ball that stays where the
-// camera keeps it, its trail curling in from behind the view
+// the looks draw from a clash's scene (scene.js), so the chase hands them one
 export function chaseScene(show, tick) {
   const round = shownRound(show);
   const attack = round.picked.attack;

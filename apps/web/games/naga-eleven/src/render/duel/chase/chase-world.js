@@ -8,7 +8,6 @@ const SPEED = { stand: 2, grass: 6, streaks: 13 };
 
 const wrapped = (value, span) => ((value % span) + span) % span;
 
-// the stand far off, rushing back slowest: its tiers, and the crowd's faces and flashes in them
 function stand(pen, { art, ticks }) {
   const [high, low] = art.sky;
   const [deep, , mid, light] = art.body;
@@ -28,7 +27,6 @@ function stand(pen, { art, ticks }) {
   pen.rect([0, STAND.top + STAND.height, ART.width, 2], deep);
 }
 
-// the grass under the ball, its mown stripes and a line flying past faster
 function grass(pen, { art, ticks }) {
   const [deep, dark] = art.body;
 
@@ -43,7 +41,6 @@ function grass(pen, { art, ticks }) {
   pen.rect([0, GRASS_TOP, ART.width, 1], art.body[3]);
 }
 
-// streaks rushing past nearest the camera, fastest of all
 function streaks(pen, { art, ticks }) {
   const light = art.body[4] ?? art.body[3];
 
@@ -56,8 +53,7 @@ function streaks(pen, { art, ticks }) {
   }
 }
 
-// the world the camera rides through beside the ball, in the move's colours, each layer rushing
-// back at its own pace so the near ones read nearer
+// each layer rushes back at its own pace, the nearer the faster, so the near ones read nearer
 export function drawChaseWorld(pen, { art, ticks }) {
   stand(pen, { art, ticks });
   grass(pen, { art, ticks });

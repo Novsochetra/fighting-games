@@ -20,8 +20,6 @@ function shotIndexAt(shots, ticks) {
 
 const pointOf = (targets, name) => targets[name] ?? targets.middle;
 
-// where a list of shots (src/data/shots.js) has the camera `ticks` into its stage, given the
-// points the stage names now: { x, y, step }
 export function viewAt(shots, ticks, targets) {
   const index = shotIndexAt(shots, ticks);
   const shot = shots[index];
@@ -37,6 +35,5 @@ export function viewAt(shots, ticks, targets) {
   return { x: lerp(from.x, to.x, share), y: lerp(from.y, to.y, share), step: shot.step };
 }
 
-// a stage played shorter than its full length runs through its shots faster
 export const fullTicks = (ticks, { length, full }) =>
   length > 0 ? (ticks * full) / length : ticks;

@@ -8,8 +8,6 @@ const CHEST_RISE = 30;
 
 const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
 
-// the world drawn PUNCH_SCALE times as big about a point of the canvas, the view kept inside what
-// was drawn: { scale, x, y } for setTransform
 export function punchTransform(focus) {
   const halfWidth = WORLD_VIEW.width / 2 / PUNCH_SCALE;
   const halfHeight = WORLD_VIEW.height / 2 / PUNCH_SCALE;
