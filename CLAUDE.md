@@ -52,13 +52,15 @@ rules on top of it:
 
 ## Testing
 
-- Unit tests are not enough. Each change needs the right mix of:
-  - **unit** tests (`test/unit/`) for plain functions,
-  - **integration** tests (`test/integration/`) for modules working together: the HTTP server, the
-    home page against the real catalog, the game simulation running many systems at once,
-  - **regression** tests (`test/regression/`) that lock in fixed bugs and the game's recorded behavior.
-- Fixing a bug: first write a test that reproduces it and fails, then fix it, then keep the test.
-- Verify your work: run `npm run check`, and look at UI changes in a browser.
+The testing rules every project of ours shares, imported here; this section says where this
+project's tests live and how to run them:
+
+@docs/testing.md
+
+- Each part keeps its tests in `test/unit/`, `test/integration/` and `test/regression/`. Integration
+  tests here cover the HTTP server, the home page against the real catalog and the game simulation
+  running many systems at once; regression tests also hold each game's recorded runs.
+- The full check is `npm run check`.
 - Changing game behavior on purpose (balance, new moves) changes the recorded runs in
   `test/regression/fixtures/`: update them with `npm run test:regression -- -u` and review the diff.
 
