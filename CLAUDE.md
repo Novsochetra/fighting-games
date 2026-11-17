@@ -53,8 +53,8 @@ changing structure.
 - Keep comments minimal: no comments that restate the code, no section-banner comments, no long
   JSDoc on obvious functions.
 - Prettier owns formatting (`.prettierrc.json`), but it never adds a blank line, so space code into
-  steps yourself. Put a blank line:
-  - after the setup (the `const`s that gather what a function needs), before its logic,
+  steps yourself (see "Function layout"). Put a blank line:
+  - between the blocks of a function,
   - after a block (`if`, `for`, `try`, `switch`) that closes with `}` when more code follows,
   - after an early return (`if (!pad) { ...; return; }`),
   - before the final `return`, unless it is the only line of the function,
@@ -73,6 +73,56 @@ changing structure.
     }
   }
   ```
+
+## Function layout
+
+- Group function bodies into blocks separated by one blank line; each block does one thing.
+- Declare variables in the block where they are first used, not at the top of the function.
+- Process-wide setup belongs in the entry file, not in the functions that do the work: the server's
+  signal and stream handlers and `process.exit` in `apps/server/src/main.js`; page-wide listeners
+  on `window` or `document` installed once from the entry (`main.tsx`, a game's `src/main.js`)
+  or a module it calls for that (`install-input.js`, `boot/`), or by a hook that removes them again.
+- No comments that describe what code does; only comments explaining a non-obvious _why_.
+
+Reordering and grouping alone, with nothing else changed, makes a function read as its steps.
+Before, every `const` sits at the top, and `delimiter` and `totals` ride in a block that connects
+to the bucket:
+
+```js
+export async function listCommand(context) {
+  const { args, connect } = context;
+  const target = await pickTarget(context);
+  const { bucket } = await connect(target.name);
+  const delimiter = args.recursive ? null : '/';
+  const totals = { files: 0, folders: 0 };
+  console.log(`s3://${bucket.name}/`);
+  for await (const page of bucket.pages({ delimiter })) {
+    countPage(page, totals);
+  }
+  return totals;
+}
+```
+
+After, each block is one step, with what it needs declared in it:
+
+```js
+export async function listCommand(context) {
+  const { args, connect } = context;
+
+  const target = await pickTarget(context);
+  const { bucket } = await connect(target.name);
+
+  const delimiter = args.recursive ? null : '/';
+  const totals = { files: 0, folders: 0 };
+
+  console.log(`s3://${bucket.name}/`);
+  for await (const page of bucket.pages({ delimiter })) {
+    countPage(page, totals);
+  }
+
+  return totals;
+}
+```
 
 ## Testing
 
