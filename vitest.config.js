@@ -21,16 +21,6 @@ export default defineConfig({
     ],
   },
   test: {
-    projects: [
-      {
-        extends: true,
-        test: {
-          name: 'unit',
-          include: [`apps/**/test/unit/**/${TESTS}`, `tools/**/test/**/${TESTS}`],
-        },
-      },
-      suite('integration'),
-      suite('regression'),
-    ],
+    projects: [suite('unit'), suite('integration'), suite('regression')],
   },
 });

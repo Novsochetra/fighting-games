@@ -5,7 +5,7 @@ import {
   isCommit,
   isReviewed,
   reviewRequest,
-} from '../added-comments.js';
+} from '../../added-comments.js';
 
 describe('isReviewed', () => {
   it('reviews the project’s scripts, components and styles', () => {

@@ -1,7 +1,7 @@
-import { execFileSync } from 'node:child_process';
 import { readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { addedComments, changesOf, isCommit, isReviewed, reviewRequest } from './added-comments.js';
+import { gitIn } from './git.js';
 
 // Claude Code runs this after each edit and each Bash command (.claude/settings.json) and shows
 // Claude what it prints. A commit is reviewed too, as Bash can edit a file without the Edit tool.
@@ -10,13 +10,7 @@ const root = process.env.CLAUDE_PROJECT_DIR ?? process.cwd();
 // A commit the command made moved HEAD seconds ago; an older move means the commit failed.
 const FRESH_SECONDS = 30;
 
-function git(...args) {
-  try {
-    return execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: 'pipe' });
-  } catch {
-    return '';
-  }
-}
+const git = gitIn(root);
 
 function reviewEdit(toolInput) {
   const file = path.relative(root, path.resolve(root, toolInput.file_path ?? ''));

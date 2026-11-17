@@ -1,9 +1,9 @@
 import { RuleTester } from 'eslint';
 import { describe, it } from 'vitest';
-import { blankLines } from '../rules/blank-lines.js';
-import { noBannerComments } from '../rules/no-banner-comments.js';
-import { noJsdocBlocks } from '../rules/no-jsdoc-blocks.js';
-import { noRawHex } from '../rules/no-raw-hex.js';
+import { blankLines } from '../../rules/blank-lines.js';
+import { noBannerComments } from '../../rules/no-banner-comments.js';
+import { noJsdocBlocks } from '../../rules/no-jsdoc-blocks.js';
+import { noRawHex } from '../../rules/no-raw-hex.js';
 
 RuleTester.describe = describe;
 RuleTester.it = it;

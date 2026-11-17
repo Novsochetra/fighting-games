@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
 
-const root = fileURLToPath(new URL('../../../', import.meta.url));
+const root = fileURLToPath(new URL('../../../../', import.meta.url));
 const script = path.join(root, 'tools/claude-hooks/review-comments.js');
 const component = path.join(root, 'apps/web/arcade/src/screens/home/details/use-details.ts');
 const scratchRepos = [];

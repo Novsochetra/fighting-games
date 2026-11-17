@@ -37,6 +37,15 @@ changing structure.
   Colors painted on a game's canvas (sprites, scenery, effects, HUD) are pixel-art data, like the
   PNGs, and live only in that game's `src/art/` palette files, the one place lint allows hex in JS.
 - Never install packages without asking; concurrent installs corrupt `node_modules`.
+- A commit by Claude waits for the `guideline-reviewer` subagent (`.claude/agents/`) to pass exactly
+  the tree it commits: stage with `git add`, run it, fix what it finds, stage, run it again, then
+  commit. `.githooks/pre-commit` refuses the commit until then (`tools/claude-hooks/`); `AGENTS.md`
+  asks the same of other agents. `git revert` and `git cherry-pick` run with `--no-commit`, and a
+  patch goes in with `git apply --index` rather than `git am`, so the result is reviewed and
+  committed like any change; merge commits and rebases combine commits already reviewed and are
+  outside the check, while a `git merge --squash` makes one new commit, reviewed like any other.
+  This guards against skipping the review by mistake, not against an agent set on getting around it:
+  CI and a person's review of the pull request are the backstop.
 
 ## Testing
 

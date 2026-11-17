@@ -1,3 +1,4 @@
 #!/bin/sh
-# lint, formatting and every test must pass before a commit
+# lint, formatting and every test must pass before a commit, and a commit by Claude needs a review
+node tools/claude-hooks/require-review.js || exit 1
 npm run check
