@@ -16,6 +16,7 @@ function djinnAt(distance, { missionIndex = 6, share = 1 } = {}) {
   Object.assign(djinn, { entering: false, x: 120 + distance, facing: -1 });
   djinn.ai.cooldown = 0;
   djinn.hp = share * djinn.maxHp;
+
   return { game, djinn };
 }
 
@@ -38,6 +39,7 @@ describe("the Storm Djinn's kit", () => {
       think(game, djinn);
       directions.add(djinn.walkDirection);
     }
+
     expect([...directions].sort()).toEqual([-1, 1]);
   });
 

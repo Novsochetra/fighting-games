@@ -15,6 +15,7 @@ function ironhornArena({ gap = 150, hp } = {}) {
   const ironhorn = game.boss;
   Object.assign(ironhorn, { entering: false, x: game.player.x + gap, facing: -1 });
   ironhorn.hp = hp ?? ironhorn.maxHp;
+
   return { game, ironhorn };
 }
 
@@ -31,8 +32,10 @@ function watch(game, ironhorn, ticks) {
     if (ironhorn.move && moves.at(-1) !== ironhorn.move.id) {
       moves.push(ironhorn.move.id);
     }
+
     game.projectiles.forEach((shot) => shots.add(shot));
   }
+
   return { moves, shots: [...shots] };
 }
 
@@ -55,6 +58,7 @@ describe('Ironhorn in a fight', () => {
       furthest = Math.min(furthest, ironhorn.x);
       dazedAt = ironhorn.move?.id === 'dazed' ? ironhorn.x : null;
     }
+
     expect(dazedAt).not.toBeNull();
     expect(dazedAt - furthest).toBeCloseTo(10, 0);
     expect(game.projectiles.filter((shot) => shot.kind === 'bamboo')).toHaveLength(1);
@@ -86,6 +90,7 @@ describe('Ironhorn in a fight', () => {
       runTicks(game, 1);
       launched ||= game.player.state === 'juggle';
     }
+
     expect(launched).toBe(true);
   });
 
@@ -97,11 +102,13 @@ describe('Ironhorn in a fight', () => {
       if (i % 300 === 0) {
         game.player.x = ironhorn.x > 192 ? 20 : 364;
       }
+
       runTicks(game, 1);
       game.player.hp = game.player.maxHp;
       ironhorn.hp = Math.max(ironhorn.hp, 40);
       used.add(ironhorn.move?.id);
     }
+
     expect([...used]).toEqual(expect.arrayContaining(['hornRush', 'stampede', 'dazedLong']));
   });
 });

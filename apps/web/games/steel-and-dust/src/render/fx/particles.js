@@ -19,6 +19,7 @@ function dust(painter, particle) {
       .use(FX_COLORS.dustHighlight)
       .rect(particle.x - radius + 1, particle.y - radius + 1, 2, 1);
   }
+
   painter.alpha(1);
 }
 

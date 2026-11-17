@@ -25,6 +25,7 @@ function coverOf(image, { left, top, height }) {
       cover += image.alpha(x, y) > 0 ? 1 : 0;
     }
   }
+
   return cover;
 }
 
@@ -38,11 +39,13 @@ function frameCovers(hero, strip) {
       covers.push({ row, frame, cover });
     }
   }
+
   return covers;
 }
 
 function idleCover(hero) {
   const swordRow = frameCovers(hero, 'idle').filter(({ row }) => row === 0);
+
   return swordRow.reduce((sum, { cover }) => sum + cover, 0) / swordRow.length;
 }
 
@@ -60,9 +63,11 @@ function hueOf(red, green, blue) {
   if (!spread) {
     return 0;
   }
+
   if (most === red) {
     return (((green - blue) / spread) * 60 + 360) % 360;
   }
+
   return most === green ? ((blue - red) / spread + 2) * 60 : ((red - green) / spread + 4) * 60;
 }
 
@@ -71,6 +76,7 @@ function isBody([red, green, blue]) {
   const saturation = most ? ((most - Math.min(red, green, blue)) * 255) / most : 0;
   const glow = most > 215 && (saturation < 150 || hueOf(red, green, blue) > 40);
   const cape = red > green * 1.6 && red > blue * 1.4 && green < 90;
+
   return !glow && !cape;
 }
 
@@ -82,6 +88,7 @@ function bodySizes(strip) {
   const path = ult ? ANGKOR.ultStrip : `${ANGKOR.directory}hero_${strip}.png`;
   const image = readPngAlpha(new URL(path, GAME));
   const height = ult ? image.height : image.height / WEAPON_IDS.length;
+
   return Array.from({ length: HERO_SPRITES.frames[strip] }, (_, frame) => {
     let body = 0;
     for (let y = 0; y < height; y++) {
@@ -89,6 +96,7 @@ function bodySizes(strip) {
         body += image.alpha(x, y) > 0 && isBody(image.rgb(x, y)) ? 1 : 0;
       }
     }
+
     return { frame, body };
   });
 }

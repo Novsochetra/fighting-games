@@ -11,7 +11,9 @@ function blinkAway(game, boss) {
   if (game.tickCount < (ai.blinkReadyAt ?? 0) || Math.random() > BLINK_CHANCE) {
     return false;
   }
+
   ai.blinkReadyAt = game.tickCount + BLINK_COOLDOWN;
+
   return startMove(game, boss, 'mirageBlink');
 }
 
@@ -22,6 +24,7 @@ export function illusionist(boss, { game, distance, pace }) {
   if (distance < 56 && blinkAway(game, boss)) {
     return;
   }
+
   if (distance > 170) {
     walk(boss, 1, pace);
   } else if (distance < 90) {

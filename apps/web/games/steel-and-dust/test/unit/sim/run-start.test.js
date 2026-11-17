@@ -10,6 +10,7 @@ import { createTestGame } from '../../support/test-game.js';
 
 function gameWithTickets(settings) {
   const runStarted = vi.fn();
+
   return { runStarted, game: createTestGame({ settings, io: { runStarted } }) };
 }
 

@@ -37,6 +37,7 @@ function renderAt(cameraX) {
   game.camera.x = cameraX;
   screen.recording.log.length = 0;
   renderFrame(game, view);
+
   return screen.recording.log;
 }
 

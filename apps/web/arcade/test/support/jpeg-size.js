@@ -10,8 +10,10 @@ export function jpegSize(bytes) {
     if (marker >= 0xc0 && marker <= 0xc3) {
       return `${bytes.readUInt16BE(offset + 7)}x${bytes.readUInt16BE(offset + 5)}`;
     }
+
     offset += 2 + bytes.readUInt16BE(offset + 2);
   }
+
   return null;
 }
 
@@ -22,6 +24,7 @@ export async function claimedAndRealSize(img, pageFile) {
   const file = URL.canParse(src)
     ? fileAt(new URL(src).pathname)
     : path.resolve(path.dirname(pageFile), src);
+
   return {
     claimed: `${img.getAttribute('width')}x${img.getAttribute('height')}`,
     real: jpegSize(await readFile(file)),

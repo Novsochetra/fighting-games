@@ -13,6 +13,7 @@ export function strikeAt(effect, tick) {
   const period = Math.floor(tick / effect.period);
   const start = Math.floor(trait(period + SALT, 1) * (effect.period - FLASH.length));
   const age = tick - period * effect.period - start;
+
   return age >= 0 && age < FLASH.length ? FLASH[age] : 0;
 }
 
@@ -21,10 +22,12 @@ export function drawLightning(painter, { effect, tick, colors }) {
   if (brightness <= 0) {
     return;
   }
+
   const span = effect.bottom - effect.top;
   painter.use(colors.lightning).alpha(effect.strength * brightness);
   for (const share of LAYER_SHARES) {
     painter.rect(0, effect.top, VIEW_WIDTH, Math.round(span * share));
   }
+
   painter.alpha(1);
 }

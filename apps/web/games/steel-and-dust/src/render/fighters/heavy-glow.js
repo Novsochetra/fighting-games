@@ -17,14 +17,17 @@ export function heavyGlowColor(fighter, heroId) {
   if (!art || !inHeavy(fighter)) {
     return null;
   }
+
   const { startup } = fighter.move;
   const time = fighter.moveTime;
   if (time >= startup + STRIKE_GLOW) {
     return null;
   }
+
   if (time >= startup - HOT_LEAD) {
     return art.hot;
   }
+
   return time * 2 < startup ? art.glowDim : art.glow;
 }
 
@@ -35,7 +38,9 @@ export function heavyLeanX(fighter, heroId) {
   if (!feel || !inHeavy(fighter) || fighter.moveTime >= fighter.move.startup) {
     return 0;
   }
+
   const share = Math.min(1, (fighter.moveTime + 1) / feel.leanTicks);
+
   return -fighter.facing * Math.round(feel.lean * share);
 }
 
@@ -45,6 +50,7 @@ export function drawHeavyLayer(painter, layer, { fighter, heroId, tickCount }) {
   if (!draw || !inHeavy(fighter)) {
     return;
   }
+
   const art = HEAVY_ART[heroId];
   draw(painter, { fighter, move: fighter.move, time: fighter.moveTime, art, tickCount });
 }

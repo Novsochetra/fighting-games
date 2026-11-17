@@ -16,6 +16,7 @@ function gnollArena({ gap = 150, hp } = {}) {
   Object.assign(gnoll, { entering: false, x: game.player.x + gap, facing: -1 });
   gnoll.hp = hp ?? gnoll.maxHp;
   gnoll.ai.cooldown = 9999;
+
   return { game, gnoll };
 }
 
@@ -27,6 +28,7 @@ function playOut(game, gnoll, ticks) {
     gnoll.ai.cooldown = 9999;
     states.add(game.player.state);
   }
+
   return states;
 }
 
@@ -58,6 +60,7 @@ describe('the Gnoll Packlord in a fight', () => {
     while (gnoll.airborne) {
       playOut(game, gnoll, 1).forEach((state) => states.add(state));
     }
+
     expect(Math.abs(gnoll.x - mark.x)).toBeLessThan(4);
     playOut(game, gnoll, 20).forEach((state) => states.add(state));
     expect(states.has('juggle')).toBe(true);
@@ -74,6 +77,7 @@ describe('the Gnoll Packlord in a fight', () => {
       moves.add(gnoll.move?.id);
       fed = fed || gnoll.hp > 80;
     }
+
     expect([...moves]).toEqual(
       expect.arrayContaining([
         'bloodFrenzy',
@@ -96,16 +100,19 @@ describe('the Gnoll Packlord in a fight', () => {
       if (i % 600 === 0) {
         game.player.x = gnoll.x > 192 ? 20 : 364;
       }
+
       if (i % 900 === 0) {
         game.fighters = game.fighters.filter(
           (fighter) => fighter.side === 'player' || fighter.def.boss,
         );
       }
+
       runTicks(game, 1);
       game.player.hp = game.player.maxHp;
       gnoll.hp = Math.max(gnoll.hp, 40);
       used.add(gnoll.move?.id);
     }
+
     expect([...used]).toEqual(
       expect.arrayContaining(['leapingMaul', 'packCallThree', 'bloodFrenzy', 'frenzyPant']),
     );

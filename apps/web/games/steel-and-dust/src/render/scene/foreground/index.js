@@ -26,6 +26,7 @@ export function drawForeground(painter, cameraX, colors, tick) {
     if (hash % 3 === 0) {
       continue;
     }
+
     const x = i * 170 - offset + (hash % 60);
     draw(painter, x, { hash, colors, tick });
   }

@@ -37,6 +37,7 @@ describe('the loading screen on the real page', () => {
         `<link rel="preload" href="${url}" as="image" fetchpriority="high" />`,
       );
     }
+
     expect(PAGE.indexOf('src/boot/boot-loading.js')).toBeLessThan(PAGE.indexOf('src/main.js'));
   });
 

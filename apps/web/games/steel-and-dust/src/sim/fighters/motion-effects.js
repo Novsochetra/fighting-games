@@ -13,7 +13,9 @@ function wantsAfterimage(fighter) {
   if (fighter.state === 'dash') {
     return fighter.stateTime % 4 === 1 && fighter.stateTime < 14;
   }
+
   const move = fighter.move;
+
   return (
     fighter.state === 'attack' &&
     move &&
@@ -58,6 +60,7 @@ function addRunEffects(game, fighter) {
     addDust(game, { x: fighter.x - fighter.facing * 6, y, count: 2 });
     game.io.sfx('step', false, { x: fighter.x });
   }
+
   if (fighter.animTime % RUN_WIND_TICKS === 0) {
     addWindLine(game, fighter);
   }
@@ -67,18 +70,23 @@ export function addMotionEffects(game, fighter) {
   if (wantsAfterimage(fighter)) {
     addAfterimage(fighter);
   }
+
   if (fighter.state === 'dash' && fighter.stateTime < 12 && fighter.stateTime % 2 === 0) {
     addWindLine(game, fighter);
   }
+
   if (fighter.state === 'walk' && !fighter.entering && fighter.animTime % 14 === 0) {
     const y = floorUnder(game.terrain, fighter);
     addDust(game, { x: fighter.x - fighter.facing * 5, y, count: 1 });
   }
+
   if (fighter.state === 'run') {
     addRunEffects(game, fighter);
   }
+
   for (const image of fighter.afterimages) {
     image.life--;
   }
+
   fighter.afterimages = fighter.afterimages.filter((image) => image.life > 0);
 }

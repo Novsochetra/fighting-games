@@ -11,6 +11,7 @@ function compressor(context, { threshold, knee, ratio, attack, release }) {
   node.ratio.value = ratio;
   node.attack.value = attack;
   node.release.value = release;
+
   return node;
 }
 
@@ -19,6 +20,7 @@ function highShelf(context, frequency, decibels) {
   node.type = 'highshelf';
   node.frequency.value = frequency;
   node.gain.value = decibels;
+
   return node;
 }
 
@@ -27,6 +29,7 @@ function gain(context, value) {
   if (value !== undefined) {
     node.gain.value = value;
   }
+
   return node;
 }
 
@@ -55,6 +58,7 @@ function buildMaster(context) {
   const reverb = context.createConvolver();
   reverb.buffer = createImpulseResponse(context, 1.0, 3.5);
   connectChain(reverb, gain(context, 0.5), master);
+
   return { master, out, reverb };
 }
 
@@ -72,6 +76,7 @@ function buildEffects(context, out) {
   const effectsBus = gain(context);
   const effectsOut = gain(context, 0.9);
   connectChain(effectsBus, tone, squeeze, effectsOut, out);
+
   return { effectsBus, effectsOut };
 }
 
@@ -87,6 +92,7 @@ function buildEcho(context, musicBus) {
   const wet = gain(context, 0.38);
   connectChain(echoInput, delay, darken, feedback, delay);
   connectChain(darken, wet, musicBus);
+
   return echoInput;
 }
 
@@ -99,5 +105,6 @@ export function buildChain(context) {
   connectChain(musicBus, gain(context, 0.12), reverb);
   const echoInput = buildEcho(context, musicBus);
   const noiseBuffer = createNoiseBuffer(context);
+
   return { master, effectsBus, effectsOut, musicBus, echoInput, noiseBuffer, crunchCurve: CRUNCH };
 }

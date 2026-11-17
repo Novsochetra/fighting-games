@@ -13,7 +13,9 @@ function flurried(move, hits) {
   if (!hits || move.multiHit) {
     return move;
   }
+
   const active = Math.max(move.active, hits * 3);
+
   return {
     ...move,
     active,
@@ -24,11 +26,13 @@ function flurried(move, hits) {
 
 function patched(move, patch = {}) {
   const { flurry, ...fields } = patch;
+
   return flurried({ ...move, ...fields }, flurry);
 }
 
 function withTempo(move, tempo) {
   const [x, y, width, height] = move.hitbox;
+
   return {
     ...move,
     startup: scaled(move.startup, tempo.startup),
@@ -45,6 +49,7 @@ function addTechniques(styled, techniques = {}) {
   for (const [id, technique] of Object.entries(techniques)) {
     styled[id] = { ...technique, technique: true };
   }
+
   for (const [from, button, to] of TECHNIQUE_LINKS) {
     const move = styled[from];
     if (styled[to] && move && !move.next[button]) {
@@ -58,6 +63,7 @@ function withWeaponPatch(styled, patch) {
   if (!patch) {
     return styled;
   }
+
   return Object.fromEntries(
     Object.entries(styled).map(([id, move]) => [id, { ...move, ...patch }]),
   );
@@ -70,6 +76,8 @@ export function applyStyle(moves, style, weaponId) {
   for (const [id, move] of Object.entries(moves)) {
     styled[id] = withTempo(patched(move, style.moves[id]), tempo);
   }
+
   addTechniques(styled, style.techniques);
+
   return normalizeMoves(withWeaponPatch(styled, style.weapons?.[weaponId]));
 }

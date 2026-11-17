@@ -14,6 +14,7 @@ function settledGate() {
   const gate = createLoaderGate(0);
   stepLoaderGate(gate, { waiting: false, progress: 1, now: 0 });
   stepLoaderGate(gate, { waiting: false, progress: 1, now: 10000 });
+
   return gate;
 }
 

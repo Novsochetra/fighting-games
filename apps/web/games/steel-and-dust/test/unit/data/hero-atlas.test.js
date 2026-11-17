@@ -13,6 +13,7 @@ const GAME = new URL('../../../', import.meta.url);
 
 function stripMismatches(hero, name) {
   const [frameHeight, ...rows] = HERO_ATLAS[hero.id][name];
+
   return packedMismatches({
     gridPath: new URL(stripPath(hero, name), GAME),
     packedPath: new URL(packedStripPath(hero, name), GAME),

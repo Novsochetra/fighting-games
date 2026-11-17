@@ -15,6 +15,7 @@ function shuffle(places) {
     const j = Math.floor(Math.random() * (i + 1));
     [places[i], places[j]] = [places[j], places[i]];
   }
+
   return places;
 }
 
@@ -22,6 +23,7 @@ function shuffle(places) {
 function spots(game, boss) {
   const { min, max } = arenaBounds(game, boss);
   const hero = game.player.x;
+
   return [min + EDGE, (min + max) / 2, max - EDGE].map((x) =>
     Math.abs(x - hero) < HERO_GAP ? clamp(hero + (x >= hero ? 1 : -1) * HERO_GAP, min, max) : x,
   );
@@ -54,6 +56,7 @@ export function castMirages(game, boss, move) {
   boss.mirages = others.slice(0, move.mirages.count).map((x, i) => {
     sandPuff(game, x);
     const fireIn = move.mirages.firing ? FIRE_EVERY / 2 + i * (FIRE_EVERY / 2) : -1;
+
     return { x, y: groundAt(game.terrain, x), facing: 1, time: 0, popTime: -1, fireIn, cast: -1 };
   });
   game.io.sfx('mirage', false, { x: boss.x });

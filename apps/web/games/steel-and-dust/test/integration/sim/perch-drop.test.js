@@ -105,6 +105,7 @@ describe('a raider dropping off a ledge on the road', () => {
       runTicks(game, 1);
       bounced.push(grain.bounced);
     }
+
     expect(grain.resting).toBe(true);
     expect(bounced.filter(Boolean).length).toBeGreaterThan(0);
   });

@@ -28,6 +28,7 @@ export function rushTargets(game, player) {
 
 function liveTarget(player, index) {
   const alive = player.rush.targets.filter((target) => target.state !== 'ko' && !target.removed);
+
   return alive.length ? alive[index % alive.length] : null;
 }
 
@@ -43,13 +44,16 @@ function blowSpot(game, player, index) {
     );
     return { x, y: groundAt(game.terrain, x), target, facing: Math.sign(x - player.x) || 1 };
   }
+
   const side = (index % 2 ? -1 : 1) * (target.x >= player.x ? 1 : -1);
   let x = clamp(target.x - side * REACH * target.scale, bounds.min, bounds.max);
   if (Math.abs(x - target.x) < REACH / 2) {
     x = clamp(target.x + side * REACH * target.scale, bounds.min, bounds.max);
   }
+
   const ground = groundAt(game.terrain, x);
   const y = index === LAST ? ground : Math.min(target.y, ground);
+
   return { x, y, target, facing: target.x >= x ? 1 : -1 };
 }
 
@@ -97,6 +101,7 @@ function strike(game, player, index) {
   if (target) {
     applyHit(game, { attacker: player, target, move, x: hitX, y: hitY });
   }
+
   addBurst(game, { sprite: 'strike', x: hitX, y: hitY, scale: index === LAST ? 1 : 0.8 });
   addSparks(game, { x: hitX, y: hitY, count: 6, color: FX_COLORS.lionGold, speed: 3 });
   leaveEcho(game, {
@@ -123,10 +128,12 @@ export function runRush(game, player, time) {
   if (time === blow.start) {
     startBlow(game, player, index);
   }
+
   if (time < blow.start + zipTicks) {
     const { from, spot } = player.rush;
     zip(game, player, { from, to: spot, since: time - blow.start });
   }
+
   if (time === blow.strikeAt) {
     strike(game, player, index);
   }
@@ -140,6 +147,7 @@ export function zipBack(game, player, time) {
     player.facing = rush.facing;
     game.io.sfx('warp');
   }
+
   const to = { x: rush.fromX, y: groundAt(game.terrain, rush.fromX) };
   player.ultFrame = rushFrame(time);
   zip(game, player, { from: rush.from, to, since: time - RUSH_END });

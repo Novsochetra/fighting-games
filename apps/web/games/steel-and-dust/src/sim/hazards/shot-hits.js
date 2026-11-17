@@ -21,6 +21,7 @@ export function hitArea(game, { shot, area, hit }) {
     if (!canReach(shot, rules, target)) {
       continue;
     }
+
     const body = hurtBox(target);
     if (
       body &&

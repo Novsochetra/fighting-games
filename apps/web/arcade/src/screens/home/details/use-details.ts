@@ -24,6 +24,7 @@ export function useDetails() {
     ...shown,
     dialogRef,
     closeRef,
+
     open(card: GameCard | undefined) {
       if (!card) {
         return;

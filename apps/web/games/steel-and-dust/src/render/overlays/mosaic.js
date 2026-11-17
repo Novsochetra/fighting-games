@@ -6,6 +6,7 @@ export function pixelate(painter, view, block) {
   if (block <= 1) {
     return;
   }
+
   const { context } = painter;
   const screen = context.canvas;
   const width = VIEW_WIDTH / block;

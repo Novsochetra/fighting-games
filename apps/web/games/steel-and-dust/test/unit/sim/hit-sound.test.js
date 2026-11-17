@@ -8,6 +8,7 @@ function gameWith(heroState) {
     combo: { count: 0 },
     io: { sfx: (key, big) => played.push({ key, big }) },
   };
+
   return { game, played };
 }
 

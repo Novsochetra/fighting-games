@@ -13,6 +13,7 @@ const RUBBLE_GONE = CRUMBLE_FRAMES * CRUMBLE_TICKS + RUBBLE_FADE;
 // the curse holds while the boss still burns the sun over his head
 export function isCursing(boss) {
   const move = boss.move;
+
   return boss.state === 'attack' && Boolean(move?.curse) && boss.moveTime < move.curse.releaseAt;
 }
 
@@ -54,6 +55,7 @@ function crackJar(game, jar, { loud }) {
   if (!loud) {
     return;
   }
+
   addSparks(game, { x: jar.x, y: jar.y - 14, count: 12, color: FX_COLORS.sunGold, speed: 2.6 });
   shake(game, 2, 6);
   game.io.sfx('jarBreak', false, { x: jar.x });
@@ -64,6 +66,7 @@ export function standJar(game, jar) {
   if (isJarStanding(jar) && !isCursing(jar.owner)) {
     crackJar(game, jar, { loud: false });
   }
+
   jar.dead = !isJarStanding(jar) && jar.time - jar.brokenAt >= RUBBLE_GONE;
 }
 

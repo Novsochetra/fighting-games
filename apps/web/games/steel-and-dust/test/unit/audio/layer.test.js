@@ -9,8 +9,10 @@ function constantRandom(value) {
   let calls = 0;
   Math.random = () => {
     calls++;
+
     return value;
   };
+
   return () => calls;
 }
 

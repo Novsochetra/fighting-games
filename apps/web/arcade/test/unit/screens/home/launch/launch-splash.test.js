@@ -20,6 +20,7 @@ function fakeDocument(pixels) {
     getImageData: vi.fn(() => ({ data: Uint8ClampedArray.from(pixels) })),
   };
   const canvas = { getContext: vi.fn(() => context) };
+
   return { document: { createElement: vi.fn(() => canvas) }, canvas, context };
 }
 

@@ -23,6 +23,7 @@ function cellPlacement(sprite, size) {
   const scale = size / (RENDER_SCALE * (sprite.density ?? 1));
   const left = snap(-feetX * scale);
   const top = snap(-feetY * scale);
+
   return {
     left,
     top,
@@ -36,6 +37,7 @@ function cellPlacement(sprite, size) {
 function landing(cellStart, step, { offset, length }) {
   const from = Math.ceil((cellStart + offset * step) / PIXEL - EPSILON) * PIXEL;
   const to = Math.floor((cellStart + (offset + length) * step) / PIXEL + EPSILON) * PIXEL;
+
   return {
     from,
     size: to - from,
@@ -50,6 +52,7 @@ function drawPiece(context, source, { across, down, x, y, facing }) {
   if (facing < 0) {
     context.scale(-1, 1);
   }
+
   context.drawImage(
     source.image,
     source.sx + across.skip,
@@ -75,6 +78,7 @@ export function drawEnemyFrame(
   if (!piece) {
     return;
   }
+
   const [sx, sy, width, height, inLeft, inTop] = piece;
   const source = frameSource(sheets.tints, {
     image: sheets.images[id],

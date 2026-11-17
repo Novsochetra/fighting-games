@@ -42,6 +42,7 @@ function spiedCanvas() {
         return value(...args);
       };
     },
+
     set(target, name, value) {
       target[name] = value;
 

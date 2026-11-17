@@ -20,6 +20,7 @@ function gridView() {
     baseUrl: '',
   });
   context.setTransform(RENDER_SCALE, 0, 0, RENDER_SCALE, 0, 0);
+
   return { view, painter: view.painter, misses, counts };
 }
 
@@ -30,6 +31,7 @@ function everyWipe() {
   const opening = Array.from({ length: REVEAL_FRAMES }, (_, i) =>
     missionWipe({ clearTime: 0, missionIndex: 1, fadeIn: i + 1 }),
   );
+
   return [...closing, ...opening].filter(Boolean);
 }
 
@@ -42,6 +44,7 @@ describe('the hand-off between two missions on the pixel grid', () => {
       pixelate(painter, view, mosaicBlock(wipe));
       drawMissionWipe(painter, view, wipe);
     }
+
     expect(misses).toEqual([]);
     expect(counts.draws).toBeGreaterThan(1000);
   });
@@ -57,6 +60,7 @@ describe('the hand-off between two missions on the pixel grid', () => {
         drawTitleCard(painter, { banner, age });
       }
     }
+
     expect(misses).toEqual([]);
     expect(counts.draws).toBeGreaterThan(1000);
   });

@@ -11,6 +11,7 @@ function ruleOf(selector, source = css) {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const rule = source.match(new RegExp(`(?:^|\\n)\\s*${escaped} \\{([^}]*)\\}`));
   expect(rule, selector).not.toBeNull();
+
   return rule[1];
 }
 

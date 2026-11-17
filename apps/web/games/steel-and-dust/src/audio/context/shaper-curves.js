@@ -7,6 +7,7 @@ export function softClipCurve() {
     const size = Math.abs(x);
     curve[i] = size < 0.8 ? x : Math.sign(x) * (0.8 + 0.2 * Math.tanh((size - 0.8) / 0.2));
   }
+
   return curve;
 }
 
@@ -17,5 +18,6 @@ export function crunchCurve() {
     const x = i / 511.5 - 1;
     curve[i] = Math.tanh(x * 3.2);
   }
+
   return curve;
 }

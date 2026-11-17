@@ -24,6 +24,7 @@ function firingFrameFlame() {
   const left = 4 * frameWidth;
   const isFlame = (x, y) => {
     const [red, green] = sheet.rgb(left + x, top + y);
+
     return sheet.alpha(left + x, top + y) > 0 && red > 200 && green > 100;
   };
   const columns = [];
@@ -32,8 +33,10 @@ function firingFrameFlame() {
     for (let y = 0; y < frameHeight; y++) {
       rows += isFlame(x, y) ? 1 : 0;
     }
+
     columns.push(rows);
   }
+
   return columns.slice(0, columns.findLastIndex((rows) => rows > 0) + 1);
 }
 
@@ -75,6 +78,7 @@ describe('the Furnace Knight’s effects', () => {
         levelHeights.add(lance.y);
       }
     }
+
     expect([...levelHeights]).toEqual([knight.y - 14]);
   });
 

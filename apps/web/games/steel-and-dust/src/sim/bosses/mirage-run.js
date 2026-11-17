@@ -15,6 +15,7 @@ function castBolt(game, boss, mirage) {
   if (mirage.cast === FIRE_AT) {
     fireMirageBolt(game, { boss, from: mirage });
   }
+
   if (mirage.cast >= CAST_TICKS) {
     mirage.cast = -1;
     mirage.fireIn = FIRE_EVERY;
@@ -32,6 +33,7 @@ function runMirage(game, boss, mirage, shift) {
   } else if (mirage.fireIn > 0 && --mirage.fireIn === 0) {
     mirage.cast = 0;
   }
+
   if (mirage.time >= MIRAGE_LIFE) {
     popMirage(game, mirage);
   }
@@ -51,6 +53,7 @@ function runMirages(game, boss) {
       runMirage(game, boss, mirage, shift);
     }
   }
+
   boss.mirages = boss.mirages.filter((mirage) => mirage.popTime < POP_TICKS);
 }
 

@@ -48,6 +48,7 @@ export function playerDrawables(match, camera, { art, scoringTeam }) {
 
   return match.players.map((player) => ({
     depth: player.y,
+
     draw: (context) =>
       drawPlayer(context, { art, camera, match, player, look: looks[player.index], scoringTeam }),
   }));

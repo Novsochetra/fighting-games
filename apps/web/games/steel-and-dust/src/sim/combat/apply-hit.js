@@ -20,6 +20,7 @@ function hitDirection({ attacker, target, move }) {
   if (move.knockAway) {
     return target.x >= attacker.x ? 1 : -1;
   }
+
   return attacker.facing;
 }
 
@@ -94,11 +95,13 @@ function landHit(game, hit, damage, direction) {
   } else {
     game.camera.kickX += direction * 0.5;
   }
+
   showDamageNumber(game, hit, { direction, damage });
   feelHit(game, hit, { direction, big });
   playHitSound(game, hit, move.hitstop);
   scoreHit(game, hit, damage);
   const knockback = (lastMultiHit && move.finalKnockback) || move.knockback;
+
   return { big, knockdown, knockback };
 }
 
@@ -114,9 +117,11 @@ export function applyHit(game, hit) {
   if (!canBeHit(target, move) || sparesHero(game, target)) {
     return false;
   }
+
   if (blocksHit(hit.attacker, target, move)) {
     return blockHit(game, hit);
   }
+
   announceGuardBreak(game, hit);
   const direction = hitDirection(hit);
   const damage = damageOf(game, target, move);
@@ -126,20 +131,25 @@ export function applyHit(game, hit) {
     knockOut(game, target, direction);
     return true;
   }
+
   if (target.side === 'enemy') {
     shout(game, target, big ? 'big' : 'hurt');
   }
+
   // an overheated boss takes every hit where it stands and stays overheated
   if (target.move?.exposed) {
     return true;
   }
+
   if (absorbsHit(target, move, damage)) {
     target.armorFlash = 6;
     target.flashTime = 0;
     game.io.sfx('armor', false, { x: target.x });
     return true;
   }
+
   reactToHit(game, target, { move, direction, knockback, knockdown });
   afflictTarget(game, target, move);
+
   return true;
 }

@@ -63,16 +63,20 @@ const ACTIONS = {
   continue: (app) => app.screens.show('chapters', progressSummary(savedGame(app), CHAPTERS)),
   'new-story': (app) => beginStory(app, newSave({ seed: newSeed() })),
   'play-chapter': (app) => beginStory(app, savedGame(app)),
+
   'quick-match': (app) =>
     app.screens.show('quickmatch', { teams: quickMatchTeams(savedGame(app), TEAMS) }),
+
   'pick-teams': (app, payload) => startQuick(app, payload?.teams ?? []),
   'kick-off': afterCard,
   'after-match': afterCard,
+
   hero: (app) => {
     const save = savedGame(app);
 
     app.screens.show('hero', { hero: save.hero, age: heroAgeOf(save) });
   },
+
   settings: (app) => app.screens.show('settings'),
   'how-to': (app) => app.screens.show('howto', { device: app.device }),
   setting: (app) => app.applySettings(),

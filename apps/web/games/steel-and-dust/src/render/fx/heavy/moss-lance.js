@@ -11,6 +11,7 @@ const THORN_EVERY = 5;
 function spanOf(since) {
   const reach = Math.min(REACH, 8 + since * GROWTH);
   const root = since >= 2 ? (since - 1) * 7 : 0;
+
   return { root: 4 + root, reach: 4 + reach };
 }
 
@@ -29,6 +30,7 @@ export function drawLance(painter, { fighter, move, time, art }) {
   if (since < 0 || since >= TICKS) {
     return;
   }
+
   const core = mossCoreOf(fighter);
   const end = (along, dy = 0) => point(core.x + along * fighter.facing, core.y - 3 + dy);
   const { root, reach } = spanOf(since);

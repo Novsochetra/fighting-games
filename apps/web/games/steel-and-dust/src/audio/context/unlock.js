@@ -13,7 +13,9 @@ function createContext() {
   } catch {
     // older WebKit exposes audioSession read-only; the context still works
   }
+
   const AudioContextClass = globalThis.AudioContext || globalThis.webkitAudioContext;
+
   return new AudioContextClass({ latencyHint: 'interactive' });
 }
 
@@ -50,6 +52,7 @@ export function unlockAudio(audio, game) {
   if (!audio.context) {
     start(audio, game);
   }
+
   if (audio.context && audio.context.state !== 'running') {
     audio.context.resume().catch(() => {});
     playSilence(audio.context);

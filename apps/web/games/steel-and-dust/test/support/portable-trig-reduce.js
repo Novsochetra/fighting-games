@@ -22,12 +22,14 @@ const words = new DataView(new ArrayBuffer(8));
 
 export function highWord(value) {
   words.setFloat64(0, value);
+
   return words.getInt32(0);
 }
 
 export function fromWords(high, low) {
   words.setInt32(0, high);
   words.setInt32(4, low);
+
   return words.getFloat64(0);
 }
 
@@ -41,8 +43,10 @@ function reduceNearHalfPi(x, absHigh, reduced) {
     rest -= sign * HALF_PI_2;
     tail = HALF_PI_2_TAIL;
   }
+
   reduced[0] = rest - sign * tail;
   reduced[1] = rest - reduced[0] - sign * tail;
+
   return sign;
 }
 
@@ -68,9 +72,11 @@ function reduceMedium(x, absHigh, reduced) {
       takeNextPiece(step, quadrants, HALF_PI_3, HALF_PI_3_TAIL);
     }
   }
+
   const sign = x < 0 ? -1 : 1;
   reduced[0] = sign * step.head;
   reduced[1] = sign * (step.rest - step.head - step.error);
+
   return sign * quadrants;
 }
 
@@ -80,8 +86,10 @@ export function reduceByHalfPi(x, reduced) {
   if (absHigh < THREE_QUARTER_PI) {
     return reduceNearHalfPi(x, absHigh, reduced);
   }
+
   if (absHigh <= MEDIUM_LIMIT) {
     return reduceMedium(x, absHigh, reduced);
   }
+
   return null;
 }

@@ -29,6 +29,7 @@ export function sendStag(game, { x, lane, direction, speed, scale, hit, range, d
 function stagArea(stag, ground) {
   const half = 20 * stag.scale;
   const height = 36 * stag.scale;
+
   return { x: stag.x - half, y: ground - height, width: half * 2, height };
 }
 
@@ -36,6 +37,7 @@ function spiritWisps(game, stag, ground) {
   if (stag.time % 3) {
     return;
   }
+
   addDust(game, { x: stag.x - stag.direction * 12 * stag.scale, y: ground, count: 1 });
   game.particles.push({
     kind: 'mote',
@@ -53,6 +55,7 @@ export function updateStag(game, stag) {
   if (stag.time === 1) {
     game.io.sfx('stampede', false, { x: stag.x });
   }
+
   stag.x += stag.direction * stag.speed;
   stag.range -= stag.speed;
   const ground = groundAt(game.terrain, stag.x);
@@ -69,6 +72,7 @@ export function updateStag(game, stag) {
       speed: 3,
     });
   }
+
   stag.done = stag.range <= 0;
 }
 

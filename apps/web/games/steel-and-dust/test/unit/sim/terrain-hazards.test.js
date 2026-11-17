@@ -92,6 +92,7 @@ describe('a fire pot', () => {
 describe('fighters pushing apart', () => {
   function pair(firstY, secondY) {
     const base = { airborne: false, entering: false, state: 'idle', side: 'enemy', scale: 1 };
+
     return [
       { ...base, x: 225, y: firstY },
       { ...base, x: 226, y: secondY },
@@ -129,6 +130,7 @@ describe('a pickup', () => {
     for (let i = 0; i < 40; i++) {
       updatePickups(game);
     }
+
     expect(game.pickups[0]).toMatchObject({ landed: true, y: LOG_TOP - 6 });
     game.player.y = LOG_TOP;
     updatePickups(game);

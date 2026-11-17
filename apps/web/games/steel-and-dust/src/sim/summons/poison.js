@@ -8,6 +8,7 @@ function bite(game, poison) {
   if (target.hp <= 1) {
     return;
   }
+
   target.hp = Math.max(1, target.hp - damage);
   target.hpBarTime = 90;
   addFloatText(game, {
@@ -38,13 +39,16 @@ export function updatePoison(game, poison) {
     poison.done = true;
     return;
   }
+
   Object.assign(poison, { x: target.x, y: target.y });
   if (poison.time % 8 === 0) {
     bubble(game, poison);
   }
+
   if (poison.time % poison.every === 0) {
     bite(game, poison);
   }
+
   poison.done = poison.time >= poison.ticks;
 }
 
@@ -53,6 +57,7 @@ export function poisonTarget(game, target, { ticks, every, damage }) {
   if (target.state === 'ko' || target.removed) {
     return;
   }
+
   const venom = game.summons.find(
     (summon) => summon.kind === 'poison' && summon.target === target && !summon.done,
   );
@@ -60,6 +65,7 @@ export function poisonTarget(game, target, { ticks, every, damage }) {
     venom.ticks = Math.max(venom.ticks, venom.time + ticks);
     return;
   }
+
   game.summons.push({
     kind: 'poison',
     target,

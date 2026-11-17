@@ -25,6 +25,7 @@ function drawLaneMark(painter, wasp) {
       shadow: null,
     });
   }
+
   painter.alpha(1);
 }
 
@@ -33,6 +34,7 @@ export function drawWasp(painter, wasp, sheets) {
     drawLaneMark(painter, wasp);
     return;
   }
+
   const { frames, ticks } = FX_SPRITES.wasp;
   drawFxFrame(painter, sheets, {
     name: 'wasp',

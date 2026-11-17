@@ -18,6 +18,7 @@ export function stopVoice(audio, voice) {
   } catch {
     // a source that already stopped throws; it is gone either way
   }
+
   forgetVoice(audio, voice);
 }
 
@@ -27,6 +28,7 @@ function releaseWhenEnded(audio, voice) {
     for (const node of voice.nodes) {
       node.disconnect();
     }
+
     forgetVoice(audio, voice);
   };
 }
@@ -41,6 +43,7 @@ function stereoPanner(audio, game, { x, dir, start, travel }) {
   } else {
     panner.pan.value = center;
   }
+
   return panner;
 }
 
@@ -59,9 +62,11 @@ function startVoice(audio, game, { definition, buffer, start, options }) {
     out = stereoPanner(audio, game, { x: options.x, dir: options.dir, start, travel });
     volume.connect(out);
   }
+
   out.connect(audio.chain.effectsBus);
   source.start(start);
   const nodes = out === volume ? [source, volume] : [source, volume, out];
+
   return { source, volume, nodes, end: start + buffer.duration / source.playbackRate.value };
 }
 
@@ -71,6 +76,7 @@ export function playBankSound(audio, game, key, options) {
   if (!takes) {
     return;
   }
+
   const definition = SOUND_DEFINITIONS[key];
   const { group, priority } = definition;
   const start = startTime(audio, 0.008);
@@ -78,11 +84,13 @@ export function playBankSound(audio, game, key, options) {
   if (isDuplicate(audio.voices, { key, group, start })) {
     return;
   }
+
   const room = planRoom(audio.voices, definition);
   room.steal.forEach((voice) => stopVoice(audio, voice));
   if (!room.play) {
     return;
   }
+
   const last = audio.lastTakes[key];
   const roll = Math.random();
   const count = takes.length;

@@ -66,6 +66,7 @@ function worldSnapshot(game) {
 
 function timers(game) {
   const { camera } = game;
+
   return [
     game.ultFreeze,
     game.flashTime,
@@ -85,6 +86,7 @@ function timers(game) {
 
 export function snapshotGame(game) {
   const { stage, camera, combo } = game;
+
   return {
     mode: game.mode,
     zone: stage.zoneIndex,

@@ -12,5 +12,6 @@ export function hitPair(key, { level, bigLevel, seconds, build }) {
     priority: 2,
     build: (track, pitch) => build(track, pitch, size),
   });
+
   return { [key]: sound(level, NORMAL), [`${key}Big`]: sound(bigLevel, BIG) };
 }

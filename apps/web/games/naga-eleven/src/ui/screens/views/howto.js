@@ -45,9 +45,11 @@ function pickDevice(app, device) {
 // data: { device: 'keys' | 'pad' | 'touch' }, the tab it opens on; a side screen
 export const HOWTO_SCREEN = {
   side: true,
+
   start(data, app) {
     return { device: DEVICES.includes(data.device) ? data.device : firstDevice(app.settings) };
   },
+
   render(section, { state, view }) {
     for (const tab of section.querySelectorAll('[data-device]')) {
       tab.setAttribute('aria-selected', String(tab.dataset.device === state.device));
@@ -59,11 +61,13 @@ export const HOWTO_SCREEN = {
       CONTROLS.flatMap((control) => controlRow(view, control, state.device)),
     );
   },
+
   adjust(_key, by, app) {
     const at = DEVICES.indexOf(app.current.state.device);
 
     pickDevice(app, DEVICES[wrapIndex(at, by, DEVICES.length)]);
   },
+
   act(action, button, app) {
     if (action !== 'tab') {
       return false;

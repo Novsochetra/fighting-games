@@ -17,8 +17,10 @@ function setUp(answers = {}) {
         ? new Response('Not found', { status: 404 })
         : new Response(JSON.stringify(answer));
     },
+
     addressOf: (id) => `offline/${id}`,
     setTimer: (callback, ms) => timers.push({ callback, ms }) - 1,
+
     clearTimer: (index) => {
       if (index !== null) {
         timers[index] = null;

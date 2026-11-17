@@ -19,6 +19,7 @@ function queenAt(distance, { missionIndex = 4, share = 1 } = {}) {
   Object.assign(queen, { entering: false, x: 120 + distance, facing: -1 });
   queen.ai.cooldown = 0;
   queen.hp = share * queen.maxHp;
+
   return { game, queen };
 }
 
@@ -41,6 +42,7 @@ describe("the Scorpion Queen's kit", () => {
       think(game, queen);
       directions.add(queen.walkDirection);
     }
+
     expect([...directions].sort()).toEqual([-1, 1]);
   });
 
@@ -93,6 +95,7 @@ describe('her swarm', () => {
         released.push(wasp);
       }
     }
+
     expect(released).toHaveLength(6);
     expect(released.slice(0, 3).every(([, from]) => from === 'near')).toBe(true);
     expect(released.slice(3).every(([, from]) => from === 'far')).toBe(true);

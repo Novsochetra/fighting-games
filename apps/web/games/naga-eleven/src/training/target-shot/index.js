@@ -65,6 +65,7 @@ const STAGES = {
       tooLate(state);
     }
   },
+
   flight: (state) => {
     const run = state.run;
 
@@ -75,6 +76,7 @@ const STAGES = {
       enterStage(run, 'after');
     }
   },
+
   after: (state) => {
     const run = state.run;
 

@@ -25,6 +25,7 @@ function calmRaider(game, kind, { x, y }) {
   raider.entering = false;
   raider.ai.cooldown = 999;
   placeFighter(game, raider, { x, y });
+
   return raider;
 }
 
@@ -70,6 +71,7 @@ describe('raiders, hazards and pickups on uneven ground', () => {
       expect(raider.y).toBe(groundAt(game.terrain, raider.x));
       closest = Math.min(closest, Math.abs(raider.x - game.player.x));
     }
+
     expect(raider.entering).toBe(false);
     expect(closest).toBeLessThan(90);
   });
@@ -141,9 +143,11 @@ describe('a long bot-played run on a hilly mission', () => {
           groundAt(game.terrain, fighter.x),
         );
       }
+
       zones.add(game.stage.zoneIndex);
       heights.add(game.player.airborne ? null : game.player.y);
     }
+
     expect(wallsMet).toBeGreaterThan(0);
     expect(zones.size).toBeGreaterThan(1);
     expect(heights).toContain(GROUND_Y - 16);

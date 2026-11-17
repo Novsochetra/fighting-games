@@ -12,6 +12,7 @@ export function glider(boss, { distance, pace }) {
     standStill(boss);
     return;
   }
+
   if (distance > 200) {
     walk(boss, 1, 1.4 * pace);
   } else if (distance < 90) {

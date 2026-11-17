@@ -10,6 +10,7 @@ function coinAhead(distance) {
   runTicks(game, 2);
   const coin = piece({ x: game.player.x + distance, y: game.player.y, landed: true, time: 60 });
   game.loot = [coin];
+
   return { game, coin };
 }
 
@@ -32,6 +33,7 @@ describe('a coin on the road', () => {
     while (game.player.airborne && game.player.x < coin.x + 30) {
       runTicks(game, 1);
     }
+
     release(game, 'right');
     expect(game.player.x).toBeGreaterThan(coin.x);
     expect(game.loot).toEqual([coin]);

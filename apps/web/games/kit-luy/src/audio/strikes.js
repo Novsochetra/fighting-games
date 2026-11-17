@@ -49,10 +49,12 @@ const BUILT = {
     { play: 'paper', freq: PAPER_PITCH },
     { play: 'tick', freq: pitchFor(TICK_PITCH, value) },
   ],
+
   take: ({ value }) => [
     { play: 'dullPaper' },
     { play: 'dullTick', freq: pitchFor(TICK_PITCH, value) },
   ],
+
   paid: ({ pieces }) => countedBack(pieces),
   arrive: ({ kind }) => call(kind),
   count: ({ value }) => [{ play: 'bar', freq: pitchFor(BAR_PITCH, value) }],

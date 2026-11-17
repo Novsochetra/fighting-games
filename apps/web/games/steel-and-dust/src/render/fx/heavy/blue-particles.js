@@ -14,6 +14,7 @@ function ageOf(particle) {
 // light that steps down as it dies rather than fading smoothly
 function steppedShare(particle, levels) {
   const share = particle.life / particle.maxLife;
+
   return levels[Math.min(levels.length - 1, Math.floor(share * levels.length))];
 }
 
@@ -45,6 +46,7 @@ function blueCrystal(painter, particle) {
     painter.use(art.ice).rect(x, y, 1, 1);
     return;
   }
+
   plus(painter, { x, y, arm: size - 1, color: art.ice });
   if (size === 3) {
     painter
@@ -53,6 +55,7 @@ function blueCrystal(painter, particle) {
       .rect(x + 1, y + 1, 1, 1);
     painter.rect(x + 1, y - 1, 1, 1).rect(x - 1, y + 1, 1, 1);
   }
+
   const glint = (particle.life >> 1) % 3 === 0;
   painter.use(glint ? art.shard : COLORS.white).rect(x, y, 1, 1);
 }
@@ -69,6 +72,7 @@ function blueShard(painter, particle) {
     painter.use(art.ice).line(point(particle.x, particle.y), tail, 1);
     painter.use(COLORS.white).rect(particle.x, particle.y, 1, 1);
   }
+
   painter.alpha(1);
 }
 
@@ -83,6 +87,7 @@ function blueFlake(painter, particle) {
   } else {
     painter.use(particle.life % 2 ? art.rime : art.glow).rect(x, y, 1, 1);
   }
+
   painter.alpha(1);
 }
 
@@ -96,6 +101,7 @@ function blueFlash(painter, particle) {
   if (age === 1) {
     painter.use(art.glow).rect(x - arm + 2, y - 1, arm * 2 - 3, 3);
   }
+
   painter
     .use(COLORS.white)
     .rect(x - arm, y, arm * 2 + 1, 1)
@@ -117,6 +123,7 @@ function blueCut(painter, particle) {
   if (age < 3) {
     painter.use(art.deep).line(from, to, 3);
   }
+
   painter.use(age < 5 ? COLORS.white : art.ice).line(from, to, 1);
 }
 

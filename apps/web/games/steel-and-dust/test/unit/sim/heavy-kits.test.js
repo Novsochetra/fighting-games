@@ -18,6 +18,7 @@ describe("every Shade's heavy kit", () => {
     for (const hook of HOOKS) {
       expect(typeof kit[hook], hook).toBe('function');
     }
+
     expect(kit.sounds.charge).toBe(`heavy${id[0].toUpperCase()}${id.slice(1)}Charge`);
     for (const key of Object.values(kit.sounds).filter(Boolean)) {
       expect(Object.hasOwn(HEAVY_SOUNDS, key), key).toBe(true);
@@ -46,6 +47,7 @@ describe("every Shade's heavy kit", () => {
     for (const key of ['glowDim', 'glow', 'hot', 'trail']) {
       expect(art[key], key).toMatch(HEX);
     }
+
     expect(art.motes.length).toBeGreaterThan(0);
     art.motes.forEach((color) => expect(color).toMatch(HEX));
     const feel = HEAVY_FEEL[id];

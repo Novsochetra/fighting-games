@@ -19,6 +19,7 @@ export function menuBackdrop(stack) {
   if (!top) {
     return { scene: 'off', dim: 'none' };
   }
+
   return {
     scene: stack.some((id) => SCENE_MENUS.has(id)) ? 'on' : 'off',
     dim: DIM_FOR_MENU[top] ?? 'panel',

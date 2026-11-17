@@ -6,5 +6,6 @@ export function loadFonts(fontSet, specs = PIXEL_FONTS) {
   if (typeof fontSet?.load !== 'function') {
     return Promise.resolve();
   }
+
   return Promise.all(specs.map((spec) => fontSet.load(spec))).catch(() => {});
 }

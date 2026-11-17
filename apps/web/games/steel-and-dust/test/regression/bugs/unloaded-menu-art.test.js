@@ -21,6 +21,7 @@ describe('the menus before their art is in', () => {
       page.frame(16);
       expect(isUp(page.loader)).toBe(true);
     }
+
     page.images.loadAll();
     await settle();
     page.frame(16);

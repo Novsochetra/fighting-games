@@ -12,6 +12,7 @@ function fireflyAt(i, { effect, tick, cameraX }) {
   const pathY = Math.sin(tick * (0.011 + trait(seed, 5) * 0.014) + trait(seed, 6) * TAU) * reachY;
   const pulse = Math.sin(tick * (0.02 + trait(seed, 7) * 0.03) + trait(seed, 8) * TAU);
   const baseX = trait(seed, 0) * CYCLE_WIDTH + pathX;
+
   return {
     x: Math.round(scrollX(baseX, { cameraX, drift: effect.drift })),
     y: Math.round(middle + pathY),
@@ -34,5 +35,6 @@ export function drawFireflies(painter, { effect, tick, cameraX, colors }) {
       drawFirefly(painter, firefly, colors.fireflies);
     }
   }
+
   painter.alpha(1);
 }

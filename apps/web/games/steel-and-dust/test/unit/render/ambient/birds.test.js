@@ -28,6 +28,7 @@ describe('ambient birds', () => {
       expect(rects.length % 3).toBe(0);
       flockSizes.add(rects.length / 3);
     }
+
     expect([...flockSizes].every((size) => size >= 3 && size <= 5)).toBe(true);
     expect(flockSizes.size).toBeGreaterThan(1);
   });
@@ -40,6 +41,7 @@ describe('ambient birds', () => {
       const wingTip = [first, second, third].find((rect) => rect.width === 1);
       wingPoses.add(body.y - wingTip.y);
     }
+
     expect([...wingPoses].sort()).toEqual([-1, 1]);
   });
 

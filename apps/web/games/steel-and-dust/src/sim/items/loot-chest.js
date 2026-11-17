@@ -57,10 +57,12 @@ function frameAt(age) {
   if (age < TIMING.rattleAt) {
     return CHEST_FRAMES.closed;
   }
+
   if (age < TIMING.openAt) {
     const beat = Math.floor((age - TIMING.rattleAt) / TIMING.rattleTicks);
     return beat % 2 ? CHEST_FRAMES.rattle : CHEST_FRAMES.closed;
   }
+
   return age < TIMING.spillAt ? CHEST_FRAMES.opening : CHEST_FRAMES.open;
 }
 
@@ -70,9 +72,11 @@ function playTimeline(game, chest) {
   if (age === TIMING.rattleAt) {
     game.io.sfx('chestRattle', false, { x: chest.x });
   }
+
   if (age === TIMING.openAt) {
     burstOpen(game, chest);
   }
+
   if (age === TIMING.spillAt) {
     chest.spilled = true;
     scatterPieces(game, { kinds: chest.contents, x: chest.x, y: chest.y - 18 });
@@ -92,5 +96,6 @@ export function updateChests(game) {
       playTimeline(game, chest);
     }
   }
+
   game.chests = game.chests.filter((chest) => chestAge(chest) < TIMING.gone);
 }

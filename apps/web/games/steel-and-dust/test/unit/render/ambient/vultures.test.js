@@ -8,6 +8,7 @@ function bird(tick) {
   const rects = rectsOf(lone, { tick });
   const left = Math.min(...rects.map((rect) => rect.x));
   const top = Math.min(...rects.map((rect) => rect.y));
+
   return { left, top, rects };
 }
 

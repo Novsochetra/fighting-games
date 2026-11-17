@@ -17,12 +17,14 @@ function boxFor(element) {
   if (element.classList.contains('launch') || element.id === 'home') {
     return SCREEN;
   }
+
   return element.classList.contains('card__frame') ? CARD : NOTHING;
 }
 
 function stubLayout() {
   vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function measure() {
     const box = boxFor(this);
+
     return { ...box, right: box.left + box.width, bottom: box.top + box.height, x: 0, y: 0 };
   });
 }

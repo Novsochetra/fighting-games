@@ -20,6 +20,7 @@ function recordedView() {
     createImage: () => new FakeImage(),
     baseUrl: '',
   });
+
   return { view, log: screen.recording.log };
 }
 
@@ -31,6 +32,7 @@ function renderMission(index, ticks = 2) {
   runTicks(game, ticks);
   log.length = 0;
   renderFrame(game, view);
+
   return { view, log, game, mission: MISSIONS[index] };
 }
 
@@ -45,6 +47,7 @@ describe('the scenery of each mission', () => {
       runTicks(game, 2);
       renderFrame(game, view);
     }
+
     expect(Object.keys(view.backdrops).sort()).toEqual(
       [...new Set(MISSIONS.map((mission) => mission.theme))].sort(),
     );
@@ -79,6 +82,7 @@ describe('the scenery of each mission', () => {
         image,
       ).toBe(true);
     }
+
     expect(log.some((call) => call.includes('img(canyonBarricade.png)'))).toBe(false);
   });
 

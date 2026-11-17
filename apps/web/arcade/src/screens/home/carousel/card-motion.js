@@ -42,6 +42,7 @@ function slideOut(card, to) {
   if (duration <= 0 || prefersReducedMotion(document.defaultView)) {
     return;
   }
+
   const copy = card.cloneNode(true);
   copy.removeAttribute('data-game-index');
   copy.classList.add('is-leaving');
@@ -58,8 +59,10 @@ export function moveCard(card, { offset, enterFrom, leaveTo }) {
   if (leaveTo !== null) {
     slideOut(card, slotFor(leaveTo));
   }
+
   if (enterFrom !== null) {
     slideIn(card, slotFor(enterFrom));
   }
+
   placeCard(card, slotFor(offset));
 }

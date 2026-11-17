@@ -23,22 +23,26 @@ function fanStorage({ plays = 3, seenPlays = plays - 1, gaveAt = null } = {}) {
   storage.write(STORAGE_KEYS.plays, plays);
   storage.write(STORAGE_KEYS.supportSeenPlays, seenPlays);
   storage.write(STORAGE_KEYS.gaveAt, gaveAt);
+
   return storage;
 }
 
 function clockVisit(time = 1_000_000) {
   const clock = { time };
+
   return { clock, visit: { now: () => clock.time } };
 }
 
 async function bootFan(storage, extra = {}) {
   const { clock, visit } = clockVisit();
   const started = await bootWithRealCatalog({ storage, visit, ...extra });
+
   return { ...started, clock };
 }
 
 async function bootAgain(storage) {
   stopHomes();
+
   return bootFan(storage);
 }
 

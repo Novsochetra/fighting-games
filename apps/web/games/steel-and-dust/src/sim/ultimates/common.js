@@ -8,6 +8,7 @@ const POSE_LAST_FRAME = 8;
 export function ultTargets(game) {
   const left = game.camera.x - 8;
   const right = game.camera.x + VIEW_WIDTH + 8;
+
   return game.fighters.filter(
     (fighter) =>
       fighter.side === 'enemy' &&
@@ -37,6 +38,7 @@ export function hitEveryTarget(game, player, move) {
       y: target.y - 18 * target.scale,
     });
   }
+
   player.facing = facing;
 }
 

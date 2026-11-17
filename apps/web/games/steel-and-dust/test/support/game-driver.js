@@ -27,6 +27,7 @@ function wallAhead(game) {
   if (isFlat(terrain) || player.airborne) {
     return false;
   }
+
   const aheadX = player.x + player.facing * LOOK_AHEAD;
 
   return isWall(terrain, aheadX, player.y) || waterAt(terrain, aheadX) !== null;
@@ -41,6 +42,7 @@ export function createScenarioGame(hero, mission = 0) {
     io: {},
   });
   selectMission(game, mission);
+
   return game;
 }
 
@@ -48,26 +50,32 @@ export function createGameDriver(game, renderFrame) {
   const { held, pressed } = game.input;
   const tapped = [];
   const action = (key) => ACTION_FOR_KEY[key] ?? key;
+
   return {
     press(key) {
       pressed[action(key)] = true;
       held[action(key)] = true;
     },
+
     release(key) {
       held[action(key)] = false;
     },
+
     tap(key) {
       this.press(key);
       tapped.push(key);
     },
+
     act: (name) => MENU_ACTIONS[name](game),
     spawn: (kind, side) => spawnEnemy(game, kind, side),
     tick: () => tick(game),
+
     afterTick() {
       for (const key of tapped.splice(0)) {
         held[action(key)] = false;
       }
     },
+
     observe: () => ({
       mode: game.mode,
       meter: game.ultMeter,
@@ -78,6 +86,7 @@ export function createGameDriver(game, renderFrame) {
         .map((fighter) => ({ x: fighter.x, state: fighter.state })),
       wallAhead: wallAhead(game),
     }),
+
     snapshot: () => snapshotGame(game),
     render: () => (renderFrame ? renderFrame(game) : null),
   };

@@ -18,6 +18,7 @@ function cobraAt(distance, { missionIndex = 3, share = 1 } = {}) {
   Object.assign(cobra, { entering: false, x: 120 + distance, facing: -1 });
   cobra.ai.cooldown = 0;
   cobra.hp = share * cobra.maxHp;
+
   return { game, cobra };
 }
 
@@ -78,6 +79,7 @@ describe('her spit', () => {
         shot.y += shot.vy;
         shot.vy += 0.16;
       }
+
       return shot.x;
     });
     expect(landings[1]).toBeCloseTo(game.player.x, -1);

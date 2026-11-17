@@ -17,6 +17,7 @@ function createCanvas(width, height) {
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
+
   return canvas;
 }
 
@@ -45,6 +46,7 @@ function syncDom() {
       touchPad.restStick();
     }
   }
+
   supporters.followRun(game);
   const playing = game.mode === 'play';
   // a skin may have no such button, and the pad is drawn again when the skin changes
@@ -64,6 +66,7 @@ function runTicks(count) {
     runTick(game);
     audio.update();
   }
+
   audio.setTickOffset(0);
 }
 
@@ -80,11 +83,13 @@ function frame(now) {
   if (sceneLoaded(view, game)) {
     runTicks(due);
   }
+
   // the menus follow this frame's ticks first, so the frame play starts on is drawn
   syncDom();
   if (!screenCovered()) {
     drawChangedFrame(game, view);
   }
+
   bootLoading.loader.update(now, missionWait(view, game));
   titleScene.frame(now);
   requestAnimationFrame(frame);

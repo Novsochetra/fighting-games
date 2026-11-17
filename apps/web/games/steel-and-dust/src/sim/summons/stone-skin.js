@@ -27,6 +27,7 @@ export function updateStoneSkin(game, skin) {
     skin.done = true;
     return;
   }
+
   Object.assign(skin, { x: target.x, y: target.y });
   if (skin.time % 6 === 0) {
     flake(game, skin);
@@ -38,6 +39,7 @@ export function stoneTarget(game, target, ticks) {
   if (target.state === 'ko' || target.removed) {
     return;
   }
+
   const skin = game.summons.find(
     (summon) => summon.kind === 'stoneSkin' && summon.target === target && !summon.done,
   );
@@ -45,6 +47,7 @@ export function stoneTarget(game, target, ticks) {
     skin.ticks = Math.max(skin.ticks, skin.time + ticks);
     return;
   }
+
   target.stoned = true;
   game.summons.push({
     kind: 'stoneSkin',

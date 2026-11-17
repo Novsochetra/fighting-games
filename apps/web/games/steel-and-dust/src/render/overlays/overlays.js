@@ -13,6 +13,7 @@ function hintOpacity(time) {
   if (time < 10) {
     return time / 10;
   }
+
   return time > 220 ? (240 - time) / 20 : 1;
 }
 
@@ -53,6 +54,7 @@ export function drawScreenFlashes(painter, game) {
     painter.use(colors.edge).rect(0, y - 1, VIEW_WIDTH, height + 2);
     painter.use(COLORS.white).rect(0, y + 1, VIEW_WIDTH, Math.max(1, height - 2));
   }
+
   if (game.flashTime > 0 && game.settings.flash) {
     painter
       .alpha(game.flashTime / 18)
@@ -68,6 +70,7 @@ function drawMissionHandoff(painter, game, view) {
   if (wipe) {
     drawMissionWipe(painter, view, wipe);
   }
+
   if (game.fadeIn > 0) {
     game.fadeIn--;
   }
@@ -77,14 +80,17 @@ export function drawOverlays(painter, { game, view }) {
   if (game.ultFreeze > 0) {
     drawUltCutIn(painter, { game, view });
   }
+
   if (game.hint && game.mode === 'play' && game.ultFreeze <= 0) {
     drawHint(painter, game);
   }
+
   drawMissionHandoff(painter, game, view);
   if (game.mode === 'title') {
     painter.alpha(0.35).use(COLORS.night).rect(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
     painter.alpha(1);
   }
+
   if (game.muted && game.mode === 'play') {
     drawText(painter, 'MUTED', {
       x: VIEW_WIDTH / 2,

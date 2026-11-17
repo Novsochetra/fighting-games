@@ -39,6 +39,7 @@ function drawn(draw, options) {
             return target[name](...args);
           }
         : target[name],
+
     set: (target, name, value) => {
       target[name] = value;
 

@@ -45,6 +45,7 @@ describe('the Warden Ox, strip to strip', () => {
         holes += image.alpha(cell.left + x, cell.top + y) > 0 ? 0 : 1;
       }
     }
+
     expect(holes).toBe(0);
   });
 });

@@ -5,12 +5,15 @@ export function parseDuration(value) {
   if (!match) {
     return 0;
   }
+
   const amount = Number(match[1]);
+
   return match[2] === 's' ? amount * 1000 : amount;
 }
 
 export function readToken(document, name) {
   const style = document.defaultView.getComputedStyle(document.documentElement);
+
   return style.getPropertyValue(name).trim();
 }
 
@@ -38,5 +41,6 @@ export function animateWith(element, keyframes, timing) {
   if (timing.duration <= 0 || prefersReducedMotion(window) || !element.animate) {
     return null;
   }
+
   return element.animate(keyframes, timing);
 }

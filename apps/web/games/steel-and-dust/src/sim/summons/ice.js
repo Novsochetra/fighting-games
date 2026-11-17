@@ -54,11 +54,13 @@ export function updateIce(game, ice) {
     thaw(ice);
     return;
   }
+
   Object.assign(ice, { x: target.x, y: target.y });
   target.hitstop = Math.max(target.hitstop, 2);
   if (target.hitShake > 0) {
     target.hitShake--;
   }
+
   if (ice.time >= ice.duration) {
     shatterIce(game, ice);
   }

@@ -18,6 +18,7 @@ function gridView() {
     baseUrl: '',
   });
   context.setTransform(RENDER_SCALE, 0, 0, RENDER_SCALE, 0, 0);
+
   return { view, painter: view.painter, misses, counts };
 }
 
@@ -36,6 +37,7 @@ describe('the loot summary on screen', () => {
     for (const clearTime of [0, 1, SUMMARY.openAt - 1]) {
       drawMissionSummary(painter, clearAt(clearTime), view);
     }
+
     expect(counts.draws).toBe(0);
   });
 
@@ -44,6 +46,7 @@ describe('the loot summary on screen', () => {
     for (let clearTime = SUMMARY.openAt; clearTime <= CLEAR_TICKS; clearTime++) {
       drawMissionSummary(painter, clearAt(clearTime), view);
     }
+
     expect(misses).toEqual([]);
     expect(counts.draws).toBeGreaterThan(5000);
   });
@@ -59,6 +62,7 @@ describe('the loot summary on screen', () => {
     for (let clearTime = SUMMARY.openAt; clearTime <= CLEAR_TICKS; clearTime++) {
       drawMissionSummary(painter, clearAt(clearTime), view);
     }
+
     const takes = stampedTexts(painter).filter((text) => text.startsWith('+'));
     expect(takes.length).toBeGreaterThan(SUMMARY.maxSteps - 1);
   });

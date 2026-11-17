@@ -22,6 +22,7 @@ function drawLeaf(painter, { at, angle, facing, colors, color, art }) {
     const tail = at(angle - step * TAIL_STEP * facing);
     painter.use(colors[step - 1]).rect(tail.x, tail.y, 1, 1);
   }
+
   const head = at(angle);
   painter.use(art.leafShade).rect(head.x - 1, head.y + 1, 2, 1);
   painter.use(color).rect(head.x - 1, head.y, 2, 1);
@@ -32,6 +33,7 @@ export function drawOrbit(painter, { fighter, move, time, art }, front) {
   if (since < 0 || time >= activeEnd(move) + 2) {
     return;
   }
+
   const colors = tailColors(art, front);
   RINGS.forEach((ring, ringIndex) => {
     const at = (turn) => ({

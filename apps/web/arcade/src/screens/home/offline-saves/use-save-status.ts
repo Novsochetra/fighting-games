@@ -28,6 +28,7 @@ export function useSaveStatus(card: GameCard | null, askAgain = false) {
 
   return {
     status,
+
     tap() {
       if (!card || !id || status?.state === 'saving') {
         return;

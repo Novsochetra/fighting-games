@@ -17,17 +17,21 @@ const AFTER = {
     y: Math.min(NET_FLOOR, from.y + ticks * ticks * 0.15),
     alpha: 1,
   }),
+
   saved: (from, ticks) => ({
     x: from.x + ticks * 1.5,
     y: from.y + ticks * 2,
     alpha: 1 - ticks / 40,
   }),
+
   over: (from, ticks) => ({ x: from.x, y: from.y - ticks * 2, alpha: 1 - ticks / 16 }),
+
   wide: (from, ticks) => ({
     x: from.x + Math.sign(from.x - 192) * ticks * 2,
     y: from.y,
     alpha: 1 - ticks / 16,
   }),
+
   short: (from, ticks) => ({ x: from.x, y: Math.max(140, from.y), alpha: 1 - ticks / 40 }),
 };
 

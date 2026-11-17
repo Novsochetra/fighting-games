@@ -142,6 +142,7 @@ describe('a spike trap as drawn', () => {
         }
       }
     }
+
     const strays = [];
     for (let x = 0; x < frameWidth; x++) {
       for (let y = FAR_EDGE; y <= NEAR_EDGE; y++) {

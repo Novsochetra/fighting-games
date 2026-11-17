@@ -16,6 +16,7 @@ function rigHand(fighter) {
 export function handOf(fighter) {
   const [name, frame] = heroAnimation(fighter);
   const hands = HANDS[name];
+
   return hands ? placed(fighter, hands[Math.min(frame, hands.length - 1)]) : rigHand(fighter);
 }
 
@@ -23,6 +24,7 @@ export function handOf(fighter) {
 export function coilOf(fighter, move) {
   const [name, strike] = move.sprite || HERO_MOVE_SPRITES[move.id] || [];
   const hands = HANDS[name];
+
   return hands ? placed(fighter, hands[Math.max(0, strike - 1)]) : handOf(fighter);
 }
 
@@ -31,6 +33,7 @@ function alongLine(game, points) {
   const index = Math.min(points.length - 2, Math.floor(reach));
   const share = reach - index;
   const [from, to] = [points[index], points[index + 1]];
+
   return [from[0] + (to[0] - from[0]) * share, from[1] + (to[1] - from[1]) * share];
 }
 
@@ -42,13 +45,16 @@ export function smearPointOf(game, fighter, time) {
     const dx = SPIN_RING.x + Math.cos(angle) * SPIN_RING.radius;
     return placed(fighter, [dx, SPIN_RING.y + Math.sin(angle) * SPIN_RING.radius]);
   }
+
   const smear = SMEARS[name];
+
   return smear ? placed(fighter, alongLine(game, smear)) : bladeTipOf(fighter);
 }
 
 // the Shade's face in the strip it is drawn in now, or near enough where none is measured
 export function faceOf(fighter) {
   const [name] = heroAnimation(fighter);
+
   return placed(fighter, FACES[name] ?? [2, -26]);
 }
 

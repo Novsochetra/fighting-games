@@ -8,5 +8,6 @@ export function synthesizeTake(key, { pitch, take, sampleRate }) {
   const track = createTrack(Math.ceil(definition.seconds * sampleRate), sampleRate);
   const shape = definition.build(track, pitch, take) || {};
   finish(track, shape);
+
   return track.samples;
 }

@@ -14,10 +14,12 @@ export function groundAt(terrain, x) {
   if (!heights) {
     return GROUND_Y;
   }
+
   const column = Math.floor(x);
   if (column < 0) {
     return heights[0];
   }
+
   return column < heights.length ? heights[column] : heights[heights.length - 1];
 }
 
@@ -43,6 +45,7 @@ function layoutHeights(zoneSpecs, zones, length) {
       raise(heights, points[i - 1], points[i]);
     }
   });
+
   return heights;
 }
 
@@ -51,6 +54,7 @@ function layoutPlatforms(zoneSpecs, zones, heights) {
   return zoneSpecs.flatMap((spec, index) =>
     (spec.platforms ?? []).map(({ at, width, rise, kind }) => {
       const x = zones[index].left + at;
+
       return { x, y: heights[x] - rise, width, kind };
     }),
   );
@@ -60,6 +64,7 @@ export function layoutTerrain(zoneSpecs, zones, length) {
   if (!zoneSpecs.some((spec) => spec.ground || spec.platforms || spec.moats)) {
     return FLAT_TERRAIN;
   }
+
   const heights = layoutHeights(zoneSpecs, zones, length);
   const water = carveMoats(zoneSpecs, zones, heights);
 

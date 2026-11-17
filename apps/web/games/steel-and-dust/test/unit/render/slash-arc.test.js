@@ -6,11 +6,14 @@ function recordingPainter() {
   const segments = [];
   const painter = {
     use: () => painter,
+
     line: (from, to, thickness) => {
       segments.push({ from, to, thickness });
+
       return painter;
     },
   };
+
   return { painter, segments };
 }
 
@@ -33,6 +36,7 @@ describe("a sword's slash", () => {
     const middleY = (bend) => {
       const { painter, segments } = recordingPainter();
       slashArc(painter, { from, to, bend, width: 3, color: '#fff' });
+
       return segments[segments.length / 2].from.y;
     };
     expect(middleY(0.2)).toBeLessThan(-5);

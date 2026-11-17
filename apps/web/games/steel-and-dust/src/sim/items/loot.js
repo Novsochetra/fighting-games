@@ -8,6 +8,7 @@ import { fallAndBounce } from './loot-motion.js';
 // a piece's y is its foot, so its box stands on it
 function touches(body, piece) {
   const half = MOTION.pieceWidth / 2;
+
   return (
     piece.x + half > body.x &&
     piece.x - half < body.x + body.width &&
@@ -49,6 +50,7 @@ function countDown(game) {
   if (game.coinStreak.timer > 0) {
     game.coinStreak.timer--;
   }
+
   if (game.purseBump > 0) {
     game.purseBump--;
   }
@@ -61,6 +63,7 @@ export function updateLoot(game) {
   for (const piece of game.loot) {
     updatePiece(game, piece, body);
   }
+
   game.loot = game.loot.filter((piece) => !piece.taken && !isExpired(piece));
   updateLootFx(game);
   countDown(game);

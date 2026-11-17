@@ -6,6 +6,7 @@ export function legAt(flight, time) {
   while (leg < flight.length - 2 && time >= flight[leg + 1][0]) {
     leg++;
   }
+
   return leg;
 }
 
@@ -13,6 +14,7 @@ export function legAt(flight, time) {
 export function progressOnLeg(flight, leg, time) {
   const from = flight[leg][0];
   const to = flight[leg + 1][0];
+
   return Math.min(1, Math.max(0, (time - from) / (to - from)));
 }
 
@@ -21,6 +23,7 @@ export function pointOnLeg(flight, leg, time) {
   const [, x1, y1, hop = 0] = flight[leg + 1];
   const along = progressOnLeg(flight, leg, time);
   const lift = 4 * hop * along * (1 - along);
+
   return [x0 + (x1 - x0) * along, y0 + (y1 - y0) * along - lift];
 }
 

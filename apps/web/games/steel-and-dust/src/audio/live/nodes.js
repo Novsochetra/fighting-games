@@ -6,6 +6,7 @@ export function track(live, node, { source = false } = {}) {
   if (source) {
     live.sources?.push(node);
   }
+
   return node;
 }
 
@@ -16,8 +17,10 @@ export function envelopeGain(live, { destination, start, attack, peak, decay, ho
   if (hold) {
     node.gain.setValueAtTime(peak, start + attack + hold);
   }
+
   node.gain.exponentialRampToValueAtTime(0.0001, start + attack + (hold || 0) + decay);
   node.connect(destination);
+
   return node;
 }
 
@@ -28,9 +31,11 @@ export function oscillator(live, { wave, from, to = from, start, duration, desti
   if (to !== from) {
     node.frequency.exponentialRampToValueAtTime(Math.max(20, to), start + (glide || duration));
   }
+
   node.connect(destination);
   node.start(start);
   node.stop(start + duration + 0.05);
+
   return node;
 }
 
@@ -41,8 +46,10 @@ export function biquad(live, { type, from, to, resonance, start, duration, desti
   if (to && to !== from) {
     node.frequency.exponentialRampToValueAtTime(Math.max(30, to), start + duration);
   }
+
   node.Q.value = resonance || 0.7;
   node.connect(destination);
+
   return node;
 }
 
@@ -53,5 +60,6 @@ export function noise(live, { start, duration, destination, rate }) {
   node.connect(destination);
   node.start(start, Math.random() * 0.8);
   node.stop(start + duration + 0.05);
+
   return node;
 }

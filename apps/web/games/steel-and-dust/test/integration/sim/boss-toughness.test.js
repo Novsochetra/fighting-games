@@ -12,6 +12,7 @@ function onLastRoad() {
   const game = createTestGame();
   selectMission(game, 11);
   startPlay(game);
+
   return game;
 }
 

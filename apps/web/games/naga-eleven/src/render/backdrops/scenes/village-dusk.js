@@ -22,6 +22,7 @@ const LAMPS = houseWindows({ ...HOUSE, windows: [{ at: 0.28 }, { at: 0.7 }] }).m
 export const VILLAGE_DUSK = {
   frameOf: swayOf,
   paint: (raster, frame) => paintVillage(raster, { art, frame, dawn: false }),
+
   overlay: (context, tick) => {
     drawMist(context, { bands: MIST, colors: DUSK_MIST, tick, mask: villageMistMask() });
     drawTwinkles(context, { points: LAMPS, colors: art.flame, tick, period: 7 });

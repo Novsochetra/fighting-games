@@ -7,6 +7,7 @@ function burstParticle(game, { x, y, color, kind }) {
   const angle = lootBetween(game, 0, Math.PI * 2);
   const speed = lootBetween(game, 0.8, kind === 'dust' ? 1.4 : 3);
   const life = Math.round(lootBetween(game, 10, kind === 'dust' ? 26 : 16));
+
   return {
     kind,
     x,
@@ -35,5 +36,6 @@ export function updateLootFx(game) {
   for (const sparkle of game.lootFx) {
     sparkle.time++;
   }
+
   game.lootFx = game.lootFx.filter((sparkle) => sparkle.time < SPARKLE_TICKS);
 }

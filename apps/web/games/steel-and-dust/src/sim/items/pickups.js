@@ -15,6 +15,7 @@ function fall(pickup, terrain) {
   if (pickup.landed) {
     return;
   }
+
   const floor = floorBelow(terrain, pickup.x, pickup.y + REST_HEIGHT);
   pickup.vy += 0.25;
   pickup.y += pickup.vy;
@@ -64,6 +65,7 @@ function collect(game, pickup) {
   } else {
     takeWeapon(game, game.player, pickup);
   }
+
   addSparks(game, { x: pickup.x, y: pickup.y, count: 10, color: COLORS.butter, speed: 2.2 });
 }
 
@@ -75,5 +77,6 @@ export function updatePickups(game) {
       collect(game, pickup);
     }
   }
+
   game.pickups = game.pickups.filter((pickup) => !pickup.taken);
 }

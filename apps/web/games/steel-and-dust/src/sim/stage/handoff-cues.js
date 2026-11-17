@@ -14,6 +14,7 @@ import { CLEAR_TICKS } from './stage-clear.js';
 
 function letterHitsNow(age, letterCount) {
   const sinceFirst = age - letterHitsAt(0);
+
   return (
     sinceFirst >= 0 && sinceFirst % CARD_STAGGER === 0 && sinceFirst < letterCount * CARD_STAGGER
   );
@@ -21,6 +22,7 @@ function letterHitsNow(age, letterCount) {
 
 function callOut(game, clearing) {
   const { number } = missionOf(game);
+
   return clearing ? clearCall(number) : startCall(number);
 }
 
@@ -35,6 +37,7 @@ function cueTitleCard(game, banner) {
   if (callsNow(game, age, clearing)) {
     game.io.announce(callOut(game, clearing));
   }
+
   if (letterHitsNow(age, cardLetterCount(banner.text))) {
     game.io.sfx('stamp');
   }
@@ -46,6 +49,7 @@ export function cueHandoff(game) {
   if (game.banner?.stamp) {
     cueTitleCard(game, game.banner);
   }
+
   const wipeStarts = game.clearTime === CLEAR_TICKS - WIPE_TICKS + 1;
   if (wipeStarts && !isLastMission(game.missionIndex)) {
     game.io.sfx('wipe');

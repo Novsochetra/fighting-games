@@ -31,6 +31,7 @@ const TOKEN = /^(?:(up|down)\+)?(\w+)(?::(\d+))?$/;
 
 function parseToken(token) {
   const [, modifier, key, hold] = TOKEN.exec(token);
+
   return { modifier, key, hold: hold ? Number(hold) : (DEFAULT_HOLD[key] ?? 1) };
 }
 
@@ -42,6 +43,7 @@ export function compileProgram(source, startTick) {
       tick += Number(token);
       continue;
     }
+
     const { modifier, key, hold } = parseToken(token);
     const keys = modifier ? [modifier, key] : [key];
     for (const name of keys) {
@@ -49,5 +51,6 @@ export function compileProgram(source, startTick) {
       events.push({ tick: tick + hold, type: 'release', key: name });
     }
   }
+
   return events;
 }

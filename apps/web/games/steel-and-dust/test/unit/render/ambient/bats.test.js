@@ -24,6 +24,7 @@ describe('ambient bats', () => {
         headings.add(Math.sign(meanX(late) - meanX(early)));
       }
     }
+
     expect(headings).toEqual(new Set([-1, 1]));
   });
 

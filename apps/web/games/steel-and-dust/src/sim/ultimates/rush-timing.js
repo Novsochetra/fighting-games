@@ -11,6 +11,7 @@ const ZIP_FRAME = ['dash', 2, FISTS_ROW];
 export const RUSH_BLOWS = rush.reduce((blows, { sprite, ticks }) => {
   const start = blows.length ? lastOf(blows).end : rushAt;
   blows.push({ sprite, start, strikeAt: start + zipTicks + windTicks, end: start + ticks });
+
   return blows;
 }, []);
 
@@ -28,6 +29,8 @@ export function rushFrame(time) {
   if (!blow || time < blow.start + zipTicks) {
     return ZIP_FRAME;
   }
+
   const [strip, strike] = blow.sprite;
+
   return [strip, time < blow.strikeAt ? strike - 1 : strike, FISTS_ROW];
 }

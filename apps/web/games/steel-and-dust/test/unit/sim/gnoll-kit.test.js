@@ -15,6 +15,7 @@ function gnollAt(distance, { missionIndex = 5, share = 1 } = {}) {
   Object.assign(gnoll, { entering: false, x: 120 + distance, facing: -1 });
   gnoll.ai.cooldown = 0;
   gnoll.hp = share * gnoll.maxHp;
+
   return { game, gnoll };
 }
 
@@ -37,6 +38,7 @@ describe("the Gnoll Packlord's kit", () => {
       think(game, gnoll);
       directions.add(gnoll.walkDirection);
     }
+
     expect([...directions].sort()).toEqual([-1, 1]);
   });
 

@@ -40,6 +40,7 @@ export function updateHangingCut(_game, cut) {
   if (cut.severedAt === null) {
     rideTarget(cut);
   }
+
   const severed = cut.severedAt !== null && cut.time >= cut.severedAt + SEVER_TICKS;
   cut.done = severed || cut.time >= CUT_LIFE;
 }

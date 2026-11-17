@@ -18,6 +18,7 @@ function playerBackFromThirdGame() {
   const storage = createMemoryStorage();
   storage.write(STORAGE_KEYS.plays, 3);
   storage.write(STORAGE_KEYS.supportSeenPlays, 2);
+
   return storage;
 }
 

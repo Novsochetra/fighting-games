@@ -15,6 +15,7 @@ function khanAt(distance, { missionIndex = 0, share = 1 } = {}) {
   Object.assign(khan, { entering: false, x: 160 + distance, facing: -1 });
   khan.ai.cooldown = 0;
   khan.hp = share * khan.maxHp;
+
   return { game, khan };
 }
 

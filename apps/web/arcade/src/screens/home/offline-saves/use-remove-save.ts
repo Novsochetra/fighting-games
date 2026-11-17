@@ -18,6 +18,7 @@ export function useRemoveSave() {
     isOpen,
     dialogRef,
     cancelRef,
+
     open(shown: GameCard) {
       sheet.finish();
       setCard(shown);

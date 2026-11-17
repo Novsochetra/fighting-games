@@ -9,6 +9,7 @@ function loadedFight() {
   drawChangedFrame(game, late.view);
   late.images.loadAll();
   runTicks(game, 1);
+
   return { game, ...late };
 }
 
@@ -31,6 +32,7 @@ describe('drawing only a changed frame', () => {
     for (let frame = 0; frame < 3; frame++) {
       expect(drawChangedFrame(game, view)).toBe(true);
     }
+
     expect(view.loadingFrames).toBe(3);
   });
 

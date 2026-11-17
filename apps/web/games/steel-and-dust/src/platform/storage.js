@@ -20,5 +20,6 @@ export function saveRecords(storage, records) {
   } catch {
     return false;
   }
+
   return true;
 }

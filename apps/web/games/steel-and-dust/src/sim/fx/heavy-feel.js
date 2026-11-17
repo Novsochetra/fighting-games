@@ -20,6 +20,7 @@ function lunge(fighter, move, feel) {
   if (fighter.airborne || move.forward || move.sustain || move.dive) {
     return;
   }
+
   fighter.vx = fighter.facing * (feel.moves[move.id]?.lunge ?? feel.lunge);
 }
 
@@ -44,6 +45,7 @@ function windUp(game, fighter, { move, kit }) {
   if (!move.chargeLevel) {
     game.io.sfx(kit.sounds.charge, false, { x: fighter.x });
   }
+
   kit.windup(game, fighter, move);
 }
 
@@ -52,6 +54,7 @@ function strike(game, fighter, { move, kit, feel }) {
   if (kit.sounds.release) {
     game.io.sfx(kit.sounds.release, false, { x: fighter.x });
   }
+
   kit.release(game, fighter, move);
 }
 
@@ -60,20 +63,25 @@ export function updateHeavyFeel(game, fighter, move, time) {
   if (fighter !== game.player || !isHeavyMove(move)) {
     return;
   }
+
   const shade = shadeOf(game);
   const parts = { move, kit: HEAVY_KITS[shade], feel: HEAVY_FEEL[shade], art: HEAVY_ART[shade] };
   if (time === 0) {
     windUp(game, fighter, parts);
   }
+
   if (time < move.startup) {
     parts.kit.gather(game, fighter, move, time);
   }
+
   if (time === move.startup) {
     strike(game, fighter, parts);
   }
+
   if (time >= move.startup && time < activeEnd(move)) {
     parts.kit.trail(game, fighter, move, time);
   }
+
   if (inTrail(move, time) && time % parts.feel.afterimageEvery === 0) {
     addHeavyAfterimage(fighter, parts);
   }

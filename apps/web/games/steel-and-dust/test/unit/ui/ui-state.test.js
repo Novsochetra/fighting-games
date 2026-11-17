@@ -7,6 +7,7 @@ function phoneUi(settings = {}) {
   game.device.coarsePointer = true;
   const ui = createUiState(game);
   ui.onTouchShownChange = vi.fn();
+
   return { game, ui };
 }
 

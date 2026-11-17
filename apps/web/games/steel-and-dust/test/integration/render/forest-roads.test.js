@@ -22,6 +22,7 @@ function firstSheerStep(mission) {
       return x;
     }
   }
+
   return null;
 }
 
@@ -41,6 +42,7 @@ function renderAt(mission, cameraX) {
   const log = screen.recording.log;
   log.length = 0;
   renderFrame(game, view);
+
   return log;
 }
 

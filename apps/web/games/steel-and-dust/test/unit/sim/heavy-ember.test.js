@@ -17,6 +17,7 @@ function emberFight() {
   raider.ai.cooldown = 9999;
   game.player.facing = 1;
   game.ultMeter = ULT_MAX;
+
   return game;
 }
 
@@ -31,9 +32,11 @@ function playChain(game, presses, ticks) {
     } else {
       runTicks(game, 1);
     }
+
     const { player } = game;
     steps.push({ move: player.move, time: player.moveTime, fire: emberKinds(game) });
   }
+
   return steps;
 }
 

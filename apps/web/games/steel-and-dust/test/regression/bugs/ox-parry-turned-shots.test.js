@@ -25,6 +25,7 @@ function guardingOx() {
   ox.ai.cooldown = 9999;
   startMove(game, ox, 'guardCounter');
   runTicks(game, GUARD_UP);
+
   return { game, ox };
 }
 
@@ -52,6 +53,7 @@ describe("the Warden Ox's guard against what a Shade sends at him", () => {
       ox.ai.cooldown = 9999;
       moves.add(ox.move?.id);
     }
+
     expect(game.floaters.some((floater) => floater.text === 'parry!')).toBe(true);
     expect(ox.hp).toBe(hp);
     expect(moves.has('guardStrike')).toBe(false);

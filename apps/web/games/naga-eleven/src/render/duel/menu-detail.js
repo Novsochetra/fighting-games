@@ -50,11 +50,13 @@ const DETAILS = {
     duoShares(option)
       ?.map((share) => numberIn(share, lang))
       .join(' + ') ?? null,
+
   chain: (option, match, lang) =>
     chainMoves(option)
       .filter(Boolean)
       .map((id) => nameOf(id, lang))
       .join(' > '),
+
   finisher: (option, match, lang) =>
     `x${numberIn(finisherLevel(option, match), lang)} ${textOf(SKILL_WORDS.combo, lang)}`,
 };

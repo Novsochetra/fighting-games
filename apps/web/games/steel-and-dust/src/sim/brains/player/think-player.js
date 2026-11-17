@@ -29,6 +29,7 @@ function idleBetweenFights(game, player) {
   if (player.state === 'charge' || player.state === 'squat') {
     player.state = 'idle';
   }
+
   if (ON_FOOT.has(player.state)) {
     player.vx *= 0.6;
     player.state = game.clearTime > 0 ? 'win' : 'idle';
@@ -41,10 +42,12 @@ function tryUltimate(game, player) {
   if (game.lootTime > 0) {
     return false;
   }
+
   if (game.ultMeter >= ULT_FULL && ULT_START_STATES.has(player.state)) {
     startUlt(game, player);
     return true;
   }
+
   if (game.ultMeter < ULT_FULL) {
     addFloatText(game, {
       x: player.x,
@@ -53,6 +56,7 @@ function tryUltimate(game, player) {
       color: COLORS.lilac,
     });
   }
+
   return false;
 }
 
@@ -62,17 +66,21 @@ export function thinkPlayer(game, player) {
     thinkGateRun(game, player);
     return;
   }
+
   if (game.mode !== 'play' || game.clearTime > 0) {
     idleBetweenFights(game, player);
     return;
   }
+
   let buffer = game.input.buffer.action ? game.input.buffer : null;
   if (buffer?.action === 'ult') {
     if (tryUltimate(game, player)) {
       return;
     }
+
     buffer = null;
   }
+
   const think = THINK_BY_STATE[player.state];
   if (think) {
     think(game, player, { buffer, direction });

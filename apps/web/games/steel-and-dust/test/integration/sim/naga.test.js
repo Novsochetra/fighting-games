@@ -19,6 +19,7 @@ function moatArena({ gap = 150, hp } = {}) {
   Object.assign(naga, { entering: false, x: game.player.x + gap, facing: -1 });
   naga.hp = hp ?? naga.maxHp;
   naga.ai.cooldown = 9999;
+
   return { game, naga };
 }
 

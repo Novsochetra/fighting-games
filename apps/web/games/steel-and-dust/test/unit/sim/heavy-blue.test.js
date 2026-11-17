@@ -19,6 +19,7 @@ const FROST = new Set([...Object.values(BLUE_HEAVY_ART).flat(), COLORS.white]);
 
 function frostGame() {
   const player = { x: 120, y: GROUND_Y, facing: 1, airborne: false, trail: [], hitstop: 0 };
+
   return { player, particles: [], fxSeed: 7, terrain: { platforms: [] } };
 }
 
@@ -28,6 +29,7 @@ function stepParticles(game) {
     particle.life--;
     kit.particles[particle.kind](particle, game.terrain);
   }
+
   game.particles = game.particles.filter((particle) => particle.life > 0);
 }
 
@@ -36,9 +38,11 @@ function windingUp(game, move, time) {
   if (time === 0) {
     kit.windup(game, fighter, move);
   }
+
   if (time < move.startup) {
     kit.gather(game, fighter, move, time);
   }
+
   if (time === move.startup) {
     kit.release(game, fighter, move);
   }
@@ -50,6 +54,7 @@ function striking(game, move, time) {
   if (time < move.startup || time >= move.startup + move.active) {
     return;
   }
+
   kit.trail(game, fighter, move, time);
   if ((time - move.startup) % (move.multiHit ?? 99) === 0) {
     kit.impact(game, { attacker: fighter, move, x: fighter.x + 26, y: fighter.y - 20 });
@@ -98,6 +103,7 @@ describe("the Blue Shade's heavy", () => {
         }
       }
     }
+
     const game = frostGame();
     kit.release(game, game.player, K1);
     const flash = game.particles.find((particle) => particle.kind === 'blueFlash');
@@ -112,6 +118,7 @@ describe("the Blue Shade's heavy", () => {
         most = Math.max(most, game.particles.length);
       });
     }
+
     expect(most).toBeGreaterThan(10);
     expect(most).toBeLessThanOrEqual(60);
   });
@@ -124,6 +131,7 @@ describe("the Blue Shade's heavy", () => {
     for (let i = 0; i < 80; i++) {
       stepParticles(game);
     }
+
     expect(shard).toMatchObject({ landed: true, y: GROUND_Y - 1 });
   });
 
@@ -140,6 +148,7 @@ describe("the Blue Shade's heavy", () => {
       for (const particle of game.particles) {
         BLUE_HEAVY_RENDER.particles[particle.kind](painter, particle);
       }
+
       BLUE_HEAVY_RENDER.over(painter, layer);
     });
     const colors = colorsDrawn(log);

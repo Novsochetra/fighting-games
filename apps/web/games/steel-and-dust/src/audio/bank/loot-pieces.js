@@ -8,6 +8,7 @@ function gate(seconds) {
     if (time < 0.003) {
       return time / 0.003;
     }
+
     return time < seconds ? 1 : Math.max(0, 1 - (time - seconds) / 0.01);
   };
 }
@@ -34,6 +35,7 @@ function chip(track, { frequency, start, hold, decay, level }) {
 function buildCoin(track) {
   chip(track, { frequency: 988, start: 0, hold: 0.05, level: 0.5 });
   chip(track, { frequency: 1319, start: 0.055, decay: 0.32, level: 0.6 });
+
   return { lowpass: 9000 };
 }
 
@@ -41,6 +43,7 @@ function buildCoin(track) {
 function buildClink(track, pitch) {
   bell(track, { base: 3400 * pitch, ratios: [1, 1.47, 2.09], decay: 0.07, level: 0.5 });
   layer(track, { filter: 'highpass', cutoff: 6000, attack: 0.0005, decay: 0.012, level: 0.4 });
+
   return { lowpass: 11000 };
 }
 
@@ -53,6 +56,7 @@ function buildGem(track, pitch) {
   });
   const shimmer = { filter: 'bandpass', cutoff: glide(6000, 0.4, 9500), resonance: 2 };
   layer(track, { ...shimmer, attack: 0.08, decay: 0.35, level: 0.12, start: 0.04 });
+
   return { lowpass: 12000 };
 }
 
@@ -69,6 +73,7 @@ function buildAppleBite(track, pitch) {
     decay: 0.06,
     level: 0.5,
   });
+
   return { drive: 1.4 };
 }
 

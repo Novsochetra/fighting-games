@@ -16,6 +16,7 @@ function cobraArena({ gap = 150, hp } = {}) {
   Object.assign(cobra, { entering: false, x: game.player.x + gap, facing: -1 });
   cobra.hp = hp ?? cobra.maxHp;
   cobra.ai.cooldown = 9999;
+
   return { game, cobra };
 }
 
@@ -27,6 +28,7 @@ function playOut(game, cobra, ticks) {
     cobra.ai.cooldown = 9999;
     states.add(game.player.state);
   }
+
   return states;
 }
 
@@ -96,11 +98,13 @@ describe('the Cobra Matriarch in a fight', () => {
       if (i % 300 === 0) {
         game.player.x = cobra.x > 192 ? 20 : 364;
       }
+
       runTicks(game, 1);
       game.player.hp = game.player.maxHp;
       cobra.hp = Math.max(cobra.hp, 40);
       used.add(cobra.move?.id);
     }
+
     expect([...used]).toEqual(expect.arrayContaining(['venomSpray', 'coilLash', 'hypnoticGaze']));
   });
 });

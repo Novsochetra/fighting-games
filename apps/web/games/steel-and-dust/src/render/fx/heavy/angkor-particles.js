@@ -22,6 +22,7 @@ function stone(painter, particle, { tail, glints }) {
     painter.use(ART.rim).rect(particle.x, top, 1, 1);
     painter.use(ART.stoneShade).rect(particle.x + size - 1, top + size - 1, 1, 1);
   }
+
   painter.alpha(1);
 }
 
@@ -60,6 +61,7 @@ function bloom(painter, particle) {
     const angle = (particle.spin + i / 8) * Math.PI * 2;
     bloomPetal(painter, { particle, angle, reach, young });
   }
+
   painter.use(ART.gold).diamond(particle.x, particle.y, young ? 2 : 1);
   painter.alpha(1);
 }

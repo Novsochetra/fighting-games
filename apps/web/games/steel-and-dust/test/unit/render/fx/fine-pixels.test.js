@@ -47,6 +47,7 @@ describe('a pixel ellipse', () => {
       expect(rows[8 - i].half).toBe(rows[8 + i].half);
       expect(rows[8 + i].half).toBeLessThanOrEqual(rows[8 + i - 1].half);
     }
+
     expect(rows[0].half).toBeGreaterThan(0);
     expect(rows.every((row) => onScreenPixels(row.half))).toBe(true);
   });
@@ -84,6 +85,7 @@ describe('fine lines and rects', () => {
       expect(rect.height).toBe(PIXEL);
       x += rect.width;
     }
+
     expect(x).toBe(21);
     expect(rects.length).toBeLessThan(21);
   });

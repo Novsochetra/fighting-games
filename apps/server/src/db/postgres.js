@@ -30,6 +30,7 @@ export function createPostgresDatabase({ connectionString, logError = console.er
   // An idle connection that drops (a database restart) emits here; without a listener Node would
   // stop the whole server.
   pool.on('error', (error) => logError(`Postgres connection error: ${error.message}`));
+
   return {
     query: (text, values) => pool.query(text, values),
     transaction: (work) => inTransaction(pool, work),

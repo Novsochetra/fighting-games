@@ -25,6 +25,7 @@ describe('ambient tumbleweeds', () => {
       if (!rects.length) {
         continue;
       }
+
       const [shadow, ...ball] = rects;
       expect(shadow).toMatchObject({ y: weeds.y, height: 1, color: shadowColor });
       expect(shadow.alpha).toBeLessThan(0.5);
@@ -32,6 +33,7 @@ describe('ambient tumbleweeds', () => {
       expect(bottom).toBeLessThanOrEqual(weeds.y);
       lifts.add(weeds.y - bottom);
     }
+
     expect(lifts.size).toBeGreaterThan(3);
   });
 

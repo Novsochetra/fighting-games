@@ -8,6 +8,7 @@ import { drawEnemyFrame, TIE_BREAK } from '../../../../src/render/fighters/enemy
 
 const sizeOf = (id) => {
   const type = Object.values(ENEMY_TYPES).find((def) => def.sprite === id);
+
   return type?.boss ? type.scale : 1;
 };
 
@@ -15,6 +16,7 @@ const sizeOf = (id) => {
 function cellSpan(sprite, size, { length, feet }) {
   const scale = size / (RENDER_SCALE * (sprite.density ?? 1));
   const start = snap(-feet * scale);
+
   return { start, step: (snap((length - feet) * scale) - start) / length };
 }
 
@@ -30,6 +32,7 @@ function drawnPiece(id, name, index) {
   const sheets = { images: { [id]: {} }, tints: null };
   const frame = { id, frame: [name, index], x: 0, y: 0, facing: 1, size: sizeOf(id) };
   drawEnemyFrame({ context }, sheets, frame);
+
   return calls;
 }
 
@@ -45,12 +48,14 @@ function axisMismatches(cell, { source, sourceLength, from, size, pieceStart, of
     if (before < offset + 1 || before >= offset + length - 1) {
       continue;
     }
+
     const after = source + ((centre - from) * sourceLength) / size - pieceStart + offset;
     const covered = centre > from && centre < from + size;
     if (!covered || Math.abs(after - before) > TIE_BREAK + 1e-9) {
       wrong.push(centre);
     }
   }
+
   return wrong;
 }
 
@@ -61,6 +66,7 @@ function pieceMismatches(id, name, index) {
   if (!piece) {
     return call ? ['an empty frame drew'] : [];
   }
+
   const [sx, sy, width, height, left, top] = piece;
   const [srcX, srcY, srcWidth, srcHeight, dx, dy, dWidth, dHeight] = call;
   const edges = [dx, dy, dWidth, dHeight].filter(
@@ -69,6 +75,7 @@ function pieceMismatches(id, name, index) {
   const size = sizeOf(id);
   const across = cellSpan(sprite, size, { length: sprite.frameWidth, feet: sprite.feetX });
   const down = cellSpan(sprite, size, { length: sprite.frameHeight, feet: sprite.feetY });
+
   return [
     ...edges.map((edge) => `edge ${edge} between screen pixels`),
     ...axisMismatches(across, {
@@ -101,6 +108,7 @@ function nearestMiss({ start, step }, length) {
     const miss = Math.abs(sheet - Math.round(sheet));
     nearest = miss > 1e-9 ? Math.min(nearest, miss) : nearest;
   }
+
   return nearest;
 }
 

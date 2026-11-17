@@ -65,6 +65,7 @@ function drawOne(painter, { game, view, fighter, sheet, cameraX }) {
   if (isBossUltimate(fighter)) {
     dimForBossUltimate(painter, fighter, cameraX);
   }
+
   drawInDoorway(painter, { game, fighter }, () => {
     drawSinking(painter, fighter, () =>
       drawFighter(painter, {
@@ -93,21 +94,26 @@ function drawFighters(painter, { game, view, cameraX }) {
   if (!ultimate) {
     drawBehindFighters(painter, { game, view });
   }
+
   let lootDrawn = false;
   for (const fighter of drawOrder(game.fighters)) {
     if (!lootDrawn && fighter.state !== 'ko') {
       drawLootOnRoad(painter, { game, view, cameraX });
       lootDrawn = true;
     }
+
     if (fighter === game.player && ultimate) {
       dimForUltimate(painter, game, cameraX);
       drawBehindFighters(painter, { game, view });
     }
+
     drawOne(painter, { game, view, fighter, sheet, cameraX });
   }
+
   if (!lootDrawn) {
     drawLootOnRoad(painter, { game, view, cameraX });
   }
+
   drawWallOverHero(painter, { game, sheets: view.propSheets });
 }
 

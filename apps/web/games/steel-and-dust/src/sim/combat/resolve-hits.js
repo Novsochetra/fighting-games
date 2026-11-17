@@ -30,13 +30,16 @@ function hitFighters(game, { attacker, move }, area) {
     if (!attacker.hitboxActive) {
       break;
     }
+
     if (target.side === attacker.side || attacker.hitTargets.has(target)) {
       continue;
     }
+
     const body = hurtBox(target);
     if (!body || !overlaps(area, body)) {
       continue;
     }
+
     const center = overlapCenter(area, body);
     if (applyHit(game, { attacker, target, move, ...center })) {
       attacker.hitTargets.add(target);
@@ -44,6 +47,7 @@ function hitFighters(game, { attacker, move }, area) {
       breakIce(game, { attacker, move }, target);
     }
   }
+
   return connected;
 }
 
@@ -103,6 +107,7 @@ function riseWithHit(attacker, move, strikeEnd) {
     Object.assign(attacker, { vy: move.hop, airborne: true, hitboxActive: false });
     attacker.moveTime = Math.max(attacker.moveTime, strikeEnd);
   }
+
   if (move.pogo && attacker.airborne) {
     attacker.moveTime = Math.max(attacker.moveTime, strikeEnd);
     attacker.hitboxActive = false;
@@ -119,6 +124,7 @@ function followUpOnHit(game, { attacker, move }) {
     attacker.durabilityUsed = true;
     useDurability(game, attacker);
   }
+
   stopOrBounce(attacker, move, strikeEnd);
   riseWithHit(attacker, move, strikeEnd);
 }
@@ -130,6 +136,7 @@ function resolveAttacker(game, attacker) {
   if (!isPlayer(attacker)) {
     return;
   }
+
   hitCrates(game, attacker, area);
   strikeRoad(game, area, attacker.facing);
   strikePharaohSpells(game, attacker, area);

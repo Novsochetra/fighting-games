@@ -25,6 +25,7 @@ function drawRay(painter, { sun, angle, halfWidth, strength }) {
     if (rise % FADE_ROWS === 0) {
       painter.alpha(strength * FADE_STEP ** (rise / FADE_ROWS));
     }
+
     const from = Math.round(sun.x + rise * left);
     const width = Math.round(sun.x + rise * right) - from + 1;
     painter.rect(from, sun.y - rise, width, 1);

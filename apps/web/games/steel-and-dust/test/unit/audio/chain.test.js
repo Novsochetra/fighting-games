@@ -30,6 +30,7 @@ describe('buildChain', () => {
     for (const bus of [chain.master, chain.effectsBus, chain.musicBus, chain.echoInput]) {
       expect(reaches(bus, context.destination)).toBe(true);
     }
+
     expect(reaches(chain.effectsBus, nodesOfKind(context, 'convolver')[0])).toBe(true);
     expect(reaches(chain.echoInput, chain.musicBus)).toBe(true);
     expect(chain.noiseBuffer.length).toBe(44100);

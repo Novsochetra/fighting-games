@@ -30,6 +30,7 @@ function sparkAt(spot, { spark, tick }) {
   const flightSeed = seed * 977 + flight;
   const startX = (trait(flightSeed, 3) - 0.5) * 8;
   const windX = (trait(flightSeed, 4) - 0.3) * 0.12;
+
   return {
     x: spot.x + startX + age * windX + Math.sin(age * 0.2 + flight) * 1.2,
     y: spot.y - 2 - age * (0.35 + trait(flightSeed, 5) * 0.35),
@@ -55,5 +56,6 @@ export function drawEmbers(painter, { effect, tick, cameraX, colors }) {
     drawGlow(painter, spot, { tick, color: colors.glow });
     drawSparks(painter, spot, { tick, colors: colors.embers });
   }
+
   painter.alpha(1);
 }

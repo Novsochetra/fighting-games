@@ -29,6 +29,7 @@ export function resolveRadius(value, size) {
   if (!Number.isFinite(amount)) {
     return 0;
   }
+
   return first.endsWith('%') ? (amount / 100) * size : amount;
 }
 
@@ -46,6 +47,7 @@ export function rectAt(from, to, progress) {
 export function panelFrame(rect, viewport, radius) {
   const scaleX = rect.width / viewport.width;
   const scaleY = rect.height / viewport.height;
+
   return {
     transform: `translate(${rect.x}px, ${rect.y}px) scale(${scaleX}, ${scaleY})`,
     borderRadius: `${radius / scaleX}px / ${radius / scaleY}px`,
@@ -62,6 +64,7 @@ export function launchArtRect(viewport, from) {
   const height = width / aspect;
   const x = (viewport.width - width) / 2;
   const y = (viewport.height - height - CAPTION_ROOM) / 2;
+
   return { x, y, width, height };
 }
 
@@ -71,6 +74,7 @@ export const captionTop = (art) => art.y + art.height + CAPTION_GAP;
 // The art keeps its shape on the way, moved and scaled from where the card was.
 export function iconFrame(rect, from) {
   const scale = rect.width / from.width;
+
   return { transform: `translate(${rect.x - from.x}px, ${rect.y - from.y}px) scale(${scale})` };
 }
 
@@ -94,6 +98,7 @@ export function launchKeyframes({ from, viewport, radius, steps = KEYFRAME_STEPS
     frames.corners.push({ offset, borderRadius });
     frames.icon.push({ offset, ...iconFrame(rectAt(from, art, offset), from) });
   }
+
   return frames;
 }
 

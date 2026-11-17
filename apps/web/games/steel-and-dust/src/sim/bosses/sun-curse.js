@@ -27,12 +27,15 @@ function jarSpots(game, count) {
   const { left, right } = screenEdges(game);
   const [min, max] = [left + JAR_EDGE, right - JAR_EDGE];
   const hero = game.player.x;
+
   return Array.from({ length: count }, (_, i) => {
     const x = min + ((max - min) * i) / (count - 1);
     if (Math.abs(x - hero) >= HERO_GAP) {
       return x;
     }
+
     const away = clamp(hero + (x >= hero ? 1 : -1) * HERO_GAP, min, max);
+
     return Math.abs(away - hero) >= HERO_GAP ? away : hero - (x >= hero ? 1 : -1) * HERO_GAP;
   });
 }
@@ -41,6 +44,7 @@ export function castCurse(game, boss, move) {
   for (const x of jarSpots(game, move.curse.jars)) {
     raiseJar(game, boss, x);
   }
+
   markCurse(game, boss);
   const { player } = game;
   const color = BOSS_ULT_COLORS[boss.kind].title;
@@ -72,6 +76,7 @@ export function watchJars(game, boss) {
   if (unbrokenJars(game, boss).length > 0) {
     return;
   }
+
   const sun = sunOver(boss);
   burstCurseMark(game, boss);
   addRing(game, { ...sun, color: FX_COLORS.sunWhite, big: true });
@@ -94,6 +99,7 @@ export function releaseCurse(game, boss) {
   if (unbrokenJars(game, boss).length === 0) {
     return;
   }
+
   const { player } = game;
   const orb = {
     x: boss.x + boss.facing * POINTED_ORB.ahead * boss.scale,

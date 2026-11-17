@@ -19,6 +19,7 @@ export function ledBoards(art, { depth = -40, height = 26, panel = 150 } = {}) {
     depth,
     height,
     frames: 4,
+
     paint: (raster, _, frame) =>
       paintBoards(raster, {
         ads: art.ads,
@@ -32,6 +33,7 @@ export function ledBoards(art, { depth = -40, height = 26, panel = 150 } = {}) {
 export const nearBoards = (layout, art) => ({
   depth: layout.pitch.width + 48,
   height: 30,
+
   paint: (raster) =>
     paintBoards(raster, { ads: art.ads, frame: art.led.frame, panel: 190, height: 24 }),
 });

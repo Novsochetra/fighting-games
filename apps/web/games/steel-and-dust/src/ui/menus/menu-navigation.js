@@ -25,14 +25,17 @@ function adjust(menus, { current, step, audio }) {
   if (menus.panels[menus.top()]?.sideways?.(step)) {
     return;
   }
+
   if (current && isSettingRow(current)) {
     menus.changeSetting(current.dataset.k, step, false);
     return;
   }
+
   if (current && isTab(current)) {
     stepTab(menus, current, step, audio);
     return;
   }
+
   if (menus.top() === 'heroes') {
     stepHero(menus, step, audio);
   } else if (!NO_SIDEWAYS_STEP.has(menus.top())) {
@@ -54,6 +57,7 @@ function move(menus, step, audio) {
     const count = menus.items().length;
     menus.state.selected = (menus.state.selected + step + count) % count;
   }
+
   menus.highlight(true);
   audio.sfx('ui');
 }
@@ -81,10 +85,12 @@ function choose(menus, { current, audio }) {
   if (!current) {
     return;
   }
+
   if (isSettingRow(current)) {
     chooseSetting(menus, current);
     return;
   }
+
   const key = tabKey(current);
   current.click();
   if (key) {
@@ -103,6 +109,7 @@ export function createNavigator({ menus, audio, act }) {
     if (!items.length && kind !== 'back') {
       return;
     }
+
     const current = items[menus.state.selected];
     const context = { current, step, audio };
     const handlers = {
@@ -114,6 +121,7 @@ export function createNavigator({ menus, audio, act }) {
     };
     handlers[kind]?.();
   }
+
   return navigate;
 }
 
@@ -123,13 +131,16 @@ export function handleMenuKey(event, { menus, navigate, ui }) {
   if (!binding) {
     return;
   }
+
   event.preventDefault();
   if (event.repeat && binding[0] !== 'move' && binding[0] !== 'adjust') {
     return;
   }
+
   ui.noteInput('key');
   if (event.code === 'KeyP' && !isPauseOnly(menus)) {
     return;
   }
+
   navigate(...binding);
 }

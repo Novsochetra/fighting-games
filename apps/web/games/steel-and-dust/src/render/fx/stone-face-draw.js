@@ -16,12 +16,15 @@ function faceFrame(face) {
   if (face.time < FACE_TIMES.glare) {
     return Math.min(3, Math.floor(face.time / RISE_TICKS));
   }
+
   if (face.time < FACE_TIMES.fire) {
     return 4;
   }
+
   if (isBreathing(face)) {
     return 5;
   }
+
   return face.time < FACE_TIMES.crumble ? 6 : 7;
 }
 
@@ -29,6 +32,7 @@ function faceDepth(face) {
   if (face.time < FACE_TIMES.glare) {
     return RISE_DEPTH * (1 - face.time / FACE_TIMES.glare);
   }
+
   return Math.max(0, face.time - FACE_TIMES.crumble) * SINK_SPEED;
 }
 

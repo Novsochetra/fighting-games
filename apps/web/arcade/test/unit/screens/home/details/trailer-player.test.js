@@ -18,9 +18,11 @@ function fakeVideo(...answers) {
     played: [],
     getAttribute: (name) => attributes.get(name) ?? null,
     removeAttribute: (name) => attributes.delete(name),
+
     set src(value) {
       attributes.set('src', value);
     },
+
     play: vi.fn(() => {
       video.played.push(video.muted ? 'muted' : 'with sound');
       const answer = answers.shift() ?? 'plays';
@@ -74,6 +76,7 @@ describe('startTrailer', () => {
 
     const throwing = {
       ...fakeVideo(),
+
       play: () => {
         throw new Error('no video here');
       },

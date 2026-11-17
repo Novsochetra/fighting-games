@@ -12,6 +12,7 @@ export const systemAppearance = (window) =>
 // the device changes (at sunset, say), the arcade follows the device again.
 export function resolveAppearance(saved, system) {
   const isKept = Boolean(saved) && saved.system === system && APPEARANCES.includes(saved.choice);
+
   return isKept ? saved.choice : system;
 }
 
@@ -44,6 +45,7 @@ export function createAppearance({ document, storage, signal }) {
     const system = systemAppearance(window);
     storage.write(APPEARANCE_KEY, next === system ? null : { choice: next, system });
     applySmoothly(document, next, { smooth });
+
     return next;
   }
 

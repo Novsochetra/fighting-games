@@ -29,11 +29,14 @@ function fakeWindow({ light = false, localStorage } = {}) {
     get matches() {
       return device.light;
     },
+
     addEventListener: (type, listener) => listeners.push(listener),
   };
+
   return {
     matchMedia: vi.fn(() => query),
     localStorage,
+
     setLight: (isLight) => {
       device.light = isLight;
       listeners.forEach((listener) => listener());
@@ -47,6 +50,7 @@ function fakeDocument(window) {
     documentElement: { dataset: {} },
     defaultView: {
       ...window,
+
       getComputedStyle: () => ({
         getPropertyValue: () =>
           document.documentElement.dataset.appearance === 'light' ? 'white' : 'black',
@@ -54,6 +58,7 @@ function fakeDocument(window) {
     },
     querySelector: () => meta,
   };
+
   return { document, meta };
 }
 
@@ -71,12 +76,14 @@ describe('appearance-early.js, the script in the head', () => {
         if (throws) {
           throw new Error('SecurityError');
         }
+
         return key === APPEARANCE_KEY ? stored : null;
       },
     };
     const window = fakeWindow({ light, localStorage });
     const document = { documentElement: { dataset: {} } };
     new Function('document', 'window', code)(document, window);
+
     return document.documentElement.dataset.appearance;
   };
 
@@ -98,6 +105,7 @@ describe('createAppearance', () => {
     const window = fakeWindow({ light });
     const { document, meta } = fakeDocument(window);
     const appearance = createAppearance({ document, storage });
+
     return { appearance, document, meta, storage, window };
   };
 
@@ -121,6 +129,7 @@ describe('createAppearance', () => {
     const { appearance, document } = setup();
     document.startViewTransition = vi.fn((update) => {
       update();
+
       return { finished: Promise.resolve() };
     });
     appearance.toggle();
@@ -135,6 +144,7 @@ describe('createAppearance', () => {
     const done = Promise.withResolvers();
     document.startViewTransition = vi.fn((update) => {
       update();
+
       return { finished: done.promise };
     });
     appearance.toggle();

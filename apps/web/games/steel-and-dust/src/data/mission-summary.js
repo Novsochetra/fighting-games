@@ -35,6 +35,7 @@ export function stepCount(value) {
 // how many of a row's steps have landed `since` ticks after it started
 function stepsLanded(value, since) {
   const landed = Math.floor((since - SUMMARY.countFrom) / SUMMARY.stepTicks) + 1;
+
   return Math.max(0, Math.min(stepCount(value), landed));
 }
 
@@ -42,11 +43,13 @@ function stepsLanded(value, since) {
 export function stepNow(value, since) {
   const sinceFirst = since - SUMMARY.countFrom;
   const step = sinceFirst / SUMMARY.stepTicks;
+
   return sinceFirst >= 0 && Number.isInteger(step) && step < stepCount(value) ? step : -1;
 }
 
 export function shownValue(value, since) {
   const steps = stepCount(value);
+
   return steps ? Math.round((value * stepsLanded(value, since)) / steps) : 0;
 }
 

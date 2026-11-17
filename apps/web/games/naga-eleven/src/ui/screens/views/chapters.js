@@ -48,6 +48,7 @@ export const CHAPTERS_SCREEN = {
     showSlot(section, 'story-done', Boolean(data.finished));
     actionButton(section, 'play-chapter').hidden = !playable;
   },
+
   act(action, _button, app) {
     if (action !== 'play-chapter') {
       return false;

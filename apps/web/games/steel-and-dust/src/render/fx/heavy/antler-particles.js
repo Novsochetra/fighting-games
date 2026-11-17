@@ -31,6 +31,7 @@ function antlerHoof(painter, particle) {
 function forkPoint(particle, dx, dy, scale) {
   const cos = Math.cos(particle.tilt);
   const sin = Math.sin(particle.tilt);
+
   return {
     x: particle.x + particle.facing * (dx * cos - dy * sin) * scale,
     y: particle.y + (dx * sin + dy * cos) * scale,
@@ -41,6 +42,7 @@ function forkColor(age, life) {
   if (age < 2) {
     return ART.antlerTip;
   }
+
   return life > 3 ? ART.antler : ART.trail;
 }
 
@@ -60,6 +62,7 @@ function antlerFork(painter, particle) {
       fineLine(context, { from, to: forkPoint(particle, toX, toY, scale), width: width + extra });
     }
   }
+
   context.globalAlpha = 1;
 }
 

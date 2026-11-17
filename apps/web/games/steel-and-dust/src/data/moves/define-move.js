@@ -2,12 +2,15 @@ function hitstopFor(damage) {
   if (damage >= 14) {
     return 11;
   }
+
   if (damage >= 10) {
     return 9;
   }
+
   if (damage >= 7) {
     return 7;
   }
+
   return 5;
 }
 
@@ -31,6 +34,7 @@ export function normalizeMoves(moves) {
     move.aerial = id.startsWith('A');
     move.cancelWindow ??= [move.startup + move.active, move.startup + move.active + move.recovery];
   }
+
   return moves;
 }
 

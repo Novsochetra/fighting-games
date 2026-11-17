@@ -21,6 +21,7 @@ describe('ambient brazier fires', () => {
         expect(rect.y).toBeGreaterThan(150 - 24);
         expect(Math.abs(rect.x + rect.width / 2 - 200)).toBeLessThan(12);
       }
+
       const bottom = rects.filter((rect) => rect.y === 149);
       const top = Math.min(...rects.map((rect) => rect.y));
       const tips = rects.filter((rect) => rect.y === top);
@@ -42,6 +43,7 @@ describe('ambient brazier fires', () => {
     for (const color of [...ALL_COLORS.flame, ALL_COLORS.flameGlow]) {
       expect(colors.has(color), color).toBe(true);
     }
+
     const glow = rectsOf(brazier, { tick: 30 }).filter(
       (rect) => rect.color === ALL_COLORS.flameGlow,
     );

@@ -15,6 +15,7 @@ function rms(samples, from, to) {
   for (let i = first; i < last; i++) {
     sum += samples[i] * samples[i];
   }
+
   return Math.sqrt(sum / (last - first));
 }
 
@@ -51,6 +52,7 @@ describe('roar', () => {
       const spread = Math.sqrt(
         windows.reduce((sum, value) => sum + (value - mean) ** 2, 0) / windows.length,
       );
+
       return spread / mean;
     };
     expect(wobble(0.5)).toBeGreaterThan(wobble(0) * 1.5);

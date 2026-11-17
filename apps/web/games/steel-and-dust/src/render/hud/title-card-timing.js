@@ -19,7 +19,9 @@ export function letterAt(age, index) {
   if (since < 0) {
     return null;
   }
+
   const drop = Math.min(1, since / CARD_DROP_TICKS);
+
   return {
     offset: Math.round((easeOutBack(drop) - 1) * DROP_HEIGHT),
     hot: since < CARD_DROP_TICKS + CARD_HOT_TICKS,
@@ -31,6 +33,7 @@ export function letterAt(age, index) {
 // every so often; null before that
 export function shineAt(age, letterCount) {
   const since = age - cardDoneAt(letterCount);
+
   return since < 0 ? null : (since % SHINE_PERIOD) * SHINE_SPEED;
 }
 

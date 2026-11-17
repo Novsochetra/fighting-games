@@ -16,6 +16,7 @@ const VENUES = { 7: 'village-field', 11: 'national-stadium' };
 const MOMENTS = {
   kickoff: (format) => fixtureMatch({ format, phase: 'kickoff' }),
   attack: (format) => attackingMatch(format),
+
   goal: (format) =>
     Object.assign(attackingMatch(format), {
       phase: 'goal',
@@ -23,6 +24,7 @@ const MOMENTS = {
       score: [1, 0],
       lastScorer: 0,
     }),
+
   fullTime: (format) =>
     Object.assign(fixtureMatch({ format, phase: 'over' }), { half: 2, minute: 90, score: [2, 1] }),
 };

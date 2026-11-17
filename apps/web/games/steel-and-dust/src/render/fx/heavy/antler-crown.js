@@ -33,6 +33,7 @@ const growthOf = (time, startup) => Math.min(1, (time + 1) / Math.max(1, startup
 function placer({ root, facing, angle }) {
   const cos = Math.cos(angle);
   const sin = Math.sin(angle);
+
   return (dx, dy) => ({
     x: root.x + (dx * cos - dy * sin) * facing,
     y: root.y + dx * sin + dy * cos,
@@ -75,9 +76,11 @@ function crownPose(time, move) {
     const growth = growthOf(time, move.startup);
     return { growth, angle: REAR * growth, lift: 0, alpha: 1, hot: since >= -2 };
   }
+
   const swing = Math.min(1, (since + 1) / 2);
   const angle = move.launch ? REAR * (1 - swing) : REAR + (RAM - REAR) * swing;
   const lift = move.launch ? THRUST * swing : 0;
+
   return { growth: 1, angle, lift, alpha: 1 - since / RAM_TICKS, hot: true };
 }
 
@@ -86,6 +89,7 @@ export function drawCrown(context, { fighter, move, time, tickCount }) {
   if (time >= move.startup + RAM_TICKS) {
     return;
   }
+
   const pose = crownPose(time, move);
   const head = antlerRoot(fighter, time, move.startup);
   const root = { x: head.x, y: head.y - pose.lift };

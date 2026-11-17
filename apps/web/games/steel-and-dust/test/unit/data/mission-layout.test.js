@@ -105,6 +105,7 @@ describe('laying out a mission', () => {
     for (const thing of things) {
       expect(thing.y).toBe(groundAt(hilly.terrain, thing.x));
     }
+
     expect(things.some((thing) => thing.y < GROUND_Y)).toBe(true);
   });
 

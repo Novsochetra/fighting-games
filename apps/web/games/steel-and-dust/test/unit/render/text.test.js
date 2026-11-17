@@ -6,6 +6,7 @@ import { createRecordingContext, RecordingCanvas } from '../../support/recording
 function draw(value, options) {
   const { context, log } = createRecordingContext(null);
   drawText(createPainter(context), value, { x: 50, y: 10, color: 'gold', ...options });
+
   return log;
 }
 
@@ -42,6 +43,7 @@ describe('bitmap text', () => {
     const made = [];
     const createCanvas = () => {
       made.push(new RecordingCanvas());
+
       return made.at(-1);
     };
     const painter = createPainter(context, createCanvas);

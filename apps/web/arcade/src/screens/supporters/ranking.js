@@ -8,9 +8,11 @@ const byNewest = (left, right) => right.date.localeCompare(left.date) || left.ra
 // Supporters who gave the same amount share a place, so the next one skips ahead: 1, 2, 2, 4.
 export function rankByAmount(supporters) {
   const sorted = [...supporters].sort(byAmount);
+
   return sorted.reduce((ranked, supporter, index) => {
     const previous = ranked[index - 1];
     const rank = previous?.amount === supporter.amount ? previous.rank : index + 1;
+
     return [...ranked, { ...supporter, rank }];
   }, []);
 }

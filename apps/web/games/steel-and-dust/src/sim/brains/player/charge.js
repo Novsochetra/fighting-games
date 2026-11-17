@@ -10,6 +10,7 @@ function chargedMoveId(chargeTime) {
   if (chargeTime >= CHARGE_MAX) {
     return 'C2';
   }
+
   return chargeTime >= CHARGE_LEVEL1 ? 'C1' : 'K1';
 }
 
@@ -18,6 +19,7 @@ function cancelCharge(game, player, { buffer, direction }) {
     if (!direction) {
       autoFace(game, player);
     }
+
     startMove(game, player, 'L1');
   } else if (buffer?.action === 'jump') {
     startSquat(player, direction);
@@ -26,7 +28,9 @@ function cancelCharge(game, player, { buffer, direction }) {
   } else {
     return false;
   }
+
   consumeBuffer(game);
+
   return true;
 }
 
@@ -37,17 +41,21 @@ export function thinkCharge(game, player, intent) {
     player.facing = intent.direction;
     player.vx = intent.direction * CHARGE_CREEP;
   }
+
   if (player.stateTime <= 4 && (held.up || held.down)) {
     startHeroMove(game, player, 'UK');
     return;
   }
+
   if (cancelCharge(game, player, intent)) {
     return;
   }
+
   if (!held.heavy) {
     if (!intent.direction) {
       autoFace(game, player);
     }
+
     startHeroMove(game, player, chargedMoveId(player.stateTime));
   }
 }

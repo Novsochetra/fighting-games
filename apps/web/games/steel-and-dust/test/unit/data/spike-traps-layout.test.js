@@ -30,6 +30,7 @@ describe('the spike traps on the roads', () => {
       for (let x = row.x - CLEAR; x <= row.x + CLEAR; x++) {
         heights.add(groundAt(mission.terrain, x));
       }
+
       const zone = mission.zones.find((item) => row.x > item.left && row.x < item.right);
 
       expect(heights.size, label).toBe(1);

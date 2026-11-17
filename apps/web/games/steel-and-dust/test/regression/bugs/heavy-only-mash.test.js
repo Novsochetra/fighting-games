@@ -24,6 +24,7 @@ function mash(pattern) {
     runTicks(game, 11);
     heavies += game.player.move?.id === 'K1' ? 1 : 0;
   }
+
   return { heavies, damage: 5000 - raider.hp };
 }
 

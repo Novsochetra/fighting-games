@@ -19,20 +19,25 @@ export function createSupportersApi({ supporters, trustProxy = false, limiter })
     if (!isFromOwnPage(request.headers)) {
       return sendForbidden(response);
     }
+
     const body = await readJsonBody(request);
     if (!body.ok) {
       return sendJsonError(response, { status: body.status, message: body.message });
     }
+
     const { donation, error } = readDonation(body.value);
     if (error) {
       return sendJsonError(response, { status: 400, message: error });
     }
+
     if (!allowGift(clientAddressOf(request, { trustProxy }))) {
       const message = 'That is a lot of gifts at once. Try again in a few minutes.';
       return sendJsonError(response, { status: 429, message, headers: { 'Retry-After': '600' } });
     }
+
     const saved = await supporters.add(donation);
     const json = JSON.stringify({ supporter: presentSupporter(saved) });
+
     return sendJson(response, { status: 201, json });
   }
 

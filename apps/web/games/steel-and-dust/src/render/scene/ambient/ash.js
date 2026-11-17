@@ -13,6 +13,7 @@ function flakeAt(i, { effect, tick, cameraX }) {
   const swayRate = 0.012 + trait(seed, 2) * 0.02;
   const sway = Math.sin(tick * swayRate + trait(seed, 3) * TAU) * (3 + trait(seed, 4) * 6);
   const baseX = trait(seed, 0) * CYCLE_WIDTH + tick * (effect.wind ?? 0) + sway;
+
   return {
     x: scrollX(baseX, { cameraX, drift: effect.drift }),
     y: wrapX(trait(seed, 5) * FALL_SPAN + tick * fall, FALL_SPAN) - 4,
@@ -46,11 +47,13 @@ export function drawAsh(painter, { effect, tick, cameraX, colors }) {
     if (!isOnScreen(flake.x, flake.y, 2)) {
       continue;
     }
+
     if (i % CINDER_EVERY === CINDER_EVERY - 1) {
       drawCinder(painter, flake, cinder);
     } else {
       drawFlake(painter, flake, flakes[i % flakes.length]);
     }
   }
+
   painter.alpha(1);
 }

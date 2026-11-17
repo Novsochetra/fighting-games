@@ -14,6 +14,7 @@ const eyesOf = (boss) => bodyPoint(boss, EYES);
 // a hero looking at her is one who faces her: walking away turns the hero round and breaks it
 export function meetsGaze(boss, hero, reach) {
   const toward = Math.sign(boss.x - hero.x) || hero.facing;
+
   return (
     hero.facing === toward &&
     Math.abs(boss.x - hero.x) <= reach &&
@@ -39,6 +40,7 @@ export function flashGaze(game, boss, move) {
   if (!boss.ai.heldByGaze) {
     return;
   }
+
   hero.move = null;
   hero.hitboxActive = false;
   hero.trail.length = 0;

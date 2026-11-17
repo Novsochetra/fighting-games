@@ -71,16 +71,20 @@ const COUNTERS = {
       count[isHero ? 'heroGoals' : 'mateGoals'] += 1;
     }
   },
+
   shot: (count, { player }) => {
     count.shots[player.team] += 1;
   },
+
   special: (count, { player, isHero }) => {
     count.specials[player.team] += 1;
     count.heroCutins += isHero ? 1 : 0;
   },
+
   skill: (count, { player }) => {
     count.skills[player.index] = (count.skills[player.index] ?? 0) + 1;
   },
+
   duel: (count) => {
     count.duels += 1;
   },

@@ -24,13 +24,16 @@ function play(fighter, sprite, [name, ticksPerFrame, loop]) {
     fighter.spriteName = key;
     fighter.spriteStart = fighter.animTime;
   }
+
   const frame = Math.floor((fighter.animTime - fighter.spriteStart) / ticksPerFrame);
   const count = sprite.strips[name].frames;
+
   return [name, loop ? frame % count : Math.min(count - 1, frame)];
 }
 
 function airFrame(fighter, sprite) {
   const match = AIR_FRAME_BY_SPEED.find(([below]) => fighter.vy < below);
+
   return ['ko', Math.min(lastFrame(sprite, 'ko'), match ? match[1] : 4)];
 }
 
@@ -44,12 +47,14 @@ function hopFrame(fighter) {
 
 function groundFrame(fighter, sprite) {
   const [, frame] = play(fighter, sprite, ['ko', 4, false]);
+
   return ['ko', Math.min(lastFrame(sprite, 'ko'), FIRST_GROUND_FRAME + frame)];
 }
 
 function getupFrame(fighter, sprite) {
   const last = lastFrame(sprite, 'ko');
   const span = last - FIRST_GROUND_FRAME + 1;
+
   return ['ko', Math.max(FIRST_GROUND_FRAME, last - Math.floor((fighter.stateTime / 16) * span))];
 }
 
@@ -58,12 +63,14 @@ function walkFrame(fighter, sprite) {
   if (fighter.walkDirection < 0) {
     frame[1] = lastFrame(sprite, 'walk') - frame[1];
   }
+
   return frame;
 }
 
 // a move plays the strip it names, or the one named as it is, or the attack strip
 export function stripForMove(sprite, move) {
   const own = move.strip ?? move.id;
+
   return sprite.strips[own] ? own : 'attack';
 }
 
@@ -72,6 +79,7 @@ function activeFrame({ move, moveTime }, { name, strike, last }) {
   if (!move.sustain || name === 'attack') {
     return strike;
   }
+
   return strike + (((moveTime - move.startup) >> 2) % (last - strike + 1));
 }
 
@@ -83,10 +91,12 @@ export function timelineFrame({ frameAt, frameOrder, loopFrames, startup, active
     const [first, last, ticks] = loopFrames;
     return first + (Math.floor((moveTime - startup) / ticks) % (last - first + 1));
   }
+
   let frame = 0;
   while (frame + 1 < frameAt.length && frameAt[frame + 1] <= moveTime) {
     frame++;
   }
+
   return frameOrder ? frameOrder[frame] : frame;
 }
 
@@ -96,15 +106,19 @@ function moveFrame(sprite, move, moveTime) {
   if (move.frameAt && name === (move.strip ?? move.id)) {
     return [name, timelineFrame(move, moveTime)];
   }
+
   const strike = sprite.strips[name].strike ?? 0;
   if (moveTime < move.startup) {
     return [name, Math.floor((moveTime / move.startup) * strike)];
   }
+
   if (moveTime < move.startup + move.active) {
     return [name, activeFrame({ move, moveTime }, { name, strike, last: lastFrame(sprite, name) })];
   }
+
   const recovered = (moveTime - move.startup - move.active) / move.recovery;
   const last = lastFrame(sprite, name);
+
   return [name, Math.min(last, strike + 1 + Math.floor(recovered * (last - strike)))];
 }
 
@@ -128,6 +142,7 @@ const FRAME_BY_STATE = {
   juggle: airFrame,
   down: groundFrame,
   getup: getupFrame,
+
   ko: (fighter, sprite) =>
     fighter.airborne ? airFrame(fighter, sprite) : groundFrame(fighter, sprite),
 };
@@ -135,10 +150,12 @@ const FRAME_BY_STATE = {
 // [strip name, frame] for an enemy drawn from a sprite sheet
 export function enemyAnimation(fighter, sprite) {
   const frameFor = FRAME_BY_STATE[fighter.state] || FRAME_BY_STATE.idle;
+
   return frameFor(fighter, sprite);
 }
 
 export function enemySpriteFrame(fighter) {
   const sprite = ENEMY_SPRITES[fighter.def.sprite];
+
   return sprite ? enemyAnimation(fighter, sprite) : null;
 }

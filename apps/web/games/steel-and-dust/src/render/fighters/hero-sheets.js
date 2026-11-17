@@ -12,6 +12,7 @@ export function heroSheetFor(view, id) {
     sheet.heroId = hero.id;
     view.heroSheets[hero.id] = sheet;
   }
+
   return view.heroSheets[hero.id];
 }
 
@@ -21,12 +22,14 @@ export function keepPickedHero(view, id) {
   if (view.heroKept === picked) {
     return;
   }
+
   view.heroKept = picked;
   for (const other of Object.keys(view.heroSheets)) {
     if (other !== picked) {
       delete view.heroSheets[other];
     }
   }
+
   heroSheetFor(view, picked);
 }
 

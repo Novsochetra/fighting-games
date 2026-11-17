@@ -10,14 +10,17 @@ export function createLauncher({ document, home, findSource, navigate }) {
     if (flight) {
       return;
     }
+
     const source = findSource(index);
     if (source && !prefersReducedMotion(document.defaultView)) {
       const timing = readLaunchTiming(document);
       flight = flyOpen({ document, source, home, timing, title: card.title });
     }
+
     if (flight) {
       await flight.done;
     }
+
     navigate(card.href);
   }
 
@@ -25,8 +28,10 @@ export function createLauncher({ document, home, findSource, navigate }) {
     if (!flight) {
       return Promise.resolve(false);
     }
+
     const current = flight;
     flight = null;
+
     return flyClose(current, { timing: readLaunchTiming(document) }).then(() => true);
   }
 

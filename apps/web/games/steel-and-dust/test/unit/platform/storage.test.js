@@ -6,6 +6,7 @@ const brokenStorage = {
   getItem() {
     throw new Error('blocked');
   },
+
   setItem() {
     throw new Error('blocked');
   },

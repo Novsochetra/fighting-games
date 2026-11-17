@@ -15,6 +15,7 @@ export function eyeArm(time) {
   if (time >= 2) {
     return DYING_ARM;
   }
+
   return time >= 0 ? BURST_ARM : EYE_ARMS[(time >> 1) & 3];
 }
 

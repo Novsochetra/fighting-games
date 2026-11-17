@@ -25,10 +25,12 @@ function onEdges({ image, height }, { left, top }) {
     edges.top += filled(x, 0);
     edges.bottom += filled(x, height - 1);
   }
+
   for (let y = 0; y < height; y++) {
     edges.left += filled(0, y);
     edges.right += filled(frameWidth - 1, y);
   }
+
   return edges;
 }
 
@@ -45,6 +47,7 @@ function cutFrames(hero, strip) {
       }
     }
   }
+
   return cut;
 }
 

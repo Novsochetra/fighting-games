@@ -34,6 +34,7 @@ describe('confetti pieces', () => {
     for (let i = 0; i < 120; i += 1) {
       stepPieces([piece], 1 / 60);
     }
+
     expect(piece.vy).toBeGreaterThan(0);
     expect(piece.y).toBeGreaterThan(-400);
   });
@@ -73,6 +74,7 @@ function fakePage({ reducedMotion = false, duration = '1000ms' } = {}) {
   };
   const document = { defaultView: window, documentElement: {} };
   const runFrame = (time) => frames.shift()?.(time);
+
   return { document, canvas, frames, calls, window, runFrame };
 }
 

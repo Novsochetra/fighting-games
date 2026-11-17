@@ -1,5 +1,6 @@
 export function isTouchOn(game) {
   const { touch } = game.settings;
+
   return (
     touch === 'on' || (touch === 'auto' && (game.device.coarsePointer || game.device.touchUsed))
   );
@@ -15,6 +16,7 @@ function hiddenByPad(game, lastInput) {
 export function createUiState(game) {
   const ui = {
     lastInput: game.device.coarsePointer ? 'touch' : 'mouse',
+
     noteInput(kind) {
       const shown = ui.showsTouchControls();
       ui.lastInput = kind;
@@ -22,9 +24,11 @@ export function createUiState(game) {
         ui.onTouchShownChange?.();
       }
     },
+
     usesButtons: () => ui.lastInput === 'key' || ui.lastInput === 'pad',
     isTouchOn: () => isTouchOn(game),
     showsTouchControls: () => isTouchOn(game) && !hiddenByPad(game, ui.lastInput),
   };
+
   return ui;
 }

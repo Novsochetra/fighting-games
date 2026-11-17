@@ -30,6 +30,7 @@ export function raisePillar(game, { x, scale, hit, burn = COMBO_BURN, delay = 0 
 function pillarArea(pillar) {
   const half = 12 * pillar.scale;
   const height = 46 * pillar.scale;
+
   return { x: pillar.x - half, y: pillar.y - height, width: half * 2, height };
 }
 
@@ -37,14 +38,17 @@ export function updatePillar(game, pillar) {
   if (pillar.time === 1) {
     game.io.sfx('flames', false, { x: pillar.x });
   }
+
   if (pillar.time === STRIKE_TICK) {
     for (const target of strikeArea(game, pillar, pillarArea(pillar))) {
       igniteTarget(game, target, pillar.burn);
     }
+
     const y = pillar.y - 30 * pillar.scale;
     addSparks(game, { x: pillar.x, y, count: 6, color: FX_COLORS.emberGold, speed: 2.6 });
     shake(game, 1, 4);
   }
+
   pillar.done = pillar.time >= fxLength('pillar');
 }
 

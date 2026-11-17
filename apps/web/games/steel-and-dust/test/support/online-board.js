@@ -22,5 +22,6 @@ export function createTestOnline({
   drawPoster,
 } = {}) {
   const ticket = createRunTicket({ api, storage });
+
   return { api, storage, online: createOnlineBoard({ api, ticket, storage, now, drawPoster }) };
 }

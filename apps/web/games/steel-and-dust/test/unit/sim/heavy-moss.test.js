@@ -24,6 +24,7 @@ function mossGame() {
   raider.ai.cooldown = 9999;
   game.player.facing = 1;
   game.ultMeter = ULT_MAX;
+
   return { game, raider };
 }
 
@@ -33,24 +34,32 @@ function recordingPainter() {
   const painter = {
     context: {},
     color: null,
+
     use(color) {
       painter.color = color;
+
       return painter;
     },
+
     alpha: () => painter,
+
     rect(x, y) {
       marks.push({ x, y, color: painter.color });
+
       return painter;
     },
+
     line(from, to) {
       for (let step = 0; step <= 8; step++) {
         const share = step / 8;
         const x = from.x + (to.x - from.x) * share;
         marks.push({ x, y: from.y + (to.y - from.y) * share, color: painter.color });
       }
+
       return painter;
     },
   };
+
   return { painter, marks };
 }
 
@@ -75,6 +84,7 @@ describe("the Moss Shade's heavy", () => {
         most = Math.max(most, own.length);
       }
     }
+
     expect([...seen].sort()).toEqual(['mossBramble', 'mossLeaf', 'mossSpore', 'mossThorn']);
     expect(most).toBeLessThanOrEqual(56);
   });
@@ -142,6 +152,7 @@ describe("the Moss Shade's heavy", () => {
         MOSS_HEAVY_RENDER.particles[particle.kind](painter, particle);
       }
     }
+
     own.forEach((particle) =>
       expect(Number.isFinite(particle.x + particle.y), particle.kind).toBe(true),
     );
@@ -168,9 +179,11 @@ describe("the Moss Shade's heavy", () => {
         }
       }
     }
+
     const onFace = marks.filter((mark) => {
       const ahead = (mark.x - fighter.x) * facing;
       const up = mark.y - fighter.y;
+
       return ahead >= 0 && ahead <= 6 && up >= -26 && up <= -20;
     });
     expect(marks.length).toBeGreaterThan(0);

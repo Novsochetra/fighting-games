@@ -19,6 +19,7 @@ describe('the memory scores store', () => {
 
   function storeAt(times) {
     const dates = times.map((time) => new Date(time));
+
     return createMemoryScoresStore({ now: () => dates.shift() });
   }
 
@@ -59,6 +60,7 @@ describe('the memory scores store', () => {
     for (let i = 1; i <= 12; i += 1) {
       await store.add(run('AAA', i * 10), `n${i}`);
     }
+
     await store.add(run('PUZ', 9999, { game: 'puzzle' }), 'other');
     const { allTime } = await store.board('brawler', { weekStart: new Date(0), size: 10 });
     expect(allTime).toHaveLength(10);
@@ -76,6 +78,7 @@ describe('the memory scores store', () => {
 describe('createBoardCache', () => {
   function cacheAt(load) {
     const clock = { time: 0 };
+
     return { clock, cache: createBoardCache({ load, freshMs: 1000, now: () => clock.time }) };
   }
 

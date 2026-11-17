@@ -14,6 +14,7 @@ export function useCatalog() {
   const url = useArcadeUrl();
   const query = useQuery({
     queryKey: ['games'],
+
     queryFn: async (): Promise<GameCard[]> =>
       withComingSoon(toGameCards(await fetchCatalog(fetch, url('api/games')))),
   });

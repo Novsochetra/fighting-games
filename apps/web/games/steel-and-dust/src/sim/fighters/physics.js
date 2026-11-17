@@ -25,6 +25,7 @@ function applyGravity(fighter, floor) {
   if (!fighter.airborne && fighter.y < floor - 0.5) {
     leaveGround(fighter);
   }
+
   if (fighter.airborne) {
     const tumbling = fighter.state === 'juggle' || fighter.state === 'ko';
     fighter.vy = Math.min(7, fighter.vy + (tumbling ? TUMBLE_GRAVITY : GRAVITY));
@@ -39,6 +40,7 @@ const STRIDING = new Set(['walk', 'run', 'dash']);
 function keepsMomentum(fighter) {
   const rushing =
     fighter.state === 'attack' && fighter.move && fighter.move.sustain && fighter.hitboxActive;
+
   return fighter.airborne || STRIDING.has(fighter.state) || rushing;
 }
 
@@ -46,6 +48,7 @@ function applyFriction(fighter) {
   if (keepsMomentum(fighter)) {
     return;
   }
+
   fighter.vx *= 0.8;
   if (Math.abs(fighter.vx) < 0.05) {
     fighter.vx = 0;
@@ -56,6 +59,7 @@ function touchGround(game, fighter, floor) {
   if (fighter.y < floor) {
     return;
   }
+
   fighter.y = floor;
   fighter.vy = 0;
   if (fighter.airborne) {
@@ -89,6 +93,7 @@ export function applyPhysics(game, fighter) {
   if (fighter.state === 'ult') {
     return;
   }
+
   const { terrain } = game;
   const from = { x: fighter.x, y: fighter.y };
   applyGravity(fighter, floorBelow(terrain, fighter.x, fighter.y));

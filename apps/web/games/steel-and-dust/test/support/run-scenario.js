@@ -9,15 +9,18 @@ export function runScenario(driver, scenario) {
     if (tick === scenario.spawnBossAt) {
       driver.spawn(scenario.boss ?? 'brute', 1);
     }
+
     bot.step(tick);
     driver.tick();
     driver.afterTick();
     if (tick % scenario.sampleEvery === 0) {
       samples.push({ tick, ...driver.snapshot() });
     }
+
     if (tick % scenario.renderEvery === 0) {
       renders.push({ tick, frame: driver.render() });
     }
   }
+
   return { samples, renders };
 }

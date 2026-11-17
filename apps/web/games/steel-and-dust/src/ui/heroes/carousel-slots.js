@@ -1,6 +1,7 @@
 // how far a card stands from the middle of the looping carousel, negative to the left
 export function wrapOffset(index, center, count) {
   const offset = (((index - center) % count) + count) % count;
+
   return offset > count / 2 ? offset - count : offset;
 }
 
@@ -13,9 +14,11 @@ export function nextSlots(previous, center, count) {
     if (!previous) {
       return { slot: offset, from: null };
     }
+
     const turn = previous[center];
     const before = previous[index];
     const slot = offset === count / 2 && before < 0 ? -offset : offset;
+
     return { slot, from: before - slot === turn ? null : slot + turn };
   });
 }

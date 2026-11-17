@@ -58,11 +58,13 @@ export function crackStrike(game, strike) {
   if (strike.time < strike.warn && strike.time % CRACKLE_EVERY === 0) {
     crackle(game, strike);
   }
+
   if (strike.time === strike.warn) {
     shake(game, strike.great ? 8 : 4, strike.great ? 26 : 10);
     game.flashTime = Math.max(game.flashTime, strike.great ? 16 : 6);
     addDust(game, { x: strike.x, y: strike.y, count: strike.great ? 16 : 6 });
     game.io.sfx('thunder', false, { vol: strike.great ? 1 : 0.6, x: strike.x });
   }
+
   strike.dead = strike.time >= strike.warn + fxLength('thunder');
 }

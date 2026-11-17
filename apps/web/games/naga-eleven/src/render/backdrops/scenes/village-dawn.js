@@ -15,6 +15,7 @@ export const swayOf = (tick) => (hash(Math.floor(tick / 48)) > 0.6 ? 1 : 0);
 export const VILLAGE_DAWN = {
   frameOf: swayOf,
   paint: (raster, frame) => paintVillage(raster, { art: VILLAGE_DAWN_ART, frame, dawn: true }),
+
   overlay: (context, tick) =>
     drawMist(context, {
       bands: MIST,

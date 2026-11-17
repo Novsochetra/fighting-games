@@ -17,6 +17,7 @@ function followBody(burst) {
     burst.time = Math.max(burst.time, (loop[1] + 1) * ticks);
     return;
   }
+
   Object.assign(burst, bodyPoint(fighter, at), { direction: fighter.facing });
   if (burst.time >= (loop[1] + 1) * ticks) {
     burst.time = loop[0] * ticks;
@@ -27,5 +28,6 @@ export function updateBurst(_game, burst) {
   if (burst.follow) {
     followBody(burst);
   }
+
   burst.done = !burst.follow && burst.time >= fxLength(burst.sprite);
 }

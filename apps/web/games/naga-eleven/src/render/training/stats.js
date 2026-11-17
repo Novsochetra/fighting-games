@@ -13,6 +13,7 @@ const STATS = {
       value: `${count(run.course.cones, (cone) => cone.clean)}/${run.course.cones.length}`,
     },
   ],
+
   'target-shot': ({ run }) => [
     {
       label: LABELS.hits,
@@ -20,6 +21,7 @@ const STATS = {
     },
     { label: LABELS.lateHit, value: String(count(run.results, (kind) => kind === 'lateHit')) },
   ],
+
   'spirit-focus': ({ run }) => [
     {
       label: LABELS.perfects,

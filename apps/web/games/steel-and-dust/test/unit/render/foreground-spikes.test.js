@@ -12,6 +12,7 @@ const fortress = scenePalette('wardenFortress').rubble;
 function rectsOf(draw) {
   const { context, log } = createRecordingContext(null);
   draw(createPainter(context));
+
   return drawnRects(log);
 }
 
@@ -46,6 +47,7 @@ describe('the iron stakes in front of the fighters on the fortress road', () => 
       shapes.add(rects.map((rect) => `${rect.x},${rect.y},${rect.height}`).join('|'));
       skulls += rects.some((rect) => rect.color === fortress.bone) ? 1 : 0;
     }
+
     expect(shapes.size).toBeGreaterThan(20);
     expect(skulls).toBeGreaterThan(4);
     expect(skulls).toBeLessThan(28);

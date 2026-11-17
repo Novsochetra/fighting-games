@@ -59,6 +59,7 @@ function drawPuffs(context, { x, floor, since }) {
       });
     }
   }
+
   context.globalAlpha = 1;
 }
 

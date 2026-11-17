@@ -85,6 +85,7 @@ export function useSupport({ othersUp }: { othersUp: boolean }) {
 
   return {
     shown,
+
     notNow() {
       preferences.snoozeSupport(now() + SUPPORT_SNOOZE_MS);
       setShown(false);

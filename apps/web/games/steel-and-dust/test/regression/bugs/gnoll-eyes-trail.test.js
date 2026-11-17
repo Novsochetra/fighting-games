@@ -37,6 +37,7 @@ describe("the Gnoll Packlord's Blood Frenzy", () => {
         seen.add(frame);
       }
     }
+
     expect(seen.size).toBeGreaterThan(2);
   });
 });

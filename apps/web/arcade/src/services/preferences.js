@@ -35,6 +35,7 @@ export function createBrowserStorage(window) {
         return null;
       }
     },
+
     write(key, value) {
       try {
         window.localStorage.setItem(key, JSON.stringify(value));
@@ -47,6 +48,7 @@ export function createBrowserStorage(window) {
 
 export const createMemoryStorage = () => {
   const values = new Map();
+
   return { read: (key) => values.get(key) ?? null, write: (key, value) => values.set(key, value) };
 };
 
@@ -71,6 +73,7 @@ const supportPreferences = ({ state, save, storage }) => ({
 // (makeId), so the server counts a like once and lets only its giver take it back.
 const wallpaperPreferences = ({ state, save }) => ({
   isLikedWallpaper: (id) => state.likedWallpapers.includes(id),
+
   setLikedWallpaper: (id, liked) =>
     save(
       'likedWallpapers',
@@ -78,6 +81,7 @@ const wallpaperPreferences = ({ state, save }) => ({
         ? state.likedWallpapers
         : toggleId(state.likedWallpapers, id),
     ),
+
   wallpaperVisitor(makeId) {
     if (!state.wallpaperVisitor) {
       save('wallpaperVisitor', makeId());
@@ -90,6 +94,7 @@ const wallpaperPreferences = ({ state, save }) => ({
 export function createPreferences(storage) {
   const readIds = (key) => {
     const value = storage.read(key);
+
     return isIdList(value) ? value : [];
   };
   const state = {
@@ -106,15 +111,18 @@ export function createPreferences(storage) {
     state[name] = value;
     storage.write(STORAGE_KEYS[name], value);
   };
+
   return {
     favorites: () => state.favorites,
     recent: () => state.recent,
     isFavorite: (id) => state.favorites.includes(id),
     toggleFavorite: (id) => save('favorites', toggleId(state.favorites, id)),
+
     recordPlay: (id) => {
       save('recent', pushRecent(state.recent, id));
       save('plays', state.plays + 1);
     },
+
     // Players from before the count was kept have only their Recent list to show for it.
     playCount: () => Math.max(state.plays, state.recent.length),
     isSoundOn: () => state.sound,

@@ -17,6 +17,7 @@ export function easePurse(shown, coins) {
   if (shown >= coins) {
     return coins;
   }
+
   return shown + Math.max(1, Math.ceil((coins - shown) * 0.2));
 }
 
@@ -25,7 +26,9 @@ function iconPose(bump, tickCount) {
   if (bump <= 0) {
     return { frame: 0, lift: 0 };
   }
+
   const { frames, ticks } = LOOT_SPRITES.coin;
+
   return { frame: Math.floor(tickCount / ticks) % frames, lift: bump > 5 ? -1 : 0 };
 }
 

@@ -48,6 +48,7 @@ describe('a body sinking in quicksand', () => {
       expect(drops[i] - drops[i - 1]).toBeGreaterThanOrEqual(0);
       expect(drops[i] - drops[i - 1]).toBeLessThanOrEqual(2);
     }
+
     expect(sinkingDrop({ sunk: 3 })).toBe(PIT_MIDDLE + 3);
   });
 });

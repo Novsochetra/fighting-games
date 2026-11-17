@@ -37,6 +37,7 @@ export function runThunderBolt(game, bolt) {
     bolt.dead = true;
     return;
   }
+
   bolt.floor = groundAt(game.terrain, bolt.x);
   const dive = Math.min(1, bolt.time / DIVE_TICKS);
   bolt.y = bolt.floor - SKIM - (bolt.from - SKIM) * (1 - dive);

@@ -36,6 +36,7 @@ describe('the leaderboard', () => {
     for (let i = 1; i <= LEADERBOARD_SIZE; i++) {
       board = rankRun(board, entry(i * 100));
     }
+
     const low = entry(50);
     expect(rankRun(board, low)).toHaveLength(LEADERBOARD_SIZE);
     expect(rankRun(board, low)).not.toContain(low);

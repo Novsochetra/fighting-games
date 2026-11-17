@@ -21,6 +21,7 @@ function spreadOf(move, time) {
 // the rime sits under the drawn feet as they coil back, and stays there as the Shade dashes off
 function stanceOf(fighter, time) {
   const coiled = Math.min(time, fighter.move.startup - 1);
+
   return { x: Math.round(fighter.x + drawnLeanX(fighter, coiled)), y: Math.round(fighter.y) };
 }
 
@@ -63,6 +64,7 @@ export function blueUnder(painter, layer) {
   if (fighter.airborne || time >= move.startup + 2) {
     return;
   }
+
   const spread = spreadOf(move, time);
   const ground = { fighter, stance: stanceOf(fighter, time), spread, art, tickCount };
   ground.radius = Math.round(4 + spread * (REACH - 4));
@@ -71,5 +73,6 @@ export function blueUnder(painter, layer) {
   if (time < move.startup) {
     drawCrystals(painter, ground);
   }
+
   painter.alpha(1);
 }

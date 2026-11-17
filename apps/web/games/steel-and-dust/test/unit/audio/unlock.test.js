@@ -7,20 +7,24 @@ const gameState = () => ({ mode: 'title', muted: false, settings: { music: 60, s
 function fakeWindow() {
   const listeners = [];
   const documentListeners = {};
+
   return {
     listeners,
     addEventListener: (type, listener, options) => listeners.push({ type, listener, options }),
     document: {
       hidden: false,
+
       addEventListener: (type, listener) => {
         documentListeners[type] = listener;
       },
     },
+
     fire(type) {
       for (const entry of listeners.filter((candidate) => candidate.type === type)) {
         entry.listener();
       }
     },
+
     fireDocument(type) {
       documentListeners[type]();
     },

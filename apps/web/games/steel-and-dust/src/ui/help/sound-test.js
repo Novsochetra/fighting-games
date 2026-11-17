@@ -6,6 +6,7 @@ function takes(key, label) {
 
 function soundButton([label, key, take]) {
   const takeAttribute = take === undefined ? '' : ` data-take="${take}"`;
+
   return `<button type="button" data-snd="${key}"${takeAttribute}>${label}</button>`;
 }
 

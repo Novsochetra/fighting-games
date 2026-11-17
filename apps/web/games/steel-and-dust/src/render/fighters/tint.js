@@ -35,9 +35,11 @@ function makeRoom(cache, { width, height }) {
   if (cache.frames.size < MAX_TINTED_FRAMES) {
     return cache.createCanvas(width, height);
   }
+
   const [oldest, canvas] = cache.frames.entries().next().value;
   cache.frames.delete(oldest);
   const fits = canvas.width === width && canvas.height === height;
+
   return fits ? canvas : cache.createCanvas(width, height);
 }
 
@@ -53,7 +55,9 @@ export function tintedFrame(cache, frame) {
     canvas = makeRoom(cache, frame);
     (frame.relief ? paintRelief : paintTint)(canvas, frame);
   }
+
   cache.frames.set(id, canvas);
+
   return canvas;
 }
 
@@ -62,5 +66,6 @@ export function frameSource(cache, frame) {
   if (!frame.color) {
     return { image: frame.image, sx: frame.sx, sy: frame.sy };
   }
+
   return { image: tintedFrame(cache, frame), sx: 0, sy: 0 };
 }

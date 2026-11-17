@@ -2,6 +2,7 @@
 export function formatMoney(amount, { currency, locale }) {
   const digits = Number.isInteger(amount) ? 0 : 2;
   const options = { minimumFractionDigits: digits, maximumFractionDigits: digits };
+
   return new Intl.NumberFormat(locale, { style: 'currency', currency, ...options }).format(amount);
 }
 

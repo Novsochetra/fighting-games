@@ -11,6 +11,7 @@ const originalRandom = Math.random;
 
 const take = (key, seed) => {
   Math.random = seededRandom(seed);
+
   return synthesizeTake(key, { pitch: 1, take: 0, sampleRate: RATE });
 };
 
@@ -22,6 +23,7 @@ function brightness(samples) {
     energy += samples[i] * samples[i];
     change += (samples[i] - samples[i - 1]) ** 2;
   }
+
   return (RATE / Math.PI) * Math.asin(Math.sqrt(change / energy) / 2);
 }
 
@@ -31,6 +33,7 @@ function largestJumpAtStart(samples) {
   for (let i = 1; i < START * RATE; i++) {
     jump = Math.max(jump, Math.abs(samples[i] - samples[i - 1]));
   }
+
   return jump;
 }
 

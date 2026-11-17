@@ -12,18 +12,21 @@ function weaponTabs(selected) {
         `<button type="button" data-w="${id}" aria-selected="${id === selected}">${weapon.name}</button>`,
     )
     .join('');
+
   return `<div class="tabs" id="wTabs">${tabs}</div>`;
 }
 
 function weaponSummary(weapon) {
   const breaks =
     weapon.durability === Infinity ? '' : ` Breaks after <b>${weapon.durability} hits</b>.`;
+
   return `<p class="wmeta"><b>${weapon.name}.</b> ${weapon.description}${breaks}</p>`;
 }
 
 function styleSummary(heroId) {
   const style = styleOf(heroId);
   const techniques = TECHNIQUE_ORDER.map((id) => style.techniques[id].name).join(', ');
+
   return `<p class="wmeta"><b>${heroById(heroId).name}: ${style.name}.</b> ${style.summary} Own techniques on every weapon: ${techniques}.</p>`;
 }
 
@@ -33,12 +36,14 @@ function moveRow(id, move, touch) {
     .map(([, label]) => `<span class="tag-l">${label}</span>`)
     .join('');
   const damage = hits > 1 ? `${move.damage}×${hits}` : move.damage;
+
   return `<tr><td>${inputLabel(MOVE_INPUTS[id], touch)}</td><td>${move.name}</td><td class="num">${damage}</td><td>${tags || '–'}</td></tr>`;
 }
 
 function ultimateRow(heroId, touch) {
   const ult = ultimateOf(heroId);
   const tags = '<span class="tag-l">Ultimate</span><span class="tag-l">Invincible</span>';
+
   return `<tr><td>${inputLabel('L', touch)} (full bar)</td><td>${ult.name}</td><td class="num">${ult.damageText}</td><td>${tags}</td></tr>`;
 }
 
@@ -55,5 +60,6 @@ export function movesHtml({ weaponId, heroId, touch }) {
     .map((combo) => `<p class="try"><b>TRY</b>${touchWords(combo, touch)}</p>`)
     .join('');
   const table = `<table class="moves">${header}<tbody>${rows}${ultimateRow(heroId, touch)}</tbody></table>`;
+
   return `${weaponTabs(weaponId)}${styleSummary(heroId)}${weaponSummary(weapon)}${table}${tries}`;
 }

@@ -25,6 +25,7 @@ function record(layers, cameraX, draw = drawPaintedBackdrop) {
   const draws = log
     .filter((call) => call.startsWith('drawImage('))
     .map((call) => call.slice('drawImage('.length, -1).split(','));
+
   return { draws, shaken, log };
 }
 
@@ -41,6 +42,7 @@ describe('painted backdrops', () => {
       expect(layer.ready).toBe(true);
       expect(layer.image.height).toBe(216);
     }
+
     expect(backdrop.ambient).toBe(PAINTED_BACKDROPS.pineRidge.ambient);
   });
 

@@ -13,11 +13,13 @@ function rms(samples, from, to) {
   for (let i = first; i < last; i++) {
     sum += samples[i] * samples[i];
   }
+
   return Math.sqrt(sum / (last - first));
 }
 
 const take = (key, seed) => {
   Math.random = seededRandom(seed);
+
   return synthesizeTake(key, { pitch: 1, take: 0, sampleRate: RATE });
 };
 

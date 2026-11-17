@@ -40,6 +40,7 @@ function knockOutEnemy(game, enemy, direction) {
   if (standing.length === 0 && !game.stage.spawnQueue.length) {
     game.slowMotion = Math.max(game.slowMotion, 42);
   }
+
   if (boss) {
     bossDown(game, enemy);
   }

@@ -21,6 +21,7 @@ const backLayers = (layout) => [
     depth: -9000,
     base: -196,
     height: 'toTop',
+
     paint: (raster) => {
       paintSky(raster, { ramp: art.sky });
       paintClouds(raster, {
@@ -69,6 +70,7 @@ function build(layout) {
       dog: { ...DOG_SIZE, frames: 3, paint: (raster, index) => paintDog(raster, index, art.dog) },
     },
     props: side.props,
+
     overlay: (context, scene) => {
       drawRipple(context, scene, puddle);
       drawDog(context, scene);

@@ -6,11 +6,13 @@ function firstLetter(word) {
   if (typeof Intl.Segmenter !== 'function') {
     return Array.from(word)[0];
   }
+
   return new Intl.Segmenter().segment(word)[Symbol.iterator]().next().value.segment;
 }
 
 export function initialsOf(name) {
   const words = name.split(/\s+/).filter(Boolean).slice(0, 2);
+
   return words.map(firstLetter).join('').toLocaleUpperCase();
 }
 
@@ -19,9 +21,11 @@ export function paletteOf({ name, isAnonymous }) {
   if (isAnonymous) {
     return 0;
   }
+
   let hash = 0;
   for (const character of name) {
     hash = (hash * 31 + character.codePointAt(0)) % 9973;
   }
+
   return (hash % AVATAR_PALETTES) + 1;
 }

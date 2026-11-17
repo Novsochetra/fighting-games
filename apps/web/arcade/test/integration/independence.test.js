@@ -30,15 +30,18 @@ async function listFiles(directory) {
   const nested = await Promise.all(
     entries.map((entry) => {
       const fullPath = path.join(directory, entry.name);
+
       return entry.isDirectory() ? listFiles(fullPath) : [fullPath];
     }),
   );
+
   return nested.flat().filter((file) => SOURCE_FILE.test(file));
 }
 
 async function relativeReferences(file) {
   const text = await readFile(file, 'utf8');
   const pattern = REFERENCE_PATTERNS[path.extname(file)];
+
   return [...text.matchAll(pattern)]
     .map((match) => match[1] ?? match[2])
     .filter((reference) => /^(\.|@\/|[\w-]+\/)/.test(reference))
@@ -60,6 +63,7 @@ async function referencesLeaving(files, isInside) {
       }
     }
   }
+
   return leaving;
 }
 

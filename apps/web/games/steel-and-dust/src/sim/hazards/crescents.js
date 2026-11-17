@@ -28,5 +28,6 @@ export function skimGround(game, shot) {
     shot.dead = true;
     return;
   }
+
   shot.y = groundAt(game.terrain, shot.x);
 }

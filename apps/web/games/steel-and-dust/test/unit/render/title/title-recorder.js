@@ -10,6 +10,7 @@ export const PAINTING = { recordingId: () => 'painting' };
 export function record(draw) {
   const { context, log } = createRecordingContext(null);
   draw(createPainter(context));
+
   return { log, context };
 }
 
@@ -19,6 +20,7 @@ export function drawnRows(log) {
     .filter((entry) => entry.startsWith('drawImage(painting,'))
     .map((entry) => {
       const [sx, sy, width, height, x, y] = entry.slice(19, -1).split(',').map(Number);
+
       return { sx, sy, width, height, x, y };
     });
 }

@@ -17,6 +17,7 @@ const sky = {
   depth: -9000,
   base: -70,
   height: 'toTop',
+
   paint: (raster) => {
     paintSky(raster, { ramp: art.sky });
     paintClouds(raster, { ramp: art.cloud, row: 40, every: 220, salt: 9 });
@@ -44,6 +45,7 @@ const farLayers = (layout) => [
   {
     depth: -22,
     height: 26,
+
     paint: (raster) =>
       paintBannerWall(raster, { art: { ...art, banners: bannersOf(layout, art) } }),
   },

@@ -55,6 +55,7 @@ export function createFighter(side, kind, x, y = GROUND_Y) {
   const animTime = (Math.random() * 60) | 0;
   const cooldown = 30 + ((Math.random() * 40) | 0);
   const spacing = 46 + Math.random() * 34;
+
   return {
     side,
     kind,

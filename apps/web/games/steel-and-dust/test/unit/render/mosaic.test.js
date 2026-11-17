@@ -14,6 +14,7 @@ function mosaicView() {
     createImage: () => new FakeImage(),
     baseUrl: '',
   });
+
   return { view, log: screen.recording.log };
 }
 

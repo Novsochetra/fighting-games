@@ -6,6 +6,7 @@ export function fakePng(width, height, filler = 64) {
   header.write('IHDR', 12, 'latin1');
   header.writeUInt32BE(width, 16);
   header.writeUInt32BE(height, 20);
+
   return Buffer.concat([header, Buffer.alloc(filler)]);
 }
 
@@ -31,6 +32,7 @@ export function fakeJpeg(width, height, filler = 64) {
   ]);
   frame.writeUInt16BE(height, 5);
   frame.writeUInt16BE(width, 7);
+
   return Buffer.concat([Buffer.from([0xff, 0xd8]), app0, frame, Buffer.alloc(filler)]);
 }
 

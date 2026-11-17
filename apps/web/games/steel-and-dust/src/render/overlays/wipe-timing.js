@@ -21,10 +21,13 @@ export function missionWipe({ clearTime, missionIndex, fadeIn }) {
   if (fadeIn > 0) {
     return { closing: false, progress: 1 - (fadeIn - 1) / (REVEAL_FRAMES - 1) };
   }
+
   if (!clearTime || isLastMission(missionIndex)) {
     return null;
   }
+
   const progress = (clearTime - (CLEAR_TICKS - WIPE_TICKS)) / WIPE_TICKS;
+
   return progress > 0 ? { closing: true, progress: Math.min(1, progress) } : null;
 }
 
@@ -36,6 +39,7 @@ export function wipeCover({ closing, progress }) {
 // a cell's cover as the wave passes it; the wave runs the same way out of a road and into the next
 function cellCover({ closing, progress }, order) {
   const reached = clamp(progress * (1 + SPREAD) - order * SPREAD, 0, 1);
+
   return closing ? reached : 1 - reached;
 }
 
@@ -52,11 +56,13 @@ export function wipeCells(wipe) {
       }
     }
   }
+
   return cells;
 }
 
 // the road breaks up into ever bigger blocks as the wipe closes over it, and back as it opens
 export function mosaicBlock(wipe) {
   const step = Math.floor(wipeCover(wipe) * MOSAIC_BLOCKS.length);
+
   return MOSAIC_BLOCKS[Math.min(step, MOSAIC_BLOCKS.length - 1)];
 }

@@ -19,6 +19,7 @@ function recordingView() {
   const createCanvas = (width, height) => {
     const canvas = Object.assign(new RecordingCanvas(), { width, height });
     created.push(canvas);
+
     return canvas;
   };
   const screen = createCanvas(768, 432);
@@ -28,6 +29,7 @@ function recordingView() {
     createImage: () => new FakeImage(),
     baseUrl: '',
   });
+
   return { view, created };
 }
 
@@ -41,6 +43,7 @@ describe('tinted sprites', () => {
     for (const kind of Object.keys(ENEMY_TYPES)) {
       spawnEnemy(game, kind, 1);
     }
+
     const raiders = game.fighters.filter((fighter) => fighter.side === 'enemy');
     raiders.forEach((raider, i) => Object.assign(raider, { x: 20 + i * 12, entering: false }));
     const { view, created } = recordingView();
@@ -53,6 +56,7 @@ describe('tinted sprites', () => {
       Object.assign(game.player, { flashTime: TINTS[0] === tint ? 4 : 0 });
       renderFrame(game, view);
     }
+
     const tinted = created.slice(before);
     // past 64 copies the cache lends the canvas it evicts instead of making a new one
     expect(tinted.length).toBeGreaterThanOrEqual(Math.min(raiders.length * TINTS.length, 64));

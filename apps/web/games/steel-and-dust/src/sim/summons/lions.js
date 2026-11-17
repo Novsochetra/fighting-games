@@ -42,6 +42,7 @@ function goldDust(game, lion) {
   if (lion.time % 2) {
     return;
   }
+
   game.particles.push({
     kind: 'mote',
     x: lion.x - lion.direction * randomBetween(6, 26) * lion.scale,
@@ -63,6 +64,7 @@ function riseFromGold(game, lion) {
 function lionArea(lion) {
   const half = 30 * lion.scale;
   const height = 46 * lion.scale;
+
   return { x: lion.x - half, y: lion.y - height, width: half * 2, height };
 }
 
@@ -89,10 +91,12 @@ function touchDown(game, lion, time) {
   if (reached === lion.reached) {
     return;
   }
+
   lion.reached = reached;
   if (lion.everyLeg) {
     lion.hitTargets.clear();
   }
+
   landed(game, lion);
 }
 
@@ -103,6 +107,7 @@ export function lionPoseAt(lion, time) {
   const [x, y] = pointOnLeg(flight, leg, time);
   const run = flight[leg + 1][1] - flight[leg][1];
   const direction = Math.abs(run) > 0.5 ? Math.sign(run) : lion.direction;
+
   return { x, y, direction, stride: progressOnLeg(flight, leg, time) };
 }
 
@@ -110,10 +115,12 @@ export function updateLion(game, lion) {
   if (lion.time === 1 && lion.appear) {
     riseFromGold(game, lion);
   }
+
   goldDust(game, lion);
   if (lion.time <= lion.appear) {
     return;
   }
+
   const time = lion.time - lion.appear;
   const end = lastOf(lion.flight)[0];
   if (time > end) {
@@ -121,6 +128,7 @@ export function updateLion(game, lion) {
     lion.done = lion.fade >= 1;
     return;
   }
+
   Object.assign(lion, lionPoseAt(lion, time));
   touchDown(game, lion, time);
   maul(game, lion);
@@ -138,5 +146,6 @@ export function pounceComboLions(game, fighter, count) {
     ];
     releaseLion(game, { flight, hit: COMBO_LION, scale: COMBO_SCALE, delay: i * 8 });
   }
+
   game.io.sfx('roar', false, { x: fighter.x });
 }

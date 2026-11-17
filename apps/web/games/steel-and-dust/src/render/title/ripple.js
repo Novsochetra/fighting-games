@@ -16,6 +16,7 @@ export function rippleOffset(ripple, y, tick) {
   const swell =
     Math.sin(y * ROW_RATE - tick * SPEED) * 0.7 +
     Math.sin(y * UNDERTOW_RATE + tick * UNDERTOW_SPEED) * 0.3;
+
   return Math.round(swell * (CALM + depth * ripple.reach)) || 0;
 }
 

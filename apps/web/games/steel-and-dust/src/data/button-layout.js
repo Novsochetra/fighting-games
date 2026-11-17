@@ -30,6 +30,7 @@ function sanitizeEntry(entry) {
   if (!entry || !isFraction(entry.x) || !isFraction(entry.y) || !Number.isFinite(entry.size)) {
     return null;
   }
+
   return { x: entry.x, y: entry.y, size: roundSize(entry.size) };
 }
 
@@ -40,6 +41,7 @@ function sanitizeOrientation(value, controls) {
   if (!value || typeof value !== 'object') {
     return null;
   }
+
   const entries = {};
   for (const control of controls) {
     entries[control] = sanitizeEntry(value[control]);
@@ -47,6 +49,7 @@ function sanitizeOrientation(value, controls) {
       return null;
     }
   }
+
   return entries;
 }
 

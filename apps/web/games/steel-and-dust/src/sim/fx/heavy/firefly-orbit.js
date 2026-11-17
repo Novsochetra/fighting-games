@@ -13,7 +13,9 @@ function leanOf(fighter, move, time) {
   if (time >= move.startup) {
     return 0;
   }
+
   const { lean, leanTicks } = FIREFLY_HEAVY_FEEL;
+
   return -fighter.facing * Math.round(lean * Math.min(1, (Math.max(0, time) + 1) / leanTicks));
 }
 
@@ -40,6 +42,7 @@ export function swarmCentreAt(fighter, move, time) {
     x: fighter.x + fighter.facing * 2 + leanOf(fighter, move, time),
     y: fighter.y - 17,
   };
+
   return between(waist, swarmKnotOf(fighter, move), share * share);
 }
 
@@ -50,6 +53,7 @@ export function swarmBugAt(fighter, { move, time, i }) {
   const angle = (i / SWARM_SIZE) * Math.PI * 2 + spinOf(fighter, time);
   const bob = Math.sin(time * 0.9 + i * 2.1) * 1.6 * (1 - share);
   const centre = swarmCentreAt(fighter, move, time);
+
   return {
     x: centre.x + Math.cos(angle) * radius,
     y: centre.y + Math.sin(angle) * radius * FLAT + bob,
@@ -62,6 +66,7 @@ export function swarmOrbit(fighter, move, time) {
   return Array.from({ length: SWARM_SIZE }, (_, i) => {
     const now = swarmBugAt(fighter, { move, time, i });
     const before = swarmBugAt(fighter, { move, time: time - 1, i });
+
     return { ...now, i, vx: now.x - before.x, vy: now.y - before.y };
   });
 }

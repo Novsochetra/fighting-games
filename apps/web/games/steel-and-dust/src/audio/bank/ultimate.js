@@ -47,6 +47,7 @@ function buildUlt(track) {
   });
   shimmer(track, { partials: SHIMMER, center: 3100, length: 0.44, level: 0.014, fadeFrom: 0.3 });
   squash(track, IGNITE);
+
   return { drive: 1.6 };
 }
 
@@ -65,6 +66,7 @@ function buildUltHit(track, pitch, size) {
     levels: [5.4, 2.28, 0.198, 0.066],
   });
   squash(track, DENSE);
+
   return { drive: 2.5, lowpass: 9000 };
 }
 

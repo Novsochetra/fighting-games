@@ -12,6 +12,7 @@ export function installAudioUnlock(target, audio) {
   for (const type of GESTURES) {
     target.addEventListener(type, retry, { capture: true, passive: true });
   }
+
   // a running context keeps iOS's 'playback' audio session, and the phone's audio hardware, busy
   // after Safari goes to the background
   target.document.addEventListener('visibilitychange', () => {

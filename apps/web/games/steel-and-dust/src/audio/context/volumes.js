@@ -4,6 +4,7 @@ export function isDucked(game) {
 
 export function volumeLevels(game) {
   const { settings, muted } = game;
+
   return {
     master: muted ? 0 : 0.9,
     effectsOut: muted ? 0 : 0.9,
@@ -16,6 +17,7 @@ export function applyVolumes(chain, game) {
   if (!chain) {
     return;
   }
+
   const levels = volumeLevels(game);
   chain.master.gain.value = levels.master;
   chain.effectsOut.gain.value = levels.effectsOut;

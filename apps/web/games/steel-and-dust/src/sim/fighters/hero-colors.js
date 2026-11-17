@@ -12,7 +12,9 @@ export function weaponGlowOf(theme, weaponId) {
   if (weaponId === 'sword') {
     return { trail: theme.blade, spark: theme.spark };
   }
+
   const weapon = WEAPONS[weaponId];
+
   return theme.weapons?.[weaponId] || { trail: weapon.trailColor, spark: weapon.sparkColor };
 }
 

@@ -52,6 +52,7 @@ function paintHead(pen, dusk) {
 const towerCanvas = (dusk) =>
   baked(`stadium-tower-${dusk}`, {
     ...SIZE,
+
     paint: (pen) => {
       paintMast(pen);
       paintHead(pen, dusk);

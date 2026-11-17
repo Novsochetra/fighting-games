@@ -14,6 +14,7 @@ function drawnPieces(sheet, frame) {
     drawImage: (image, ...args) => calls.push(args),
   };
   drawHeroFrame({ context }, sheet, { x: 0, y: 0, facing: 1, ...frame });
+
   return calls;
 }
 
@@ -30,6 +31,7 @@ function misplaced(pieces, { name, row, index }) {
   const expected = [sx, sy, width, tall, -feetX * scale + left * scale, frameTop + top * scale];
   const wrong = expected.some((value, i) => value !== call[i]);
   const sizes = call[6] !== width * scale || call[7] !== tall * scale;
+
   return wrong || sizes || !call.slice(4).every(onScreenPixel);
 }
 

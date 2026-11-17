@@ -9,6 +9,7 @@ export function railwayProblem(env) {
   if (!onRailway(env) || POSTGRES_URL.test(env.DATABASE_URL?.trim() ?? '')) {
     return null;
   }
+
   return (
     'DATABASE_URL is not a postgres:// URL (its value is not shown). On Railway set it to ' +
     '${{Postgres.DATABASE_URL}}, without quotes, or every supporter is lost on the next deploy.'
@@ -21,9 +22,11 @@ export function withRailwayDefaults(env) {
   if (!onRailway(env)) {
     return env;
   }
+
   const problem = railwayProblem(env);
   if (problem) {
     throw new Error(problem);
   }
+
   return { ...env, HOST: env.HOST || '0.0.0.0', TRUST_PROXY: env.TRUST_PROXY || '1' };
 }

@@ -20,6 +20,7 @@ function cueKind(game, { kind, value, since }) {
     const key = value ? ARRIVE_SOUND[kind] : 'clink';
     game.io.sfx(key, false, value ? {} : { rate: NONE_RATE });
   }
+
   const step = stepNow(value, since);
   if (step >= 0) {
     game.io.sfx('clink', false, { rate: streakRate(step) });
@@ -32,6 +33,7 @@ function cueTake(game, { value, since }) {
   if (step < 0) {
     return;
   }
+
   game.io.sfx('coin', false, { rate: streakRate(step) });
   if (step === stepCount(value) - 1) {
     game.io.sfx('tallyTotal');
@@ -44,9 +46,11 @@ export function cueSummary(game) {
   if (!time || time > SUMMARY_TICKS) {
     return;
   }
+
   if (time === SUMMARY.openAt) {
     game.io.sfx('tallyOpen');
   }
+
   summaryValues(game.missionLoot).forEach((value, row) => {
     const since = time - rowStartsAt(row);
     if (row === TOTAL_ROW) {

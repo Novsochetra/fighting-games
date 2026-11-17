@@ -14,6 +14,7 @@ const loaders = { createImage: () => new FakeImage(), baseUrl: '' };
 function drawCalls(sheets, prop) {
   const { context, log } = createRecordingContext(null);
   drawPropSprite(createPainter(context), sheets, prop);
+
   return log.filter((call) => call.startsWith('drawImage('));
 }
 

@@ -39,6 +39,7 @@ function strikeAgain(game, echo) {
   } else {
     addSparks(game, { x, y, count: 5, color: FX_COLORS.lionGold, speed: 2.2 });
   }
+
   shake(game, 1, 4);
   game.io.sfx('echo', false, { x: echo.x });
 }
@@ -58,9 +59,11 @@ export function updateEcho(game, echo) {
   if (echo.time === echo.strikeAt) {
     strikeAgain(game, echo);
   }
+
   if (echo.wakeAt !== null && echo.time === echo.wakeAt) {
     burstIntoGold(game, echo);
   }
+
   const flared = echo.wakeAt !== null && echo.time >= echo.wakeAt + ECHO_FLARE_TICKS;
   echo.done = flared || echo.time >= ECHO_LIFE;
 }

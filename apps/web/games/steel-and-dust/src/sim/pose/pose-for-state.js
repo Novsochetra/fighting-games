@@ -25,6 +25,7 @@ function idlePose(fighter, pose) {
   const bob = (fighter.animTime >> 5) & 1;
   pose.crouch += bob;
   pose.frontArm += bob * 0.05;
+
   return pose;
 }
 
@@ -39,18 +40,21 @@ function walkPose(fighter, pose) {
   pose.backArm += 0.6 * sin;
   pose.backForearm += 0.3 * sin;
   pose.crouch += Math.abs(sin) > 0.7 ? 0 : 1;
+
   return pose;
 }
 
 function airPose(fighter, pose) {
   Object.assign(pose, fighter.vy < 0 ? RISING_AIR : FALLING_AIR);
   pose.crouch -= 1;
+
   return pose;
 }
 
 function tumblePose(fighter, pose) {
   Object.assign(pose, JUGGLE_POSE);
   pose.torso = -2.3 - clamp(fighter.vy * 0.15, -1, 1);
+
   return pose;
 }
 
@@ -61,6 +65,7 @@ function koPose(fighter, pose) {
 function getupPose(fighter, pose) {
   const lying = { ...pose, ...LYING_POSE };
   const crouched = { ...pose, crouch: 4 };
+
   return blendPoses(lying, crouched, easeInOutCubic(Math.min(1, fighter.stateTime / 16)));
 }
 
@@ -93,5 +98,6 @@ const POSE_BY_STATE = {
 export function poseForState(fighter) {
   const pose = { ...BASE_POSE, ...guardOf(fighter) };
   const build = POSE_BY_STATE[fighter.state];
+
   return build ? build(fighter, pose) : pose;
 }

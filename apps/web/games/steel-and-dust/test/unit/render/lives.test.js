@@ -12,6 +12,7 @@ const LOST = `fillStyle=${HUD_COLORS.barTrough}`;
 function heartColors(lives) {
   const { context, log } = createRecordingContext(null);
   drawLives(createPainter(context), { lives, x: 6, y: 47 });
+
   return [0, 1, 2, 3, 4].map((i) => log[log.indexOf(`fillRect(${7 + i * 9},47,2,1)`) - 1]);
 }
 

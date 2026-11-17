@@ -68,6 +68,7 @@ describe('createSoundPlayer', () => {
     const context = createFakeAudioContext({ state });
     const createContext = vi.fn(() => context);
     const player = createSoundPlayer({ createContext, isEnabled: () => enabled });
+
     return { context, createContext, player };
   };
 

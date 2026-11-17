@@ -15,6 +15,7 @@ function lateSheets() {
     createCanvas: () => null,
     baseUrl: '',
   });
+
   return { sheets, images };
 }
 

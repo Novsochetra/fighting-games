@@ -6,6 +6,7 @@ import { loadPaintedBackdrop } from './painted-backdrop.js';
 // fought, or the first time the mission is drawn
 export function backdropFor(view, themeId) {
   view.backdrops[themeId] ||= loadPaintedBackdrop(view.loaders, PAINTED_BACKDROPS[themeId]);
+
   return view.backdrops[themeId];
 }
 
@@ -23,9 +24,11 @@ export function missionRoadLoaded(view, missionIndex) {
   if (!backdropSettled(backdropFor(view, missionAt(missionIndex).theme))) {
     return false;
   }
+
   const next = MISSIONS[missionIndex + 1];
   if (next) {
     backdropFor(view, next.theme);
   }
+
   return true;
 }

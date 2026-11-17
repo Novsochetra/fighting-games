@@ -119,6 +119,7 @@ function bokatorLeaf(particle, terrain) {
   if (particle.landed) {
     return;
   }
+
   const lastY = particle.y;
   particle.vx *= 0.9;
   particle.vy = Math.min(LEAF_FALL, particle.vy + 0.06);

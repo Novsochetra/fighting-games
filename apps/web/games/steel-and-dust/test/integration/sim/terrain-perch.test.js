@@ -15,6 +15,7 @@ function raiderAt(game, kind, { x, y }) {
   const raider = game.fighters.filter((fighter) => fighter.side === 'enemy').at(-1);
   raider.entering = false;
   placeFighter(game, raider, { x, y });
+
   return raider;
 }
 
@@ -30,6 +31,7 @@ function runUntil(game, ticks, check) {
       return i;
     }
   }
+
   return -1;
 }
 
@@ -48,6 +50,7 @@ describe('a ranged raider near a platform', () => {
     const knives = [];
     const hitAt = runUntil(game, 600, () => {
       knives.push(...game.projectiles.filter((shot) => shot.kind === 'knife'));
+
       return game.player.hp < game.player.maxHp;
     });
     expect(hitAt).toBeGreaterThan(0);

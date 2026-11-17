@@ -3,6 +3,7 @@ import { rankRun } from '../../data/leaderboard.js';
 
 function runEntry(game, cleared) {
   const { score, missionIndex, playTime, settings } = game;
+
   return {
     score,
     mission: missionIndex + 1,
@@ -23,6 +24,7 @@ export function endRun(game, cleared) {
   if (game.score <= 0 || game.settings.training) {
     return;
   }
+
   game.lastRun = runEntry(game, cleared);
   game.leaderboard = rankRun(game.leaderboard, game.lastRun);
   game.io.saveLeaderboard(game.leaderboard);

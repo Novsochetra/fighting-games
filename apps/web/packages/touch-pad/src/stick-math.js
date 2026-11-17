@@ -19,6 +19,7 @@ export function stickDirections(normalizedX, normalizedY, current) {
 export function knobOffset(dx, dy, radius) {
   const distance = Math.hypot(dx, dy);
   const scale = distance > radius ? radius / distance : 1;
+
   return { x: dx * scale, y: dy * scale };
 }
 
@@ -31,7 +32,9 @@ export function followThumb(center, thumb, radius) {
   if (distance <= reach) {
     return center;
   }
+
   const pull = (distance - reach) / distance;
+
   return { x: center.x + dx * pull, y: center.y + dy * pull };
 }
 

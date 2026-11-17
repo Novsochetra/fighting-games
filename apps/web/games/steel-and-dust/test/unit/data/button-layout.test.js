@@ -26,6 +26,7 @@ describe('button layout sizes', () => {
     for (let i = 0; i < 12; i++) {
       size = steppedSize(size, 1);
     }
+
     expect(size).toBe(1.8);
   });
 });
@@ -46,6 +47,7 @@ describe('a button centre on the touch layer', () => {
 // a layout saved for the Dusk skin, which steers with a d-pad
 const duskEntries = () => {
   const { stick, ...buttons } = entries();
+
   return { ...buttons, dpad: stick };
 };
 
@@ -90,6 +92,7 @@ describe('a saved button layout', () => {
     for (const landscape of broken) {
       expect(sanitizeButtonLayout({ classic: { landscape, portrait: null } })).toBeNull();
     }
+
     // the stick is the classic skin's: Dusk has a d-pad there instead
     expect(sanitizeButtonLayout({ dusk: { landscape: entries() } })).toBeNull();
   });

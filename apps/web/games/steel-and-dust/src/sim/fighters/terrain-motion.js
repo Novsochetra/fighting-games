@@ -37,10 +37,12 @@ export function followFloor(terrain, fighter) {
   if (isFlat(terrain) || fighter.airborne || fighter.state === 'ult') {
     return;
   }
+
   if (fighter.entering) {
     fighter.y = groundAt(terrain, fighter.x);
     return;
   }
+
   const floor = floorBelow(terrain, fighter.x, fighter.y);
   if (floor - fighter.y > STEP_UP) {
     leaveGround(fighter);
@@ -60,11 +62,14 @@ export function blockWall(terrain, fighter, from) {
   if (isFlat(terrain) || fighter.entering || fighter.x === from.x) {
     return 0;
   }
+
   if (!isWall(terrain, fighter.x, from.y) && !wadesIn(terrain, fighter, fighter.x)) {
     return 0;
   }
+
   const side = Math.sign(fighter.x - from.x);
   fighter.x = from.x;
+
   return side;
 }
 
@@ -74,6 +79,7 @@ export function nudge(terrain, fighter, distance) {
     fighter.x += distance;
     return;
   }
+
   const toX = fighter.x + distance;
   if (!isWall(terrain, toX, fighter.y) && !wadesIn(terrain, fighter, toX)) {
     fighter.x = toX;
@@ -87,10 +93,13 @@ export function dropThrough(game, fighter) {
   if (!terrain.platforms.length || fighter.airborne) {
     return false;
   }
+
   const platform = platformUnder(terrain, fighter.x, fighter.y);
   if (!platform) {
     return false;
   }
+
   Object.assign(fighter, { y: platform.y + 1, vy: 0, airborne: true, state: 'air' });
+
   return true;
 }

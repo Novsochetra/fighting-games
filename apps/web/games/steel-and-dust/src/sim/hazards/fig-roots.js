@@ -37,6 +37,7 @@ function rootLine(game, boss, { count, gap, every }, direction) {
     if (isWall(game.terrain, x, floor)) {
       return;
     }
+
     floor = groundAt(game.terrain, x);
     plantRoot(game, boss, { x, delay: 2 + i * every, marked: false });
   }
@@ -51,6 +52,7 @@ export function burstRoots(game, boss, move) {
   for (const direction of directions) {
     rootLine(game, boss, roots, direction);
   }
+
   plantRoot(game, boss, { x: game.player.x, delay: roots.underHero, marked: true });
   shake(game, 3, 12);
   game.io.sfx('roots', false, { x: boss.x });

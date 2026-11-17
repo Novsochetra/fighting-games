@@ -38,9 +38,11 @@ const COUNTERS = {
   goal: (match, seen, event) => {
     seen.goals[event.team] += 1;
   },
+
   out: (match, seen, event) => {
     seen.restarts[event.kind] = (seen.restarts[event.kind] ?? 0) + 1;
   },
+
   whistle: (match, seen, event) => seen.whistles.push(whistleOf(match, event)),
   pass: countPass,
 };

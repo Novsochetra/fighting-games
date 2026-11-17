@@ -23,6 +23,7 @@ export function hillyTerrain(mission) {
     ],
     platforms: [{ at: 220, width: 60, rise: 36, kind: 'planks' }],
   };
+
   return layoutTerrain(
     mission.zones.map(() => zoneSpec),
     mission.zones,
@@ -37,8 +38,10 @@ export function useTerrain(game, terrain) {
   for (const crate of game.crates) {
     crate.y = groundAt(terrain, crate.x);
   }
+
   // a tree is laid where its own road is level for its whole length, which another road is not
   game.trees = [];
+
   return game;
 }
 

@@ -18,6 +18,7 @@ function templeArena({ gap = 150, hp } = {}) {
   Object.assign(pharaoh, { entering: false, x: game.player.x + gap, facing: -1 });
   pharaoh.hp = hp ?? pharaoh.maxHp;
   pharaoh.ai.cooldown = 9999;
+
   return { game, pharaoh };
 }
 
@@ -30,6 +31,7 @@ function playOut(game, pharaoh, ticks, everyTick = () => {}) {
     pharaoh.ai.cooldown = 9999;
     states.add(game.player.state);
   }
+
   return states;
 }
 
@@ -135,6 +137,7 @@ describe('the Sand Pharaoh in a fight', () => {
     for (const jar of shotsOf(game, 'canopic')) {
       swingAt(game, pharaoh, jar.x);
     }
+
     playOut(game, pharaoh, 2);
     expect(pharaoh.move.id).toBe('sunBroken');
     expect(game.player.hp).toBe(game.player.maxHp);
@@ -154,11 +157,13 @@ describe('the Sand Pharaoh in a fight', () => {
       } else if (i % 300 === 0) {
         game.player.x = pharaoh.x + (pharaoh.x > 192 ? -30 : 30);
       }
+
       runTicks(game, 1);
       game.player.hp = game.player.maxHp;
       pharaoh.hp = Math.max(pharaoh.hp, 40);
       used.add(pharaoh.move?.id);
     }
+
     expect([...used]).toEqual(
       expect.arrayContaining(['mirageVolley', 'mirageBlink', 'scarabCarpet', 'curseOfSun']),
     );

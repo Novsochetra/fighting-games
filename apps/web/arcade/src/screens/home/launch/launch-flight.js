@@ -15,6 +15,7 @@ const keepOrder = (keyframes) => keyframes;
 function createPart(document, className) {
   const element = document.createElement('div');
   element.className = className;
+
   return element;
 }
 
@@ -24,6 +25,7 @@ function buildCaption(document, title) {
   const name = createPart(document, 'launch__title');
   name.textContent = title;
   caption.append(name, createPart(document, 'launch__spinner'));
+
   return caption;
 }
 
@@ -31,6 +33,7 @@ function buildCaption(document, title) {
 function backdropOf(art) {
   const backdrop = art.cloneNode(true);
   backdrop.className = 'launch__backdrop';
+
   return backdrop;
 }
 
@@ -44,14 +47,17 @@ function buildLayer(document, source, title) {
     icon.append(art.cloneNode(true));
     panel.append(backdropOf(art));
   }
+
   const splash = sampleSplash(document, art);
   if (splash) {
     panel.style.setProperty('--splash-top', splash.top);
     panel.style.setProperty('--splash-bottom', splash.bottom);
   }
+
   const caption = buildCaption(document, title ?? '');
   layer.append(panel, icon, caption);
   document.body.append(layer);
+
   return { layer, panel, icon, caption };
 }
 
@@ -65,6 +71,7 @@ function measureScene({ source, home, layer }) {
   const { width, height } = layer.getBoundingClientRect();
   const homeBox = home.getBoundingClientRect();
   const style = source.ownerDocument.defaultView.getComputedStyle(source);
+
   return {
     from,
     viewport: { width, height },
@@ -95,6 +102,7 @@ function play(parts, scene, { timing, order }) {
   placeCaption(parts.caption, scene);
   // Set outside the keyframes, which would otherwise keep the zoom off the compositor.
   parts.home.style.transformOrigin = `${scene.origin.x}px ${scene.origin.y}px`;
+
   return [
     parts.panel.animate(order(frames.panel), options),
     parts.panel.animate(order(frames.corners), options),
@@ -115,15 +123,18 @@ export function flyOpen({ document, source, home, timing, title }) {
   if (!source || !isMeasurable(source.getBoundingClientRect())) {
     return null;
   }
+
   const parts = { ...buildLayer(document, source, title), home };
   const scene = measureScene({ source, home, layer: parts.layer });
   if (!isMeasurable(scene.viewport)) {
     parts.layer.remove();
     return null;
   }
+
   source.classList.add('is-launching');
   markLaunching(document, true);
   const animations = play(parts, scene, { timing, order: keepOrder });
+
   return { source, parts, animations, done: settle(animations) };
 }
 
@@ -137,6 +148,7 @@ export function flyClose({ source, parts, animations: openAnimations }, { timing
     source.isConnected && isMeasurable(scene.from)
       ? play(parts, scene, { timing, order: reverseKeyframes })
       : fadeOut(parts.layer, timing);
+
   return settle(animations).then(() => {
     parts.layer.remove();
     parts.home.style.removeProperty('transform-origin');

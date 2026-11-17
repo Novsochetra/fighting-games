@@ -24,6 +24,7 @@ export function installFullscreen({ window, document, fullscreen, layout }) {
     window,
     document,
     fullscreen,
+
     changed: () => {
       fullscreen.refreshLabels();
       window.setTimeout(layout.fit, 60);

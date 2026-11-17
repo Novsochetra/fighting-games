@@ -25,6 +25,7 @@ function bayonArena() {
   const guardian = game.boss;
   Object.assign(guardian, { entering: false, x: game.player.x + 170, facing: -1 });
   guardian.ai.cooldown = 9999;
+
   return { game, guardian };
 }
 
@@ -48,6 +49,7 @@ function drawBayonEffects(game) {
   } finally {
     Math.random = simRandom;
   }
+
   return log;
 }
 
@@ -70,6 +72,7 @@ function playAndDraw(game, guardian, ticks) {
     guardian.ai.cooldown = 9999;
     frames.push(drawBayonEffects(game));
   }
+
   return frames;
 }
 
@@ -88,6 +91,7 @@ describe("the Bayon Guardian's light in a fight", () => {
       startMove(game, guardian, move);
       drawn.push(...playAndDraw(game, guardian, 160));
     }
+
     const fills = drawn.flat().filter((call) => call.startsWith('fillRect(')).length;
     expect(fills).toBeGreaterThan(10000);
     expect(drawn.flatMap(offGrid)).toEqual([]);

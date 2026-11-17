@@ -16,6 +16,7 @@ export function isDuplicate(voices, { key, group, start }) {
   if (group === 'voice') {
     return false;
   }
+
   return voices.some((voice) => voice.key === key && Math.abs(voice.start - start) < MERGE_SECONDS);
 }
 
@@ -24,6 +25,7 @@ export function lowestPriority(voices) {
   return voices.reduce((lowest, voice) => {
     const lower = voice.priority < lowest.priority;
     const older = voice.priority === lowest.priority && voice.start < lowest.start;
+
     return lower || older ? voice : lowest;
   });
 }
@@ -37,16 +39,20 @@ export function planRoom(voices, { group, priority }) {
     if (victim.priority > priority) {
       return { play: false, steal };
     }
+
     steal.push(victim);
   }
+
   const others = voices.filter((voice) => !steal.includes(voice));
   if (others.length >= MAX_VOICES) {
     const victim = lowestPriority(others);
     if (victim.priority > priority) {
       return { play: false, steal };
     }
+
     steal.push(victim);
   }
+
   return { play: true, steal };
 }
 
@@ -58,8 +64,10 @@ export function chooseTake(voices, { key, count, last, requested, roll }) {
   for (let tries = 0; tries < count && count > 1 && isTaken(take); tries++) {
     take = (take + 1) % count;
   }
+
   if (requested !== undefined) {
     take = requested % count;
   }
+
   return take;
 }

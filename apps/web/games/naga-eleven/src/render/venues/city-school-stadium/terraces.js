@@ -41,6 +41,7 @@ export function paintTerraces(raster, { index, art }) {
     rowPitch: PITCH,
     palette: art.crowd,
     frame: index,
+
     filled: (x, row) =>
       !inAisle(x, shape) &&
       noise2(x, row * 13, { cell: 46, salt: 21 }) + hash2(x, row, 23) * 0.25 > 0.5,

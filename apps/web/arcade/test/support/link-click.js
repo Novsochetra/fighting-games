@@ -14,5 +14,6 @@ export function clickAndSeeIfHeld(target, init = {}) {
       new MouseEvent('click', { bubbles: true, cancelable: true, button: 0, ...init }),
     );
   });
+
   return isHeld;
 }

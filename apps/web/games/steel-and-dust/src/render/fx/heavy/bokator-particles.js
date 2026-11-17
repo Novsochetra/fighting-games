@@ -46,6 +46,7 @@ function bokatorRoar(painter, particle) {
     const y = particle.y + Math.sin(angle) * particle.radius;
     painter.rect(x - (particle.direction < 0 ? 0 : thick - 1), y, thick, 1);
   }
+
   painter.alpha(1);
 }
 
@@ -58,6 +59,7 @@ function bokatorLeaf(painter, particle) {
   } else {
     painter.use(ART.leafEdge).rect(particle.x, particle.y, 1, 1);
   }
+
   painter.alpha(1);
 }
 
@@ -77,8 +79,10 @@ function bokatorClaw(painter, particle) {
       const edge = (at) => point(at.x - facing, at.y);
       painter.use(ART.clawShade).line(edge(from), edge(to), 1);
     }
+
     painter.use(hot ? ART.claw[age] : ART.clawShade).line(from, to, 1);
   }
+
   painter.alpha(1);
 }
 

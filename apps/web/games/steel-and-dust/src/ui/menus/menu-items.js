@@ -38,12 +38,15 @@ export function navigableItems(document, top) {
     const buttons = [...menu.querySelectorAll('.mbtn')].filter((button) => !button.hidden);
     return [...menu.querySelectorAll('.post-name'), ...buttons, menu.querySelector('.xbtn')];
   }
+
   if (top === 'skins') {
     return skinsItems(menu);
   }
+
   if (top === 'credits') {
     return [menu.querySelector('.xbtn')];
   }
+
   return [...menu.querySelectorAll('.mbtn')].filter((button) => !button.hidden);
 }
 

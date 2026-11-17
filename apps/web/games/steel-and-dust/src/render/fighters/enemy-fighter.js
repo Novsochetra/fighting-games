@@ -13,9 +13,11 @@ function hitTint(fighter) {
   if (fighter.flashTime > 0) {
     return COLORS.white;
   }
+
   if (fighter.frozen) {
     return FX_COLORS.iceBody;
   }
+
   return fighter.armorFlash > 0 ? COLORS.gold : null;
 }
 
@@ -24,6 +26,7 @@ function drawAfterimages(painter, sheets, fighter) {
     if (!image.sprite) {
       continue;
     }
+
     painter.alpha((0.45 * image.life) / 12);
     drawEnemyFrame(painter, sheets, {
       id: fighter.def.sprite,
@@ -35,6 +38,7 @@ function drawAfterimages(painter, sheets, fighter) {
       size: spriteSize(fighter),
     });
   }
+
   painter.alpha(1);
 }
 
@@ -49,6 +53,7 @@ export function drawSpriteEnemy(painter, { sheets, fighter, shakeX, tickCount, f
   if (isBossWindingUp(fighter)) {
     drawDangerZone(painter, fighter, tickCount, floor);
   }
+
   drawAfterimages(painter, sheets, fighter);
   const id = fighter.def.sprite;
   const at = {
@@ -66,6 +71,7 @@ export function drawSpriteEnemy(painter, { sheets, fighter, shakeX, tickCount, f
   if (isTelegraphing(fighter, tickCount)) {
     drawTelegraph(painter, sheets, at);
   }
+
   drawWindupWarning(painter, fighter, tickCount);
   drawEnemyHealth(painter, fighter);
 }

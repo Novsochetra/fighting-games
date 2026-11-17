@@ -3,6 +3,7 @@ import { VIEW_HEIGHT, VIEW_WIDTH } from '../../config.js';
 
 export function isBossUltimate(fighter) {
   const move = fighter.move;
+
   return (
     fighter.state === 'attack' &&
     Boolean(move?.bossUltimate) &&

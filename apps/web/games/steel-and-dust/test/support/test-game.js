@@ -20,12 +20,14 @@ export function createTestGame({
     io,
   });
   placeOnTitle(game);
+
   return game;
 }
 
 export function createPlayingGame(options) {
   const game = createTestGame(options);
   startPlay(game);
+
   return game;
 }
 

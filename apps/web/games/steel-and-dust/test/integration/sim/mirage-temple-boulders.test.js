@@ -41,6 +41,7 @@ function untilClose(game, boulder) {
     if (boulder.state === 'rolling' && boulder.x - game.player.x < JUMP_FROM) {
       return;
     }
+
     runTicks(game, 1);
   }
 }

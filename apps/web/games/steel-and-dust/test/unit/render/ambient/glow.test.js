@@ -42,6 +42,7 @@ describe('ambient furnace glow', () => {
       expect(first).toBeLessThanOrEqual(1);
       expect(second).toBeGreaterThanOrEqual(0);
     }
+
     const apart = heats.filter(([first, second]) => Math.abs(first - second) > 0.3);
     expect(apart.length).toBeGreaterThan(heats.length / 5);
   });

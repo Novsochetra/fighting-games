@@ -31,14 +31,17 @@ export function hitWall(game, fighter, move) {
   if (!soft) {
     smashWall(game, fighter);
   }
+
   if (onlyOnMiss && fighter.hitConfirmed) {
     return;
   }
+
   if (turn) {
     fighter.facing = -fighter.facing;
   } else {
     fighter.x -= fighter.facing * WALL_BOUNCE;
     fighter.vx = 0;
   }
+
   startMove(game, fighter, next);
 }

@@ -34,6 +34,7 @@ const GLOW_LEVELS = [0.14, 0.2, 0.26];
 
 export function crackOpen(time) {
   const since = MARK_TICKS + time;
+
   return OPEN_FROM + OPEN_REACH * easeOutCubic(Math.min(1, Math.max(0, since) / OPEN_TICKS));
 }
 
@@ -43,6 +44,7 @@ export function wallWidth(segment) {
   if (out < 5) {
     return 3;
   }
+
   return out < 12 ? 2 : 1;
 }
 
@@ -61,6 +63,7 @@ function seamColor(root, segment) {
   if (segment.start < 3 || segment.running) {
     return COLORS.white;
   }
+
   return isBlinking(root.time) ? COLORS.red : FX_COLORS.gazeGold;
 }
 
@@ -131,6 +134,7 @@ export function drawRootCrack(context, root) {
   if (open > OPEN_FROM + OPEN_REACH / 2) {
     drawChips(context, root);
   }
+
   if (-root.time < SHAFT_TICKS) {
     drawShafts(context, root);
   }

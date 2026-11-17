@@ -35,10 +35,12 @@ export function customised(draft, slot, centres) {
   if (draft[slot]) {
     return draft;
   }
+
   const entries = {};
   for (const [control, centre] of Object.entries(centres)) {
     entries[control] = { x: roundFraction(centre.x), y: roundFraction(centre.y), size: 1 };
   }
+
   return { ...draft, [slot]: entries };
 }
 
@@ -49,12 +51,14 @@ function withEntry(draft, slot, control, entry) {
 function placed(entry, centre, half) {
   const scaled = { x: half.x * entry.size, y: half.y * entry.size };
   const inside = clampCentre(centre, scaled);
+
   return { ...entry, x: roundFraction(inside.x), y: roundFraction(inside.y) };
 }
 
 // `half` is the control's half width and height at size 1, as fractions of the layer
 export function moveControl(draft, { slot, control, centre, half }) {
   const entry = draft[slot][control];
+
   return withEntry(draft, slot, control, placed(entry, centre, half));
 }
 
@@ -62,6 +66,7 @@ export function moveControl(draft, { slot, control, centre, half }) {
 export function resizeControl(draft, { slot, control, step, half }) {
   const entry = draft[slot][control];
   const resized = { ...entry, size: steppedSize(entry.size, step) };
+
   return withEntry(draft, slot, control, placed(resized, entry, half));
 }
 

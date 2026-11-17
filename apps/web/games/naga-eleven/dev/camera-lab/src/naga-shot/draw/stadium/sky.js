@@ -39,6 +39,7 @@ function skyCanvas(dusk) {
   return baked(`stadium-sky-${dusk}`, {
     width: SKY.width,
     height,
+
     paint: (pen) =>
       colours.forEach((_, band) => paintBand(pen, { band, colours, width: SKY.width })),
   });

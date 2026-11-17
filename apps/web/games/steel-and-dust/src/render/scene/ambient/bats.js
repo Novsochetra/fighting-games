@@ -27,6 +27,7 @@ function drawBat(painter, { x, y, frame }) {
   if (!isOnScreen(x, y, BAT_WIDTH)) {
     return;
   }
+
   const left = Math.round(x);
   const top = Math.round(y);
   for (const [offsetX, offsetY, width, height] of WING_FRAMES[frame]) {
@@ -36,6 +37,7 @@ function drawBat(painter, { x, y, frame }) {
 
 function colonyOf(crossing) {
   const seed = crossing + SALT;
+
   return {
     seed,
     size: 2 + (hashInt(seed) % 3),
@@ -51,6 +53,7 @@ function batAt(colony, { i, progress, tick }) {
   const dart = Math.sin(tick * (0.05 + trait(seed, 3) * 0.04) + i * 2.1) * 10;
   const x = colony.heading > 0 ? along + dart : VIEW_WIDTH - along + dart;
   const bob = Math.sin(tick * 0.13 + i * 1.3) * 3 + Math.sin(tick * 0.031 + i) * 7;
+
   return { x, y: colony.lift + i * 5 + bob, frame: twoFrame(tick + i * 2, 4) };
 }
 
@@ -61,6 +64,7 @@ export function drawBats(painter, { effect, tick, colors }) {
   if (elapsed >= crossTicks) {
     return;
   }
+
   const colony = colonyOf(crossing);
   painter.use(colors.bat);
   for (let i = 0; i < colony.size; i++) {

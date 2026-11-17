@@ -19,10 +19,12 @@ export function createBank(context, clock = browserClock) {
     if (built[key]) {
       return built[key];
     }
+
     const definition = SOUND_DEFINITIONS[key];
     if (!definition) {
       return null;
     }
+
     const takes = [];
     for (let take = 0; take < definition.takes; take++) {
       const pitch = randomBetween(0.94, 1.06);
@@ -31,7 +33,9 @@ export function createBank(context, clock = browserClock) {
       buffer.getChannelData(0).set(samples);
       takes.push(buffer);
     }
+
     built[key] = takes;
+
     return takes;
   }
 
@@ -42,6 +46,7 @@ export function createBank(context, clock = browserClock) {
       if (built[key]) {
         continue;
       }
+
       get(key);
       if (clock.now() - started > SLICE_MS) {
         clock.later(warm, NEXT_SLICE_MS);

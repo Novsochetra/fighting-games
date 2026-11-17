@@ -41,6 +41,7 @@ describe('the gold motes rising off him', () => {
       expect(mote.y).toBeLessThanOrEqual(184);
       expect(mote.y).toBeGreaterThan(184 - top * scale - 40);
     }
+
     expect(motes[11][0].y).toBeLessThan(motes[10][0].y);
     expect(new Set(motes.map((frame) => Math.round(frame[0].x))).size).toBeGreaterThan(3);
   });
@@ -60,6 +61,7 @@ describe('the gold motes rising off him', () => {
     for (const mote of glowMotes(guardian(), 5)) {
       expect([0, 0.25, 0.5, 0.75, 1]).toContain(mote.alpha);
     }
+
     const { context, log } = recordingPainter();
     drawGlowMotes(context, guardian(), 40);
     const rects = drawnRects(log);

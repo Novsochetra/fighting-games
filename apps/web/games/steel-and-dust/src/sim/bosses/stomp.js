@@ -15,6 +15,7 @@ const footX = (boss, step) => boss.x + (step % 2 ? FOOT : -FOOT) * boss.scale;
 export function lastFootfall(boss) {
   const stride = boss.ai.stride ?? 0;
   const since = stride < STRIDE ? Infinity : stride % STRIDE;
+
   return { x: footX(boss, Math.floor(stride / STRIDE)), since };
 }
 
@@ -26,12 +27,14 @@ export function stomp(game, boss) {
   if (ai.stride % STRIDE !== 0) {
     return;
   }
+
   const y = floorUnder(game.terrain, boss);
   const x = footX(boss, ai.stride / STRIDE);
   addDust(game, { x, y, count: 4, color: FX_COLORS.rootDust });
   if (boss.glowing) {
     addSparks(game, { x, y: y - 4, count: 3, color: FX_COLORS.gazeGold, speed: 1.4 });
   }
+
   shake(game, 1, 6);
   game.io.sfx('land', false, { x, vol: 0.5 });
 }

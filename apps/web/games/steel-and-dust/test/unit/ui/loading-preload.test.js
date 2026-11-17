@@ -13,11 +13,13 @@ function createFakeImage({ decode } = {}) {
   if (decode) {
     image.decode = decode;
   }
+
   return image;
 }
 
 function manualTimers() {
   const pending = [];
+
   return {
     setTimer: (resolve, ms) => pending.push({ resolve, ms }),
     fire: () => pending.splice(0).forEach(({ resolve }) => resolve()),

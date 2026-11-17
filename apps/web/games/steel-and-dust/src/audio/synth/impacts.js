@@ -12,6 +12,7 @@ export function crack(track, { start = 0, level = 1, width = 0.0012 }) {
     const progress = i / length;
     samples[first + i] += (1 - 2 * progress) * (1 - progress * 0.3) * level;
   }
+
   layer(track, { filter: 'highpass', cutoff: 2500, attack: 0.0002, decay: 0.006, level, start });
 }
 
@@ -41,12 +42,14 @@ function rollingEnvelope(length, rolls) {
     (i / rolls) * length * 0.7 + randomBetween(0, 0.06),
     randomBetween(0.5, 1),
   ]);
+
   return (time) => {
     const fade = Math.exp((-4.5 * time) / length);
     const roll = bumps.reduce(
       (sum, [at, size]) => sum + size * Math.exp(-Math.pow((time - at) / 0.07, 2)),
       0.35,
     );
+
     return Math.min(1.2, roll) * fade * Math.min(1, time / 0.004);
   };
 }

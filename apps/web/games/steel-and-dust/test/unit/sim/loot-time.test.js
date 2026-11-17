@@ -8,6 +8,7 @@ function felledBossGame() {
   const { game, sounds } = createLootGame();
   const boss = spawnEnemy(game, 'khan', game.player.x + 90);
   game.boss = boss;
+
   return { game, sounds, boss };
 }
 
@@ -15,6 +16,7 @@ function felledBossGame() {
 function lootTimeGame({ loot = [], chests = [] }) {
   const { game } = createLootGame();
   Object.assign(game, { lootTime: 1, loot, chests });
+
   return game;
 }
 
@@ -25,6 +27,7 @@ function ticksToClear(game, limit = LOOT_TIME.limit + 10) {
       return tick;
     }
   }
+
   return null;
 }
 

@@ -14,6 +14,7 @@ describe('raiders knocked down', () => {
       dropLoot(game, raider);
       paid += game.loot.some((piece) => piece.kind === 'coin') ? 1 : 0;
     }
+
     expect(paid).toBeGreaterThan(5);
     expect(paid).toBeLessThan(35);
   });

@@ -46,5 +46,6 @@ export function createGame({ settings, device, records, hintsSeen, checkpoint, l
     camera: createCamera(),
   };
   resetRun(game);
+
   return game;
 }

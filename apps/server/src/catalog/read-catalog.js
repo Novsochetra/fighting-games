@@ -8,6 +8,7 @@ export async function loadCatalog({ gamesRoot, warn = console.warn }) {
 
 export async function readCatalogRecords(gamesRoot) {
   const folders = await listGameFolders(gamesRoot);
+
   return Promise.all(folders.map((folder) => readRecord(gamesRoot, folder)));
 }
 
@@ -21,6 +22,7 @@ async function listGameFolders(gamesRoot) {
     if (error.code === 'ENOENT') {
       return [];
     }
+
     throw error;
   }
 }
@@ -38,8 +40,10 @@ function describeReadError(error) {
   if (error.code === 'ENOENT') {
     return 'the file is missing';
   }
+
   if (error instanceof SyntaxError) {
     return `the file is not valid JSON (${error.message})`;
   }
+
   return error.message;
 }

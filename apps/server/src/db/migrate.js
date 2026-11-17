@@ -8,6 +8,7 @@ const CREATE_LEDGER = `CREATE TABLE IF NOT EXISTS schema_migrations (
 export async function appliedMigrations(database) {
   await database.query(CREATE_LEDGER);
   const { rows } = await database.query('SELECT name FROM schema_migrations');
+
   return new Set(rows.map((row) => row.name));
 }
 
@@ -20,8 +21,10 @@ export async function migrate(database, migrations = MIGRATIONS) {
       for (const statement of migration.statements) {
         await query(statement);
       }
+
       await query('INSERT INTO schema_migrations (name) VALUES ($1)', [migration.name]);
     });
   }
+
   return pending.map((migration) => migration.name);
 }

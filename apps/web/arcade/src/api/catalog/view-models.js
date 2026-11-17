@@ -21,6 +21,7 @@ export function isSecureGameUrl(value) {
   if (typeof value !== 'string' || /\s/.test(value)) {
     return false;
   }
+
   try {
     const url = new URL(value);
     return url.protocol === 'https:' && url.username === '' && url.password === '';
@@ -35,17 +36,20 @@ const asTrailer = (value) => (isRelativeUrl(value) || isSecureGameUrl(value) ? v
 
 export function monogramOf(title) {
   const [first = ''] = Array.from(asText(title));
+
   return first.toLocaleUpperCase('en');
 }
 
 export function firstSentence(text) {
   const value = asText(text);
   const end = SENTENCE_END.exec(value);
+
   return end ? value.slice(0, end.index + 1) : value;
 }
 
 export function metaLine({ genre, players, year }) {
   const yearText = Number.isInteger(year) ? String(year) : '';
+
   return [asText(genre), asText(players), yearText].filter((part) => part !== '').join(' · ');
 }
 
@@ -56,6 +60,7 @@ function controlsOf(game) {
 export function toGameCard(game) {
   const coverSrc = asUrl(game.cover);
   const bannerSrc = asUrl(game.banner) || coverSrc;
+
   return {
     id: asText(game.id),
     title: asText(game.title),
@@ -87,5 +92,6 @@ export function formatGameCount(count) {
   if (count === 0) {
     return 'No games yet';
   }
+
   return count === 1 ? '1 game' : `${count} games`;
 }

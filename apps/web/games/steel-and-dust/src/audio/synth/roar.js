@@ -15,11 +15,13 @@ function flutter(seconds, sampleRate, { rate, depth }) {
     if (i % retarget === 0) {
       wanderTarget = Math.random() * 2 - 1;
     }
+
     wander += (wanderTarget - wander) * drift;
     phase += (rate * (1 + 0.25 * wander)) / sampleRate;
     const second = Math.sin(TAU * phase * 0.68 + 1.3);
     curve[i] = 1 + depth * (0.75 * Math.sin(TAU * phase) + 0.35 * second) * (0.8 + 0.2 * wander);
   }
+
   return (time) => curve[Math.min(curve.length - 1, Math.round(time * sampleRate))];
 }
 
@@ -28,6 +30,7 @@ function holdThenFade(hold, fade) {
     if (time < 0.003) {
       return time / 0.003;
     }
+
     return time < hold ? 1 : Math.exp((-6.9 * (time - hold)) / fade);
   };
 }

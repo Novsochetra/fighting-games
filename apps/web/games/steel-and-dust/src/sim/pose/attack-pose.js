@@ -4,6 +4,7 @@ import { addSpin, blendPoses } from './blend.js';
 function windupPose(fighter, guard, windup) {
   const { move, moveTime } = fighter;
   const from = fighter.poseAtMoveStart || guard;
+
   return blendPoses(
     from,
     windup,
@@ -19,11 +20,13 @@ function strikePose(fighter, windup, strike) {
   if (move.strike.spin) {
     addSpin(pose, (moveTime - move.startup) * move.strike.spin);
   }
+
   if (move.sustain) {
     const sway = Math.sin(fighter.animTime * 0.5) * 4;
     pose.frontFoot += sway;
     pose.backFoot -= sway;
   }
+
   return pose;
 }
 
@@ -38,6 +41,7 @@ function followThroughPose(fighter, guard, strike) {
     last = { ...strike };
     addSpin(last, ((move.active - 1) * move.strike.spin) % (Math.PI * 2));
   }
+
   return blendPoses(last, settle, progress < 0.3 ? 0 : easeInOutCubic((progress - 0.3) / 0.7));
 }
 
@@ -48,8 +52,10 @@ export function attackPose(fighter, guard) {
   if (moveTime < move.startup) {
     return windupPose(fighter, guard, windup);
   }
+
   if (moveTime < move.startup + move.active) {
     return strikePose(fighter, windup, strike);
   }
+
   return followThroughPose(fighter, guard, strike);
 }

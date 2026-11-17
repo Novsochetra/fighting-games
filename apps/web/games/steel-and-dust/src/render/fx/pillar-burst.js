@@ -23,6 +23,7 @@ const FOOT_LEVELS = [0.22, 0.3, 0.38];
 
 export function burstRing(time) {
   const progress = Math.min(1, time / BURST_TICKS);
+
   return {
     radius: snap(BURST_FROM + easeOutCubic(progress) * BURST_REACH),
     width: progress < 0.4 ? 2 : 1,
@@ -46,6 +47,7 @@ export function drawPillarFoot(context, pillar) {
   if (pillar.time < PILLAR_BURNS[1] + 6) {
     drawFootLight(context, pillar);
   }
+
   if (pillar.time < BURST_TICKS) {
     const ring = burstRing(pillar.time);
     context.globalAlpha = ring.alpha;
@@ -56,5 +58,6 @@ export function drawPillarFoot(context, pillar) {
       rows: ringRows(ring.radius, ring.radius * FLAT + PIXEL, ring.width),
     });
   }
+
   context.globalAlpha = 1;
 }

@@ -14,6 +14,7 @@ export function loadPlatformSprites({ createImage, baseUrl }) {
     image.src = `${baseUrl}${DIRECTORY}${sprite.file}`;
     sheets.images[kind] = image;
   }
+
   return sheets;
 }
 

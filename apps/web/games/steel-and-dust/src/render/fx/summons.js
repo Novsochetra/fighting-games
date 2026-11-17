@@ -25,6 +25,7 @@ function iceFrame(ice) {
   if (grown < ICE_HOLD_FRAMES[0]) {
     return grown;
   }
+
   return ICE_HOLD_FRAMES[Math.floor(ice.time / 6) % ICE_HOLD_FRAMES.length];
 }
 
@@ -52,6 +53,7 @@ function drawStag(painter, sheets, stag) {
       tint: echo ? FX_COLORS.spiritFlame : null,
     });
   }
+
   painter.alpha(1);
 }
 
@@ -96,6 +98,7 @@ function drawPhoenix(painter, sheets, phoenix) {
       facing: phoenix.direction,
     });
   }
+
   painter.alpha(1);
 }
 

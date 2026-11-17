@@ -22,6 +22,7 @@ function buildChestLand(track, pitch) {
     level: 0.3,
     start: 0.004,
   });
+
   return { drive: 2 };
 }
 
@@ -37,6 +38,7 @@ function buildChestRattle(track, pitch) {
       start,
     });
   });
+
   return { drive: 1.4 };
 }
 
@@ -74,6 +76,7 @@ function buildChestOpen(track, pitch) {
       start: 0.16,
     });
   });
+
   return { lowpass: 11000 };
 }
 

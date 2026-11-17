@@ -15,6 +15,7 @@ function hill() {
   for (let x = 100; x <= 200; x++) {
     heights[x] = GROUND_Y - 30;
   }
+
   return {
     heights,
     platforms: [{ x: 250, y: GROUND_Y - 40, width: 60, kind: 'planks' }],
@@ -79,6 +80,7 @@ describe('the face ahead of a walker', () => {
     for (let x = 100; x <= 300; x++) {
       heights[x] = GROUND_Y - Math.round((x - 100) / 2);
     }
+
     expect(faceAhead({ heights, platforms: [] }, { x: 90, y: GROUND_Y }, 1, 200)).toBeNull();
   });
 

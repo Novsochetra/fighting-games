@@ -11,6 +11,7 @@ function lootGame(pieces) {
   game.player.x = 100;
   game.player.y = GROUND_Y;
   game.loot = pieces.map((each) => piece({ y: GROUND_Y, landed: true, ...each }));
+
   return { game, sounds };
 }
 

@@ -11,12 +11,14 @@ export function autoFace(game, player) {
   if (!game.settings.aim) {
     return;
   }
+
   let best = null;
   let bestDistance = 1e9;
   for (const enemy of game.fighters) {
     if (!canBeAimedAt(enemy)) {
       continue;
     }
+
     const distance = Math.abs(enemy.x - player.x);
     if (
       distance < bestDistance &&
@@ -27,6 +29,7 @@ export function autoFace(game, player) {
       best = enemy;
     }
   }
+
   if (best && Math.abs(best.x - player.x) > 3) {
     player.facing = best.x > player.x ? 1 : -1;
   }

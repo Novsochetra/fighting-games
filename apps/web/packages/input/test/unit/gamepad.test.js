@@ -9,6 +9,7 @@ import {
 
 function pad({ axes = [0, 0], down = [] } = {}) {
   const buttons = Array.from({ length: 17 }, (_, i) => ({ pressed: down.includes(i), value: 0 }));
+
   return { connected: true, mapping: 'standard', axes, buttons };
 }
 

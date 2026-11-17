@@ -32,6 +32,7 @@ export function markPillars(game, boss, move) {
       hitTargets: new Set(),
     });
   }
+
   game.io.sfx('stoneGaze', false, { x: boss.x });
 }
 
@@ -41,6 +42,7 @@ export function burnPillar(game, pillar) {
     shake(game, 3, 10);
     game.io.sfx('goldPillar', false, { x: pillar.x });
   }
+
   if (pillar.time > 0 && pillar.time < PILLAR_BURNS[1] && pillar.time % 4 === 0) {
     const y = pillar.y - 20 - (pillar.time % 3) * 18;
     addSparks(game, { x: pillar.x, y, count: 3, color: FX_COLORS.gazeGold, speed: 1.8 });

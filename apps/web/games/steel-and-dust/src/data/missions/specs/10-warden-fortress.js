@@ -10,13 +10,16 @@ function flight(from, { step, rises, landing }) {
     points.push([x, rise], [x + step, rise]);
     x += step;
   }
+
   x += landing;
   points.push([x, lastOf(rises)]);
   for (const rise of rises.slice(0, -1).reverse()) {
     points.push([x, rise], [x + step, rise]);
     x += step;
   }
+
   points.push([x, 0]);
+
   return points;
 }
 

@@ -23,6 +23,7 @@ function fightFrame({ hudFrames }) {
   images.loadWhere((src) => hudFrames === 'loaded' || !isHudFrame(src));
   log.length = 0;
   renderFrame(game, view);
+
   return [...log, ...stampCalls(view)];
 }
 

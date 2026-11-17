@@ -28,6 +28,7 @@ function createRoad() {
   selectMission(game, mission.index);
   startPlay(game);
   runTicks(game, 2);
+
   return { view, game, log: screen.recording.log };
 }
 
@@ -37,6 +38,7 @@ function frameAt(road, { cameraX, tick = 0 }) {
   road.game.tickCount = tick;
   road.log.length = 0;
   renderFrame(road.game, road.view);
+
   return road.log.slice();
 }
 
@@ -84,6 +86,7 @@ describe('the Iron Works road', () => {
         colorsIn(frameAt(road, { cameraX, tick })).forEach((color) => colors.add(color));
       }
     }
+
     const { furnace, sparks, plume, steam, shimmer, ash } = theme.ambient;
     for (const color of [...furnace, ...sparks, ...plume, steam, shimmer, ...ash]) {
       expect(colors.has(color), color).toBe(true);
@@ -96,6 +99,7 @@ describe('the Iron Works road', () => {
     for (let cameraX = 0; cameraX <= mission.length - VIEW_WIDTH; cameraX += 340) {
       colorsIn(frameAt(road, { cameraX })).forEach((color) => colors.add(color));
     }
+
     for (const key of ['slag', 'pipe', 'chain', 'molten']) {
       expect(colors.has(theme.front[key]), key).toBe(true);
     }

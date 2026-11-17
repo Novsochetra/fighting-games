@@ -17,6 +17,7 @@ function play(scenario) {
   Object.assign(Math, { random: seededRandom(scenario.seed), sin: portableSin, cos: portableCos });
   const game = createScenarioGame(scenario.hero, scenario.mission);
   const result = runScenario(createGameDriver(game, createRecordedRenderer()), scenario);
+
   return `${JSON.stringify(result, null, 1)}\n`;
 }
 

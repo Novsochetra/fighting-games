@@ -27,6 +27,7 @@ function ultimateSounds(hero) {
   for (let tick = 0; game.player.state === 'ult' && tick < 600; tick++) {
     runTicks(game, 1);
   }
+
   return played;
 }
 

@@ -15,6 +15,7 @@ function radiusOf({ move, time }) {
     const share = (time + 1) / move.startup;
     return OPEN.from + (OPEN.to - OPEN.from) * (1 - (1 - share) ** 2);
   }
+
   return OPEN.to + (time - move.startup + 1) * BURST_GROWTH;
 }
 
@@ -23,6 +24,7 @@ function dashColor(i, front, { move, time, art, tickCount }) {
   if (hot) {
     return flicker(i, tickCount >> 1) > 0.5 ? art.bloom : art.glow;
   }
+
   return front ? art.glow : art.thornLight;
 }
 
@@ -41,6 +43,7 @@ export function drawGroundRing(painter, layer, front) {
   if (fighter.airborne || since >= BURST_TICKS) {
     return;
   }
+
   const radius = radiusOf(layer);
   const center = { x: fighter.x, y: fighter.y - 1 };
   const length = (Math.PI * 2) / DASHES / (since >= 0 ? 2 : 1.4);
@@ -52,5 +55,6 @@ export function drawGroundRing(painter, layer, front) {
       drawDash(painter, { center, radius, angle, length });
     }
   }
+
   painter.alpha(1);
 }

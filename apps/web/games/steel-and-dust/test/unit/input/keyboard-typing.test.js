@@ -6,6 +6,7 @@ function setup() {
   const game = { input: { pressed: {} } };
   const ui = { noteInput: vi.fn() };
   const field = { matches: (selector) => selector.includes('input'), blur: vi.fn() };
+
   return { menus, game, ui, field };
 }
 
@@ -19,6 +20,7 @@ describe('typing a name', () => {
       handleKeyDown(event, { game, menus, ui });
       expect(event.preventDefault).not.toHaveBeenCalled();
     }
+
     expect(menus.handleKey).not.toHaveBeenCalled();
     expect(game.input.pressed.mute).toBeUndefined();
   });

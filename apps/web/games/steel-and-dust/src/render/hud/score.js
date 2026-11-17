@@ -22,6 +22,7 @@ function easeScore(view, score) {
   } else {
     view.shownScore += Math.ceil((score - view.shownScore) * 0.18);
   }
+
   return view.shownScore;
 }
 
@@ -31,6 +32,7 @@ export function scoreRows(game, shown) {
   if (best) {
     rows.push({ label: 'BEST', value: `${best} HITS`, color: COLORS.lilac });
   }
+
   return rows;
 }
 
@@ -47,6 +49,7 @@ export function drawScore(painter, game, view) {
     key: `score|${rows.map((row) => `${row.label}:${row.value}`).join('|')}`,
     box: SCORE_BOX,
     ready: Boolean(view.hudFrames.ready.score),
+
     draw: (inner) => {
       drawPlaque(inner, view.hudFrames, 'score', SCORE_BOX);
       rows.forEach((row, i) => drawRow(inner, row, [ROW_ONE, ROW_TWO][i]));

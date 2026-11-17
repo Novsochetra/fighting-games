@@ -19,6 +19,7 @@ function swordRow(strip) {
   const path = ONE_ROW_STRIPS.has(strip) ? BLUE.ultStrip : `${BLUE.directory}hero_${strip}.png`;
   const image = readPngAlpha(new URL(path, GAME));
   const rows = ONE_ROW_STRIPS.has(strip) ? 1 : WEAPON_IDS.length;
+
   return { image, height: image.height / rows };
 }
 
@@ -30,11 +31,14 @@ function frameOf({ image, height }, index) {
     if (!inside(x, y)) {
       return false;
     }
+
     const { alpha, rgb } = pixel(x, y);
+
     return alpha > 0 && rgb[2] >= 200 && rgb[2] - rgb[0] >= 150 && Math.min(...rgb) < 190;
   };
   const black = (x, y) =>
     inside(x, y) && pixel(x, y).alpha > 0 && Math.max(...pixel(x, y).rgb) < 16;
+
   return { height, blue, black, solid: (x, y) => inside(x, y) && pixel(x, y).alpha > 0 };
 }
 
@@ -46,6 +50,7 @@ function topOf(frame) {
       }
     }
   }
+
   return frame.height;
 }
 
@@ -58,10 +63,12 @@ function blobFrom(frame, start, seen) {
     if (seen.has(key) || !frame.blue(x, y)) {
       continue;
     }
+
     seen.add(key);
     blob.push([x, y]);
     stack.push(...NEIGHBOURS.map(([dx, dy]) => [x + dx, y + dy]));
   }
+
   return blob;
 }
 
@@ -79,7 +86,9 @@ function isPlate(frame, blob) {
       }
     }
   }
+
   const wrapped = [...ring].filter((key) => frame.black(...key.split(',').map(Number))).length;
+
   return cores.length >= 2 && wrapped >= WRAPPED * ring.size;
 }
 
@@ -97,6 +106,7 @@ function hasFlatFace(frame) {
       }
     }
   }
+
   return false;
 }
 

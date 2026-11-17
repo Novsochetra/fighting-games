@@ -13,6 +13,7 @@ describe('scene palettes', () => {
       for (const color of [ground.sand, ground.soil, ground.soilDeep, ...grass, rubble.fern]) {
         expect(color, themeId).toMatch(COLOR);
       }
+
       expect(ground.grass, themeId).toBe(PAINTED_THEMES[themeId].ground.grass);
       expect(palette.ambient, themeId).toBe(PAINTED_THEMES[themeId].ambient);
     }

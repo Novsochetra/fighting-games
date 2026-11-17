@@ -43,6 +43,7 @@ export function raiseDustDevils(game, boss, move) {
     const x = game.player.x + boss.facing * BEHIND_HERO;
     raiseDevil(game, boss, clamp(x, left + MARGIN, right - MARGIN));
   }
+
   game.io.sfx('gust', false, { x: boss.x });
 }
 
@@ -88,11 +89,13 @@ export function spinDustDevil(game, devil) {
   if (devil.hitTargets.size > 0 && devil.endAt > devil.time) {
     devil.endAt = devil.time;
   }
+
   devil.dead = devil.time >= devil.endAt + DEVIL_FADE;
   devil.y = groundAt(game.terrain, devil.x);
   if (!isSpinning(devil)) {
     return;
   }
+
   driftAfterHero(game, devil);
   pullHero(game, devil);
   if (devil.time % 3 === 0) {

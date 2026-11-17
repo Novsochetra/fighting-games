@@ -9,9 +9,11 @@ export function mirageFrame(mirage, bossFrame) {
   if (mirage.popTime >= 0) {
     return ['mirage', Math.min(5, 3 + Math.floor(mirage.popTime / POP_FRAME_TICKS))];
   }
+
   if (mirage.cast >= 0) {
     return ['scarabCarpet', Math.min(3, 1 + Math.floor(mirage.cast / 8))];
   }
+
   return bossFrame;
 }
 
@@ -20,6 +22,7 @@ function mirageAlpha(mirage, tickCount) {
   if (mirage.popTime >= 0) {
     return 0.85 * (1 - mirage.popTime / POP_TICKS);
   }
+
   return (tickCount + mirage.x) % FLICKER_EVERY < 2 ? 0.55 : 0.85;
 }
 
@@ -27,6 +30,7 @@ export function drawMirages(painter, sheets, { fighter, frame, tickCount }) {
   if (!fighter.mirages?.length) {
     return;
   }
+
   for (const mirage of fighter.mirages) {
     painter.alpha(mirageAlpha(mirage, tickCount));
     drawEnemyFrame(painter, sheets, {
@@ -38,5 +42,6 @@ export function drawMirages(painter, sheets, { fighter, frame, tickCount }) {
       size: spriteSize(fighter),
     });
   }
+
   painter.alpha(1);
 }

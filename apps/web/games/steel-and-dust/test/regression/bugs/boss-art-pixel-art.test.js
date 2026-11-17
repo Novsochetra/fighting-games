@@ -51,6 +51,7 @@ function palette(image) {
       }
     }
   }
+
   return { colors: colors.size, soft };
 }
 
@@ -59,6 +60,7 @@ const drawnAt = (image, box, x, y) =>
 
 function isLone(image, box, x, y) {
   const key = image.colorKey(box.left + x, box.top + y);
+
   return NEIGHBOURS.every(
     ([dx, dy]) =>
       !drawnAt(image, box, x + dx, y + dy) ||
@@ -78,11 +80,13 @@ function speckle(image, box) {
       }
     }
   }
+
   return drawn > 30 ? lone / drawn : 0;
 }
 
 function sheetBoxes(kind) {
   const { frameWidth: width, frameHeight: height, strips } = ENEMY_SPRITES[kind];
+
   return Object.values(strips).flatMap(({ row, frames }) =>
     Array.from({ length: frames }, (_, frame) => ({
       left: frame * width,
@@ -95,6 +99,7 @@ function sheetBoxes(kind) {
 
 function effectBoxes(name) {
   const { frameWidth: width, frameHeight: height, frames } = FX_SPRITES[name];
+
   return Array.from({ length: frames }, (_, frame) => ({
     left: frame * width,
     top: 0,

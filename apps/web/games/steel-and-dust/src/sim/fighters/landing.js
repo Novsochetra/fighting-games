@@ -23,6 +23,7 @@ function landFromAttack(game, fighter, floor) {
     if (move.shockwave) {
       spawnShockwave(game, fighter);
     }
+
     game.io.sfx(move.shockwave ? 'heavy' : 'land');
   } else if (move && move.aerial) {
     endMove(game, fighter);
@@ -40,6 +41,7 @@ function landFromJuggle(game, fighter, floor) {
     game.io.sfx('heavy');
     return;
   }
+
   fighter.state = 'down';
   fighter.stateTime = 0;
   fighter.vx *= 0.4;
@@ -53,6 +55,7 @@ function landKnockedOut(game, fighter, floor) {
     fighter.vx = 0;
     return;
   }
+
   Object.assign(fighter, { koBounced: true, vy: -1.8, airborne: true, y: floor - 1 });
   addDust(game, { x: fighter.x, y: floor, count: 8 });
 }

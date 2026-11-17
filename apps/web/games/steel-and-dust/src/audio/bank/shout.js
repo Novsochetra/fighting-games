@@ -19,6 +19,7 @@ export function shout(spec) {
       shouted[key] = curveOrValue(shouted[key]);
     }
   }
+
   return shouted;
 }
 
@@ -36,6 +37,7 @@ export function shoutBuilder(shouts, drive) {
         level: 2.5,
       });
     }
+
     voice(track, { ...chosen, pitchScale: pitch });
     if (chosen.tail) {
       const start = (chosen.start || 0) + chosen.length - 0.05;
@@ -49,6 +51,7 @@ export function shoutBuilder(shouts, drive) {
         start,
       });
     }
+
     return { drive, crush: { rate: 18500, bits: 12 }, lowpass: 7500 };
   };
 }

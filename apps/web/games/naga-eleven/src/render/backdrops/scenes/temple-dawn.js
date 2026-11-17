@@ -132,6 +132,7 @@ function paintTemple(raster) {
 
 export const TEMPLE_DAWN = {
   paint: paintTemple,
+
   overlay: (context, tick) =>
     drawMotes(context, {
       area: { x: 0, y: 40, width: 384, height: 120 },

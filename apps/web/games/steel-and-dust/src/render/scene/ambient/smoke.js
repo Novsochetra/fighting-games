@@ -9,6 +9,7 @@ function puffAt(spot, { puff, puffs, tick }) {
   const age = wrapX(tick + Math.floor((puff * LIFE) / puffs) + spot.index * 37, LIFE);
   const progress = age / LIFE;
   const size = 2 + Math.round(progress * 4);
+
   return {
     x: spot.x + progress * 20 + Math.sin(age * 0.05 + puff) * 1.5 - size / 2,
     y: spot.y - 6 - age * 0.3 - size / 2,
@@ -32,5 +33,6 @@ export function drawSmoke(painter, { effect, tick, cameraX, colors }) {
   for (const spot of emitterSpots(effect, cameraX)) {
     drawPuffs(painter, spot, tick);
   }
+
   painter.alpha(1);
 }

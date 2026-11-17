@@ -29,6 +29,7 @@ function build(layout) {
         depth: -9000,
         base: -64,
         height: 'toTop',
+
         paint: (raster) => {
           paintSky(raster, { ramp: art.sky });
           paintClouds(raster, { ramp: art.cloud, row: 30 });

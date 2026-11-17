@@ -55,6 +55,7 @@ const outward = (moment, at) => (at.x === 0 ? moment.dive || 1 : Math.sign(at.x)
 // where the ball goes once it meets the keeper, the post or the net, by what came of it
 const AFTER = {
   catch: () => ({ held: true }),
+
   goal: (moment, since) => {
     if (since < 4) {
       return shotPoint(moment.aim, lerp(KEEPER_SHARE, 1, since / 4));
@@ -71,10 +72,12 @@ const AFTER = {
       z: lerp(DEPTH.line, DEPTH.net - 0.2, into),
     };
   },
+
   wide: (moment, since) => ({
     ...shotPoint(moment.aim, KEEPER_SHARE + since * 0.03),
     gone: since > 16,
   }),
+
   post: (moment, since) => {
     if (since < 3) {
       return shotPoint(moment.aim, lerp(KEEPER_SHARE, 1, since / 3));
@@ -87,10 +90,13 @@ const AFTER = {
       since: since - 3,
     });
   },
+
   punch: (moment, since, contact) =>
     thrown(contact, { velocity: { x: outward(moment, contact) * 0.18, y: 0.14, z: 0.03 }, since }),
+
   parry: (moment, since, contact) =>
     thrown(contact, { velocity: { x: outward(moment, contact) * 0.12, y: 0.04, z: -0.05 }, since }),
+
   wall: (moment, since, contact) =>
     thrown(contact, { velocity: { x: -contact.x * 0.01, y: 0.035, z: -0.26 }, since }),
 };

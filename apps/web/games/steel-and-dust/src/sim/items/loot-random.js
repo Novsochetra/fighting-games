@@ -2,6 +2,7 @@
 // Math.random steers the raiders and the recorded runs, so a coin's bounce must never take a draw
 export function lootRandom(game) {
   game.lootSeed = (Math.imul(game.lootSeed, 1664525) + 1013904223) >>> 0;
+
   return game.lootSeed / 4294967296;
 }
 

@@ -67,6 +67,7 @@ describe('a change of fold', () => {
     const lists = new Map();
     const matchMedia = (query) => {
       lists.set(query, lists.get(query) ?? new EventTarget());
+
       return lists.get(query);
     };
 

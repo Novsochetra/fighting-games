@@ -23,7 +23,9 @@ function swarmLevel({ move, time, tickCount }, i) {
   if (time >= move.startup - HOT_LEAD) {
     return 2;
   }
+
   const share = windupShare(move, time);
+
   return flicker(i + 31, tickCount >> 1) < 0.3 + 0.7 * share ? 1 : 0;
 }
 
@@ -46,6 +48,7 @@ function drawSwarm(painter, layer, front) {
   if (time > move.startup) {
     return;
   }
+
   for (const bug of swarmOrbit(fighter, move, time)) {
     const level = swarmLevel(layer, bug.i);
     drawTail(painter, { layer, bug, level, front });
@@ -63,6 +66,7 @@ function drawKnot(painter, { fighter, move, time }) {
   if (hot < 0 || time > move.startup) {
     return;
   }
+
   const { x, y } = swarmKnotOf(fighter, move);
   const swell = Math.min(hot, 1);
   for (const { color, alpha, size } of KNOT_BANDS) {
@@ -71,6 +75,7 @@ function drawKnot(painter, { fighter, move, time }) {
       .use(color)
       .diamond(x, y, size + swell);
   }
+
   painter.use(ART.heart).diamond(x, y, hot > 1 ? 1 : 0);
 }
 

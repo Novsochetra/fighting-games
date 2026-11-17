@@ -16,12 +16,15 @@ function addStickActions(actions, [x = 0, y = 0]) {
   if (x < -STICK_THRESHOLD) {
     actions.add('left');
   }
+
   if (x > STICK_THRESHOLD) {
     actions.add('right');
   }
+
   if (y < -STICK_THRESHOLD) {
     actions.add('up');
   }
+
   if (y > STICK_THRESHOLD) {
     actions.add('down');
   }
@@ -32,12 +35,15 @@ export function readGamepadActions(gamepad) {
   if (!gamepad) {
     return actions;
   }
+
   for (const [buttonIndex, action] of BUTTON_ACTIONS) {
     if (isPressed(gamepad.buttons?.[buttonIndex])) {
       actions.add(action);
     }
   }
+
   addStickActions(actions, gamepad.axes ?? []);
+
   return actions;
 }
 
@@ -46,6 +52,7 @@ export function readAllGamepads(gamepads) {
   for (const gamepad of gamepads ?? []) {
     readGamepadActions(gamepad).forEach((action) => actions.add(action));
   }
+
   return actions;
 }
 

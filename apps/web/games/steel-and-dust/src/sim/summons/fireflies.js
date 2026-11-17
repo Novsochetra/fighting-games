@@ -46,6 +46,7 @@ function nearestRaider(game, fly) {
       bestDistance = distance;
     }
   }
+
   return best;
 }
 
@@ -55,6 +56,7 @@ function steer(fly, { x, y }, { speed, turn }) {
   const distance = Math.hypot(dx, dy) || 1;
   fly.vx += ((dx / distance) * speed - fly.vx) * turn;
   fly.vy += ((dy / distance) * speed - fly.vy) * turn;
+
   return distance;
 }
 
@@ -80,15 +82,18 @@ function hunt(game, fly) {
   if (!fly.target || !isHuntable(fly.target)) {
     fly.target = nearestRaider(game, fly);
   }
+
   if (!fly.target && fly.owner) {
     orbit(fly);
     return;
   }
+
   if (!fly.target) {
     fly.vx *= 0.94;
     fly.vy = fly.vy * 0.94 - 0.02;
     return;
   }
+
   const distance = steer(fly, chest(fly.target), HUNT);
   if (distance < 8 && fly.cooldown <= 0) {
     sting(game, fly);
@@ -99,6 +104,7 @@ function glowTrail(game, fly) {
   if (fly.time % 2) {
     return;
   }
+
   game.particles.push({
     kind: 'mote',
     x: fly.x,
@@ -123,6 +129,7 @@ export function updateFirefly(game, fly) {
   } else {
     hunt(game, fly);
   }
+
   fly.x += fly.vx;
   fly.y += fly.vy;
   glowTrail(game, fly);
@@ -138,5 +145,6 @@ export function releaseComboFireflies(game, fighter, count) {
     const x = fighter.x + fighter.facing * 12;
     releaseFirefly(game, { x, y: fighter.y - 26, angle, hit: COMBO_STING, stings: 2, life: 120 });
   }
+
   game.io.sfx('swarm', false, { x: fighter.x });
 }

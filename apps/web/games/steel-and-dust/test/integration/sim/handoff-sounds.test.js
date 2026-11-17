@@ -17,6 +17,7 @@ function listenedGame(missionIndex) {
   startPlay(game);
   runTicks(game, 200);
   heard.length = 0;
+
   return { game, heard };
 }
 
@@ -24,6 +25,7 @@ function clearAndWalkOn(missionIndex) {
   const { game, heard } = listenedGame(missionIndex);
   stageClear(game);
   runTicks(game, 600);
+
   return heard;
 }
 

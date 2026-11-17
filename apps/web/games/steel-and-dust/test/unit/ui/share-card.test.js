@@ -51,10 +51,12 @@ describe('the share card', () => {
       fillRect: vi.fn(),
       // each letter as wide as the font is tall
       measureText: (text) => ({ width: text.length * Number(/(\d+)px/.exec(context.font)[1]) }),
+
       fillText(text, x, y) {
         texts.push({ text, font: context.font, color: context.fillStyle, x, y });
       },
     };
+
     return { context, texts };
   }
 

@@ -24,6 +24,7 @@ function drawnColumns(cell, y) {
       columns.push(x);
     }
   }
+
   return columns;
 }
 
@@ -34,11 +35,14 @@ function headOf(frame) {
   while (drawnColumns(cell, top).length === 0) {
     top++;
   }
+
   const columns = [];
   for (let y = top; y < top + HEAD_ROWS; y++) {
     columns.push(...drawnColumns(cell, y));
   }
+
   const middle = columns.reduce((sum, x) => sum + x, 0) / columns.length;
+
   return { ahead: (middle - sprite.feetX) / UNIT, up: (sprite.feetY - top) / UNIT };
 }
 
@@ -52,6 +56,7 @@ function brokenSun() {
   Object.assign(pharaoh, { entering: false, x: game.player.x + 150, facing: -1 });
   pharaoh.ai.cooldown = 9999;
   startMove(game, pharaoh, 'sunBroken');
+
   return { game, pharaoh };
 }
 
@@ -66,6 +71,7 @@ function starRings(game, pharaoh) {
     fresh.forEach((burst) => seen.add(burst));
     rings.push(...fresh.map((burst) => ({ burst, shown: enemySpriteFrame(pharaoh) })));
   }
+
   return rings;
 }
 

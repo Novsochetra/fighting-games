@@ -8,9 +8,11 @@ import { createRecordingContext } from '../../support/recording-canvas.js';
 
 function drawFrames(count) {
   const view = { loadingFrames: 0 };
+
   return Array.from({ length: count }, () => {
     const { context, log } = createRecordingContext(null);
     drawLoadingScreen(createPainter(context), view);
+
     return log;
   });
 }
@@ -18,6 +20,7 @@ function drawFrames(count) {
 // the label's own pixels, after its shadow; a dot is a single pixel of the 3x5 font
 function labelPixels(log) {
   const start = log.lastIndexOf(`fillStyle=${COLORS.lilac}`);
+
   return log
     .slice(start + 1)
     .map((call) => call.slice('fillRect('.length, -1).split(',').map(Number));
@@ -47,6 +50,7 @@ describe('the loading screen', () => {
     for (const frame of [0, 20, 40, 60]) {
       expect(left(frames[frame])).toBe((VIEW_WIDTH - textWidth('LOADING...', 2)) / 2);
     }
+
     const ys = labelPixels(frames[0]).flatMap(([, y, , height]) => [y, y + height]);
     expect(Math.min(...ys) + Math.max(...ys)).toBe(VIEW_HEIGHT);
   });

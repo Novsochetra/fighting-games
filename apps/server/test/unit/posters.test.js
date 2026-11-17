@@ -91,6 +91,7 @@ describe('a poster in the bucket', () => {
     for (const typed of ['1', '', null, 'posters/steel-and-dust/ABCDEF0123456789abcdef01']) {
       expect(isPosterKey(typed, 'steel-and-dust')).toBe(false);
     }
+
     expect(isPosterKey('posters/steel-and-dust/../0123456789abcdef0123', 'steel-and-dust')).toBe(
       false,
     );

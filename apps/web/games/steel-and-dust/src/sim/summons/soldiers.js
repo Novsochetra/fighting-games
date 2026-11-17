@@ -35,6 +35,7 @@ export function raiseSoldier(game, { x, direction, hit, delay = 0 }) {
 
 function thrustArea(soldier) {
   const x = soldier.direction > 0 ? soldier.x : soldier.x - REACH;
+
   return { x, y: soldier.y - 36, width: REACH, height: 30 };
 }
 
@@ -67,12 +68,15 @@ export function updateSoldier(game, soldier) {
   if (soldier.time === 1) {
     addDust(game, { x: soldier.x, y: soldier.y, count: 3, color: FX_COLORS.reliefStone });
   }
+
   if (soldier.time >= strike && soldier.time < strike + STRIKE_TICKS) {
     thrust(game, soldier);
   }
+
   if (soldier.time === crumble) {
     crumbleStone(game, soldier);
   }
+
   soldier.done = soldier.time >= end;
 }
 
@@ -86,5 +90,6 @@ export function raiseComboSoldiers(game, fighter, count) {
       delay: i * 5,
     });
   }
+
   game.io.sfx('relief', false, { x: fighter.x });
 }

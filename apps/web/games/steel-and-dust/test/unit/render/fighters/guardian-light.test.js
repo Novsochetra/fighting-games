@@ -58,6 +58,7 @@ describe("the colossus's footfall", () => {
       expect(puffs[i].radius).toBeGreaterThanOrEqual(puffs[i - 1].radius);
       expect(puffs[i].alpha).toBeLessThanOrEqual(puffs[i - 1].alpha);
     }
+
     expect(puffs.at(-1).radius).toBeGreaterThan(puffs[0].radius * 2);
     expect(new Set(puffs.map((puff) => puff.alpha)).size).toBe(4);
   });
@@ -66,6 +67,7 @@ describe("the colossus's footfall", () => {
     const rects = (fighter) => {
       const { context, log } = recordingPainter();
       drawFootfall(context, { fighter, floor: 184 });
+
       return drawnRects(log);
     };
     const plain = rects(guardian());
@@ -116,6 +118,7 @@ describe('the light of his reforming', () => {
       expect(drawnRects(log).length).toBeGreaterThan(0);
       expect(offGrid(drawnRects(log))).toEqual([]);
     }
+
     expect(random).not.toHaveBeenCalled();
   });
 });

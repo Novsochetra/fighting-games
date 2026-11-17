@@ -13,6 +13,7 @@ function clean(value) {
   if (typeof value !== 'string') {
     return '';
   }
+
   return value.replace(CONTROL_CHARACTERS, ' ').replace(/\s+/g, ' ').trim();
 }
 
@@ -24,12 +25,14 @@ export function toCents(value) {
   if (typeof amount !== 'number' || !Number.isFinite(amount)) {
     return null;
   }
+
   const cents = Math.round(amount * 100);
   const hasMoreDecimals = Math.abs(cents - amount * 100) > 1e-6;
   const { minAmount, maxAmount } = DONATION_LIMITS;
   if (hasMoreDecimals || cents < minAmount * 100 || cents > maxAmount * 100) {
     return null;
   }
+
   return cents;
 }
 
@@ -43,11 +46,14 @@ export function readDonation(body) {
       error: `The amount must be from $${minAmount} to $${maxAmount}, in dollars and cents.`,
     };
   }
+
   if (lengthOf(name) > nameLength) {
     return { error: `The name can be at most ${nameLength} characters.` };
   }
+
   if (lengthOf(message) > messageLength) {
     return { error: `The message can be at most ${messageLength} characters.` };
   }
+
   return { donation: { name, amountCents, message } };
 }

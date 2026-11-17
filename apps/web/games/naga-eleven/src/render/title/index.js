@@ -19,6 +19,7 @@ export function drawTitleArt(context, { tick = 0 } = {}) {
   context.fillRect(0, 0, VIEW.width, VIEW.height);
   drawLayer(context, {
     key: 'title',
+
     paint: () => {
       const raster = createRaster();
 

@@ -16,6 +16,7 @@ function arenaWith(kind, gap = 60) {
   spawnEnemy(game, kind, 1);
   const enemy = game.fighters.find((fighter) => fighter.side === 'enemy');
   Object.assign(enemy, { entering: false, x: game.player.x + gap, facing: -1 });
+
   return { game, enemy };
 }
 
@@ -51,6 +52,7 @@ describe('every enemy type, fighting the hero', () => {
     for (let i = 0; i < 120 && game.projectiles.some((shot) => shot.kind === 'bomb'); i++) {
       runTicks(game, 1);
     }
+
     const fire = game.projectiles.find((shot) => shot.kind === 'fire');
     expect(fire).toBeDefined();
     expect(Math.abs(fire.x - 160)).toBeLessThan(24);

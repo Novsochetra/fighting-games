@@ -5,10 +5,12 @@ const ANSWERS = {
     worker.posts += 1;
     worker.status = { state: 'saving', done: 0, total: 4 };
   },
+
   DELETE: (worker) => {
     worker.removes += 1;
     worker.status = { state: 'not-saved' };
   },
+
   GET: () => {},
 };
 
@@ -73,6 +75,7 @@ export async function bootBeforeTheWorker(worker) {
 
   return {
     answerFromServer: () => page.held.splice(0).forEach((answer) => answer()),
+
     takeOver() {
       page.isTakenOver = true;
       dispatch(workers, new Event('controllerchange'));

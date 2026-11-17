@@ -7,6 +7,7 @@ const SHEETS = new URL('../../../assets/sprites/enemies/', import.meta.url);
 
 function sheetMismatches(id) {
   const sprite = ENEMY_SPRITES[id];
+
   return packedMismatches({
     gridPath: new URL(sprite.file, SHEETS),
     packedPath: new URL(`packed/${sprite.file}`, SHEETS),

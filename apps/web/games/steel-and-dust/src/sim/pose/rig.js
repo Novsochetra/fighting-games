@@ -11,6 +11,7 @@ function knee(hip, foot, facing, scale) {
   if (distance >= 2 * thigh) {
     return { x: midX, y: midY };
   }
+
   const offset = Math.sqrt(thigh * thigh - (distance / 2) * (distance / 2));
   let bendX = -dy / distance;
   let bendY = dx / distance;
@@ -18,6 +19,7 @@ function knee(hip, foot, facing, scale) {
     bendX = -bendX;
     bendY = -bendY;
   }
+
   return { x: midX + bendX * offset, y: midY + bendY * offset };
 }
 
@@ -29,6 +31,7 @@ function footAt(hip, target, scale) {
   if (distance <= reach) {
     return { x: target.x, y: target.y };
   }
+
   return { x: hip.x + (dx / distance) * reach, y: hip.y + (dy / distance) * reach };
 }
 
@@ -44,6 +47,7 @@ function torsoJoints(fighter, pose) {
     x: neck.x + Math.cos(pose.torso) * 4.5 * scale * facing,
     y: neck.y + Math.sin(pose.torso) * 4.5 * scale,
   };
+
   return { hip, neck, head, shoulder: along(9) };
 }
 
@@ -66,6 +70,7 @@ export function rig(fighter, pose) {
     { x: x + pose.backFoot * scale * facing, y: y - pose.backLift * scale },
     scale,
   );
+
   return {
     hip,
     neck,

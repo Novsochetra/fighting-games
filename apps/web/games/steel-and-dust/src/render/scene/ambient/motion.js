@@ -26,6 +26,7 @@ export function twoFrame(ticks, frameTicks) {
 export function isOnScreen(x, y, size) {
   const left = Math.round(x);
   const top = Math.round(y);
+
   return left + size > 0 && left < VIEW_WIDTH && top + size > 0 && top < VIEW_HEIGHT;
 }
 

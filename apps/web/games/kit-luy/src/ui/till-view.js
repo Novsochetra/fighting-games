@@ -55,6 +55,7 @@ export function createTillView({ till, text }) {
     write,
     show,
     bundle: (value) => till.querySelector(`[data-value="${value}"]`),
+
     // a bundle that has just snapped in would keep that motion, which outranks the pull
     pull(value) {
       const bundle = till.querySelector(`[data-value="${value}"]`);

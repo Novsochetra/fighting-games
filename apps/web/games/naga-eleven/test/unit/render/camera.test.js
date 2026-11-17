@@ -79,6 +79,7 @@ describe('the broadcast camera', () => {
         each.ball.x = centre + (Math.floor(i / 20) % 2 === 0 ? 50 : -50);
         each.ball.y = each.pitch.width / 2 + (Math.floor(i / 30) % 2 === 0 ? 40 : -40);
       },
+
       check: () => looks.add(`${lookOf(camera).x} ${lookOf(camera).y}`),
     });
 
@@ -95,6 +96,7 @@ describe('the broadcast camera', () => {
         each.ball.vx = i < 100 ? 3 : 0;
         each.ball.x += each.ball.vx;
       },
+
       check: () => path.push(lookOf(camera).x),
     });
 
@@ -151,6 +153,7 @@ describe('the broadcast camera', () => {
         each.ball.x += each.ball.vx;
         each.ball.y = Math.max(40, each.ball.y + each.ball.vy);
       },
+
       check: (each) => expect(inView(project(camera, each.ball.x, each.ball.y))).toBe(true),
     });
   });

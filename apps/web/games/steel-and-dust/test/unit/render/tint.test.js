@@ -7,8 +7,10 @@ function countingCache() {
   const cache = createTintCache((width, height) => {
     const canvas = Object.assign(new RecordingCanvas(), { width, height });
     created.push(canvas);
+
     return canvas;
   });
+
   return { cache, created };
 }
 
@@ -74,6 +76,7 @@ describe('tinted frames', () => {
       tintedFrame(cache, frame(0, `#${String(i).padStart(6, '0')}`));
       tintedFrame(cache, frame(0, '#000001'));
     }
+
     expect(cache.frames.size).toBe(64);
     expect(created).toHaveLength(64);
     expect(tintedFrame(cache, frame(0, '#000001'))).toBe(kept);

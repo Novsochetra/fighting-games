@@ -18,6 +18,7 @@ function recordedView() {
     createImage: () => new FakeImage(),
     baseUrl: '',
   });
+
   return { view, log: screen.recording.log };
 }
 

@@ -16,6 +16,7 @@ export const ANGKOR_PARTICLE_MOVERS = {
     particle.vx *= 0.9;
     particle.vy *= 0.9;
   },
+
   // a chip of sandstone knocked loose: it falls, skips off the ground and settles
   angkorChip(particle, terrain) {
     const lastY = particle.y;
@@ -28,12 +29,14 @@ export const ANGKOR_PARTICLE_MOVERS = {
       particle.vx *= 0.55;
     }
   },
+
   // a lotus petal carried on the air: it slows and sinks a little as it goes
   angkorPetal(particle) {
     drift(particle);
     particle.vx *= 0.9;
     particle.vy = particle.vy * 0.9 + 0.03;
   },
+
   // pink light drawn in to the gathering point, turning as it closes in
   angkorSwirl(particle) {
     particle.angle += particle.spin;
@@ -41,12 +44,14 @@ export const ANGKOR_PARTICLE_MOVERS = {
     particle.x = particle.centerX + Math.cos(particle.angle) * particle.radius;
     particle.y = particle.centerY + Math.sin(particle.angle) * particle.radius * 0.8;
   },
+
   // sand pouring off the cut
   angkorSand(particle) {
     particle.vy += SAND_GRAVITY;
     particle.vx *= 0.88;
     drift(particle);
   },
+
   // a lotus opening where a blow lands, and a pillar of light out of the seal: both stay put
   angkorBloom() {},
   angkorShaft() {},

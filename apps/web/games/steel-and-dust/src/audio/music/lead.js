@@ -17,6 +17,7 @@ export function playLead(live, { song, time: start, beat, position, leadBar, bus
   if (!note || !leadBar) {
     return;
   }
+
   const frequency = midiToFrequency(note);
   const length = beat * song.leadLength;
   const envelope = envelopeGain(live, {

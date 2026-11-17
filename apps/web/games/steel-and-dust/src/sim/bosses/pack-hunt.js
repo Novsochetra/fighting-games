@@ -26,9 +26,11 @@ export function howl(game, boss, move, time) {
   if (time !== move.howls[0]) {
     return;
   }
+
   for (let i = 0; i < move.pack; i++) {
     game.stage.spawnQueue.push({ kind: move.packKind, side: i % 2 ? 1 : -1, delay: 30 + i * 20 });
   }
+
   game.stage.reinforcementTimer = 0;
   game.io.sfx('howl', false, { x: boss.x });
 }
@@ -83,9 +85,11 @@ export function feed(game, boss, move, time) {
   if (time === 0) {
     boss.ai.fed = false;
   }
+
   if (!boss.hitConfirmed || boss.ai.fed) {
     return;
   }
+
   const healed = Math.min(boss.maxHp - boss.hp, move.heals);
   boss.ai.fed = true;
   boss.hp += healed;

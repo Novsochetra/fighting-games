@@ -123,6 +123,7 @@ export function homeActions(parts: HomeParts) {
     showDetails: detailsOpenerOf(parts),
     step,
     toggleFavorite: favoriteToggleOf(parts),
+
     pickTile(index: number) {
       if (choice.select(index, { cue: true })) {
         homeRef.current!.querySelector('#hero')?.scrollIntoView?.({ block: 'start' });

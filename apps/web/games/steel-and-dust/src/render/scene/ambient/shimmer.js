@@ -12,6 +12,7 @@ function strandAt(spot, { strand, tick, effect }) {
   const climbed = wrapX(trait(seed, 1) * effect.height + tick * 0.22, effect.height);
   const y = Math.round(spot.y - climbed);
   const wobble = Math.round(Math.sin(tick * 0.16 + y * 0.7 + strand) * (1 + climbed / 10));
+
   return { y, wobble, seed, fade: 1 - climbed / effect.height };
 }
 
@@ -34,5 +35,6 @@ export function drawShimmer(painter, { effect, tick, cameraX, colors }) {
       drawStrand(painter, spot, strandAt(spot, { strand, tick, effect }), effect.width);
     }
   }
+
   painter.alpha(1);
 }

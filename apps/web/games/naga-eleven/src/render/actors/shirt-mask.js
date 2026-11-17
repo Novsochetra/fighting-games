@@ -30,6 +30,7 @@ export function cellOf(mask, { left, top, width, height, mirror }) {
   return {
     width,
     height,
+
     isShirt: (x, y) =>
       inside(x, y) && mask.bits[(top + y) * mask.width + left + (mirror ? width - 1 - x : x)] === 1,
   };

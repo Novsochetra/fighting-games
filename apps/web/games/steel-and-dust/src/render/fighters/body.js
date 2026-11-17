@@ -31,6 +31,7 @@ function torsoFrame(joints, facing) {
     forwardX = -forwardX;
     forwardY = -forwardY;
   }
+
   return { dx, dy, upX, upY, forwardX, forwardY };
 }
 
@@ -71,6 +72,7 @@ function drawTorsoDetails(painter, parts) {
   if (palette.plate) {
     drawPlate(painter, parts);
   }
+
   if (palette.glow && !palette.hideTabard) {
     const neck = point(
       joints.neck.x + frame.forwardX * 1.5 * scale,
@@ -83,6 +85,7 @@ function drawTorsoDetails(painter, parts) {
     painter.use(palette.glow).line(neck, waist, Math.round(2 * scale));
     painter.use(palette.glowShade).line(waist, along(8, 1.5), Math.round(2 * scale));
   }
+
   if (palette.belt) {
     const width = Math.round(9 * scale);
     const left = point(
@@ -135,6 +138,7 @@ export function drawBody(painter, { fighter, joints, pose, palette, ghost, headS
   if (fighter.scarf && !ghost) {
     drawCape(painter, fighter.scarf, palette);
   }
+
   painter
     .use(palette.jacketShade)
     .limb(joints.hip, along(8, -4), Math.round(4 * scale), palette.outline);
@@ -149,6 +153,7 @@ export function drawBody(painter, { fighter, joints, pose, palette, ghost, headS
   if (line) {
     drawWeapon(painter, line, { fighter, ghost });
   }
+
   drawFrontArm(painter, parts);
   if (palette.pauldron) {
     drawPauldron(painter, parts);

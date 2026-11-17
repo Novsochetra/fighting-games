@@ -45,6 +45,7 @@ describe('a run of coins', () => {
     for (let i = 1; i < rates.length; i++) {
       expect(rates[i]).toBeGreaterThan(rates[i - 1]);
     }
+
     expect(streakRate(0)).toBe(1);
     expect(streakRate(99)).toBe(rates.at(-1));
   });
@@ -54,6 +55,7 @@ describe('a run of coins', () => {
     for (let i = 0; i < 3; i++) {
       collectPiece(game, piece());
     }
+
     game.coinStreak.timer = 0;
     collectPiece(game, piece());
     const rates = sounds.map((sound) => sound.rate);

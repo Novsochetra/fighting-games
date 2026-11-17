@@ -41,6 +41,7 @@ export const assetsHrefFrom = (pagePath) =>
 export function startupImages(splashRoot) {
   return {
     name: 'arcade-startup-images',
+
     async transformIndexHtml(_html, { path: pagePath }) {
       const fileNames = (await readdir(splashRoot)).sort();
 

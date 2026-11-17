@@ -25,6 +25,7 @@ function windup(game, fighter) {
   if (fighter.airborne) {
     return;
   }
+
   const feet = { x: fighter.x, y: fighter.y };
   kickDust(game, { ...feet, direction: -fighter.facing, count: 2, speed: 1.2 });
   kickDust(game, { ...feet, direction: fighter.facing, count: 1, speed: 0.8 });
@@ -36,6 +37,7 @@ function gather(game, fighter, move, time) {
   if (time % 2 === 0) {
     breathIn(game, chestOf(fighter), { count: 2, spin: 0.13 * fighter.facing });
   }
+
   if (time === flameTick(move) && !fighter.airborne) {
     coilFlame(game, fighter, move);
   }
@@ -54,6 +56,7 @@ function release(game, fighter, move) {
     chestFlare(game, fighter, chest);
     return;
   }
+
   const back = { x: fighter.x - fighter.facing * 4, y: fighter.y };
   kickDust(game, { ...back, direction: -fighter.facing, count: 3, speed: 2 });
   if (move.chargeLevel === 2) {
@@ -67,6 +70,7 @@ function trail(game, fighter, move, time) {
   if (time === move.startup + FLAME_HOLD) {
     spendFlame(game, fighter);
   }
+
   if (time % 2 === 0) {
     const tip = bladeTipOf(fighter);
     shedMotes(game, tip, { colors: ART.motes, direction: -fighter.facing, count: 1, life: 12 });

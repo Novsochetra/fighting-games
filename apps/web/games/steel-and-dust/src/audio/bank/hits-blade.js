@@ -33,6 +33,7 @@ function buildBlade(track, pitch, size) {
     decay: 0.75 * longer,
     level: 0.32,
   });
+
   return { drive: 2.2 };
 }
 

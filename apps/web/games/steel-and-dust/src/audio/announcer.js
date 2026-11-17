@@ -15,6 +15,7 @@ function loadCall(audio, announcer, call) {
   if (announcer.clips.has(call)) {
     return;
   }
+
   announcer.clips.set(call, null);
   Promise.resolve()
     .then(() => globalThis.fetch(`${CLIPS}${call}.mp3`))
@@ -30,6 +31,7 @@ export function preloadCalls(audio, announcer, game) {
   if (!audio.context || announcer.loadedFor === index) {
     return;
   }
+
   announcer.loadedFor = index;
   const next = MISSIONS[index + 1];
   const calls = [
@@ -54,6 +56,7 @@ export function playCall(audio, announcer, { game, call }) {
   if (!clip || !audio.chain || game.muted || audio.context.state !== 'running') {
     return;
   }
+
   stopPlaying(announcer);
   const source = audio.context.createBufferSource();
   const gain = audio.context.createGain();

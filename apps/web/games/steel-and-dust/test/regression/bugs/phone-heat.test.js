@@ -21,6 +21,7 @@ function fightView() {
   runTicks(game, 120);
   renderFrame(game, late.view);
   late.log.length = 0;
+
   return { game, ...late };
 }
 

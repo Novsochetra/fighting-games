@@ -6,6 +6,7 @@ const { cinder: CINDER, flame: FLAME, core: CORE } = EMBER_HEAVY_ART;
 
 function rampAt(ramp, heat) {
   const index = Math.round((1 - heat) * (ramp.length - 1));
+
   return ramp[Math.max(0, Math.min(ramp.length - 1, index))];
 }
 
@@ -27,6 +28,7 @@ function emberCinder(painter, particle) {
   if (share < 0.35 && flicker(particle.seed, particle.life) < 0.4) {
     return;
   }
+
   const { x, y } = particle;
   const tail = { x: x - particle.vx * 2.5, y: y - particle.vy * 2.5 };
   streak(painter.context, { from: tail, to: particle, color: rampAt(CINDER, share * 0.6) });
@@ -60,6 +62,7 @@ const RAYS = 10;
 
 function rayLength(particle, { angle, reach, i }) {
   const rise = 1 + 0.5 * Math.max(0, -Math.sin(angle));
+
   return reach * (0.5 + 0.5 * flicker(particle.seed + i, 0)) * rise;
 }
 
@@ -82,6 +85,7 @@ function emberFlare(painter, particle) {
     const angle = ((i + 0.5) / RAYS) * Math.PI * 2;
     drawRay(context, { x, y, angle, length: rayLength(particle, { angle, reach, i }) });
   }
+
   context.fillStyle = FLAME[2];
   fillRows(context, { x, y, rows: ellipseRows(reach * 0.3, reach * 0.3) });
   dot(context, { x, y, color: FLAME[0], size: 3 });

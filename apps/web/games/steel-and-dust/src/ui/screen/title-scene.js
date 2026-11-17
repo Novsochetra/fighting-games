@@ -18,6 +18,7 @@ function loadPaintings(createImage, baseUrl) {
     painting.image.src = `${baseUrl}${scene.painting}`;
     paintings[orientation] = painting;
   }
+
   return paintings;
 }
 
@@ -33,6 +34,7 @@ function watchScreen(matchMedia) {
   read();
   portrait.addEventListener?.('change', read);
   still.addEventListener?.('change', read);
+
   return screen;
 }
 
@@ -44,6 +46,7 @@ function drawScene(view, { orientation, still }, tick) {
     canvas.width = scene.width;
     canvas.height = scene.height;
   }
+
   const painting = view.paintings[orientation].image;
   drawTitleScene(view.painter, { scene, painting, tick, colors: TITLE_SCENE_COLORS, still });
   drawn.orientation = orientation;
@@ -75,12 +78,14 @@ export function createTitleScene({
   };
   const screen = watchScreen(matchMedia);
   const clock = { steps: null, tick: 0 };
+
   return {
     frame(now) {
       if (!view.painter || menus.dataset.scene !== 'on') {
         clock.steps = null;
         return;
       }
+
       clock.steps ??= createClock(now);
       clock.tick += ticksDue(clock.steps, now, TICK_MS);
       const tick = screen.still ? 0 : clock.tick;
@@ -93,11 +98,13 @@ export function createTitleScene({
 
 export function installTitleScene(window) {
   const { document } = window;
+
   return createTitleScene({
     canvas: document.getElementById('titleScene'),
     menus: document.getElementById('menus'),
     matchMedia: (query) => window.matchMedia(query),
     createImage: () => new window.Image(),
+
     createCanvas: (width, height) =>
       Object.assign(document.createElement('canvas'), { width, height }),
   });

@@ -14,6 +14,7 @@ function gameWithRaider() {
   const raider = game.fighters.find((fighter) => fighter.side === 'enemy');
   Object.assign(raider, { entering: false, x: game.player.x + 80, state: 'idle' });
   raider.ai.cooldown = 999;
+
   return { game, raider };
 }
 
@@ -77,6 +78,7 @@ describe('the golden lion in a running fight', () => {
       runTicks(game, 1);
       heights.push(y - lionsOf(game)[0].y);
     }
+
     expect(heights[9]).toBeCloseTo(60);
     expect(heights[19]).toBeCloseTo(0);
     expect(heights[29]).toBeCloseTo(60);

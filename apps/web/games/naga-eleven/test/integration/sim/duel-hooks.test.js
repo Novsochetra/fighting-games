@@ -20,6 +20,7 @@ describe('the hooks the duels hang on', () => {
 
         return false;
       },
+
       duelTick(each) {
         duelTicks += 1;
 

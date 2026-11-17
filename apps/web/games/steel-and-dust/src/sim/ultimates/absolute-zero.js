@@ -51,6 +51,7 @@ function iaiCut(game, player, strike) {
     addSparks(game, { x, y: player.y - 22, count: 6, color: themeOf(game).spark, speed: 2.4 });
     return;
   }
+
   const target = targets[strike % targets.length];
   blinkTo(game, player, target, strike % 2 ? 1 : -1);
   const y = target.y - 18 * target.scale;
@@ -71,6 +72,7 @@ function shatterAll(game) {
   for (const ice of game.summons.filter((summon) => summon.kind === 'ice')) {
     shatterIce(game, ice);
   }
+
   game.slashBandTime = 16;
   finaleFlash(game);
 }
@@ -80,6 +82,7 @@ function sheathFrame(time) {
   if (time < intro) {
     return ['ult', Math.min(saluteFrames - 1, Math.floor(time / poseTicks))];
   }
+
   return ['ult', Math.min(8, saluteFrames + Math.floor((time - STRIKES_END) / sheathTicks))];
 }
 
@@ -89,15 +92,19 @@ export function runAbsoluteZero(game, player, time) {
   if (!cutting) {
     player.ultFrame = sheathFrame(time);
   }
+
   if (cutting && (time - intro) % gap === 0) {
     iaiCut(game, player, (time - intro) / gap);
   }
+
   if (time === STRIKES_END) {
     returnToCenter(game, player);
   }
+
   if (time === ABSOLUTE_ZERO.shatterAt) {
     shatterAll(game);
   }
+
   if (time >= ABSOLUTE_ZERO.end) {
     finishUlt(player);
   }

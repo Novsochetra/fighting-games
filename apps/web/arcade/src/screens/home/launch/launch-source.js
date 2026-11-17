@@ -8,5 +8,6 @@ export function pickLaunchSource(candidates, viewportHeight) {
   const visible = present.find((element) =>
     isOnScreen(element.getBoundingClientRect(), viewportHeight),
   );
+
   return visible ?? present[0] ?? null;
 }

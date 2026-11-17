@@ -67,6 +67,7 @@ describe('the spike traps of the Mirage Temple', () => {
     for (const [i, tile] of row.entries()) {
       tile.time = SINK_AT + SPIKE_TRAP.sink - i * SPIKE_TRAP.stagger;
     }
+
     game.player.x = row[0].x - 30;
 
     press(game, 'right');

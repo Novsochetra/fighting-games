@@ -29,6 +29,7 @@ function fireflyFight() {
   raider.ai.cooldown = 9999;
   game.player.facing = 1;
   game.ultMeter = ULT_MAX;
+
   return game;
 }
 
@@ -44,6 +45,7 @@ describe("the Firefly Shade's heavy", () => {
     const move = { startup: 8, hitbox: [4, -25, 20, 10] };
     const spread = (time) => {
       const xs = swarmOrbit(hero, move, time).map((bug) => bug.x);
+
       return Math.max(...xs) - Math.min(...xs);
     };
     expect(spread(7)).toBeLessThan(spread(0) / 3);
@@ -67,6 +69,7 @@ describe("the Firefly Shade's heavy", () => {
     for (let i = 0; i < 8; i++) {
       FIREFLY_PARTICLE_MOVERS.fireflyBug(bug);
     }
+
     expect(Math.hypot(bug.x - to.x, bug.y - to.y)).toBeLessThan(1);
   });
 
@@ -81,9 +84,11 @@ describe("the Firefly Shade's heavy", () => {
         FIREFLY_HEAVY_KIT.gather(game, game.player, move, time);
         FIREFLY_HEAVY_KIT.trail(game, game.player, move, time);
       }
+
       FIREFLY_HEAVY_KIT.release(game, game.player, move);
       FIREFLY_HEAVY_KIT.impact(game, { attacker: game.player, move, x: 140, y: 120 });
     }
+
     expect(game.particles.filter(isFirefly).length).toBeGreaterThan(heavies.length * 10);
   });
 
@@ -94,9 +99,11 @@ describe("the Firefly Shade's heavy", () => {
       if (i % 6 === 0) {
         tap(game, 'heavy');
       }
+
       runTicks(game, 1);
       most = Math.max(most, game.particles.filter(isFirefly).length);
     }
+
     expect(most).toBeGreaterThan(10);
     expect(most).toBeLessThanOrEqual(60);
   });

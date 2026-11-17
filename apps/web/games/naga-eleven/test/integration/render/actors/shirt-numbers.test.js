@@ -142,6 +142,7 @@ describe('a match frame with the shirts numbered', () => {
     const made = [];
     const actors = createActorArt({
       sprites,
+
       createCanvas: (canvasWidth, canvasHeight) => {
         made.push(`${canvasWidth}x${canvasHeight}`);
 

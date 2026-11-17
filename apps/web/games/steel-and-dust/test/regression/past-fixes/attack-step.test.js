@@ -5,6 +5,7 @@ import { createPlayingGame, press, release, runTicks, tap } from '../../support/
 function readyGame() {
   const game = createPlayingGame();
   runTicks(game, 30);
+
   return game;
 }
 
@@ -16,6 +17,7 @@ function distanceOfSlash(holdRight) {
   while (game.player.state === 'attack') {
     runTicks(game, 1);
   }
+
   return game.player.x - start;
 }
 

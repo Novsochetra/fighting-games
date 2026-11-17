@@ -61,6 +61,7 @@ export function installTouch(layer, { source, onPause }) {
       releaseAll(source);
       pad.restStick();
     },
+
     fit(portrait) {
       layout = PITCH_SIDE.layouts[portrait ? 'portrait' : 'landscape'];
 
@@ -70,6 +71,7 @@ export function installTouch(layer, { source, onPause }) {
       pad.restStick();
       showKeys(pad, layout, shown);
     },
+
     // the inputs the screen reads (a drill's, src/render/training/touch-keys.js), or null for all;
     // asked on every frame with the same list while they stay the same, it changes the pad only
     // when the list does, and holds play still under the turn card

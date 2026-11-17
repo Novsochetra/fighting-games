@@ -11,6 +11,7 @@ function leafAt(i, { effect, tick, cameraX }) {
   const swayRate = 0.02 + trait(seed, 2) * 0.03;
   const sway = Math.sin(tick * swayRate + trait(seed, 3) * TAU) * (2 + trait(seed, 4) * 4);
   const baseX = trait(seed, 0) * CYCLE_WIDTH + tick * (effect.wind ?? 0) + sway;
+
   return {
     x: scrollX(baseX, { cameraX, drift: effect.drift }),
     y: wrapX(trait(seed, 5) * FALL_SPAN + tick * fall, FALL_SPAN) - 4,

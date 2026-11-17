@@ -15,6 +15,7 @@ function scarabs(live, start) {
     const frequency = 3000 + (i % 3) * 700;
     click(live, { start: start + i * 0.028 + (i % 2) * 0.009, volume: 0.05, frequency });
   }
+
   const sand = { type: 'bandpass', from: 2400, to: 1400, resonance: 1.2 };
   hiss(live, { start, ...sand, attack: 0.02, duration: 0.4, volume: 0.07 });
 }

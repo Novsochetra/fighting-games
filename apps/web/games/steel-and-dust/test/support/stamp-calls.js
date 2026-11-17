@@ -8,6 +8,7 @@ export function stampCalls(view) {
 // any image drawn on the screen but the painter's own stamps of text and frames
 export function drawsArt(log, view) {
   const stamps = stampCanvases(view).map((canvas) => `drawImage(${canvas.recordingId()},`);
+
   return log.some(
     (call) => call.startsWith('drawImage(') && !stamps.some((stamp) => call.startsWith(stamp)),
   );

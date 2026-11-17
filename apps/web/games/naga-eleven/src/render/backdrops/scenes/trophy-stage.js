@@ -122,6 +122,7 @@ export const TROPHY_STAGE = {
     paintBeams(raster);
     paintStage(raster);
   },
+
   overlay: (context, tick) => {
     drawSparkle(context, tick);
     drawConfetti(context, tick);

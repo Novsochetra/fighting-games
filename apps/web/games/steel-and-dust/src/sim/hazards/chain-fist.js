@@ -10,5 +10,6 @@ export const FIST_ON_FRAME = {
 
 export function fistOf(boss) {
   const [, frame] = enemySpriteFrame(boss);
+
   return bodyPoint(boss, FIST_ON_FRAME[frame] ?? FIST_ON_FRAME[3]);
 }

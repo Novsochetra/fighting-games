@@ -201,6 +201,7 @@ export function recordAmbient(effects, options = {}) {
   const { plane = 'back', tick = 0, cameraX = 0, colors = ALL_COLORS } = options;
   const { context, log } = createRecordingContext(null);
   drawAmbient(createPainter(context), { effects, plane, tick, cameraX, colors });
+
   return { log, alpha: context.globalAlpha };
 }
 
@@ -223,6 +224,7 @@ export function drawnRects(log) {
       rects.push({ x, y, width, height, color, alpha });
     }
   }
+
   return rects;
 }
 

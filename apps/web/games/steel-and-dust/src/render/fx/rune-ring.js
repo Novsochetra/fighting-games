@@ -19,6 +19,7 @@ const MOTE_LIFE = 14;
 
 export function ringRadius(pillar) {
   const grown = Math.min(1, (pillar.wait + pillar.time) / GROW_TICKS);
+
   return snap(RADIUS * (0.3 + 0.7 * easeOutCubic(grown)));
 }
 
@@ -27,6 +28,7 @@ export const isThrobbing = (since) => since % THROB_TICKS < 2;
 // how far in the closing ring has come, as a share of the rim's radius
 export function closingShare(time, since) {
   const period = isHurrying(time) ? HURRY_CLOSE_TICKS : CLOSE_TICKS;
+
   return 1 - (since % period) / period;
 }
 
@@ -90,6 +92,7 @@ function drawHeart(context, { x, y, time }) {
   if (swell <= 0) {
     return;
   }
+
   paint(context, { color: time > -4 ? COLORS.white : FX_COLORS.gazeWhite, alpha: 0.85 }, () =>
     fillRows(context, { x, y, rows: flatDisc(snap(1 + swell * 4)) }),
   );

@@ -31,10 +31,12 @@ function sampleAngles() {
   for (let i = 0; i < 50000; i++) {
     angles.push((random() - 0.5) * 2 * 10 ** (random() * 7 - 2));
   }
+
   // near whole turns the reduction takes its second and third steps
   for (let i = 1; i < 4000; i++) {
     angles.push((i * Math.PI) / 2, (-i * Math.PI) / 2);
   }
+
   return angles;
 }
 

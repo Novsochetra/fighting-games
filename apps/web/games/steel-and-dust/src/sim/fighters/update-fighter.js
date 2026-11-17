@@ -24,6 +24,7 @@ function tickTimers(fighter) {
 // swing of a boss, whose sheet draws its own arc where the drawn weapon really is
 function inSwing(fighter) {
   const move = fighter.move;
+
   return (
     fighter.state === 'attack' &&
     move &&
@@ -57,12 +58,14 @@ export function updateFighter(game, fighter) {
     fighter.hitstop--;
     return;
   }
+
   tickTimers(fighter);
   if (isPlayer(fighter)) {
     thinkPlayer(game, fighter);
   } else {
     thinkEnemy(game, fighter);
   }
+
   updateState(game, fighter);
   applyPhysics(game, fighter);
   refreshPose(fighter);
@@ -71,5 +74,6 @@ export function updateFighter(game, fighter) {
   if (fighter.scarf) {
     updateScarf(fighter, game.tickCount);
   }
+
   easeHealthBar(fighter);
 }

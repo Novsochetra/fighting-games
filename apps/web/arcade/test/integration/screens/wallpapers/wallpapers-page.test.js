@@ -74,6 +74,7 @@ describe('the wallpapers page', () => {
       expect(image.getAttribute('src')).toMatch(CDN);
       expect(image.getAttribute('srcset')).toMatch(/ 640w, .* 1280w$/);
     }
+
     expect(images.slice(0, 8).every((image) => image.loading === 'eager')).toBe(true);
     expect(images.slice(8).every((image) => image.loading === 'lazy')).toBe(true);
   });

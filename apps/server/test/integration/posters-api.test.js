@@ -23,10 +23,13 @@ let bucket;
 function fakeStorage() {
   bucket = new Map();
   const urlOf = (key) => `${FILES_URL}/${key}`;
+
   return {
     urlOf,
+
     async putFile({ key, body, contentType }) {
       bucket.set(key, { body, contentType });
+
       return { key, url: urlOf(key) };
     },
   };
@@ -63,6 +66,7 @@ function post(pathname, body, headers = {}) {
     ...headers,
   };
   const sent = Object.fromEntries(Object.entries(all).filter(([, value]) => value !== undefined));
+
   return sendRequest(server.port, { method: 'POST', path: pathname, headers: sent, body: text });
 }
 
@@ -84,6 +88,7 @@ async function postedRun() {
     ticket,
   });
   expect(reply.status).toBe(201);
+
   return ticket;
 }
 

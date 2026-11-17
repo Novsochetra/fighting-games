@@ -64,6 +64,7 @@ export const MOVE_HANDLERS = {
   pass: (effects, match, event) => notePass(effects, match, event.player),
   save: (effects, match, event) => meetKeeper(effects, match, event.keeper),
   combo: climbCombo,
+
   comboEnd: (effects, match, event) => {
     endCombo(effects, match, event);
 

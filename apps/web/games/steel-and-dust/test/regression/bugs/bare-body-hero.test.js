@@ -17,6 +17,7 @@ function frameOf(game, { view, log }) {
   game.player.invincible = 0;
   log.length = 0;
   renderFrame(game, view);
+
   return log.slice();
 }
 
@@ -28,6 +29,7 @@ function fallen() {
   frameOf(game, late);
   Object.assign(game, { mode: 'over' });
   game.player.hp = 0;
+
   return { game, late };
 }
 

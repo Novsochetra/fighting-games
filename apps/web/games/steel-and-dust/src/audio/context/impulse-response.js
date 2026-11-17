@@ -10,6 +10,7 @@ export function createImpulseResponse(context, seconds, decay) {
       data[i] = smoothed * Math.pow(1 - i / length, decay);
     }
   }
+
   return buffer;
 }
 
@@ -19,5 +20,6 @@ export function createNoiseBuffer(context) {
   for (let i = 0; i < data.length; i++) {
     data[i] = Math.random() * 2 - 1;
   }
+
   return buffer;
 }

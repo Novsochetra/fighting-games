@@ -18,6 +18,7 @@ function freshPlayer(terrain) {
   const player = createFighter('player', 'player', START_X, groundAt(terrain, START_X));
   player.facing = 1;
   attachScarf(player);
+
   return player;
 }
 

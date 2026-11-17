@@ -32,6 +32,7 @@ function escapeX(game, fighter) {
   const player = game.player;
   const bounds = arenaBounds(game, fighter);
   const roomRight = bounds.max - player.x > player.x - bounds.min;
+
   return player.x + (roomRight ? 1 : -1) * ESCAPE_GAP;
 }
 
@@ -39,6 +40,7 @@ function escapeX(game, fighter) {
 function landingX(game, fighter) {
   const player = game.player;
   const toPlayer = Math.sign(player.x - fighter.x) || 1;
+
   return fighter.def.ranged ? escapeX(game, fighter) : player.x + toPlayer * AMBUSH_GAP;
 }
 
@@ -59,11 +61,14 @@ export function tryBlink(game, fighter, distance) {
     ai.blinkCooldown--;
     return false;
   }
+
   if (!fighter.def.blink || distance > 40 || Math.random() > 0.05) {
     return false;
   }
+
   blinkTo(game, fighter, { x: landingX(game, fighter), puff: sandPuff });
   ai.blinkCooldown = BLINK_COOLDOWN;
+
   return true;
 }
 
@@ -73,7 +78,9 @@ export function slipAway(game, boss) {
   if (game.tickCount < (ai.slipReadyAt ?? 0) || Math.random() > SLIP_CHANCE) {
     return false;
   }
+
   blinkTo(game, boss, { x: escapeX(game, boss), puff: whirl });
   ai.slipReadyAt = game.tickCount + SLIP_COOLDOWN;
+
   return true;
 }

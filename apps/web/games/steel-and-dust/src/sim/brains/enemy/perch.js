@@ -10,6 +10,7 @@ const ARRIVED = 1;
 
 export function perchSpot(platform, x) {
   const centre = platform.x + platform.width / 2;
+
   return x < centre ? platform.x + PERCH_INSET : platform.x + platform.width - PERCH_INSET;
 }
 
@@ -18,6 +19,7 @@ function canReach({ terrain, raider }, platform, spot) {
   const rise = raider.y - platform.y;
   const centre = platform.x + platform.width / 2;
   const side = Math.sign(spot - raider.x);
+
   return (
     rise > STEP_UP &&
     rise <= HOP_REACH &&
@@ -31,6 +33,7 @@ function keepsHeroInRange({ terrain, raider, hero, near, far }, platform, spot) 
   const fromHero = Math.abs(spot - hero.x);
   const heroBetween = Math.sign(hero.x - raider.x) !== Math.sign(hero.x - spot);
   const heroOnIt = platformUnder(terrain, hero.x, hero.y) === platform;
+
   return fromHero > near && fromHero <= far && !heroBetween && !heroOnIt;
 }
 
@@ -47,6 +50,7 @@ export function choosePerch(terrain, raider, hero, [near, far]) {
       bestGap = gap;
     }
   }
+
   return best;
 }
 
@@ -55,6 +59,7 @@ function holdPerch(game, raider, distance, [near, far]) {
   if (distance < near && !isResting(raider) && drop(game, raider)) {
     return 'moving';
   }
+
   return distance <= far ? 'perched' : null;
 }
 
@@ -66,6 +71,7 @@ function climbTo(game, raider, platform) {
   } else {
     hop(game, raider, { toX: spot, faceX: null, rise: raider.y - platform.y });
   }
+
   return 'moving';
 }
 
@@ -76,12 +82,16 @@ export function thinkPerch(game, raider, distance, keepAway) {
   if (!terrain.platforms.length) {
     return null;
   }
+
   if (platformUnder(terrain, raider.x, raider.y)) {
     return holdPerch(game, raider, distance, keepAway);
   }
+
   if (isResting(raider)) {
     return null;
   }
+
   const platform = choosePerch(terrain, raider, player, keepAway);
+
   return platform ? climbTo(game, raider, platform) : null;
 }

@@ -20,9 +20,11 @@ export const steppedLevel = (levels, seed, beat) =>
 // width it spans; the extra half pixel on the height keeps the top and bottom rows from vanishing
 export function ellipseRows(rx, ry) {
   const rows = Math.max(0, Math.round(ry / PIXEL));
+
   return Array.from({ length: rows * 2 + 1 }, (_, i) => {
     const dy = (i - rows) * PIXEL;
     const share = 1 - (dy / (ry + PIXEL / 2)) ** 2;
+
     return { dy, half: snap(Math.max(0, rx) * Math.sqrt(Math.max(0, share))) };
   });
 }
@@ -31,8 +33,10 @@ export function ellipseRows(rx, ry) {
 export function ringRows(rx, ry, width = 1) {
   const inset = width * PIXEL;
   const inner = ellipseRows(rx - inset, ry - inset);
+
   return ellipseRows(rx, ry).map((row, i) => {
     const hole = inner[i - width]?.half ?? 0;
+
     return { ...row, hole: Math.max(0, Math.min(hole, row.half - inset)) };
   });
 }
@@ -45,10 +49,12 @@ export function fillRows(context, { x, y, rows }) {
     if (half <= 0) {
       continue;
     }
+
     if (hole <= 0) {
       context.fillRect(left - half, top + dy, half * 2, PIXEL);
       continue;
     }
+
     context.fillRect(left - half, top + dy, half - hole, PIXEL);
     context.fillRect(left + hole, top + dy, half - hole, PIXEL);
   }
@@ -78,6 +84,7 @@ export function fineLine(context, { from, to, width = 1 }) {
     const y = snap(from.y + (dy * i) / steps) - offset;
     fills.add(snap(x), snap(y), size, size);
   }
+
   fills.flush();
 }
 

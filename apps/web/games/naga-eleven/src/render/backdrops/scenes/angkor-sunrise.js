@@ -127,11 +127,13 @@ function drawBirds(context, tick) {
 
 export const ANGKOR_SUNRISE = {
   frameOf: (tick) => [0, 1, 2, 1][Math.floor(tick / 40) % 4],
+
   paint: (raster, frame) => {
     paintHeavens(raster, frame);
     paintTemple(raster);
     paintMoat(raster);
   },
+
   overlay: (context, tick) => {
     glitterDashes({ x: SUN.x, line: BANK, bottom: 216, tick }).forEach((dash) => {
       artRect(

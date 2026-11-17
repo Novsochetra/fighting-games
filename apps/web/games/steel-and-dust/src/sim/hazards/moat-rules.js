@@ -14,12 +14,14 @@ export const MOAT_RULES = {
   // the curl at the front of the wave, low enough to jump
   tide: {
     range: 160,
+
     area: (tide) => ({
       x: tide.x - 15 + tide.direction * 3,
       y: tide.y - 26,
       width: 30,
       height: 26,
     }),
+
     hit: TIDE_HIT,
     enemyWeapon: 'none',
     armed: isRolling,
@@ -35,12 +37,14 @@ export const MOAT_RULES = {
   // the head and the body skimming the stone behind it, low enough to jump
   spiritNaga: {
     range: 200,
+
     area: (spirit) => ({
       x: spirit.direction > 0 ? spirit.x - 45 : spirit.x - 15,
       y: spirit.y - SWEEP_LOW,
       width: 60,
       height: SWEEP_LOW,
     }),
+
     hit: SWEEP_HIT,
     enemyWeapon: 'none',
     armed: isSweeping,

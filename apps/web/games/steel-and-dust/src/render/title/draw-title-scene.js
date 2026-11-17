@@ -26,6 +26,7 @@ export function drawTitleScene(painter, { scene, painting, tick, colors, still }
   if (still) {
     return;
   }
+
   for (const effect of scene.effects) {
     const air = { effect, tick, cameraX: 0, colors, painting };
     const draw = TITLE_EFFECTS[effect.kind] ?? drawShifted;

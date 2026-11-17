@@ -9,6 +9,7 @@ afterEach(() => server?.close());
 
 async function start(options) {
   server = await startTestServer(options);
+
   return server;
 }
 
@@ -24,6 +25,7 @@ function give(body, headers = {}) {
     ...headers,
   };
   const sent = Object.fromEntries(Object.entries(all).filter(([, value]) => value !== undefined));
+
   return sendRequest(server.port, {
     method: 'POST',
     path: '/api/supporters',
@@ -34,6 +36,7 @@ function give(body, headers = {}) {
 
 const list = async (headers) => {
   const reply = await sendRequest(server.port, { path: '/api/supporters', headers });
+
   return { ...reply, json: reply.status === 200 ? JSON.parse(reply.text) : null };
 };
 
@@ -127,6 +130,7 @@ describe('the supporters API', () => {
     for (let i = 0; i < GIFT_LIMIT.limit; i += 1) {
       expect((await give({ amount: 1 })).status).toBe(201);
     }
+
     const reply = await give({ amount: 1 });
     expect(reply.status).toBe(429);
     expect(reply.headers['retry-after']).toBe('600');
@@ -139,6 +143,7 @@ describe('the supporters API', () => {
     for (let i = 0; i < GIFT_LIMIT.limit; i += 1) {
       await give({ amount: 1 }, from('1.1.1.1'));
     }
+
     expect((await give({ amount: 1 }, from('1.1.1.1'))).status).toBe(429);
     expect((await give({ amount: 1 }, from('2.2.2.2'))).status).toBe(201);
   });
@@ -156,6 +161,7 @@ describe('GET /api/health', () => {
     const supporters = {
       list: async () => [],
       add: async () => ({}),
+
       ping: async () => {
         throw new Error('connection refused');
       },

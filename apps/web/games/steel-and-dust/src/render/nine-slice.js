@@ -4,11 +4,13 @@ function spans(start, length, tile) {
   for (let offset = 0; offset < length; offset += tile) {
     out.push({ offset: start + offset, size: Math.min(tile, length - offset) });
   }
+
   return out;
 }
 
 function axis(imageSize, before, after, destinationSize) {
   const tile = imageSize - before - after;
+
   return [
     { source: 0, size: before, offset: 0 },
     ...spans(before, destinationSize - before - after, tile).map(({ offset, size }) => ({
@@ -32,6 +34,7 @@ export function nineSlicePieces(image, slice, rect, scale) {
       if (middle && columnIndex > 0 && columnIndex < columns.length - 1) {
         return;
       }
+
       pieces.push({
         source: [column.source, row.source, column.size, row.size],
         destination: [
@@ -43,6 +46,7 @@ export function nineSlicePieces(image, slice, rect, scale) {
       });
     });
   });
+
   return pieces;
 }
 

@@ -10,6 +10,7 @@ export function playKick(live, { song, time: start, position, bus }) {
   if (!song.kickSteps.includes(position)) {
     return;
   }
+
   const body = envelopeGain(live, {
     destination: bus,
     start,
@@ -40,6 +41,7 @@ export function playSnare(live, { song, time: start, position, bus }) {
   if (!song.snareSteps.includes(position)) {
     return;
   }
+
   const filter = { type: 'bandpass', from: 1900, to: 1500, resonance: 0.8 };
   noiseHit(live, {
     start,
@@ -70,6 +72,7 @@ export function playHat(live, { song, time: start, position, bus }) {
   if (!open && !(song.closedHats && position % 2 === 0)) {
     return;
   }
+
   const filter = { type: 'highpass', from: 8500, to: 8500, resonance: 0.7 };
   const envelope = { attack: 0.001, peak: open ? 0.05 : 0.025, decay: open ? 0.06 : 0.02 };
   noiseHit(live, { start, bus, filter, envelope, duration: 0.04 });

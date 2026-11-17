@@ -10,6 +10,7 @@ export function shedHeroAura(game) {
   if (game.mode !== 'play' || QUIET_STATES.has(player.state) || game.tickCount % aura.every) {
     return;
   }
+
   game.particles.push({
     kind: 'mote',
     x: player.x + randomBetween(-8, 8),

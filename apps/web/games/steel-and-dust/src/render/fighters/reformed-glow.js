@@ -50,12 +50,14 @@ const fadeOf = (age) => Math.ceil(Math.min(age / MOTE_FADE_IN, 1 - age / MOTE_LI
 export function glowMotes(fighter, tick) {
   const [behind, top, width, height] = fighter.def.hurtShape;
   const scale = fighter.scale;
+
   return Array.from({ length: MOTES }, (_, i) => {
     const life = tick + (i * MOTE_LIFE) / MOTES;
     const age = life % MOTE_LIFE;
     const cycle = Math.floor(life / MOTE_LIFE);
     const ahead = (flicker(i, cycle) * width - behind) * scale * fighter.facing;
     const up = (top - height + flicker(i + MOTES, cycle) * height * 0.8) * scale;
+
     return {
       x: fighter.x + ahead + Math.sin((age + i * 9) * 0.12) * 1.5,
       y: fighter.y - up - age * MOTE_RISE,

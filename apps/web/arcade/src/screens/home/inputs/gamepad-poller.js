@@ -11,12 +11,14 @@ export function createGamepadPoller({ getGamepads, requestFrame, onAction }) {
       running = false;
       return;
     }
+
     const pads = Array.from(getGamepads() ?? []).filter(Boolean);
     if (pads.length === 0) {
       running = false;
       previous = new Set();
       return;
     }
+
     const current = readAllGamepads(pads);
     newlyPressed(previous, current).forEach((action) => onAction(action));
     previous = current;
@@ -31,10 +33,12 @@ export function createGamepadPoller({ getGamepads, requestFrame, onAction }) {
         requestFrame(tick);
       }
     },
+
     // the arcade's screen going away stops the loop at its next frame
     stop() {
       stopped = true;
     },
+
     isRunning: () => running,
   };
 }

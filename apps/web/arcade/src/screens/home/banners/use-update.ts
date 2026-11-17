@@ -15,6 +15,7 @@ export function useUpdate() {
   return {
     shown,
     reload: () => reload(),
+
     notNow() {
       setDismissed(true);
       sound.play('sheetClose');

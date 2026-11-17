@@ -17,6 +17,7 @@ const AFTER = {
       startChain(match, attacker, moveOf(move));
     }
   },
+
   passed: (match, { attacker }) => notePass(match, attacker, { held: 0 }),
   stolen: (match, { defender }) => gainSpirit(match, defender, 'tackle'),
   cut: (match, { defender }) => gainSpirit(match, defender, 'intercept'),

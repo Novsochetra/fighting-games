@@ -9,6 +9,7 @@ function releaseWhenEnded({ nodes, sources }) {
     release();
     return;
   }
+
   for (const source of sources) {
     source.onended = () => {
       playing -= 1;

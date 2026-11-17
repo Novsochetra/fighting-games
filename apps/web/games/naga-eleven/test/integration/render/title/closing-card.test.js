@@ -27,6 +27,7 @@ function drawnTexts({ lang, age }) {
 
       return typeof value === 'function' ? value.bind(real) : value;
     },
+
     set(real, name, value) {
       real[name] = value;
 

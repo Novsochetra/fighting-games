@@ -28,6 +28,7 @@ function stampede(live, start) {
   for (let i = 0; i < 4; i++) {
     thump(live, { start: start + i * 0.07, from: 95, to: 45, duration: 0.12, volume: 0.32 });
   }
+
   const howl = { type: 'bandpass', from: 500, to: 1400, resonance: 3 };
   hiss(live, { start, ...howl, attack: 0.08, duration: 0.35, volume: 0.07 });
 }

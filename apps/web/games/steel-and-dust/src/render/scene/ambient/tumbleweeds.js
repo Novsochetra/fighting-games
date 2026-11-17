@@ -12,6 +12,7 @@ function weedAt(i, { effect, tick, cameraX }) {
   const lap = Math.floor(travel / SPAN);
   const radius = 4 + Math.floor(trait(seed, 2) * 4);
   const hop = Math.abs(Math.sin(tick * speed * 0.06 + trait(seed, 3) * TAU));
+
   return {
     x: wrapX(travel, SPAN) - MARGIN,
     y: effect.y - radius - 1 - hop * (3 + radius),
@@ -37,6 +38,7 @@ function drawWeed(painter, weed, [body, light]) {
     } else {
       painter.rect(left, centreY + dy, 1, 1).rect(left + span - 1, centreY + dy, 1, 1);
     }
+
     painter.use(light).rect(left + wrapX(dy * 3 + weed.turn, span), centreY + dy, 1, 1);
   }
 }

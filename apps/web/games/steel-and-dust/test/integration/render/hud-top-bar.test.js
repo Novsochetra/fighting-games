@@ -24,6 +24,7 @@ function drawTopOfScreen(game) {
   drawPlayerPanel(painter, game, view);
   drawClock(painter, game, view);
   drawScore(painter, game, view);
+
   return filledRects(log);
 }
 
@@ -39,6 +40,7 @@ function busyGame() {
   game.playTime = 59 * 3600;
   game.arena = { left: 0, right: VIEW_WIDTH };
   game.stage.waveIndex = 0;
+
   return game;
 }
 

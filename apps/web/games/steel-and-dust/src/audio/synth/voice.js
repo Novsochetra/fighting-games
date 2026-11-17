@@ -33,6 +33,7 @@ function voiceSample(voicing, shape, time) {
   voicing.roughPhase += 6.2832 * (55 + 25 * Math.sin(time * 7.3)) * shape.period;
   // rough shakes the level 30 to 80 times a second, the rasp of a real scream
   const rasp = 1 - shape.rough(time) * 0.5 * (1 + Math.sin(voicing.roughPhase));
+
   return x * shape.envelope(time) * rasp;
 }
 
@@ -55,6 +56,7 @@ export function voice(track, params) {
       retuneFormants(voicing.formants, shape, time);
       retargetWander(voicing.glottis, shape, time);
     }
+
     samples[first + i] += voiceSample(voicing, shape, time);
   }
 }

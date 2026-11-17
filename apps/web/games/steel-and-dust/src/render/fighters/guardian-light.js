@@ -8,10 +8,12 @@ export function drawGuardianBehind(painter, sheets, { fighter, at, floor, tickCo
   if (isStomping(fighter)) {
     drawFootfall(painter.context, { fighter, floor });
   }
+
   const phase = reformPhase(fighter);
   if (phase !== null) {
     drawReformBacklight(painter.context, { fighter, floor, phase });
   }
+
   if (fighter.glowing) {
     drawReformedRim(painter, sheets, { at, tickCount });
   }
@@ -24,6 +26,7 @@ export function drawGuardianOver(painter, { fighter, tickCount }) {
   if (phase !== null) {
     drawReformFlare(painter.context, { fighter, phase });
   }
+
   if (fighter.glowing) {
     drawGlowMotes(painter.context, fighter, tickCount);
   }

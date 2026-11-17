@@ -18,6 +18,7 @@ function doubleTapAndHold(game, direction) {
 function distanceIn(game, ticks) {
   const start = game.player.x;
   runTicks(game, ticks);
+
   return game.player.x - start;
 }
 
@@ -33,6 +34,7 @@ function footsteps(game, sfx, ticks) {
       }
     }
   }
+
   return heard;
 }
 
@@ -72,6 +74,7 @@ describe('the hero running', () => {
       runTicks(game, 1);
       states.add(game.player.state);
     }
+
     expect([...states]).toEqual(['dash', 'run']);
     expect(game.player.vx).toBeGreaterThan(1.7);
   });
@@ -180,6 +183,7 @@ describe('the hero running', () => {
     const states = new Set();
     runUntil(game, (player) => {
       states.add(player.state);
+
       return player.x > 240;
     });
     release(game, 'right');

@@ -7,6 +7,7 @@ function noisyTrack(length) {
   for (let i = 0; i < length; i++) {
     track.samples[i] = Math.sin(i * 0.37) * 0.3 + Math.sin(i * 0.05) * 0.2;
   }
+
   return track;
 }
 
@@ -38,6 +39,7 @@ describe('finish', () => {
       expect(track.samples[i + 1]).toBe(track.samples[i]);
       expect(track.samples[i + 3]).toBe(track.samples[i]);
     }
+
     const levels = new Set(Array.from(track.samples.slice(0, 1000)));
     expect(levels.size).toBeLessThanOrEqual(17);
   });

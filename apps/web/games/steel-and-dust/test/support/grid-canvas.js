@@ -43,13 +43,16 @@ function createMatrix() {
       mb * moveX + md * moveY + mf,
     ];
   };
+
   return {
     at,
     times,
     get: () => [...matrix],
+
     set: (values) => {
       matrix = [...values];
     },
+
     // only a matrix that keeps a rect a rect keeps its edges on device pixels
     keepsRects: () =>
       (isZero(matrix[1]) && isZero(matrix[2])) || (isZero(matrix[0]) && isZero(matrix[3])),
@@ -60,6 +63,7 @@ function imageBox(image, args) {
   if (args.length === 2) {
     return [...args, image.width, image.height];
   }
+
   return args.length === 4 ? args : args.slice(4);
 }
 
@@ -87,32 +91,39 @@ export function createGridContext() {
     transform: (...values) => matrix.times(values),
     translate: (x, y) => matrix.times([1, 0, 0, 1, x, y]),
     scale: (x, y) => matrix.times([x, 0, 0, y, 0, 0]),
+
     rotate: (angle) => {
       miss(`rotate(${angle})`);
       matrix.times([Math.cos(angle), Math.sin(angle), -Math.sin(angle), Math.cos(angle), 0, 0]);
     },
+
     fillRect: (...box) => checkBox('fillRect', box),
     drawImage: (image, ...args) => checkBox('drawImage', imageBox(image, args)),
     beginPath: () => clips.splice(0),
     rect: (...box) => clips.push({ box, transform: matrix.get() }),
+
     clip: () => {
       const current = matrix.get();
       for (const { box, transform } of clips) {
         matrix.set(transform);
         checkBox('clip', box);
       }
+
       matrix.set(current);
     },
   };
   for (const name of SMOOTH_SHAPES) {
     methods[name] = (...args) => {
       miss(`${name}(${args.join(',')})`);
+
       return { addColorStop: () => {} };
     };
   }
+
   const state = { globalAlpha: 1, fillStyle: '#000000', imageSmoothingEnabled: false };
   const context = new Proxy(state, {
     get: (target, name) => methods[name] ?? (name in target ? target[name] : () => {}),
+
     set(target, name, value) {
       const smooths =
         (name === 'shadowBlur' && value > 0) ||
@@ -121,9 +132,12 @@ export function createGridContext() {
       if (smooths) {
         miss(`${name}=${value}`);
       }
+
       target[name] = value;
+
       return true;
     },
   });
+
   return { context, misses, counts };
 }

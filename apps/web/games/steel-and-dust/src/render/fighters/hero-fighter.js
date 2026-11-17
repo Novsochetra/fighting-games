@@ -27,16 +27,20 @@ function glowColor(fighter, { tickCount, theme, heroId }) {
   if (fighter.state === 'ult') {
     return theme.ult.edge;
   }
+
   const heavy = heavyGlowColor(fighter, heroId);
   if (heavy) {
     return heavy;
   }
+
   if (fighter.state !== 'charge' || fighter.stateTime < CHARGE_TAP) {
     return null;
   }
+
   if (fighter.stateTime >= CHARGE_MAX) {
     return (tickCount >> 2) & 1 ? COLORS.gold : COLORS.cream;
   }
+
   return fighter.stateTime >= CHARGE_LEVEL1 ? theme.glow : theme.glowDim;
 }
 
@@ -44,6 +48,7 @@ function hitTint(fighter) {
   if (fighter.flashTime > 0) {
     return COLORS.white;
   }
+
   return fighter.armorFlash > 0 ? COLORS.gold : null;
 }
 
@@ -60,10 +65,12 @@ function drawGlow(painter, sheet, { fighter, frame, row, shakeX, color }) {
   for (const [dx, dy] of OUTER_GLOW) {
     drawHeroFrame(painter, sheet, at(dx, dy));
   }
+
   painter.alpha(0.95);
   for (const [dx, dy] of INNER_GLOW) {
     drawHeroFrame(painter, sheet, at(dx, dy));
   }
+
   painter.alpha(1);
 }
 
@@ -79,6 +86,7 @@ export function drawHeroFighter(painter, { sheet, fighter, shakeX: shake, tickCo
   if (color) {
     drawGlow(painter, sheet, { fighter, frame, row, shakeX, color });
   }
+
   const at = { frame, x: fighter.x + shakeX, y: fighter.y, facing: fighter.facing, row };
   drawHeroFrame(painter, sheet, { ...at, tint: hitTint(fighter) });
   // turned slow as stone by the guardian's gaze: grey stone washed over the hero
@@ -87,5 +95,6 @@ export function drawHeroFighter(painter, { sheet, fighter, shakeX: shake, tickCo
     drawHeroFrame(painter, sheet, { ...at, tint: FX_COLORS.stoneSkin });
     painter.alpha(1);
   }
+
   drawHeavyLayer(painter, 'over', layers);
 }

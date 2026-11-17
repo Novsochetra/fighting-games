@@ -15,10 +15,12 @@ function jumpCancel(game, player, buffer) {
   if (!move.jumpCancel || !player.hitConfirmed || player.moveTime < activeEnd(move) || !wantsJump) {
     return false;
   }
+
   jump(game, player, { vy: -6.6 });
   if (buffer?.action === 'jump') {
     consumeBuffer(game);
   }
+
   return true;
 }
 
@@ -26,6 +28,7 @@ function faceForFollowUp(game, player, direction) {
   if (player.airborne) {
     return;
   }
+
   if (direction) {
     player.facing = direction;
   } else {
@@ -39,6 +42,7 @@ function chainAttack(game, player, { buffer, direction }) {
   if (player.moveTime < open || player.moveTime > close) {
     return false;
   }
+
   const held = game.input.held;
   const id = player.airborne ? pickAirMove(buffer, held, move) : pickGroundMove(buffer, held, move);
   if (id) {
@@ -47,15 +51,18 @@ function chainAttack(game, player, { buffer, direction }) {
     consumeBuffer(game);
     return true;
   }
+
   // no heavy follow-up in this string: charge straight out of it
   if (!player.airborne && buffer.action === 'heavy' && !move.chargeLevel) {
     if (direction) {
       player.facing = direction;
     }
+
     tryCharge(game, player);
     consumeBuffer(game);
     return true;
   }
+
   return false;
 }
 
@@ -75,6 +82,7 @@ function drift(player, direction) {
   if (!direction || move.dive) {
     return;
   }
+
   if (player.airborne) {
     player.vx = clamp(player.vx + direction * 0.08, -1.9, 1.9);
   } else if (direction === player.facing && !move.sustain) {
@@ -88,9 +96,11 @@ export function thinkAttack(game, player, intent) {
   if (jumpCancel(game, player, buffer) || !buffer) {
     return;
   }
+
   const attacking = buffer.action === 'light' || buffer.action === 'heavy';
   if (attacking && chainAttack(game, player, intent)) {
     return;
   }
+
   dashCancel(game, player, intent);
 }

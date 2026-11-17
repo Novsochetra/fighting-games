@@ -19,12 +19,15 @@ export function createStaticHandler({ webRoot, mounts, isImmutable = () => false
     if (!stats) {
       return sendNotFound(response);
     }
+
     if (stats.isDirectory()) {
       return serveDirectory({ request, response, target, query });
     }
+
     if (!stats.isFile() || target.trailingSlash) {
       return sendNotFound(response);
     }
+
     const cache = isImmutable(target.canonicalPath) ? KEPT_FOR_A_YEAR : null;
 
     return sendFile({ request, response, filePath: target.filePath, stats, cache });
@@ -35,11 +38,13 @@ async function serveDirectory({ request, response, target, query }) {
   if (!target.trailingSlash) {
     return sendRedirect(response, `${target.canonicalPath}/${query}`);
   }
+
   const indexPath = path.join(target.filePath, 'index.html');
   const stats = await statOrNull(indexPath);
   if (!stats?.isFile()) {
     return sendNotFound(response);
   }
+
   return sendFile({ request, response, filePath: indexPath, stats });
 }
 

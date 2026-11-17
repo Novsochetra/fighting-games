@@ -23,9 +23,11 @@ function checkId(entry, folderName) {
   if (!isFilledText(entry.id)) {
     return [];
   }
+
   if (entry.id !== folderName) {
     return [`"id" is "${entry.id}" but the folder is "${folderName}"`];
   }
+
   return ID_PATTERN.test(entry.id)
     ? []
     : ['"id" may only use lowercase letters, digits and dashes'];
@@ -37,6 +39,7 @@ function checkArtPath(entry, field) {
   if (isMissing || (typeof value === 'string' && RELATIVE_FILE_PATTERN.test(value))) {
     return [];
   }
+
   return [`"${field}" must be a relative file path inside the game folder`];
 }
 
@@ -46,7 +49,9 @@ function checkControls(entry) {
   if (entry.controls === undefined) {
     return [];
   }
+
   const isTextList = Array.isArray(entry.controls) && entry.controls.every(isFilledText);
+
   return isTextList ? [] : ['"controls" must be a list of non-empty strings'];
 }
 
@@ -55,6 +60,7 @@ function checkUrl(entry) {
   if (entry.url === undefined || isSecureUrl(entry.url)) {
     return [];
   }
+
   return ['"url" must be an https:// address'];
 }
 
@@ -62,6 +68,7 @@ function checkPixelArt(entry) {
   if (entry.pixelArt === undefined || typeof entry.pixelArt === 'boolean') {
     return [];
   }
+
   return ['"pixelArt" must be true or false'];
 }
 
@@ -71,6 +78,7 @@ function checkListed(entry) {
   if (entry.listed === undefined || typeof entry.listed === 'boolean') {
     return [];
   }
+
   return ['"listed" must be true or false'];
 }
 
@@ -90,6 +98,7 @@ export function validateGameEntry(entry, folderName) {
   if (!isPlainObject(entry)) {
     return ['game.json must hold a JSON object'];
   }
+
   return CHECKS.flatMap((check) => check(entry, folderName));
 }
 

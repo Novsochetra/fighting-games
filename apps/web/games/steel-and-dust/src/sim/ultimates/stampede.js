@@ -62,9 +62,11 @@ export function runStampede(game, player, time) {
       stampedeHerd(game, player, { side, lanes });
     }
   }
+
   if (since === STAMPEDE.greatStagAt) {
     greatStag(game, player);
   }
+
   flashOnImpact(game);
   if (time >= STAMPEDE.end) {
     finishUlt(player);

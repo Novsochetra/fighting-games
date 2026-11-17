@@ -7,6 +7,7 @@ function leave({ referrer, length = 2, href = GAME }) {
   const location = { href, assign: vi.fn() };
   const history = { length, back: vi.fn() };
   createArcadeExit({ location, history, referrer })();
+
   return { assign: location.assign, back: history.back };
 }
 

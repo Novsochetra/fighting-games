@@ -9,6 +9,7 @@ import { backdropFor, backdropPieces, missionRoadLoaded } from './scene/backdrop
 export function sceneLoaded(view, game) {
   keepPickedHero(view, game.settings.hero);
   const enemies = missionEnemiesSettled(view.enemySheets, game.missionIndex);
+
   return (
     missionRoadLoaded(view, game.missionIndex) &&
     enemies &&
@@ -25,6 +26,7 @@ export function sceneProgress(view, game) {
   keepMissionEnemies(enemySheets, game.missionIndex);
   const enemies = enemySheets.needed.filter((id) => enemySheets.settled[id]).length;
   const settled = pieces.filter((piece) => piece.settled).length + strips - sheet.waiting + enemies;
+
   return settled / (pieces.length + strips + enemySheets.needed.length);
 }
 

@@ -18,6 +18,7 @@ export function envelopeSteps({ gain, attack, duration }, at) {
 
 export function frequencySteps({ frequency: [from, to], duration }, at) {
   const steps = [{ type: 'set', value: from, time: at }];
+
   return from === to ? steps : [...steps, { type: 'exponential', value: to, time: at + duration }];
 }
 
@@ -34,12 +35,14 @@ export function createNoiseBuffer(context, seconds = NOISE_SECONDS) {
   for (let i = 0; i < length; i += 1) {
     samples[i] = Math.random() * 2 - 1;
   }
+
   return buffer;
 }
 
 function createTone(context, voice) {
   const oscillator = context.createOscillator();
   oscillator.type = voice.wave;
+
   return { source: oscillator, output: oscillator, pitch: oscillator.frequency };
 }
 
@@ -50,6 +53,7 @@ function createNoise(context, voice, noiseBuffer) {
   filter.type = voice.filter;
   filter.Q.value = voice.resonance;
   source.connect(filter);
+
   return { source, output: filter, pitch: filter.frequency };
 }
 
@@ -64,5 +68,6 @@ export function scheduleVoice(context, { destination, noiseBuffer }, voice, star
   amp.connect(destination);
   parts.source.start(at);
   parts.source.stop(at + voice.duration + 0.05);
+
   return parts.source;
 }

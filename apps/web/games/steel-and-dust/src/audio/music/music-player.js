@@ -15,6 +15,7 @@ export function selectSong(audio, name) {
   if (music.name === name) {
     return;
   }
+
   music.name = name;
   music.step = 0;
   music.next = audio.context ? audio.context.currentTime + 0.08 : 0;
@@ -26,11 +27,13 @@ export function tickMusic(audio) {
   if (!context || context.state !== 'running' || !music.name) {
     return;
   }
+
   const song = SONGS[music.name];
   const beat = 60 / song.bpm / 4;
   if (music.next < context.currentTime) {
     music.next = context.currentTime + 0.05;
   }
+
   while (music.next < context.currentTime + LOOKAHEAD_SECONDS) {
     const step = { song, index: music.step, time: music.next };
     try {
@@ -38,6 +41,7 @@ export function tickMusic(audio) {
     } catch {
       // a node the browser refuses to schedule must not stop the music loop
     }
+
     music.step = (music.step + 1) % 64;
     music.next += beat;
   }
@@ -51,5 +55,6 @@ export function updateMusic(audio, game) {
     audio.ducked = ducked;
     applyVolumes(audio.chain, game);
   }
+
   tickMusic(audio);
 }

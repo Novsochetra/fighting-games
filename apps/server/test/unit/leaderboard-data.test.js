@@ -104,6 +104,7 @@ describe('run tickets', () => {
 
   function clockedTickets(secret = 'secret') {
     const clock = { time: Date.UTC(2026, 9, 29) };
+
     return { clock, tickets: createRunTickets({ secret, now: () => clock.time }) };
   }
 

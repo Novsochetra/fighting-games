@@ -16,6 +16,7 @@ export function isFromOtherSite(headers) {
   if (OTHER_SITE_FETCHES.has(headers['sec-fetch-site'])) {
     return true;
   }
+
   return headers.origin !== undefined && hostOf(headers.origin) !== headers.host;
 }
 

@@ -23,21 +23,26 @@ export function handleKeyDown(event, { game, menus, ui }) {
     handleTyping(event, menus);
     return;
   }
+
   if (event.code === 'KeyM' && !event.repeat) {
     game.input.pressed.mute = true;
     return;
   }
+
   if (menus.isOpen()) {
     menus.handleKey(event);
     return;
   }
+
   const action = actionForKey(event.code);
   if (!action) {
     return;
   }
+
   if (!hasModifier(event)) {
     event.preventDefault();
   }
+
   pressAction(game.input, action, event.repeat);
 }
 

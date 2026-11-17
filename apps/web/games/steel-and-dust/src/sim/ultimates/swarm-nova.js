@@ -14,11 +14,13 @@ function heightAt(time) {
   if (time < novaAt) {
     return hover * easeOutCubic(Math.min(1, time / RISE_TICKS));
   }
+
   return hover * (1 - Math.min(1, (time - novaAt) / (end - novaAt - 6)));
 }
 
 export function stingsEach(targetCount) {
   const { stings, crowd } = SWARM_NOVA;
+
   return Math.max(1, Math.min(stings, Math.floor((stings * targetCount) / crowd)));
 }
 
@@ -39,6 +41,7 @@ function releaseSwarm(game, player) {
       owner: player,
     });
   }
+
   game.io.sfx('swarm', false, { x: player.x });
 }
 
@@ -56,6 +59,7 @@ function nova(game, player) {
   for (const fly of swarmOf(game)) {
     fly.done = true;
   }
+
   const y = player.y - 24;
   addBurst(game, { sprite: 'nova', x: player.x, y, scale: 1.3 });
   addSparks(game, { x: player.x, y, count: 30, color: FX_COLORS.emberGold, speed: 5 });
@@ -70,18 +74,22 @@ export function runSwarmNova(game, player, time) {
   if (time === 1) {
     player.ultFloor = floorUnder(game.terrain, player);
   }
+
   player.y = player.ultFloor - heightAt(time);
   player.airborne = player.y < player.ultFloor;
   player.ultFrame = poseFrame(time, poseTicks);
   if (time === intro) {
     releaseSwarm(game, player);
   }
+
   if (time === recallAt) {
     recallSwarm(game);
   }
+
   if (time === novaAt) {
     nova(game, player);
   }
+
   if (time >= end) {
     player.y = player.ultFloor;
     player.airborne = false;

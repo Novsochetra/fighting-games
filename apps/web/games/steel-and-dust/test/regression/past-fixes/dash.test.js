@@ -11,6 +11,7 @@ describe('dash', () => {
     const game = createPlayingGame();
     runTicks(game, 30);
     tap(game, 'dash');
+
     return game;
   }
 
@@ -21,6 +22,7 @@ describe('dash', () => {
       frames.push(heroAnimation(game.player));
       runTicks(game, 1);
     }
+
     expect(frames.length).toBeGreaterThan(5);
     expect(frames.every(([name, frame]) => name === 'dash' && frame >= 1 && frame <= 3)).toBe(true);
   });
@@ -32,11 +34,13 @@ describe('dash', () => {
       speeds.push(Math.abs(game.player.vx));
       runTicks(game, 1);
     }
+
     expect(speeds).toHaveLength(DASH_TICKS - 1);
     expect(speeds[0]).toBeGreaterThan(4);
     for (let i = 1; i < speeds.length; i++) {
       expect(speeds[i]).toBeLessThanOrEqual(speeds[i - 1]);
     }
+
     expect(speeds.at(-1)).toBeCloseTo(1.7, 1);
     expect(game.player.state).toBe('idle');
   });

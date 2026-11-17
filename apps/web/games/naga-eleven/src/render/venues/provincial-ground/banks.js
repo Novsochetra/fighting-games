@@ -57,6 +57,7 @@ function paintStandingFans(raster, { index, art }) {
     rowPitch: 9,
     palette: art.crowd,
     frame: index,
+
     filled: (x, row) =>
       noise2(x, row * 11, { cell: 40, salt: 9 }) > 0.44 && hash2(x, row, 95) < 0.8,
   });

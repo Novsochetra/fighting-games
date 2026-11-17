@@ -40,7 +40,9 @@ export function stairs(from, steps) {
     points.push([x, rise], [x + width, rise]);
     x += width;
   }
+
   points.push([x, 0]);
+
   return points;
 }
 
@@ -73,6 +75,7 @@ export function contour(from, legs) {
     x += run;
     points.push([x, rise]);
   }
+
   return points;
 }
 
@@ -85,6 +88,8 @@ export function dais(from, steps) {
     points.push([x, rise], [x + width, rise]);
     x += width;
   }
+
   points.push([x, 0]);
+
   return points;
 }

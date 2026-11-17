@@ -16,6 +16,7 @@ function khanArena({ gap = 120, hp } = {}) {
   const khan = game.boss;
   Object.assign(khan, { entering: false, x: game.player.x + gap, facing: -1 });
   khan.hp = hp ?? khan.maxHp;
+
   return { game, khan };
 }
 
@@ -42,6 +43,7 @@ describe('Gravel Khan in a fight', () => {
         .forEach((shot) => waves.add(shot));
       knockedDown ||= game.player.state === 'juggle' || game.player.state === 'down';
     }
+
     expect(waves.size).toBe(3);
     expect(knockedDown).toBe(true);
   });
@@ -71,6 +73,7 @@ describe('Gravel Khan in a fight', () => {
       runTicks(game, 1);
       hit ||= wave.hitTargets.has(game.player);
     }
+
     expect(hit).toBe(false);
   });
 
@@ -92,17 +95,21 @@ describe('Gravel Khan in a fight', () => {
       if (i % 300 === 0) {
         game.fighters = game.fighters.filter((fighter) => !raiders(game).includes(fighter));
       }
+
       game.player.hp = game.player.maxHp;
       if (i === 1800) {
         khan.hp = 75;
       }
+
       khan.hp = Math.max(khan.hp, i < 1800 ? 110 : 40);
       if (khan.move) {
         used.add(khan.move.id);
       }
+
       expect(khan.x).toBeGreaterThanOrEqual(game.arena.left - 1);
       expect(khan.x).toBeLessThanOrEqual(game.arena.right + 1);
     }
+
     expect([...used]).toEqual(expect.arrayContaining(['crescentDash', 'warHorn', 'tempest']));
     expect(used.has('charge')).toBe(false);
   });

@@ -21,6 +21,7 @@ function frameOf(piece) {
     const glint = Math.floor((beat % GEM_GLINT_EVERY) / sprite.ticks);
     return glint < sprite.frames ? glint : 0;
   }
+
   return Math.floor(beat / sprite.ticks) % sprite.frames;
 }
 
@@ -36,6 +37,7 @@ function drawPiece(painter, { piece, sheets }) {
   if (isBlinking(piece) && (piece.time >> 2) & 1) {
     return;
   }
+
   const bob = piece.landed && piece.kind === 'apple' ? Math.round(Math.sin(piece.time * 0.08)) : 0;
   drawLootFrame(painter, sheets, {
     name: piece.kind,
@@ -53,6 +55,7 @@ export function drawGroundLoot(painter, { game, sheets, cameraX }) {
       if (!piece.landed) {
         drawShadow(painter, { piece, terrain: game.terrain });
       }
+
       drawPiece(painter, { piece, sheets });
     }
   }

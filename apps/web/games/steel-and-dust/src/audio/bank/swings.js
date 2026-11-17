@@ -97,20 +97,24 @@ function buildSwing(track, spec, pitch) {
   if (sleeve) {
     flap(track, { ...sleeve, cutoff: sleeve.cutoff * pitch });
   }
+
   for (const frequency of spec.glints || []) {
     const envelope = linearCurve([0, 0, peak, 1, length, 0]);
     layer(track, { wave: 'sine', frequency: frequency * pitch, envelope, length, level: 0.02 });
   }
+
   if (hum) {
     const frequency = expCurve([0, hum.from, length, hum.to]);
     const envelope = linearCurve([0, 0, peak, 1, length, 0]);
     layer(track, { wave: 'sine', frequency, envelope, length, level: hum.level });
   }
+
   return { drive: spec.drive };
 }
 
 function swingSound(key, spec) {
   const shaped = { ...spec, peak: SWING_LEAD_SECONDS[key] };
+
   return {
     group: 'swing',
     level: spec.level,

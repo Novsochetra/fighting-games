@@ -16,6 +16,7 @@ function djinnArena({ gap = 150, hp, heroX = 120 } = {}) {
   Object.assign(djinn, { entering: false, x: game.player.x + gap, facing: -1 });
   djinn.hp = hp ?? djinn.maxHp;
   djinn.ai.cooldown = 9999;
+
   return { game, djinn };
 }
 
@@ -28,6 +29,7 @@ function playOut(game, djinn, ticks, everyTick = () => {}) {
     djinn.ai.cooldown = 9999;
     states.add(game.player.state);
   }
+
   return states;
 }
 
@@ -132,11 +134,13 @@ describe('the Storm Djinn in a fight', () => {
       if (i % 600 === 0) {
         game.player.x = djinn.x > 192 ? 20 : 364;
       }
+
       runTicks(game, 1);
       game.player.hp = game.player.maxHp;
       djinn.hp = Math.max(djinn.hp, 40);
       used.add(djinn.move?.id);
     }
+
     expect([...used]).toEqual(expect.arrayContaining(['thunderFist', 'dustDevils', 'eyeOfStorm']));
   });
 });

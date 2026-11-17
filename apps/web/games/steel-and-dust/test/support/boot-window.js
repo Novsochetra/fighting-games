@@ -11,6 +11,7 @@ function fakeClock(window) {
   let nextId = 1;
   window.setTimeout = (callback, ms) => {
     timers.set(nextId, { at: now + ms, callback });
+
     return nextId++;
   };
   window.clearTimeout = (id) => timers.delete(id);
@@ -22,6 +23,7 @@ function fakeClock(window) {
       now = timer.at;
       timer.callback();
     }
+
     now = until;
   };
   window.PerformanceObserver = class {
@@ -50,20 +52,24 @@ export function fakeBootWindow(href) {
     },
     history: {
       state: { kept: true },
+
       replaceState: (state, title, url) => {
         window.rewritten.push({ state, url });
         window.location.href = url;
       },
     },
     addEventListener: (type, listener) => listeners.set(type, listener),
+
     removeEventListener: (type, listener) => {
       if (listeners.get(type) === listener) {
         listeners.delete(type);
       }
     },
+
     // an exception reaches the window itself; a file that fails fires at its own element
     fire: (type, target = window) => listeners.get(type)?.({ type, target }),
   };
   fakeClock(window);
+
   return window;
 }

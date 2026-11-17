@@ -104,6 +104,7 @@ describe('the layout draft', () => {
     for (const step of [1, 1, 1, 1, 1]) {
       draft = resizeControl(draft, { slot: LANDSCAPE, control: 'light', step, half });
     }
+
     expect(draft[LANDSCAPE].light).toEqual({ x: 0.91, y: 0.82, size: 1.5 });
     expect(sizeOf(draft, LANDSCAPE, 'light')).toBe(1.5);
     expect(sizeOf(draft, PORTRAIT, 'light')).toBe(1);
@@ -122,6 +123,7 @@ describe('the layout draft', () => {
       while (order.length <= shown.length) {
         order.push(nextControl(order[order.length - 1], shown));
       }
+
       return order;
     };
     expect(turns(shownControls(CLASSIC.layouts.landscape, 'fixed'))).toEqual([
@@ -171,6 +173,7 @@ describe('the layout draft', () => {
         half: stickHalf,
       });
     }
+
     expect(draft[LANDSCAPE].stick).toEqual({ x: 0.896, y: 0.7, size: 1.3 });
     expect(sizeOf(draft, LANDSCAPE, 'stick')).toBe(1.3);
     expect(draft[LANDSCAPE].light).toEqual(landscapeDraft()[LANDSCAPE].light);

@@ -11,6 +11,7 @@ function fakeAudio() {
   const context = createFakeAudioContext({ state: 'running' });
   const chain = buildChain(context);
   context.nodes.length = 0;
+
   return { context, chain };
 }
 
@@ -77,6 +78,7 @@ describe('playOneShot', () => {
       const step = { song: SONGS.boss, index, time: index * 0.1 };
       playOneShot(audio, (live) => playStep(live, step));
     }
+
     advanceTo(audio.context, 30);
     expect(connectedNodes(audio.context)).toEqual([]);
   });

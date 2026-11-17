@@ -15,6 +15,7 @@ function pixelAt(strip, frame, { ahead, up }) {
   const x = frame * sprite.frameWidth + sprite.feetX + Math.round(ahead * RENDER_SCALE);
   const y =
     sprite.strips[strip].row * sprite.frameHeight + sprite.feetY - Math.round(up * RENDER_SCALE);
+
   return { alpha: sheet.alpha(x, y), rgb: sheet.rgb(x, y) };
 }
 
@@ -30,6 +31,7 @@ function lowestRow(strip, frame) {
       }
     }
   }
+
   return -1;
 }
 
@@ -79,6 +81,7 @@ describe("the Sand Pharaoh's art and his spells", () => {
           lowest = strip.alpha(x, y) > 0 ? Math.max(lowest, y) : lowest;
         }
       }
+
       expect(lowest - anchorY, name).toBe(sprite.frameHeight - sprite.feetY - 2);
     }
   });
@@ -107,9 +110,11 @@ describe("the Sand Pharaoh's art and his spells", () => {
         for (let y = 0; y < frameHeight; y++) {
           edge.push(image.alpha(left, top + y), image.alpha(left + frameWidth - 1, top + y));
         }
+
         for (let x = 0; x < frameWidth; x++) {
           edge.push(image.alpha(left + x, top));
         }
+
         expect(Math.max(...edge), `${name} ${frame}`).toBe(0);
       }
     }

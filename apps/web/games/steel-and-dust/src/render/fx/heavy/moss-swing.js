@@ -18,6 +18,7 @@ function arcPoint(at, angle, radius) {
 function arcSpan(since) {
   const head = Math.min(ARC_STEPS, Math.round(((since + 1) * ARC_STEPS) / 2));
   const tail = Math.max(0, Math.round(((since - 1) * ARC_STEPS) / 3));
+
   return { head, tail };
 }
 
@@ -36,6 +37,7 @@ function drawArcStep(painter, { at, range, i, art, since }) {
   if (Math.abs(i + 0.5 - ARC_STEPS / 2) < ARC_STEPS / 3) {
     painter.use(since === 0 ? art.bloom : art.glow).line(...band(ARC_RADIUS), 1);
   }
+
   if (i % 3 === 1) {
     drawThorn(painter, { at, angle: angleAt(i), art });
   }
@@ -46,6 +48,7 @@ function drawArc(painter, { fighter, move, time, art }, range) {
   if (since < 0 || since >= ARC_TICKS) {
     return;
   }
+
   const core = mossCoreOf(fighter);
   const at = { x: core.x, y: core.y - 4, facing: fighter.facing };
   const { head, tail } = arcSpan(since);
@@ -53,6 +56,7 @@ function drawArc(painter, { fighter, move, time, art }, range) {
   for (let i = tail; i < head; i++) {
     drawArcStep(painter, { at, range, i, art, since });
   }
+
   painter.alpha(1);
 }
 

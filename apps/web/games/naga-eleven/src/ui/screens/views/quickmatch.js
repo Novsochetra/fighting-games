@@ -16,6 +16,7 @@ export const QUICKMATCH_SCREEN = {
 
     return { options, picks: firstPicks(options) };
   },
+
   render(section, { state, view }) {
     const teams = pickedTeams(state);
     const kits = kitColoursOf(teams);
@@ -23,12 +24,14 @@ export const QUICKMATCH_SCREEN = {
     fillSlot(section, 'home', teamBadge(view, teams[0], kits[0], { format: true }));
     fillSlot(section, 'away', teamBadge(view, teams[1], kits[1], { format: true }));
   },
+
   adjust(side, by, app) {
     const { state } = app.current;
 
     state.picks = stepPick(state.options, state.picks, { side, by });
     app.rerender();
   },
+
   act(action, _button, app) {
     if (action !== 'pick-teams') {
       return false;

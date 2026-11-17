@@ -31,6 +31,7 @@ export const MOSS_PARTICLE_MOVERS = {
     particle.vx *= 0.93;
     particle.vy = particle.vy * 0.93 - 0.012;
   },
+
   mossLeaf(particle, terrain) {
     if (particle.pulled) {
       pullLeaf(particle);
@@ -38,12 +39,14 @@ export const MOSS_PARTICLE_MOVERS = {
       fallLeaf(particle, terrain);
     }
   },
+
   mossThorn(particle) {
     particle.x += particle.vx;
     particle.y += particle.vy;
     particle.vx *= THORN_DRAG;
     particle.vy *= THORN_DRAG;
   },
+
   // a bramble stays rooted where it grew
   mossBramble() {},
 };

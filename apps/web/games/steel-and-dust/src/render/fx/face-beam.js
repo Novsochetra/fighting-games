@@ -19,6 +19,7 @@ function pulseAt(face, run, length) {
     const at = (travelled + (i * length) / PULSES) % length;
     bump = Math.max(bump, 1 - Math.abs(run - at) / 7);
   }
+
   return bump;
 }
 
@@ -32,6 +33,7 @@ export function beamProfile(face, run, length) {
   const tip = Math.min(1, (length - run) / TAPER) ** 0.6;
   const dying = Math.min(1, (FACE_TIMES.sink - time) / DIE_TICKS);
   const size = tip * dying;
+
   return {
     glow: (8 + wave + flicker(run >> 1, time >> 1) * 2) * size,
     body: (4.5 + wave * 0.6 + bump * 1.8) * size * Math.min(1, 0.6 + run / 10),
@@ -59,6 +61,7 @@ function columnsOf(face, mouth, length) {
     const x = face.direction > 0 ? mouth.x + run : mouth.x - run - PIXEL;
     columns.push({ x: snap(x), shape: beamProfile(face, Math.max(0, run), length) });
   }
+
   return columns;
 }
 
@@ -70,6 +73,7 @@ function drawBand(context, { columns, y, color, half }) {
     const span = snap(half(column.shape));
     fills.add(column.x, y - span, PIXEL, span * 2);
   }
+
   fills.flush();
 }
 
@@ -106,6 +110,7 @@ export function drawFaceBeam(painter, face) {
   for (const band of BANDS) {
     drawBand(context, { ...beam, ...band });
   }
+
   drawLightning(context, { face, mouth, length });
   drawMuzzle(context, { face, mouth });
   drawTip(context, { face, mouth, length });

@@ -12,6 +12,7 @@ function moveSideways(piece, game) {
     piece.vx = -piece.vx * MOTION.bounce;
     return;
   }
+
   piece.x = toX;
 }
 
@@ -24,7 +25,9 @@ function land(piece, floor) {
     piece.rolling = true;
     return false;
   }
+
   piece.vy = -piece.vy * MOTION.bounce;
+
   return true;
 }
 
@@ -35,12 +38,14 @@ function roll(piece, game) {
     Object.assign(piece, { vx: 0, rolling: false, landed: true });
     return;
   }
+
   moveSideways(piece, game);
   const floor = floorBelow(game.terrain, piece.x, piece.y - 1);
   if (floor - piece.y > MOTION.rollDip) {
     piece.rolling = false;
     return;
   }
+
   piece.y = floor;
 }
 
@@ -49,10 +54,12 @@ export function fallAndBounce(piece, game) {
   if (piece.landed) {
     return false;
   }
+
   if (piece.rolling) {
     roll(piece, game);
     return false;
   }
+
   piece.vy += MOTION.gravity;
   piece.vx *= MOTION.airDrag;
   moveSideways(piece, game);
@@ -61,6 +68,8 @@ export function fallAndBounce(piece, game) {
   if (piece.vy > 0 && next >= floor) {
     return land(piece, floor);
   }
+
   piece.y = next;
+
   return false;
 }

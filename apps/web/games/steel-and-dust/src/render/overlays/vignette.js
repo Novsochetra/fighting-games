@@ -7,6 +7,7 @@ function strength(game) {
     player.hp > 0 && player.hp / player.maxHp <= 0.3
       ? 0.35 + 0.25 * Math.sin(game.tickCount * 0.12)
       : 0;
+
   return Math.max(lowHealth, (game.hurtFlash / 14) * (game.settings.flash ? 0.8 : 0.4));
 }
 
@@ -22,6 +23,7 @@ function gradient(context, view) {
     view.vignette.addColorStop(0, HUD_COLORS.vignetteClear);
     view.vignette.addColorStop(1, HUD_COLORS.vignetteRed);
   }
+
   return view.vignette;
 }
 
@@ -30,10 +32,12 @@ export function drawVignette(painter, game, view) {
   if (!game.player || game.mode === 'title') {
     return;
   }
+
   const alpha = strength(game);
   if (alpha <= 0.01) {
     return;
   }
+
   const context = painter.context;
   const fill = gradient(context, view);
   context.globalAlpha = Math.min(1, alpha);

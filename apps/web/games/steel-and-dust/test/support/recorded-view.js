@@ -8,6 +8,7 @@ function createCanvas(width, height) {
   const canvas = new RecordingCanvas();
   canvas.width = width;
   canvas.height = height;
+
   return canvas;
 }
 
@@ -21,10 +22,12 @@ export function createRecordedRenderer() {
   });
   const log = screen.recording.log;
   log.length = 0;
+
   return function recordFrame(game) {
     renderFrame(game, view);
     const frame = { calls: log.length, digest: digest(log) };
     log.length = 0;
+
     return frame;
   };
 }

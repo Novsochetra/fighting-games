@@ -37,6 +37,7 @@ function overlap(one, other) {
       either += drawn(one, x, y) || drawn(other, x, y) ? 1 : 0;
     }
   }
+
   return both / either;
 }
 
@@ -58,6 +59,7 @@ function greyEdge(cell) {
       count += drawn(cell, x, y) && grey && onEdge(cell, x, y) ? 1 : 0;
     }
   }
+
   return count;
 }
 
@@ -69,10 +71,12 @@ function footOf(frame) {
     for (let x = 0; x < frameWidth; x++) {
       count += serpent.alpha(frame * frameWidth + x, y) > 0 ? 1 : 0;
     }
+
     if (count >= 8) {
       return y;
     }
   }
+
   return -1;
 }
 

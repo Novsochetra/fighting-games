@@ -8,6 +8,7 @@ const STAR_TICKS = 3;
 
 function leanOf(fighter, time) {
   const { lean, leanTicks } = BOKATOR_HEAVY_FEEL;
+
   return -fighter.facing * Math.round(lean * Math.min(1, (time + 1) / leanTicks));
 }
 
@@ -16,6 +17,7 @@ function drawChestStar(painter, { fighter, move, time, art }) {
   if (lead > STAR_TICKS || lead < 1) {
     return;
   }
+
   const arm = STAR_TICKS + 1 - lead;
   const chest = chestOf(fighter);
   const x = Math.round(chest.x + leanOf(fighter, time));

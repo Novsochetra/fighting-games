@@ -15,6 +15,7 @@ function knightAt(distance, { missionIndex = 7, share = 1 } = {}) {
   Object.assign(knight, { entering: false, x: 120 + distance, facing: -1 });
   knight.ai.cooldown = 0;
   knight.hp = share * knight.maxHp;
+
   return { game, knight };
 }
 
@@ -37,6 +38,7 @@ describe("the Furnace Knight's kit", () => {
       think(game, knight);
       directions.add(knight.walkDirection);
     }
+
     expect([...directions]).toEqual([1]);
     expect(game.summons.some((summon) => summon.sprite === 'steam')).toBe(true);
   });

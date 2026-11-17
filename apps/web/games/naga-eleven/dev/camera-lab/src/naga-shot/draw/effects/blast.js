@@ -44,6 +44,7 @@ function flamePoints({ at, angle, root, length, width }) {
 
 const fadingPen = (pen, fade) => ({
   ...pen,
+
   rect: (box, color) => {
     for (let x = box[0]; x < box[0] + box[2]; x += 1) {
       if (dithered(x, box[1], fade)) {

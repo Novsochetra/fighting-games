@@ -9,6 +9,7 @@ const framesBetween = (from, to) => {
   for (let time = from; time < to; time++) {
     frames.add(cutsFrame(time)[1]);
   }
+
   return frames;
 };
 

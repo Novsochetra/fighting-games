@@ -25,6 +25,7 @@ export function drawPool(context, { fighter, move, time, tickCount }) {
   if (fighter.airborne || time > move.startup) {
     return;
   }
+
   const rx = snap(5 + growthOf(time, move.startup) * 8);
   const ry = Math.max(PIXEL, snap(rx * FLAT));
   const at = { x: fighter.x, y: fighter.y };

@@ -32,6 +32,7 @@ describe.each(Object.entries(TITLE_SCENES))('the %s title scene', (_orientation,
     for (const tick of ticksUpTo(3000, 61)) {
       drawAt(scene, tick);
     }
+
     expect(random).not.toHaveBeenCalled();
   });
 

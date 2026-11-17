@@ -26,14 +26,18 @@ function stubLayout(overrides = {}) {
     if (!element.isConnected) {
       return NOTHING;
     }
+
     if (element.classList.contains('launch') || element.id === 'home') {
       return SCREEN;
     }
+
     const name = [...boxes.keys()].find((className) => element.classList.contains(className));
+
     return overrides[name] ?? boxes.get(name) ?? NOTHING;
   };
   vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function measure() {
     const box = boxFor(this);
+
     return { ...box, right: box.left + box.width, bottom: box.top + box.height, x: 0, y: 0 };
   });
 }
@@ -125,6 +129,7 @@ describe('coming back from a game', () => {
     const started = await bootWithRealCatalog();
     press('Enter');
     await waitUntil(() => expect(started.navigate).toHaveBeenCalled());
+
     return started;
   }
 

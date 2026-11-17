@@ -2,6 +2,7 @@ import { BODY_ART } from '../../art/weapon-art.js';
 
 function oddSize(size) {
   const rounded = Math.round(size);
+
   return rounded % 2 === 0 ? rounded + 1 : rounded;
 }
 
@@ -25,6 +26,7 @@ function hoodFace(painter, { x, y, size, unit, facing, palette }) {
   if (palette.mask) {
     painter.use(palette.mask).rect(faceX, faceY + 3 * unit, width, height - 3 * unit);
   }
+
   painter
     .use(palette.eye)
     .rect(facing > 0 ? faceX + width - 2 * unit : faceX + unit, faceY + 2 * unit, unit, unit);
@@ -110,6 +112,7 @@ function wrapped(painter, { joints, scale, facing, palette, unit }) {
   if (!palette.headStyle) {
     return;
   }
+
   painter.use(palette.hair).rect(x, y, size, 3 * unit);
   painter.use(palette.outline).rect(facing > 0 ? x - 2 : x + size, y, 2, 4 * unit);
   painter.use(palette.hair).rect(facing > 0 ? x - 1 : x + size, y + unit, 1, 2 * unit);

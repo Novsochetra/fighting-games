@@ -5,6 +5,7 @@ export function blendPoses(from, to, amount) {
   for (const key of POSE_KEYS) {
     pose[key] = from[key] + (to[key] - from[key]) * amount;
   }
+
   return pose;
 }
 

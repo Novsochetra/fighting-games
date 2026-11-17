@@ -17,6 +17,7 @@ const run = (score, more = {}) => ({
 
 function cells(html) {
   const rows = [...html.matchAll(/<tr class="([^"]*)">(.*?)<\/tr>/g)];
+
   return rows.map(([, classes, row]) => ({
     classes,
     cells: [...row.matchAll(/<td[^>]*>(.*?)<\/td>/g)].map(([, cell]) => cell),

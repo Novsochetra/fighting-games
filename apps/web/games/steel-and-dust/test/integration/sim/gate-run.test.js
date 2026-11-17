@@ -25,6 +25,7 @@ function clearedAt(missionIndex, { offset = 200, hero = 'moss' } = {}) {
   game.player.x = boss.left + offset;
   followFloor(game.terrain, game.player);
   stageClear(game);
+
   return { game, heard };
 }
 
@@ -35,7 +36,9 @@ function runUntil(game, done, limit = 1500) {
     runTicks(game, 1);
     ticks++;
   }
+
   expect(done(game)).toBe(true);
+
   return ticks;
 }
 
@@ -158,6 +161,7 @@ describe('the hero coming onto the next road', () => {
   function enteredNext() {
     const { game } = clearedAt(1);
     runUntil(game, () => game.missionIndex === 2);
+
     return game;
   }
 

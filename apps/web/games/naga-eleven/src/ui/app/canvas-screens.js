@@ -68,17 +68,21 @@ const isMatchRunning = (session) =>
 
 export const trainingScreen = (session) => ({
   kind: 'training',
+
   get playing() {
     return DRILL_RUNNING.has(session.state.phase);
   },
+
   // the touch keys this drill reads; the pad hides the rest, which would cover its targets
   get keys() {
     return drillKeys(session.state);
   },
+
   step: (input, app) => {
     stepTrainingSession(session, input);
     app.audio?.hearTraining(session.state);
   },
+
   draw: (context, tick, app) => drawTrainingSession(context, session, { tick, actors: app.actors }),
   tap: (point) => tapTrainingSession(session, point),
   isDone: () => isTrainingSessionDone(session),
@@ -87,15 +91,19 @@ export const trainingScreen = (session) => ({
 
 export const matchScreen = (session) => ({
   kind: 'match',
+
   get playing() {
     return isMatchRunning(session);
   },
+
   session,
   venue: session.venue,
+
   step: (input, app) => {
     session.cinema = cinemaOf(app);
     stepMatchSession(session, input, { hear: app.hear });
   },
+
   draw: (context, tick, app) => drawMatchSession(context, session, { tick, actors: app.actors }),
   tap: (point) => tapMatchSession(session, point),
   isDone: () => isMatchSessionDone(session),
@@ -108,8 +116,10 @@ export const stillScreen = (session) => ({
   kind: 'still',
   playing: false,
   step: () => {},
+
   draw: (context, tick, app) =>
     drawMatchSession(context, session, { tick, actors: app.actors, still: true }),
+
   isDone: () => false,
 });
 

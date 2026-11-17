@@ -10,10 +10,12 @@ function nearestEnemy(view) {
     if (enemy.state === 'ko') {
       continue;
     }
+
     if (!best || Math.abs(enemy.x - view.player.x) < Math.abs(best.x - view.player.x)) {
       best = enemy;
     }
   }
+
   return best;
 }
 
@@ -24,12 +26,15 @@ export function createBot(driver, scheduled) {
     if (direction === bot.heldDirection) {
       return;
     }
+
     if (bot.heldDirection) {
       driver.release(bot.heldDirection < 0 ? 'left' : 'right');
     }
+
     if (direction) {
       driver.press(direction < 0 ? 'left' : 'right');
     }
+
     bot.heldDirection = direction;
   }
 
@@ -50,6 +55,7 @@ export function createBot(driver, scheduled) {
         return program;
       }
     }
+
     return PROGRAMS[0];
   }
 
@@ -75,20 +81,24 @@ export function createBot(driver, scheduled) {
       runEvents(tick);
       return;
     }
+
     if (view.meter >= 100) {
       driver.tap('ult');
       return;
     }
+
     const target = nearestEnemy(view);
     if (!target) {
       walkToward(1, view);
       return;
     }
+
     const dx = target.x - view.player.x;
     if (Math.abs(dx) > REACH) {
       walkToward(Math.sign(dx), view);
       return;
     }
+
     startProgram(tick, view);
   }
 
@@ -97,10 +107,12 @@ export function createBot(driver, scheduled) {
       bot.lastMode = view.mode;
       bot.modeSince = tick;
     }
+
     const waited = tick - bot.modeSince;
     if (view.mode === 'pause' && waited === RESUME_AFTER) {
       driver.act('resume');
     }
+
     if (view.mode === 'over' && waited === CONTINUE_AFTER) {
       driver.act('continue');
     }
@@ -113,6 +125,7 @@ export function createBot(driver, scheduled) {
       for (const key of scheduled[tick] ?? []) {
         driver.tap(key);
       }
+
       if (view.mode === 'play') {
         fight(tick, view);
       }

@@ -18,9 +18,11 @@ function setup({ isEnabled = true, choice = null } = {}) {
   if (choice !== null) {
     storage.write(CONSENT_KEY, choice);
   }
+
   const tag = { event: vi.fn(), grant: vi.fn(), deny: vi.fn() };
   const loadTag = vi.fn(() => tag);
   const analytics = createAnalytics({ isEnabled, loadTag, storage });
+
   return { analytics, storage, tag, loadTag };
 }
 

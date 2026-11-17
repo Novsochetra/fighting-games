@@ -7,6 +7,7 @@ function valueHtml(definition, settings) {
   if (definition.range) {
     return `${value}%<span class="meter"><i style="width:${value}%"></i></span>`;
   }
+
   return definition.format(value);
 }
 
@@ -15,6 +16,7 @@ function controlHtml(definition, settings) {
   if (definition.action) {
     return `<span class="stepper">${value}<button type="button" class="xbtn stone-btn" data-act="${definition.action}">Edit</button></span>`;
   }
+
   return (
     '<span class="stepper"><button type="button" class="stone-btn" data-d="-1" aria-label="Less">‹</button>' +
     `${value}<button type="button" class="stone-btn" data-d="1" aria-label="More">›</button></span>`
@@ -23,6 +25,7 @@ function controlHtml(definition, settings) {
 
 function rowHtml(definition, settings) {
   const note = definition.note ? `<small>${definition.note}</small>` : '';
+
   return (
     `<div class="setrow" data-k="${definition.key}"><span class="lbl">${definition.label}${note}</span>` +
     `${controlHtml(definition, settings)}</div>`
@@ -61,10 +64,12 @@ export function createSectionPanel({ list, title, game, audio, layout, visibilit
       if (!definition || definition.action) {
         return false;
       }
+
       game.settings[key] = steppedValue(definition, game.settings[key], { step, wrap });
       game.io.saveSettings(game.settings);
       audio.sfx('ui');
       AFTER_CHANGE[key]?.({ audio, layout, game });
+
       return true;
     },
   };

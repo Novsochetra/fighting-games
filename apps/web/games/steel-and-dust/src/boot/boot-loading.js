@@ -7,6 +7,7 @@ const loading = startLoading(window);
 
 export const bootLoading = {
   ...loading,
+
   appReady() {
     recovery.started();
     loading.appReady();

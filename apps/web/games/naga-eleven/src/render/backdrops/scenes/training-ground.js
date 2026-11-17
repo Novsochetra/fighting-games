@@ -159,5 +159,6 @@ export const TRAINING_GROUND = {
     paintPitch(raster);
     paintGear(raster);
   },
+
   overlay: drawCornerFlag,
 };

@@ -28,6 +28,7 @@ function windup(game, fighter) {
   if (fighter.airborne) {
     return;
   }
+
   for (const side of [-1, 1]) {
     const at = { x: fighter.x + side * 16, y: fighter.y - 1 };
     pushMist(game, at, { vx: -side * 1.1, life: 12, color: art.mist });
@@ -37,6 +38,7 @@ function windup(game, fighter) {
 // somewhere on the coiled body below the face, where the drawn sprite stands as it leans back
 function bodyPointOf(game, fighter) {
   const back = BLUE_HEAVY_FEEL.lean + fxBetween(game, -2, 6);
+
   return { x: fighter.x - fighter.facing * back, y: fighter.y - fxBetween(game, 6, 26) };
 }
 
@@ -49,6 +51,7 @@ function gather(game, fighter, move, time) {
       color: art.mist,
     });
   }
+
   if (time % 3 === 1 && time < move.startup - 1) {
     formCrystal(game, bodyPointOf(game, fighter), move.startup - time + 1);
   }
@@ -62,6 +65,7 @@ function kickUpFrost(game, fighter) {
     const at = { x: stanceX + side * 9, y: fighter.y - 3 };
     throwShards(game, at, { count: 2, angle: headingOf(side, 1.15), spread: 0.3, speed: 2.4 });
   }
+
   const back = { x: fighter.x - fighter.facing * 6, y: fighter.y - 2 };
   pushMist(game, back, { vx: -fighter.facing * 1.6, life: 14, color: art.mist });
 }

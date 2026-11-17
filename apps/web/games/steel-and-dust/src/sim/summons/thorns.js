@@ -42,6 +42,7 @@ function scatterLeaves(game, thorn) {
 function thornArea(thorn) {
   const half = 16 * thorn.scale;
   const height = 46 * thorn.scale;
+
   return { x: thorn.x - half, y: thorn.y - height, width: half * 2, height };
 }
 
@@ -50,11 +51,13 @@ export function updateThorn(game, thorn) {
     addDust(game, { x: thorn.x, y: thorn.y, count: 3 });
     game.io.sfx('thorns', false, { x: thorn.x });
   }
+
   if (thorn.time === STRIKE_TICK) {
     strikeArea(game, thorn, thornArea(thorn));
     scatterLeaves(game, thorn);
     shake(game, 1, 4);
   }
+
   thorn.done = thorn.time >= fxLength('thorns');
 }
 

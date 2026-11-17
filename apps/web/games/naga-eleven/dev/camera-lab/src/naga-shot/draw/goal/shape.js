@@ -22,6 +22,7 @@ export function goalView(camera) {
 
   return {
     depthOf: (side) => depthOfDistance(SIDES[side]),
+
     at({ x, h }, side) {
       const depth = depthOfDistance(SIDES[side]);
 

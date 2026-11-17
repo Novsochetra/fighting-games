@@ -25,6 +25,7 @@ function pickedOnTheTitle(heroId) {
   selectMission(game, 0);
   game.settings.hero = heroId;
   startPlay(game);
+
   return game;
 }
 
@@ -43,6 +44,7 @@ describe('a hero drawn with a sword', () => {
     for (let i = 0; i < 500; i++) {
       useDurability(game, game.player);
     }
+
     expect(game.player.weapon).toEqual(OWN_SWORD);
   });
 

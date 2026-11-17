@@ -21,6 +21,7 @@ const FIST_REACH = 14;
 
 function fistPoint(game, player) {
   const x = player.x + player.facing * FIST_REACH;
+
   return { x, y: groundAt(game.terrain, x) };
 }
 
@@ -60,6 +61,7 @@ function wakePride(game, player) {
     if (echo) {
       wakeEcho(echo, delay);
     }
+
     releaseLion(game, {
       flight: prideFlight(start, rank, { heap, ground, scale, run }),
       hit: POUNDING_LION.lion,
@@ -86,15 +88,19 @@ function runRushPhases(game, player, time) {
   if (time === gatherAt) {
     breatheIn(game, player);
   }
+
   if (time > gatherAt && time < rushAt) {
     gatherMote(game, player);
   }
+
   if (time === rushAt) {
     unleash(game, player);
   }
+
   if (time >= rushAt && time < RUSH_END) {
     runRush(game, player, time);
   }
+
   if (time >= RUSH_END && time < WAKE_AT) {
     zipBack(game, player, time);
   }
@@ -108,16 +114,20 @@ export function runPoundingLion(game, player, time) {
   if (time === slamAt) {
     slam(game, player);
   }
+
   runRushPhases(game, player, time);
   if (time === WAKE_AT) {
     wakePride(game, player);
   }
+
   if (time > WAKE_AT && time < FINALE_START && time % 3 === 0) {
     channel(game, player);
   }
+
   if (time === pounceAt) {
     pounce(game, player);
   }
+
   if (time >= POUNDING_LION.end) {
     player.rush = null;
     finishUlt(player);

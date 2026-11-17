@@ -32,9 +32,11 @@ export function migrateSettings(stored) {
   for (const [key, value] of Object.entries(stored)) {
     settings[RENAMED_KEYS[key] ?? key] = value;
   }
+
   if ('buttonLayout' in settings) {
     settings.buttonLayout = sanitizeButtonLayout(settings.buttonLayout);
   }
+
   return settings;
 }
 

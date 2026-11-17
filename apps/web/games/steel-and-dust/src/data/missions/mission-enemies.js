@@ -7,12 +7,14 @@ function kitMoves(kit) {
   const skills = kit.skills.map((skill) => skill.move);
   const swaps = Object.values(kit.phaseTwo?.swaps ?? {});
   const opener = kit.phaseTwo?.opener ? [kit.phaseTwo.opener] : [];
+
   return [...kit.close.moves, ...skills, ...swaps, kit.ultimate.move, ...opener];
 }
 
 // the raiders a boss calls onto the road itself, as the Gnoll Packlord's howls bring hounds
 function calledIn(kind) {
   const kit = BOSS_KITS[kind];
+
   return kit ? kitMoves(kit).flatMap((id) => ENEMY_MOVES[id].packKind ?? []) : [];
 }
 
@@ -25,6 +27,7 @@ export function missionEnemyKinds(index) {
   for (const kind of [...kinds]) {
     calledIn(kind).forEach((called) => kinds.add(called));
   }
+
   return kinds;
 }
 

@@ -8,11 +8,13 @@ const FLASH_TICKS = 3;
 // it holds the follow-through of its cut, and swings the cut once more when the cuts land
 export function carvingFrame(carving) {
   const [strip, strike, row] = carving.sprite;
+
   return [strip, carving.swungAt === null ? strike + 1 : strike, row];
 }
 
 function flashing(carving) {
   const swinging = carving.swungAt !== null && carving.time < carving.swungAt + FLASH_TICKS;
+
   return carving.time <= FLASH_TICKS || swinging;
 }
 

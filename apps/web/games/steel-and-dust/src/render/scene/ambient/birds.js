@@ -24,6 +24,7 @@ function drawBird(painter, { x, y, frame }) {
   if (!isOnScreen(x, y, BIRD_WIDTH)) {
     return;
   }
+
   const left = Math.round(x);
   const top = Math.round(y);
   for (const [offsetX, offsetY, width, height] of WING_FRAMES[frame]) {
@@ -33,6 +34,7 @@ function drawBird(painter, { x, y, frame }) {
 
 function flockOf(crossing) {
   const seed = crossing + SALT;
+
   return { seed, size: 3 + (hashInt(seed) % 3), lift: Math.round(trait(seed, 1) * 16) - 8 };
 }
 
@@ -43,6 +45,7 @@ export function drawBirds(painter, { effect, tick, colors }) {
   if (elapsed >= crossTicks) {
     return;
   }
+
   const flock = flockOf(crossing);
   const leaderX = VIEW_WIDTH + BIRD_WIDTH - (elapsed / crossTicks) * TRAVEL;
   painter.use(colors.bird);

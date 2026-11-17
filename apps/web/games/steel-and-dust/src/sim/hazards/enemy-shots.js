@@ -25,6 +25,7 @@ function bombSpeed(game, fighter, startY) {
   const drop = floorUnder(game.terrain, game.player) - startY;
   const flight =
     (-BOMB_LIFT + Math.sqrt(BOMB_LIFT * BOMB_LIFT + 2 * BOMB_GRAVITY * drop)) / BOMB_GRAVITY;
+
   return clamp(Math.abs(game.player.x - fighter.x) / flight, 0.8, 3.2);
 }
 

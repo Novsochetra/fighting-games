@@ -18,12 +18,15 @@ export function createRateLimiter({ limit, windowMs, now = Date.now }) {
     if (hits.size >= SWEEP_AT_KEYS) {
       sweep(time);
     }
+
     const recent = (hits.get(key) ?? []).filter((at) => at > time - windowMs);
     const allowed = recent.length < limit;
     if (allowed) {
       recent.push(time);
     }
+
     hits.set(key, recent);
+
     return allowed;
   };
 }

@@ -19,6 +19,7 @@ export function drawBoxStamped(painter, { key, box, ready, draw }) {
     width: box.width + MARGIN * 2,
     height: box.height + MARGIN * 2,
     resolution: RENDER_SCALE,
+
     draw: (context, left, top) => {
       context.save();
       context.translate(left - x, top - y);

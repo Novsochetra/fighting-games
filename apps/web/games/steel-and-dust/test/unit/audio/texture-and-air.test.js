@@ -64,6 +64,7 @@ function brightness(samples) {
     energy += samples[i] * samples[i];
     change += (samples[i] - samples[i - 1]) ** 2;
   }
+
   return change / energy;
 }
 

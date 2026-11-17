@@ -15,6 +15,7 @@ export function saveFall(game) {
     endRun(game, false);
     return;
   }
+
   if (game.checkpoint) {
     game.checkpoint.lives = game.lives;
     game.io.saveRun(game.checkpoint);

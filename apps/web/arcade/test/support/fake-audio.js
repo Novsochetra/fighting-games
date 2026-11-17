@@ -30,13 +30,16 @@ export function createFakeAudioContext({ state = 'running' } = {}) {
     createGain: () => {
       const gain = node({ gain: param(1) });
       context.gains.push(gain);
+
       return gain;
     },
+
     createDynamicsCompressor: () => node(),
     createOscillator: () => source({ kind: 'tone', type: 'sine', frequency: param(440) }),
     createBufferSource: () => source({ kind: 'noise', buffer: null }),
     createBiquadFilter: () => node({ type: 'lowpass', Q: param(1), frequency: param(350) }),
     createBuffer: (_channels, length) => ({ getChannelData: () => new Float32Array(length) }),
   });
+
   return context;
 }

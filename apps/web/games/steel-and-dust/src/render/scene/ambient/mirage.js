@@ -12,6 +12,7 @@ function streakAt(row, streak, { effect, tick, cameraX }) {
   const tremble = Math.sin(tick * (0.09 + trait(seed, 2) * 0.08) + row * 1.7) * 1.5;
   const stretch = Math.round(Math.sin(tick * 0.03 + trait(seed, 3) * TAU) * 3);
   const baseX = trait(seed, 0) * CYCLE_WIDTH + tick * 0.02 + tremble;
+
   return {
     x: Math.round(scrollX(baseX, { cameraX, drift: effect.drift })),
     width: Math.max(2, length + stretch),
@@ -39,5 +40,6 @@ export function drawMirage(painter, { effect, tick, cameraX, colors }) {
     painter.use(row % 2 ? sky : glow);
     drawRow(painter, row, { effect, tick, cameraX });
   }
+
   painter.alpha(1);
 }

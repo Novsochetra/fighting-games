@@ -42,16 +42,20 @@ export function drawSwirl(painter, layer, front) {
   if (left <= 0) {
     return;
   }
+
   const core = mossCoreOf(fighter);
   if (left <= SEED_LEAD) {
     if (front) {
       drawSeed(painter, { core, art, tickCount: layer.tickCount });
     }
+
     return;
   }
+
   if (!fighter.airborne) {
     return;
   }
+
   const share = time / Math.max(1, move.startup - SEED_LEAD);
   const radius = FAR - (FAR - NEAR) * share;
   for (let i = 0; i < MOTES; i++) {

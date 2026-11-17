@@ -7,6 +7,7 @@ const RANKS = [
 
 export function comboRank(count) {
   const rank = RANKS.find(([minimum]) => count >= minimum);
+
   return rank ? rank[1] : '';
 }
 
@@ -22,10 +23,12 @@ export function endCombo(game) {
     };
     game.io.sfx('combo');
   }
+
   if (combo.count > records.bestCombo) {
     records.bestCombo = combo.count;
     game.io.saveRecords(records);
   }
+
   combo.count = 0;
   combo.timer = 0;
   combo.damage = 0;

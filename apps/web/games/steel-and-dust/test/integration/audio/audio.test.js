@@ -17,10 +17,12 @@ function gameState() {
 
 function fakeWindow() {
   const listeners = {};
+
   return {
     addEventListener: (type, listener) => {
       listeners[type] = listener;
     },
+
     document: { hidden: false, addEventListener: () => {} },
     fire: (type) => listeners[type](),
   };
@@ -76,6 +78,7 @@ describe('audio, from the first tap to a fight with music', () => {
     for (const node of nodes) {
       expect(reaches(node, context.destination)).toBe(true);
     }
+
     expect(nodesOfKind(context, 'stereoPanner')).toHaveLength(3);
   });
 
@@ -90,6 +93,7 @@ describe('audio, from the first tap to a fight with music', () => {
     for (const hit of ['blade', 'heavy', 'blunt', 'pierce']) {
       audio.sfx(hit, false, { x: 120 });
     }
+
     const before = nodesOfKind(context, 'bufferSource').length;
     audio.sfx('ult');
     audio.sfx('ultHit', true, { x: 140 });

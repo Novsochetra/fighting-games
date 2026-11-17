@@ -16,6 +16,7 @@ function isDrawable(art) {
 export function cornerSourceRect({ width, height }, [column, row]) {
   const cornerWidth = width * CORNER_SHARE;
   const cornerHeight = height * CORNER_SHARE;
+
   return [column * (width - cornerWidth), row * (height - cornerHeight), cornerWidth, cornerHeight];
 }
 
@@ -26,6 +27,7 @@ function meanColor(pixels, first, second) {
   const [red, green, blue] = [0, 1, 2].map((channel) =>
     channelMean(pixels, first, second, channel),
   );
+
   return `rgb(${red} ${green} ${blue})`;
 }
 
@@ -42,10 +44,12 @@ export function sampleSplash(document, art) {
   if (!context || !isDrawable(art)) {
     return null;
   }
+
   context.imageSmoothingQuality = 'high';
   const size = { width: art.naturalWidth, height: art.naturalHeight };
   for (const corner of CORNERS) {
     context.drawImage(art, ...cornerSourceRect(size, corner), corner[0], corner[1], 1, 1);
   }
+
   return splashColors(context.getImageData(0, 0, 2, 2).data);
 }

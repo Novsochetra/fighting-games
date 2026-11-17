@@ -45,6 +45,7 @@ describe('ambient flames', () => {
       heights.add(new Set(tongueOf(rects).map((rect) => rect.y)).size);
       glowAlphas.add(glowOf(rects)[0].alpha);
     }
+
     expect(heights.size).toBeGreaterThan(3);
     expect(glowAlphas.size).toBeGreaterThan(10);
   });
@@ -54,6 +55,7 @@ describe('ambient flames', () => {
       expect(flickerAt(0, tick)).toBeGreaterThanOrEqual(0);
       expect(flickerAt(0, tick)).toBeLessThanOrEqual(1);
     }
+
     expect(flickerAt(0, 90)).not.toBe(flickerAt(1, 90));
   });
 

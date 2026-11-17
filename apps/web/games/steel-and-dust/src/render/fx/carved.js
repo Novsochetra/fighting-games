@@ -17,10 +17,12 @@ export function drawCarved(painter, sheet, { at, alpha, flash }) {
   for (const [dx, dy] of RIM) {
     drawHeroFrame(painter, sheet, { ...at, x: at.x + dx, y: at.y + dy, tint: FX_COLORS.reliefRim });
   }
+
   drawHeroFrame(painter, sheet, { ...at, tint: FX_COLORS.reliefStone, relief: true });
   if (flash) {
     painter.alpha(alpha * FLASH);
     drawHeroFrame(painter, sheet, { ...at, tint: FX_COLORS.reliefRim });
   }
+
   painter.alpha(1);
 }

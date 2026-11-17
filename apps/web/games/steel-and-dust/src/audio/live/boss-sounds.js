@@ -42,6 +42,7 @@ function hypnosis(live, start) {
     blip(live, { start: at, frequency: 880, duration: 0.5, volume: 0.06, wave: 'sine' });
     blip(live, { start: at, frequency: 1245, duration: 0.45, volume: 0.04, wave: 'sine' });
   }
+
   const shimmer = { type: 'bandpass', from: 3000, to: 6000, resonance: 4 };
   hiss(live, { start, ...shimmer, attack: 0.05, duration: 0.7, volume: 0.03 });
 }

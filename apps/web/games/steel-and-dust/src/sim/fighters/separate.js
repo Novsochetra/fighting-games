@@ -22,6 +22,7 @@ const BOSS_BODY_KEPT = 0.75;
 
 function halfBody(fighter, apart) {
   const shape = fighter.def?.boss && fighter.def.hurtShape;
+
   return shape ? (shape[2] / 2) * BOSS_BODY_KEPT * fighter.scale : apart * fighter.scale;
 }
 
@@ -32,6 +33,7 @@ function pushApart(terrain, first, second) {
   if (Math.abs(dx) >= minimum) {
     return;
   }
+
   const push = Math.min(1.2, (minimum - Math.abs(dx)) / 2);
   const side = dx === 0 ? randomSide() : Math.sign(dx);
   nudge(terrain, first, -push * side);

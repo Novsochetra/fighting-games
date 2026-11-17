@@ -17,6 +17,7 @@ function stripImage(strip) {
   const path = ONE_ROW_STRIPS.has(strip) ? ANGKOR.ultStrip : `${ANGKOR.directory}hero_${strip}.png`;
   const image = readPngAlpha(new URL(path, GAME));
   const rows = ONE_ROW_STRIPS.has(strip) ? 1 : WEAPON_IDS.length;
+
   return { image, rows, height: image.height / rows };
 }
 
@@ -27,10 +28,12 @@ function onEdges({ image, height }, { left, top }) {
     edges.top += filled(x, 0);
     edges.bottom += filled(x, height - 1);
   }
+
   for (let y = 0; y < height; y++) {
     edges.left += filled(0, y);
     edges.right += filled(frameWidth - 1, y);
   }
+
   return edges;
 }
 
@@ -45,6 +48,7 @@ function cutFrames(strip) {
       }
     }
   }
+
   return cut;
 }
 

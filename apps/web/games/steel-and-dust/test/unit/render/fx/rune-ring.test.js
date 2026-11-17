@@ -19,6 +19,7 @@ const markTimes = Array.from({ length: WAIT }, (_, i) => i - WAIT);
 function ringRects(time) {
   const { context, log } = recordingPainter();
   drawRuneRing(context, pillarAt(time));
+
   return drawnRects(log);
 }
 
@@ -41,6 +42,7 @@ describe("the gaze's rune ring", () => {
     for (let i = 1; i < radii.length; i++) {
       expect(radii[i]).toBeGreaterThanOrEqual(radii[i - 1]);
     }
+
     expect(new Set(radii).size).toBeGreaterThan(4);
   });
 
@@ -63,6 +65,7 @@ describe("the gaze's rune ring", () => {
       expect((left + right) / 2).toBeCloseTo(120.5, 0);
       expect(right - left).toBeGreaterThan(bottom - top);
     }
+
     const open = boundsOf(ringRects(-10).filter((rect) => !rect.light));
     expect(open.right - open.left).toBeGreaterThan((open.bottom - open.top) * 2);
   });
@@ -92,6 +95,7 @@ describe('the pillar bursting from the ring', () => {
     const drawn = (time) => {
       const { context, log } = recordingPainter();
       drawPillarFoot(context, pillarAt(time));
+
       return drawnRects(log);
     };
     expect(drawn(PILLAR_BURNS[1]).length).toBeGreaterThan(0);

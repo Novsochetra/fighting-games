@@ -95,38 +95,47 @@ export function createScreenFit({ document, window, elements, game, ui }) {
     padLayout() {
       return padLayoutOf(context);
     },
+
     // where the stage stands now, which a copy of the shell puts its bezel round
     stageRect() {
       return context.stageRect;
     },
+
     // the Skins screen shows the skin looked at, each key in the shape looked at, as if picked (null
     // for the ones picked)
     previewSkin(skinId, keyShapes = {}) {
       context.preview = skinId ? { skinId, keyShapes } : null;
       layout.fit();
     },
+
     originalStickRest(scale) {
       return originalStickRest({ context, safe: readSafeArea(), scale });
     },
+
     // where the touch layer stands, null for the whole screen (the Skins screen lays its copy there)
     touchArea() {
       return touchAreaOf(context.hingeNow());
     },
+
     stickRest(scale) {
       return customStick(context, scale)?.rest ?? layout.originalStickRest(scale);
     },
+
     padScale() {
       return context.padScale;
     },
+
     fit() {
       fitPage(document, context, readSafeArea());
       layout.onFit?.();
     },
+
     applyTouchSettings() {
       applyTouchClasses(document, { game, ui });
       layout.fit();
     },
   };
+
   return layout;
 }
 

@@ -9,6 +9,7 @@ export function chestOf(fighter) {
 
 export function bladeTipOf(fighter) {
   const last = fighter.trail[fighter.trail.length - 1];
+
   return last ? { x: last.tipX, y: last.tipY } : chestOf(fighter);
 }
 
@@ -72,24 +73,29 @@ export function defaultKit(art, sounds) {
   return {
     sounds,
     windup() {},
+
     gather(game, fighter, _move, time) {
       if (time % 2 === 0) {
         gatherMotes(game, chestOf(fighter), { colors: art.motes });
       }
     },
+
     release(game, fighter) {
       const at = chestOf(fighter);
       addRing(game, { ...at, color: art.glow });
       fxSparks(game, { ...at, count: 8, color: art.hot, speed: 3 });
     },
+
     trail(game, fighter, _move, time) {
       if (time % 2 === 0) {
         shedMotes(game, bladeTipOf(fighter), { colors: art.motes, direction: -fighter.facing });
       }
     },
+
     impact(game, hit) {
       fxSparks(game, { x: hit.x, y: hit.y, count: 6, color: art.hot, speed: 3.4 });
     },
+
     particles: {},
   };
 }

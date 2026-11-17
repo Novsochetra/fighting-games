@@ -19,5 +19,6 @@ export async function postDonation(fetchFn, donation, url = DONATE_URL) {
   if (!response.ok || !payload?.supporter) {
     throw new Error(typeof payload?.error === 'string' ? payload.error : SEND_FAILED);
   }
+
   return payload.supporter;
 }

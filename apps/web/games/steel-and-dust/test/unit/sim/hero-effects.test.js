@@ -36,6 +36,7 @@ describe("each Shade's glow", () => {
         game.tickCount = tick;
         shedHeroAura(game);
       }
+
       return game.particles.filter((particle) => particle.color === HERO_THEMES[hero].aura.color);
     };
     expect(count('firefly').length).toBe(24);

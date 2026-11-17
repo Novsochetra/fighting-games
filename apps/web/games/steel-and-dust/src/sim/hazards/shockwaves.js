@@ -25,6 +25,7 @@ export function spawnShockwave(game, fighter) {
       damage: fighter.side === 'player' ? 8 : 12,
     });
   }
+
   shake(game, 3, 10);
   addDust(game, { x: fighter.x, y: floorUnder(game.terrain, fighter), count: 10 });
   game.io.sfx('boom');
@@ -51,6 +52,7 @@ function strike(game, wave, area) {
     if (target.side === wave.side || target.airborne || wave.hitTargets.has(target)) {
       continue;
     }
+
     const body = hurtBox(target);
     if (
       body &&
@@ -68,10 +70,12 @@ export function rideFloor(terrain, wave) {
   if (isFlat(terrain)) {
     return;
   }
+
   if (isWall(terrain, wave.x, wave.y)) {
     wave.broken = true;
     return;
   }
+
   wave.y = floorBelow(terrain, wave.x, wave.y);
 }
 
@@ -79,6 +83,7 @@ function sweep(game, wave) {
   if (wave.time % 2 === 0) {
     trailDust(game, wave);
   }
+
   const area = { x: wave.x - 6, y: wave.y - 12, width: 12, height: 12 };
   strike(game, wave, area);
   if (wave.side === 'player') {
@@ -96,5 +101,6 @@ export function updateShockwaves(game) {
       sweep(game, wave);
     }
   }
+
   game.shockwaves = game.shockwaves.filter((wave) => wave.time < 24 && !wave.broken);
 }

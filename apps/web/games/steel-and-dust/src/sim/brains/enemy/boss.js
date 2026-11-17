@@ -22,18 +22,22 @@ export function thinkBoss(game, boss, distance) {
     thinkKitBoss(game, boss, { kit, distance });
     return;
   }
+
   if (boss.ai.cooldown > 0) {
     if (distance > 42) {
       walk(boss, 1, 1);
     } else {
       standStill(boss);
     }
+
     return;
   }
+
   const player = game.player;
   if (player.state === 'down' || player.state === 'getup') {
     standStill(boss);
     return;
   }
+
   chooseAttack(game, boss, distance);
 }

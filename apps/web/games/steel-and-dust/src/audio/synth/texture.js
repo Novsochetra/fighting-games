@@ -18,6 +18,7 @@ export function flap(track, { start, length, cutoff, rate, level }) {
   const envelope = (time) => {
     const progress = time / length;
     const swell = Math.sin(Math.PI * Math.min(1, progress * 3)) * (1 - progress);
+
     return swell * (0.5 + 0.5 * Math.sin(phase + time * rate * 6.2832 * (1 - 0.4 * progress)));
   };
   layer(track, { filter: 'bandpass', resonance: 1.2, cutoff, length, start, level, envelope });

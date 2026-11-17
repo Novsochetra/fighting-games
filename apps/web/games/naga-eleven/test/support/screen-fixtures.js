@@ -18,6 +18,7 @@ export const throwingStorage = {
   getItem() {
     throw new Error('blocked');
   },
+
   setItem() {
     throw new Error('blocked');
   },

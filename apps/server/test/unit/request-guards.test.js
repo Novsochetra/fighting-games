@@ -54,6 +54,7 @@ describe('createRateLimiter', () => {
     for (let i = 0; i < 1000; i += 1) {
       allow(`visitor-${i}`);
     }
+
     time = 20;
     expect(allow('visitor-0')).toBe(true);
     expect(allow('visitor-0')).toBe(false);

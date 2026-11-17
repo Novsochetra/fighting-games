@@ -7,6 +7,7 @@ const MAX_STEP_SECONDS = 0.05;
 
 function readColors(window, canvas) {
   const style = window.getComputedStyle(canvas);
+
   return Array.from({ length: CONFETTI_COLORS }, (_, i) =>
     style.getPropertyValue(`--color-confetti-${i + 1}`).trim(),
   ).filter(Boolean);
@@ -32,11 +33,13 @@ function fitCanvas(window, canvas, context) {
   canvas.width = Math.round(width * ratio);
   canvas.height = Math.round(height * ratio);
   context.setTransform(ratio, 0, 0, ratio, 0, 0);
+
   return { left, top, width, height };
 }
 
 function centerOf(element, box) {
   const { left, top, width, height } = element.getBoundingClientRect();
+
   return { x: left + width / 2 - box.left, y: top + height / 2 - box.top };
 }
 
@@ -71,6 +74,7 @@ function animate({ window, context, pieces, duration, clear, finish }) {
   }
 
   frame = window.requestAnimationFrame(draw);
+
   return () => {
     window.cancelAnimationFrame(frame);
     finish();
@@ -86,6 +90,7 @@ export function playConfetti({ document, canvas, from }) {
   if (!context || colors.length === 0 || duration <= 0 || prefersReducedMotion(window)) {
     return () => {};
   }
+
   raise(canvas);
   const box = fitCanvas(window, canvas, context);
   const pieces = launchPieces({ origin: centerOf(from, box), colors });
@@ -94,5 +99,6 @@ export function playConfetti({ document, canvas, from }) {
     clear();
     lower(canvas);
   };
+
   return animate({ window, context, pieces, duration, clear, finish });
 }

@@ -16,6 +16,7 @@ const DROP = Object.freeze({ action: 'drop' });
 // a little past the edge, or straight up when the raider already stands past that spot
 function landingX(x, edgeX, side) {
   const spot = edgeX + side * LAND_IN;
+
   return side * (spot - x) > 0 ? spot : x;
 }
 
@@ -26,7 +27,9 @@ function edgeUnder(terrain, raider, hero, side) {
   if (platform) {
     return { edgeX: side > 0 ? platform.x : platform.x + platform.width, faceX: null };
   }
+
   const faceX = faceAhead(terrain, raider, side, Math.abs(hero.x - raider.x));
+
   return faceX === null ? null : { edgeX: faceX, faceX };
 }
 
@@ -36,16 +39,19 @@ function hopUp(terrain, raider, hero) {
   if (rise > HOP_REACH || Math.abs(dx) >= HOP_RANGE) {
     return null;
   }
+
   const side = Math.sign(dx) || raider.facing;
   const edge = edgeUnder(terrain, raider, hero, side);
   if (!edge) {
     return null;
   }
+
   return { action: 'hop', toX: landingX(raider.x, edge.edgeX, side), faceX: edge.faceX, rise };
 }
 
 function dropDown(terrain, raider, hero) {
   const onPlatform = platformUnder(terrain, raider.x, raider.y) !== null;
+
   return onPlatform && Math.abs(hero.x - raider.x) < DROP_RANGE ? DROP : null;
 }
 
@@ -54,13 +60,16 @@ function hopWall(terrain, raider) {
   if (raider.state !== 'walk' || raider.walkDirection <= 0) {
     return null;
   }
+
   const side = raider.facing;
   const faceX = faceAhead(terrain, raider, side, WALL_LOOKAHEAD);
   if (faceX === null) {
     return null;
   }
+
   // the column just past where the face begins, on either side
   const rise = raider.y - groundAt(terrain, faceX + side / 2);
+
   return rise > HOP_REACH ? null : { action: 'hop', toX: faceX + side * LAND_IN, faceX, rise };
 }
 
@@ -70,7 +79,9 @@ export function ledgeBehind(terrain, raider) {
   if (isFlat(terrain)) {
     return false;
   }
+
   const behindX = raider.x - raider.facing * LEDGE_LOOK;
+
   return floorBelow(terrain, behindX, raider.y) - raider.y > STEP_UP;
 }
 
@@ -79,6 +90,7 @@ function changeLevel(terrain, raider, hero) {
   if (raider.def.ranged || hero.airborne || onOneLevel(terrain, raider, hero)) {
     return null;
   }
+
   return raider.y > hero.y ? hopUp(terrain, raider, hero) : dropDown(terrain, raider, hero);
 }
 
@@ -92,20 +104,26 @@ export function tryClimb(game, raider) {
   if (isFlat(game.terrain)) {
     return false;
   }
+
   if (isResting(raider)) {
     raider.ai.hopWait--;
     return false;
   }
+
   if (tryLeap(game, raider, game.player.x)) {
     return true;
   }
+
   const plan = planClimb(game.terrain, raider, game.player);
   if (!plan) {
     return false;
   }
+
   if (plan.action === 'drop') {
     return drop(game, raider);
   }
+
   hop(game, raider, plan);
+
   return true;
 }

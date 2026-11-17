@@ -38,7 +38,9 @@ export function excitation({ milliseconds, lowpass, click }, sampleRate) {
     level += (Math.random() * 2 - 1 - level) * smoothing;
     strike[i] = level * Math.exp((-5 * i) / length);
   }
+
   strike[0] += click || 0;
+
   return strike;
 }
 
@@ -60,6 +62,7 @@ function ringMode(scratch, strike, [frequency, seconds], sampleRate) {
       loudest = Math.abs(y);
     }
   }
+
   return { length, loudest };
 }
 

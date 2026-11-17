@@ -12,6 +12,7 @@ const MIN_CLOCK_WIDTH = 50;
 
 export function formatClock(ticks) {
   const seconds = Math.floor(ticks / 60);
+
   return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 }
 
@@ -21,6 +22,7 @@ export function waveText(game) {
   if (!game.arena || !zone || zone.boss || waveIndex < 0) {
     return null;
   }
+
   return `WAVE ${Math.min(waveIndex + 1, zone.waves.length)}/${zone.waves.length}`;
 }
 
@@ -30,6 +32,7 @@ function centeredBox({ width, y, height }) {
 
 export function clockPlaque(text) {
   const width = Math.max(MIN_CLOCK_WIDTH, textWidth(text, DIGIT_SCALE) + PADDING * 2);
+
   return centeredBox({ width, y: 0, height: TOP_BAR_HEIGHT });
 }
 
@@ -38,6 +41,7 @@ function drawWave(painter, game, view) {
   if (!text) {
     return;
   }
+
   const box = centeredBox({ width: textWidth(text, 1) + PADDING * 2, ...LOWER_BOX });
   drawPlaque(painter, view.hudFrames, 'score', box);
   drawText(painter, text, { x: VIEW_WIDTH / 2, y: box.y + 5, color: COLORS.sand, align: 'center' });

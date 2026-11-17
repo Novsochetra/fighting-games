@@ -14,12 +14,15 @@ function laneLength(fighter) {
     const [ahead, , width] = hitboxOf(fighter, move);
     return (ahead + width) * fighter.scale;
   }
+
   if (move.lane === 'spikes') {
     return spikeLineReach(fighter, move.spikes);
   }
+
   if (move.lane === 'roots') {
     return rootLineReach(fighter, move.roots);
   }
+
   return move.lane ?? 130;
 }
 
@@ -62,5 +65,6 @@ export function drawDangerZone(painter, fighter, tickCount, floor) {
   } else if (move.hitbox && !move.leapAt) {
     slamZone(painter, fighter, floor);
   }
+
   painter.alpha(1);
 }

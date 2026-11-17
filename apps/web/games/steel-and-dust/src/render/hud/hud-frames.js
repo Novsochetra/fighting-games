@@ -16,6 +16,7 @@ export function loadHudFrames({ createImage, baseUrl }) {
     image.src = `${baseUrl}${DIRECTORY}${frame.file}`;
     sheets.images[kind] = image;
   }
+
   return sheets;
 }
 
@@ -24,6 +25,7 @@ export function drawHudFrame(painter, sheets, kind, rect) {
   if (!sheets.ready[kind]) {
     return;
   }
+
   const { width, height } = rect;
   drawStamped(painter, {
     key: `frame|${kind}|${width}|${height}`,
@@ -32,6 +34,7 @@ export function drawHudFrame(painter, sheets, kind, rect) {
     width,
     height,
     resolution: RENDER_SCALE,
+
     draw: (context, x, y) =>
       drawNineSlice(context, sheets.images[kind], {
         slice: HUD_FRAMES[kind].slice,

@@ -12,7 +12,9 @@ function stubRects() {
     if (this.classList.contains('pad-zone')) {
       return { left: 0, top: 0, right: 422, bottom: 390, width: 422, height: 390 };
     }
+
     const [x, y] = SPOTS[this.dataset.control] ?? [-500, -500];
+
     return { left: x - 50, top: y - 50, right: x + 50, bottom: y + 50, width: 100, height: 100 };
   });
   vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockImplementation(function width() {

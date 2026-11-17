@@ -48,12 +48,14 @@ function stepToward(hook, to, speed) {
   const step = Math.min(speed, gap);
   hook.x += gap ? (dx / gap) * step : 0;
   hook.y += gap ? (dy / gap) * step : 0;
+
   return gap <= speed;
 }
 
 function catches(game, hook) {
   const hero = game.player;
   const body = hurtBox(hero);
+
   return Boolean(body) && canBeHit(hero, {}) && overlaps(hookArea(hook), body);
 }
 
@@ -64,6 +66,7 @@ function flyOut(game, hook) {
     grab(game, hook);
     return;
   }
+
   const fist = fistOf(hook.owner);
   const far = Math.hypot(hook.x - fist.x, hook.y - fist.y) >= REACH;
   if (far || hook.y >= groundAt(game.terrain, hook.x)) {
@@ -90,5 +93,6 @@ export function swingHook(game, hook) {
     letGo(game, hook);
     return;
   }
+
   STEPS[hook.state](game, hook);
 }

@@ -9,6 +9,7 @@ function fillColor(full, tickCount) {
   if (!full) {
     return HUD_COLORS.ultFill;
   }
+
   return (tickCount >> 2) & 1 ? COLORS.gold : COLORS.cream;
 }
 
@@ -22,6 +23,7 @@ function drawHalves(painter, game, gauge) {
       .use(color)
       .rect(gauge.x + index * half, gauge.y, Math.round(half * share), gauge.height);
   }
+
   painter.use(COLORS.outline).rect(gauge.x + half - 1, gauge.y - 1, 2, gauge.height + 2);
 }
 

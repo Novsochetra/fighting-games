@@ -55,6 +55,7 @@ export function nagaShotScene(settings) {
 
     draw: (context, { actors, lang }) =>
       drawNagaShot(context, { ...momentOf(plan, frame, settings), actors, lang }),
+
     isDone: () => frame >= plan.total,
     stage: () => clockAt(plan, frame).stage,
     stageTicks: () => clockAt(plan, frame).ticks,

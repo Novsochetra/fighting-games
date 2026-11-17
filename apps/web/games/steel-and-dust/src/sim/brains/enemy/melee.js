@@ -13,16 +13,19 @@ function tryAttack(game, fighter, distance) {
     startMove(game, fighter, basicAttack(fighter));
     return true;
   }
+
   if (def.lunge && distance > 40 && distance < 72 && Math.random() < 0.04) {
     startMove(game, fighter, def.lungeMove || 'lunge');
     return true;
   }
+
   return false;
 }
 
 // a swing at a hero on a bank or a platform above, or on the road below, cannot land
 function isReady(game, fighter, playerDown) {
   const { player } = game;
+
   return (
     fighter.hasToken &&
     fighter.ai.cooldown <= 0 &&
@@ -37,6 +40,7 @@ export function thinkMelee(game, fighter, { distance, playerDown }) {
   if (isReady(game, fighter, playerDown) && tryAttack(game, fighter, distance)) {
     return;
   }
+
   const wanted = fighter.hasToken ? fighter.def.range - 4 : fighter.ai.spacing;
   if (distance > wanted + 6) {
     walk(fighter, 1, 1);

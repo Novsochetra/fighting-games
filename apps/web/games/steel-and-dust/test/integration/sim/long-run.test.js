@@ -36,6 +36,7 @@ function playZones(game, ticks) {
       largest[key] = Math.max(largest[key], size);
     }
   }
+
   return { largest, zones };
 }
 
@@ -53,6 +54,7 @@ describe('a long run through the zones', () => {
       for (const [key, limit] of Object.entries(LIMITS)) {
         expect(largest[key], `${hero} ${key}`).toBeLessThanOrEqual(limit);
       }
+
       expect(
         game.fighters.every((fighter) => !fighter.removed),
         hero,
@@ -76,6 +78,7 @@ describe('a long run through the zones', () => {
     ]) {
       expect(game[key], key).toEqual([]);
     }
+
     expect(game.boss).toBeNull();
     expect(game.stage).toMatchObject({ zoneIndex: 0, waveIndex: -1, spawnQueue: [] });
   });

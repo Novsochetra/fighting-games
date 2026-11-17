@@ -36,6 +36,7 @@ export function coverCost(controls, bar, picked) {
     if (!overlaps(rect, bar)) {
       return cost;
     }
+
     return cost + (control === picked ? 10 : 1);
   }, 0);
 }

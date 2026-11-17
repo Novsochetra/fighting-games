@@ -32,6 +32,7 @@ function greyPixels(cell) {
       count += image.alpha(cell.left + x, cell.top + y) > 0 && grey && brightest <= 210 ? 1 : 0;
     }
   }
+
   return count;
 }
 
@@ -49,6 +50,7 @@ function sunMiddle(frame) {
       }
     }
   }
+
   return sum / count;
 }
 

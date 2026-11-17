@@ -13,6 +13,7 @@ export function readSheet(kind) {
     width: sprite.frameWidth,
     height: sprite.frameHeight,
   });
+
   return { sprite, image, cellOf };
 }
 
@@ -24,6 +25,7 @@ export function lowestRow(image, { left, top, width, height }) {
       }
     }
   }
+
   return -1;
 }
 
@@ -33,6 +35,7 @@ export function headMiddle(image, cell, rows) {
   while (top < cell.height && !rowDrawn(image, cell, top)) {
     top++;
   }
+
   let sum = 0;
   let count = 0;
   for (let y = top; y < top + rows; y++) {
@@ -43,6 +46,7 @@ export function headMiddle(image, cell, rows) {
       }
     }
   }
+
   return sum / count;
 }
 
@@ -62,6 +66,7 @@ function floodBox(cell, start, joins) {
     });
     stack.push(...NEIGHBOURS.map(([dx, dy]) => ({ x: x + dx, y: y + dy })).filter(joins));
   }
+
   return box;
 }
 
@@ -73,6 +78,7 @@ export function blobsOf(image, cell, passes) {
     const key = y * cell.width + x;
     const fits = inside && !taken.has(key) && image.alpha(cell.left + x, cell.top + y) > 0;
     const join = fits && passes(image.rgb(cell.left + x, cell.top + y));
+
     return join && taken.add(key);
   };
   const blobs = [];
@@ -83,6 +89,7 @@ export function blobsOf(image, cell, passes) {
       }
     }
   }
+
   return blobs;
 }
 
@@ -92,5 +99,6 @@ function rowDrawn(image, cell, y) {
       return true;
     }
   }
+
   return false;
 }

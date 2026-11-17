@@ -46,6 +46,7 @@ export function lanceParts(lance) {
   if (diving(lance)) {
     return [{ tip: lance, angle, from: 0, to: Math.min(LANCE_LENGTH, run / Math.cos(angle)) }];
   }
+
   const level = Math.abs(lance.x - lance.bend.x);
   const parts = [{ tip: lance, angle: 0, from: 0, to: Math.min(LANCE_LENGTH, level) }];
   if (level < LANCE_LENGTH) {
@@ -54,6 +55,7 @@ export function lanceParts(lance) {
     const to = Math.min(LANCE_LENGTH, level + DIVE / Math.cos(angle));
     parts.push({ tip, angle, from: level, to });
   }
+
   return parts;
 }
 
@@ -63,8 +65,10 @@ export function lanceArea(lance) {
   if (diving(lance)) {
     return { x: lance.x - TIP_REACH, y: lance.y - LANCE_CORE, width: TIP_REACH * 2, height };
   }
+
   const [{ to }] = lanceParts(lance);
   const left = lance.direction > 0 ? lance.x - to : lance.x;
+
   return { x: left, y: lance.y - LANCE_CORE, width: to, height };
 }
 

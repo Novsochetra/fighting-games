@@ -31,6 +31,7 @@ function updateGetup(_game, fighter) {
   if (fighter.stateTime < 16) {
     return;
   }
+
   Object.assign(fighter, {
     state: 'idle',
     juggleCount: 0,
@@ -48,10 +49,12 @@ function updateKnockedOut(game, fighter) {
   if (fighter.airborne) {
     return;
   }
+
   fighter.stateTime++;
   if (fighter.side === 'enemy' && fighter.stateTime > 70) {
     fighter.removed = true;
   }
+
   if (fighter.side === 'player' && fighter.stateTime > 80 && game.mode === 'play') {
     game.mode = 'over';
     loseLife(game);
@@ -68,6 +71,7 @@ function updateDash(_game, fighter) {
   if (fighter.airborne && fighter.stateTime < 12) {
     fighter.vy = 0;
   }
+
   if (fighter.stateTime >= DASH_TICKS) {
     fighter.state = fighter.airborne ? 'air' : 'idle';
   }
@@ -83,7 +87,9 @@ function chargeColor(game, time) {
   if (time >= CHARGE_MAX) {
     return COLORS.gold;
   }
+
   const theme = themeOf(game);
+
   return time >= CHARGE_LEVEL1 ? theme.glow : theme.glowDim;
 }
 
@@ -93,11 +99,13 @@ function updateCharge(game, fighter) {
     game.io.sfx('chargeLevel1');
     addSparks(game, { x: fighter.x, y: fighter.y - 20, count: 8, color: COLORS.cyan, speed: 2.4 });
   }
+
   if (time === CHARGE_MAX) {
     game.io.sfx('chargeMax');
     addSparks(game, { x: fighter.x, y: fighter.y - 20, count: 14, color: COLORS.gold, speed: 3.2 });
     shake(game, 1, 4);
   }
+
   if (time >= CHARGE_TAP && time % 3 === 0) {
     game.particles.push({
       kind: 'mote',
@@ -129,6 +137,7 @@ export function updateState(game, fighter) {
   if (update) {
     update(game, fighter);
   }
+
   if (fighter.state !== 'attack') {
     fighter.hitboxActive = false;
   }

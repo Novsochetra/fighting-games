@@ -15,6 +15,7 @@ function pixelAt(strip, frame, { ahead = 0, up = 0 }) {
   const x = frame * sprite.frameWidth + sprite.feetX + Math.round(ahead * RENDER_SCALE);
   const y =
     sprite.strips[strip].row * sprite.frameHeight + sprite.feetY - Math.round(up * RENDER_SCALE);
+
   return { alpha: sheet.alpha(x, y), rgb: sheet.rgb(x, y) };
 }
 

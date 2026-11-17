@@ -10,6 +10,7 @@ function defineGtag(window) {
     // gtag.js reads only Arguments objects from the data layer; an array of the same values is ignored.
     window.dataLayer.push(arguments);
   };
+
   return window.gtag;
 }
 
@@ -38,9 +39,11 @@ export function loadGoogleTag({ window, measurementId, userProperties }) {
   script.async = true;
   script.src = `${TAG_URL}?id=${encodeURIComponent(measurementId)}`;
   window.document.head.append(script);
+
   return {
     event: (name, params) => gtag('event', name, params),
     grant: () => gtag('consent', 'update', { analytics_storage: 'granted' }),
+
     deny: () => {
       gtag('consent', 'update', { analytics_storage: 'denied' });
       clearGoogleCookies(window.document);
@@ -50,8 +53,10 @@ export function loadGoogleTag({ window, measurementId, userProperties }) {
 
 export function browserAnalytics(window, { isInstalled }) {
   const measurementId = MEASUREMENT_ID;
+
   return {
     isEnabled: isAnalyticsEnabled({ measurementId, hostname: window.location.hostname }),
+
     loadTag: () =>
       loadGoogleTag({
         window,

@@ -35,6 +35,7 @@ export function comesDownHard(fighter) {
   if (!fighter.airborne || fighter.vy <= 0) {
     return false;
   }
+
   if (fighter.side === 'player') {
     return fighter.state === 'attack' && Boolean(fighter.move?.dive);
   }

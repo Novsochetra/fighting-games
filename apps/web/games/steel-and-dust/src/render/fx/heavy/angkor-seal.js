@@ -18,7 +18,9 @@ function windupSeal(art, { startup, time }) {
   } else if (time * 2 >= startup) {
     color = art.lotus;
   }
+
   const lit = Math.ceil(share * PETALS);
+
   return {
     rx: 8 + (SEAL.rx - 8) * easeOutCubic(share),
     alpha: 0.75 + 0.25 * share,
@@ -35,6 +37,7 @@ export function sealOf(art, { fighter, move, time }) {
   if (seal && fighter.airborne) {
     seal.rx *= AIR_SCALE;
   }
+
   return seal;
 }
 
@@ -43,11 +46,14 @@ function sealAt(art, { move, time }) {
   if (time < startup) {
     return windupSeal(art, { startup, time });
   }
+
   const since = time - startup;
   if (since >= STRIKE_TICKS) {
     return null;
   }
+
   const color = since < 2 ? art.white : art.hot;
+
   return {
     rx: SEAL.rx + since * 5,
     alpha: 1 - since / STRIKE_TICKS,

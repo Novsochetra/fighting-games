@@ -19,6 +19,7 @@ function heavyOn(hero) {
   raider.ai.cooldown = 9999;
   game.player.facing = 1;
   game.ultMeter = ULT_MAX;
+
   return { game, raider, sounds };
 }
 
@@ -35,8 +36,10 @@ function playHeavy(game) {
       xs.push({ x: player.x, time: player.moveTime, startup: player.move.startup });
       striking ||= player.moveTime >= player.move.startup;
     }
+
     player.afterimages.forEach((image) => colors.add(image.color));
   }
+
   return { xs, colors, striking };
 }
 
@@ -85,6 +88,7 @@ describe("a Shade's heavy, felt", () => {
       kit.gather(game, player, player.move, time);
       kit.trail(game, player, player.move, time);
     }
+
     kit.release(game, player, player.move);
     kit.impact(game, hit);
     Math.random = seededRandom(6);

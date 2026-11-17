@@ -78,6 +78,7 @@ const MAPPERS = {
   out: outCues,
   special: (event) => [cueOf('charge', { look: lookOf(event.move) })],
   duel: () => [cueOf('duel', {}, 'duel')],
+
   duelEnd: (event) =>
     event.duel?.outcome?.result === 'wide' ? [cueOf('duelEnd'), cueOf('ooh')] : [cueOf('duelEnd')],
 };

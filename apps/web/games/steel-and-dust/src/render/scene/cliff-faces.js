@@ -28,6 +28,7 @@ function dropToward(surfaceAt, x, side) {
       return Math.min(SHOULDER[distance - 1], Math.floor(fall / 3));
     }
   }
+
   return 0;
 }
 
@@ -47,12 +48,14 @@ export function cliffSteps(runs) {
       steps.push({ x: after.x, top, foot, highOnLeft: before.y < after.y });
     }
   }
+
   return steps;
 }
 
 // the columns `from` to `to` pixels out from the face toward its low side
 function across(step, from, to) {
   const width = to - from;
+
   return step.highOnLeft ? { x: step.x + from, width } : { x: step.x - to, width };
 }
 
@@ -79,6 +82,7 @@ function drawContactShadow(painter, step, color) {
       .use(color)
       .rect(x, step.foot - 1, width, height);
   }
+
   painter.alpha(1);
 }
 
@@ -98,10 +102,12 @@ export function drawCliffFaces(painter, runs, { texture, cliff, colors, deep }) 
     if (deep) {
       drawDeepFace(context, deep, { step, fromY: step.top - texture.top + deep.from });
     }
+
     drawFace(context, cliff, step);
     for (const slice of LIP) {
       drawSlice(context, texture, step, { surfaceY: step.top, slice });
     }
+
     drawSlice(context, texture, step, { surfaceY: step.foot, slice: FOOT });
     drawContactShadow(painter, step, colors.shadow);
   }

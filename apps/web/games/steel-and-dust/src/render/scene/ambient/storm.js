@@ -11,5 +11,6 @@ export function stormStrength(tick) {
   for (const { rate, phase, weight } of SWELLS) {
     sum += Math.sin(tick * rate + phase) * weight;
   }
+
   return (sum + 1) / 2;
 }

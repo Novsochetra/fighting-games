@@ -26,6 +26,7 @@ function raiseWave(game, player, wave) {
   for (const side of [-1, 1]) {
     raiseThorn(game, { x: player.x + side * distance, scale, hit: THORNWOOD.thorn });
   }
+
   shake(game, 2, 5);
 }
 
@@ -49,11 +50,13 @@ function bloom(game, player) {
   for (const target of ultTargets(game)) {
     raiseThorn(game, { x: target.x, scale: 1.35, hit: THORNWOOD.bloom });
   }
+
   leafStorm(game, player);
 }
 
 function waveAt(since) {
   const wave = since / THORNWOOD.waveGap;
+
   return since >= 0 && Number.isInteger(wave) && wave < THORNWOOD.waves ? wave : -1;
 }
 
@@ -64,16 +67,20 @@ export function runThornwood(game, player, time) {
   if (since === 0) {
     plantBlade(game, player);
   }
+
   const wave = waveAt(since);
   if (wave >= 0) {
     raiseWave(game, player, wave);
   }
+
   if (time === THORNWOOD.bloomAt) {
     bloom(game, player);
   }
+
   if (time === THORNWOOD.bloomAt + BLOOM_STRIKE) {
     finaleFlash(game);
   }
+
   if (time >= THORNWOOD.end) {
     finishUlt(player);
   }

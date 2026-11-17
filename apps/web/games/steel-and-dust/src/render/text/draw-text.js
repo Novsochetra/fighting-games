@@ -41,6 +41,7 @@ function alignedX(x, width, align) {
   if (align === 'center') {
     return x - Math.floor(width / 2);
   }
+
   return align === 'right' ? x - width : x;
 }
 
@@ -58,5 +59,6 @@ export function drawText(painter, value, { x, y, color, scale = 1, align, shadow
       scale,
     });
   }
+
   drawRun(painter, { text, x: left, y: top, color, scale });
 }

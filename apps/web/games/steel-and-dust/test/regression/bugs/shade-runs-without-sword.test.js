@@ -14,15 +14,18 @@ const RUN_DRAWN = /^drawImage\(img\(hero_(run|dash)\.png\),(\d+),(\d+),/;
 // every piece of a packed strip has a corner of its own, so the corner names the row it was cut from
 function rowOf(pieces, strip, sx, sy) {
   const [, ...rows] = pieces[strip];
+
   return rows.findIndex((frames) => frames.some(([x, y]) => x === sx && y === sy));
 }
 
 function drawnRows(game, late) {
   late.log.length = 0;
   renderFrame(game, late.view);
+
   return late.log.flatMap((call) => {
     const drawn = RUN_DRAWN.exec(call);
     const pieces = HERO_ATLAS[game.settings.hero];
+
     return drawn ? [rowOf(pieces, drawn[1], Number(drawn[2]), Number(drawn[3]))] : [];
   });
 }
@@ -32,6 +35,7 @@ function playing(heroId) {
   const game = createPlayingGame({ settings: { hero: heroId } });
   renderFrame(game, late.view);
   late.images.loadAll();
+
   return { game, late };
 }
 
@@ -56,6 +60,7 @@ function runAround({ game, late }) {
   step(40);
   release(game, 'left');
   step(12);
+
   return seen;
 }
 

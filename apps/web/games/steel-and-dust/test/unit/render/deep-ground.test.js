@@ -38,6 +38,7 @@ const breach = (x) => (x >= 250 && x < 294 ? VIEW_HEIGHT + 128 : GROUND_Y - 16);
 function record(draw) {
   const { context, log } = createRecordingContext(null);
   draw(createPainter(context));
+
   return log;
 }
 
@@ -54,6 +55,7 @@ function road(surfaceAt, body = deep) {
 
 function facesOf(surfaceAt, body = deep) {
   const runs = surfaceRuns(surfaceAt, 100, 400);
+
   return record((painter) => drawCliffFaces(painter, runs, { texture, cliff, colors, deep: body }));
 }
 
@@ -88,6 +90,7 @@ describe('a road built on a level body', () => {
     for (const rect of shade) {
       expect(rect.alpha).toBeLessThan(1);
     }
+
     expect(log.filter((call) => call.startsWith('globalAlpha')).at(-1)).toBe('globalAlpha=1');
   });
 

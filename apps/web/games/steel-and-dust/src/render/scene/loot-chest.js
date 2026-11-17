@@ -13,6 +13,7 @@ function fadeOf(age) {
   if (age < TIMING.fadeAt) {
     return 1;
   }
+
   return Math.max(0, 1 - (age - TIMING.fadeAt) / (TIMING.gone - TIMING.fadeAt));
 }
 

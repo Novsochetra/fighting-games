@@ -13,6 +13,7 @@ export function shimmer(track, { partials, center, length, level, fadeFrom }) {
     const gain = level * Math.pow(10, decibels / 20);
     layer(track, { wave: 'sine', frequency: pitch, envelope, length, level: gain });
   }
+
   layer(track, {
     filter: 'bandpass',
     resonance: 3,

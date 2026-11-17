@@ -9,6 +9,7 @@ export function drawFloaters(painter, floaters) {
     if (time > (big ? 60 : 30) && (time >> 1) % 2) {
       continue;
     }
+
     const scale = (floater.size || 1) + (time < 3 && !big ? 1 : 0);
     drawText(painter, floater.text, {
       x: floater.x,

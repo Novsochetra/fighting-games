@@ -13,6 +13,7 @@ function shakeAmount(hitstop) {
   if (hitstop >= 9) {
     return 3;
   }
+
   return hitstop >= 7 ? 2 : 1;
 }
 
@@ -20,9 +21,11 @@ function damageNumberColor(attacker, damage) {
   if (!isPlayer(attacker)) {
     return COLORS.scarlet;
   }
+
   if (damage >= 14) {
     return COLORS.tangerine;
   }
+
   return damage >= 9 ? COLORS.butter : COLORS.white;
 }
 
@@ -45,6 +48,7 @@ export function showImpact(game, hit, { direction, hitstop }) {
   });
   addSparks(game, { x: hit.x, y: hit.y, count: heavy ? 10 : 6, color, speed: heavy ? 3.2 : 2.4 });
   heavyImpact(game, hit);
+
   return color;
 }
 
@@ -54,6 +58,7 @@ export function showBigHit(game, hit, { direction, hitstop, color }) {
   if (huge || hit.move.launch) {
     addSpeedLines(game, hit.x, hit.y);
   }
+
   punch(game, {
     x: hit.x - game.camera.x,
     y: hit.y,
@@ -67,6 +72,7 @@ export function showDamageNumber(game, hit, { direction, damage }) {
   if (!game.settings.numbers) {
     return;
   }
+
   const playerHit = isPlayer(hit.attacker);
   game.floaters.push({
     x: hit.x + randomBetween(-3, 3),
@@ -83,6 +89,7 @@ export function feelHit(game, hit, { direction, big }) {
   if (isPlayer(hit.attacker)) {
     buzz(game, big ? 'bigHit' : 'hit');
   }
+
   if (isPlayer(hit.target)) {
     game.hurtFlash = 14;
     buzz(game, 'hurt');

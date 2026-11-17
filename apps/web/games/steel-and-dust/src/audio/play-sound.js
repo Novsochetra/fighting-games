@@ -12,6 +12,7 @@ function playLiveSound(audio, key) {
   if (!isLiveSound(key) || start - (audio.liveStarts[key] ?? -1) < MERGE_SECONDS) {
     return;
   }
+
   audio.liveStarts[key] = start;
   try {
     playOneShot(audio, (live) => LIVE_SOUNDS[key](live, start));
@@ -26,10 +27,12 @@ export function playSound(audio, game, { key, big, options }) {
   if (!context || game.muted || context.state !== 'running') {
     return;
   }
+
   if (isBankSound(key)) {
     const bigKey = `${key}Big`;
     playBankSound(audio, game, big && isBankSound(bigKey) ? bigKey : key, options || {});
     return;
   }
+
   playLiveSound(audio, key);
 }

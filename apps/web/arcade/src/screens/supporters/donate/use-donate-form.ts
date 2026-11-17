@@ -21,6 +21,7 @@ export function useDonateForm() {
     setError,
     setField: (field: Field, value: string) => setFields((was) => ({ ...was, [field]: value })),
     clear: () => setFields(NO_FIELDS),
+
     // the donation the form holds, or none, with what is wrong said and its field in focus
     read(): Donation | null {
       const read = readDonationForm(fields);

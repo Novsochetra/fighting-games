@@ -33,6 +33,7 @@ function fakeAnimate(keyframes, options) {
     finished,
     finish,
     cancelledWhileShown: null,
+
     cancel: () => {
       animation.cancelledWhileShown = element.isConnected && !element.matches('.screen-layer--top');
     },

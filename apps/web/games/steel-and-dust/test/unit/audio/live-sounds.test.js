@@ -10,6 +10,7 @@ function fakeLive() {
   const context = createFakeAudioContext({ state: 'running' });
   const chain = buildChain(context);
   context.nodes.length = 0;
+
   return { context, chain };
 }
 
@@ -113,6 +114,7 @@ describe('live sounds', () => {
         `heavy${id[0].toUpperCase()}${id.slice(1)}Charge`,
       );
     }
+
     for (const key of Object.keys(HEAVY_SOUNDS)) {
       expect(key.startsWith('heavy')).toBe(true);
     }

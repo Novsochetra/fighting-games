@@ -20,8 +20,10 @@ export function drawGazePillar(painter, pillar, sheets) {
     if (pillar.time < 0) {
       drawImpactFlare(painter.context, pillar);
     }
+
     drawEyeFlare(painter.context, pillar);
   }
+
   if (pillar.time >= 0) {
     const frame = fxFrameAt('gazePillar', pillar.time);
     drawFxFrame(painter, sheets, { name: 'gazePillar', frame, x: pillar.x, y: pillar.y });

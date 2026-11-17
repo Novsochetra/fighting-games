@@ -11,6 +11,7 @@ const originalRandom = Math.random;
 
 function playing(key, start) {
   const { group, priority } = SOUND_DEFINITIONS[key];
+
   return { key, start, group, priority };
 }
 

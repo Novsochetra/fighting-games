@@ -124,6 +124,7 @@ export const CITY_STREET = {
     paintWires(raster);
     paintTraffic(raster);
   },
+
   overlay: (context, tick) => {
     drawTwinkles(context, {
       points: [

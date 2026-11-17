@@ -9,11 +9,13 @@ function soilColors({ sand, grass, rock }) {
   const blades = grass
     ? { grass, grassLight: shade(grass, 0.25), grassDark: shade(grass, -0.3) }
     : { grassDark: shade(sand, -0.3) };
+
   return { ...blades, soil: shade(sand, -0.18), soilDeep: shade(sand, -0.34), shadow: rock };
 }
 
 function groundColors(ground) {
   const { sand } = ground;
+
   return {
     sand,
     edge: shade(sand, 0.35),
@@ -29,6 +31,7 @@ function groundColors(ground) {
 // any colors of its own in `front`
 function foregroundColors({ ground, foreground = 'ferns', front }) {
   const { rock, grass = ground.sand } = ground;
+
   return {
     kind: foreground,
     rock,
@@ -54,5 +57,6 @@ export function scenePalette(themeId) {
   if (!palettes.has(themeId)) {
     palettes.set(themeId, buildPalette(PAINTED_THEMES[themeId]));
   }
+
   return palettes.get(themeId);
 }

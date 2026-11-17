@@ -36,6 +36,7 @@ export function renderFrame(game, view) {
     drawLoadingScreen(painter, view);
     return;
   }
+
   const cameraX = Math.round(game.camera.x);
   const setLayer = createCameraTransform(context, game);
   const { theme } = missionOf(game);
@@ -57,8 +58,10 @@ export function renderFrame(game, view) {
   if (wipe) {
     pixelate(painter, view, mosaicBlock(wipe));
   }
+
   if (!MODES_WITHOUT_HUD.has(game.mode)) {
     drawHud(painter, game, view);
   }
+
   drawOverlays(painter, { game, view });
 }

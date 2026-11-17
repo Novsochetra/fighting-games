@@ -29,7 +29,9 @@ export function withComingSoon(cards, count = COMING_SOON_COUNT) {
   if (cards.length === 0) {
     return cards;
   }
+
   const teasers = Array.from({ length: count }, (_, i) => comingSoonCard(i + 1));
+
   return [...cards, ...teasers];
 }
 

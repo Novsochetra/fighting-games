@@ -14,6 +14,7 @@ const MOSAIC = 'drawImage(canvas(192x108,';
 function nightCells(view, log) {
   const sprite = view.diamonds.get(`${COLORS.night}:${WIPE_CELL}`);
   const stamp = sprite && `drawImage(${sprite.recordingId()},`;
+
   return sprite ? log.filter((call) => call.startsWith(stamp)).length : 0;
 }
 
@@ -33,9 +34,11 @@ function fightFirstMission({ nextRoad }) {
   } else {
     images.failAll();
   }
+
   while (game.fadeIn > 0) {
     renderFrame(game, view);
   }
+
   return { game, view, log };
 }
 
@@ -55,6 +58,7 @@ function walkOn({ game, view, log }) {
       drawn,
     });
   }
+
   return frames;
 }
 

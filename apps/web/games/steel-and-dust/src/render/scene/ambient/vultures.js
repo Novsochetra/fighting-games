@@ -28,6 +28,7 @@ const FLAP = [
 // mostly gliding; now and then a few slow wingbeats
 function shapeAt(tick, seed) {
   const beat = (tick + Math.floor(trait(seed, 3) * 400)) % 400;
+
   return beat < 36 ? FLAP[Math.floor(beat / 9) & 1] : GLIDE;
 }
 
@@ -38,6 +39,7 @@ function vultureAt(i, { effect, tick, cameraX }) {
   const reach = effect.radius * (0.75 + trait(seed, 2) * 0.25);
   const centre = effect.x + Math.sin(tick * 0.0011) * 60;
   const centreX = scrollX(centre, { cameraX, drift: effect.drift, margin: effect.radius + WIDTH });
+
   return {
     x: Math.round(centreX + Math.cos(angle) * reach - WIDTH / 2),
     y: Math.round(effect.y + Math.sin(angle) * reach * 0.3 + i * 3),

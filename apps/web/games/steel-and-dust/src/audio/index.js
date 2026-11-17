@@ -13,6 +13,7 @@ const SOUND_COUNT = Object.keys(SOUND_DEFINITIONS).length;
 
 function describeState(audio) {
   const built = audio.bank ? audio.bank.builtCount() : 0;
+
   return {
     state: audio.context ? audio.context.state : 'none',
     voices: audio.voices.length,
@@ -35,22 +36,27 @@ export function createAudio(game) {
     ducked: null,
   };
   const announcer = createAnnouncer();
+
   return {
     unlock: () => {
       unlockAudio(audio, game);
       preloadCalls(audio, announcer, game);
     },
+
     resume: () => resumeAudio(audio),
     suspend: () => suspendAudio(audio),
     sfx: (key, big, options) => playSound(audio, game, { key, big, options }),
     announce: (call) => playCall(audio, announcer, { game, call }),
+
     setTickOffset: (seconds) => {
       audio.tickOffset = seconds;
     },
+
     update: () => {
       updateMusic(audio, game);
       preloadCalls(audio, announcer, game);
     },
+
     syncVolumes: () => applyVolumes(audio.chain, game),
     debugState: () => describeState(audio),
   };

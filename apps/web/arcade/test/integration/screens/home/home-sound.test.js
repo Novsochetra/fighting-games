@@ -12,6 +12,7 @@ const setup = async (storage = createMemoryStorage()) => {
     storage,
     createAudioContext,
   });
+
   return { ...started, context, createAudioContext, storage };
 };
 

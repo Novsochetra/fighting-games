@@ -14,6 +14,7 @@ function rms(samples, from, to) {
   for (let i = first; i < last; i++) {
     sum += samples[i] * samples[i];
   }
+
   return Math.sqrt(sum / (last - first));
 }
 
@@ -26,16 +27,19 @@ function shimmerBand(samples) {
   let low = 0;
   let high = 0;
   let previous = 0;
+
   return samples.map((x) => {
     low = (1 - lowpass) * x + lowpass * low;
     high = highpass * (high + low - previous);
     previous = low;
+
     return high;
   });
 }
 
 const take = (key, seed) => {
   Math.random = seededRandom(seed);
+
   return synthesizeTake(key, { pitch: 1, take: 0, sampleRate: RATE });
 };
 

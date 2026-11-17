@@ -18,6 +18,7 @@ export function floorBelow(terrain, x, y) {
       floor = platform.y;
     }
   }
+
   return floor;
 }
 
@@ -40,7 +41,9 @@ export function faceAhead(terrain, { x, y }, side, reach) {
     if (isWall(terrain, column, feetY)) {
       return side > 0 ? column : column + 1;
     }
+
     feetY = floorBelow(terrain, column, feetY);
   }
+
   return null;
 }

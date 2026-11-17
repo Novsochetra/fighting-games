@@ -66,6 +66,7 @@ describe('createGamepadPoller', () => {
       frames.shift()?.();
       frame += 1;
     };
+
     return { poller, onAction, runFrame, frames };
   };
 

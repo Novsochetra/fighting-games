@@ -35,6 +35,7 @@ function updateWorld(game) {
   for (const fighter of game.fighters) {
     updateFighter(game, fighter);
   }
+
   resolveHits(game);
   separateFighters(game.fighters, game.terrain);
   updateShockwaves(game);
@@ -50,8 +51,10 @@ function updateWorld(game) {
     if (!fighter.entering) {
       fighter.x = clamp(fighter.x, bounds.min, bounds.max);
     }
+
     followFloor(game.terrain, fighter);
   }
+
   updateMoat(game);
   game.fighters = game.fighters.filter((fighter) => !fighter.removed);
   if (game.boss && game.boss.removed) {
@@ -63,10 +66,12 @@ function advanceClearScreen(game) {
   if (!game.clearTime || holdForWayOut(game)) {
     return;
   }
+
   game.clearTime++;
   if (game.clearTime <= CLEAR_TICKS || game.mode !== 'play') {
     return;
   }
+
   // coins taken over the loot time came after the boss's fall committed the score
   commitScore(game);
   if (isLastMission(game.missionIndex)) {
@@ -83,12 +88,15 @@ function countDown(game) {
   if (combo.timer > 0 && --combo.timer === 0) {
     endCombo(game);
   }
+
   if (combo.bump > 0) {
     combo.bump--;
   }
+
   if (game.goArrowTime > 0) {
     game.goArrowTime--;
   }
+
   updateLootTime(game);
   ageBanner(game);
   advanceClearScreen(game);
@@ -101,6 +109,7 @@ function ageBanner(game) {
   if (!banner) {
     return;
   }
+
   banner.age++;
   if (banner.time < BANNER_FOREVER && --banner.time <= 0) {
     game.banner = null;
@@ -112,6 +121,7 @@ function tankSmoke(game) {
   if (game.tickCount % 7 !== 0) {
     return;
   }
+
   const middle = game.camera.x + VIEW_WIDTH / 2;
   for (const prop of missionOf(game).props) {
     if (prop.kind === 'tank' && Math.abs(prop.x + 30 - middle) < VIEW_WIDTH) {
@@ -143,10 +153,12 @@ export function simulateStep(game) {
     updateEffects(game);
     return;
   }
+
   // the clock waits while the hero runs onto the road on its own
   if (game.mode === 'play' && !isFightOver(game) && !game.gateRun) {
     game.playTime++;
   }
+
   updateZones(game);
   updateWorld(game);
   updateCamera(game);

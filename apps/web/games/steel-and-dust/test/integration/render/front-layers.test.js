@@ -35,6 +35,7 @@ function renderForest(fronts) {
       fronts,
     });
   }
+
   const game = createTestGame();
   selectMission(game, MISSIONS.find((mission) => mission.theme === THEME).index);
   startPlay(game);
@@ -44,6 +45,7 @@ function renderForest(fronts) {
   screen.recording.log.length = 0;
   renderFrame(game, view);
   random.mockRestore();
+
   return screen.recording.log;
 }
 

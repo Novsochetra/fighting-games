@@ -53,6 +53,7 @@ function movesOf(kit) {
   const swaps = Object.values(kit.phaseTwo?.swaps ?? {});
   const opener = kit.phaseTwo?.opener ? [kit.phaseTwo.opener] : [];
   const skills = kit.skills.map((skill) => skill.move);
+
   return [...new Set([...kit.close.moves, ...skills, ...swaps, kit.ultimate.move, ...opener])];
 }
 
@@ -65,6 +66,7 @@ function bossArena(kind) {
   const boss = game.boss;
   Object.assign(boss, { entering: false, x: HERO_X + GAP, facing: -1 });
   boss.ai.cooldown = 9999;
+
   return { game, boss };
 }
 
@@ -82,6 +84,7 @@ function drawBossLayers(view, { game, boss }) {
   if (isBossUltimate(boss)) {
     dimForBossUltimate(painter, boss, cameraX);
   }
+
   drawFighter(painter, {
     fighter: boss,
     sheet: { ready: false },
@@ -116,6 +119,7 @@ function playEveryMove(kind) {
       misses.splice(0).forEach((call) => found.add(`${move}: ${call}`));
     }
   }
+
   return { misses: [...found], draws: counts.draws };
 }
 

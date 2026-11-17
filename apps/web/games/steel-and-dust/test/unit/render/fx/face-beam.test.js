@@ -13,6 +13,7 @@ const faceAt = (time) => ({ x: 26, y: 220, floor: 184, direction: 1, reach: 200,
 function beamRects(time) {
   const { painter, log } = recordingPainter();
   drawFaceBeam(painter, faceAt(time));
+
   return drawnRects(log);
 }
 
@@ -29,6 +30,7 @@ describe("a stone face's beam", () => {
       expect(core).toBeLessThan(body);
       expect(body).toBeLessThan(glow);
     }
+
     expect(beamProfile(face, length - 2, length).body).toBeLessThan(
       beamProfile(face, 100, length).body,
     );
@@ -73,6 +75,7 @@ describe("a stone face's beam", () => {
 describe('the lightning round the beam', () => {
   const beam = (time) => {
     const face = faceAt(time);
+
     return { face, mouth: mouthOf(face), length: beamLength(face) };
   };
 
@@ -82,6 +85,7 @@ describe('the lightning round the beam', () => {
     for (const point of points) {
       expect(Math.abs(point.y - mouth.y)).toBeLessThanOrEqual(8);
     }
+
     expect(points.at(-1).x - points[0].x).toBeCloseTo(46);
     expect(new Set(points.map((point) => Math.sign(point.y - mouth.y))).size).toBeGreaterThan(1);
   });
@@ -110,6 +114,7 @@ describe('the light a stone face gathers and breathes', () => {
     const lit = (time) => {
       const { painter, log } = recordingPainter();
       drawStoneFaceLight(painter, faceAt(time));
+
       return drawnRects(log);
     };
     expect(lit(FACE_TIMES.glare - 1)).toEqual([]);

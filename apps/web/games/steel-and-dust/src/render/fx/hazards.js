@@ -16,6 +16,7 @@ function drawShockPeak(painter, { x, y, height }) {
     const half = Math.round(((height - row) / height) * 3);
     painter.use(COLORS.outline).rect(x - half - 1, y - row, half * 2 + 3, 1);
   }
+
   for (let row = 0; row < height; row++) {
     const half = Math.round(((height - row) / height) * 3) - 1;
     if (half >= 0) {
@@ -64,6 +65,7 @@ function drawSlashWave(painter, wave) {
       painter.use(COLORS.white).rect(x - wave.direction * 2, y, 1, 1);
     }
   }
+
   painter.alpha(1);
 }
 
@@ -127,6 +129,7 @@ export function drawProjectiles(painter, projectiles, fxSheets) {
     if (!ON_GROUND.has(shot.kind)) {
       DRAW_SHOT[shot.kind](painter, shot, fxSheets);
     }
+
     LIGHT_OVER[shot.kind]?.(painter, shot);
   }
 }
@@ -138,6 +141,7 @@ export function drawGroundHazards(painter, projectiles, fxSheets, road) {
     if (ON_GROUND.has(shot.kind)) {
       DRAW_SHOT[shot.kind](painter, shot, fxSheets, road);
     }
+
     GROUND_MARK[shot.kind]?.(painter, shot);
   }
 }

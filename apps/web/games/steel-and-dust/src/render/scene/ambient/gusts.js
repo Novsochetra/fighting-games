@@ -12,6 +12,7 @@ function streakAt(i, { effect, tick, cameraX }) {
   const length = Math.max(2, Math.round(effect.length * (0.35 + trait(seed, 3) * 0.65)));
   const sway = Math.sin(tick * 0.05 + trait(seed, 5) * TAU) * 1.5;
   const baseX = trait(seed, 0) * CYCLE_WIDTH - tick * speed;
+
   return {
     x: Math.round(scrollX(baseX, { cameraX, drift: effect.drift, margin: effect.length })),
     y: Math.round(effect.top + trait(seed, 4) * (effect.bottom - effect.top) + sway),
@@ -47,5 +48,6 @@ export function drawGusts(painter, { effect, tick, cameraX, colors }) {
       drawStreak(painter, streak, { colors: colors.gusts, alpha: alpha * fade });
     }
   }
+
   painter.alpha(1);
 }

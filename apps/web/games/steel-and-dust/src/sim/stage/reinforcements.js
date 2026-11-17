@@ -8,9 +8,11 @@ export function callReinforcements(game) {
   if (!boss || boss.state === 'ko' || boss.entering) {
     return;
   }
+
   if (++game.stage.reinforcementTimer <= REINFORCEMENT_EVERY) {
     return;
   }
+
   game.stage.reinforcementTimer = 0;
   const helpers = game.fighters.filter(
     (fighter) => fighter.side === 'enemy' && !fighter.def.boss && fighter.state !== 'ko',

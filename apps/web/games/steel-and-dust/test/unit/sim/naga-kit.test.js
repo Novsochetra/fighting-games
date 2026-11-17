@@ -16,6 +16,7 @@ function nagaAt(distance, { missionIndex = 10, share = 1 } = {}) {
   Object.assign(naga, { entering: false, x: 120 + distance, facing: -1 });
   naga.ai.cooldown = 0;
   naga.hp = share * naga.maxHp;
+
   return { game, naga };
 }
 
@@ -38,6 +39,7 @@ describe("the Naga Raja's kit", () => {
       think(game, naga);
       states.add(naga.state);
     }
+
     expect([...states].sort()).toEqual(['idle', 'walk']);
   });
 

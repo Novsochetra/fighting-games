@@ -8,6 +8,7 @@ function fakeLive() {
   const musicBus = { kind: 'musicBus', connections: [] };
   const echoInput = { kind: 'echo', connections: [] };
   const noiseBuffer = context.createBuffer(1, 44100, 44100);
+
   return { context, chain: { musicBus, echoInput, noiseBuffer } };
 }
 

@@ -26,6 +26,7 @@ function pixelsNear(strip, frame, [ahead, up], reach = 2) {
       pixels.push({ alpha: sheet.alpha(x + dx, y + dy), rgb: sheet.rgb(x + dx, y + dy) });
     }
   }
+
   return pixels;
 }
 
@@ -37,6 +38,7 @@ function lowestRow(image, { left, top, width, height }) {
       }
     }
   }
+
   return -1;
 }
 
@@ -117,9 +119,11 @@ describe("the Naga Raja's art and her water", () => {
         for (let y = 0; y < frameHeight; y++) {
           edge.push(strip.alpha(left, y), strip.alpha(left + frameWidth - 1, y));
         }
+
         for (let x = 0; x < frameWidth; x++) {
           edge.push(strip.alpha(left + x, 0));
         }
+
         expect(Math.max(...edge), `${name} ${frame}`).toBe(0);
       }
     }

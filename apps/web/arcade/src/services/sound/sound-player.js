@@ -12,6 +12,7 @@ function buildGraph(context) {
   const limiter = context.createDynamicsCompressor();
   master.connect(limiter);
   limiter.connect(context.destination);
+
   return { context, destination: master, noiseBuffer: createNoiseBuffer(context) };
 }
 
@@ -31,9 +32,11 @@ export function createSoundPlayer({ createContext, isEnabled }) {
       const context = createContext();
       graph = context ? buildGraph(context) : null;
     }
+
     if (graph) {
       wake(graph.context);
     }
+
     return graph;
   }
 
@@ -42,12 +45,15 @@ export function createSoundPlayer({ createContext, isEnabled }) {
     if (!cue || !isEnabled()) {
       return false;
     }
+
     const ready = ensureGraph();
     if (!ready) {
       return false;
     }
+
     const startTime = ready.context.currentTime + LOOKAHEAD;
     cue.forEach((voice) => scheduleVoice(ready.context, ready, voice, startTime));
+
     return true;
   }
 
@@ -59,6 +65,7 @@ export function browserAudioContext(window) {
   if (!AudioContextClass) {
     return null;
   }
+
   try {
     return new AudioContextClass({ latencyHint: 'interactive' });
   } catch {

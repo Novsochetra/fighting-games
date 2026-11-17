@@ -17,6 +17,7 @@ function pacesFor(format, { x, vx, ticks }) {
     step: (each) => {
       each.ball.x = Math.max(-60, Math.min(each.pitch.length + 60, each.ball.x + each.ball.vx));
     },
+
     check: () => {
       paces.push(camera.along.pace);
       places.push(camera.along.value);

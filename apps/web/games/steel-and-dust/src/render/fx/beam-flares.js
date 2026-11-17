@@ -18,6 +18,7 @@ const SPRAY_LIFE = 8;
 export function arcPoints({ face, mouth, length }, arc) {
   const beat = face.time >> 1;
   const start = flicker(beat, arc + 7) * Math.max(0, length - ARC_SPAN);
+
   return Array.from({ length: ARC_STEPS + 1 }, (_, step) => ({
     x: mouth.x + face.direction * (start + (step * ARC_SPAN) / ARC_STEPS),
     y: mouth.y + (flicker(step + arc * 16, beat) - 0.5) * 2 * ARC_SWING,
@@ -36,6 +37,7 @@ export function drawLightning(context, beam) {
     if (flicker(arc, beat) < 0.3) {
       continue;
     }
+
     const points = arcPoints(beam, arc);
     inLight(context, () => {
       context.globalAlpha = 0.4;
@@ -69,6 +71,7 @@ export function drawMuzzle(context, { face, mouth }) {
     context.fillStyle = FX_COLORS.gazeWhite;
     fineLine(context, { from: point(radius * 0.5), to: point(reach * 0.7) });
   }
+
   drawStar(context, { ...mouth, arm: Math.round(6 + burst * 10 + ((face.time >> 1) & 1) * 2) });
 }
 
@@ -84,6 +87,7 @@ function drawSpray(context, { face, x, y }) {
     context.fillStyle = age < 3 ? FX_COLORS.gazeWhite : FX_COLORS.gazeGold;
     context.fillRect(snap(x - face.direction * age * speed), snap(y + age * rise), PIXEL, PIXEL);
   }
+
   context.globalAlpha = 1;
 }
 

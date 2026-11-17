@@ -96,6 +96,7 @@ function shard(particle, terrain) {
   if (particle.landed) {
     return;
   }
+
   const lastY = particle.y;
   particle.vy += SHARD_FALL;
   particle.vx *= SHARD_DRAG;

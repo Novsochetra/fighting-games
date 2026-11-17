@@ -24,6 +24,7 @@ async function bootCounted(bootFn = bootWithRealCatalog, options = {}) {
   const { tag, setup } = createFakeAnalytics();
   const storage = options.storage ?? storageWithConsent('granted');
   const started = await bootFn({ ...options, storage, analytics: setup });
+
   return { ...started, tag };
 }
 

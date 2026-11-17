@@ -30,6 +30,7 @@ describe("an echo's look", () => {
       expect(look).toMatchObject({ rim: FX_COLORS.lionGold, relief: true });
       expect(look.alpha).toBeLessThan(0.8);
     }
+
     expect(held[0].alpha).not.toBe(held[1].alpha);
   });
 
@@ -40,6 +41,7 @@ describe("an echo's look", () => {
       expect(look).toMatchObject({ body: FX_COLORS.reliefRim, relief: false });
       expect(look.alpha).toBeGreaterThan(0.8);
     }
+
     expect(echoLook(echoAt(40, 58)).relief).toBe(true);
   });
 });

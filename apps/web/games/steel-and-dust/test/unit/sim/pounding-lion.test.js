@@ -15,6 +15,7 @@ function longestHold(from, to) {
     run = sameFrame(time, time - 1) ? run + 1 : 1;
     longest = Math.max(longest, run);
   }
+
   return longest;
 }
 

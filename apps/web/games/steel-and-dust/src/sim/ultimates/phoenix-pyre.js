@@ -20,11 +20,13 @@ function raiseWave(game, player, wave) {
   for (const side of [-1, 1]) {
     raisePillar(game, { x: player.x + side * distance, scale, hit: PHOENIX_PYRE.pillar, burn });
   }
+
   shake(game, 2, 5);
 }
 
 function waveAt(since) {
   const wave = since / waveGap;
+
   return since >= 0 && Number.isInteger(wave) && wave < waves ? wave : -1;
 }
 
@@ -43,6 +45,7 @@ function flightOf(game, player) {
     [middle, high - 10],
     [middle, groundAt(game.terrain, middle) - 8],
   ];
+
   return [[0, player.x, player.y - 46], ...points.map(([x, y], i) => [legs[i], x, y])];
 }
 
@@ -65,6 +68,7 @@ function inferno(game, player) {
   for (const target of ultTargets(game)) {
     igniteTarget(game, target, burn);
   }
+
   hitEveryTarget(game, player, PHOENIX_PYRE.inferno);
   addSparks(game, {
     x,
@@ -84,12 +88,15 @@ export function runPhoenixPyre(game, player, time) {
   if (wave >= 0) {
     raiseWave(game, player, wave);
   }
+
   if (time === phoenixAt) {
     riseOfThePhoenix(game, player);
   }
+
   if (time === DIVE_AT) {
     inferno(game, player);
   }
+
   if (time >= PHOENIX_PYRE.end) {
     finishUlt(player);
   }

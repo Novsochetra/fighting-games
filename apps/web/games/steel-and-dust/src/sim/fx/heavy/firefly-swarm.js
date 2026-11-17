@@ -71,13 +71,16 @@ export function strikePointOf(fighter, move) {
   if (!move.hitbox) {
     return chestOf(fighter);
   }
+
   const [x, y, width, height] = move.hitbox;
+
   return { x: fighter.x + fighter.facing * (x + width / 2), y: fighter.y + y + height / 2 };
 }
 
 // a unit step from one point toward another, turned by `spread` radians
 export function aimFrom(from, to, spread) {
   const angle = Math.atan2(to.y - from.y, to.x - from.x) + spread;
+
   return { x: Math.cos(angle), y: Math.sin(angle) };
 }
 

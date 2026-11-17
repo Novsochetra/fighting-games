@@ -13,6 +13,7 @@ function installPointerTracking(window, { game, audio, ui, layout }) {
         game.device.touchUsed = true;
         layout.applyTouchSettings();
       }
+
       audio.unlock();
     },
     true,
@@ -34,5 +35,6 @@ export function installInput({ window, elements, game, audio, ui, layout, menus 
   const touchPad = installGameTouchPad({ elements, game, audio, layout });
   installPauseButton(elements.pauseButton, { game, audio });
   const gamepad = createGamepadReader({ navigator: window.navigator, game, menus, ui });
+
   return { touchPad, gamepad };
 }

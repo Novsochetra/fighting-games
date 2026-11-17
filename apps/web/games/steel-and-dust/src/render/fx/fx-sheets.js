@@ -14,6 +14,7 @@ export function loadFxSheets({ createImage, createCanvas, baseUrl }) {
     image.src = `${baseUrl}${DIRECTORY}${name}.png`;
     sheets.images[name] = image;
   }
+
   return sheets;
 }
 
@@ -26,6 +27,7 @@ export function drawFxFrame(painter, sheets, { name, frame, x, y, scale = 1, fac
   if (!sheets.ready[name]) {
     return;
   }
+
   const { frameWidth, frameHeight, anchorX, anchorY } = FX_SPRITES[name];
   const source = frameSource(sheets.tints, {
     image: sheets.images[name],
@@ -63,5 +65,6 @@ export function drawFxFrame(painter, sheets, { name, frame, x, y, scale = 1, fac
 
 export function fxFrameAt(name, time) {
   const { frames, ticks } = FX_SPRITES[name];
+
   return Math.min(frames - 1, Math.floor(Math.max(0, time) / ticks));
 }

@@ -13,6 +13,7 @@ export function blowWarHorn(game, boss, count) {
     const kind = kinds[(Math.random() * kinds.length) | 0];
     game.stage.spawnQueue.push({ kind, side: i % 2 ? 1 : -1, delay: 20 + i * 24 });
   }
+
   game.stage.reinforcementTimer = 0;
   addRing(game, { ...bodyPoint(boss, HORN), color: COLORS.gold, big: true });
   game.io.sfx('warHorn', false, { x: boss.x });

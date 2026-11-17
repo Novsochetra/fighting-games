@@ -16,6 +16,7 @@ describe('the boxes of the HUD', () => {
     for (const box of row) {
       expect([box.y, box.height]).toEqual([0, TOP_BAR_HEIGHT]);
     }
+
     for (let i = 1; i < row.length; i++) {
       expect(row[i].x).toBeGreaterThan(right(row[i - 1]));
     }

@@ -58,8 +58,10 @@ export const ANTLER_PARTICLE_MOVERS = {
     particle.vx *= 0.9;
     particle.vy = particle.vy * 0.95 - 0.04;
   },
+
   antlerHoof() {},
   antlerFork() {},
+
   antlerRush(particle) {
     particle.x += particle.vx;
     particle.y += particle.vy;

@@ -16,6 +16,7 @@ function pharaohAt(distance, { missionIndex = 8, share = 1 } = {}) {
   Object.assign(pharaoh, { entering: false, x: 120 + distance, facing: -1 });
   pharaoh.ai.cooldown = 0;
   pharaoh.hp = share * pharaoh.maxHp;
+
   return { game, pharaoh };
 }
 
@@ -43,6 +44,7 @@ describe("the Sand Pharaoh's kit", () => {
       think(game, pharaoh);
       directions.add(pharaoh.walkDirection);
     }
+
     expect([...directions].sort()).toEqual([-1, 1]);
   });
 

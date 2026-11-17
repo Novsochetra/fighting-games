@@ -37,6 +37,7 @@ export function rollTide(game, tide) {
   if (tide.time < tide.breakAt && isWall(game.terrain, tide.x + tide.direction * 8, tide.y)) {
     tide.breakAt = tide.time;
   }
+
   const rolling = tide.time >= TIDE_RISE && tide.time < tide.breakAt;
   tide.speed = rolling ? TIDE_SPEED : 0;
   tide.y = groundAt(game.terrain, tide.x);
@@ -44,6 +45,7 @@ export function rollTide(game, tide) {
     const x = tide.x - tide.direction * 10;
     addSparks(game, { x, y: tide.y - 4, count: 1, color: FX_COLORS.foam, speed: 1 });
   }
+
   tide.dead = tide.time >= tide.breakAt + TIDE_BREAK;
 }
 

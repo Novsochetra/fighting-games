@@ -106,5 +106,6 @@ export const AIRPORT = {
     paintBoard(raster);
     paintHall(raster);
   },
+
   overlay: drawDepartures,
 };

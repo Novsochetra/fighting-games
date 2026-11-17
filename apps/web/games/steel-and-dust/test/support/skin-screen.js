@@ -14,11 +14,14 @@ export function stubRect(element) {
   if (element.classList.contains('skin-preview')) {
     return LAYER;
   }
+
   const spot = element.closest('#m-skins') && ORIGINAL[element.dataset.control];
   if (!spot) {
     return { left: 0, top: 0, width: 0, height: 0 };
   }
+
   const [x, y, size] = spot;
+
   return { left: x - size / 2, top: y - size / 2, width: size, height: size };
 }
 

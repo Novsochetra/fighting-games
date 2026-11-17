@@ -32,6 +32,7 @@ function drawDisc(painter, { x, y, radius }) {
     y: Math.round(y) - radius,
     width: radius * 2 + 1,
     height: radius * 2 + 1,
+
     draw: (context, left, top) => {
       context.fillStyle = painter.color;
       drawDiscRows(context, left, top, radius);
@@ -48,6 +49,7 @@ export function drawSunGlow(painter, { effect, tick, colors }) {
     painter.use(colors.sun[colorIndex]).alpha(base + rise * breath);
     drawDisc(painter, { x: effect.x, y: effect.y, radius: effect.radius + extra + swell });
   }
+
   painter.context.globalCompositeOperation = 'source-over';
   painter.alpha(1);
 }

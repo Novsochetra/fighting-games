@@ -40,6 +40,7 @@ function heavyBlueCharge(live, start) {
   for (const [offset, frequency, volume] of CRACKLE) {
     click(live, { start: start + offset, volume, frequency });
   }
+
   metal(live, { start: start + 0.07, frequencies: RING, duration: 0.18, volume: 0.05 });
 }
 

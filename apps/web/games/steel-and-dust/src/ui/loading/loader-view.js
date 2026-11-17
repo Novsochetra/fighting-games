@@ -13,6 +13,7 @@ function drawPhase(element, phase) {
     // a layout in between, so the fade in starts from transparent
     element.getBoundingClientRect();
   }
+
   element.classList.toggle('done', down);
   element.classList.toggle('complete', phase === 'complete');
 }
@@ -29,16 +30,19 @@ export function createLoaderView(element) {
       element.hidden = true;
     }
   });
+
   return {
     // the words are kept out of sight until the pixel font is in
     showWords() {
       element.classList.add('lettered');
     },
+
     render(phase, percent) {
       if (percent !== drawn.percent) {
         drawPercent(element, parts, percent);
         drawn.percent = percent;
       }
+
       if (phase !== drawn.phase) {
         drawPhase(element, phase);
         drawn.phase = phase;

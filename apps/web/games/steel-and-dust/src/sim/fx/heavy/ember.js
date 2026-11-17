@@ -39,6 +39,7 @@ function swirlTo(game, fighter, { at, life }) {
 
 export const EMBER_HEAVY_KIT = {
   sounds: { charge: 'heavyEmberCharge', release: 'heavyEmberRelease' },
+
   // the hands catch fire; a charged heavy has burned all through its charge and flares bigger
   windup(game, fighter, move) {
     const at = handOf(fighter);
@@ -46,6 +47,7 @@ export const EMBER_HEAVY_KIT = {
     addFlare(game, { ...at, size: move.chargeLevel ? 8 : 4, life: 4, facing });
     lickUp(game, at, { facing, size: 6, life: 9 });
   },
+
   // embers spiral in from all round to where the hands coil, and flames lick up off the hands
   gather(game, fighter, move, time) {
     const left = move.startup - time;
@@ -53,14 +55,17 @@ export const EMBER_HEAVY_KIT = {
     if (left >= SWIRL_MIN) {
       swirlTo(game, fighter, { at: coil, life: Math.min(SWIRL_MAX, left) });
     }
+
     if (left >= SWIRL_PAIRED) {
       swirlTo(game, fighter, { at: coil, life: Math.min(SWIRL_MAX, left) });
     }
+
     if (time % 3 === 1) {
       const size = 4 + (time / move.startup) * 3;
       lickUp(game, handOf(fighter), { facing: fighter.facing, size, life: 7 });
     }
   },
+
   // the gathered fire bursts off the hands the way the blow goes
   release(game, fighter, move) {
     const at = handOf(fighter);
@@ -78,6 +83,7 @@ export const EMBER_HEAVY_KIT = {
     });
     throwCinders(game, at, { ...aim, count: 5, spread: 0.5, speed: 3.6, life: 15 });
   },
+
   // the smear sheds cinders that drift back and up behind it, and flames that burn out
   trail(game, fighter, _move, time) {
     const at = smearPointOf(game, fighter, time);
@@ -89,6 +95,7 @@ export const EMBER_HEAVY_KIT = {
       throwFlames(game, at, { count: 1, angle, spread: 0.5, speed: 0.7, size: 5, life: 8 });
     }
   },
+
   // a blow that lands erupts in a fan of flame and throws cinders on through the raider; the burn
   // it sets (summons/burn.js) does the lingering, and the game's own flash sits over the middle
   impact(game, hit) {
@@ -100,5 +107,6 @@ export const EMBER_HEAVY_KIT = {
     const on = { angle: heading(facing, -20), lead: HITSTOP_LEAD };
     throwCinders(game, hit, { ...on, count, spread: 0.7, speed: 3.8, life: 15 });
   },
+
   particles: EMBER_PARTICLE_MOVERS,
 };

@@ -12,6 +12,7 @@ const ECHO_GAP = 3;
 
 export function leapFrame(stride) {
   const leaps = FX_SPRITES.lion.frames - RISE_FRAMES;
+
   return RISE_FRAMES + Math.min(leaps - 1, Math.floor(stride * leaps));
 }
 
@@ -19,6 +20,7 @@ export function lionFrame(lion, time) {
   if (time <= lion.appear) {
     return Math.min(RISE_FRAMES - 1, Math.floor((time / LION_RISE_TICKS) * RISE_FRAMES));
   }
+
   return leapFrame(lion.stride);
 }
 
@@ -30,6 +32,7 @@ function drawEchoes(painter, sheets, lion) {
     if (time <= 0) {
       continue;
     }
+
     const pose = lionPoseAt(lion, time);
     painter.alpha(0.3 / echo);
     drawFxFrame(painter, sheets, {
@@ -52,6 +55,7 @@ export function drawLion(painter, sheets, lion) {
     drawEchoes(painter, sheets, lion);
     painter.alpha(1);
   }
+
   drawFxFrame(painter, sheets, {
     name: 'lion',
     frame: lionFrame(lion, lion.time),

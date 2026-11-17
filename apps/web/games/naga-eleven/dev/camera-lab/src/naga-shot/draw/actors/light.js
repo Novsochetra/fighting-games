@@ -27,6 +27,7 @@ const STRIKER = {
     light: FROM_BALL,
     level: level(phaseOf(clock.share, 0.15, 0.8) * 0.75),
   }),
+
   manifest: ({ naga }) => ({ light: FROM_BEHIND, level: level(0.5 + naga.colour * 0.5) }),
   impact: ({ clock }) => afterKick(clock),
 };

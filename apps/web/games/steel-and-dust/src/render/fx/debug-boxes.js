@@ -8,6 +8,7 @@ function drawFighterBoxes(painter, fighter) {
   if (body) {
     painter.use(COLORS.mint).outline(body.x, body.y, body.width, body.height);
   }
+
   if (fighter.state === 'attack' && fighter.hitboxActive && fighter.move) {
     const hit = swingBox(fighter);
     painter
@@ -16,6 +17,7 @@ function drawFighterBoxes(painter, fighter) {
       .rect(hit.x, hit.y, Math.round(hit.width), Math.round(hit.height));
     painter.alpha(1).use(COLORS.coral).outline(hit.x, hit.y, hit.width, hit.height);
   }
+
   drawText(painter, fighter.state + (fighter.hasToken ? ' T' : ''), {
     x: fighter.x,
     y: fighter.y - 56 * fighter.scale,
@@ -28,6 +30,7 @@ export function drawDebugBoxes(painter, game) {
   for (const fighter of game.fighters) {
     drawFighterBoxes(painter, fighter);
   }
+
   for (const wave of game.shockwaves) {
     painter
       .alpha(0.45)
@@ -35,6 +38,7 @@ export function drawDebugBoxes(painter, game) {
       .rect(wave.x - 6, wave.y - 12, 12, 12);
     painter.alpha(1);
   }
+
   for (const crate of game.crates) {
     if (!crate.broken) {
       const box = crateBox(crate);

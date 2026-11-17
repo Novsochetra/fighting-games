@@ -106,6 +106,7 @@ describe('the save buttons on the home screen', () => {
     while (byId('spotlight-title').textContent !== 'Morodok Angkor') {
       press('ArrowRight');
     }
+
     await waitUntil(() => expect(cardSave()).toBeNull());
     stopHomes();
     document.body.innerHTML = '';

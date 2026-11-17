@@ -4,6 +4,7 @@ import { openMenu, openPage } from '../../support/menu-page.js';
 
 const backdrop = () => {
   const { scene, dim } = document.getElementById('menus').dataset;
+
   return { scene, dim };
 };
 const title = () => document.getElementById('m-title');

@@ -17,6 +17,7 @@ function bayonArena({ gap = 170 } = {}) {
   const guardian = game.boss;
   Object.assign(guardian, { entering: false, x: game.player.x + gap, facing: -1 });
   guardian.ai.cooldown = 9999;
+
   return { game, guardian };
 }
 
@@ -29,6 +30,7 @@ function playOut(game, guardian, ticks, everyTick = () => {}) {
     guardian.ai.cooldown = 9999;
     states.add(game.player.state);
   }
+
   return states;
 }
 

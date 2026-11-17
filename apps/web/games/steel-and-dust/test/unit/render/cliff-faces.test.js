@@ -25,6 +25,7 @@ const bank = (x) => (x >= 200 && x < 300 ? GROUND_Y - 20 : GROUND_Y);
 function record(draw) {
   const { context, log } = createRecordingContext(null);
   draw(createPainter(context));
+
   return log;
 }
 
@@ -35,6 +36,7 @@ const imageDraws = (log, name) =>
 
 function facesOf(surfaceAt) {
   const runs = surfaceRuns(surfaceAt, 100, 400);
+
   return record((painter) => drawCliffFaces(painter, runs, { texture, cliff, colors }));
 }
 
@@ -65,6 +67,7 @@ describe('rounded shoulders', () => {
     for (const x of [150, 199, 250, 300, 305]) {
       expect(drawn(x), `at ${x}`).toBe(bank(x));
     }
+
     const slope = (x) => GROUND_Y - Math.round(x / 3);
     expect(roundedShoulders(slope)(90)).toBe(slope(90));
   });
@@ -111,6 +114,7 @@ describe('cliff faces', () => {
       const lowSide = shadow.x >= 300 || shadow.x + shadow.width <= 200;
       expect(lowSide, `shadow at ${shadow.x}`).toBe(true);
     }
+
     expect(log.at(-1)).toBe('globalAlpha=1');
   });
 

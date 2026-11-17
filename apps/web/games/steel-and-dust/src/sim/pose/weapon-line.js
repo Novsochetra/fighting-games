@@ -14,14 +14,17 @@ export function weaponLine(fighter, joints, pose) {
   if (type === 'shield') {
     return { type, grip: hand, tip: hand, dx, dy };
   }
+
   const reach = REACH[type];
   if (!reach) {
     return null;
   }
+
   const at = (length) => ({
     x: hand.x + dx * length * fighter.scale,
     y: hand.y + dy * length * fighter.scale,
   });
+
   return { type, grip: at(reach[0]), tip: at(reach[1]), dx, dy };
 }
 
@@ -38,6 +41,7 @@ export function strikePoints(fighter) {
       },
     };
   }
+
   const line = weaponLine(fighter, joints, fighter.pose);
   if (line) {
     return {
@@ -48,5 +52,6 @@ export function strikePoints(fighter) {
       },
     };
   }
+
   return { tip: joints.frontHand, inner: joints.frontElbow };
 }

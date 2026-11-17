@@ -10,5 +10,6 @@ export function startGroundAttack(game, player, { buffer, direction }) {
   } else {
     startHeroMove(game, player, pickGroundMove(buffer, held, null));
   }
+
   consumeBuffer(game);
 }

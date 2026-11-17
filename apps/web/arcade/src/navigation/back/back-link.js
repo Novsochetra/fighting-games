@@ -5,6 +5,8 @@ export function cameFrom(target, { referrer, historyLength }) {
   if (!referrer || historyLength < 2) {
     return false;
   }
+
   const from = new URL(referrer);
+
   return from.origin === target.origin && from.pathname === target.pathname;
 }

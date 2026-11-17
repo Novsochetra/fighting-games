@@ -23,6 +23,7 @@ function renderedCalls(game) {
     baseUrl: '',
   });
   renderFrame(game, view);
+
   return screen.recording.log;
 }
 
@@ -49,6 +50,7 @@ describe('the carved soldiers in the light', () => {
     while (game.player.stateTime < ULTIMATES.angkor.releaseAt - 1) {
       runTicks(game, 1);
     }
+
     const log = renderedCalls(game);
     const dim = log.indexOf(`fillStyle=${HERO_THEMES.angkor.ult.dim}`);
     expect(dim).toBeGreaterThan(-1);

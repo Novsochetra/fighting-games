@@ -17,10 +17,12 @@ export function screenEdges(game) {
   if (arena && isLockedScreen(arena)) {
     return { left: arena.left, right: arena.right };
   }
+
   const view = { left: camera.x, right: camera.x + VIEW_WIDTH };
   if (!arena) {
     return view;
   }
+
   return { left: Math.max(arena.left, view.left), right: Math.min(arena.right, view.right) };
 }
 
@@ -37,13 +39,17 @@ export function arenaBounds(game, fighter) {
   if (fighter === game.player && game.gateRun?.free) {
     return FREE;
   }
+
   const { left, right } = screenEdges(game);
   if (fighter.side === 'enemy' && fighter.entering) {
     if (fighter.x > left + 10 && fighter.x < right - 10) {
       fighter.entering = false;
     }
+
     return FREE;
   }
+
   const margin = fighter.def?.boss ? BOSS_HALF_WIDTH * fighter.scale : MARGIN;
+
   return { min: left + margin, max: right - margin };
 }

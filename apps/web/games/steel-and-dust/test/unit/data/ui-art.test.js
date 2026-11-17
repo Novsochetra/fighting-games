@@ -10,6 +10,7 @@ const STYLES = new URL('styles/', GAME);
 function stylesheetImages() {
   return readdirSync(STYLES).flatMap((file) => {
     const css = readFileSync(new URL(file, STYLES), 'utf8');
+
     return [...css.matchAll(/url\('([^']+\.(?:png|jpe?g|webp|gif|svg))'\)/g)].map((match) =>
       new URL(match[1], STYLES).href.slice(GAME.href.length),
     );
@@ -34,6 +35,7 @@ describe('the menu art list', () => {
       expect(files.filter((file) => file.includes('landscape')).length, folder).toBeGreaterThan(1);
       expect(files.filter((file) => file.includes('portrait')).length, folder).toBeGreaterThan(1);
     }
+
     for (const file of SKIN_ART) {
       expect(existsSync(new URL(file, GAME)), file).toBe(true);
     }

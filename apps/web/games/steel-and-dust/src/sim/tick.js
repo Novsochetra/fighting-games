@@ -14,9 +14,11 @@ function runWorld(game) {
     game.slowMotion--;
     run = game.slowMotion % 3 === 0;
   }
+
   if (!run) {
     return;
   }
+
   simulateStep(game);
   const camera = game.camera;
   if (camera.shakeTime > 0 && --camera.shakeTime === 0) {
@@ -35,15 +37,18 @@ export function runTick(game) {
   if (game.flashTime > 0) {
     game.flashTime--;
   }
+
   if (game.slashBandTime > 0) {
     game.slashBandTime--;
   }
+
   if (game.mode === 'title') {
     updateFighter(game, game.player);
     updateEffects(game);
   } else if (RUNNING_MODES.has(game.mode)) {
     runWorld(game);
   }
+
   clearPressed(game.input);
 }
 

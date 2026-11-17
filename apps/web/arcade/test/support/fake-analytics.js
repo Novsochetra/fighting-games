@@ -6,12 +6,14 @@ import { createMemoryStorage } from '@/services/preferences.js';
 export function createFakeAnalytics() {
   const tag = { event: vi.fn(), grant: vi.fn(), deny: vi.fn() };
   const loadTag = vi.fn(() => tag);
+
   return { tag, loadTag, setup: { isEnabled: true, loadTag } };
 }
 
 export function storageWithConsent(choice) {
   const storage = createMemoryStorage();
   storage.write(CONSENT_KEY, choice);
+
   return storage;
 }
 

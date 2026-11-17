@@ -167,6 +167,7 @@ describe('the roll of a temple boulder', () => {
     while (fromLedge.x > 60) {
       rollOn(terrain, fromLedge);
     }
+
     expect(fromLedge.y).toBe(GROUND_Y);
 
     const atWall = rollFrom(terrain, 260);
@@ -174,6 +175,7 @@ describe('the roll of a temple boulder', () => {
     while (rolling) {
       rolling = rollOn(terrain, atWall);
     }
+
     expect(atWall.x).toBeGreaterThanOrEqual(200);
     expect(atWall.y).toBe(GROUND_Y);
   });

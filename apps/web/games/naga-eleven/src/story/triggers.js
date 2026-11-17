@@ -40,19 +40,25 @@ const late = (wanted) => (trigger, match) =>
 
 export const CONDITIONS = {
   kickoff: (_, match, events) => whistled(events, 'kickoff', 1) || opening(match),
+
   firstDuel: (trigger, match, events) =>
     eventsOf(events, 'duel').some((event) => meets(trigger, match, event.duel)),
+
   goalFor: goalBy('for'),
   goalAgainst: goalBy('against'),
   halfTime: (_, match, events) => whistled(events, 'halfTime') || match.phase === 'halfTime',
+
   secondHalf: (_, match, events) =>
     whistled(events, 'kickoff', 2) || (match.half === 2 && inPlay(match)),
+
   losingLate: late(-1),
   drawLate: late(0),
+
   specialGoal: (trigger, _, events) =>
     eventsOf(events, 'goal').some(
       (goal) => Boolean(goal.move) && (!trigger.move || goal.move === trigger.move),
     ),
+
   minute: (trigger, match) => inPlay(match) && match.minute >= trigger.at,
   ...PLAY_CONDITIONS,
 };

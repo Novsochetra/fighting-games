@@ -39,6 +39,7 @@ export function advanceGlottis(glottis, shape, time) {
   if (glottis.phase >= 1) {
     startPulse(glottis, shape, time);
   }
+
   return step;
 }
 
@@ -48,14 +49,17 @@ function smoothClosure(slope, phase, openQuotient, step) {
   if (distance < 0) {
     distance += 1;
   }
+
   if (distance < step) {
     const ratio = distance / step;
     return slope + 0.5 * (ratio + ratio - ratio * ratio - 1);
   }
+
   if (distance > 1 - step) {
     const ratio = (distance - 1) / step;
     return slope + 0.5 * (ratio * ratio + ratio + ratio + 1);
   }
+
   return slope;
 }
 
@@ -69,5 +73,6 @@ export function glottalSlope(glottis, openQuotient, step) {
     slope = opening * (2 - 3 * opening);
     glottis.flow = 6.75 * opening * opening * (1 - opening);
   }
+
   return smoothClosure(slope, phase, openQuotient, step);
 }

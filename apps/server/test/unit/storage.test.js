@@ -12,6 +12,7 @@ const CONFIG = {
 
 function fakeClient() {
   const sent = [];
+
   return { sent, send: async (command) => sent.push(command.input) };
 }
 
@@ -132,6 +133,7 @@ describe('checkStorage', () => {
     return {
       putFile: async ({ key, body }) => {
         files.set(key, body);
+
         return { key, url: `https://files.example.test/${key}` };
       },
     };

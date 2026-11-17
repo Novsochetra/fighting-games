@@ -32,7 +32,9 @@ function pathMethods(painter, paths) {
     beginPath: () => {
       paths.list = [];
     },
+
     moveTo: (x, y) => paths.list.push([painter.toDevice(x, y)]),
+
     lineTo: (x, y) => {
       if (paths.list.length === 0) {
         paths.list.push([]);
@@ -40,7 +42,9 @@ function pathMethods(painter, paths) {
 
       paths.list.at(-1).push(painter.toDevice(x, y));
     },
+
     closePath: () => {},
+
     rect: (x, y, width, height) =>
       paths.list.push([
         painter.toDevice(x, y),
@@ -48,8 +52,10 @@ function pathMethods(painter, paths) {
         painter.toDevice(x + width, y + height),
         painter.toDevice(x, y + height),
       ]),
+
     arc: (...[x, y, radius, start, end]) =>
       addCurve({ x, y, radiusX: radius, radiusY: radius, start, end }),
+
     ellipse: (...[x, y, radiusX, radiusY, , start, end]) =>
       addCurve({ x, y, radiusX, radiusY, start, end }),
   };
@@ -62,6 +68,7 @@ function paintMethods({ canvas, painter, paths, stateOf }) {
         painter.deviceRect({ x, y, width, height }),
         parseColor(stateOf().fillStyle),
       ),
+
     clearRect: (x, y, width, height) => {
       const box = painter.deviceRect({ x, y, width, height });
 
@@ -71,6 +78,7 @@ function paintMethods({ canvas, painter, paths, stateOf }) {
         canvas.data.fill(0, from * 4, (row * canvas.width + Math.min(canvas.width, box.right)) * 4);
       }
     },
+
     fill: () => {
       const color = parseColor(stateOf().fillStyle);
       const shapes = paths.list.filter((points) => points.length > 2);
@@ -79,6 +87,7 @@ function paintMethods({ canvas, painter, paths, stateOf }) {
         painter.paintRect({ left: from, top: row, right: to, bottom: row + 1 }, color),
       );
     },
+
     stroke: () => {
       const state = stateOf();
       const color = parseColor(state.strokeStyle);
@@ -91,6 +100,7 @@ function paintMethods({ canvas, painter, paths, stateOf }) {
         });
       }
     },
+
     drawImage: (image, ...args) => painter.drawImage(image, args),
     fillText: (text, x, y) => painter.fillText(text, x, y),
     strokeText: (text, x, y) => painter.fillText(text, x, y),
@@ -102,9 +112,11 @@ function imageMethods(canvas, stateOf) {
     measureText: (text) => ({
       width: Math.round(fontSizeOf(stateOf().font) * 0.6) * [...text].length,
     }),
+
     createLinearGradient: gradient,
     createRadialGradient: gradient,
     createPattern: (image) => ({ stops: [{ color: 'transparent' }], image }),
+
     getImageData: (x, y, width, height) => {
       const out = createPixelCanvas(width, height);
 
@@ -112,6 +124,7 @@ function imageMethods(canvas, stateOf) {
 
       return { width, height, data: out.data };
     },
+
     putImageData: (image, x, y) => {
       for (let row = 0; row < image.height; row += 1) {
         const line = image.data.subarray(row * image.width * 4, (row + 1) * image.width * 4);
@@ -119,6 +132,7 @@ function imageMethods(canvas, stateOf) {
         canvas.data.set(line, ((y + row) * canvas.width + x) * 4);
       }
     },
+
     createImageData: (width, height) => ({
       width,
       height,
@@ -130,19 +144,24 @@ function imageMethods(canvas, stateOf) {
 function transformMethods(stack, holder) {
   return {
     save: () => stack.push({ ...holder.state }),
+
     restore: () => {
       holder.state = stack.pop() ?? holder.state;
     },
+
     translate: (x, y) => {
       holder.state.offsetX += x * holder.state.scaleX;
       holder.state.offsetY += y * holder.state.scaleY;
     },
+
     scale: (x, y) => {
       holder.state.scaleX *= x;
       holder.state.scaleY *= y;
     },
+
     setTransform: (...[scaleX = 1, , , scaleY = 1, offsetX = 0, offsetY = 0]) =>
       Object.assign(holder.state, { scaleX, scaleY, offsetX, offsetY }),
+
     resetTransform: () =>
       Object.assign(holder.state, { scaleX: 1, scaleY: 1, offsetX: 0, offsetY: 0 }),
   };
@@ -169,6 +188,7 @@ function createContext(canvas) {
 
   return new Proxy(context, {
     get: (target, name) => (name in target ? target[name] : holder.state[name]),
+
     set: (_, name, value) => {
       holder.state[name] = value;
 

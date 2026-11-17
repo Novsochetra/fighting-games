@@ -7,6 +7,7 @@ export const LEADERBOARD_SIZE = 10;
 export function rankRun(board, entry) {
   const at = board.findIndex((ranked) => ranked.score < entry.score);
   const ranked = at < 0 ? [...board, entry] : [...board.slice(0, at), entry, ...board.slice(at)];
+
   return ranked.slice(0, LEADERBOARD_SIZE);
 }
 
@@ -39,6 +40,7 @@ export function sanitizeLeaderboard(stored) {
   if (!Array.isArray(stored)) {
     return [];
   }
+
   return stored
     .filter(isEntry)
     .map(storedEntry)

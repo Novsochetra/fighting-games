@@ -52,6 +52,7 @@ function createPanels({ elements, game, audio, layout, ui, window, supporters, o
     credits: createCreditsPanel({ root: elements.credits, game, feed: supporters }),
   };
   panels.skins = createSkinPicker({ window, game, audio, layout, settings: panels.section });
+
   return panels;
 }
 
@@ -106,5 +107,6 @@ export function installUi({ window, elements, game, audio, ui, pad, online }) {
     surfaces: [elements.stage, elements.touch],
   });
   installMenuTapFix(elements.menus);
+
   return { layout, fullscreen, menus, act, supporters };
 }

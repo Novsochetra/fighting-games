@@ -13,6 +13,7 @@ function fightOneRaider(hero, weapon = 'fists') {
   if (game.player.weapon.id !== weapon) {
     equipWeapon(game, weapon);
   }
+
   spawnEnemy(game, 'grunt', 1);
   const raider = game.fighters.find((fighter) => fighter.side === 'enemy');
   Object.assign(raider, { entering: false, x: game.player.x + 16, hp: 300 });
@@ -20,6 +21,7 @@ function fightOneRaider(hero, weapon = 'fists') {
   raider.ai.cooldown = 999;
   game.player.facing = 1;
   game.ultMeter = ULT_MAX;
+
   return { game, raider };
 }
 
@@ -44,6 +46,7 @@ function ticksUntilIdle(game) {
     runTicks(game, 1);
     ticks++;
   }
+
   return ticks;
 }
 
@@ -66,6 +69,7 @@ describe('the Shades fight differently with the same weapon', () => {
       tap(game, 'light');
       recovery[hero] = ticksUntilIdle(game);
     }
+
     expect(recovery.firefly).toBeLessThan(recovery.moss);
     expect(recovery.moss).toBeLessThan(recovery.antler);
   });
@@ -138,6 +142,7 @@ describe('the Shades fight differently with the same weapon', () => {
       runTicks(game, 1);
       struck ||= summonsOf(game, 'lion').some((lion) => lion.hitTargets.has(raider));
     }
+
     expect(struck).toBe(true);
     expect(summonsOf(game, 'lion')).toEqual([]);
   });
@@ -150,6 +155,7 @@ describe('the Shades fight differently with the same weapon', () => {
       runTicks(game, 1);
       struck ||= summonsOf(game, 'soldier').some((soldier) => soldier.hitTargets.has(raider));
     }
+
     expect(struck).toBe(true);
     expect(summonsOf(game, 'soldier')).toEqual([]);
   });

@@ -6,6 +6,8 @@ export function drawnLeanX(fighter, time) {
   if (time >= fighter.move.startup) {
     return 0;
   }
+
   const { lean, leanTicks } = BLUE_HEAVY_FEEL;
+
   return -fighter.facing * Math.round(lean * Math.min(1, (time + 1) / leanTicks));
 }

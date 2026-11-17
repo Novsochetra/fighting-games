@@ -17,6 +17,7 @@ export function callStormWave(game, boss, [, offsets]) {
       markStrike(game, boss, { x });
     }
   }
+
   game.io.sfx('zap', false, { vol: 0.5, x: boss.x });
 }
 

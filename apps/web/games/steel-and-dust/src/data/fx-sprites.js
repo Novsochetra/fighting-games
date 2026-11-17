@@ -99,5 +99,6 @@ export const FX_SCALE = 1 / RENDER_SCALE;
 // ticks an effect takes to play through once
 export function fxLength(name) {
   const sprite = FX_SPRITES[name];
+
   return sprite.frames * sprite.ticks;
 }

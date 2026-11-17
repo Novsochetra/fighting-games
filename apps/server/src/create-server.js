@@ -42,6 +42,7 @@ export function createArcadeServer({
   });
   const serveStatic =
     serveFiles ?? (webRoot ? createStaticHandler({ webRoot }) : createSourceFiles());
+
   return http.createServer((request, response) => {
     dispatch({ request, response, routes, serveStatic }).catch((error) => {
       logError(error);
@@ -63,10 +64,12 @@ async function dispatch({ request, response, routes, serveStatic }) {
   if (route.type === 'method-not-allowed') {
     return sendMethodNotAllowed(response, route.allow);
   }
+
   if (route.type === 'handler') {
     return isFromOtherSite(request.headers)
       ? sendForbidden(response)
       : route.handle(request, response);
   }
+
   return serveStatic(request, response);
 }

@@ -16,6 +16,7 @@ function fightOneRaider() {
   raider.maxHp = 500;
   raider.ai.cooldown = 9999;
   game.player.facing = 1;
+
   return { game, raider, sounds };
 }
 
@@ -78,6 +79,7 @@ describe('heavy spends the bar and light fills it', () => {
       untilIdle(game);
       raider.ai.cooldown = 9999;
     }
+
     const hp = raider.hp;
     tap(game, 'heavy');
     untilIdle(game);

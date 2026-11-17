@@ -133,6 +133,7 @@ export const HOTEL_NIGHT = {
     paintLamp(raster);
     paintBed(raster);
   },
+
   overlay: (context, tick) => {
     drawTwinkles(context, {
       points: LIT.slice(0, 40),

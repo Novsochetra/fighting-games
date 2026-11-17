@@ -28,6 +28,7 @@ const CARDS = {
   2: { paint: (raster) => TEMPLE_DAWN.paint(raster), overlay: TEMPLE_DAWN.overlay },
   3: {
     paint: (raster) => paintNightStadium(raster, { art: CARD_ART.asia, tiers: 2, banks: 4 }),
+
     overlay: (context, tick) =>
       drawTwinkles(context, {
         points: FLASHES(2),
@@ -39,6 +40,7 @@ const CARDS = {
   4: {
     paint: (raster) =>
       paintNightStadium(raster, { art: CARD_ART.world, tiers: 3, banks: 6, flags: true }),
+
     overlay: (context, tick) => {
       drawTwinkles(context, {
         points: FLASHES(3),
@@ -60,6 +62,7 @@ export function drawChapterCard(context, { number, tick = 0 }) {
   context.fillRect(0, 0, VIEW.width, VIEW.height);
   drawLayer(context, {
     key: `card:${number}`,
+
     paint: () => {
       const raster = createRaster();
 

@@ -25,6 +25,7 @@ function buildArmor(track, pitch) {
   layer(track, { filter: 'highpass', cutoff: 3000, attack: 0.0003, decay: 0.012, level: 0.55 });
   ring(track, CLANG, pitch);
   ring(track, THUD, 1);
+
   return { drive: 1.5 };
 }
 

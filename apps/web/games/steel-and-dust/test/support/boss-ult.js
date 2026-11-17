@@ -8,6 +8,7 @@ export function facingKhan(hero) {
   runTicks(game, 30);
   spawnEnemy(game, 'khan', 1);
   Object.assign(game.boss, { entering: false, x: game.player.x + 70, facing: -1 });
+
   return game;
 }
 
@@ -18,9 +19,11 @@ export function fireUltimate(game) {
   if (game.player.state !== 'ult') {
     return false;
   }
+
   for (let i = 0; game.player.state === 'ult' && i < 600; i++) {
     runTicks(game, 1);
   }
+
   return true;
 }
 

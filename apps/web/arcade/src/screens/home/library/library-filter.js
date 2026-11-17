@@ -25,9 +25,11 @@ export function filterEntries(cards, { filter, favorites, recent }) {
     const entries = byId(cards);
     return recent.map((id) => entries.get(id)).filter(Boolean);
   }
+
   const entries = cards
     .map((card, index) => ({ card, index }))
     .filter(({ card }) => isPlayable(card));
+
   return filter === 'favorites'
     ? entries.filter(({ card }) => favorites.includes(card.id))
     : entries;
@@ -37,6 +39,7 @@ function countLabel({ filter, shown, total }) {
   if (filter === 'all' && shown < total) {
     return `Showing ${shown} of ${total}`;
   }
+
   return formatGameCount(shown);
 }
 
@@ -44,6 +47,7 @@ export function libraryPage(cards, { filter, favorites, recent, expanded }) {
   const matching = filterEntries(cards, { filter, favorites, recent });
   const isPaged = filter === 'all' && !expanded;
   const entries = isPaged ? matching.slice(0, LIBRARY_PAGE_SIZE) : matching;
+
   return {
     entries,
     title: TITLES[filter],

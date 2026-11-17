@@ -17,6 +17,7 @@ function useSteps() {
   return {
     step,
     setStep,
+
     goTo(next: Step) {
       flushSync(() => setStep(next));
       window.document

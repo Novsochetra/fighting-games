@@ -14,6 +14,7 @@ export function isTelegraphing(fighter, tickCount) {
   const move = fighter.move;
   const windingUp =
     fighter.side === 'enemy' && fighter.state === 'attack' && fighter.moveTime < move.startup;
+
   return (
     windingUp &&
     !move.underground &&

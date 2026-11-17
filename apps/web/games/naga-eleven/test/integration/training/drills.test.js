@@ -56,6 +56,7 @@ describe.each(DRILL_IDS)('%s played through', (drill) => {
 
     playThrough(state, {
       bot: (each) => bot(each),
+
       onResult: (each) => {
         if (each.attempt === 1) {
           bot = BOTS[drill]();
@@ -79,6 +80,7 @@ describe.each(DRILL_IDS)('%s played through', (drill) => {
 
     playThrough(state, {
       bot: (each) => bot(each),
+
       onResult: (each) => {
         if (each.attempt === 1) {
           bot = idleBot;

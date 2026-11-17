@@ -59,6 +59,7 @@ function post(pathname, body, headers = {}) {
     ...headers,
   };
   const sent = Object.fromEntries(Object.entries(all).filter(([, value]) => value !== undefined));
+
   return sendRequest(server.port, { method: 'POST', path: pathname, headers: sent, body: text });
 }
 

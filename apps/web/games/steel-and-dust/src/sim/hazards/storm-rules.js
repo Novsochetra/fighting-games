@@ -23,12 +23,14 @@ export const STORM_RULES = {
   // the bolt's head leads and its crackling tail trails a little behind it
   thunderBolt: {
     range: 130,
+
     area: (bolt) => ({
       x: bolt.direction > 0 ? bolt.x - 30 : bolt.x - 4,
       y: bolt.y - 5,
       width: 34,
       height: 10,
     }),
+
     hit: ZAP_HIT,
     enemyWeapon: 'none',
     breaksOnHit: true,

@@ -7,9 +7,11 @@ function spikeRow(painter, { x, y, width, art }) {
     painter.use(art.thornLight).rect(x + 1, y, 1, 1);
     return;
   }
+
   if (width === 2) {
     painter.use(art.outline).rect(x - 1, y, 1, 1);
   }
+
   painter.use(art.thornLight).rect(x, y, 1, 1);
 }
 
@@ -18,6 +20,7 @@ function widthAt(share) {
   if (share < 0.34) {
     return 3;
   }
+
   return share < 0.67 ? 2 : 1;
 }
 
@@ -27,5 +30,6 @@ export function drawSpike(painter, { x, y, height, lean, art, tip = art.thornTip
     const width = widthAt(share);
     spikeRow(painter, { x: x + Math.round((lean * row) / height), y: y - row - 1, width, art });
   }
+
   painter.use(tip).rect(x + lean, y - height - 1, 1, 1);
 }

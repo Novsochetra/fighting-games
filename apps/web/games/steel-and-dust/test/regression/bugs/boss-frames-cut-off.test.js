@@ -16,10 +16,12 @@ function edgePixels(sheet, { left, top, width, height }) {
     count += sheet.alpha(left + x, top) > 0 ? 1 : 0;
     count += sheet.alpha(left + x, top + height - 1) > 0 ? 1 : 0;
   }
+
   for (let y = 0; y < height; y++) {
     count += sheet.alpha(left, top + y) > 0 ? 1 : 0;
     count += sheet.alpha(left + width - 1, top + y) > 0 ? 1 : 0;
   }
+
   return count;
 }
 

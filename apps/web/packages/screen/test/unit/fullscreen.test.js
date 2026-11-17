@@ -3,11 +3,13 @@ import { createFullscreen, installFullscreen } from '../../src/fullscreen.js';
 
 function fakeDocument({ request = vi.fn(async () => {}) } = {}) {
   const listeners = {};
+
   return {
     listeners,
     documentElement: { requestFullscreen: request },
     fullscreenElement: null,
     exitFullscreen: vi.fn(),
+
     addEventListener: (type, listener) => {
       listeners[type] = listener;
     },

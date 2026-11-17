@@ -11,6 +11,7 @@ import { thinkSlinger } from './slinger.js';
 
 function arenaMiddle(game) {
   const { left, right } = screenEdges(game);
+
   return (left + right) / 2;
 }
 
@@ -37,6 +38,7 @@ function faceThePlayer(game, fighter) {
   if (fighter.ai.cooldown > 0) {
     fighter.ai.cooldown--;
   }
+
   return Math.abs(dx);
 }
 
@@ -50,27 +52,33 @@ export function thinkEnemy(game, fighter) {
   if (fighter.state !== 'idle' && fighter.state !== 'walk') {
     return;
   }
+
   if (fighter.entering) {
     walkIntoArena(game, fighter);
     return;
   }
+
   const distance = faceThePlayer(game, fighter);
   if (fightIsOff(game)) {
     standStill(fighter);
     return;
   }
+
   if (fighter.def.boss) {
     thinkBoss(game, fighter, distance);
     return;
   }
+
   const playerDown = isPlayerDown(game.player);
   maybeTakeToken(game, fighter, playerDown);
   if (fighter.def.blink && tryBlink(game, fighter, distance)) {
     return;
   }
+
   if (tryClimb(game, fighter)) {
     return;
   }
+
   const think = fighter.def.ranged ? thinkSlinger : thinkMelee;
   think(game, fighter, { distance, playerDown });
 }

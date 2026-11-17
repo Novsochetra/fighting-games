@@ -42,5 +42,6 @@ export function updateSummons(game) {
       UPDATE_BY_KIND[summon.kind](game, summon);
     }
   }
+
   game.summons = game.summons.filter((summon) => !summon.done);
 }

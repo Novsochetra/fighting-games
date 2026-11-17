@@ -45,6 +45,7 @@ describe('the card the story closes on', () => {
     const app = {
       settings: { lang: 'en' },
       screens: { hide: vi.fn() },
+
       play: (screen) => {
         app.canvas = screen;
       },

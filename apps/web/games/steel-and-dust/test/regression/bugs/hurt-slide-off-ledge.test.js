@@ -35,6 +35,7 @@ describe('a raider whose hurt slide carries it off a ledge', () => {
     while (raider.state === 'hurt') {
       runTicks(game, 1);
     }
+
     expect(raider.airborne).toBe(true);
     expect(raider.state).toBe('air');
     runTicks(game, 30);

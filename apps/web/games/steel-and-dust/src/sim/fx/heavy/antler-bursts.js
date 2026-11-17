@@ -54,6 +54,7 @@ function rushHeading(fighter, move) {
   if (move.launch) {
     return { vx: fighter.facing * 0.5, vy: -3.2 };
   }
+
   return move.dive ? { vx: fighter.facing * 2, vy: 2.4 } : { vx: fighter.facing * 3.4, vy: 0 };
 }
 

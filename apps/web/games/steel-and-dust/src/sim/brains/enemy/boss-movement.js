@@ -98,6 +98,7 @@ function floater(boss, { game, distance, pace }) {
   if (distance < 44 && slipAway(game, boss)) {
     return;
   }
+
   if (distance > 160) {
     walk(boss, 1, pace);
   } else if (distance < 80) {
@@ -115,6 +116,7 @@ function juggernaut(boss, { game, distance, pace }) {
   if (ai.vent % VENT_TICKS === 0) {
     ventSteam(game, boss);
   }
+
   if (distance > 44) {
     walk(boss, 1, pace);
   } else {

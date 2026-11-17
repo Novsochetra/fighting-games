@@ -12,6 +12,7 @@ function fireflyBug(particle) {
   if (particle.turn) {
     turn(particle, particle.turn);
   }
+
   particle.vx *= particle.drag;
   particle.vy = particle.vy * particle.drag - particle.lift;
   const flutter = particle.wobble * Math.min(1, age / 6);

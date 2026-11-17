@@ -22,6 +22,7 @@ function render(params, seed) {
   Math.random = seededRandom(seed);
   const track = createTrack(11025, 44100);
   voice(track, params);
+
   return track.samples;
 }
 

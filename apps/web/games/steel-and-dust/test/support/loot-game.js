@@ -9,12 +9,14 @@ export function createLootGame(options = {}) {
   const game = createPlayingGame({ ...options, io: { sfx, ...options.io } });
   game.fighters = [game.player];
   sounds.length = 0;
+
   return { game, sounds };
 }
 
 export function spawnEnemy(game, kind, x) {
   const enemy = createFighter('enemy', kind, x, game.player.y);
   game.fighters.push(enemy);
+
   return enemy;
 }
 
@@ -28,6 +30,7 @@ export function countRandomDraws(run) {
   let draws = 0;
   Math.random = () => {
     draws++;
+
     return original();
   };
   try {
@@ -35,6 +38,7 @@ export function countRandomDraws(run) {
   } finally {
     Math.random = original;
   }
+
   return draws;
 }
 

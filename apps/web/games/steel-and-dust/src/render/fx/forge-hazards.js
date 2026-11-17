@@ -14,9 +14,11 @@ function blazeFrame(blaze) {
   if (blaze.time < BLAZE_LIGHT) {
     return 0;
   }
+
   if (blaze.time < blaze.life) {
     return 1 + (Math.floor((blaze.time - BLAZE_LIGHT) / BLAZE_TICKS) % 4);
   }
+
   return 5;
 }
 
@@ -51,6 +53,7 @@ function poolFrame(pool) {
   if (erupt < 4) {
     return erupt + 1;
   }
+
   return Math.floor(pool.time / 12) % 2 ? 5 : 0;
 }
 

@@ -18,6 +18,7 @@ describe('ambient veil', () => {
     for (const tick of [CALM, FULL]) {
       expect(wash(tick)).toMatchObject({ x: 0, y: 0, width: VIEW_WIDTH, height: VIEW_HEIGHT });
     }
+
     expect(wash(CALM).alpha).toBeLessThan(0.02);
     expect(wash(FULL).alpha).toBeGreaterThan(0.25);
   });

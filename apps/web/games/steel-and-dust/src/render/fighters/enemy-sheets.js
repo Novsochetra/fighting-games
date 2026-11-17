@@ -25,6 +25,7 @@ function requestSheet(sheets, id) {
   if (sheets.images[id]) {
     return;
   }
+
   const image = sheets.loaders.createImage();
   // a sheet let go before it came in is not marked as in when it does
   const settle = (ready) => () => {
@@ -51,6 +52,7 @@ export function keepMissionEnemies(sheets, missionIndex) {
   if (sheets.mission === missionIndex) {
     return;
   }
+
   sheets.mission = missionIndex;
   sheets.needed = [...missionEnemySheets(missionIndex)];
   sheets.upcoming = MISSIONS[missionIndex + 1] ? [...missionEnemySheets(missionIndex + 1)] : [];
@@ -60,6 +62,7 @@ export function keepMissionEnemies(sheets, missionIndex) {
       releaseSheet(sheets, id);
     }
   }
+
   sheets.needed.forEach((id) => requestSheet(sheets, id));
 }
 
@@ -70,6 +73,7 @@ export function missionEnemiesSettled(sheets, missionIndex) {
   if (settled) {
     sheets.upcoming.forEach((id) => requestSheet(sheets, id));
   }
+
   return settled;
 }
 
@@ -79,6 +83,8 @@ export function enemySheetReady(sheets, id) {
   if (!id) {
     return false;
   }
+
   requestSheet(sheets, id);
+
   return Boolean(sheets.ready[id]);
 }

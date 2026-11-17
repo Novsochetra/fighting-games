@@ -36,6 +36,7 @@ export function thinkSlinger(game, slinger, situation) {
   if (perch === 'moving') {
     return;
   }
+
   if (canThrow(game, slinger, situation)) {
     startMove(game, slinger, slinger.def.rangedMove || 'toss');
   } else if (perch === 'perched') {

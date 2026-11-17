@@ -21,6 +21,7 @@ export function burstMaterial(game, { target, x, y }, direction) {
   if (!material) {
     return;
   }
+
   for (let i = 0; i < material.count; i++) {
     game.particles.push({
       kind: material.kind,

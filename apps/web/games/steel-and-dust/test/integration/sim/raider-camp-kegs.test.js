@@ -13,6 +13,7 @@ function campGame() {
   selectMission(game, RAIDER_CAMP);
   startPlay(game);
   game.fighters = [game.player];
+
   return game;
 }
 
@@ -23,6 +24,7 @@ function lineUp(game, keg) {
   const raider = createFighter('enemy', 'grunt', keg.x - 54, keg.y);
   raider.facing = -1;
   game.fighters.push(raider);
+
   return raider;
 }
 

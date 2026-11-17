@@ -44,13 +44,16 @@ export function updateBurn(game, burn) {
     burn.done = true;
     return;
   }
+
   Object.assign(burn, { x: target.x, y: target.y, scale: target.scale });
   if (burn.time % 6 === 0) {
     smoulder(game, burn);
   }
+
   if (burn.time % SCORCH_EVERY === 0) {
     scorch(game, burn);
   }
+
   burn.done = burn.done || burn.time >= burn.duration;
 }
 
@@ -59,6 +62,7 @@ export function igniteTarget(game, target, duration) {
   if (target.state === 'ko' || target.removed) {
     return;
   }
+
   const lit = game.summons.find(
     (summon) => summon.kind === 'burn' && summon.target === target && !summon.done,
   );
@@ -66,6 +70,7 @@ export function igniteTarget(game, target, duration) {
     lit.duration = Math.max(lit.duration, lit.time + duration);
     return;
   }
+
   game.summons.push({
     kind: 'burn',
     target,

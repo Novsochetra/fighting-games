@@ -31,6 +31,7 @@ function throwDebris(game) {
         color: i ? FX_COLORS.reliefStone : FX_COLORS.reliefShade,
       });
     }
+
     addDust(game, { x, y, count: 1, color: FX_COLORS.reliefStone });
   }
 }
@@ -53,6 +54,7 @@ export function splitGround(game, player) {
       scale: 0.5,
     });
   }
+
   throwDebris(game);
   addSparks(game, { x, y: y - 4, count: 18, color: theme.spark, speed: 4.4 });
   game.io.sfx('boom');

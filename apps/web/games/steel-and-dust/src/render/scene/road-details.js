@@ -14,6 +14,7 @@ function drawStones(painter, { cameraX, colors, surfaceAt }) {
     if (hash % 3 === 0) {
       return;
     }
+
     const left = x + (hash % 11);
     const width = 3 + (hash % 4);
     const y = surfaceAt(left) + 6 + ((hash >>> 5) % 20);
@@ -28,6 +29,7 @@ function drawRoots(painter, { cameraX, colors, surfaceAt }) {
     if (hash % 2) {
       return;
     }
+
     const y = surfaceAt(x) + 4 + ((hash >>> 4) % 9);
     painter.use(colors.rut).rect(x, y, 6 + (hash % 8), 1);
     painter.rect(x + 5 + (hash % 8), y + 1, 4 + ((hash >>> 2) % 5), 1);

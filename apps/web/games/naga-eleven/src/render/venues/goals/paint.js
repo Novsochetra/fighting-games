@@ -21,6 +21,7 @@ function faces(camera, shape, ripple, origin) {
 
       return at({ x: back, y, z: lift, out: bulgeOf(ripple, { y, z: lift }) });
     },
+
     roof: (across, up) => at({ x: along(across), y: far + (near - far) * up, z: roofAt(across) }),
     far: side(far),
     near: side(near),

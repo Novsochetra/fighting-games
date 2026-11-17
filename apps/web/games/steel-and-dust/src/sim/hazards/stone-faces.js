@@ -58,6 +58,7 @@ export function beamArea(face) {
   const mouth = mouthOf(face);
   const length = beamLength(face);
   const left = face.direction > 0 ? mouth.x : mouth.x - length;
+
   return { x: left, y: mouth.y - BEAM_HALF, width: length, height: BEAM_HALF * 2 };
 }
 
@@ -73,12 +74,15 @@ export function glareFace(game, face) {
     shake(game, 4, FACE_TIMES.sink - FACE_TIMES.fire);
     game.io.sfx('faceBeam', false, { x: face.x });
   }
+
   if (isBreathing(face) && face.time % 2 === 0) {
     sparkAlong(game, face);
   }
+
   if (face.time === FACE_TIMES.crumble) {
     addBurst(game, { sprite: 'rockBurst', x: face.x, y: face.floor, scale: 1 });
     game.io.sfx('break', false, { x: face.x });
   }
+
   face.dead = face.time >= FACE_TIMES.gone;
 }

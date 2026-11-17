@@ -16,11 +16,13 @@ const holdsOthersBack = () => document.documentElement.classList.contains('has-c
 async function bootLive(storage = createMemoryStorage(), options = {}) {
   const analytics = createFakeAnalytics();
   const started = await bootWithRealCatalog({ storage, analytics: analytics.setup, ...options });
+
   return { ...started, ...analytics, storage };
 }
 
 async function bootAgain(storage) {
   stopHomes();
+
   return bootLive(storage);
 }
 

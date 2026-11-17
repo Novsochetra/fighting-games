@@ -45,11 +45,13 @@ function passEnd(game, player, target) {
     const side = player.x > player.cuts.fromX ? -1 : 1;
     return clamp(player.cuts.fromX + side * SHADOW_REACH, bounds.min, bounds.max);
   }
+
   const way = target.x >= player.x ? 1 : -1;
   const through = clamp(target.x + way * beyond, bounds.min, bounds.max);
   if (Math.abs(through - target.x) >= beyond / 2) {
     return through;
   }
+
   return clamp(target.x - way * beyond, bounds.min, bounds.max);
 }
 
@@ -92,6 +94,7 @@ function cutThrough(game, player, index) {
   if (!target) {
     return;
   }
+
   const count = player.cuts.made.get(target) ?? 0;
   player.cuts.made.set(target, count + 1);
   strikeTarget(
@@ -115,11 +118,14 @@ export function runPass(game, player, time) {
       const sprite = [...PASSES[index - 1].sprite, SWORD_ROW];
       leaveCarving(game, { x: player.x, y: player.y, facing: player.facing, sprite });
     }
+
     startPass(game, player, index);
   }
+
   if (time >= pass.crossAt && time < pass.crossAt + crossTicks) {
     cross(game, player, time - pass.crossAt);
   }
+
   if (time === pass.cutAt) {
     cutThrough(game, player, index);
   }

@@ -38,6 +38,7 @@ function gather(game, fighter, move, time) {
     const spread = SEAL.rx * Math.max(0.75, Math.min(1, (time + 1) / move.startup));
     liftGrit(game, { x: fighter.x, y: fighter.y, spread });
   }
+
   // the last petals arrive before the strike: in a low cut his head comes down where his chest was
   if (time % 2 === 1 && time < move.startup - SWIRL_STOPS) {
     swirlPetal(game, { ...chestOf(fighter), facing: fighter.facing });
@@ -52,6 +53,7 @@ function release(game, fighter) {
     raiseShafts(game, { x: fighter.x, y: fighter.y });
     kickChips(game, { ...frontFootOf(fighter), count: 4, direction: 0 });
   }
+
   const chest = chestOf(fighter);
   scatterPetals(game, { x: chest.x + facing * 12, y: chest.y + 4, count: 5, direction: facing });
 }
@@ -62,6 +64,7 @@ function trail(game, fighter, move, time) {
   if (into >= FULL_TRAIL_TICKS && time % 3 !== 0) {
     return;
   }
+
   const tip = bladeTipOf(fighter);
   pourSand(game, { ...tip, direction: -fighter.facing });
   if (into % 3 === 1) {

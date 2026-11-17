@@ -30,18 +30,22 @@ export function reformPhase(fighter) {
   if (fighter.state !== 'attack' || reformAt === undefined) {
     return null;
   }
+
   const since = fighter.moveTime - reformAt;
   if (since < -GATHER_TICKS || since >= BURST_TICKS) {
     return null;
   }
+
   return since < 0 ? since / GATHER_TICKS : since / BURST_TICKS;
 }
 
 export function gatherMotes(heart, phase, time) {
   const share = phase + 1;
+
   return Array.from({ length: MOTES }, (_, i) => {
     const distance = (1 - ((share * 2 + i / MOTES) % 1)) * MOTE_FROM;
     const angle = (i * Math.PI * 2) / MOTES + time * 0.04;
+
     return { x: heart.x + Math.cos(angle) * distance, y: heart.y + Math.sin(angle) * distance };
   });
 }
@@ -88,6 +92,7 @@ function drawRays(context, { heart, phase, time }) {
     });
     fineLine(context, { from: at(near), to: at(far) });
   }
+
   context.globalAlpha = 1;
 }
 
@@ -96,6 +101,7 @@ export function drawReformBacklight(context, { fighter, floor, phase }) {
   if (phase < 0) {
     return;
   }
+
   const heart = bodyPoint(fighter, CHEST);
   drawColumn(context, { heart, floor, fade: 1 - phase });
   drawRays(context, { heart, phase, time: fighter.moveTime });
@@ -104,6 +110,7 @@ export function drawReformBacklight(context, { fighter, floor, phase }) {
 export function gatherHeart(fighter, phase) {
   const low = bodyPoint(fighter, RUBBLE_HEART);
   const high = bodyPoint(fighter, CHEST);
+
   return { x: high.x, y: low.y + (high.y - low.y) * (phase + 1) ** 2 };
 }
 
@@ -114,6 +121,7 @@ export function drawReformFlare(context, { fighter, phase }) {
     drawGather(context, { heart, phase, time: fighter.moveTime });
     return;
   }
+
   const heart = bodyPoint(fighter, CHEST);
   drawHalo(context, { ...heart, radius: 8 * (1 - phase) + 2, strength: 2 - phase });
   drawStar(context, { ...heart, arm: Math.round(24 * (1 - phase)) + 3 });

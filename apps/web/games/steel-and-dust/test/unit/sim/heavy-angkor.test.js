@@ -23,12 +23,14 @@ function angkorGame(weapon) {
   if (weapon) {
     equipWeapon(game, weapon);
   }
+
   spawnEnemy(game, 'grunt', 1);
   const raider = game.fighters.find((fighter) => fighter.side === 'enemy');
   Object.assign(raider, { entering: false, x: game.player.x + 24, hp: 900 });
   raider.ai.cooldown = 9999;
   game.player.facing = 1;
   game.ultMeter = ULT_MAX;
+
   return { game, raider };
 }
 
@@ -37,6 +39,7 @@ function inHeavy() {
   tap(game, 'heavy');
   runTicks(game, 2);
   game.particles.length = 0;
+
   return { game, raider, player: game.player, move: game.player.move };
 }
 
@@ -54,6 +57,7 @@ describe("the Angkor Warrior's heavy", () => {
     for (let time = 0; time < move.startup; time++) {
       KIT.gather(game, player, move, time);
     }
+
     const grit = game.particles.filter((particle) => particle.kind === 'angkorGrit');
     expect(grit.length).toBeGreaterThanOrEqual(move.startup);
     grit.forEach((grain) => expect(grain.vy).toBeLessThan(0));
@@ -107,6 +111,7 @@ describe("the Angkor Warrior's heavy", () => {
         KIT.particles[particle.kind](particle, game.terrain);
       }
     }
+
     expect(grit.y).toBeLessThan(rise.y - 4);
     expect(Math.abs(grit.vy)).toBeLessThan(0.5);
     expect(swirl.radius).toBeLessThan(rise.radius / 10);
@@ -148,8 +153,10 @@ describe("the Angkor Warrior's heavy", () => {
         } else {
           runTicks(game, 1);
         }
+
         most = Math.max(most, angkorCount(game));
       }
+
       expect(most).toBeGreaterThan(10);
       expect(most).toBeLessThanOrEqual(60);
     },

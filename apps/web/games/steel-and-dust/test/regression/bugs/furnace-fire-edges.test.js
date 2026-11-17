@@ -45,6 +45,7 @@ function fireAround(cell, x, y) {
       }
     }
   }
+
   return fire / seen;
 }
 
@@ -64,6 +65,7 @@ function countInFire(cell, isWrong, share) {
       count += wrong && fireAround(cell, x, y) >= share ? 1 : 0;
     }
   }
+
   return count;
 }
 

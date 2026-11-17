@@ -25,6 +25,7 @@ function loadedStrips(hero) {
     baseUrl: '',
     hero,
   });
+
   return Object.values(sheet.images);
 }
 

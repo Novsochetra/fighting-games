@@ -14,6 +14,7 @@ const rootAt = (time) => ({ x: 90, y: 184, time, marked: true });
 function crackRects(time) {
   const { context, log } = recordingPainter();
   drawRootCrack(context, rootAt(time));
+
   return drawnRects(log);
 }
 
@@ -45,6 +46,7 @@ describe("a crack's path", () => {
     for (const segment of running) {
       expect(Math.abs(segment.to.x)).toBeLessThanOrEqual(4.01);
     }
+
     expect(openCrack(path, 100).some((segment) => segment.running)).toBe(false);
   });
 });
@@ -55,6 +57,7 @@ describe("the fig root's crack in the road", () => {
     for (let i = 1; i < opens.length; i++) {
       expect(opens[i]).toBeGreaterThanOrEqual(opens[i - 1]);
     }
+
     expect(opens[0]).toBeLessThan(4);
     expect(opens.at(-1)).toBeGreaterThan(20);
   });
@@ -72,6 +75,7 @@ describe("the fig root's crack in the road", () => {
       expect(offGrid(rects)).toEqual([]);
       expect(rects.some((rect) => rect.color === FX_COLORS.rootCrack)).toBe(true);
     }
+
     const open = crackRects(-20);
     expect(open.some((rect) => rect.color === FX_COLORS.gazeGold && !rect.light)).toBe(true);
     const { left, right } = boundsOf(open);

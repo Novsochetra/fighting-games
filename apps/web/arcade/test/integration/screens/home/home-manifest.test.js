@@ -10,6 +10,7 @@ const MANIFEST = path.join(PUBLIC_ROOT, 'assets', 'manifest.webmanifest');
 async function pngSize(file) {
   const bytes = await readFile(file);
   expect(bytes.subarray(1, 4).toString('latin1')).toBe('PNG');
+
   return `${bytes.readUInt32BE(16)}x${bytes.readUInt32BE(20)}`;
 }
 
@@ -31,6 +32,7 @@ describe('the arcade as an installable app', () => {
     for (const icon of icons) {
       expect(await pngSize(path.join(path.dirname(MANIFEST), icon.src))).toBe(icon.sizes);
     }
+
     const purposes = icons.map((icon) => `${icon.sizes} ${icon.purpose}`);
     expect(purposes).toEqual(
       expect.arrayContaining(['192x192 any', '512x512 any', '512x512 maskable']),
@@ -51,6 +53,7 @@ describe('the arcade as an installable app', () => {
     for (const [, , href] of links) {
       expect((await stat(fileAt(href))).isFile()).toBe(true);
     }
+
     expect(await pngSize(path.join(PUBLIC_ROOT, 'assets', 'icons', 'apple-touch-icon.png'))).toBe(
       '180x180',
     );

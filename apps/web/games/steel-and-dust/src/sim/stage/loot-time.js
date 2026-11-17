@@ -22,6 +22,7 @@ export function startLootTime(game, boss) {
       knockOut(game, enemy, enemy.x < game.player.x ? -1 : 1);
     }
   }
+
   const text = `${boss.def.name} down`;
   showBanner(game, { text, sub: 'Grab the loot', color: COLORS.gold, time: 120 });
   endCombo(game);
@@ -30,6 +31,7 @@ export function startLootTime(game, boss) {
 
 function piecesInReach(game) {
   const { left, right } = screenEdges(game);
+
   return game.loot.some((piece) => piece.x >= left && piece.x <= right);
 }
 
@@ -49,10 +51,12 @@ export function updateLootTime(game) {
   if (!game.lootTime || game.mode !== 'play') {
     return;
   }
+
   shortenWhenBare(game);
   if (++game.lootTime < LOOT_TIME.limit) {
     return;
   }
+
   game.lootTime = 0;
   game.loot = [];
   game.chests = game.chests.filter((chest) => chest.spilled);

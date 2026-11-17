@@ -101,6 +101,7 @@ describe('the run ticket', () => {
 describe('the online board', () => {
   function clockedOnline(api = fakeBoardApi()) {
     const clock = { time: 0 };
+
     return { clock, ...createTestOnline({ api, now: () => clock.time }) };
   }
 

@@ -24,6 +24,7 @@ export function lightKeg(game, keg, fuse = KEG.fuse) {
   if (keg.gone || (keg.lit && keg.fuse <= fuse)) {
     return;
   }
+
   const first = !keg.lit;
   Object.assign(keg, { lit: true, fuse });
   if (first) {
@@ -51,6 +52,7 @@ function thrownBody(fighter) {
 
 function struckByThrown(game, keg) {
   const box = kegBox(keg);
+
   return game.fighters.some(
     (fighter) =>
       fighter.side === 'enemy' &&
@@ -74,9 +76,11 @@ export function updateKegs(game) {
     if (keg.gone) {
       continue;
     }
+
     if (struckByThrown(game, keg)) {
       lightKeg(game, keg, KEG.thrownFuse);
     }
+
     if (keg.lit && --keg.fuse <= 0) {
       blowKeg(game, keg);
       chain(game, keg);

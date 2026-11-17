@@ -18,21 +18,25 @@ function opaqueRuns(png, y, from, to) {
     if (png.alpha(x, y) && (x === from || !png.alpha(x - 1, y))) {
       runs.push([x, x]);
     }
+
     if (png.alpha(x, y)) {
       runs.at(-1)[1] = x;
     }
   }
+
   return runs;
 }
 
 function terrainWith(platforms, heightAt = () => GROUND_Y) {
   const heights = Int16Array.from({ length: 2000 }, (_, x) => heightAt(x));
+
   return { heights, platforms };
 }
 
 function draws(terrain, cameraX = 0, loaded = sheets) {
   const { context, log } = createRecordingContext(null);
   drawPlatforms(createPainter(context), { cameraX, terrain, sheets: loaded });
+
   return log
     .filter((call) => call.startsWith('drawImage('))
     .map((call) => call.slice(10, -1).split(','));

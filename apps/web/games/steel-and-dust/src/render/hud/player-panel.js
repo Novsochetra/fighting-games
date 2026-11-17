@@ -15,9 +15,11 @@ function healthColor(fraction, tickCount) {
   if (fraction > 0.5) {
     return COLORS.mint;
   }
+
   if (fraction > 0.25) {
     return COLORS.amber;
   }
+
   return (tickCount >> 3) & 1 ? COLORS.red : COLORS.salmon;
 }
 
@@ -39,6 +41,7 @@ function drawLivesBox(painter, game, view) {
     key: `lives|${game.lives}`,
     box: LIVES_BOX,
     ready: Boolean(view.hudFrames.ready.panel),
+
     draw: (inner) => {
       drawPlaque(inner, view.hudFrames, 'panel', LIVES_BOX);
       drawLives(inner, {

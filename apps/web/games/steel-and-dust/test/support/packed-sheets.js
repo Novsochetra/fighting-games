@@ -8,6 +8,7 @@ const sameColor = (first, second) => first.every((value, i) => value === second[
 function packedAt(piece, cellX, cellY) {
   const [sx, sy, width, height, left, top] = piece;
   const inside = cellX >= left && cellX < left + width && cellY >= top && cellY < top + height;
+
   return inside ? { x: sx + cellX - left, y: sy + cellY - top } : null;
 }
 
@@ -16,6 +17,7 @@ function samePixel(grid, packed, from, to) {
   if (alpha !== grid.alpha(from.x, from.y)) {
     return false;
   }
+
   return alpha === 0 || sameColor(packed.rgb(to.x, to.y), grid.rgb(from.x, from.y));
 }
 
@@ -30,6 +32,7 @@ function cellMismatches(grid, packed, cell, piece) {
       wrong += fits ? 0 : 1;
     }
   }
+
   return wrong;
 }
 
@@ -45,6 +48,7 @@ function borderMismatches(packed, cell, piece) {
       wrong += outside && packed.alpha(sx + x, sy + y) > 0 ? 1 : 0;
     }
   }
+
   return wrong;
 }
 
@@ -71,5 +75,6 @@ export function packedMismatches({ gridPath, packedPath, frameWidth, frameHeight
       }
     }
   }
+
   return mismatches;
 }

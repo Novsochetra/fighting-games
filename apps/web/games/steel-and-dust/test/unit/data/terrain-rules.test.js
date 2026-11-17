@@ -92,6 +92,7 @@ describe('the terrain of every mission', () => {
           expect(platform.x, label).toBeGreaterThanOrEqual(zone.left + ZONE_PAD);
           expect(platform.x + platform.width, label).toBeLessThanOrEqual(zone.right - ZONE_PAD);
         }
+
         const rise = groundAt(mission.terrain, platform.x) - platform.y;
         expect(platform.y, label).toBeGreaterThanOrEqual(GROUND_Y - 80);
         expect(rise, label).toBeGreaterThanOrEqual(24);

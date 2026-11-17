@@ -21,6 +21,7 @@ function kitMoves(kit) {
       moves.push(next);
     }
   }
+
   return moves;
 }
 
@@ -66,6 +67,7 @@ describe('the boss kits', () => {
           expect(last, `${kind} ${id}`).toBeLessThan(sprite.strips[move.strip ?? id].frames);
           expect(ticks, `${kind} ${id}`).toBeGreaterThan(0);
         }
+
         if (move.wallNext) {
           expect(move.sustain, `${kind} ${id}`).toBe(true);
           expect(ENEMY_MOVES[move.wallNext.move], `${kind} ${id}`).toBeDefined();

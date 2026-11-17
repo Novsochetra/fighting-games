@@ -18,6 +18,7 @@ export function supportersPage(data, { order, locale }) {
     tier: tierOf(supporter.amount).id,
     tierName: tierOf(supporter.amount).name,
   });
+
   return {
     order,
     isEmpty: ranked.length === 0,

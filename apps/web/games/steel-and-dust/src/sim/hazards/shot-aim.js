@@ -11,7 +11,9 @@ export function diveToward(shooter, hero, { x, speed }) {
   if (drop <= STEP_UP) {
     return 0;
   }
+
   const ticks = Math.max(1, Math.abs(hero.x - x) / speed);
+
   return Math.min(STEEPEST * speed, drop / ticks);
 }
 

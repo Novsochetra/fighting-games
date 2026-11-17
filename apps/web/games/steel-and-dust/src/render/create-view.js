@@ -29,5 +29,6 @@ export function createView({ context, createCanvas, createImage, baseUrl }) {
     mosaic: null,
   };
   createHeroSheets(view);
+
   return view;
 }

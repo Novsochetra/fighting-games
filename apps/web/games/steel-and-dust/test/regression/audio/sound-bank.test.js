@@ -16,6 +16,7 @@ function fixtureTakes() {
       takes.push({ key, take, expected, seed: 1000 + takes.length }),
     );
   }
+
   return takes;
 }
 

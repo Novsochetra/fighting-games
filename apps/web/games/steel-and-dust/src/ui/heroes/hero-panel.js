@@ -8,6 +8,7 @@ function pageFolder(baseUri) {
 
 function heroCardHtml(hero, { picked, folder }) {
   const art = (path) => `url(${folder}${path})`;
+
   return `<button class="hero-card${picked ? ' picked' : ''}" data-act="hero-${hero.id}"
     data-hero="${hero.id}" style="--idle: ${art(hero.cards.side)}; --win: ${art(hero.cards.middle)}">
     <span class="hero-art" aria-hidden="true"></span>
@@ -21,6 +22,7 @@ function heroCardHtml(hero, { picked, folder }) {
 // which hero fights on
 export function createHeroPanel({ list, game }) {
   let slots = null;
+
   return {
     build() {
       const folder = pageFolder(list.ownerDocument.baseURI);
@@ -31,11 +33,13 @@ export function createHeroPanel({ list, game }) {
       ).join('');
       slots = null;
     },
+
     firstSelected: () =>
       Math.max(
         0,
         HEROES.findIndex((hero) => hero.id === game.settings.hero),
       ),
+
     // Back is selected past the last card, and the carousel stays where it is
     focus(index) {
       if (index < HEROES.length) {

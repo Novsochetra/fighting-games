@@ -19,6 +19,7 @@ function drawSherds(painter, x, { hash, colors }) {
     painter.use(colors.sherd).rect(x + offsetX, VIEW_HEIGHT - 3 - lift, 3, 2);
     painter.use(colors.sherdLight).rect(x + offsetX, VIEW_HEIGHT - 3 - lift, 2, 1);
   }
+
   painter
     .use(colors.sherd)
     .rect(x + 8, VIEW_HEIGHT - 7, 1, 4)

@@ -12,6 +12,7 @@ const temple = scenePalette('mirageTemple').rubble;
 function rectsOf(draw) {
   const { context, log } = createRecordingContext(null);
   draw(createPainter(context));
+
   return drawnRects(log);
 }
 
@@ -41,6 +42,7 @@ describe('what lies in front of the fighters on the temple road', () => {
       const piece = ['block', 'sherd', 'reed'].find((name) => colors.has(temple[name]));
       kinds.add(piece);
     }
+
     expect(kinds).toEqual(new Set(['block', 'sherd', 'reed']));
   });
 

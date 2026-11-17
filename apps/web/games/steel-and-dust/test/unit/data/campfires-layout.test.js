@@ -25,6 +25,7 @@ describe('the campfires on the roads', () => {
       for (let x = fire.x - CAMPFIRE.halfWidth - 4; x <= fire.x + CAMPFIRE.halfWidth + 4; x++) {
         heights.add(groundAt(mission.terrain, x));
       }
+
       const zone = mission.zones.find((item) => fire.x > item.left && fire.x < item.right);
       const near = (items, reach) => items.filter(({ x }) => Math.abs(x - fire.x) < reach);
       const over = mission.terrain.platforms.filter(

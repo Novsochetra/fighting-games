@@ -12,5 +12,6 @@ export const POSTMATCH_SCREEN = {
     renderGrowth(section, data, view);
     renderGroup(section, data.group, view);
   },
+
   back: () => true,
 };

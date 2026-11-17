@@ -19,6 +19,7 @@ export function installMenuEvents({ document, menus, act, ui, panels, audio }) {
     if (event.pointerType !== 'mouse') {
       return;
     }
+
     const items = menus.items();
     const index = items.findIndex((item) => item.contains(event.target));
     if (hoverSelects(items[index]) && index !== menus.state.selected) {

@@ -22,6 +22,7 @@ export function raiseSpikes(game, fighter, { count, gap, every, bothWays }) {
       if (isWall(game.terrain, x, floor)) {
         break;
       }
+
       floor = groundAt(game.terrain, x);
       game.projectiles.push({
         kind: 'spike',

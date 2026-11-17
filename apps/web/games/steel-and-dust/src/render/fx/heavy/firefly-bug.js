@@ -9,6 +9,7 @@ function headingOf(vx, vy) {
   const down = Math.abs(vy);
   const x = across >= down * 0.5 ? Math.sign(vx) : 0;
   const y = down >= across * 0.5 ? Math.sign(vy) : 0;
+
   return x || y ? { x, y } : { x: 0, y: -1 };
 }
 
@@ -54,6 +55,7 @@ export function drawBug(painter, { x, y, vx, vy, level, flap, fade = 1 }) {
     drawHalo(painter, { x: left, y: top, alpha });
     painter.alpha(alpha);
   }
+
   painter.use(ART.shell).rect(left + head.x, top + head.y, 1, 1);
   drawWings(painter.context, { shellX: left + head.x, shellY: top + head.y, head, flap });
   painter.use(LANTERNS[level]).rect(left, top, 1, 1);
@@ -61,5 +63,6 @@ export function drawBug(painter, { x, y, vx, vy, level, flap, fade = 1 }) {
     painter.context.fillStyle = ART.heart;
     fineRect(painter.context, { x: left, y: top, width: PIXEL, height: PIXEL });
   }
+
   painter.alpha(1);
 }

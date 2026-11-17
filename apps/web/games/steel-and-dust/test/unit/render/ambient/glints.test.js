@@ -26,6 +26,7 @@ describe('ambient glints', () => {
       expect(dash.y).toBeGreaterThanOrEqual(glints.top);
       expect(dash.y).toBeLessThanOrEqual(glints.bottom);
     }
+
     const plainLengths = new Set(dashes.map((dash) => dash.width).filter((width) => width <= 5));
     expect([...plainLengths].sort()).toEqual([1, 2, 3, 4, 5]);
   });
@@ -78,6 +79,7 @@ describe('ambient glints', () => {
   it('stay glued to the water, scrolling with the camera by their drift and wrapping', () => {
     const tick = ticksUpTo(2400, 2).find((at) => {
       const [dash] = rectsOf(oneGlint, { tick: at, cameraX: IN_VIEW });
+
       return dash && dash.x > 40 && dash.x < 300;
     });
     const atStart = rectsOf(oneGlint, { tick, cameraX: IN_VIEW });

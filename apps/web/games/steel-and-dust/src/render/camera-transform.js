@@ -9,6 +9,7 @@ function shakeOffset(game) {
     x = Math.round((Math.random() * 2 - 1) * camera.shakeAmount);
     y = Math.round((Math.random() * 2 - 1) * camera.shakeAmount);
   }
+
   return { x: x + Math.round(camera.kickX), y: y + Math.round(camera.kickY) };
 }
 
@@ -16,6 +17,7 @@ function shakeOffset(game) {
 function zoomOf(camera) {
   const { zoom } = camera;
   const scale = zoom.time > 0 ? 1 + zoom.amount * Math.pow(zoom.time / zoom.duration, 2) : 1;
+
   return { scale, x: zoom.x * (1 - scale), y: zoom.y * (1 - scale) };
 }
 

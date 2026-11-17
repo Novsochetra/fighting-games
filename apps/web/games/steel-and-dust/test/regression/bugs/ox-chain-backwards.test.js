@@ -38,6 +38,7 @@ describe("the Warden Ox's chain", () => {
         expect((hook.x - fistOf(ox).x) * ox.facing, `tick ${tick}`).toBeGreaterThan(0);
       }
     }
+
     expect(caughtTicks).toBeGreaterThan(0);
   });
 });

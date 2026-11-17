@@ -18,8 +18,10 @@ function sparkAt(spot, { spark, tick, effect }) {
   if (age < 0 || age >= life) {
     return null;
   }
+
   const speedX = (trait(seed, 2) - 0.5) * 2.2;
   const speedY = -0.2 - trait(seed, 3) * 0.9 + GRAVITY * age;
+
   return {
     x: spot.x + speedX * age,
     y: spot.y + (speedY - (GRAVITY * age) / 2) * age,
@@ -37,6 +39,7 @@ function drawSpark(painter, spark, colors) {
       .alpha(0.3)
       .rect(spark.x - 1, spark.y - 1, 3, 3);
   }
+
   painter
     .use(colors[heat])
     .alpha(1 - spark.progress * 0.7)
@@ -54,5 +57,6 @@ export function drawSparks(painter, { effect, tick, cameraX, colors }) {
       }
     }
   }
+
   painter.alpha(1);
 }

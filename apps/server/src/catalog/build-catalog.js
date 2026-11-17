@@ -10,6 +10,7 @@ export function buildCatalog(records, warn = () => {}) {
       games.push(toCatalogGame(record.entry));
     }
   }
+
   return { games: games.sort(compareGames) };
 }
 

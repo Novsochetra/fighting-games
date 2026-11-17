@@ -15,8 +15,10 @@ export function installOffer({ isInstalled, isSnoozed: snoozed, hasPrompt, isIos
   if (isInstalled || snoozed) {
     return null;
   }
+
   if (hasPrompt) {
     return 'prompt';
   }
+
   return isIos ? 'ios' : null;
 }

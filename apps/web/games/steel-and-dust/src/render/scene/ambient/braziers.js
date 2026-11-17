@@ -34,6 +34,7 @@ function rowOf(root, { row, height, tick }) {
   const rise = row / height;
   const width = Math.max(1, Math.round(BASE_WIDTH * (1 - rise * rise)));
   const sway = Math.round(Math.sin(tick * 0.27 + row * 0.7 + root.seed * 1.9) * rise * 2);
+
   return { x: root.x - Math.floor(width / 2) + sway, y: root.y - row - 1, width, rise };
 }
 
@@ -60,5 +61,6 @@ export function drawBraziers(painter, { effect, tick, cameraX, colors }) {
       drawTongue(painter, root, { tick, colors: colors.flame });
     }
   }
+
   painter.alpha(1);
 }

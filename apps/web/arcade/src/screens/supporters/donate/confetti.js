@@ -14,9 +14,11 @@ export const CONFETTI = {
 
 export function launchPieces({ origin, colors, random = Math.random, count = CONFETTI.count }) {
   const { minSpeed, extraSpeed, spread, minSize, extraSize } = CONFETTI;
+
   return Array.from({ length: count }, () => {
     const angle = -Math.PI / 2 + (random() - 0.5) * spread;
     const speed = minSpeed + random() * extraSpeed;
+
     return {
       x: origin.x,
       y: origin.y,
@@ -41,6 +43,7 @@ export function stepPieces(pieces, seconds) {
     piece.rotation += piece.spin * seconds;
     piece.flip += CONFETTI.flipSpeed * seconds;
   }
+
   return pieces;
 }
 
@@ -50,5 +53,6 @@ export function opacityAt(elapsed, duration) {
   if (elapsed <= fadeFrom) {
     return 1;
   }
+
   return Math.max(0, 1 - (elapsed - fadeFrom) / (duration - fadeFrom));
 }

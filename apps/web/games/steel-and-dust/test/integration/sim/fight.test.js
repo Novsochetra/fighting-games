@@ -29,6 +29,7 @@ function walkInto(game, x) {
   for (let i = 0; i < 600 && game.player.x < x; i++) {
     runTicks(game, 1);
   }
+
   release(game, 'right');
 }
 
@@ -85,6 +86,7 @@ describe('a fight, with every system running', () => {
       tap(game, 'light');
       runTicks(game, 8);
     }
+
     expect(game.combo.count).toBeGreaterThanOrEqual(2);
     expect(game.score).toBeGreaterThan(0);
     expect(raider.hp).toBeLessThan(raider.maxHp);
@@ -124,9 +126,11 @@ describe('a fight, with every system running', () => {
     for (const side of [-1, 1, 1]) {
       spawnEnemy(game, 'grunt', side);
     }
+
     for (const [i, enemy] of enemies(game).entries()) {
       Object.assign(enemy, { entering: false, x: 60 + i * 60 });
     }
+
     game.ultMeter = 100;
     tap(game, 'ult');
     runTicks(game, 400);
@@ -175,6 +179,7 @@ describe('a fight, with every system running', () => {
       continueRun(game);
       expect(game.mode).toBe('play');
     }
+
     fall(game);
     expect(game).toMatchObject({ mode: 'over', lives: 0, continues: 5 });
     continueRun(game);
@@ -206,6 +211,7 @@ describe('a fight, with every system running', () => {
     game.ultMeter = ULT_MAX;
     tap(game, 'heavy');
     runTicks(game, 60);
+
     return boss;
   }
 

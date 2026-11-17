@@ -3,6 +3,7 @@ import { createRecordingContext } from '../../../support/recording-canvas.js';
 
 export function recordingPainter() {
   const { context, log } = createRecordingContext(null);
+
   return { painter: createPainter(context), context, log };
 }
 
@@ -22,6 +23,7 @@ export function drawnRects(log) {
       rects.push({ x, y, width, height, ...state });
     }
   }
+
   return rects;
 }
 

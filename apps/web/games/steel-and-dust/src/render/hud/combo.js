@@ -10,6 +10,7 @@ function comboColor(count) {
   if (count >= 20) {
     return COLORS.salmon;
   }
+
   return count >= 10 ? COLORS.amber : COLORS.butter;
 }
 
@@ -30,6 +31,7 @@ function drawLiveCombo(painter, { combo, tickCount }) {
   if (rank) {
     drawText(painter, rank, { x: RIGHT, y: below + 11, color, align: 'right' });
   }
+
   drawText(painter, `${Math.round(combo.damage)} DMG`, {
     x: RIGHT,
     y: below + 19,
@@ -48,6 +50,7 @@ function slideOffset(time) {
   if (time < 8) {
     return (8 - time) * 6;
   }
+
   return time > 96 ? (time - 96) * 8 : 0;
 }
 
@@ -64,6 +67,7 @@ function drawComboResult(painter, { comboResult: result, tickCount }) {
     const color = result.count >= 20 ? COLORS.salmon : COLORS.amber;
     drawText(painter, result.rank, { x, y: 52, color, scale: 2, align: 'right' });
   }
+
   drawText(painter, `${Math.round(result.damage)} DMG`, {
     x,
     y: 66,

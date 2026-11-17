@@ -4,6 +4,7 @@ const DRAG_THRESHOLD = 6;
 function startDrag(editor, element, event) {
   const control = element.dataset.control;
   const centre = editor.controls.centreOnScreen(control);
+
   return {
     pointerId: event.pointerId,
     control,
@@ -21,6 +22,7 @@ function follow(drag, event, editor) {
   if (!drag.moving && travel < DRAG_THRESHOLD) {
     return;
   }
+
   drag.moving = true;
   drag.element.classList.add('dragging');
   editor.moveTo(drag.control, { x: point.x + drag.offset.x, y: point.y + drag.offset.y });
@@ -34,6 +36,7 @@ export function installLayoutDrag(preview, editor) {
     if (!element || drag) {
       return;
     }
+
     event.preventDefault();
     element.setPointerCapture?.(event.pointerId);
     drag = startDrag(editor, element, event);

@@ -65,6 +65,7 @@ function sustainRush(game, fighter, move) {
     fighter.moveTime = activeEnd(move) - 1;
     return;
   }
+
   fighter.vx = fighter.facing * move.forward;
   const bounds = arenaBounds(game, fighter);
   const atWall =
@@ -88,15 +89,19 @@ function whileActive(game, fighter, move, time) {
     fighter.vy = move.dive[1];
     fighter.airborne = true;
   }
+
   if (move.sustain) {
     sustainRush(game, fighter, move);
   }
+
   if (move.multiHit && (time - move.startup) % move.multiHit === 0) {
     fighter.hitTargets.clear();
   }
+
   if (move.multiHit && time > move.startup && (time - move.startup) % (move.multiHit * 2) === 0) {
     playSwing(game, fighter, move);
   }
+
   if (move.pull) {
     pullIn(game, fighter);
   }
@@ -108,18 +113,22 @@ export function updateAttack(game, fighter) {
   if (time === Math.max(0, move.startup - swingLeadTicks(fighter, move))) {
     playSwing(game, fighter, move);
   }
+
   if (time === move.startup) {
     releaseStrike(game, fighter, move);
   }
+
   playMoveCues(game, fighter, move, time);
   updateHeavyFeel(game, fighter, move, time);
   const active = time >= move.startup && time < activeEnd(move);
   if (active) {
     whileActive(game, fighter, move, time);
   }
+
   if (fighter.move !== move) {
     return;
   }
+
   fighter.hitboxActive = active && Boolean(move.hitbox);
   fighter.moveTime++;
   if (fighter.moveTime >= moveLength(move)) {

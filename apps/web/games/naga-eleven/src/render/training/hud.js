@@ -38,11 +38,13 @@ const CLOCKS = {
     value: `${seconds(runTime(run))}/${seconds(run.limit)}`,
     bar: null,
   }),
+
   'target-shot': (run) => ({
     label: LABELS.shots,
     value: `${Math.min(run.shot + 1, DRILLS['target-shot'].tuning.shots)}/${DRILLS['target-shot'].tuning.shots}`,
     bar: run.target.left / run.target.total,
   }),
+
   'spirit-focus': (run) => ({
     label: LABELS.beats,
     value: `${run.beats.filter((beat) => beat.rating !== null).length}/${run.beats.length}`,

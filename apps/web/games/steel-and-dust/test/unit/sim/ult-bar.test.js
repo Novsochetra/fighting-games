@@ -32,6 +32,7 @@ describe('the ULT bar', () => {
     for (const id of ['K1', 'K2', 'K3', 'LLK', 'UK', 'C1', 'C2', 'AK', 'ADK']) {
       expect(meterForHit(game, { ...light, move: { id } }, 10)).toBe(0);
     }
+
     expect(meterForHit(game, { ...light, move: { id: 'L1', ultimate: true } }, 10)).toBe(0);
   });
 

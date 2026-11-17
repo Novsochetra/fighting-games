@@ -19,6 +19,7 @@ export function actionForKey({ key, altKey, ctrlKey, metaKey }) {
   if (altKey || ctrlKey || metaKey) {
     return null;
   }
+
   return KEY_ACTIONS.get(key) ?? null;
 }
 
@@ -26,5 +27,6 @@ export function focusZone(target) {
   if (target?.closest?.('.card')) {
     return 'carousel';
   }
+
   return target?.closest?.('.tile') ? 'library' : null;
 }

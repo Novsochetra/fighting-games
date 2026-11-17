@@ -19,6 +19,7 @@ function buildBreak(track, pitch) {
   woodKnock(track, 520 * pitch, 0.056);
   const thud = glide(150, 0.08, 80);
   layer(track, { wave: 'sine', frequency: thud, attack: 0.001, decay: 0.08, level: 0.7 });
+
   return { drive: 1.8 };
 }
 
@@ -37,6 +38,7 @@ function buildShatter(track) {
     level: 0.6,
     drive: 3,
   });
+
   return { drive: 1.5 };
 }
 
@@ -55,6 +57,7 @@ function buildKo(track, pitch) {
   });
   const rumble = glide(1600, 0.4, 90);
   layer(track, { filter: 'lowpass', cutoff: rumble, attack: 0.002, decay: 0.4, level: 2.5 });
+
   return { drive: 2.4 };
 }
 
@@ -72,6 +75,7 @@ function buildBoom(track, pitch) {
     level: 0.5,
     drive: 3,
   });
+
   return { drive: 2.2 };
 }
 

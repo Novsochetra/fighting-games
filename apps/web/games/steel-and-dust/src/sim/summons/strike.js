@@ -8,8 +8,10 @@ export function strikeTarget(game, summon, { target, move }) {
   if (!body) {
     return false;
   }
+
   const attacker = hazardAttacker(summon, 'sword');
   const y = body.y + body.height / 2;
+
   return applyHit(game, { attacker, target, move: move || summon.hit, x: target.x, y });
 }
 
@@ -20,11 +22,13 @@ export function strikeArea(game, summon, area) {
     if (target.side === summon.side || summon.hitTargets.has(target)) {
       continue;
     }
+
     const body = hurtBox(target);
     if (body && overlaps(area, body) && strikeTarget(game, summon, { target })) {
       summon.hitTargets.add(target);
       struck.push(target);
     }
   }
+
   return struck;
 }

@@ -28,6 +28,7 @@ function openSegments(effect, reach) {
       segments.push({ from: point(fromX, fromY), to: point(toX, toY) });
     }
   }
+
   return segments;
 }
 
@@ -36,6 +37,7 @@ export function shaftHeight(effect, at) {
   const since = effect.time - (effect.run * Math.abs(at.x - effect.x)) / VIEW_WIDTH;
   const life = since < SHAFT_GROWS ? since / SHAFT_GROWS : 1 - (since - SHAFT_GROWS) / SHAFT_DIES;
   const tall = 0.45 + (hashInt(Math.round(at.x)) % 56) / 100;
+
   return Math.round(SHAFT_HEIGHT * tall * clamp(life, 0, 1));
 }
 
@@ -44,6 +46,7 @@ function drawShaft(painter, { effect, at }) {
   if (height < 2) {
     return;
   }
+
   const core = Math.round(height * 0.6);
   painter
     .alpha(0.45)
@@ -64,19 +67,23 @@ export function drawFissure(painter, effect, progress) {
   for (const { from, to } of segments) {
     painter.use(FX_COLORS.fissureDark).line(from, to, 3);
   }
+
   for (const { from, to } of segments) {
     painter.use(effect.color).line(from, to, 1);
   }
+
   for (const { from, to } of segments) {
     const hot = effect.time <= effect.run && reach - Math.abs(to.x - effect.x) < HOT_REACH;
     if (hot) {
       painter.use(COLORS.white).line(from, to, 1);
     }
   }
+
   for (const { to } of segments) {
     if (hashInt(Math.round(to.x) + 1) % SHAFT_EVERY === 0) {
       drawShaft(painter, { effect, at: to });
     }
   }
+
   painter.alpha(1);
 }

@@ -50,6 +50,7 @@ describe('the ultimates', () => {
       expect(width, hero.id).toBe(HERO_SPRITES.frameWidth * HERO_SPRITES.frames.ult);
       expect(height, hero.id).toBeGreaterThanOrEqual(HERO_SPRITES.frameHeight);
     }
+
     // only the Angkor Warrior's raised dav needs the room
     const taller = withStrips.filter(
       (hero) => pngSize(GAME_ROOT + hero.ultStrip).height > HERO_SPRITES.frameHeight,

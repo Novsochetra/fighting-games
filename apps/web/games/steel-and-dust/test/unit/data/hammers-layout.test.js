@@ -23,6 +23,7 @@ describe('the drop hammers on the roads', () => {
       for (let x = hammer.x - CLEAR; x <= hammer.x + CLEAR; x++) {
         heights.add(groundAt(mission.terrain, x));
       }
+
       const zone = mission.zones.find((item) => hammer.x > item.left && hammer.x < item.right);
       const crates = mission.crates.filter(({ x }) => Math.abs(x - hammer.x) < CLEAR);
       const catwalks = mission.terrain.platforms.filter(

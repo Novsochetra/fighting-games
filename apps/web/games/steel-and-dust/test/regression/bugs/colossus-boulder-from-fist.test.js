@@ -22,6 +22,7 @@ function frontAbove(strip, frame, up) {
       }
     }
   }
+
   return front;
 }
 

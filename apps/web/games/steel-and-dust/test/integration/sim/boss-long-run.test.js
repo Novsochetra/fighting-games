@@ -29,6 +29,7 @@ function ultFills() {
   for (let tick = 200; tick < TICKS; tick += ULT_EVERY) {
     fills[tick] = ['fill'];
   }
+
   return fills;
 }
 
@@ -51,6 +52,7 @@ function longestFighterList(game) {
       }
     }
   }
+
   return longest;
 }
 
@@ -58,6 +60,7 @@ function measure(game, largest) {
   for (const key of Object.keys(LIMITS)) {
     largest[key] = Math.max(largest[key], game[key].length);
   }
+
   largest.fighterList = Math.max(largest.fighterList, longestFighterList(game));
   game.fighters.forEach((fighter) => fighter.side === 'enemy' && largest.kinds.add(fighter.kind));
 }
@@ -75,12 +78,14 @@ function fightBoss(game, mission) {
     if (tick === SPAWN_AT) {
       spawnEnemy(game, missionAt(mission).boss, 1);
     }
+
     keepStanding(game);
     bot.step(tick);
     driver.tick();
     driver.afterTick();
     measure(game, largest);
   }
+
   return largest;
 }
 
@@ -100,6 +105,7 @@ describe('a long fight against every road boss', () => {
       for (const [key, limit] of Object.entries(LIMITS)) {
         expect(largest[key], `${label} ${key}`).toBeLessThanOrEqual(limit);
       }
+
       expect(largest.fighterList, label).toBeLessThanOrEqual(FIGHTER_LIST_LIMIT);
       // a kind the road does not list would load its sheet only as it walks on
       const listed = missionEnemyKinds(mission);

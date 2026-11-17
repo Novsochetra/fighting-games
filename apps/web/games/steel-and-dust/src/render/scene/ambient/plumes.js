@@ -15,6 +15,7 @@ function plumeAt(i, { effect, tick, cameraX }) {
   const age = clock - round * life;
   const startX = trait(seed * 131 + round, 3) * CYCLE_WIDTH;
   const baseX = startX - age * effect.speed * (0.7 + trait(seed, 4) * 0.6);
+
   return {
     x: scrollX(baseX, { cameraX, drift: effect.drift, margin: MARGIN }),
     y: effect.y,
@@ -28,6 +29,7 @@ function plumeAt(i, { effect, tick, cameraX }) {
 function puffAt(plume, puff) {
   const size = Math.round(3 + plume.progress * 7 + (PUFFS - puff) * 1.5);
   const churn = Math.sin(plume.age * 0.08 + puff * 1.9) * 1.5;
+
   return {
     x: plume.x + puff * 5,
     y: plume.y - size - puff * 0.5 - plume.progress * 4 + churn,
@@ -49,5 +51,6 @@ export function drawPlumes(painter, { effect, tick, cameraX, colors }) {
       }
     }
   }
+
   painter.alpha(1);
 }

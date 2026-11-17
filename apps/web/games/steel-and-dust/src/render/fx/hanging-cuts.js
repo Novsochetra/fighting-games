@@ -13,6 +13,7 @@ const BEND = 0.22;
 function slashOf(cut, length) {
   const dx = Math.cos(cut.angle) * length;
   const dy = Math.sin(cut.angle) * length * SQUASH;
+
   return {
     from: { x: cut.x - dx, y: cut.y - dy },
     to: { x: cut.x + dx, y: cut.y + dy },
@@ -44,10 +45,12 @@ export function drawHangingCut(painter, _sheets, cut) {
     painter.alpha(1);
     return;
   }
+
   if (cut.time < CUT_FLARE_TICKS) {
     drawFlare(painter, cut);
     return;
   }
+
   drawSlash(painter, cut, { length: LENGTH, width: 3 });
   if ((cut.time >> 2) % 2) {
     painter.use(COLORS.white).diamond(cut.x, cut.y, 1);

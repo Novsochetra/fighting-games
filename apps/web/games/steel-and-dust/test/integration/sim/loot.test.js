@@ -16,6 +16,7 @@ function missionBossGame() {
   game.arena = { left, right: left + VIEW_WIDTH };
   const boss = spawnEnemy(game, 'khan', game.player.x + 90);
   game.boss = boss;
+
   return { game, sounds, boss };
 }
 
@@ -37,6 +38,7 @@ function nearestPiece(game) {
   const inReach = game.loot.filter((piece) => piece.x > left && piece.x < right);
   const away = (piece) => Math.abs(piece.x - game.player.x);
   inReach.sort((first, second) => away(first) - away(second));
+
   return inReach[0];
 }
 
@@ -49,6 +51,7 @@ function fetchLoot(game) {
     game.input.held.left = dx < -2;
     runTicks(game, 1);
   }
+
   release(game, 'right');
   release(game, 'left');
 }
@@ -77,6 +80,7 @@ describe('loot in play', () => {
     for (let i = 0; i < 160; i++) {
       knockOut(game, spawnEnemy(game, 'grunt', 40 + (i % 60) * 5), 1);
     }
+
     expect(game.loot.length).toBe(MAX_LOOT);
     expect(game.coins).toBeGreaterThan(0);
   });
@@ -87,12 +91,14 @@ describe('loot in play', () => {
     for (let i = 0; i < 160; i++) {
       knockOut(game, spawnEnemy(game, 'grunt', 30 + (i % 40) * 8), 1);
     }
+
     game.player.x = -500;
     const ticks = 600;
     const started = performance.now();
     for (let tick = 0; tick < ticks; tick++) {
       updateLoot(game);
     }
+
     const perTick = (performance.now() - started) / ticks;
     // a tick has 16.7ms; loot is a sliver of it even with the road full
     expect(perTick).toBeLessThan(0.5);
@@ -110,6 +116,7 @@ describe("the mission boss's loot", () => {
     for (const key of ['chestLand', 'chestRattle', 'chestOpen']) {
       expect(soundKeys(sounds)).toContain(key);
     }
+
     const x = game.player.x;
     walk(game, 'right', 20);
     expect(game.player.x).toBeGreaterThan(x);
@@ -129,6 +136,7 @@ describe("the mission boss's loot", () => {
       runTicks(game, 1);
       rolled ||= game.loot.some((piece) => piece.rolling);
     }
+
     const xs = game.loot.map((piece) => piece.x);
     expect(rolled).toBe(true);
     expect(Math.max(...xs) - Math.min(...xs)).toBeGreaterThan(VIEW_WIDTH / 2);

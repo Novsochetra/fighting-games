@@ -22,6 +22,7 @@ function raiseBrambles(game, { target, facing }) {
   if (floor - target.y > BRAMBLE_REACH) {
     return;
   }
+
   BRAMBLE_SPOTS.forEach((spot, i) => {
     const height = Math.round(fxBetween(game, 9, 13)) - (i === 1 ? 0 : 3);
     addBramble(game, {

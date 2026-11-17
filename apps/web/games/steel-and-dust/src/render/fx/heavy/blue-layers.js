@@ -9,6 +9,7 @@ const GLINT_LEAD = 3;
 // the hilt held at the front of the coiled body, on the drawn sprite
 function hiltOf(fighter, time) {
   const x = fighter.x + drawnLeanX(fighter, time) + fighter.facing * 6;
+
   return { x: Math.round(x), y: Math.round(fighter.y - 19) };
 }
 
@@ -30,12 +31,14 @@ function drawFlash(painter, { fighter, move, time, art }) {
   if (age > 0 && fighter.hitstop > 0) {
     return;
   }
+
   const slash = { ...strikeLineOf(fighter, move), bend: 0.04 * fighter.facing };
   if (age === 0) {
     slashArc(painter, { ...slash, width: 4, color: art.deep });
     slashArc(painter, { ...slash, width: 2, color: COLORS.white });
     return;
   }
+
   slashArc(painter, { ...slash, width: 2, color: art.flash });
 }
 
@@ -45,6 +48,7 @@ export function blueOver(painter, layer) {
   if (time >= move.startup - GLINT_LEAD && time < move.startup) {
     drawGlint(painter, layer);
   }
+
   if (time >= move.startup && time < move.startup + FLASH_TICKS) {
     drawFlash(painter, layer);
   }

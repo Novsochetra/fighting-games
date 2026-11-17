@@ -19,6 +19,7 @@ function puffAt(spot, { puff, tick, effect }) {
   const sway = (Math.sin(age * 0.025 + puff * 1.7) * 3 + (trait(seed, 2) - 0.5) * 10) * progress;
   // the column climbs straight out of the stack, then bends downwind the higher it gets
   const lean = age * effect.wind * progress * 1.6;
+
   return {
     age,
     x: Math.round(spot.x + lean + sway - size / 2),
@@ -58,6 +59,7 @@ function billowsOf(spot, { tick, effect }) {
   for (let puff = 0; puff < PUFFS; puff++) {
     billows.push(puffAt(spot, { puff, tick, effect }));
   }
+
   return billows.sort((first, second) => second.age - first.age);
 }
 
@@ -70,5 +72,6 @@ export function drawPlume(painter, { effect, tick, cameraX, colors }) {
       }
     }
   }
+
   painter.alpha(1);
 }

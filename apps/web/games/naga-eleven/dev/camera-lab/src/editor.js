@@ -50,6 +50,7 @@ export function installEditor(document, { onChange }) {
     show,
     resetList: () => resetValue(select.value),
     resetAll: () => Object.keys(EDITABLE).forEach(resetValue),
+
     copy: () =>
       document.defaultView.navigator.clipboard?.writeText(JSON.stringify(editsOf(), null, 2)),
   };

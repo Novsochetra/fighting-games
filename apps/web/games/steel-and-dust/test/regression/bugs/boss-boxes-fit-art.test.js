@@ -24,6 +24,7 @@ function artExtent(id, strip, frame) {
       }
     }
   }
+
   return { ahead, up };
 }
 

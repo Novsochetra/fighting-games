@@ -13,6 +13,7 @@ const MOST_MEGABYTES_HELD = 24;
 
 function playingView() {
   const createCanvas = (width, height) => Object.assign(new RecordingCanvas(), { width, height });
+
   return createView({
     context: createCanvas(768, 432).getContext('2d'),
     createCanvas,
@@ -31,6 +32,7 @@ const heldMegabytes = (view) =>
 
 function ownAndNext(index) {
   const next = MISSIONS[index + 1] ? missionEnemySheets(index + 1) : [];
+
   return [...new Set([...missionEnemySheets(index), ...next])].sort();
 }
 

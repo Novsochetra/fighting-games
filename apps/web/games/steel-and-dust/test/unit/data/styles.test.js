@@ -152,6 +152,7 @@ describe('the Shades fight in their own styles', () => {
       expect(moves.S3).toMatchObject({ name: 'Shatterpoint', shatters: true });
       expect(moves.AS.aerial).toBe(true);
     }
+
     expect(heroMoves('moss', 'axe').S3).toMatchObject({ thorns: 2, thornRing: true });
     expect(heroMoves('antler', 'spear').S3.quakeDamage).toBe(10);
     expect(heroMoves('firefly', 'fists').S3.fireflies).toBe(6);

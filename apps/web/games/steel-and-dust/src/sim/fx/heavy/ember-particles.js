@@ -11,6 +11,7 @@ const seedOf = (game) => Math.floor(fxRandom(game) * 100000);
 // an angle in radians from degrees measured the way the fighter faces: 0 ahead, -90 straight up
 export function heading(facing, degrees) {
   const radians = (degrees * Math.PI) / 180;
+
   return facing === 1 ? radians : Math.PI - radians;
 }
 
@@ -22,6 +23,7 @@ function launch(game, at, { angle, spread, speed, lead = 0 }) {
   const vx = Math.cos(direction) * velocity;
   const vy = Math.sin(direction) * velocity;
   const ahead = fxBetween(game, 0, lead);
+
   return { x: at.x + vx * ahead, y: at.y + vy * ahead, vx, vy };
 }
 
@@ -91,12 +93,14 @@ export const EMBER_PARTICLE_MOVERS = {
     particle.vx *= 0.92;
     particle.vy = particle.vy * 0.92 - CINDER_LIFT;
   },
+
   emberFlame(particle) {
     particle.x += particle.vx;
     particle.y += particle.vy;
     particle.vx *= 0.84;
     particle.vy = particle.vy * 0.84 - FLAME_LIFT;
   },
+
   emberSwirl(particle) {
     particle.px = particle.x;
     particle.py = particle.y;
@@ -108,5 +112,6 @@ export const EMBER_PARTICLE_MOVERS = {
     particle.x = particle.centerX + Math.cos(particle.angle) * particle.radius;
     particle.y = particle.centerY + Math.sin(particle.angle) * particle.radius * 0.8;
   },
+
   emberFlare() {},
 };

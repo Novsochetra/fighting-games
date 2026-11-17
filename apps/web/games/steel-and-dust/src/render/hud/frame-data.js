@@ -9,6 +9,7 @@ function phaseColor(move, frame) {
   if (frame < move.startup) {
     return HUD_COLORS.frameStartup;
   }
+
   return frame < move.startup + move.active ? COLORS.red : HUD_COLORS.frameRecovery;
 }
 
@@ -24,6 +25,7 @@ function drawMoveTimeline(painter, player) {
   for (let i = 0; i < total; i++) {
     painter.use(phaseColor(move, i)).rect(6 + i * width, VIEW_HEIGHT - 14, width, 5);
   }
+
   painter
     .use(COLORS.white)
     .rect(6 + Math.min(player.moveTime, total - 1) * width, VIEW_HEIGHT - 16, width, 9);
@@ -38,6 +40,7 @@ export function drawFrameData(painter, game) {
   } else {
     drawText(painter, `state: ${player.state}`, { x: 6, y: VIEW_HEIGHT - 22, color: COLORS.sand });
   }
+
   const buffer = game.input.buffer;
   if (buffer.action) {
     const label = BUFFER_LABEL[buffer.action] ?? buffer.action;

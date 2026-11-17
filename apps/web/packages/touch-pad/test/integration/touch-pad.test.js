@@ -123,6 +123,7 @@ describe('a touch pad drawn from a skin', () => {
       pointer(control('jump'), 'pointerup', SPOTS.jump);
       const event = Object.assign(new Event(type, { bubbles: true }), { pseudoElement });
       control('jump').dispatchEvent(event);
+
       return control('jump').dataset.pulse;
     };
 

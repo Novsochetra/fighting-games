@@ -10,8 +10,10 @@ function recycledCanvas(stamps) {
   if (stamps.cache.size < MAX_STAMPS) {
     return stamps.createCanvas(1, 1);
   }
+
   const [oldestKey, canvas] = stamps.cache.entries().next().value;
   stamps.cache.delete(oldestKey);
+
   return canvas;
 }
 
@@ -22,6 +24,7 @@ function stampFor(stamps, { key, width, height, resolution, draw }) {
     stamps.cache.set(key, cached);
     return cached;
   }
+
   const canvas = recycledCanvas(stamps);
   // sizing a canvas clears it and resets its context
   canvas.width = width * resolution;
@@ -31,6 +34,7 @@ function stampFor(stamps, { key, width, height, resolution, draw }) {
   context.setTransform(resolution, 0, 0, resolution, 0, 0);
   draw(context, 0, 0);
   stamps.cache.set(key, canvas);
+
   return canvas;
 }
 
@@ -42,9 +46,11 @@ export function drawStamped(painter, { key, x, y, width, height, resolution = 1,
     draw(painter.context, x, y);
     return;
   }
+
   if (width <= 0 || height <= 0) {
     return;
   }
+
   const stamp = stampFor(painter.stamps, { key, width, height, resolution, draw });
   painter.context.drawImage(stamp, x, y, width, height);
 }

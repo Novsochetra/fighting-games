@@ -15,6 +15,7 @@ function spinning() {
     behind: true,
     follow: { fighter, at: AT, loop: [1, 4], whileMove: 'whirl' },
   });
+
   return { fighter, burst: game.summons[0] };
 }
 
@@ -39,6 +40,7 @@ describe('a burst that follows a fighter', () => {
       tick(burst);
       expect(burst.time).toBeLessThan(5 * ticks);
     }
+
     expect(burst.done).toBe(false);
     fighter.move = { whirl: false };
     tick(burst);
@@ -46,6 +48,7 @@ describe('a burst that follows a fighter', () => {
     while (!burst.done) {
       tick(burst);
     }
+
     expect(burst.time).toBe(frames * ticks);
   });
 });

@@ -15,5 +15,6 @@ export function writeJson(storage, key, value) {
   } catch {
     return false;
   }
+
   return true;
 }

@@ -33,6 +33,7 @@ function renderAt(cameraX) {
   game.camera.x = cameraX;
   screen.recording.log.length = 0;
   renderFrame(game, view);
+
   return screen.recording.log;
 }
 
@@ -69,8 +70,10 @@ describe('the Mirage Temple road', () => {
       for (let x = zone.left; x <= zone.right; x++) {
         heights.add(groundAt(temple.terrain, x));
       }
+
       expect(heights.size > 1, zone.label).toBe(!zone.boss);
     }
+
     expect(temple.terrain.platforms.length).toBeGreaterThanOrEqual(4);
     expect(new Set(temple.terrain.platforms.map((platform) => platform.kind))).toEqual(
       new Set(['slab']),

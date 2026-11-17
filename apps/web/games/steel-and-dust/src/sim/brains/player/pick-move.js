@@ -15,17 +15,21 @@ export function pickAirMove(buffer, held, current) {
   if (buffer.action === 'heavy' && down && !current?.dive) {
     return 'ADK';
   }
+
   if (buffer.action === 'light' && down) {
     return 'ADL';
   }
+
   if (current) {
     return nextInChain(buffer, current);
   }
+
   return buffer.action === 'heavy' ? 'AK' : 'AL';
 }
 
 function wantsLauncher(buffer, held, current) {
   const vertical = holdsUp(buffer, held) || holdsDown(buffer, held);
+
   return buffer.action === 'heavy' && vertical && !current?.launch;
 }
 
@@ -33,6 +37,7 @@ function wantsLauncher(buffer, held, current) {
 function wantsLightSpecial(buffer, held, current, { direction, moveId }) {
   const holding = direction === 'down' ? holdsDown(buffer, held) : holdsUp(buffer, held);
   const fresh = direction === 'down' ? buffer.downNew : buffer.upNew;
+
   return buffer.action === 'light' && holding && (!current || fresh) && current?.id !== moveId;
 }
 
@@ -40,14 +45,18 @@ export function pickGroundMove(buffer, held, current) {
   if (wantsLauncher(buffer, held, current)) {
     return 'UK';
   }
+
   if (wantsLightSpecial(buffer, held, current, { direction: 'down', moveId: 'DL' })) {
     return 'DL';
   }
+
   if (wantsLightSpecial(buffer, held, current, { direction: 'up', moveId: 'UL' })) {
     return 'UL';
   }
+
   if (current) {
     return nextInChain(buffer, current);
   }
+
   return buffer.action === 'heavy' ? 'K1' : 'L1';
 }

@@ -123,6 +123,7 @@ startLoop(window, {
     clearPresses(input);
     showPad();
   },
+
   draw: () => drawApp(app, context),
 });
 

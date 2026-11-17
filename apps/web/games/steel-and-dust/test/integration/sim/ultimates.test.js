@@ -20,6 +20,7 @@ function startUltimate(hero) {
   ]) {
     spawnEnemy(game, kind, side);
   }
+
   raiders(game).forEach((raider, i) => {
     Object.assign(raider, { entering: false, x: game.player.x + [70, 140, -60][i], hp: 400 });
     raider.maxHp = 400;
@@ -27,6 +28,7 @@ function startUltimate(hero) {
   });
   game.ultMeter = 100;
   tap(game, 'ult');
+
   return game;
 }
 
@@ -41,6 +43,7 @@ function watchUltimate(game, look) {
     game.summons.forEach((summon) => seen.kinds.add(summon.kind));
     look?.(game, seen);
   }
+
   return seen;
 }
 
@@ -111,6 +114,7 @@ describe("each Shade's ultimate", () => {
         if (summon.kind === 'phoenix') {
           directions.add(summon.direction);
         }
+
         if (summon.kind === 'burn') {
           burning.add(summon.target);
         }
@@ -136,9 +140,11 @@ describe("each Shade's ultimate", () => {
         if (summon.kind === 'echo') {
           echoes.add(summon);
         }
+
         if (summon.kind === 'lion') {
           lions.add(summon);
         }
+
         if (summon.kind === 'burst' && !bursts.includes(summon)) {
           bursts.push(summon);
         }
@@ -188,13 +194,16 @@ describe("each Shade's ultimate", () => {
         if (summon.kind === 'hangingCut') {
           cuts.add(summon);
         }
+
         if (summon.kind === 'carving') {
           carvings.add(summon);
         }
       }
+
       if (current.player.stateTime === ULTIMATES.angkor.releaseAt - 1 && !hpBeforeRelease) {
         hpBeforeRelease = raiders(current).map((raider) => raider.hp);
       }
+
       watched.cutsHanging = Math.max(
         watched.cutsHanging ?? 0,
         current.summons.filter((summon) => summon.kind === 'hangingCut').length,
@@ -227,6 +236,7 @@ describe("each Shade's ultimate", () => {
     while (game.player.stateTime < releaseAt) {
       runTicks(game, 1);
     }
+
     const severed = game.summons.filter((summon) => summon.kind === 'hangingCut');
     expect(severed.length).toBeGreaterThan(0);
     expect(severed.every((hanging) => hanging.severedAt !== null)).toBe(true);
@@ -245,6 +255,7 @@ describe("each Shade's ultimate", () => {
     while (game.player.stateTime < chopAt) {
       runTicks(game, 1);
     }
+
     const fissure = game.effects.find((effect) => effect.kind === 'fissure');
     const xs = fissure.points.map(([x]) => x);
     expect(Math.min(...xs)).toBeLessThanOrEqual(game.camera.x);

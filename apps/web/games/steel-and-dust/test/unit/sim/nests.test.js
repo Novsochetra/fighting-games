@@ -67,6 +67,7 @@ describe('a hornet nest', () => {
     for (let i = 0; i < NEST.sway; i++) {
       updateNests(game);
     }
+
     expect(nest.state).toBe('falling');
 
     untilBroken(game);

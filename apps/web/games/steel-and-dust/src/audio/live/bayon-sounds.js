@@ -62,6 +62,7 @@ function reform(live, start) {
   for (let i = 0; i < 5; i++) {
     click(live, { start: start + i * 0.05, volume: 0.06, frequency: 700 + i * 160 });
   }
+
   [262, 392, 523, 784].forEach((frequency, i) => {
     blip(live, {
       start: start + 0.2 + i * 0.09,

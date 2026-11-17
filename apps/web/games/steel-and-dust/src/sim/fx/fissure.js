@@ -12,6 +12,7 @@ export function fissurePoints(terrain, { left, right }) {
   for (let x = Math.floor(left / STEP) * STEP; x <= right + STEP; x += STEP) {
     points.push([x, groundAt(terrain, x) + 1 + (hashInt(x / STEP) % DEPTH)]);
   }
+
   return points;
 }
 
@@ -19,6 +20,7 @@ export function fissurePoints(terrain, { left, right }) {
 // hero has to jump as it passes (rifts.js runs with it)
 export function fissureReach({ time, run, linear }) {
   const share = Math.min(1, time / run);
+
   return (linear ? share : easeOutCubic(share)) * VIEW_WIDTH;
 }
 

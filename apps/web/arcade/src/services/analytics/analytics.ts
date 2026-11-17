@@ -45,6 +45,7 @@ export function createAnalytics({
   return {
     isEnabled: () => isEnabled,
     needsAnswer: () => isEnabled && !isConsentChoice(answer()),
+
     allow() {
       if (isEnabled) {
         storage.write(CONSENT_KEY, CONSENT.granted);

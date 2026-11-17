@@ -31,6 +31,7 @@ export function leanOf(fighter, time, startup) {
   if (time >= startup) {
     return 0;
   }
+
   return -fighter.facing * Math.round(FEEL.lean * Math.min(1, (time + 1) / FEEL.leanTicks));
 }
 
@@ -39,6 +40,7 @@ export function antlerRoot(fighter, time, startup) {
   const [strip, index] = heroAnimation(fighter);
   const dx = HOOD_TOPS[strip]?.[index] ?? DEFAULT_TOP[0];
   const dy = HOOD_HEIGHTS[strip]?.[index] ?? DEFAULT_TOP[1];
+
   return {
     x: fighter.x + leanOf(fighter, time, startup) + dx * fighter.facing,
     y: fighter.y + dy + ROOT_DEPTH,

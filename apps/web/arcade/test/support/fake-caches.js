@@ -13,6 +13,7 @@ function fakeCache() {
 
   return {
     entries,
+
     async put(key, response) {
       entries.set(addressOf(key), response.clone());
     },
@@ -32,6 +33,7 @@ export function fakeCaches() {
 
   return {
     caches,
+
     async open(name) {
       if (!caches.has(name)) {
         caches.set(name, fakeCache());

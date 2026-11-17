@@ -24,6 +24,7 @@ function lockScreen(game) {
   if (game.arena.right - game.arena.left <= VIEW_WIDTH) {
     return;
   }
+
   const left = Math.round(cameraTarget(game));
   game.arena = { left, right: left + VIEW_WIDTH };
 }
@@ -48,6 +49,7 @@ function enterZone(game) {
   if (!zone || game.player.x < zone.at) {
     return;
   }
+
   game.arena = { left: zone.left, right: zone.right };
   Object.assign(game.stage, { waveIndex: 0, waveDelay: 0 });
   releaseWave(game, zone.waves[0]);
@@ -63,6 +65,7 @@ function spawnFromQueue(game) {
   if (!queue.length) {
     return;
   }
+
   queue[0].delay--;
   if (queue[0].delay <= 0) {
     const next = queue.shift();
@@ -87,6 +90,7 @@ function leaveZone(game) {
 // left; on a single screen the field has to be clear
 function nextWaveReady(game, zone, standing) {
   const wave = zone.waves[game.stage.waveIndex + 1];
+
   return wave && game.player.x >= wave.at && standing <= (zone.screens > 1 ? 1 : 0);
 }
 
@@ -100,9 +104,11 @@ function advanceWaves(game, zone) {
     stage.waveDelay = 0;
     return;
   }
+
   if (++stage.waveDelay <= WAVE_PAUSE) {
     return;
   }
+
   stage.waveDelay = 0;
   if (cleared) {
     leaveZone(game);
@@ -116,10 +122,12 @@ export function updateZones(game) {
     enterZone(game);
     return;
   }
+
   spawnFromQueue(game);
   if (isFightOver(game)) {
     return;
   }
+
   advanceWaves(game, currentZone(game));
   callReinforcements(game);
 }

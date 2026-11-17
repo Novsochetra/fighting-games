@@ -105,6 +105,7 @@ function knockBackNearby(game, player) {
     if (enemy.side !== 'enemy' || enemy.state === 'ko' || Math.abs(enemy.x - player.x) >= 90) {
       continue;
     }
+
     const side = enemy.x < player.x ? -1 : 1;
     Object.assign(enemy, { move: null, state: 'juggle', airborne: true, vy: -3 });
     enemy.vx = side * 3;
@@ -116,6 +117,7 @@ export function continueRun(game) {
   if (!hasLivesLeft(game)) {
     return;
   }
+
   const player = game.player;
   Object.assign(player, { hp: player.maxHp, hpLag: player.maxHp, state: 'getup', stateTime: 0 });
   const y = floorUnder(game.terrain, player);
@@ -134,6 +136,7 @@ export function continueAs(game, heroId) {
   if (!hasLivesLeft(game)) {
     return;
   }
+
   const hero = heroById(heroId);
   game.settings.hero = hero.id;
   game.io.saveSettings(game.settings);
@@ -141,6 +144,7 @@ export function continueAs(game, heroId) {
   if (holdsOwnWeapon(player)) {
     takeOwnWeapon(game, player);
   }
+
   continueRun(game);
   addFloatText(game, {
     x: player.x,

@@ -99,6 +99,7 @@ function drawRain(context, tick) {
 export const HOME_NIGHT = {
   frameOf: (tick) => (hash(Math.floor(tick / 6)) > 0.55 ? 1 : 0),
   paint: paintHome,
+
   overlay: (context, tick) => {
     drawRain(context, tick);
     drawFlame(context, { x: LAMP.x, y: LAMP.y, colors: art.flame, tick });

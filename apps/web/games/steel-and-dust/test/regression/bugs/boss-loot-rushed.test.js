@@ -12,6 +12,7 @@ function felledMissionBoss() {
   const boss = spawnEnemy(game, 'khan', game.player.x + 90);
   game.boss = boss;
   knockOut(game, boss, 1);
+
   return game;
 }
 

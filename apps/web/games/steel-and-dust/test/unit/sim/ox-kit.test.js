@@ -15,6 +15,7 @@ function oxAt(distance, { missionIndex = 9, share = 1 } = {}) {
   Object.assign(ox, { entering: false, x: 120 + distance, facing: -1 });
   ox.ai.cooldown = 0;
   ox.hp = share * ox.maxHp;
+
   return { game, ox };
 }
 
@@ -37,6 +38,7 @@ describe("the Warden Ox's kit", () => {
       think(game, ox);
       directions.push(ox.walkDirection * (ox.state === 'walk' ? 1 : 0));
     }
+
     expect(new Set(directions)).toEqual(new Set([1, 0]));
   });
 

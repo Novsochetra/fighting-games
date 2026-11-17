@@ -64,6 +64,7 @@ export function strikeStar(game, hit) {
   if (flurry && starFlashing(game)) {
     return;
   }
+
   const scale = flurry ? FLURRY_SIZE : (STRIKE_SIZES[hit.move.id] ?? STRIKE_SIZE);
   addBurst(game, { sprite: 'strike', x: hit.x, y: hit.y, scale, direction: hit.attacker.facing });
 }
@@ -73,6 +74,7 @@ export function liftColumn(game, hit) {
   if (!hit.move.launch || hit.attacker.airborne) {
     return;
   }
+
   const { x } = hit;
   addBurst(game, { sprite: 'awaken', x, y: hit.attacker.y, scale: COLUMN_SIZE, behind: true });
 }

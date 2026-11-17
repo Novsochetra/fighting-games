@@ -79,6 +79,7 @@ function fieldAttack(match, player, round) {
 const BASICS = {
   field: {
     attack: fieldAttack,
+
     defend: () =>
       [BASIC_OPTIONS.tackle, BASIC_OPTIONS.block, BASIC_OPTIONS.intercept].map((basic) =>
         basicOption(basic),
@@ -89,6 +90,7 @@ const BASICS = {
       shootOption(match, player, round),
       ...offersOf(match, player, round),
     ],
+
     defend: () => [BASIC_OPTIONS.catch, BASIC_OPTIONS.punch].map((basic) => basicOption(basic)),
   },
 };

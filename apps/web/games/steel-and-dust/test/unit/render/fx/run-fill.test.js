@@ -8,7 +8,9 @@ function filled(rects) {
   for (const [x, y, width, height] of rects) {
     fills.add(x, y, width, height);
   }
+
   fills.flush();
+
   return drawnRects(log).map(({ x, y, width, height }) => [x, y, width, height]);
 }
 

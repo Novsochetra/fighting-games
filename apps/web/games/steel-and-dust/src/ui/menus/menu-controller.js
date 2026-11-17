@@ -40,10 +40,12 @@ export class MenuController {
     for (const node of this.document.querySelectorAll('#menus .sel')) {
       node.classList.remove('sel');
     }
+
     const { lastInput } = this.ui;
     if (lastInput === 'touch' || (lastInput === 'mouse' && !scroll)) {
       return;
     }
+
     const current = items[this.state.selected];
     current?.classList.add('sel');
     if (scroll) {
@@ -120,6 +122,7 @@ export class MenuController {
     if (!this.panels.section.change(key, step, wrap)) {
       return;
     }
+
     const keep = this.state.selected;
     this.panels.section.build();
     this.state.selected = keep;
@@ -134,6 +137,7 @@ export class MenuController {
     if (this.game.mode === this.state.mode) {
       return false;
     }
+
     this.state.mode = this.game.mode;
     this.state.stack = [...(MENUS_FOR_MODE[this.game.mode] ?? [])];
     this.state.unseen = new Set(this.state.stack.slice(0, -1));
@@ -143,6 +147,7 @@ export class MenuController {
     }
 
     this.show(true);
+
     return true;
   }
 }

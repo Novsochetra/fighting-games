@@ -35,6 +35,7 @@ function differingPixels(own, arsenal, row) {
       count += Boolean(own.alpha(x, y)) !== Boolean(inRow) ? 1 : 0;
     }
   }
+
   return count;
 }
 

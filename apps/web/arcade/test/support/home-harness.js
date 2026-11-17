@@ -52,6 +52,7 @@ export async function bootWithGames(ids, options) {
   const { games } = JSON.parse(await realCatalogJson());
   const base = games.find((game) => game.id === 'steel-and-dust');
   const copies = ids.map((id) => ({ ...base, id, title: id, path: `games/${id}/` }));
+
   return boot(async () => jsonReply(JSON.stringify({ games: copies })), options);
 }
 
@@ -60,11 +61,13 @@ export async function bootWithGames(ids, options) {
 export async function bootWithSteelAndDust(options) {
   const { games } = JSON.parse(await realCatalogJson());
   const body = JSON.stringify({ games: games.filter((game) => game.id === 'steel-and-dust') });
+
   return boot(async () => jsonReply(body), options);
 }
 
 export const bootWithRealCatalog = async (options) => {
   const body = await realCatalogJson();
+
   return { body, ...(await boot(async () => jsonReply(body), options)) };
 };
 

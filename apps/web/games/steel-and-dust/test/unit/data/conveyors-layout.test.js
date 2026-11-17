@@ -52,6 +52,7 @@ describe('the conveyor belts on the roads', () => {
       for (let x = left - CLEAR; x <= right + CLEAR; x++) {
         heights.add(groundAt(mission.terrain, x));
       }
+
       const zone = mission.zones.find((item) => belt.from > item.left && belt.to < item.right);
 
       expect(heights.size, label).toBe(1);

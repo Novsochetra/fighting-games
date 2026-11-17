@@ -5,6 +5,7 @@ import { missionOf } from './mission.js';
 // the camera keeps the hero a little left of center, inside the zone when one is running
 export function cameraTarget(game) {
   const { left, right } = game.arena ?? { left: 0, right: missionOf(game).length };
+
   return clamp(game.player.x - VIEW_WIDTH * 0.42, left, right - VIEW_WIDTH);
 }
 

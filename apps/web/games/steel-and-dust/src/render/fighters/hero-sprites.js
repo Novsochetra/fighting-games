@@ -39,10 +39,12 @@ export function loadHeroSprites({ createImage, createCanvas, baseUrl, hero, them
   for (const name of names) {
     sheet.images[name] = createImage();
   }
+
   watchStrips(sheet, Object.values(sheet.images));
   for (const name of names) {
     sheet.images[name].src = `${baseUrl}${packedStripPath(hero, name)}`;
   }
+
   return sheet;
 }
 
@@ -51,6 +53,7 @@ export function loadHeroSprites({ createImage, createCanvas, baseUrl, hero, them
 export function frameBox(sheet, name) {
   const { frameHeight, feetY } = HERO_SPRITES;
   const height = sheet.pieces[name][0];
+
   return { frameHeight: height, feetY: height - (frameHeight - feetY) };
 }
 
@@ -65,6 +68,7 @@ function drawPiece(context, source, { piece, box, x, y, facing }) {
   if (facing < 0) {
     context.scale(-1, 1);
   }
+
   context.drawImage(
     source.image,
     source.sx,
@@ -88,11 +92,13 @@ export function drawHeroFrame(
   if (!sheet.ready) {
     return;
   }
+
   const sourceRow = ONE_ROW_STRIPS.has(name) ? 0 : row || 0;
   const piece = sheet.pieces[name][1 + sourceRow]?.[index];
   if (!piece) {
     return;
   }
+
   const [sx, sy, width, height] = piece;
   const source = frameSource(sheet.tints, {
     image: sheet.images[name],

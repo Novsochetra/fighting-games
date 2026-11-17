@@ -15,6 +15,7 @@ export function startMove(game, fighter, id) {
   if (!move) {
     return false;
   }
+
   Object.assign(fighter, { move, moveTime: 0, state: 'attack', hitboxActive: false });
   fighter.hitTargets.clear();
   fighter.hitConfirmed = false;
@@ -24,9 +25,11 @@ export function startMove(game, fighter, id) {
   if (fighter.airborne && !move.dive && fighter.vy > 0) {
     fighter.vy *= 0.4;
   }
+
   if (fighter.side === 'enemy' && fighter.def.boss && !move.quiet) {
     game.io.sfx('warn');
   }
+
   return true;
 }
 
@@ -45,6 +48,7 @@ export function jump(game, fighter, { vy, vx }) {
   if (vx !== undefined) {
     fighter.vx = vx;
   }
+
   fighter.airborne = true;
   fighter.state = 'air';
   clearMove(fighter);
@@ -76,6 +80,7 @@ export function dash(game, fighter, direction) {
   if (direction) {
     fighter.facing = direction;
   }
+
   fighter.invincible = Math.max(fighter.invincible, chained ? 9 : 14);
   clearMove(fighter);
   fighter.spriteName = null;

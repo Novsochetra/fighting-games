@@ -24,6 +24,7 @@ function runningAudio(game = gameState()) {
   audio.unlock();
   const context = contexts.at(-1);
   context.nodes.length = 0;
+
   return { audio, context, game };
 }
 

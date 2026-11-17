@@ -17,11 +17,14 @@ function createSource(params, sampleRate) {
   if (!params.wave || params.wave === 'noise') {
     return () => Math.random() * 2 - 1;
   }
+
   const frequencyAt = asCurve(params.frequency || 0);
   const shape = WAVES[params.wave] || WAVES.sawtooth;
+
   return (time) => {
     phase += frequencyAt(time) / sampleRate;
     phase -= Math.floor(phase);
+
     return shape(phase);
   };
 }
@@ -42,9 +45,11 @@ export function layer(track, params) {
     if (filter) {
       x = filter(x, i, time);
     }
+
     if (params.drive) {
       x = Math.tanh(x * params.drive);
     }
+
     samples[first + i] += x * envelope(time) * level;
   }
 }

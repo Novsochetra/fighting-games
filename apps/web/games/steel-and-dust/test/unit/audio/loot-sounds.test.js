@@ -14,6 +14,7 @@ function loudness(samples, from, to) {
   for (let i = from; i < to; i++) {
     peak = Math.max(peak, Math.abs(samples[i]));
   }
+
   return peak;
 }
 
@@ -25,6 +26,7 @@ function pitchOf(samples, from, to) {
       crossings++;
     }
   }
+
   return (crossings * SAMPLE_RATE) / (to - from);
 }
 
@@ -45,6 +47,7 @@ describe('the loot sounds', () => {
       expect(isBankSound(key)).toBe(true);
       expect(definition.group).toBe('loot');
     }
+
     expect(GROUP_CAPS.loot).toBeGreaterThan(0);
   });
 
@@ -52,6 +55,7 @@ describe('the loot sounds', () => {
     for (const definition of Object.values(LOOT_SOUNDS)) {
       expect(definition.priority).toBeLessThanOrEqual(2);
     }
+
     expect(LOOT_SOUNDS.coin.priority).toBe(0);
   });
 

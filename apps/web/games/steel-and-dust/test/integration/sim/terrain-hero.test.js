@@ -16,6 +16,7 @@ function runTo(game, x, check = () => {}) {
     runTicks(game, 1);
     check(game.player);
   }
+
   release(game, direction);
 }
 

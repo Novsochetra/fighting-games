@@ -35,6 +35,7 @@ describe('ambient lightning', () => {
       );
       starts.add(first - period * storm.period);
     }
+
     expect(starts.size).toBeGreaterThan(4);
   });
 
@@ -57,6 +58,7 @@ describe('ambient lightning', () => {
       expect(rects.every((rect) => rect.color === ALL_COLORS.lightning)).toBe(true);
       alphas.push(rects[0].alpha);
     }
+
     expect(alphas).toEqual(FLASH.map((brightness) => storm.strength * brightness));
   });
 });

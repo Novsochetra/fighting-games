@@ -29,6 +29,7 @@ function moatArena() {
   const naga = game.boss;
   Object.assign(naga, { entering: false, x: game.player.x + 150, facing: -1 });
   naga.ai.cooldown = 9999;
+
   return { game, naga };
 }
 
@@ -49,6 +50,7 @@ function drawnColumns(cell, y) {
       columns.push(x);
     }
   }
+
   return columns;
 }
 
@@ -59,11 +61,14 @@ function headOf(strip, frame) {
   while (drawnColumns(cell, top).length === 0) {
     top++;
   }
+
   const columns = [];
   for (let y = top; y < top + HEAD_ROWS; y++) {
     columns.push(...drawnColumns(cell, y));
   }
+
   const middle = columns.reduce((sum, x) => sum + x, 0) / columns.length;
+
   return { ahead: (middle - sprite.feetX) / UNIT, up: (sprite.feetY - top) / UNIT };
 }
 
@@ -112,6 +117,7 @@ describe("the Naga Raja's effects on her art", () => {
     for (const at of tides) {
       expect(shown.get(at + 1), `tick ${at}`).toEqual(['tidalCoil', 5]);
     }
+
     expect(splashes.size).toBe(tides.length);
   });
 });

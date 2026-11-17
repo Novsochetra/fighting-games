@@ -37,6 +37,7 @@ const KEYS = {
   ' ': (player) => {
     player.playing = !player.playing;
   },
+
   ArrowLeft: (player) => stepBy(player, -1),
   ArrowRight: (player) => stepBy(player, 1),
   Home: (player) => seek(player, 0),

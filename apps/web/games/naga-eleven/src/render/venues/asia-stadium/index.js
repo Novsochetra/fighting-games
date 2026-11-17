@@ -43,6 +43,7 @@ function build(layout) {
     goal: stadiumGoal(layout, art, ASIA_STADIUM.net),
     ...pitchside(layout, { cloth: art.flagCloth }),
     near: [nearBoards(layout, art)],
+
     overlay: (context, scene) =>
       drawFlashes(context, {
         band: bandOf(scene.layers.far[0], scene.view, { top: 20, bottom: 10 }),

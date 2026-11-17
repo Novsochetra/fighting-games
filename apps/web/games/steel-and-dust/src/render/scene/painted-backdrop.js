@@ -18,6 +18,7 @@ function loadLayer({ createImage, baseUrl }, folder, { name, parallax, once = fa
   const layer = { name, image: createImage(), parallax, once, ready: false, settled: false };
   watchLoad(layer);
   layer.image.src = `${baseUrl}${DIRECTORY}${folder}/${name}.png`;
+
   return layer;
 }
 
@@ -33,6 +34,7 @@ function loadCliff({ createImage, createCanvas, baseUrl }, folder, name = 'cliff
     context.drawImage(cliff.image, 0, 0);
   });
   cliff.image.src = `${baseUrl}${DIRECTORY}${folder}/${name}.png`;
+
   return cliff;
 }
 
@@ -53,6 +55,7 @@ export function loadPaintedBackdrop(loaders, spec) {
   const ground = Object.assign(loadLayer(loaders, spec.folder, { name: 'ground', parallax: 1 }), {
     top: spec.groundTop,
   });
+
   return {
     layers: spec.layers.map((layer) => loadLayer(loaders, spec.folder, layer)),
     fronts: (spec.fronts ?? []).map((layer) => loadLayer(loaders, spec.folder, layer)),
@@ -73,13 +76,16 @@ function drawLayer(context, layer, cameraX) {
   if (!layer.ready || width <= 0) {
     return;
   }
+
   const offset = cameraX * layer.parallax;
   if (layer.once) {
     if (offset < width) {
       context.drawImage(layer.image, Math.round(-offset), 0);
     }
+
     return;
   }
+
   const start = -(((offset % width) + width) % width);
   for (let x = start; x < VIEW_WIDTH; x += width) {
     context.drawImage(layer.image, Math.round(x), 0);
@@ -102,6 +108,7 @@ export function drawPaintedFronts(painter, setLayer, { backdrop, cameraX }) {
   if (!backdrop.fronts?.length) {
     return;
   }
+
   setLayer(0, true);
   for (const layer of backdrop.fronts) {
     drawLayer(painter.context, layer, cameraX);

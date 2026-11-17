@@ -35,5 +35,6 @@ export function meterForHit(game, { attacker, target, move }, damage) {
   if (attacker === game.player) {
     return move.ultimate || isHeavyMove(move) ? 0 : damage * LIGHT_SHARE;
   }
+
   return target === game.player ? damage : 0;
 }

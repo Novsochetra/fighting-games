@@ -16,6 +16,7 @@ function guardianAt(distance, { missionIndex = 11, share = 1 } = {}) {
   Object.assign(guardian, { entering: false, x: 120 + distance, facing: -1 });
   guardian.ai.cooldown = 0;
   guardian.hp = share * guardian.maxHp;
+
   return { game, guardian };
 }
 

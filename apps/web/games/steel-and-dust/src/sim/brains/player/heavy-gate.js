@@ -16,6 +16,7 @@ export function refuseHeavy(game, player) {
   if (quiet) {
     return;
   }
+
   game.io.sfx('heavyEmpty', false, { x: player.x });
   addFloatText(game, { x: player.x, y: player.y - 48, text: 'No power', color: COLORS.lilac });
   showHint(game, 'heavyBar');
@@ -30,8 +31,10 @@ export function startHeroMove(game, player, id) {
       refuseHeavy(game, player);
       return false;
     }
+
     spendHeavy(game);
   }
+
   return startMove(game, player, id);
 }
 
@@ -40,6 +43,8 @@ export function tryCharge(game, player) {
     refuseHeavy(game, player);
     return false;
   }
+
   startCharge(player);
+
   return true;
 }

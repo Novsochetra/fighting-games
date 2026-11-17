@@ -42,6 +42,7 @@ function frames(heroId, strip, weapon) {
   const drawn = readPngAlpha(new URL(`${hero.directory}../hero_${strip}.png`, GAME));
   const height = image.height / WEAPON_IDS.length;
   const top = WEAPONS[weapon].spriteRow * height;
+
   return Array.from({ length: HERO_SPRITES.frames[strip] }, (_, index) => ({
     image,
     left: index * frameWidth,
@@ -57,6 +58,7 @@ function pixel({ image, left, top }, x, y) {
 
 function whiteAt(frame, x, y) {
   const { alpha, rgb } = pixel(frame, x, y);
+
   return alpha > 0 && Math.min(...rgb) >= PALE;
 }
 
@@ -75,6 +77,7 @@ function streakFrom(frame, start, seen) {
     if (!inside || seen.has(key) || !paleAt(frame, x, y)) {
       continue;
     }
+
     seen.add(key);
     Object.assign(box, {
       left: Math.min(box.left, x),
@@ -84,6 +87,7 @@ function streakFrom(frame, start, seen) {
     });
     stack.push(...NEIGHBOURS.map(([dx, dy]) => [x + dx, y + dy]));
   }
+
   return Math.max(box.right - box.left, box.bottom - box.top) + 1;
 }
 
@@ -97,6 +101,7 @@ function longestStreak(frame) {
       }
     }
   }
+
   return longest;
 }
 
@@ -104,6 +109,7 @@ function longestStreak(frame) {
 function armourAt(frame, x, y) {
   const { alpha, rgb } = pixel(frame, x, y);
   const [red, , blue] = rgb;
+
   return alpha > 0 && blue >= 150 && blue - red >= 100 && Math.min(...rgb) < PALE;
 }
 
@@ -116,6 +122,7 @@ function goldOnArmour(fists, sword) {
       count += alpha > 0 && FISTS_SMEAR.has(hex) && armourAt(sword, x, y) ? 1 : 0;
     }
   }
+
   return count;
 }
 

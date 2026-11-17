@@ -10,6 +10,7 @@ function walkingGuardian() {
   game.missionIndex = 11;
   spawnEnemy(game, 'guardian', 1);
   Object.assign(game.boss, { entering: false, x: 240, facing: -1 });
+
   return { game, guardian: game.boss };
 }
 
@@ -39,11 +40,13 @@ describe("the colossus's footfalls", () => {
         falls.push({ dust: game.particles[dust].x, ...lastFootfall(guardian) });
       }
     }
+
     expect(falls.length).toBe(4);
     for (const fall of falls) {
       expect(fall.since).toBe(0);
       expect(fall.x).toBe(fall.dust);
     }
+
     expect(falls[0].x).not.toBe(falls[1].x);
     expect(falls[0].x).toBe(falls[2].x);
     stomp(game, guardian);

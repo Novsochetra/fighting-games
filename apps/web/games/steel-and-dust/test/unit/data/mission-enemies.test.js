@@ -17,6 +17,7 @@ describe('the enemies a mission can call onto its road', () => {
     for (const kind of MISSIONS[FIREFLY_HOLLOW].reinforcements) {
       expect(kinds).toContain(kind);
     }
+
     expect(kinds).toContain('hound');
   });
 
@@ -25,6 +26,7 @@ describe('the enemies a mission can call onto its road', () => {
       for (const kind of missionEnemyKinds(index)) {
         expect(ENEMY_SPRITES[ENEMY_TYPES[kind]?.sprite], `${mission.name} ${kind}`).toBeDefined();
       }
+
       expect(missionEnemySheets(index), mission.name).toContain(ENEMY_TYPES[mission.boss].sprite);
     });
   });

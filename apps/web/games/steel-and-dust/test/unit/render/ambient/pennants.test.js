@@ -20,6 +20,7 @@ function columnsOf(rects) {
   for (const rect of rects.filter((item) => item.color !== outline)) {
     columns.set(rect.x, [...(columns.get(rect.x) ?? []), rect]);
   }
+
   return columns;
 }
 

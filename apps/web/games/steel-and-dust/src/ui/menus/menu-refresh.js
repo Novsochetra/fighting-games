@@ -29,18 +29,21 @@ function showRunEnded(byId, { prefix, game, context, ended }) {
 // fills in the live text of a base menu when it opens
 export function createMenuRefreshers({ document, game, context }) {
   const byId = (id) => document.getElementById(id);
+
   return {
     title() {
       showSavedRun(byId, game.checkpoint);
       byId('titleNote').innerHTML = titleNoteHtml(game, context());
       context().fullscreen.refreshLabels();
     },
+
     pause() {
       const button = byId('weaponBtn');
       button.hidden = !game.settings.training;
       button.textContent = weaponButtonLabel(game);
       context().fullscreen.refreshLabels();
     },
+
     // with no lives left the run can only start over from the first mission
     over() {
       const out = !hasLivesLeft(game);
@@ -53,6 +56,7 @@ export function createMenuRefreshers({ document, game, context }) {
       byId('overBoardBtn').hidden = !out;
       showRunEnded(byId, { prefix: 'over', game, context, ended: out });
     },
+
     clear() {
       byId('clearStats').innerHTML = clearResultsHtml(game);
       showRunEnded(byId, { prefix: 'clear', game, context, ended: true });

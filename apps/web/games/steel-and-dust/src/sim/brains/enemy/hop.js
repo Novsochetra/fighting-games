@@ -28,6 +28,7 @@ export function hopTimes(rise) {
       clear = ticks;
     }
   }
+
   return { clear, land: ticks };
 }
 
@@ -36,6 +37,7 @@ export function hopTimes(rise) {
 export function hopSpeed({ travel, faceGap, rise }) {
   const { clear, land } = hopTimes(rise);
   const overFace = faceGap === null ? Infinity : faceGap / (clear + 1);
+
   return Math.sign(travel) * Math.min(HOP_SPEED, Math.abs(travel) / land, overFace);
 }
 
@@ -68,6 +70,8 @@ export function drop(game, raider) {
   if (!dropThrough(game, raider)) {
     return false;
   }
+
   raider.ai.hopWait = HOP_WAIT;
+
   return true;
 }

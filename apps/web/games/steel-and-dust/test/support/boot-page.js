@@ -10,9 +10,11 @@ export const PAGE = readFileSync(join(import.meta.dirname, '../../index.html'), 
 function createTestClock() {
   let now = 1000;
   const timers = [];
+
   return {
     now: () => now,
     setTimeout: (callback, ms) => timers.push({ at: now + ms, callback }),
+
     advance(ms) {
       now += ms;
       const due = timers.filter(({ at }) => at <= now);
@@ -48,5 +50,6 @@ export function openBootPage({ fontLoads = Promise.resolve([]), fetch } = {}) {
     clock.advance(ms);
     boot.loader.update(clock.now(), scene);
   };
+
   return { boot, images, clock, loader, frame };
 }

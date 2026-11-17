@@ -113,6 +113,7 @@ function paintVillageTv(raster, frame) {
 export const VILLAGE_TV = {
   frameOf: (tick) => Math.floor(hash(Math.floor(tick / 8), 4) * 3),
   paint: paintVillageTv,
+
   overlay: (context, tick) => {
     drawScreen(context, { colors: art.screen, tick });
     artRect(context, { x: TV.x + 14, y: TV.y + 12, width: 1, height: 1 }, art.screen[3]);

@@ -22,11 +22,13 @@ function loadedSheets() {
     baseUrl: '',
   });
   Object.keys(ENEMY_SPRITES).forEach((id) => enemySheetReady(sheets, id));
+
   return Object.values(sheets.images);
 }
 
 function paintedShare(path) {
   const image = readPngAlpha(join(GAME_ROOT, path));
+
   return paintedPixels(image) / (image.width * image.height);
 }
 

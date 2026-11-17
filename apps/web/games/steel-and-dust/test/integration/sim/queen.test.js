@@ -16,6 +16,7 @@ function queenArena({ gap = 150, hp } = {}) {
   Object.assign(queen, { entering: false, x: game.player.x + gap, facing: -1 });
   queen.hp = hp ?? queen.maxHp;
   queen.ai.cooldown = 9999;
+
   return { game, queen };
 }
 
@@ -27,6 +28,7 @@ function playOut(game, queen, ticks) {
     queen.ai.cooldown = 9999;
     states.add(game.player.state);
   }
+
   return states;
 }
 
@@ -102,11 +104,13 @@ describe('the Scorpion Queen in a fight', () => {
       if (i % 600 === 0) {
         game.player.x = queen.x > 192 ? 20 : 364;
       }
+
       runTicks(game, 1);
       game.player.hp = game.player.maxHp;
       queen.hp = Math.max(queen.hp, 40);
       used.add(queen.move?.id);
     }
+
     expect([...used]).toEqual(
       expect.arrayContaining(['tailSting', 'burrowTwice', 'emerge', 'hiveSwarm']),
     );

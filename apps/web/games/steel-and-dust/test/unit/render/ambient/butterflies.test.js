@@ -19,8 +19,10 @@ function butterfliesIn(rects) {
     if (i === 0 || rects[i - 1].color !== rect.color) {
       found.push({ color: rect.color, rects: [] });
     }
+
     found.at(-1).rects.push(rect);
   });
+
   return found
     .filter((_, i) => i % 2 === 0)
     .map((wings, i) => ({ ...wings, body: found[i * 2 + 1] }));
@@ -50,6 +52,7 @@ describe('ambient butterflies', () => {
         expect(body.color).not.toBe(color);
       }
     }
+
     expect([...wingColors].sort()).toEqual([...palette].sort());
   });
 
@@ -66,6 +69,7 @@ describe('ambient butterflies', () => {
       run = count === 4 ? run + 1 : 0;
       longestSpread = Math.max(longestSpread, run);
     }
+
     expect(longestSpread).toBeGreaterThan(20);
   });
 

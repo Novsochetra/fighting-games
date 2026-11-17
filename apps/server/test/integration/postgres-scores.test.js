@@ -66,6 +66,7 @@ describe('the Postgres scores store', () => {
     for (let i = 1; i <= 12; i += 1) {
       await store.add(run('AAA', i), `n${i}`);
     }
+
     const { week, allTime } = await store.board('brawler', { weekStart: new Date(0), size: 10 });
     expect(allTime.map((saved) => saved.score)).toEqual([12, 11, 10, 9, 8, 7, 6, 5, 4, 3]);
     expect(week).toHaveLength(10);

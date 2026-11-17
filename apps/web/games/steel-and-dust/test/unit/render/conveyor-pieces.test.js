@@ -42,6 +42,7 @@ function leanOf(frame) {
       const along = x + Math.max(0, shift) - Math.max(0, -shift);
       matched += pale(frame, x, HIGH_ROW) && pale(frame, along, LOW_ROW) ? 1 : 0;
     }
+
     best = matched > best.matched ? { shift, matched } : best;
   }
 
@@ -61,6 +62,7 @@ describe('a conveyor belt as drawn', () => {
     for (let i = 2; i < backs.length; i++) {
       expect(backs[i] - backs[i - 1]).toBe(CONVEYOR.segment);
     }
+
     expect(backs[0]).toBeLessThan(backs[1] - CONVEYOR.segment / 2);
   });
 

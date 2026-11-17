@@ -11,6 +11,7 @@ import { createRecordingContext } from '../../support/recording-canvas.js';
 function record(draw) {
   const { context, log } = createRecordingContext(null);
   draw(createPainter(context));
+
   return log;
 }
 
@@ -109,9 +110,11 @@ describe('what lies in front of the fighters', () => {
       const log = record((painter) => drawForeground(painter, cameraX, canyon.rubble, 0));
       colorsIn(log).forEach((color) => colors.add(color));
     }
+
     for (const key of ['scrub', 'scrubLight', 'bone', 'rock']) {
       expect(colors.has(canyon.rubble[key]), key).toBe(true);
     }
+
     expect(colors.has(canyon.rubble.fern)).toBe(false);
     expect(at(0).join('|')).not.toBe(at(12).join('|'));
   });
@@ -124,9 +127,11 @@ describe('what lies in front of the fighters', () => {
     for (let cameraX = 0; cameraX < 6400; cameraX += 340) {
       colorsIn(at(cameraX, 30)).forEach((color) => colors.add(color));
     }
+
     for (const key of ['slag', 'slagTop', 'pipe', 'pipeLight', 'chain', 'molten']) {
       expect(colors.has(works[key]), key).toBe(true);
     }
+
     expect(colors.has(works.fern)).toBe(false);
     const moving = [0, 500, 900, 1400, 2000].filter(
       (cameraX) => at(cameraX, 0).join('|') !== at(cameraX, 90).join('|'),

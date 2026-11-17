@@ -22,6 +22,7 @@ const pillarAt = (time, spot = { x: 120, y: 184 }) => ({
 function raySolids(time, spot) {
   const { painter, log } = recordingPainter();
   drawGazeRay(painter, pillarAt(time, spot));
+
   return { rects: drawnRects(log), log };
 }
 
@@ -38,6 +39,7 @@ describe("the gaze ray's bands", () => {
       for (const width of [core, body, edge, glow]) {
         expect(width % 2).toBe(1);
       }
+
       expect(core).toBeLessThanOrEqual(body);
       expect(body).toBeLessThan(edge);
       expect(edge).toBeLessThan(glow);
@@ -71,6 +73,7 @@ describe('the gaze ray', () => {
         expect(share).toBeLessThanOrEqual(rayReach(time));
       }
     }
+
     const [first] = rayMotes(-5);
     expect(rayMotes(-4)[0]).toBeGreaterThan(first);
   });

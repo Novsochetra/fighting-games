@@ -9,9 +9,11 @@ function tintPalette(color, outline) {
   for (const key of PALETTE_KEYS) {
     palette[key] = color;
   }
+
   palette.outline = outline;
   palette.headStyle = null;
   palette.hideTabard = true;
+
   return palette;
 }
 

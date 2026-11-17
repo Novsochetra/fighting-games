@@ -137,10 +137,12 @@ export function steppedValue(definition, current, { step, wrap }) {
   if (definition.range) {
     return Math.min(100, Math.max(0, current + step * 10));
   }
+
   const { options } = definition;
   const next = options.indexOf(current) + step;
   if (wrap) {
     return options[(next + options.length) % options.length];
   }
+
   return options[Math.min(options.length - 1, Math.max(0, next))];
 }

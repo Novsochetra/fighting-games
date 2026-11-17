@@ -21,6 +21,7 @@ export function prideSchedule() {
     const delay = rank * ripple;
     const appear = LION_RISE_TICKS + wait;
     const land = pounceAt - (pride.length - 1 - rank) * cascade;
+
     return { scale, delay, appear, run: land - WAKE_AT - delay - appear };
   });
 }
@@ -35,5 +36,6 @@ export function prideFlight(start, rank, { heap, ground, scale, run }) {
     [hopTicks, hop, hopHeight * size],
     [run, landing, pounceHeight * size],
   ];
+
   return points.map(([tick, x, height]) => [tick, x, ground(x), height]);
 }

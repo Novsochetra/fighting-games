@@ -7,9 +7,11 @@ import { drawSwingOver, drawSwingUnder } from './moss-swing.js';
 // strike in front
 export const MOSS_HEAVY_RENDER = {
   particles: MOSS_PARTICLE_DRAWS,
+
   under(painter, layer) {
     drawGrove(painter, layer);
     drawSwingUnder(painter, layer);
   },
+
   over: drawSwingOver,
 };

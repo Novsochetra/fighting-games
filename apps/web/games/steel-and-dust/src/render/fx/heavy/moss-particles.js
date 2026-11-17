@@ -41,6 +41,7 @@ function spore(painter, particle) {
     painter.alpha(alpha * 0.6).use(ART.sporeHalo);
     painter.rect(particle.x - 1, particle.y, 3, 1).rect(particle.x, particle.y - 1, 1, 3);
   }
+
   painter.alpha(alpha).use(particle.color).rect(particle.x, particle.y, 1, 1);
   painter.alpha(1);
 }
@@ -52,6 +53,7 @@ function leaf(painter, particle) {
   for (const [dx, dy, lit] of pixels) {
     painter.use(lit ? particle.color : ART.leafShade).rect(particle.x + dx, particle.y + dy, 1, 1);
   }
+
   painter.alpha(1);
 }
 

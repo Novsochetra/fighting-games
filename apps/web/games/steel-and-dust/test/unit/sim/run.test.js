@@ -12,11 +12,13 @@ function runningGame() {
   runTicks(game, 30);
   Object.assign(game.player, { facing: 1, vx: 1.7 });
   startRun(game.player);
+
   return game;
 }
 
 function buffered(game, action) {
   Object.assign(game.input.buffer, { action, ttl: 8, up: false, down: false, direction: 0 });
+
   return { buffer: game.input.buffer, direction: 1 };
 }
 
@@ -68,9 +70,11 @@ describe('the run', () => {
       thinkRun(game, game.player, HOLDING_ON);
       speeds.push(game.player.vx);
     }
+
     for (let i = 1; i < speeds.length; i++) {
       expect(speeds[i]).toBeGreaterThan(speeds[i - 1]);
     }
+
     expect(speeds.at(-1)).toBeCloseTo(RUN_SPEED, 2);
   });
 
@@ -80,6 +84,7 @@ describe('the run', () => {
     for (let i = 0; i < 40; i++) {
       thinkRun(game, game.player, HOLDING_ON);
     }
+
     expect(game.player.vx).toBeLessThan(RUN_SPEED / 2);
   });
 
@@ -136,6 +141,7 @@ describe('the run', () => {
       game.player.animTime++;
       frames.push(heroAnimation(game.player));
     }
+
     expect(frames.every(([name]) => name === 'run')).toBe(true);
     expect(frames.map(([, frame]) => frame).slice(0, 36)).toEqual(
       [0, 1, 2, 3, 4, 5, 6, 7, 0].flatMap((frame) => [frame, frame, frame, frame]),

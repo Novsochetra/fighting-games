@@ -11,8 +11,10 @@ function readSupporter(entry) {
   if (!Number.isFinite(amount) || amount <= 0) {
     return null;
   }
+
   const name = trimmed(entry.name);
   const day = trimmed(entry.date);
+
   return {
     name: name || ANONYMOUS,
     isAnonymous: name === '',
@@ -25,6 +27,7 @@ function readSupporter(entry) {
 export function readSupporters(payload) {
   const currency = trimmed(payload?.currency).toUpperCase();
   const entries = Array.isArray(payload?.supporters) ? payload.supporters : [];
+
   return {
     currency: CURRENCY_CODE.test(currency) ? currency : DEFAULT_CURRENCY,
     supporters: entries.map(readSupporter).filter(Boolean),

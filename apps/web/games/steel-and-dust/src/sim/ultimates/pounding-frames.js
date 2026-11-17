@@ -39,8 +39,10 @@ function frameIn(frames, since) {
     if (left < ticks) {
       return [...frame, FISTS_ROW];
     }
+
     left -= ticks;
   }
+
   return [...lastOf(frames)[0], FISTS_ROW];
 }
 
@@ -50,17 +52,22 @@ export function poundingFrame(time) {
   if (time >= FINALE_START) {
     return frameIn(FINALE, time - FINALE_START);
   }
+
   if (time >= WAKE_AT) {
     return ['idle', Math.floor(time / STANCE_TICKS) % STANCE_FRAMES, FISTS_ROW];
   }
+
   if (time >= rushAt) {
     return rushFrame(time);
   }
+
   if (time >= gatherAt) {
     return COIL_FRAME;
   }
+
   if (time >= SLAM_START) {
     return frameIn(SLAM, time - SLAM_START);
   }
+
   return frameIn(BOW, time);
 }

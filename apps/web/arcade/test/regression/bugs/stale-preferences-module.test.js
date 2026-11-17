@@ -17,6 +17,7 @@ vi.mock('@/services/preferences.js', async (importOriginal) => {
   const real = await importOriginal();
   const withoutAnalytics = (preferences) =>
     Object.fromEntries(Object.entries(preferences).filter(([name]) => !/analytics/i.test(name)));
+
   return {
     ...real,
     createPreferences: (storage) => withoutAnalytics(real.createPreferences(storage)),

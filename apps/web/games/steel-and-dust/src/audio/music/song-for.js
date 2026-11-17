@@ -7,9 +7,12 @@ export function songFor(game) {
   if (game.mode === 'title' || game.mode === 'clear') {
     return 'title';
   }
+
   if (!RUN_MODES.has(game.mode) || game.lootTime || game.clearTime) {
     return null;
   }
+
   const { boss } = game;
+
   return boss && !boss.entering && boss.state !== 'ko' ? 'boss' : 'battle';
 }

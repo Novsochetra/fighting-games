@@ -19,6 +19,7 @@ function sheet(file, spec, size = REGULAR) {
     const [frames, strike] = counts.split('/').map(Number);
     strips[name] = strike === undefined ? { row, frames } : { row, frames, strike };
   });
+
   return { file, ...size, strips };
 }
 

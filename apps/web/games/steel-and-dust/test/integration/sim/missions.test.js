@@ -21,6 +21,7 @@ function playMission(index) {
   const game = createTestGame();
   selectMission(game, index);
   startPlay(game);
+
   return game;
 }
 
@@ -38,6 +39,7 @@ function beatWave(game) {
   for (const enemy of standing(game)) {
     knockOut(game, enemy, 1);
   }
+
   standAt(game, game.player.x, 20);
 }
 
@@ -149,6 +151,7 @@ describe('missions and their zones', () => {
       expect(game.boss.y).toBeLessThanOrEqual(floor);
       onFloor += game.boss.y === floor ? 1 : 0;
     }
+
     expect(onFloor).toBeGreaterThan(200);
     expect(game.player.y).toBe(floor);
   });

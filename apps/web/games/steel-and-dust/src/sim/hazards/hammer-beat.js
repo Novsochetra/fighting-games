@@ -11,6 +11,7 @@ export function hammerPhase(time) {
     if (at < HAMMER[phase]) {
       return { phase, at };
     }
+
     at -= HAMMER[phase];
   }
 
@@ -23,6 +24,7 @@ export function headLift(time) {
   if (phase === 'drop') {
     return HAMMER.lift * (1 - (at + 1) / HAMMER.drop);
   }
+
   if (phase === 'rise') {
     return (HAMMER.lift * (at + 1)) / HAMMER.rise;
   }

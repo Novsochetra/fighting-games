@@ -15,6 +15,7 @@ export function setBlazes(game, boss, { at, life }) {
     if (isWall(game.terrain, x, boss.y)) {
       return;
     }
+
     game.projectiles.push({
       kind: 'blaze',
       x,

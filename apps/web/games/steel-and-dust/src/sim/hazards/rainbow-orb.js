@@ -18,6 +18,7 @@ const SPARK_EVERY = 3;
 
 function overHand(boss, frame) {
   const [ahead, up] = RAINBOW_HANDS[frame];
+
   return [boss.x + boss.facing * ahead * boss.scale, boss.y - up * boss.scale - OVER_HAND];
 }
 
@@ -50,8 +51,10 @@ export function spinOrb(game, orb) {
     const color = colors[Math.floor(orb.time / SPARK_EVERY) % colors.length];
     addSparks(game, { x: orb.x, y: orb.y, count: 1, color, speed: 1.4 });
   }
+
   if (orb.time === orb.burstAt) {
     colors.forEach((color) => addSparks(game, { x: orb.x, y: orb.y, count: 2, color, speed: 2.6 }));
   }
+
   orb.dead = orb.time >= orb.burstAt + ORB_BURST;
 }

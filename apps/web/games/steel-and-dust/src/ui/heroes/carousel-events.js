@@ -10,7 +10,9 @@ function clickTurn(target) {
   if (arrow) {
     return Number(arrow.dataset.step);
   }
+
   const card = target.closest('.hero-card');
+
   return card && card.dataset.depth !== '0' ? Number(card.dataset.slot) : null;
 }
 
@@ -34,6 +36,7 @@ export function installCarouselEvents({ stage, menus, audio }) {
     if (turn === null) {
       return;
     }
+
     event.stopPropagation();
     if (turn !== 0) {
       stepHero(menus, turn, audio);

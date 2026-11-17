@@ -24,6 +24,7 @@ export function playBass(live, { song, time: start, beat, position, chord, bus }
   if (!song.bassSteps.includes(position)) {
     return;
   }
+
   const frequency = midiToFrequency(chord[0] - 24);
   const envelope = envelopeGain(live, {
     destination: bus,
@@ -55,6 +56,7 @@ export function playArpeggio(live, { song, time: start, beat, position, chord, b
   if (position % song.arpeggioEvery !== 0) {
     return;
   }
+
   const { arpeggio } = song;
   const note = chord[arpeggio[Math.floor(position / song.arpeggioEvery) % arpeggio.length]] + 12;
   const frequency = midiToFrequency(note);
@@ -88,6 +90,7 @@ export function playPad(live, { song, time: start, beat, position, chord, bus })
   if (!song.padLevel || position !== 0) {
     return;
   }
+
   const duration = beat * 16;
   for (const note of chord) {
     const frequency = midiToFrequency(note);

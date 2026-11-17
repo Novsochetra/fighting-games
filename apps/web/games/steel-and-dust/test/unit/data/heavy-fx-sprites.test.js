@@ -19,6 +19,7 @@ function colorsOf(image) {
       }
     }
   }
+
   return colors.size;
 }
 
@@ -40,6 +41,7 @@ describe("the Shades' heavy effect strips", () => {
       if (!HEAVY_FX_SPRITES[name]) {
         return;
       }
+
       const { frameWidth, frameHeight, frames, anchorX, anchorY } = HEAVY_FX_SPRITES[name];
       const image = readPngAlpha(new URL(`assets/sprites/fx/${name}.png`, GAME));
       expect([image.width, image.height]).toEqual([frameWidth * frames, frameHeight]);

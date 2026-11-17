@@ -2,6 +2,7 @@
 // changes which way a fight goes: Math.random also steers the raiders and the recorded runs
 export function fxRandom(game) {
   game.fxSeed = (Math.imul(game.fxSeed, 1664525) + 1013904223) >>> 0;
+
   return game.fxSeed / 4294967296;
 }
 

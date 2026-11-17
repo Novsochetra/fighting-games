@@ -12,6 +12,7 @@ export function loadLootSheets({ createImage, baseUrl }) {
     image.src = `${baseUrl}${DIRECTORY}${sprite.file}`;
     sheets.images[name] = image;
   }
+
   return sheets;
 }
 
@@ -26,6 +27,7 @@ export function drawLootFrame(painter, sheets, { name, frame, x, y, zoom = 1 }) 
   if (!sheets.ready[name]) {
     return;
   }
+
   const { frameWidth, frameHeight } = LOOT_SPRITES[name];
   const scale = LOOT_SPRITES[name].scale * zoom;
   const width = frameWidth * scale;

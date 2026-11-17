@@ -35,6 +35,7 @@ function butterflyAt(i, { effect, tick, cameraX }) {
   const reachY = (effect.bottom - effect.top) / 2 - 3;
   const gliding = Math.sin(tick * 0.017 + trait(seed, 5) * TAU) > 0.75;
   const pose = gliding ? 0 : Math.floor((tick + seed) / (4 + (i % 3))) & 1;
+
   return {
     x: Math.round(scrollX(baseX, { cameraX, drift: effect.drift })),
     y: Math.round(middle + swing(6, 0.019, reachY * 0.7) + swing(11, 0.047, reachY * 0.3)) - pose,
@@ -48,6 +49,7 @@ function drawButterfly(painter, butterfly, { wing, body }) {
   for (const [offsetX, offsetY, width, height] of pose.wings) {
     painter.rect(x + offsetX, y + offsetY, width, height);
   }
+
   const [offsetX, offsetY, width, height] = pose.body;
   painter.use(body).rect(x + offsetX, y + offsetY, width, height);
 }

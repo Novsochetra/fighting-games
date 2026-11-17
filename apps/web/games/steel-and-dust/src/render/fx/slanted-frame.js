@@ -16,6 +16,7 @@ function addColumn(runs, { column, source, drop }) {
     last.sourceEnd = source + 1;
     return;
   }
+
   runs.push({
     left: column * PIXEL,
     width: PIXEL,
@@ -44,6 +45,7 @@ export function slantRuns(sprite, { size, slant = 0, shift = 0, window = {} }) {
       drop: snap(along * Math.tan(slant)),
     });
   }
+
   return runs;
 }
 
@@ -72,6 +74,7 @@ export function drawSlantedFrame(painter, sheets, { name, frame, scale = 1, line
   if (!sheets.ready[name]) {
     return;
   }
+
   const { x, y, facing = 1, angle = 0 } = line;
   const turn = Math.abs(angle) > QUARTER / 2 ? Math.sign(angle) : 0;
   const sprite = FX_SPRITES[name];
@@ -84,6 +87,7 @@ export function drawSlantedFrame(painter, sheets, { name, frame, scale = 1, line
   if (turn) {
     context.transform(0, turn, -turn, 0, 0, 0);
   }
+
   drawRuns(context, { image: sheets.images[name], sprite, frame, runs, size });
   context.restore();
 }

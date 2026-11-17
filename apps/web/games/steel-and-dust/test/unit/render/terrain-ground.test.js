@@ -13,12 +13,14 @@ const hilly = (x) => {
   if (x >= 100 && x < 160) {
     return GROUND_Y - Math.round((x - 100) / 3);
   }
+
   return x >= 160 && x < 260 ? GROUND_Y - 20 : GROUND_Y;
 };
 
 function record(surfaceAt, { cameraX = 0, tick = 0 } = {}) {
   const { context, log } = createRecordingContext(null);
   drawTerrainGround(createPainter(context), { cameraX, colors, tick, surfaceAt });
+
   return drawnRects(log);
 }
 
@@ -79,6 +81,7 @@ describe('the painted road', () => {
   function textureDraws(surfaceAt, cameraX = 0) {
     const { context, log } = createRecordingContext(null);
     drawTerrainGround(createPainter(context), { cameraX, colors, tick: 0, surfaceAt, texture });
+
     return log
       .filter((call) => call.startsWith('drawImage('))
       .map((call) => call.slice(10, -1).split(',').slice(1).map(Number));

@@ -67,6 +67,7 @@ export function drawSpike(painter, spike, sheets) {
     drawCrack(painter, spike);
     return;
   }
+
   const frame = fxFrameAt('spike', spike.time);
   drawFxFrame(painter, sheets, {
     name: 'spike',

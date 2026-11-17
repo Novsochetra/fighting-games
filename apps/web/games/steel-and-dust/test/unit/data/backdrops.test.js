@@ -28,6 +28,7 @@ function drawsSomethingWithin(effect, colors, ticks) {
       return true;
     }
   }
+
   return false;
 }
 
@@ -90,6 +91,7 @@ describe('painted backdrops', () => {
       });
       expect(deep.from, themeId).toBeLessThan(layerSize(folder, 'ground').height);
     }
+
     expect(layerSize('angkor-wat', 'face')).toEqual({ width: 4 * 11, height: 216 });
     expect(layerSize('angkor-wat', 'breach')).toEqual({ width: 2 * 16, height: 216 });
   });

@@ -10,6 +10,7 @@ function flashOf(seed, tick) {
   const clock = tick + Math.floor(trait(seed, 2) * cycle);
   const flash = Math.floor(clock / cycle);
   const lit = (clock - flash * cycle) / (cycle * (0.25 + trait(seed, 3) * 0.25));
+
   return { flash, lit };
 }
 
@@ -19,6 +20,7 @@ function glintAt(i, { effect, tick, cameraX }) {
   if (lit >= 1) {
     return null;
   }
+
   const flashSeed = seed * 977 + flash;
   const depth = trait(seed, 4);
   const shimmer = 0.8 + 0.2 * Math.sin(tick * 0.45 + seed);
@@ -28,6 +30,7 @@ function glintAt(i, { effect, tick, cameraX }) {
   // a road's glints spread over the whole water; `left` and `span` gather them into one stretch
   const across = (effect.left ?? 0) + trait(seed, 0) * (effect.span ?? CYCLE_WIDTH);
   const baseX = across + (trait(flashSeed, 6) - 0.5) * 6;
+
   return {
     x: Math.round(scrollX(baseX, { cameraX, drift: effect.drift })),
     y: effect.top + Math.round(depth * (effect.bottom - effect.top)),
@@ -42,6 +45,7 @@ const DIMMER_BELOW = [0.75, 0.4];
 
 function shadeOf(colors, intensity) {
   const step = DIMMER_BELOW.filter((threshold) => intensity <= threshold).length;
+
   return colors[Math.min(step, colors.length - 1)];
 }
 
@@ -59,6 +63,7 @@ function drawGlint(painter, glint, colors) {
     drawStar(painter, glint, colors);
     return;
   }
+
   const left = glint.x - Math.floor(glint.length / 2);
   painter.use(shadeOf(colors, glint.intensity)).rect(left, glint.y, glint.length, 1);
 }

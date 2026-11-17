@@ -102,6 +102,7 @@ export function drawGroundRing(pen, { at, ground, hit, life = 22, reach = 84 }) 
       y: ground,
       radiusX: radius - inset,
       radiusY: (radius - inset) * 0.2,
+
       pick: (angle, x, y) => {
         if (!dithered(x, y, 1.1 - share - band * 0.3)) {
           return null;

@@ -58,6 +58,7 @@ export function useCoffeeNote() {
   return {
     hidden: phase === 'waiting' || phase === 'gone',
     hiding: phase === 'hiding',
+
     hide() {
       if (phase === 'shown' && fadeOf(window) > 0) {
         setPhase('hiding');

@@ -19,6 +19,7 @@ function framePixel(strip, frame, { ahead, up }) {
   const x = frame * sprite.frameWidth + sprite.feetX + Math.round(ahead * RENDER_SCALE);
   const y =
     sprite.strips[strip].row * sprite.frameHeight + sprite.feetY - Math.round(up * RENDER_SCALE);
+
   return { alpha: sheet.alpha(x, y), rgb: sheet.rgb(x, y) };
 }
 
@@ -30,6 +31,7 @@ function lowestRow(image, { left, top, width, height }) {
       }
     }
   }
+
   return -1;
 }
 
@@ -50,11 +52,13 @@ function touchesEdge(image, { left, top, width, height }) {
       return true;
     }
   }
+
   for (let x = 0; x < width; x++) {
     if (image.alpha(left + x, top)) {
       return true;
     }
   }
+
   return false;
 }
 
@@ -72,6 +76,7 @@ describe("the Bayon Guardian's art and his spells", () => {
       );
       expect(near.some(isGold), `frame ${frame}`).toBe(true);
     }
+
     expect(scale).toBeGreaterThan(2);
   });
 
@@ -103,6 +108,7 @@ describe("the Bayon Guardian's art and his spells", () => {
         const box = { left: frame * frameWidth, top: 0, width: frameWidth, height: frameHeight };
         lowest = Math.max(lowest, lowestRow(strip, box));
       }
+
       expect(lowest - anchorY, name).toBe(sprite.frameHeight - sprite.feetY - 2);
     }
   });
@@ -114,6 +120,7 @@ describe("the Bayon Guardian's art and his spells", () => {
         expect(touchesEdge(sheet, frameBox(strip, frame)), `${strip} ${frame}`).toBe(false);
       }
     }
+
     for (const name of GROUND_FX) {
       const { frameWidth, frameHeight, frames } = FX_SPRITES[name];
       const strip = fxStrip(name);

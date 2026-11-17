@@ -9,7 +9,9 @@ export function circularOffset(index, selected, count) {
   if (count <= 0) {
     return 0;
   }
+
   const forward = (((index - selected) % count) + count) % count;
+
   return forward > count / 2 ? forward - count : forward;
 }
 
@@ -19,12 +21,15 @@ export function centerShift(distance) {
   if (distance <= 0) {
     return 0;
   }
+
   const between = SLOT_SCALES.slice(1, distance).reduce((sum, scale) => sum + scale, 0);
+
   return SLOT_SCALES[0] / 2 + between + SLOT_SCALES[distance] / 2;
 }
 
 export function slotFor(offset) {
   const distance = Math.min(Math.abs(offset), LAST_SLOT);
+
   return {
     side: offset < 0 ? -1 : 1,
     distance,
@@ -43,10 +48,12 @@ export function slotFor(offset) {
 // side it went out, unless it was out of sight already.
 export function planTurn(previousOffsets, selected, count) {
   const turn = previousOffsets[selected];
+
   return Array.from({ length: count }, (_, index) => {
     const offset = circularOffset(index, selected, count);
     const before = previousOffsets[index];
     const wraps = Number.isFinite(turn) && Number.isFinite(before) && before - offset !== turn;
+
     return {
       offset,
       enterFrom: wraps ? offset + turn : null,

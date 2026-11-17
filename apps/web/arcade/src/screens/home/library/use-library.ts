@@ -32,6 +32,7 @@ export function useLibrary(cards: GameCard[]) {
   return {
     filter: state.filter,
     page: libraryPage(cards, { filter: state.filter, expanded: state.expanded, ...state.lists }),
+
     setFilter(filter: string) {
       if (!isFilter(filter) || filter === state.filter) {
         return false;

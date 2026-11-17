@@ -19,6 +19,7 @@ function clearFirstMission() {
   while (game.missionIndex === 0) {
     runTicks(game, 1);
   }
+
   return { game, ...late };
 }
 

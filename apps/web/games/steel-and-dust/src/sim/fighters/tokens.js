@@ -6,6 +6,7 @@ export function takeToken(game, fighter) {
     fighter.hasToken = true;
     return true;
   }
+
   return false;
 }
 

@@ -60,6 +60,7 @@ function paintOffice(raster) {
 
 export const FEDERATION_OFFICE = {
   paint: paintOffice,
+
   overlay: (context, tick) =>
     drawMotes(context, {
       area: { x: 150, y: 60, width: 110, height: 80 },

@@ -38,6 +38,7 @@ export async function startWorker(files = server()) {
   const services = {
     activity: createGameActivity({
       now: () => clock.now,
+
       wait: async (ms) => {
         clock.now += ms;
       },

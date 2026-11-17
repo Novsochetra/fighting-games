@@ -17,6 +17,7 @@ function gameWithRaider(kind = 'grunt') {
   const raider = game.fighters.find((fighter) => fighter.side === 'enemy');
   Object.assign(raider, { entering: false, x: game.player.x + 80, state: 'idle' });
   raider.ai.cooldown = 999;
+
   return { game, raider };
 }
 

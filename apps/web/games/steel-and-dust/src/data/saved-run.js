@@ -23,10 +23,13 @@ export function sanitizeSavedRun(stored) {
   if (!stored || typeof stored !== 'object' || !isPlayable(stored) || !hasCarriedAmounts(stored)) {
     return null;
   }
+
   const coins = coinsOf(stored);
   if (!Number.isInteger(coins) || coins < 0) {
     return null;
   }
+
   const { mission, score, playTime, continues, lives, ultMeter } = stored;
+
   return { mission, score, coins, playTime, continues, lives, ultMeter };
 }

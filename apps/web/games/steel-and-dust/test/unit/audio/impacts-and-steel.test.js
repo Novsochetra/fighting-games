@@ -14,6 +14,7 @@ function rms(samples, from, to) {
   for (let i = first; i < last; i++) {
     sum += samples[i] * samples[i];
   }
+
   return Math.sqrt(sum / (last - first));
 }
 

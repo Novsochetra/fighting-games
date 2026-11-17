@@ -26,6 +26,7 @@ function afterLastBoss(reached) {
   for (let i = 0; i < 60 + LOOT_TIME.limit + CLEAR_TICKS && !reached(game); i++) {
     runTicks(game, 1);
   }
+
   return game;
 }
 
@@ -41,6 +42,7 @@ function stampedTexts(game) {
   renderFrame(game, view);
   view.painter.stamps.cache.clear();
   renderFrame(game, view);
+
   return [...view.painter.stamps.cache.keys()].filter((key) => key.startsWith('text|'));
 }
 

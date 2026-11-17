@@ -64,10 +64,13 @@ export const SHOT_RULES = {
   },
   boulder: {
     range: 400,
+
     area: (shot) => {
       const half = 8 * shot.size;
+
       return { x: shot.x - half, y: shot.y - half, width: half * 2, height: half * 2 };
     },
+
     hit: BOULDER_HIT,
     enemyWeapon: 'hammer',
   },
@@ -88,12 +91,14 @@ export const SHOT_RULES = {
   // a toppling stalk strikes along its length the moment it lands, frame 3 of its strip
   bamboo: {
     range: 70,
+
     area: (shot) => ({
       x: shot.direction > 0 ? shot.x : shot.x - 56,
       y: shot.y - 14,
       width: 56,
       height: 14,
     }),
+
     hit: BAMBOO_HIT,
     enemyWeapon: 'hammer',
     armed: (shot) => shot.time >= 18 && shot.time < 26,

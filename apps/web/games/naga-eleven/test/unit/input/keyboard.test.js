@@ -9,6 +9,7 @@ function fakeWindow() {
     addEventListener: (type, listener) => {
       listeners[type] = listener;
     },
+
     send: (type, fields) => listeners[type]({ preventDefault: () => {}, repeat: false, ...fields }),
   };
 }

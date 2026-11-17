@@ -29,6 +29,7 @@ function ring(painter, effect, progress) {
       .use(i % 2 ? effect.color : COLORS.white)
       .rect(x, effect.y + Math.sin(angle) * radius * 0.8, size, size);
   }
+
   painter.alpha(1);
 }
 
@@ -45,6 +46,7 @@ function lines(painter, effect, progress) {
       .use(COLORS.white)
       .line(from, point(effect.x + Math.cos(angle) * outer, effect.y + Math.sin(angle) * outer), 1);
   }
+
   painter.alpha(1);
 }
 
@@ -73,6 +75,7 @@ function star(painter, effect, progress) {
     const short = point(effect.x + dx * radius * 0.45, effect.y + dy * radius * 0.45);
     painter.use(effect.bladed ? COLORS.frost : effect.color).line(center, short, 3);
   }
+
   if (effect.big) {
     for (const [dx, dy] of DIAGONALS) {
       const from = point(effect.x + dx * 2, effect.y + dy * 2);
@@ -81,6 +84,7 @@ function star(painter, effect, progress) {
         .line(from, point(effect.x + dx * radius * 0.6, effect.y + dy * radius * 0.6), 1);
     }
   }
+
   painter.use(COLORS.white).diamond(effect.x, effect.y, 2);
 }
 
@@ -88,10 +92,12 @@ function impact(painter, effect, progress) {
   if (effect.time < 2) {
     painter.use(COLORS.white).diamond(effect.x, effect.y, effect.big ? 6 : 4);
   }
+
   painter.alpha(Math.max(0, 1 - progress * progress));
   if (effect.bladed) {
     bladeCrescent(painter, effect);
   }
+
   star(painter, effect, progress);
   painter.alpha(1);
 }

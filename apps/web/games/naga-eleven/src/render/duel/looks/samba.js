@@ -45,6 +45,7 @@ function figures(pen, scene, runner, cast) {
         x: at.x - i * 11,
         y: at.y + Math.round(Math.sin((scene.tick - i * 6) / 4) * 3),
       }),
+
       count: 1,
       gap: 11,
       tint: { body: tints[i - 1], rim: scene.art.body[4] },

@@ -40,6 +40,7 @@ function fireTrail(game, phoenix) {
 
 function phoenixArea(phoenix) {
   const half = 22 * phoenix.scale;
+
   return {
     x: phoenix.x - half,
     y: phoenix.y - 14 * phoenix.scale,
@@ -69,10 +70,12 @@ export function updatePhoenix(game, phoenix) {
     phoenix.leg = leg;
     phoenix.hitTargets.clear();
   }
+
   const [x, y] = pointOnLeg(flight, leg, phoenix.time);
   if (Math.abs(x - phoenix.x) > 0.5) {
     phoenix.direction = x > phoenix.x ? 1 : -1;
   }
+
   Object.assign(phoenix, { x, y });
   fireTrail(game, phoenix);
   sear(game, phoenix);

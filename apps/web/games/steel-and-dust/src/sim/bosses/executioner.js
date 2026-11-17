@@ -25,6 +25,7 @@ export function spinWhirl(game, boss) {
   if (game.summons.some((summon) => summon.follow?.fighter === boss)) {
     return;
   }
+
   addBurst(game, {
     sprite: 'axeWhirl',
     ...bodyPoint(boss, WAIST),

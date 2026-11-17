@@ -12,10 +12,12 @@ function puffAt(spot, { puff, tick, effect }) {
   if (age < 0 || age >= LIFE) {
     return null;
   }
+
   const progress = age / LIFE;
   const reach = REACH * (1 - (1 - progress) ** 2);
   const size = 3 + Math.round(progress * 9);
   const [towardX, towardY] = effect.toward;
+
   return {
     x: Math.round(spot.x + towardX * reach - size / 2 + Math.sin(age * 0.3 + puff) * progress),
     y: Math.round(spot.y + towardY * reach - age * 0.16 - size / 2),
@@ -43,5 +45,6 @@ export function drawSteam(painter, { effect, tick, cameraX, colors }) {
       }
     }
   }
+
   painter.alpha(1);
 }

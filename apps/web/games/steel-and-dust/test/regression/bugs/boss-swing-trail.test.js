@@ -21,6 +21,7 @@ function longestTrail(kind, move) {
     fighter.ai.cooldown = 9999;
     longest = Math.max(longest, fighter.trail.length);
   }
+
   return longest;
 }
 

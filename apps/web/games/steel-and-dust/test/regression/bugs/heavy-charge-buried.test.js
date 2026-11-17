@@ -23,6 +23,7 @@ function boostOf(key) {
     node.connections.includes(chain.effectsBus),
   );
   const sources = [...nodesOfKind(context, 'oscillator'), ...nodesOfKind(context, 'bufferSource')];
+
   return { boosts, sources };
 }
 

@@ -21,6 +21,7 @@ function fightRaiders(hero, { weapon = 'sword', offsets = [16] } = {}) {
   const raiders = offsets.map((offset) => addRaider(game, offset));
   game.player.facing = 1;
   game.ultMeter = ULT_MAX;
+
   return { game, raiders, sounds };
 }
 
@@ -32,6 +33,7 @@ function pressWhenReady(game, action) {
       tap(game, action);
       return;
     }
+
     runTicks(game, 1);
   }
 }
@@ -54,6 +56,7 @@ const summonsOf = (game, kind) => game.summons.filter((summon) => summon.kind ==
 function summonedOnStrike(game, kind) {
   const earlier = new Set(game.summons);
   untilStrike(game);
+
   return summonsOf(game, kind).filter((summon) => !earlier.has(summon));
 }
 
@@ -62,6 +65,7 @@ function addRaider(game, offset) {
   const raider = game.fighters.at(-1);
   Object.assign(raider, { entering: false, x: game.player.x + offset, hp: 300, maxHp: 300 });
   raider.ai.cooldown = 999;
+
   return raider;
 }
 

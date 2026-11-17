@@ -39,6 +39,7 @@ function drawnWhen(missionIndex, done) {
 
   screen.recording.log.length = 0;
   renderFrame(game, view);
+
   return { game, log: screen.recording.log };
 }
 

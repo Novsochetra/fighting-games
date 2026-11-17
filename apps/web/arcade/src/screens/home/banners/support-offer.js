@@ -14,5 +14,6 @@ export const isBackFromGame = ({ playCount, seenPlays }) =>
 
 export function shouldOfferSupport({ isReturn, playCount, hasGiven, snoozedUntil, now }) {
   const isSnoozed = typeof snoozedUntil === 'number' && now < snoozedUntil;
+
   return isReturn && !hasGiven && !isSnoozed && playCount >= SUPPORT_AFTER_PLAYS;
 }

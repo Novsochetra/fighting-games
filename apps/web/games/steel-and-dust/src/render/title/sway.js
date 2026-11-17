@@ -7,12 +7,14 @@ const GUST_RATE = 0.047;
 // crown on its own beat so they never move as one
 export function swayAt(index, tick) {
   const phase = index * 2.3;
+
   return Math.sin(tick * RATE + phase) * 0.75 + Math.sin(tick * GUST_RATE + phase * 1.7) * 0.25;
 }
 
 // a crown bends from where it meets its trunk: its bottom row holds still and its top moves most
 export function swayOffset(crown, y, lean) {
   const bend = (crown.bottom - y) / (crown.bottom - crown.top);
+
   return Math.round(lean * bend) || 0;
 }
 

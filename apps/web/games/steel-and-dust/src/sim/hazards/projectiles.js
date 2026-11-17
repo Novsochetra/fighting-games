@@ -63,9 +63,11 @@ function moveShot(game, shot) {
   } else if (shot.vy) {
     shot.y += shot.vy;
   }
+
   if (hitsGround(game.terrain, shot)) {
     shot.dead = true;
   }
+
   const rules = SHOT_RULES[shot.kind];
   if (rules.rehitEvery && shot.time % rules.rehitEvery === 0) {
     shot.hitTargets.clear();
@@ -74,6 +76,7 @@ function moveShot(game, shot) {
 
 function stillFlying(game, shot) {
   const cameraX = game.camera.x;
+
   return (
     !shot.dead &&
     shot.time < SHOT_RULES[shot.kind].range &&
@@ -91,14 +94,17 @@ export function updateProjectiles(game) {
     if ((shot.kind === 'knife' || shot.kind === 'bolt') && shot.side === 'enemy') {
       showHint(game, 'sling');
     }
+
     if (rules.hit && (!rules.armed || rules.armed(shot))) {
       hitArea(game, { shot, area, hit: rules.hit });
     }
+
     if (shot.side === 'player') {
       breakCratesIn(game, area);
       strikeRoad(game, area, shot.direction);
       strikePharaohSpells(game, shot, area);
     }
   }
+
   game.projectiles = game.projectiles.filter((shot) => stillFlying(game, shot));
 }

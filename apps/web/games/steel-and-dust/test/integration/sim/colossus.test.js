@@ -15,6 +15,7 @@ function colossusArena({ gap = 140, hp } = {}) {
   const colossus = game.boss;
   Object.assign(colossus, { entering: false, x: game.player.x + gap, facing: -1 });
   colossus.hp = hp ?? colossus.maxHp;
+
   return { game, colossus };
 }
 
@@ -28,7 +29,9 @@ function playOut(game, ticks) {
     game.projectiles.forEach((shot) => shots.add(shot));
     knockedDown ||= game.player.state === 'juggle' || game.player.state === 'down';
   }
+
   const ofKind = (kind) => [...shots].filter((shot) => shot.kind === kind);
+
   return { ofKind, knockedDown };
 }
 
@@ -83,6 +86,7 @@ describe('the Rust Colossus in a fight', () => {
       waves += Math.max(0, game.shockwaves.length - before);
       game.projectiles.forEach((shot) => shots.add(shot));
     }
+
     const boulders = [...shots].filter((shot) => shot.kind === 'boulder');
     expect(waves).toBe(4);
     expect(boulders).toHaveLength(9);
@@ -97,6 +101,7 @@ describe('the Rust Colossus in a fight', () => {
       if (i % 400 === 0) {
         game.player.x = colossus.x > 200 ? 20 : 380;
       }
+
       runTicks(game, 1);
       game.player.hp = game.player.maxHp;
       colossus.hp = Math.max(colossus.hp, 40);
@@ -105,6 +110,7 @@ describe('the Rust Colossus in a fight', () => {
         expect(colossus.walkDirection).toBe(1);
       }
     }
+
     expect([...used]).toEqual(expect.arrayContaining(['spikeCross', 'boulderLob', 'landslide']));
   });
 });

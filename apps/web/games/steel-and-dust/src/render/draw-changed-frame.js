@@ -8,7 +8,9 @@ export function drawChangedFrame(game, view) {
   if (loaded && view.drawnTick === game.tickCount) {
     return false;
   }
+
   view.drawnTick = loaded ? game.tickCount : null;
   renderFrame(game, view);
+
   return true;
 }

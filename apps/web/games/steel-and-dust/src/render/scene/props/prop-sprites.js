@@ -14,6 +14,7 @@ export function loadPropSprites({ createImage, baseUrl }) {
     image.src = `${baseUrl}${DIRECTORY}${sprite.file}`;
     sheets.images[kind] = image;
   }
+
   return sheets;
 }
 
@@ -25,6 +26,7 @@ export function drawPropSprite(painter, sheets, { kind, x, y }) {
   if (!sheets.ready[kind]) {
     return;
   }
+
   const { feetX, feetY } = PROP_SPRITES[kind];
   const image = sheets.images[kind];
   painter.context.drawImage(

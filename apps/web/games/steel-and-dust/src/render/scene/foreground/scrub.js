@@ -25,6 +25,7 @@ function drawBush(painter, x, { hash, colors, tick }) {
       const bend = (y / height) * (fan * 4 - 3 + shiver);
       painter.rect(x + i * 2 + bend, VIEW_HEIGHT - y - 2, 1, 2);
     }
+
     painter.rect(x + i * 2 + fan * 4 - 4 + shiver, VIEW_HEIGHT - height - 1, 2, 1);
   }
 }

@@ -34,11 +34,13 @@ function heroActions(game, begin) {
         continueAs(game, hero.id);
         return;
       }
+
       game.settings.hero = hero.id;
       game.io.saveSettings(game.settings);
       begin();
     };
   }
+
   return actions;
 }
 
@@ -67,10 +69,12 @@ function onlineActions({ game, menus, online, share }) {
       menus.panels.leaderboard.chooseTab();
       menus.open('leaderboard');
     },
+
     post() {
       menus.panels.post.reset();
       menus.open('post');
     },
+
     sendScore: () => online.post(game.lastRun, menus.panels.post.state.name),
     share: () => share(game.lastRun, online.rankOf(game.lastRun)),
   };
@@ -94,6 +98,7 @@ export function createMenuActions(services) {
     if (ui.isTouchOn() && fullscreen.supported && !fullscreen.isActive()) {
       fullscreen.enter();
     }
+
     startPlay(game);
   };
   const actions = {
@@ -107,20 +112,25 @@ export function createMenuActions(services) {
     fullscreen: () => fullscreen.toggle(),
     restart: () => restartRun(game),
     quit: () => quitToTitle(game),
+
     weapon() {
       cycleWeapon(game);
       menus.refresh();
     },
+
     arcade: leaveForArcade,
   };
+
   return function act(name) {
     const action = actions[name];
     if (!action) {
       return;
     }
+
     if (!QUIET_ACTIONS.has(name)) {
       audio.sfx('uiOk');
     }
+
     action();
   };
 }

@@ -39,10 +39,12 @@ function intro(pen, show, { tick }) {
 const SCENES = {
   intro,
   versus: drawVersus,
+
   menu: (pen, show, options) => {
     drawVersus(pen, show, options);
     drawMenu(pen, show, options);
   },
+
   wait: drawVersus,
   cutin: drawCutin,
   clash: drawClash,

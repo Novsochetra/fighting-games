@@ -14,6 +14,7 @@ export function blockHit(game, hit) {
     parryHit(game, hit);
     return attacker !== game.player;
   }
+
   const x = target.x + target.facing * 9 * target.scale;
   const y = target.y - 20 * target.scale;
   target.blockFlash = 10;
@@ -36,7 +37,9 @@ export function blockHit(game, hit) {
       attacker.vx = -attacker.facing * 1.3;
     }
   }
+
   game.floaters.push({ x, y: y - 8, text: 'block', color: COLORS.ice, time: 0 });
   showHint(game, 'shield');
+
   return true;
 }

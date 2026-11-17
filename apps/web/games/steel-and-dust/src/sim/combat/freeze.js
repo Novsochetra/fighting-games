@@ -5,12 +5,14 @@ export function freezeTarget(game, target, { duration, shatter = SHATTER_HIT }) 
   if (target.state === 'ko' || target.removed) {
     return;
   }
+
   const ticks = target.def.boss ? Math.round(duration / 2) : duration;
   const held = game.summons.find((summon) => summon.kind === 'ice' && summon.target === target);
   if (held) {
     held.duration = Math.max(held.duration, held.time + ticks);
     return;
   }
+
   target.frozen = true;
   target.hitShake = 0;
   target.hitstop = Math.max(target.hitstop, 2);

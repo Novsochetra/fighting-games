@@ -15,17 +15,21 @@ export function createLateImages() {
       waiting.push({ image: this, src: value, load: () => (super.src = value) });
     }
   }
+
   return {
     createImage: () => new LateImage(),
     waiting: () => waiting.map(({ src }) => src),
+
     loadAll() {
       waiting.splice(0).forEach(({ load }) => load());
     },
+
     loadWhere(match) {
       const arriving = waiting.filter(({ src }) => match(src));
       arriving.forEach((entry) => waiting.splice(waiting.indexOf(entry), 1));
       arriving.forEach(({ load }) => load());
     },
+
     failAll() {
       waiting.splice(0).forEach(({ image }) => image.onerror?.());
     },
@@ -41,5 +45,6 @@ export function createLateView() {
     createImage: images.createImage,
     baseUrl: '',
   });
+
   return { view, images, log: screen.recording.log };
 }

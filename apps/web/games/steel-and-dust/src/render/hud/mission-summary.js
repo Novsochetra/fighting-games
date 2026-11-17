@@ -36,13 +36,16 @@ function countColor({ value, since, color }) {
   if (!value) {
     return COLORS.none;
   }
+
   const sinceDone = since - countDoneAt(value);
+
   return sinceDone >= 0 && sinceDone < FLASH_TICKS ? COLORS.flash : color;
 }
 
 // the icon turns while its count rolls up
 function iconFrame(name, { value, since }) {
   const { frames, ticks } = LOOT_SPRITES[name];
+
   return value && since < countDoneAt(value) ? Math.floor(since / ticks) % frames : 0;
 }
 
@@ -51,6 +54,7 @@ function rowEntry(clearTime, row) {
   const since = clearTime - rowStartsAt(row);
   const pop = clamp(since / SUMMARY.popTicks, 0, 1);
   const lift = Math.round((1 - easeOutBack(pop)) * RISE);
+
   return { since, lift, alpha: clamp(since / FADE_TICKS, 0, 1) };
 }
 
@@ -68,6 +72,7 @@ function drawKind(painter, { sheets, clearTime, values }, row) {
   if (since < 0) {
     return;
   }
+
   const name = SUMMARY_KINDS[row];
   const value = values[row];
   painter.alpha(alpha);
@@ -88,6 +93,7 @@ function drawTakeSparkles(painter, sheets, { value, since }) {
   if (!value || age < 0 || age >= SPARKLE.frames * SPARKLE.ticks) {
     return;
   }
+
   const frame = Math.floor(age / SPARKLE.ticks);
   const y = SUMMARY_BOX.y + TAKE_ROW_Y + ICON_SIZE - 2;
   for (const side of [-1, 1]) {
@@ -101,6 +107,7 @@ function drawTake(painter, { sheets, clearTime, values }) {
   if (since < 0) {
     return;
   }
+
   const value = values[TOTAL_ROW];
   painter.alpha(alpha);
   drawCount(painter, sheets, {
@@ -121,6 +128,7 @@ export function drawMissionSummary(painter, game, view) {
   if (!game.clearTime || open < 0) {
     return;
   }
+
   const opacity = easeOutCubic(Math.min(1, open));
   const box = { ...SUMMARY_BOX, y: SUMMARY_BOX.y + Math.round((1 - opacity) * RISE) };
   drawSummaryPanel(painter, { box, opacity });

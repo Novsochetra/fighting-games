@@ -25,6 +25,7 @@ function keepWaiting(gate, progress, now, timing) {
   if (gate.waitingSince === null) {
     Object.assign(gate, { waitingSince: now, baseline: progress });
   }
+
   gate.settledAt = null;
   gate.progress = relativeProgress(progress, gate.baseline);
   if (!gate.shown && now - gate.waitingSince >= timing.graceMs) {
@@ -37,6 +38,7 @@ function stopWaiting(gate, now, timing) {
   if (!gate.shown) {
     return;
   }
+
   gate.settledAt ??= now;
   if (now - gate.shownAt >= timing.minShownMs && now - gate.settledAt >= timing.lingerMs) {
     gate.shown = false;
@@ -48,6 +50,7 @@ export function loaderPhase(gate) {
   if (gate.waitingSince !== null) {
     return gate.shown ? 'loading' : 'pending';
   }
+
   return gate.shown ? 'complete' : 'hidden';
 }
 
@@ -57,6 +60,7 @@ export function stepLoaderGate(gate, { waiting, progress, now }, timing = LOADER
   } else {
     stopWaiting(gate, now, timing);
   }
+
   return loaderPhase(gate);
 }
 

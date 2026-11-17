@@ -3,6 +3,7 @@ const SEGMENTS = 14;
 // a point on the curve from `from` to `to` that bows out through `control`
 function onCurve({ from, control, to }, share) {
   const rest = 1 - share;
+
   return {
     x: rest * rest * from.x + 2 * rest * share * control.x + share * share * to.x,
     y: rest * rest * from.y + 2 * rest * share * control.y + share * share * to.y,

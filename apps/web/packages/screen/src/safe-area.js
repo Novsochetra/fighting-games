@@ -8,8 +8,10 @@ export function createSafeArea(document, window) {
   const probe = document.createElement('div');
   probe.style.cssText = SAFE_AREA_PROBE;
   document.body.appendChild(probe);
+
   return () => {
     const style = window.getComputedStyle(probe);
+
     return {
       top: parseFloat(style.paddingTop) || 0,
       right: parseFloat(style.paddingRight) || 0,

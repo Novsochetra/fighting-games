@@ -20,6 +20,7 @@ export function presentTier(amount, { currency, locale }) {
   const tier = tierOf(amount);
   const next = nextTierOf(amount);
   const missing = next ? formatMoney(centsBetween(amount, next.min), { currency, locale }) : '';
+
   return {
     id: tier.id,
     label: `${tier.name} supporter`,

@@ -15,6 +15,7 @@ function glyphPixels(char) {
       }
     }
   }
+
   return pixels;
 }
 
@@ -22,10 +23,12 @@ function faceColor(letter, { x, y, row }) {
   if (letter.hot) {
     return TITLE_CARD_COLORS.hot;
   }
+
   const along = x + y - letter.shineFrom;
   if (letter.shine !== null && along <= letter.shine && along > letter.shine - SHINE_WIDTH) {
     return TITLE_CARD_COLORS.shine;
   }
+
   return TITLE_CARD_COLORS.face[row];
 }
 
@@ -44,10 +47,12 @@ export function drawCardLetter(painter, letter) {
   for (const block of blocks) {
     context.fillRect(block.x - 1, block.y - 1, block.size + 2, block.size + 2 + DEPTH);
   }
+
   context.fillStyle = TITLE_CARD_COLORS.depth;
   for (const block of blocks) {
     context.fillRect(block.x, block.y + DEPTH, block.size, block.size);
   }
+
   for (const block of blocks) {
     context.fillStyle = faceColor(letter, block);
     context.fillRect(block.x, block.y, block.size, block.size);

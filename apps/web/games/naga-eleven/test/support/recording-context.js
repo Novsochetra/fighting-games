@@ -13,6 +13,7 @@ export function createRecordingContext() {
         calls.push({ name, args });
       };
     },
+
     set(target, name, value) {
       target[name] = value;
       calls.push({ name, args: [value] });

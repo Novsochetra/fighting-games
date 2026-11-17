@@ -73,6 +73,7 @@ function fakeParam(value) {
   return Object.assign(param, {
     setValueAtTime: (eventValue, time) => record('set', eventValue, time),
     linearRampToValueAtTime: (eventValue, time) => record('linear', eventValue, time),
+
     exponentialRampToValueAtTime(eventValue, time) {
       if (eventValue <= 0) {
         throw new RangeError('an exponential ramp cannot reach 0');
@@ -134,6 +135,7 @@ function fakeSource(context, kind, params) {
 
   return Object.assign(source, {
     isSource: true,
+
     start(when = 0) {
       checkTime(when);
 

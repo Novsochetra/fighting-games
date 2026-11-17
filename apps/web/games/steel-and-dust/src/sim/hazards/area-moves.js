@@ -34,10 +34,12 @@ export function quake(game, attacker, move) {
     if (!canBeQuaked(target, attacker)) {
       continue;
     }
+
     const body = hurtBox(target);
     if (!body || overlaps(swing, body)) {
       continue;
     }
+
     const floor = floorUnder(game.terrain, target);
     addDust(game, { x: target.x, y: floor, count: 6 });
     if (applyHit(game, { attacker, target, move: launch, x: target.x, y: floor - 8 })) {
@@ -60,11 +62,13 @@ export function pullIn(game, attacker) {
     if (!canBePulled(target, attacker)) {
       continue;
     }
+
     const dx = attacker.x - target.x;
     if (Math.abs(dx) < 80 && Math.abs(dx) > 10) {
       nudge(game.terrain, target, Math.sign(dx) * 1.3);
     }
   }
+
   if (game.tickCount % 2 === 0) {
     const side = Math.random() < 0.5 ? -1 : 1;
     game.particles.push({

@@ -38,6 +38,7 @@ function sealRing(pen, { reach, near, far, glyph, dash = 0 }) {
     y: SEAL.y,
     radiusX: reach * SEAL.radius,
     radiusY: reach * SEAL.radius * SEAL.flat,
+
     pick: (angle) => {
       const light = lightOf(angle, glyph);
       const gap = dash && Math.floor(wrap(angle - glyph.spin) * dash) % 2 === 1;

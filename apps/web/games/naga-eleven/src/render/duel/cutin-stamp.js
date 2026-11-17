@@ -19,6 +19,7 @@ const OUTLINE = 4;
 const STAMPS = {
   duo: () => ({ text: 'DUO', art: TAG_ART.duo, km: SKILL_WORDS.duo }),
   chain: () => ({ text: 'CHAIN', art: TAG_ART.chain, km: SKILL_WORDS.chain }),
+
   finisher: (option, match) => {
     const level = finisherLevel(option, match);
 

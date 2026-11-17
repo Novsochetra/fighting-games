@@ -29,12 +29,15 @@ function trainingKeys(game, pressed) {
     game.settings.hitboxes = !game.settings.hitboxes;
     game.io.saveSettings(game.settings);
   }
+
   if (pressed.fillUlt && game.mode === 'play') {
     fillUlt(game);
   }
+
   if (game.mode !== 'play' || game.player.state === 'ko') {
     return;
   }
+
   for (const [key, id] of WEAPON_KEYS) {
     if (pressed[key]) {
       equipWeapon(game, id);
@@ -47,9 +50,11 @@ export function handleGlobalKeys(game) {
   if (pressed.pause) {
     pause(game);
   }
+
   if (pressed.mute) {
     toggleMute(game);
   }
+
   if (game.settings.training) {
     trainingKeys(game, pressed);
   }

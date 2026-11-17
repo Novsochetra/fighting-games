@@ -27,6 +27,7 @@ function fighterOn(fields) {
   game.terrain = ROAD;
   const fighter = createFighter('enemy', 'grunt', fields.x, GROUND_Y);
   Object.assign(fighter, fields);
+
   return { game, fighter };
 }
 

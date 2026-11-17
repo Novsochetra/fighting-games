@@ -15,6 +15,7 @@ function ironhornAt(distance, { missionIndex = 2, share = 1 } = {}) {
   Object.assign(ironhorn, { entering: false, x: 120 + distance, facing: -1 });
   ironhorn.ai.cooldown = 0;
   ironhorn.hp = share * ironhorn.maxHp;
+
   return { game, ironhorn };
 }
 

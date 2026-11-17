@@ -7,6 +7,7 @@ export function rockfallIndex(move, time) {
   const { count, every } = move.rockfall;
   const since = time - move.startup;
   const index = since / every;
+
   return since >= 0 && since % every === 0 && index < count ? index : -1;
 }
 

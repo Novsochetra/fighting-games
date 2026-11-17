@@ -42,6 +42,7 @@ function drawChain(painter, { from, to, sag, colors }) {
 
 function stakeOf(hash, i) {
   const bits = hash >>> (i * 4);
+
   return { height: 14 + (bits % 11), lean: (bits & 8 ? 1 : -1) * (1 + ((bits >>> 1) & 1)) };
 }
 

@@ -9,6 +9,7 @@ export function loadImage(url, createImage) {
   });
   image.src = url;
   const decoded = typeof image.decode === 'function' ? image.decode().catch(() => loaded) : loaded;
+
   return decoded.then(() => image);
 }
 
@@ -22,6 +23,7 @@ export function settleWithin(promise, ms, setTimer) {
     () => true,
     () => true,
   );
+
   return Promise.race([settled, delay(ms, setTimer).then(() => false)]);
 }
 
@@ -37,5 +39,6 @@ export function trackProgress(promises, onProgress) {
     onProgress(progressFraction(settled, promises.length));
   };
   onProgress(progressFraction(0, promises.length));
+
   return Promise.all(promises.map((promise) => Promise.resolve(promise).then(count, count)));
 }

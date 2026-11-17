@@ -163,6 +163,7 @@ describe('saving the controls laid out on the Skins screen of the real page', ()
       names.push(screen().querySelector('.layout-name').textContent);
       tool('next').click();
     }
+
     expect(names).toEqual(['ATTACK', 'HEAVY', 'JUMP', 'DASH', 'ULT', 'ATTACK']);
   });
 });

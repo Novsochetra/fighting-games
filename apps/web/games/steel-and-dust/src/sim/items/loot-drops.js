@@ -9,6 +9,7 @@ function purseDrop(game) {
   if (lootChance(game, RAIDER_DROP.gemChance)) {
     kinds.push('gem');
   }
+
   return kinds;
 }
 
@@ -18,6 +19,7 @@ function raiderKinds(game) {
   if (lootChance(game, RAIDER_DROP.appleChance)) {
     kinds.push('apple');
   }
+
   return kinds;
 }
 
@@ -33,5 +35,6 @@ export function dropLoot(game, enemy) {
     dropChest(game, { x: enemy.x, y: enemy.y, contents: chestContents(drop) });
     return;
   }
+
   spillPieces(game, { kinds: raiderKinds(game), x: enemy.x, y: middleY, spread: 1.5 });
 }

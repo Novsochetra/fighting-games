@@ -13,6 +13,7 @@ const LAYERS = [
 export function heatAt(tick, index) {
   const throb = Math.sin(tick * 0.035 + index * 2.1);
   const flicker = Math.sin(tick * 0.27 + index * 1.3) * 0.6 + Math.sin(tick * 0.71 + index) * 0.4;
+
   return Math.min(1, Math.max(0, 0.5 + throb * 0.35 + flicker * 0.15));
 }
 
@@ -37,5 +38,6 @@ export function drawGlow(painter, { effect, tick, cameraX, colors }) {
     const heat = heatAt(tick, spot.index);
     drawPool(painter, spot, { effect, heat, colors: colors.furnace });
   }
+
   painter.alpha(1);
 }

@@ -11,6 +11,7 @@ function settle(game, coin, ticks = 300) {
       bounces.push(tick);
     }
   }
+
   return bounces;
 }
 
@@ -25,8 +26,10 @@ describe('a loot piece falling', () => {
         peaks.push(lowest);
         lowest = GROUND_Y;
       }
+
       lowest = Math.min(lowest, coin.y);
     }
+
     expect(coin.landed).toBe(true);
     expect(coin.y).toBe(GROUND_Y);
     expect(coin.vx).toBe(0);
@@ -86,6 +89,7 @@ describe('a loot piece falling', () => {
         rolled.push(coin.x);
       }
     }
+
     expect(rolled.length).toBeGreaterThan(5);
     expect(rolled.at(-1) - rolled[0]).toBeGreaterThan(5);
     expect(coin).toMatchObject({ landed: true, rolling: false, vx: 0, y: GROUND_Y });

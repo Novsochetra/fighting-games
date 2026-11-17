@@ -10,9 +10,11 @@ function fillSmear(context, trail) {
   for (const step of trail) {
     context.lineTo(step.tipX, step.tipY);
   }
+
   for (let i = trail.length - 1; i >= 0; i--) {
     context.lineTo(trail[i].innerX, trail[i].innerY);
   }
+
   context.closePath();
   context.fill();
 }
@@ -23,6 +25,7 @@ export function drawTrail(painter, { fighter, sheet }) {
   if (trail.length < 2 || (isPlayer(fighter) && sheet.ready)) {
     return;
   }
+
   const context = painter.context;
   context.globalAlpha = 0.5;
   context.fillStyle = isPlayer(fighter)
@@ -34,5 +37,6 @@ export function drawTrail(painter, { fighter, sheet }) {
     const from = point(trail[i - 1].tipX, trail[i - 1].tipY);
     painter.use(COLORS.white).line(from, point(trail[i].tipX, trail[i].tipY), 1);
   }
+
   context.globalAlpha = 1;
 }

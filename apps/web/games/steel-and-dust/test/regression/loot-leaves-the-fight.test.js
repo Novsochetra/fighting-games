@@ -8,10 +8,12 @@ import { seededRandom } from '../support/seeded-random.js';
 const originalMath = { random: Math.random, sin: Math.sin, cos: Math.cos };
 const SWEEPS = {
   none: () => {},
+
   // coins and gems swept off the road the tick they land, so only the apples reach the hero
   money: (game) => {
     game.loot = game.loot.filter((piece) => piece.kind === 'apple');
   },
+
   // nothing reaches the hero: no coin, gem, apple or chest
   everything: (game) => {
     game.loot = [];
@@ -35,16 +37,19 @@ function play(scenario, sweep) {
     }
   };
   const { samples } = runScenario(driver, scenario);
+
   return { samples, fellAt, coins: game.coins };
 }
 
 function untilTheBossFalls(...runs) {
   const fellAt = Math.min(...runs.map((run) => run.fellAt));
+
   return runs.map((run) => run.samples.filter((sample) => sample.tick < fellAt));
 }
 
 function fight({ tick, mode, zone, wave, enemies, player, boss }) {
   const hero = { x: player.x, y: player.y, state: player.state, move: player.move, hp: player.hp };
+
   return { tick, mode, zone, wave, boss, enemies, hero };
 }
 

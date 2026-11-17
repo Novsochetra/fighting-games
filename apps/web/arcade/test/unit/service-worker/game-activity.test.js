@@ -6,6 +6,7 @@ function startActivity(onWait = () => {}) {
   const clock = { now: 0, waits: [] };
   const activity = createGameActivity({
     now: () => clock.now,
+
     wait: async (ms) => {
       clock.waits.push(ms);
       clock.now += ms;

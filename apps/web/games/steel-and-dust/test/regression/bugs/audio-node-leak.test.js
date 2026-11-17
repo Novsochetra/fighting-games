@@ -77,6 +77,7 @@ describe('a long session of runs', () => {
     for (let run = 0; run < 5; run++) {
       playRun(session);
     }
+
     game.mode = 'pause';
     game.clearTime = 1;
     advanceTo(context, session.time + 10);

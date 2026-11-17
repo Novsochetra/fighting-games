@@ -31,6 +31,7 @@ export async function createFixtureSite() {
     await mkdir(path.dirname(filePath), { recursive: true });
     await writeFile(filePath, contents);
   }
+
   return {
     webRoot: root,
     gamesRoot: path.join(root, 'games'),

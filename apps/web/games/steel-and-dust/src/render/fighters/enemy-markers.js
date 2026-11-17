@@ -8,6 +8,7 @@ export function drawWindupWarning(painter, fighter, tickCount) {
   if (fighter.state !== 'attack' || fighter.moveTime >= Math.min(12, move.startup)) {
     return;
   }
+
   drawText(painter, '!', {
     x: fighter.joints.head.x,
     y: fighter.joints.head.y - 12 * fighter.scale,
@@ -21,6 +22,7 @@ export function drawEnemyHealth(painter, fighter) {
   if (fighter.def.boss || fighter.hpBarTime <= 0 || fighter.state === 'ko') {
     return;
   }
+
   const x = Math.round(fighter.x - 10);
   const y = Math.round(fighter.y - 46);
   painter.use(COLORS.outline).rect(x - 1, y - 1, 22, 5);

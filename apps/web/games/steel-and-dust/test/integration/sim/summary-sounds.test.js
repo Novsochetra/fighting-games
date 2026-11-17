@@ -10,6 +10,7 @@ function clearWith(taken) {
   const io = {
     sfx: (key, big, options = {}) =>
       heard.push({ time: game.clearTime, mission: game.missionIndex, key, rate: options.rate }),
+
     announce: () => {},
   };
   const game = createTestGame({ io });
@@ -20,6 +21,7 @@ function clearWith(taken) {
   heard.length = 0;
   stageClear(game);
   runTicks(game, 600);
+
   return heard.filter((sound) => sound.mission === 0);
 }
 

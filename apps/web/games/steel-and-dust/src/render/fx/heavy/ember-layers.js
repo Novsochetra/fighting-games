@@ -34,6 +34,7 @@ function drawGroundFire(painter, { fighter, move, time, leanX }) {
   if (fighter.airborne || time >= move.startup || progress < GROUND_FROM) {
     return;
   }
+
   GROUND_FIRES.forEach((offset, i) => {
     drawFlame(painter.context, {
       x: fighter.x + offset * fighter.facing + leanX,
@@ -52,9 +53,11 @@ function clearOfFace(fighter, hand) {
   if (Math.abs(ahead) >= FACE_CLEAR || Math.abs(hand.y - face.y) >= FACE_CLEAR) {
     return hand;
   }
+
   if (ahead > 0) {
     return { x: face.x + fighter.facing * FACE_CLEAR, y: hand.y };
   }
+
   return { x: hand.x, y: face.y - FACE_CLEAR };
 }
 
@@ -72,6 +75,7 @@ function drawHandFire(painter, { fighter, move, time, leanX }) {
   if (time >= move.startup) {
     return;
   }
+
   const progress = progressOf(move, time);
   const hand = clearOfFace(fighter, handOf(fighter));
   const at = { x: hand.x + leanX, y: hand.y };

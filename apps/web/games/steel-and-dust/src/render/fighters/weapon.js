@@ -18,11 +18,13 @@ function sword(painter, { line, hand, crossX, crossY, ghost, colors }) {
     painter.alpha(0.3).use(ART.swordGlow).line(hand, line.tip, 5);
     painter.alpha(1);
   }
+
   painter.use(ghost ? colors.steel : ART.swordBlade).limb(hand, line.tip, 2, colors.outline);
   if (!ghost) {
     const edgeFrom = point(hand.x + line.dx * 3, hand.y + line.dy * 3);
     painter.use(ART.swordEdge).line(edgeFrom, point(line.tip.x - line.dx, line.tip.y - line.dy), 1);
   }
+
   const guardFrom = point(hand.x - crossX * 3, hand.y - crossY * 3);
   painter.use(colors.gold).line(guardFrom, point(hand.x + crossX * 3, hand.y + crossY * 3), 2);
 }

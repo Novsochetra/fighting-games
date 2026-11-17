@@ -28,15 +28,19 @@ export function cutsFrame(time) {
   if (time < poseTicks * 2) {
     return ['ult', Math.floor(time / poseTicks)];
   }
+
   if (time < passesAt) {
     return ['ult', BLAZE_FRAMES[Math.floor(time / BLAZE_TICKS) % BLAZE_FRAMES.length]];
   }
+
   if (time < leapAt) {
     return passFrame(time);
   }
+
   if (time < chopAt) {
     return ['ult', time < (leapAt + chopAt) / 2 ? 5 : 6];
   }
+
   return ['ult', time < chopAt + CHOP_TICKS ? 7 : 8];
 }
 
@@ -45,7 +49,9 @@ export function leapLift(time) {
   if (time <= leapAt || time >= chopAt) {
     return 0;
   }
+
   const progress = (time - leapAt) / (chopAt - leapAt);
+
   return leapHeight * 4 * progress * (1 - progress);
 }
 
@@ -71,10 +77,12 @@ function release(game, player) {
     if (summon.kind === 'hangingCut') {
       severCut(game, summon, { from: player, move: THOUSAND_CUTS.sever });
     }
+
     if (summon.kind === 'carving') {
       swingCarving(summon);
     }
   }
+
   const x = game.camera.x + VIEW_WIDTH / 2;
   const color = themeOf(game).blade;
   addScreenCut(game, { x, y: player.y - SCREEN_CUT_HEIGHT, angle: SCREEN_CUT_ANGLE, color });
@@ -88,6 +96,7 @@ function leap(game, player, time) {
   if (time === leapAt) {
     player.leapFrom = player.y;
   }
+
   player.y = player.leapFrom - leapLift(time);
   if (time % ECHO_EVERY === 0 && time < chopAt) {
     player.afterimages.push({
@@ -105,9 +114,11 @@ function runPasses(game, player, time) {
   if (time === passesAt) {
     startPasses(game, player);
   }
+
   if (time >= passesAt && time < PASSES_END) {
     runPass(game, player, time);
   }
+
   if (time === releaseAt) {
     release(game, player);
   }
@@ -120,13 +131,16 @@ export function runThousandCuts(game, player, time) {
   if (time >= poseTicks * 2 && time < passesAt && time % MOTE_EVERY === 0) {
     blaze(game, player);
   }
+
   runPasses(game, player, time);
   if (time >= leapAt && time <= chopAt) {
     leap(game, player, time);
   }
+
   if (time === chopAt) {
     splitGround(game, player);
   }
+
   if (time >= end) {
     player.cuts = null;
     finishUlt(player);

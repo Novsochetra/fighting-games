@@ -45,6 +45,7 @@ function drawChain(painter, x, { hash, colors, tick }) {
     painter.use(colors.chain).rect(linkX - (wide ? 1 : 0), link * LINK, wide ? 3 : 1, LINK + 1);
     painter.use(colors.chainLight).rect(linkX - (wide ? 1 : 0), link * LINK + 1, 1, 1);
   }
+
   const hookX = Math.round(x + swing);
   const hookY = links * LINK;
   painter.use(colors.chain).rect(hookX - 1, hookY, 3, 2);

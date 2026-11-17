@@ -31,8 +31,10 @@ export function spawnPiece(game, piece) {
     if (LOOT_VALUES[piece.kind].coins) {
       addToPurse(game, piece.kind);
     }
+
     return;
   }
+
   game.loot.push(createPiece(game, piece));
 }
 

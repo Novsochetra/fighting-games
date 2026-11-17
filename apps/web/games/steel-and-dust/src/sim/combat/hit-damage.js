@@ -4,6 +4,7 @@ import { isPlayer } from '../fighters/loadout.js';
 
 function enemyDamage(target, move) {
   const damage = move.damage * (target.move?.exposed ? 2 : 1);
+
   return move.ultimate && target.def.boss ? ultDamageToBoss(damage) : damage;
 }
 

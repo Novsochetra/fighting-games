@@ -34,6 +34,7 @@ export const rayReach = (time) => Math.min(1, (time + RAY_LEAD + 1) / SHOOT_TICK
 export function rayMotes(time) {
   const since = time + RAY_LEAD;
   const reach = rayReach(time);
+
   return Array.from({ length: MOTES }, (_, i) => (since * MOTE_SPEED + i / MOTES) % 1).filter(
     (share) => share <= reach,
   );
@@ -45,6 +46,7 @@ function stepsOf(from, to) {
   const dx = to.x - from.x;
   const dy = to.y - from.y;
   const major = Math.max(Math.abs(dx), Math.abs(dy), PIXEL);
+
   return {
     from,
     dx,
@@ -73,6 +75,7 @@ function drawBand(context, { line, steps, widthAt, color }) {
       fills.add(snap(at.x - PIXEL / 2) - extra, snap(at.y), across, PIXEL);
     }
   }
+
   fills.flush();
 }
 
@@ -112,5 +115,6 @@ export function drawGazeRay(painter, pillar) {
   for (const share of rayMotes(pillar.time)) {
     drawMote(context, stepAt(line, Math.round(line.count * share)));
   }
+
   context.globalAlpha = 1;
 }

@@ -19,6 +19,7 @@ describe('taps on the canvas', () => {
       addEventListener: (type, listener) => {
         listeners[type] = listener;
       },
+
       getBoundingClientRect: () => ({ left: 0, top: 0, width: VIEW.width, height: VIEW.height }),
     };
     const taps = [];

@@ -16,11 +16,13 @@ const DUST_TICKS = 8;
 
 function cardLines(text) {
   const upper = text.toUpperCase();
+
   return upper.length > LINE_LENGTH ? upper.split(' ') : [upper];
 }
 
 function lineLetters(line, y) {
   const left = VIEW_WIDTH / 2 - Math.floor(textWidth(line, SCALE) / 2);
+
   return [...line]
     .map((char, i) => ({ char, x: left + i * 4 * SCALE, y }))
     .filter((letter) => letter.char !== ' ');
@@ -36,6 +38,7 @@ export function layoutCard(text) {
     lineLetters(line, top + i * (GLYPH_HEIGHT + LINE_GAP)),
   );
   const left = Math.min(...letters.map((letter) => letter.x));
+
   return { letters, top, left, bottom: top + height, scale: SCALE };
 }
 
@@ -44,6 +47,7 @@ function drawStrikeDust(painter, { x, y }, sinceHit) {
   if (sinceHit < 0 || sinceHit >= DUST_TICKS) {
     return;
   }
+
   const spread = 2 + sinceHit * 2;
   const size = sinceHit < DUST_TICKS / 2 ? 2 : 1;
   const top = y + GLYPH_HEIGHT - Math.floor(sinceHit / 2) - size;

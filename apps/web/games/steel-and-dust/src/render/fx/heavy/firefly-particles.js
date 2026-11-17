@@ -10,12 +10,15 @@ function bugLevel(particle, age) {
   if (particle.joining) {
     return age < 2 ? 0 : 1;
   }
+
   if (age < 3) {
     return 2;
   }
+
   if (particle.life < particle.maxLife * 0.3) {
     return 0;
   }
+
   return flicker(particle.seed, Math.floor(age / 3)) > 0.3 ? 1 : 0;
 }
 
@@ -23,6 +26,7 @@ function bugFade(particle, age) {
   if (particle.joining) {
     return Math.min((age + 1) / 2, particle.life / 2);
   }
+
   return (particle.life / particle.maxLife) * 3.5;
 }
 
@@ -49,6 +53,7 @@ function fireflyGlint(painter, particle) {
     fineRect(context, { x: x - 1, y: y + 0.25, width: 3, height: PIXEL });
     fineRect(context, { x: x + 0.25, y: y - 1, width: PIXEL, height: 3 });
   }
+
   painter.alpha(1);
 }
 
@@ -88,9 +93,11 @@ function fireflyFlash(painter, particle) {
   if (age < 3) {
     drawCross(painter, { x, y, particle, grow: [0.7, 1, 0.6][age] });
   }
+
   if (age >= 1) {
     drawScatter(painter, { x, y, size: particle.size, age });
   }
+
   painter.alpha(1);
 }
 

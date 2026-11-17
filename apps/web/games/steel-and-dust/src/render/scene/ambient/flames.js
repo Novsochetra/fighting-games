@@ -35,6 +35,7 @@ function tongueRow(spot, { row, height, size, tick }) {
   const progress = row / height;
   const width = Math.max(1, Math.round(size * 0.7 * (1 - progress * progress)));
   const lean = Math.round(Math.sin(tick * 0.27 - row * 0.7 + spot.index * 2.3) * progress * 1.6);
+
   return { x: Math.round(spot.x - width / 2) + lean, y: spot.y - row - 1, width };
 }
 
@@ -46,6 +47,7 @@ function drawTongue(painter, spot, { size, flicker, tick, colors }) {
     if (!isOnScreen(slice.x, slice.y, slice.width)) {
       continue;
     }
+
     painter.use(row > height * 0.55 ? outer : middle).rect(slice.x, slice.y, slice.width, 1);
     if (slice.width > 4 && row < height * 0.35) {
       painter.use(core).rect(slice.x + 2, slice.y, slice.width - 4, 1);
@@ -61,5 +63,6 @@ export function drawFlames(painter, { effect, tick, cameraX, colors }) {
     painter.alpha(0.75);
     drawTongue(painter, spot, { size, flicker, tick, colors: colors.flame });
   }
+
   painter.alpha(1);
 }

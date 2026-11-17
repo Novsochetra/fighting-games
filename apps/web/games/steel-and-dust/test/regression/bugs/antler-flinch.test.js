@@ -41,6 +41,7 @@ const WEAPON_PART = 12;
 
 function antlerSheet(strip) {
   const image = readPngAlpha(new URL(stripPath(ANTLER, strip), GAME));
+
   return { image, height: image.height / WEAPON_IDS.length, frames: HERO_SPRITES.frames[strip] };
 }
 
@@ -48,6 +49,7 @@ function pixelAt({ image, height }, weapon, { x, y }) {
   const at = [x, WEAPONS[weapon].spriteRow * height + y];
   const rgb = image.rgb(...at);
   const hex = rgb.map((value) => value.toString(16).padStart(2, '0')).join('');
+
   return { drawn: image.alpha(...at) > 0, rgb, hex };
 }
 
@@ -70,6 +72,7 @@ function recolored(sheet, weapon, frame) {
     pixels +=
       isTeal(pixelAt(sheet, 'sword', at)) && now.drawn && SMEAR[weapon].has(now.hex) ? 1 : 0;
   });
+
   return pixels;
 }
 
@@ -83,12 +86,14 @@ function weaponAndBody(sheet, weapon, frame) {
     held[index] = now.drawn && (!bare.drawn || now.hex !== bare.hex) && !SMEAR[weapon].has(now.hex);
     body[index] = bare.drawn && !held[index] && Math.max(...bare.rgb) < DARK;
   });
+
   return { held, body, height: sheet.height };
 }
 
 function neighbors(index, height) {
   const [x, y] = [index % frameWidth, Math.floor(index / frameWidth)];
   const around = [-1, 0, 1].flatMap((dy) => [-1, 0, 1].map((dx) => [x + dx, y + dy]));
+
   return around
     .filter(([nx, ny]) => nx >= 0 && ny >= 0 && nx < frameWidth && ny < height)
     .map(([nx, ny]) => ny * frameWidth + nx);
@@ -102,6 +107,7 @@ function partFrom(mask, start, height) {
     next.forEach((index) => (mask[index] = 0));
     part.push(...next);
   }
+
   return part;
 }
 
@@ -115,6 +121,7 @@ function loosePieces(sheet, weapon, frame) {
       loose.push(part.length);
     }
   }
+
   return loose;
 }
 

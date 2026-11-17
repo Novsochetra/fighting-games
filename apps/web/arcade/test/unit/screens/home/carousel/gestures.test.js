@@ -24,6 +24,7 @@ describe('createWheelStepper', () => {
   const setup = () => {
     let time = 0;
     const feed = createWheelStepper({ now: () => time });
+
     return { feed, wait: (ms) => (time += ms) };
   };
 

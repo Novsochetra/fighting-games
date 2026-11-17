@@ -12,6 +12,7 @@ describe('the pixel font', () => {
     for (const css of stylesheets) {
       expect(css).not.toContain('var(--font-body)');
     }
+
     expect(readFileSync(new URL('page.css', STYLES), 'utf8')).toMatch(
       /body \{\s*font-family: var\(--font-display\);/,
     );

@@ -57,12 +57,14 @@ describe('the sun glow on stamps', () => {
     const made = [];
     const painter = createPainter(context, () => {
       made.push(new RecordingCanvas());
+
       return made.at(-1);
     });
     const ticks = ticksUpTo(1200, 1);
     for (const tick of ticks) {
       drawSunGlow(painter, { effect: GLOW, tick, colors });
     }
+
     // five halos, each at the three sizes of a breath
     expect(made.length).toBeLessThanOrEqual(15);
     expect(log.some((call) => call.startsWith('fillRect('))).toBe(false);

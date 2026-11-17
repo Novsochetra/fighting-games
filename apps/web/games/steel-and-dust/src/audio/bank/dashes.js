@@ -31,11 +31,13 @@ function swirl(track, pitch) {
   const body = { length: 0.26, peak: 0.06, level: 0.5 };
   hush(track, { ...body, from: 400 * pitch, top: 1500 * pitch, to: 500 * pitch });
   whomp(track, { from: 100 * pitch, to: 55, seconds: 0.1, attack: 0.01, decay: 0.1, level: 0.3 });
+
   return { lowpass: 3800 };
 }
 
 function buildDash(track, pitch) {
   pushOff(track, pitch);
+
   return swirl(track, pitch);
 }
 

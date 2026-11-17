@@ -8,6 +8,7 @@ import { createLootGame, soundKeys, spawnEnemy } from '../../support/loot-game.j
 function gameWithKegs(...xs) {
   const { game, sounds } = createLootGame();
   game.kegs = createKegs(xs.map((x) => ({ x, y: game.player.y })));
+
   return { game, sounds, kegs: game.kegs };
 }
 

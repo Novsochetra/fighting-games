@@ -17,9 +17,11 @@ const TIP = 0.28;
 // half widths, in screen pixels, of a flame tongue's rows from its tip down to its foot
 export function flameRows(rows) {
   const widest = Math.max(1, rows * 0.26);
+
   return Array.from({ length: rows }, (_, row) => {
     const share = (row + 0.5) / rows;
     const reach = share < WIDEST ? Math.sqrt(share / WIDEST) : 1 - (share - WIDEST) * 1.8;
+
     return Math.max(0, Math.round(widest * reach - 0.35));
   });
 }
@@ -38,6 +40,7 @@ function drawRow(context, { middle, top, half, down, cool }) {
     if (down < band.from) {
       return;
     }
+
     const tipped = band.step === 3 && down < TIP ? 4 : band.step;
     context.fillStyle = colorAt(tipped, cool);
     span(context, { middle, top, half: Math.floor(half * band.share) });

@@ -13,20 +13,24 @@ export function createLoader(element, now) {
     const progress = boot.done ? (scene ?? 1) : boot.progress;
     view.render(stepLoaderGate(gate, { waiting, progress, now: time }), loaderPercent(gate));
   };
+
   return {
     update,
     showWords: view.showWords,
+
     bootProgress(fraction, time) {
       if (!boot.done) {
         boot.progress = fraction;
         update(time, null);
       }
     },
+
     // the screen comes down on the next update, from the game's own frame loop, so it never lifts
     // before the game has built its title
     bootDone() {
       boot.done = true;
     },
+
     phase: () => loaderPhase(gate),
   };
 }

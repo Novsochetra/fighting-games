@@ -15,6 +15,7 @@ function isArcadePage(referrer, arcade) {
 // again started it over behind a loading notice and grew the history a step.
 export function createArcadeExit({ location, history, referrer }) {
   const arcade = new URL(ARCADE_ADDRESS, location.href);
+
   return function leaveForArcade() {
     if (history.length > 1 && isArcadePage(referrer, arcade)) {
       history.back();

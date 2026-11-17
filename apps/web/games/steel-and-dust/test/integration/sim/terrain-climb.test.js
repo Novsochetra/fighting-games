@@ -14,6 +14,7 @@ function raiderAt(game, kind, { x, y }) {
   const raider = game.fighters.filter((fighter) => fighter.side === 'enemy').at(-1);
   raider.entering = false;
   placeFighter(game, raider, { x, y });
+
   return raider;
 }
 
@@ -21,6 +22,7 @@ function raiderAt(game, kind, { x, y }) {
 function walker(game, x) {
   const raider = raiderAt(game, 'grunt', { x });
   Object.assign(raider.ai, { cooldown: 999, spacing: 20 });
+
   return raider;
 }
 
@@ -28,6 +30,7 @@ function attacker(game, x) {
   const raider = raiderAt(game, 'grunt', { x });
   raider.ai.cooldown = 0;
   takeToken(game, raider);
+
   return raider;
 }
 
@@ -40,8 +43,10 @@ function watchTakeOffs(game, raider, ticks, each = () => {}) {
     if (!from.airborne && raider.airborne) {
       takeOffs.push({ tick: i, x: from.x });
     }
+
     each(raider);
   }
+
   return takeOffs;
 }
 
@@ -73,6 +78,7 @@ describe('a melee raider and the hero on different levels', () => {
       if (raider.state === 'attack') {
         swingHeights.add(raider.y);
       }
+
       if (raider.airborne) {
         frames.push(enemySpriteFrame(raider)[0]);
       }

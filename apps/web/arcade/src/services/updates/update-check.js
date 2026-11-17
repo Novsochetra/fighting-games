@@ -36,6 +36,7 @@ export function createUpdateCheck({ version, fetch, root, workers, document, sig
 
   return {
     isReady: () => state.isReady,
+
     subscribe(listener) {
       listeners.add(listener);
 

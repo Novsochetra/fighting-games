@@ -9,6 +9,7 @@ import { renderProgress } from '../parts/xp-meter.js';
 // screen it opened over
 export const HERO_SCREEN = {
   side: true,
+
   render(section, { data, view }) {
     const hero = data.hero ?? heroAtLevel(1);
     const stats = STATS.map(([stat, key]) => ({ stat, key, value: hero.stats?.[stat] ?? 0 }));

@@ -18,6 +18,7 @@ function fortress({ gap = 150, hp } = {}) {
   Object.assign(ox, { entering: false, x: game.player.x + gap, facing: -1 });
   ox.hp = hp ?? ox.maxHp;
   ox.ai.cooldown = 9999;
+
   return { game, ox };
 }
 
@@ -30,6 +31,7 @@ function playOut(game, ox, ticks, everyTick = () => {}) {
     ox.ai.cooldown = 9999;
     states.add(game.player.state);
   }
+
   return states;
 }
 
@@ -153,6 +155,7 @@ describe('the Warden Ox in a fight', () => {
       if (moves.at(-1) !== ox.move?.id) {
         moves.push(ox.move?.id);
       }
+
       xs.push(ox.x);
     });
     expect(moves.filter(Boolean)).toEqual(['executionersRound', 'roundBack', 'roundCleave']);
@@ -171,9 +174,11 @@ describe('the Warden Ox in a fight', () => {
           dash(game, game.player, 1);
           dashed = true;
         }
+
         runTicks(game, 1);
         ox.ai.cooldown = 9999;
       }
+
       expect(game.player.hp < hp, dashes ? 'dashing' : 'standing').toBe(!dashes);
     }
   });

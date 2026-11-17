@@ -23,6 +23,7 @@ function payingDrop(game, raider) {
     game.loot = [];
     dropLoot(game, raider);
   }
+
   return kindsOf(game);
 }
 
@@ -53,6 +54,7 @@ describe('loot a fallen raider drops', () => {
       tally.gems += count(kinds, 'gem');
       tally.apples += count(kinds, 'apple');
     }
+
     expect(tally.paid / drops).toBeCloseTo(RAIDER_DROP.chance, 1);
     expect(tally.gems / drops).toBeCloseTo(RAIDER_DROP.chance * RAIDER_DROP.gemChance, 1);
     expect(tally.apples / drops).toBeCloseTo(RAIDER_DROP.appleChance, 1);
@@ -67,6 +69,7 @@ describe('loot a fallen raider drops', () => {
       dropLoot(game, raider);
       empty += game.loot.length === 0 ? 1 : 0;
     }
+
     expect(empty).toBeGreaterThan(80);
   });
 
@@ -78,6 +81,7 @@ describe('loot a fallen raider drops', () => {
         dropLoot(game, spawnEnemy(game, 'grunt', 120 + i * 10));
       }
     }
+
     expect(first.loot).toEqual(second.loot);
   });
 
@@ -92,6 +96,7 @@ describe('a road full of loot', () => {
   function fullRoad() {
     const { game } = createLootGame();
     game.loot = Array.from({ length: MAX_LOOT }, () => lootPiece({}));
+
     return game;
   }
 

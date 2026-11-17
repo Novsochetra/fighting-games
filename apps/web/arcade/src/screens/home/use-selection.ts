@@ -34,6 +34,7 @@ export function useSelection(cards: GameCard[]) {
   return {
     selection,
     selected: selection?.index ?? -1,
+
     select(index: number, { cue = false, focus = null }: SelectOptions = {}) {
       if (!selection || !isInRange(index)) {
         return false;

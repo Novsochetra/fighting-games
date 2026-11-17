@@ -20,6 +20,7 @@ function lionPath() {
       path.push({ y: lion.y, airborne: groundAt(game.terrain, lion.x) - lion.y > 1 });
     }
   }
+
   return path;
 }
 

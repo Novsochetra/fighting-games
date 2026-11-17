@@ -57,6 +57,7 @@ describe.each(Object.entries(SAMPLE_EFFECTS))('the %s effect', (_kind, effect) =
     for (const tick of ticksUpTo(600, 50)) {
       recordEffect(effect, { tick, cameraX: tick });
     }
+
     expect(random).not.toHaveBeenCalled();
   });
 
@@ -105,6 +106,7 @@ describe('drawAmbientEffect', () => {
   const drawOne = (effect, colors = ALL_COLORS) => {
     const { context, log } = createRecordingContext(null);
     drawAmbientEffect(createPainter(context), { effect, ...BUSY, colors });
+
     return log;
   };
 

@@ -40,6 +40,7 @@ function fakePage(navigator) {
     setTimeout: (callback) => timers.push(callback),
   };
   const runTimers = () => timers.splice(0).forEach((callback) => callback());
+
   return { window, document, link, runTimers };
 }
 

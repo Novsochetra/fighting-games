@@ -22,6 +22,7 @@ function gridView() {
     baseUrl: '',
   });
   context.setTransform(RENDER_SCALE, 0, 0, RENDER_SCALE, 0, 0);
+
   return { view, painter: view.painter, misses, counts };
 }
 
@@ -39,7 +40,9 @@ function lootyGame() {
   for (let i = 0; i < 6; i++) {
     knockOut(game, spawnEnemy(game, 'grunt', game.player.x + 12 + i * 33), 1);
   }
+
   knockOut(game, spawnEnemy(game, 'brute', game.player.x + 150), 1);
+
   return game;
 }
 
@@ -51,6 +54,7 @@ describe('loot on the pixel grid', () => {
       updateLoot(game);
       drawLoot(painter, { game, view });
     }
+
     expect(misses).toEqual([]);
     expect(counts.draws).toBeGreaterThan(3000);
   });
@@ -64,6 +68,7 @@ describe('loot on the pixel grid', () => {
       game.loot = loot;
       const before = counts.draws;
       drawGroundLoot(painter, { game, sheets: view.lootSheets, cameraX: 0 });
+
       return counts.draws - before;
     };
     const one = drawsFor([near]);

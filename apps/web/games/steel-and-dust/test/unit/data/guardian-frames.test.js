@@ -46,6 +46,7 @@ function differingRows(first, second, { fromRow = 0, read = pixelAt } = {}) {
       }
     }
   }
+
   return rows;
 }
 
@@ -75,6 +76,7 @@ describe("the Bayon Guardian's frames", () => {
     for (let tick = 0; tick < moveLength(move); tick++) {
       shown.add(timelineFrame(move, tick));
     }
+
     const strip = sprite.strips.fourFaces.frames;
     expect([...shown]).toEqual(Array.from({ length: strip }, (_, frame) => frame));
   });

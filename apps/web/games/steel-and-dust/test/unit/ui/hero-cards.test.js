@@ -24,6 +24,7 @@ function rowMismatches(card, source) {
       wrong += same ? 0 : 1;
     }
   }
+
   return wrong;
 }
 const LOOPS = KHMER.flatMap((hero) => [
@@ -155,6 +156,7 @@ describe('the hero select cards', () => {
     const feet = (frame) =>
       Array.from({ length: FEET_ROWS * FRAME.width }, (_, at) => {
         const x = frame * FRAME.width + (at % FRAME.width);
+
         return strip.alpha(x, FEET_LINE - Math.floor(at / FRAME.width)) > 0;
       });
     const line = (frame, y) =>

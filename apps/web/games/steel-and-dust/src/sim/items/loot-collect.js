@@ -10,6 +10,7 @@ const PURSE_BUMP = 10;
 // each coin in a quick run rings a step higher up the scale, up to its top
 export function streakRate(streak) {
   const { scale } = COIN_STREAK;
+
   return 2 ** (scale[Math.min(streak, scale.length - 1)] / 12);
 }
 

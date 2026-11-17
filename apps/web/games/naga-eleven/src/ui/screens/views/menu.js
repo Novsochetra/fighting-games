@@ -21,5 +21,6 @@ export const MENU_SCREEN = {
     setSlot(section, 'continue-note', note ? view.sayWith('continueNote', note) : '');
     markAsk(actionButton(section, 'new-story'), saved);
   },
+
   back: () => true,
 };

@@ -6,6 +6,7 @@ const WAVE = 6;
 
 function waveAt(column, band) {
   const swell = 0.6 * Math.sin(column * 0.55 + band * 2.1) + 0.4 * Math.sin(column * 0.21 + band);
+
   return Math.round(((swell + 1) / 2) * WAVE);
 }
 
@@ -21,6 +22,7 @@ function drawBand(painter, { band, effect, tick, cameraX }) {
   if (bottom > top + WAVE) {
     painter.rect(0, top + WAVE, VIEW_WIDTH, bottom - top - WAVE);
   }
+
   for (let i = 0; i <= VIEW_WIDTH / STEP; i++) {
     const wave = waveAt(firstColumn + i, band);
     if (wave < WAVE) {
@@ -34,5 +36,6 @@ export function drawMist(painter, { effect, tick, cameraX, colors }) {
   for (let band = 0; band < BANDS; band++) {
     drawBand(painter, { band, effect, tick, cameraX });
   }
+
   painter.alpha(1);
 }

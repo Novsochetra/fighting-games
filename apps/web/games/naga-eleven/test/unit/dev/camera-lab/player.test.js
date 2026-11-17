@@ -16,6 +16,7 @@ function counting() {
       step: () => {
         ticks += 1;
       },
+
       isDone: () => ticks >= STAGES.length,
       stage: () => STAGES[Math.max(0, ticks - 1)],
       stageTicks: () => ticks,

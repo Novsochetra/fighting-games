@@ -18,6 +18,7 @@ function place(card, { slot, from }) {
     card.getBoundingClientRect();
     card.classList.remove('wrap');
   }
+
   setSlot(card, slot);
 }
 
@@ -25,5 +26,6 @@ function place(card, { slot, from }) {
 export function turnCarousel(cards, center, previous) {
   const placed = nextSlots(previous, center, cards.length);
   placed.forEach((spot, index) => place(cards[index], spot));
+
   return placed.map((spot) => spot.slot);
 }

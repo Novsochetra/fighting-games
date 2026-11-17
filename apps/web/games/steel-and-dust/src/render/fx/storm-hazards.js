@@ -22,9 +22,11 @@ function devilFrame(devil) {
   if (devil.time < DEVIL_GROW) {
     return Math.floor(devil.time / (DEVIL_GROW / 3));
   }
+
   if (devil.time < devil.endAt) {
     return 3 + (Math.floor((devil.time - DEVIL_GROW) / DEVIL_SPIN_TICKS) % 3);
   }
+
   return Math.min(7, 6 + Math.floor((devil.time - devil.endAt) / (DEVIL_FADE / 2)));
 }
 
@@ -43,6 +45,7 @@ export function drawStrikeMark(painter, strike) {
   if (strike.time >= strike.warn) {
     return;
   }
+
   const fast = strike.warn - strike.time < 16;
   const lit = (strike.time >> (fast ? 1 : 2)) & 1;
   const x = strike.x - strike.half;
@@ -58,6 +61,7 @@ export function drawStormStrike(painter, strike, sheets) {
   if (strike.time < strike.warn) {
     return;
   }
+
   drawFxFrame(painter, sheets, {
     name: 'thunder',
     frame: fxFrameAt('thunder', strike.time - strike.warn),

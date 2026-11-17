@@ -17,6 +17,7 @@ function gameWithRaider() {
   Object.assign(raider, { entering: false, x: game.player.x + 80, state: 'idle', hp: 200 });
   raider.maxHp = 200;
   raider.ai.cooldown = 999;
+
   return { game, raider };
 }
 

@@ -20,11 +20,13 @@ function act(game, player, intent) {
     startGroundAttack(game, player, intent);
     return;
   }
+
   if (buffer.action === 'jump') {
     jumpOrDrop(game, player, intent);
   } else if (buffer.action === 'dash') {
     dash(game, player, dashDirection(buffer, direction, player));
   }
+
   consumeBuffer(game);
 }
 
@@ -44,11 +46,13 @@ export function thinkSquat(game, player, { buffer, direction }) {
   if (direction) {
     player.jumpDirection = direction;
   }
+
   const id = { heavy: 'UK', light: 'UL' }[buffer?.action];
   if (id) {
     if (direction) {
       player.facing = direction;
     }
+
     startHeroMove(game, player, id);
     consumeBuffer(game);
   }

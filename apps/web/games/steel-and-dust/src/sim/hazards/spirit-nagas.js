@@ -78,10 +78,12 @@ export function burstSerpent(game, rise) {
     const x = rise.x + (((rise.time >> 2) % 5) - 2) * 5;
     addSparks(game, { x, y: rise.y - 2, count: 1, color: FX_COLORS.foam, speed: 1 });
   }
+
   if (rise.time === rise.warn) {
     shake(game, 6, 20);
     addBurst(game, { sprite: 'splash', x: rise.x, y: rise.y, scale: 1.4, behind: true });
     game.io.sfx('splash', false, { vol: 1, x: rise.x });
   }
+
   rise.dead = rise.time >= rise.warn + fxLength('serpentRise');
 }

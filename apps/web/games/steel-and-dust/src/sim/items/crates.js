@@ -30,6 +30,7 @@ export function breakCrate(game, crate) {
       color: i % 3 ? COLORS.crateWood : COLORS.crateDark,
     });
   }
+
   game.pickups.push({
     x: crate.x,
     y: crate.y - 12,

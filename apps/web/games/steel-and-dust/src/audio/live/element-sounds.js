@@ -5,6 +5,7 @@ function zap(live, start) {
   for (let i = 0; i < 5; i++) {
     click(live, { start: start + i * 0.018, volume: 0.12, frequency: 2500 });
   }
+
   blip(live, { start, frequency: 1180, duration: 0.18, volume: 0.05, wave: 'sawtooth' });
   const crackle = { type: 'highpass', from: 3000, to: 1500, resonance: 1.2 };
   hiss(live, { start, ...crackle, attack: 0.005, duration: 0.25, volume: 0.06 });

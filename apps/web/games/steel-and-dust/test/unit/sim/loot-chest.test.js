@@ -10,6 +10,7 @@ const CONTENTS = ['coin', 'coin', 'gem', 'apple'];
 function chestGame(x = 200) {
   const { game, sounds } = createLootGame();
   dropChest(game, { x, y: GROUND_Y, contents: CONTENTS });
+
   return { game, sounds, chest: game.chests[0] };
 }
 
@@ -50,6 +51,7 @@ describe('a boss chest', () => {
       frames.add(chest.frame);
       updateChests(game);
     }
+
     expect([...frames].sort()).toEqual([CHEST_FRAMES.closed, CHEST_FRAMES.rattle]);
   });
 

@@ -12,6 +12,7 @@ const continuesColumn = (run, rect) =>
 
 function join(run, rect) {
   const row = continuesRow(run, rect);
+
   return {
     x: Math.min(run.x, rect.x),
     y: Math.min(run.y, rect.y),
@@ -26,19 +27,23 @@ export function createRunFill(context) {
     if (run) {
       context.fillRect(run.x, run.y, run.width, run.height);
     }
+
     run = null;
   };
   const add = (x, y, width, height) => {
     if (width <= 0 || height <= 0) {
       return;
     }
+
     const rect = { x, y, width, height };
     if (run && (continuesRow(run, rect) || continuesColumn(run, rect))) {
       run = join(run, rect);
       return;
     }
+
     flush();
     run = rect;
   };
+
   return { add, flush };
 }

@@ -16,6 +16,7 @@ export const gatherShare = (face) =>
 // how far out from the mouth each mote still is, as a share of where it set out from
 export function moteDistances(face) {
   const share = gatherShare(face);
+
   return Array.from({ length: MOTES }, (_, i) => 1 - ((share / MOTE_SHARE + i / MOTES) % 1));
 }
 

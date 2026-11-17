@@ -106,5 +106,6 @@ export const SCHOOL_YARD = {
     paintSchool(raster);
     paintKids(raster);
   },
+
   overlay: (context, tick) => drawFlag(context, { ...FLAG, colors: art.flag, tick }),
 };

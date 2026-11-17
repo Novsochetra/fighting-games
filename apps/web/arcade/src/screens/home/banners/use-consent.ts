@@ -21,6 +21,7 @@ export function useConsent() {
     canAskAgain: analytics.isEnabled(),
     allow: answer(analytics.allow),
     refuse: answer(analytics.refuse),
+
     askAgain() {
       setShown(true);
       sound.play('sheetOpen');

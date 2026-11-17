@@ -20,6 +20,7 @@ export function surfaceRuns(surfaceAt, from, to) {
       runs.push({ x, width: 1, y });
     }
   }
+
   return runs;
 }
 
@@ -30,10 +31,12 @@ function drawSoilRun(painter, { x, width, y }, colors) {
   for (let column = x + (x % 2); column < x + width; column += 2) {
     painter.rect(column, y + TOP_SOIL - 1, 1, 1);
   }
+
   painter.use(colors.soilDeep).rect(x, y + DEEP_SOIL, width, VIEW_HEIGHT - y - DEEP_SOIL);
   for (let column = x + (x % 2); column < x + width; column += 2) {
     painter.rect(column, y + DEEP_SOIL - 1, 1, 1);
   }
+
   painter.use(colors.grassDark).rect(x, y, width, 1);
   painter.use(colors.lip).rect(x, y + 1, width, 1);
 }
@@ -73,8 +76,10 @@ function drawTextureRun(painter, { image, top }, { run, deep, shadow }) {
       const rest = VIEW_HEIGHT - bottom;
       context.drawImage(image, sourceX, image.height - 1, span, 1, x + drawn, bottom, span, rest);
     }
+
     drawn += span;
   }
+
   if (deep) {
     drawDeepRun(painter, deep, { run, fromY: y - top + deep.from, shadow });
   }
@@ -120,6 +125,7 @@ export function drawTerrainGround(painter, { cameraX, colors, tick, texture, cli
   if (!painted) {
     drawRoadDetails(painter, { cameraX, colors, tick, surfaceAt });
   }
+
   if (colors.grass) {
     drawSwayingGrass(painter, { cameraX, colors, tick, surfaceAt });
   }

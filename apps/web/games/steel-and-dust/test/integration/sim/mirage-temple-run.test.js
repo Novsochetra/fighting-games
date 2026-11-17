@@ -25,12 +25,15 @@ function playRun() {
       if (fighter.y > groundAt(game.terrain, fighter.x)) {
         run.belowGround.push(`${fighter.kind} at tick ${tick}`);
       }
+
       const onSlab = platformUnder(game.terrain, fighter.x, fighter.y) && !fighter.airborne;
       run.perched += onSlab ? 1 : 0;
     }
+
     run.highest = Math.min(run.highest, game.player.y);
     run.zones = Math.max(run.zones, game.stage.zoneIndex);
   }
+
   return run;
 }
 

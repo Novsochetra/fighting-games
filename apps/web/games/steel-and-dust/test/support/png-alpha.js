@@ -16,8 +16,10 @@ function readChunks(buffer) {
     } else {
       chunks[type] = data;
     }
+
     at += length + 12;
   }
+
   return chunks;
 }
 
@@ -29,11 +31,13 @@ function paeth(left, up, upLeft) {
   if (toLeft <= toUp && toLeft <= toUpLeft) {
     return left;
   }
+
   return toUp <= toUpLeft ? up : upLeft;
 }
 
 function predict(filter, { left, up, upLeft }) {
   const predictors = [0, left, up, (left + up) >> 1, paeth(left, up, upLeft)];
+
   return predictors[filter];
 }
 
@@ -51,6 +55,7 @@ function unfilter(raw, { width, height, bytesPerPixel }) {
       pixels[at] = value & 255;
     }
   }
+
   return pixels;
 }
 
@@ -64,6 +69,7 @@ export function readPngAlpha(path) {
   if (header[8] !== 8 || header[12] !== 0 || !bytesPerPixel) {
     throw new Error(`${path}: only 8-bit RGBA or indexed PNGs are read here`);
   }
+
   const pixels = unfilter(inflateSync(Buffer.concat(chunks.IDAT)), {
     width,
     height,
@@ -71,12 +77,14 @@ export function readPngAlpha(path) {
   });
   const alpha = (x, y) => {
     const value = pixels[(y * width + x) * bytesPerPixel + bytesPerPixel - 1];
+
     return colorType === 6 ? value : (chunks.tRNS?.[value] ?? 255);
   };
   const rgb = (x, y) => {
     const at = (y * width + x) * bytesPerPixel;
     const source = colorType === 6 ? pixels : chunks.PLTE;
     const start = colorType === 6 ? at : pixels[at] * 3;
+
     return [source[start], source[start + 1], source[start + 2]];
   };
   // the color as one number, for counting and comparing many pixels without building arrays
@@ -84,8 +92,10 @@ export function readPngAlpha(path) {
     const at = (y * width + x) * bytesPerPixel;
     const source = colorType === 6 ? pixels : chunks.PLTE;
     const start = colorType === 6 ? at : pixels[at] * 3;
+
     return (source[start] << 16) | (source[start + 1] << 8) | source[start + 2];
   };
+
   return { width, height, alpha, rgb, colorKey };
 }
 
@@ -97,5 +107,6 @@ export function paintedPixels(image) {
       painted += image.alpha(x, y) > 0 ? 1 : 0;
     }
   }
+
   return painted;
 }

@@ -23,6 +23,7 @@ export function drawSand(painter, sand) {
     const y = sand.y + Math.sin(angle) * radius;
     painter.use(i % 3 ? FX_COLORS.mirage : FX_COLORS.mirageLight).rect(x - 1, y - 1, 2, 2);
   }
+
   painter.alpha(1);
 }
 
@@ -58,6 +59,7 @@ export function drawFire(painter, fire) {
       .use(COLORS.gold)
       .rect(x + 1, fire.y - Math.round(height / 2), 1, Math.round(height / 2));
   }
+
   painter
     .alpha(0.35 * strength)
     .use(COLORS.orange)

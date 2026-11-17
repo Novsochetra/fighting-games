@@ -53,7 +53,9 @@ const STAGES = {
       enter(show, { shoot: 'aim', keep: 'dive' }[humanPart(show)] ?? 'wait');
     }
   },
+
   aim: (show, input) => pick(show, input) && enter(show, 'power'),
+
   power(show, input) {
     show.power = sweepOf(show.stageTicks);
 
@@ -62,12 +64,14 @@ const STAGES = {
       enter(show, 'wait');
     }
   },
+
   dive(show, input) {
     if (pick(show, input)) {
       choosePenalty(show.shootout, 'keep', { dive: AIMS[show.cursor] });
       enter(show, 'wait');
     }
   },
+
   wait(show) {
     show.kick = stepShootout(show.shootout);
 
@@ -75,13 +79,16 @@ const STAGES = {
       enter(show, 'kick');
     }
   },
+
   kick: (show) => show.stageTicks >= PENALTY_TICKS.kick && enter(show, 'result'),
+
   result(show) {
     if (show.stageTicks >= PENALTY_TICKS.result) {
       show.cursor = 1;
       enter(show, show.shootout.over ? 'over' : 'ready');
     }
   },
+
   over: (show) => show.stageTicks >= PENALTY_TICKS.over && enter(show, 'done'),
   done: () => {},
 };

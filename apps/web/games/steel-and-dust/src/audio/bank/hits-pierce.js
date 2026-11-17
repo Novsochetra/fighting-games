@@ -19,6 +19,7 @@ function buildPierce(track, pitch, size) {
   });
   steel(track, { base: 3300 * tuned, ratios: THIN, decay: 0.5 * longer, level: 0.22 });
   boom(track, { from: 170 * tuned, to: 70, decay: 0.08 * longer, level: 0.6 });
+
   return { drive: 2 };
 }
 

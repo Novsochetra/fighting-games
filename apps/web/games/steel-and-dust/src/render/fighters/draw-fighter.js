@@ -26,7 +26,9 @@ function isBlinkedOut(fighter, tickCount) {
   ) {
     return true;
   }
+
   const blinking = isPlayer(fighter) && fighter.state !== 'dash' && fighter.state !== 'ult';
+
   return fighter.invincible > 0 && blinking && (tickCount >> 2) % 2;
 }
 
@@ -44,6 +46,7 @@ function hitShakeOffset(fighter) {
   if (fighter.hitShake > 0 && fighter.hitstop > 0) {
     return fighter.hitstop & 1 ? 1 : -1;
   }
+
   return 0;
 }
 
@@ -51,12 +54,15 @@ function bodyPalette(fighter, tickCount) {
   if (fighter.flashTime > 0) {
     return FLASH_PALETTE;
   }
+
   if (fighter.armorFlash > 0) {
     return ARMOR_PALETTE;
   }
+
   if (fighter.frozen) {
     return ICE_PALETTE;
   }
+
   return isTelegraphing(fighter, tickCount) ? TELEGRAPH_PALETTE : fighter.palette;
 }
 
@@ -64,11 +70,13 @@ function drawSkeletonFighter(painter, { fighter, shakeX, tickCount, floor }) {
   if (isBossWindingUp(fighter)) {
     drawDangerZone(painter, fighter, tickCount, floor);
   }
+
   drawSkeletonAfterimages(painter, fighter);
   const palette = bodyPalette(fighter, tickCount);
   if (shakeX) {
     painter.context.translate(shakeX, 0);
   }
+
   const { joints, pose } = fighter;
   drawBody(painter, {
     fighter,
@@ -81,6 +89,7 @@ function drawSkeletonFighter(painter, { fighter, shakeX, tickCount, floor }) {
   if (shakeX) {
     painter.context.translate(-shakeX, 0);
   }
+
   if (fighter.side === 'enemy') {
     drawWindupWarning(painter, fighter, tickCount);
     drawEnemyHealth(painter, fighter);
@@ -92,10 +101,12 @@ export function drawFighter(painter, { fighter, sheet, enemySheets, tickCount, f
   if (!fighter.joints || isBlinkedOut(fighter, tickCount)) {
     return;
   }
+
   // a raider dropping from overhead has its shadow drawn on the spot it falls on (drop-shadow.js)
   if (!isOutOfReach(fighter) && !fighter.dropping) {
     drawShadow(painter, fighter, floor);
   }
+
   const shakeX = hitShakeOffset(fighter);
   if (isPlayer(fighter) && sheet.ready) {
     drawHeroFighter(painter, { sheet, fighter, shakeX, tickCount });

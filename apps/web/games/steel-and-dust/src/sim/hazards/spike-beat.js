@@ -13,6 +13,7 @@ export function spikePhase(time) {
     if (at < SPIKE_TRAP[phase]) {
       return { phase, at };
     }
+
     at -= SPIKE_TRAP[phase];
   }
 

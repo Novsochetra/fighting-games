@@ -54,8 +54,10 @@ function fistsFrames(heroId, strip) {
   const drawn = readPngAlpha(new URL(`${hero.directory}../hero_${strip}.png`, GAME));
   const height = image.height / WEAPON_IDS.length;
   const top = WEAPONS.fists.spriteRow * height;
+
   return Array.from({ length: HERO_SPRITES.frames[strip] }, (_, index) => {
     const drawnIndex = strip === 'dash' && index === 0 ? 1 : index;
+
     return {
       image,
       left: index * frameWidth,
@@ -69,6 +71,7 @@ function fistsFrames(heroId, strip) {
 
 function goldAt(frame, x, y) {
   const { image, left, top } = frame;
+
   return image.alpha(left + x, top + y) > 0 && FISTS_SMEAR.has(hexAt(image, left + x, top + y));
 }
 
@@ -81,11 +84,13 @@ function solidMask(frame) {
       mask[y * frameWidth + x] = drawn && !goldAt(frame, x, y) ? 1 : 0;
     }
   }
+
   return { mask, height: frame.height };
 }
 
 function solid({ mask, height }, x, y) {
   const [px, py] = [Math.round(x), Math.round(y)];
+
   return px >= 0 && py >= 0 && px < frameWidth && py < height && mask[py * frameWidth + px] === 1;
 }
 
@@ -95,6 +100,7 @@ function airBeside(shape, { x, y }, across) {
       return true;
     }
   }
+
   return false;
 }
 
@@ -108,6 +114,7 @@ function longestRun(positions) {
       start = i;
     }
   }
+
   return longest;
 }
 
@@ -126,10 +133,12 @@ function thinRunAlong(shape, degrees) {
       ) {
         continue;
       }
+
       const line = Math.round(x * across.x + y * across.y);
       lines.set(line, [...(lines.get(line) ?? []), x * along.x + y * along.y]);
     }
   }
+
   return Math.max(0, ...[...lines.values()].map(longestRun));
 }
 
@@ -139,6 +148,7 @@ function longestThinRun(frame) {
   for (let degrees = 0; degrees < 180; degrees += ANGLE_STEP) {
     longest = Math.max(longest, thinRunAlong(shape, degrees));
   }
+
   return longest;
 }
 
@@ -152,6 +162,7 @@ function goldOnTheCore(frame) {
       count += core && goldAt(frame, x, y) ? 1 : 0;
     }
   }
+
   return count;
 }
 

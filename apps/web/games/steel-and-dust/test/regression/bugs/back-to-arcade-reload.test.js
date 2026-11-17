@@ -15,6 +15,7 @@ describe('Back to arcade', () => {
     const back = vi.spyOn(window.history, 'back').mockImplementation(() => {});
     const assign = vi.spyOn(window.location, 'assign').mockImplementation(() => {});
     openPage().act('arcade');
+
     return { back, assign };
   }
 

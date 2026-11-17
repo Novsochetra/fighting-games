@@ -59,11 +59,13 @@ function renderRow(section, { key, value, view }) {
 // so Back returns to the screen it opened over
 export const SETTINGS_SCREEN = {
   side: true,
+
   render(section, { view }) {
     for (const key of SETTING_KEYS) {
       renderRow(section, { key, value: view.settings[key], view });
     }
   },
+
   adjust(key, by, app) {
     app.settings = stepSetting(app.settings, key, by);
     writeSettings(app.storage, app.settings);

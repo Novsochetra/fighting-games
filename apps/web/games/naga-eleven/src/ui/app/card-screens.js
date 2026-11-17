@@ -14,6 +14,7 @@ function heldCard({ ticks, skippable, draw }) {
   return {
     kind: 'card',
     playing: false,
+
     step: (input) => {
       state.age += 1;
 
@@ -21,6 +22,7 @@ function heldCard({ ticks, skippable, draw }) {
         skip();
       }
     },
+
     draw: (context, tick) => draw(context, { tick, age: state.age }),
     tap: skip,
     isDone: () => state.age >= ticks,
@@ -40,6 +42,7 @@ export const closingCardScreen = ({ lang }) =>
   heldCard({
     ticks: 480,
     skippable: CLOSING_BEATS.moral + 15,
+
     draw: (context, { tick, age }) =>
       drawClosingCard(context, { ...CLOSING_CARD, lang, tick, age }),
   });

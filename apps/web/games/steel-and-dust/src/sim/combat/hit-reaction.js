@@ -21,6 +21,7 @@ function launchOrKnock(target, { move, direction, knockback, knockdown }) {
   } else {
     return false;
   }
+
   return true;
 }
 
@@ -33,6 +34,7 @@ function flinch(target, { move, direction, knockback }) {
     target.vx = direction * knockback[0] * 0.6;
     return;
   }
+
   target.state = 'hurt';
   target.stateTime = move.hitstun;
   target.vx = direction * knockback[0];
@@ -48,6 +50,7 @@ export function absorbsHit(target, move, damage) {
   const { move: own } = target;
   const moveArmor =
     target.state === 'attack' && own && own.armor && target.moveTime < own.startup + own.active;
+
   return heavyArmor || moveArmor;
 }
 
@@ -58,9 +61,11 @@ export function reactToHit(game, target, reaction) {
     target.hitboxActive = false;
     target.trail.length = 0;
   }
+
   if (!launchOrKnock(target, reaction)) {
     flinch(target, reaction);
   }
+
   if (target.state === 'juggle') {
     target.juggleCount++;
     if (target.juggleCount > 16 && !reaction.move.launch) {

@@ -42,6 +42,7 @@ function antlerGame() {
   runTicks(game, 30);
   game.particles = [];
   game.player.facing = 1;
+
   return game;
 }
 
@@ -59,15 +60,19 @@ function stepKit(game, move, time) {
   if (time === 0) {
     KIT.windup(game, fighter, move);
   }
+
   if (time < move.startup) {
     KIT.gather(game, fighter, move, time);
   }
+
   if (time === move.startup) {
     KIT.release(game, fighter, move);
   }
+
   if (time >= move.startup && time < activeEnd(move)) {
     KIT.trail(game, fighter, move, time);
   }
+
   if (hitTimes(move).includes(time)) {
     KIT.impact(game, {
       attacker: fighter,
@@ -91,6 +96,7 @@ function playChain(game, steps) {
       seen.most = Math.max(seen.most, game.particles.length);
     }
   }
+
   return seen;
 }
 
@@ -99,12 +105,14 @@ function heroInHeavy(id, time, { airborne = false, facing = 1 } = {}) {
   const fighter = game.player;
   startMove(game, fighter, id);
   Object.assign(fighter, { moveTime: time, airborne, facing, x: 100, y: 150 });
+
   return { fighter, move: fighter.move, time, tickCount: 40, art: ART };
 }
 
 function drawn(draw, layer) {
   const { painter, log } = recordingPainter();
   withoutRandom(() => draw(painter, layer));
+
   return drawnRects(log);
 }
 
@@ -141,12 +149,14 @@ describe("the Antler Spirit Shade's heavy", () => {
       if (SHARED_KINDS.includes(kind)) {
         continue;
       }
+
       expect(kind.startsWith('antler'), kind).toBe(true);
       expect(typeof KIT.particles[kind], kind).toBe('function');
       const rects = drawn(RENDER.particles[kind], particle);
       expect(rects.length, kind).toBeGreaterThan(0);
       expect(offGrid(rects), kind).toEqual([]);
     }
+
     expect([...kinds.keys()]).toEqual(
       expect.arrayContaining(['antlerWisp', 'antlerHoof', 'antlerFork', 'antlerRush']),
     );
@@ -161,6 +171,7 @@ describe("the Antler Spirit Shade's heavy", () => {
       KIT.particles.antlerRush(rush);
       KIT.particles.antlerHoof(hoof);
     }
+
     expect(wisp.y).toBeLessThan(-4);
     expect(rush.x).toBeGreaterThan(10);
     expect(hoof).toMatchObject({ x: 5, y: 9 });
@@ -216,6 +227,7 @@ describe("the Antler Spirit Shade's heavy sounds", () => {
     const live = { context, chain: buildChain(context) };
     context.nodes.length = 0;
     ANTLER_HEAVY_SOUNDS[key](live, 2);
+
     return [...nodesOfKind(context, 'oscillator'), ...nodesOfKind(context, 'bufferSource')];
   }
 
@@ -224,6 +236,7 @@ describe("the Antler Spirit Shade's heavy sounds", () => {
     for (const node of play('heavyAntlerCharge')) {
       expect(node.stops[0][0]).toBeLessThanOrEqual(2 + 0.3);
     }
+
     for (const node of play('heavyAntlerRelease')) {
       expect(node.stops[0][0]).toBeLessThanOrEqual(2 + 0.15);
     }

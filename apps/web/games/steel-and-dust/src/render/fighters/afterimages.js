@@ -18,6 +18,7 @@ export function drawHeroAfterimages(painter, sheet, fighter) {
       row: image.row !== undefined ? image.row : row,
     });
   }
+
   painter.alpha(1);
 }
 
@@ -34,5 +35,6 @@ export function drawSkeletonAfterimages(painter, fighter) {
       headStyle: fighter.palette.headStyle,
     });
   }
+
   painter.alpha(1);
 }

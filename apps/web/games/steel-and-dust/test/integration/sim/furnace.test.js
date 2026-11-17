@@ -17,6 +17,7 @@ function knightArena({ gap = 150, hp } = {}) {
   Object.assign(knight, { entering: false, x: game.player.x + gap, facing: -1 });
   knight.hp = hp ?? knight.maxHp;
   knight.ai.cooldown = 9999;
+
   return { game, knight };
 }
 
@@ -29,6 +30,7 @@ function playOut(game, knight, ticks, everyTick = () => {}) {
     knight.ai.cooldown = 9999;
     states.add(game.player.state);
   }
+
   return states;
 }
 
@@ -131,11 +133,13 @@ describe('the Furnace Knight in a fight', () => {
       if (i % 600 === 0) {
         game.player.x = knight.x > 192 ? 20 : 364;
       }
+
       runTicks(game, 1);
       game.player.hp = game.player.maxHp;
       knight.hp = Math.max(knight.hp, 40);
       used.add(knight.move?.id);
     }
+
     expect([...used]).toEqual(
       expect.arrayContaining(['fireFlailHot', 'slagPot', 'meltdown', 'overheated']),
     );

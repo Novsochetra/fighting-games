@@ -59,5 +59,6 @@ export function controlsHtml({ touch, stick, dpad = false }) {
   const touchTable = table('Touch', touchRows(stick, dpad));
   const keys = table('Keyboard', KEY_ROWS);
   const pad = table('Gamepad', PAD_ROWS);
+
   return touch ? touchTable + keys + pad : keys + pad + touchTable;
 }

@@ -24,6 +24,7 @@ function buildBlunt(track, pitch) {
     drive: 2.5,
   });
   boom(track, { from: 165 * pitch, to: 48, glideTime: 0.09, decay: 0.2, level: 1.5, drive: 2 });
+
   return { drive: 3.2, lowpass: 9000 };
 }
 
@@ -35,6 +36,7 @@ function buildBluntBig(track, pitch) {
   boom(track, { from: 125 * pitch, to: 34, decay: 0.42, level: 1.8, drive: 2.4 });
   rumble(track, { length: 0.35, from: 1400, to: 90, level: 2.2, rolls: 2 });
   crackle(track, { start: 0, length: 0.05, count: 8, cutoff: 2000, level: 0.4 });
+
   return { drive: 3.4, crush: { rate: 22050, bits: 10 } };
 }
 

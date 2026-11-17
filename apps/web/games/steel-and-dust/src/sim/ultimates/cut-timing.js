@@ -15,6 +15,7 @@ export const PASSES = passes.reduce((list, { sprite, ticks }) => {
   const crossAt = start + windTicks;
   const cutAt = crossAt + crossTicks / 2;
   list.push({ sprite, start, crossAt, cutAt, end: start + ticks });
+
   return list;
 }, []);
 
@@ -30,9 +31,11 @@ export function passFrame(time) {
   if (!pass) {
     return STILL_FRAME;
   }
+
   const [strip, strike] = pass.sprite;
   if (time < pass.crossAt) {
     return [strip, strike - 1, SWORD_ROW];
   }
+
   return [strip, time < pass.crossAt + crossTicks ? strike : strike + 1, SWORD_ROW];
 }

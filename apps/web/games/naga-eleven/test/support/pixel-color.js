@@ -48,6 +48,7 @@ export const fontSizeOf = (font) => Number(String(font).match(/(\d+(?:\.\d+)?)px
 export function gradient() {
   return {
     stops: [],
+
     addColorStop(offset, color) {
       this.stops.push({ offset, color });
     },

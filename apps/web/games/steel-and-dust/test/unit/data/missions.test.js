@@ -40,6 +40,7 @@ describe('the twelve missions', () => {
     for (const theme of forestThemes) {
       expect(desertThemes.has(theme), theme).toBe(false);
     }
+
     expect(MISSIONS.slice(10).map((mission) => mission.theme)).toEqual(['angkorWat', 'bayon']);
   });
 
@@ -119,6 +120,7 @@ describe('the twelve missions', () => {
       expect(mission.zones.at(-1).boss, mission.name).toBe(mission.boss);
       expect(ENEMY_TYPES[mission.boss].boss, mission.name).toBe(true);
     }
+
     expect(new Set(MISSIONS.map((mission) => mission.boss)).size).toBe(bossTypes.length);
     expect(MISSIONS.at(-1).boss).toBe('guardian');
   });
@@ -148,6 +150,7 @@ describe('the twelve missions', () => {
           expect(wave.at).toBeLessThan(zone.right);
           expect(wave.kinds.length).toBeLessThanOrEqual(4);
         }
+
         expect(zone.waves.at(-1).lock).toBe(true);
       });
       for (const thing of [...mission.crates, ...mission.props]) {
@@ -164,6 +167,7 @@ describe('the twelve missions', () => {
         mission.name,
       ).toBe(true);
     }
+
     expect(MISSIONS.at(-1).length).toBeGreaterThan(MISSIONS[0].length);
     expect(MISSIONS.at(-1).length).toBe(Math.max(...MISSIONS.map((mission) => mission.length)));
   });
@@ -186,6 +190,7 @@ describe('the enemy sprite sheets', () => {
       for (const strip of ['idle', 'walk', 'attack', 'hurt', 'ko']) {
         expect(sprite.strips[strip], `${type.name} ${strip}`).toBeDefined();
       }
+
       expect(sprite.strips.ko.frames, type.name).toBeGreaterThanOrEqual(9);
     }
   });

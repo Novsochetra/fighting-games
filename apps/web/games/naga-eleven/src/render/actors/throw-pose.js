@@ -41,11 +41,13 @@ function cellOf(pixels, { column, row }) {
     inside,
     opaque: (x, y) => inside(x, y) && pixels.data[at(x, y) + 3] > 0,
     isLine: (x, y) => LINE.every((value, i) => pixels.data[at(x, y) + i] === value),
+
     paint: (x, y, rgb) => {
       if (inside(x, y)) {
         pixels.data.set([...rgb, 255], at(x, y));
       }
     },
+
     clear: (x, y) => pixels.data.fill(0, at(x, y), at(x, y) + 4),
   };
 }

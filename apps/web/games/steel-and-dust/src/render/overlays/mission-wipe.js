@@ -18,6 +18,7 @@ function diamondSprite(view, color, radius) {
     createPainter(canvas.getContext('2d')).use(color).diamond(radius, radius, radius);
     view.diamonds.set(key, canvas);
   }
+
   return view.diamonds.get(key);
 }
 

@@ -48,11 +48,14 @@ function levelChange(terrain, before, raider) {
   if (before.airborne || !raider.airborne || raider.state !== 'air') {
     return null;
   }
+
   if (raider.vy < -5) {
     return 'hop';
   }
+
   const platform = platformUnder(terrain, before.x, before.y);
   const overIt = platform && raider.x >= platform.x && raider.x <= platform.x + platform.width;
+
   return overIt ? 'drop' : null;
 }
 
@@ -74,11 +77,13 @@ function playRun() {
       if (fighter.y > groundAt(game.terrain, fighter.x)) {
         run.belowGround.push(`${fighter.kind} at tick ${tick}`);
       }
+
       if (fighter.side === 'enemy') {
         noteRaider(run, { game, fighter, tick, before });
       }
     }
   }
+
   return run;
 }
 
@@ -88,6 +93,7 @@ function noteRaider(run, { game, fighter, tick, before }) {
     run.hops += change === 'hop' ? 1 : 0;
     run.changes.set(fighter, [...(run.changes.get(fighter) ?? []), tick]);
   }
+
   const perched = platformUnder(game.terrain, fighter.x, fighter.y) && !fighter.airborne;
   run.perchedTicks += perched && fighter.def.ranged ? 1 : 0;
   before.set(fighter, { x: fighter.x, y: fighter.y, airborne: fighter.airborne });

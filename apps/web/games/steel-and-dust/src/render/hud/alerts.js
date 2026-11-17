@@ -12,6 +12,7 @@ export function drawBossBar(painter, boss) {
   if (!boss || boss.state === 'ko' || boss.entering) {
     return;
   }
+
   painter
     .alpha(0.55)
     .use(COLORS.night)
@@ -33,6 +34,7 @@ export function drawGoArrow(painter, game) {
   if (game.goArrowTime <= 0 || game.arena || !currentZone(game)) {
     return;
   }
+
   const step = (game.tickCount >> 2) % 6;
   const color = (game.goArrowTime >> 4) & 1 ? COLORS.amber : COLORS.butter;
   drawText(painter, 'GO', { x: VIEW_WIDTH - 26, y: 92, color, scale: 2, align: 'right' });
@@ -52,18 +54,21 @@ function drawEdgeArrow(painter, game, enemy) {
   if (screenX > -2 && screenX < VIEW_WIDTH + 2) {
     return;
   }
+
   const onLeft = screenX < 0;
   const y = clamp(enemy.y - 18 * enemy.scale, 40, VIEW_HEIGHT - 30);
   const x = onLeft ? 4 : VIEW_WIDTH - 5;
   if (!((game.tickCount >> 3) & 1)) {
     return;
   }
+
   painter.alpha(0.9);
   for (let i = 0; i < 4; i++) {
     painter
       .use(enemy.def.boss ? COLORS.scarlet : COLORS.red)
       .rect(onLeft ? x + i : x - i, y - i, 1, i * 2 + 1);
   }
+
   painter.alpha(1);
 }
 
@@ -72,6 +77,7 @@ export function drawOffscreenArrows(painter, game) {
   if (game.mode !== 'play') {
     return;
   }
+
   for (const enemy of game.fighters) {
     if (enemy.side === 'enemy' && enemy.state !== 'ko') {
       drawEdgeArrow(painter, game, enemy);
@@ -84,16 +90,19 @@ export function drawBanner(painter, game) {
   if (!banner) {
     return;
   }
+
   banner.startTime ||= banner.time;
   const age = banner.startTime - banner.time;
   const blink = banner.time < BANNER_FOREVER && banner.time < 20 && (banner.time >> 1) % 2;
   if (blink) {
     return;
   }
+
   if (banner.stamp) {
     drawTitleCard(painter, { banner, age: cardAge(banner, game.clearTime > 0) });
     return;
   }
+
   const slide = age < 6 ? (6 - age) * 10 : 0;
   drawText(painter, banner.text, {
     x: VIEW_WIDTH / 2 + slide,

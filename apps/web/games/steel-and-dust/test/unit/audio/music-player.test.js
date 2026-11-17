@@ -13,6 +13,7 @@ function fakeAudio(state = 'running') {
   const context = createFakeAudioContext({ state });
   const audio = { context, chain: buildChain(context), music: createMusicState(), ducked: null };
   context.nodes.length = 0;
+
   return audio;
 }
 

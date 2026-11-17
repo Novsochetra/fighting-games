@@ -16,9 +16,11 @@ function tideFrame(tide) {
   if (tide.time < TIDE_RISE) {
     return Math.floor(tide.time / (TIDE_RISE / 2));
   }
+
   if (tide.time < tide.breakAt) {
     return 2 + (Math.floor((tide.time - TIDE_RISE) / LOOP_TICKS) % 3);
   }
+
   return Math.min(7, 5 + Math.floor((tide.time - tide.breakAt) / (TIDE_BREAK / 3)));
 }
 
@@ -49,6 +51,7 @@ function drawLaneMark(painter, { x, y, direction, left: ticksLeft, time }) {
       shadow: null,
     });
   }
+
   painter.alpha(1);
 }
 
@@ -64,6 +67,7 @@ export function drawNagaBolt(painter, bolt, sheets) {
       time: bolt.time,
     });
   }
+
   const frame = darting
     ? 2 + (Math.floor(bolt.time / 3) % 2)
     : Math.floor((bolt.time * 2) / BOLT_WARN);
@@ -89,6 +93,7 @@ export function drawSpiritNaga(painter, spirit, sheets) {
     });
     return;
   }
+
   const since = spirit.time - SWEEP_WARN;
   const frame = since < 8 ? 1 + (since >> 2) : 3 + (Math.floor(since / LOOP_TICKS) % 2);
   drawFxFrame(painter, sheets, {
@@ -108,6 +113,7 @@ export function drawRainbowOrb(painter, orb, sheets) {
   } else if (orb.time < orb.burstAt) {
     frame = 3 + (Math.floor((orb.time - ORB_GROW) / LOOP_TICKS) % 4);
   }
+
   drawFxFrame(painter, sheets, {
     name: 'rainbowOrb',
     frame,
@@ -122,6 +128,7 @@ export function drawSerpentRise(painter, rise, sheets) {
   if (rise.time < rise.warn) {
     return;
   }
+
   drawFxFrame(painter, sheets, {
     name: 'serpentRise',
     frame: fxFrameAt('serpentRise', rise.time - rise.warn),

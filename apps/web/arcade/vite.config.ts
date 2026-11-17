@@ -49,6 +49,7 @@ function copyAsIs(): Plugin {
   return {
     name: 'arcade-copy-as-is',
     apply: 'build',
+
     async writeBundle() {
       const copies = AS_IS.map((entry) => {
         const source = sourceOfAsIs(entry);
@@ -71,6 +72,7 @@ function watchSource(): Plugin {
   return {
     name: 'arcade-watch-source',
     apply: 'serve',
+
     configureServer(server) {
       server.watcher.add(ARCADE_SRC);
     },
@@ -85,12 +87,15 @@ function stampVersion(): Plugin {
   return {
     name: 'arcade-version',
     apply: 'build',
+
     buildStart() {
       version = buildVersion();
     },
+
     transformIndexHtml: () => [
       { tag: 'meta', attrs: { name: 'arcade-version', content: version }, injectTo: 'head' },
     ],
+
     generateBundle() {
       this.emitFile({
         type: 'asset',

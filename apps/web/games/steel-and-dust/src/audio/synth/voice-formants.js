@@ -18,9 +18,11 @@ function vowelBlend(vowels, time) {
   while (j < vowels.length - 2 && time > vowels[j + 1][0]) {
     j++;
   }
+
   const from = vowels[j];
   const to = vowels[j + 1] || from;
   const blend = to[0] > from[0] ? clamp((time - from[0]) / (to[0] - from[0]), 0, 1) : 0;
+
   return { from: VOWELS[from[1]], to: VOWELS[to[1]], blend };
 }
 
@@ -47,5 +49,6 @@ export function applyFormants(formants, input) {
     memory[i * 2] = out;
     x = out;
   }
+
   return x;
 }

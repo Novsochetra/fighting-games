@@ -14,6 +14,7 @@ function afterTheBoss() {
   game.boss = boss;
   knockOut(game, boss, 1);
   runTicks(game, 60);
+
   return { game, sounds, boss };
 }
 

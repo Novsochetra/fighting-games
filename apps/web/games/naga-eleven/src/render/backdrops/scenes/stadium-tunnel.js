@@ -116,6 +116,7 @@ const FLASHES = Array.from({ length: 14 }, (_, i) => ({
 
 export const STADIUM_TUNNEL = {
   paint: paintTunnel,
+
   overlay: (context, tick) => {
     drawTwinkles(context, {
       points: FLASHES,

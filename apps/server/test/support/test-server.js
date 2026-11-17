@@ -7,9 +7,11 @@ export async function startTestServer(options = {}) {
   server.listen(0, '127.0.0.1');
   await once(server, 'listening');
   const { port } = server.address();
+
   return {
     port,
     baseUrl: `http://127.0.0.1:${port}`,
+
     close: () =>
       new Promise((resolve) => {
         server.closeAllConnections();

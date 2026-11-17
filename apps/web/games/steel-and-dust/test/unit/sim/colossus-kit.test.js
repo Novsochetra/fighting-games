@@ -15,6 +15,7 @@ function colossusAt(distance, { missionIndex = 1, share = 1 } = {}) {
   Object.assign(colossus, { entering: false, x: 120 + distance, facing: -1 });
   colossus.ai.cooldown = 0;
   colossus.hp = share * colossus.maxHp;
+
   return { game, colossus };
 }
 

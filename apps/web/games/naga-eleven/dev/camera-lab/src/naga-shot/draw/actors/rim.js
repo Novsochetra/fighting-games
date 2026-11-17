@@ -52,6 +52,7 @@ export function rimmedFrame(frame, { light, level, key }) {
   return baked(`rim:${key}:${light.dx},${light.dy}:${level}`, {
     width: source.width,
     height: source.height,
+
     paint: ({ context }) => {
       context.save();
       context.translate(mirror ? source.width : 0, 0);

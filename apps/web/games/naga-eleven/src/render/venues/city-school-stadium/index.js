@@ -20,6 +20,7 @@ const backLayers = (layout) => [
     depth: -9000,
     base: WALL_DEPTH - 4,
     height: 'toTop',
+
     paint: (raster) => {
       paintSky(raster, { ramp: art.sky });
       paintClouds(raster, { ramp: art.cloud, row: 24, every: 280, salt: 6 });
@@ -65,6 +66,7 @@ function build(layout) {
       {
         depth: WALL_DEPTH,
         height: 26,
+
         paint: (raster) =>
           paintBannerWall(raster, { art: { ...art, banners: bannersOf(layout, art) } }),
       },

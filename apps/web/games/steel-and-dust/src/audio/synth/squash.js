@@ -6,6 +6,7 @@ export function squash(track, { threshold, ratio, attack, release }) {
   for (const value of samples) {
     peak = Math.max(peak, Math.abs(value));
   }
+
   const limit = threshold * peak;
   const rise = 1 - Math.exp(-1 / (attack * sampleRate));
   const fall = 1 - Math.exp(-1 / (release * sampleRate));

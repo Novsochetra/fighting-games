@@ -3,6 +3,7 @@ const WHITE = [255, 255, 255];
 
 function channels(hex) {
   const value = parseInt(hex.slice(1, 7), 16);
+
   return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
 }
 

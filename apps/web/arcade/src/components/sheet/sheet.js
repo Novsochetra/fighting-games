@@ -15,6 +15,7 @@ function showDialog(dialog) {
   } else {
     dialog.setAttribute('open', '');
   }
+
   holdPage(dialog, true);
   // The sheet takes the focus itself; Safari otherwise ringed the close button on a tap.
   dialog.focus({ preventScroll: true });
@@ -26,6 +27,7 @@ function hideDialog(dialog) {
   } else {
     dialog.removeAttribute('open');
   }
+
   holdPage(dialog, false);
 }
 
@@ -77,17 +79,20 @@ export function createSheet({ dialog, closeButton, document, sound, signal }) {
     if (!dialog.open || closing) {
       return;
     }
+
     sound.play('sheetClose');
     const duration = readDuration(document, '--duration-fade');
     if (duration <= 0 || prefersReducedMotion(document.defaultView)) {
       finish();
       return;
     }
+
     dialog.classList.add('is-closing');
     closing = setTimeout(finish, duration);
   }
 
   wireClosing({ dialog, closeButton }, { close, signal });
   wireDrag({ dialog, close, signal });
+
   return { open, close, finish, isOpen: () => dialog.open };
 }

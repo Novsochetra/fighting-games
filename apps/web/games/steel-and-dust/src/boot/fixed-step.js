@@ -15,5 +15,6 @@ export function ticksDue(clock, now, tickMs) {
     clock.accumulator -= tickMs;
     count++;
   }
+
   return count;
 }

@@ -16,12 +16,16 @@ export function createPostgresSupportersStore(database) {
   return {
     async list() {
       const { rows } = await database.query(LIST);
+
       return rows.map(toSupporter);
     },
+
     async add({ name, amountCents, message }) {
       const { rows } = await database.query(ADD, [name, amountCents, message]);
+
       return toSupporter(rows[0]);
     },
+
     async ping() {
       await database.query(PING);
     },

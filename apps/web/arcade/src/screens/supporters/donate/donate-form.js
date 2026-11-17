@@ -25,8 +25,10 @@ export function readAmount(text) {
   if (!DOLLARS_AND_CENTS.test(typed)) {
     return null;
   }
+
   const amount = Number(typed);
   const { minAmount, maxAmount } = DONATION_LIMITS;
+
   return amount >= minAmount && amount <= maxAmount ? amount : null;
 }
 
@@ -37,11 +39,14 @@ export function readDonationForm({ name, amount, message }) {
     const most = maxAmount.toLocaleString('en-US');
     return { field: 'amount', error: `Enter an amount from $${minAmount} to $${most}.` };
   }
+
   if (lengthOf(donation.name) > nameLength) {
     return { field: 'name', error: `Keep the name to ${nameLength} characters.` };
   }
+
   if (lengthOf(donation.message) > messageLength) {
     return { field: 'message', error: `Keep the message to ${messageLength} characters.` };
   }
+
   return { donation };
 }

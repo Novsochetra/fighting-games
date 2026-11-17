@@ -3,6 +3,7 @@ export function normalize(samples) {
   for (let i = 0; i < samples.length; i++) {
     loudest = Math.max(loudest, Math.abs(samples[i]));
   }
+
   if (loudest > 0) {
     for (let i = 0; i < samples.length; i++) {
       samples[i] /= loudest;
@@ -42,6 +43,7 @@ function bitCrush(samples, { rate, bits }, sampleRate) {
     if (i % hold === 0) {
       held = Math.round(samples[i] * steps) / steps;
     }
+
     samples[i] = held;
   }
 }
@@ -62,9 +64,11 @@ export function finish(track, shape = {}) {
   if (shape.lowpass) {
     topCut(samples, shape.lowpass, sampleRate);
   }
+
   if (shape.crush) {
     bitCrush(samples, shape.crush, sampleRate);
   }
+
   fadeTail(samples, sampleRate);
   normalize(samples);
 }

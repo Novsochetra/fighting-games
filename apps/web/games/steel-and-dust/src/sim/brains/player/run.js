@@ -37,6 +37,7 @@ function leap(game, player, buffer) {
   if ((buffer.down || game.input.held.down) && dropThrough(game, player)) {
     return;
   }
+
   jump(game, player, { vy: -5.8, vx: player.facing * 2.2 });
 }
 
@@ -47,11 +48,13 @@ function act(game, player, intent) {
     startGroundAttack(game, player, intent);
     return;
   }
+
   if (buffer.action === 'jump') {
     leap(game, player, buffer);
   } else if (buffer.action === 'dash') {
     dash(game, player, dashDirection(buffer, direction, player));
   }
+
   consumeBuffer(game);
 }
 

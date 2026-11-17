@@ -5,7 +5,9 @@ function readRem(document, name) {
   if (!rem) {
     return 0;
   }
+
   const rootStyle = document.defaultView.getComputedStyle(document.documentElement);
+
   return rem * parseFloat(rootStyle.fontSize);
 }
 

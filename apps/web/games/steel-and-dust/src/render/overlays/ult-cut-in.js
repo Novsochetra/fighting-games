@@ -37,6 +37,7 @@ function drawPortrait(painter, { view, game, colors, slide }) {
   if (!sheet.ready) {
     return;
   }
+
   const context = painter.context;
   context.save();
   context.beginPath();
@@ -50,6 +51,7 @@ function drawPortrait(painter, { view, game, colors, slide }) {
   for (const [dx, dy] of GLOW) {
     drawHeroFrame(painter, sheet, at(dx * 0.5, dy * 0.5, colors.edge));
   }
+
   painter.alpha(1);
   drawHeroFrame(painter, sheet, at(0, 0, null));
   context.restore();

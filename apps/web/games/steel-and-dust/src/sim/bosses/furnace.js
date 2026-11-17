@@ -51,6 +51,7 @@ export function vent(game, boss, move, time) {
     const color = BOSS_ULT_COLORS[boss.kind].title;
     addFloatText(game, { ...bodyPoint(boss, ABOVE_HEAD), text: 'Overheat!', color });
   }
+
   const side = (time / move.vents) % 2 ? 1 : -1;
   ventSteam(game, boss, { size: HOT_STEAM, side });
 }

@@ -19,6 +19,7 @@ function shatterWeapon(game, player, weapon) {
       color: i % 2 ? COLORS.steel : COLORS.slate,
     });
   }
+
   addRing(game, { x: hand.x, y: hand.y, color: COLORS.red });
   addFloatText(game, {
     x: player.x,
@@ -36,6 +37,7 @@ export function useDurability(game, player) {
   if (holdsOwnWeapon(player)) {
     return;
   }
+
   player.weapon.durability--;
   const weapon = WEAPONS[player.weapon.id];
   const left = player.weapon.durability;
@@ -49,6 +51,7 @@ export function useDurability(game, player) {
     });
     game.io.sfx('lowDurability');
   }
+
   if (left <= 0) {
     shatterWeapon(game, player, weapon);
   }

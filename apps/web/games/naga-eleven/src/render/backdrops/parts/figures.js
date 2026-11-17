@@ -56,6 +56,7 @@ export function figureShape({ x, ground, height, pose = 'stand', bun = false, bu
       width: Math.ceil(height * 0.8) + 2,
       height: Math.ceil(height + radius) + 2,
     },
+
     inside: (px, py) =>
       inHead(px, py, head) || inBody(px, py, body) || (bun && inHead(px, py, knot)),
   };

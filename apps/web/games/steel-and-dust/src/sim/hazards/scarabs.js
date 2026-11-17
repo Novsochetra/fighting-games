@@ -32,6 +32,7 @@ export function crawlScarabs(game, carpet) {
     addDust(game, { x: carpet.x, y: carpet.y, count: 10, color: FX_COLORS.scarabSand });
     return;
   }
+
   carpet.y = groundAt(game.terrain, carpet.x);
   if (carpet.time % 6 === 0) {
     const x = carpet.x - carpet.direction * 14;

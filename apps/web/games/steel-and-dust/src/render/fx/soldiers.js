@@ -21,6 +21,7 @@ const { rise, strike, crumble, end } = SOLDIER_TIMING;
 // rises, following through after, holding the last frame
 export function soldierFrame(soldier) {
   const frame = STRIKE_FRAME + Math.floor((soldier.time - strike) / TICKS_PER_FRAME);
+
   return [STRIP, clamp(frame, 0, HERO_SPRITES.frames[STRIP] - 1)];
 }
 
@@ -33,6 +34,7 @@ export function soldierStep(soldier) {
 export function soldierSunk(soldier) {
   const risen = easeOutCubic(clamp(soldier.time / rise, 0, 1));
   const fallen = clamp((soldier.time - crumble) / (end - crumble), 0, 1) ** 2;
+
   return (1 - risen) * SUNK + (fallen * SUNK) / 2;
 }
 
@@ -41,6 +43,7 @@ export function soldierAlpha(soldier) {
   if (soldier.time < crumble) {
     return SOLID;
   }
+
   return (SOLID * Math.max(0, end - soldier.time)) / (end - crumble);
 }
 

@@ -8,9 +8,11 @@ function stampingPainter() {
   const createCanvas = (width, height) => {
     const canvas = Object.assign(new RecordingCanvas(), { width, height });
     made.push(canvas);
+
     return canvas;
   };
   const { context, log } = createRecordingContext(null);
+
   return { painter: createPainter(context, createCanvas), log, made };
 }
 
@@ -50,6 +52,7 @@ describe('stamps', () => {
     for (let i = 0; i < 400; i++) {
       drawStamped(painter, square(`score ${i}`));
     }
+
     expect(made.length).toBeLessThanOrEqual(128);
     expect(painter.stamps.cache.size).toBeLessThanOrEqual(128);
   });
@@ -62,6 +65,7 @@ describe('stamps', () => {
       drawStamped(painter, square('label'));
       drawStamped(painter, square(`score ${i}`));
     }
+
     expect(painter.stamps.cache.get('label')).toBe(label);
   });
 

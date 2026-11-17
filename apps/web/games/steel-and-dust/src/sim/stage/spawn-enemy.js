@@ -16,6 +16,7 @@ function bossTitle(game, boss) {
   if (isFinalBoss(game, boss)) {
     return 'Final boss';
   }
+
   return isMissionBoss(game, boss) ? 'Boss' : 'Mid-boss';
 }
 

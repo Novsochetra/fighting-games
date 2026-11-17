@@ -17,12 +17,14 @@ function runningAudio() {
   context.decodeAudioData = vi.fn(async () => createFakeBuffer(1, 44100, 44100));
   const audio = { context, chain: buildChain(context), tickOffset: 0 };
   context.nodes.length = 0;
+
   return audio;
 }
 
 function serveClips({ ok = true } = {}) {
   const fetch = vi.fn(async () => ({ ok, status: ok ? 200 : 404, arrayBuffer: async () => [] }));
   vi.stubGlobal('fetch', fetch);
+
   return fetch;
 }
 
@@ -33,6 +35,7 @@ async function loadedAnnouncer(audio, missionIndex = 0) {
   const announcer = createAnnouncer();
   preloadCalls(audio, announcer, game(missionIndex));
   await settle();
+
   return announcer;
 }
 

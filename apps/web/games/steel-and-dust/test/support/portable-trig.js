@@ -24,6 +24,7 @@ function sinKernel(x, tail, wasReduced) {
   if ((highWord(x) & 0x7fffffff) < TINY) {
     return x;
   }
+
   const [s1, s2, s3, s4, s5, s6] = SIN_TERMS;
   const square = x * x;
   const cube = square * x;
@@ -31,6 +32,7 @@ function sinKernel(x, tail, wasReduced) {
   if (!wasReduced) {
     return x + cube * (s1 + square * series);
   }
+
   return x - (square * (0.5 * tail - cube * series) - tail - cube * s1);
 }
 
@@ -39,6 +41,7 @@ function cosKernel(x, tail) {
   if (absHigh < TINY) {
     return 1;
   }
+
   const [c1, c2, c3, c4, c5, c6] = COS_TERMS;
   const square = x * x;
   const series =
@@ -46,7 +49,9 @@ function cosKernel(x, tail) {
   if (absHigh < NEAR_ZERO_POINT_THREE) {
     return 1 - (0.5 * square - (square * series - x * tail));
   }
+
   const quarter = absHigh > NEAR_ZERO_POINT_78 ? 0.28125 : fromWords(absHigh - 0x00200000, 0);
+
   return 1 - quarter - (0.5 * square - quarter - (square * series - x * tail));
 }
 
@@ -62,15 +67,18 @@ function portable(x, quarterTurns, native) {
   if (absHigh <= QUARTER_PI) {
     return quarterTurns ? cosKernel(x, 0) : sinKernel(x, 0, false);
   }
+
   if (absHigh >= NOT_FINITE) {
     return x - x;
   }
+
   const quadrant = reduceByHalfPi(x, reduced);
   // the game only goes past 2^19 * pi/2 for wind sway rounded to whole pixels, where a last bit
   // never shows
   if (quadrant === null) {
     return native(x);
   }
+
   return SIN_BY_QUADRANT[(quadrant + quarterTurns) & 3](reduced[0], reduced[1]);
 }
 

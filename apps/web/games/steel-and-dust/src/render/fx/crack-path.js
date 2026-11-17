@@ -15,10 +15,12 @@ const FORK = [
 function forkFrom(node, side) {
   const start = Math.abs(node.x);
   let from = node;
+
   return FORK.map(([ahead, down], i) => {
     const to = { x: node.x + side * ahead, y: node.y + down };
     const segment = { from, to, start: start + i, reach: start + i + 1, fork: true };
     from = to;
+
     return segment;
   });
 }
@@ -28,6 +30,7 @@ function forkFrom(node, side) {
 function nodeAt(seed, side, i) {
   const roll = hashInt(seed * 64 + i * side + 128);
   const swing = SWINGS[roll % SWINGS.length] * ((roll >>> 8) & 1 ? -1 : 1);
+
   return {
     x: side * (i * NODE_GAP + ((roll >>> 4) % 3) * 0.5),
     y: Math.round((swing + i * 0.3) * 2) / 2,
@@ -43,8 +46,10 @@ function crackSide(seed, side) {
     if (FORKS[side].includes(i)) {
       segments.push(...forkFrom(node, side));
     }
+
     last = node;
   }
+
   return segments;
 }
 
@@ -61,6 +66,7 @@ export function openCrack(segments, open) {
         x: segment.from.x + (segment.to.x - segment.from.x) * share,
         y: segment.from.y + (segment.to.y - segment.from.y) * share,
       };
+
       return { ...segment, to, running: share < 1 };
     });
 }

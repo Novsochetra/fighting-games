@@ -33,6 +33,7 @@ function layoutZone(spec, { left, label }) {
   const at = left + LEAD_IN;
   const waves = spec.boss ? [[spec.boss]] : spec.waves;
   const lastAt = screens > 1 ? right - FOLLOW_LEAD : at;
+
   return {
     at,
     left,
@@ -47,10 +48,12 @@ function layoutZone(spec, { left, label }) {
 function layoutZones(spec, number) {
   let left = FIRST_ZONE;
   let fights = 0;
+
   return spec.zones.map((zoneSpec) => {
     fights += zoneSpec.boss ? 0 : 1;
     const zone = layoutZone(zoneSpec, { left, label: `Zone ${number}-${fights}` });
     left = zone.right + ROAD;
+
     return zone;
   });
 }
@@ -60,6 +63,7 @@ function layoutCrates(zones, items, terrain) {
   const spots = zones.flatMap((zone) =>
     zone.screens > 1 ? [zone.left - 120, zone.left + VIEW_WIDTH + 60] : [zone.left - 120],
   );
+
   return spots
     .map((x, i) => ({ x, y: groundAt(terrain, x), item: items[i % items.length] }))
     .filter((crate) => WEAPON_CRATES || crate.item === 'ration');

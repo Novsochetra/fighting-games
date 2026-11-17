@@ -9,10 +9,12 @@ function hitSoundKey(game, attacker) {
   if (isPlayer(attacker) && game.player?.state === 'ult') {
     return 'ultHit';
   }
+
   const weapon = attackerWeapon(attacker);
   if (weapon) {
     return weapon.hitSound;
   }
+
   return (attacker.weapon && ENEMY_HIT_SOUND[attacker.weapon.id]) || 'blunt';
 }
 

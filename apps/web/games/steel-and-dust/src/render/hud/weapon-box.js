@@ -55,6 +55,7 @@ function drawDurability(painter, weapon, def, tickCount) {
     drawInfinity(painter, COLUMN_X, ROW_TWO);
     return;
   }
+
   const text = `${weapon.durability}`;
   const warn = isWorn(weapon, def);
   drawText(painter, text, { x: COLUMN_X, y: ROW_TWO, color: warn ? COLORS.coral : COLORS.lilac });
@@ -76,6 +77,7 @@ function drawSlot(painter, { weapon, def, popup }) {
       .outline(x - 2, y - 2, size + 4, size + 4);
     painter.alpha(1);
   }
+
   return pop;
 }
 
@@ -100,6 +102,7 @@ export function drawWeaponBox(painter, game, view) {
     drawWeaponParts(painter, game, view);
     return;
   }
+
   const { weapon } = game.player;
   const warning = warningOn(weapon, WEAPONS[weapon.id], game.tickCount);
   drawBoxStamped(painter, {

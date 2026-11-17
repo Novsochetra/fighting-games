@@ -40,6 +40,7 @@ describe('ambient leaves', () => {
         expect(rects[i + 1].color).not.toBe(rects[i].color);
       }
     }
+
     expect([...shapes].sort()).toEqual(['1x2', '2x1']);
   });
 
@@ -50,6 +51,7 @@ describe('ambient leaves', () => {
       const rects = rectsOf(leaves, { tick, colors: emberWoods });
       rects.filter((_, i) => i % 2 === 0).forEach((rect) => bodies.add(rect.color));
     }
+
     expect([...bodies].sort()).toEqual([...emberWoods.leaves].sort());
   });
 });

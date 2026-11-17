@@ -99,6 +99,7 @@ function updateResult(state, input) {
 const STEPS = {
   intro: (state, input) => pressed(input, 'pass') && enter(state, 'ready'),
   ready: (state) => state.phaseTicks >= READY_TICKS && enter(state, 'play'),
+
   play: (state, input) => {
     rulesOf(state).updateRun(state, input);
 
@@ -106,6 +107,7 @@ const STEPS = {
       enter(state, 'finish');
     }
   },
+
   finish: (state) => {
     rulesOf(state).updateFinish?.(state);
 
@@ -113,6 +115,7 @@ const STEPS = {
       settle(state);
     }
   },
+
   result: updateResult,
   done: () => {},
 };

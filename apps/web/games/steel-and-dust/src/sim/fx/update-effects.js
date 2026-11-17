@@ -10,6 +10,7 @@ const MOVE_PARTICLE = {
     particle.vx *= 0.86;
     particle.vy *= 0.86;
   },
+
   dust(particle) {
     particle.x += particle.vx;
     particle.y += particle.vy;
@@ -19,6 +20,7 @@ const MOVE_PARTICLE = {
       particle.size++;
     }
   },
+
   chunk(particle, terrain) {
     const lastY = particle.y;
     particle.vy += 0.25;
@@ -31,6 +33,7 @@ const MOVE_PARTICLE = {
       particle.vx *= 0.7;
     }
   },
+
   mote(particle) {
     particle.x += particle.vx;
     particle.y += particle.vy;
@@ -93,6 +96,7 @@ function updateParticles(game) {
     particle.life--;
     MOVE_PARTICLE[particle.kind](particle, game.terrain);
   }
+
   game.particles = game.particles.filter((particle) => particle.life > 0);
   if (game.particles.length > MAX_PARTICLES) {
     game.particles.splice(0, game.particles.length - MAX_PARTICLES);
@@ -103,6 +107,7 @@ function updateFloaters(game) {
   for (const effect of game.effects) {
     effect.time++;
   }
+
   game.effects = game.effects.filter((effect) => effect.time < effect.duration);
   for (const floater of game.floaters) {
     floater.time++;
@@ -110,6 +115,7 @@ function updateFloaters(game) {
       floater.x += floater.vx;
     }
   }
+
   game.floaters = game.floaters.filter((floater) => floater.time < (floater.big ? 70 : 40));
 }
 
@@ -117,11 +123,13 @@ function settleCamera(camera) {
   if (camera.zoom.time > 0) {
     camera.zoom.time--;
   }
+
   camera.kickX *= 0.75;
   camera.kickY *= 0.75;
   if (Math.abs(camera.kickX) < 0.05) {
     camera.kickX = 0;
   }
+
   if (Math.abs(camera.kickY) < 0.05) {
     camera.kickY = 0;
   }
@@ -133,11 +141,14 @@ export function updateEffects(game) {
   if (game.comboResult && ++game.comboResult.time > 110) {
     game.comboResult = null;
   }
+
   if (game.weaponPopup > 0) {
     game.weaponPopup--;
   }
+
   if (game.hurtFlash > 0) {
     game.hurtFlash--;
   }
+
   settleCamera(game.camera);
 }

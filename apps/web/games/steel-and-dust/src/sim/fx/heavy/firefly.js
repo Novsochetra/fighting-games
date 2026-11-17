@@ -56,6 +56,7 @@ function sting(game, hit, count) {
       drag: 0.88,
     });
   }
+
   spawnGlint(game, hit, { spread: 7, life: 9 });
 }
 
@@ -63,29 +64,35 @@ function sting(game, hit, count) {
 // render/fx/heavy/firefly-layers.js), flashes as one at the strike and is flung out with the blow
 export const FIREFLY_HEAVY_KIT = {
   sounds: { charge: 'heavyFireflyCharge', release: 'heavyFireflyRelease' },
+
   windup(game, fighter, move) {
     for (let i = 0; i < 3; i++) {
       joinSwarm(game, fighter, { move, time: 0, life: Math.max(4, move.startup - i) });
     }
   },
+
   gather(game, fighter, move, time) {
     if (time % 3 === 1 && move.startup - time > 3) {
       joinSwarm(game, fighter, { move, time, life: move.startup - time });
     }
   },
+
   release(game, fighter, move) {
     spawnFlash(game, swarmKnotOf(fighter, move), { size: 2, facing: fighter.facing });
     burstFromSwarm(game, fighter, move);
   },
+
   trail(game, fighter, move, time) {
     const since = time - move.startup;
     if (since < TRAIL_TICKS / 2 || (since % 2 === 0 && since < TRAIL_TICKS)) {
       shedFromBlade(game, fighter);
     }
   },
+
   impact(game, hit) {
     spawnFlash(game, hit, { size: 1, facing: hit.attacker.facing, life: 5 });
     sting(game, hit, hit.move.multiHit ? 1 : 3);
   },
+
   particles: FIREFLY_PARTICLE_MOVERS,
 };

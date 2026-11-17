@@ -10,8 +10,10 @@ function stampedPainter() {
   const createCanvas = (width, height) => {
     const canvas = Object.assign(new RecordingCanvas(), { width, height });
     made.push(canvas);
+
     return canvas;
   };
+
   return { painter: createPainter(screen.getContext('2d'), createCanvas), screen, made };
 }
 
@@ -22,6 +24,7 @@ function drawBox(painter, key, calls) {
     key,
     box: BOX,
     ready: true,
+
     draw: (inner) => {
       calls.push(key);
       inner.use('#123456').rect(BOX.x, BOX.y, 4, 4);
@@ -36,6 +39,7 @@ describe('a stamped HUD box', () => {
     for (let frame = 0; frame < 5; frame++) {
       drawBox(painter, 'lives|3', calls);
     }
+
     expect(calls).toEqual(['lives|3']);
     expect(made).toHaveLength(1);
     const log = screen.recording.log;

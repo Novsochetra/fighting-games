@@ -27,6 +27,7 @@ describe('the leaderboard rules in game.json', () => {
       .map((text) => {
         const scores = [...text.matchAll(/"score": (\d+)/g)].map((match) => Number(match[1]));
         const ticks = [...text.matchAll(/"tick": (\d+)/g)].map((match) => Number(match[1]));
+
         return Math.max(0, ...scores) / (Math.max(1, ...ticks) / 60);
       });
     expect(Math.max(...paces)).toBeGreaterThan(100);

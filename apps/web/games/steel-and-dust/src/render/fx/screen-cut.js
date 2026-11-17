@@ -14,6 +14,7 @@ const BEND = 0.08;
 function ends(effect, half) {
   const dx = Math.cos(effect.angle) * half;
   const dy = Math.sin(effect.angle) * half;
+
   return {
     from: { x: effect.x - dx, y: effect.y - dy },
     to: { x: effect.x + dx, y: effect.y + dy },

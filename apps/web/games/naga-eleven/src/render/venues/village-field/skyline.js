@@ -61,6 +61,7 @@ export function distantTrees(layout, art) {
     depth: -900,
     base: -196,
     height: 70,
+
     paint: (raster, frame) => {
       paintTreeLine(raster, { bottom: raster.height, height: 26, salt: 2 }, art.haze);
       paintWat(

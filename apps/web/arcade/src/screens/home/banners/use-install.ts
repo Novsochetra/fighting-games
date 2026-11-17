@@ -71,6 +71,7 @@ function useInstallOffer(hasPrompt: boolean) {
 
   return {
     offer,
+
     snooze() {
       preferences.dismissInstall(installer!.now());
       snoozed();
@@ -85,6 +86,7 @@ export function useInstall() {
 
   return {
     offer,
+
     add() {
       setPrompt(null);
       sound.play('sheetOpen');

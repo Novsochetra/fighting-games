@@ -52,19 +52,23 @@ function gapsAlong(image, { left, top }, { y, from, to }) {
       gaps.push(x);
     }
   }
+
   return gaps;
 }
 
 function stripImage(heroId, strip) {
   const hero = HEROES.find(({ id }) => id === heroId);
+
   return readPngAlpha(new URL(stripPath(hero, strip), GAME));
 }
 
 function gapsIn({ hero, strip, frame, lines }) {
   const image = stripImage(hero, strip);
   const height = image.height / WEAPON_IDS.length;
+
   return ['fists', 'spear', 'axe'].flatMap((weapon) => {
     const corner = { left: frame * frameWidth, top: WEAPONS[weapon].spriteRow * height };
+
     return lines
       .map((line) => ({ weapon, y: line.y, gaps: gapsAlong(image, corner, line) }))
       .filter(({ gaps }) => gaps.length > 0);

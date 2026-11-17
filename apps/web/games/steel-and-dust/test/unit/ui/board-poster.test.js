@@ -20,9 +20,11 @@ function fakePage() {
                 if (key === 'fillText') {
                   canvas.texts.push(args[0]);
                 }
+
                 if (key === 'drawImage') {
                   canvas.cuts.push(args.slice(1, 5));
                 }
+
                 return { width: 1 };
               },
       },
@@ -31,6 +33,7 @@ function fakePage() {
     canvas.toBlob = (done, type, quality) =>
       done(new Blob([`${canvas.width}x${canvas.height} ${type} ${quality}`]));
     canvases.push(canvas);
+
     return canvas;
   };
   const document = {
@@ -55,6 +58,7 @@ function fakePage() {
       },
     };
   }
+
   return { window: { Image: FakeImage, FileReader: FakeReader }, document, canvases };
 }
 

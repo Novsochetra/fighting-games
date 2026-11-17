@@ -34,6 +34,7 @@ describe('the hero carousel on the real page', () => {
     for (let step = 0; step < 7; step++) {
       page.key('ArrowRight');
     }
+
     expect(middle()).toBe('angkor');
     page.key('ArrowRight');
     expect(middle()).toBe('moss');

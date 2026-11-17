@@ -17,6 +17,7 @@ function recordSlots(card) {
     placed.push([name, value]);
     setProperty(name, value);
   });
+
   return (name) => placed.filter(([property]) => property === name).map(([, value]) => value);
 }
 

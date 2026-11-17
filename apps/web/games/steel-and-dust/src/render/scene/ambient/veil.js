@@ -6,6 +6,7 @@ const WAVE = 8;
 
 function waveAt(column) {
   const swell = 0.6 * Math.sin(column * 0.47) + 0.4 * Math.sin(column * 0.19 + 2);
+
   return Math.round(((swell + 1) / 2) * WAVE);
 }
 

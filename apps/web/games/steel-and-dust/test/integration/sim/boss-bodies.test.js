@@ -13,6 +13,7 @@ function arena(kind, gap) {
   const boss = game.boss;
   Object.assign(boss, { entering: false, x: game.player.x + gap, facing: -1 });
   boss.ai.cooldown = 9999;
+
   return { game, boss };
 }
 

@@ -77,6 +77,7 @@ export function openPage({ records, settings = {} } = {}) {
     typeKey: (code) => window.dispatchEvent(new window.KeyboardEvent('keydown', { code })),
     saved: () => JSON.parse(window.localStorage.getItem('kit_luy')),
     view: () => document.getElementById('app').dataset.view,
+
     openMenu: () =>
       document.getElementById('menus').classList.contains('is-down')
         ? document.querySelector('.menu.open').id

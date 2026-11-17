@@ -72,6 +72,7 @@ export function runnerDrawable(state, { camera, tick, actors }) {
 
   return {
     depth: runner.y,
+
     draw: (context) => {
       if (runner.sprinting && moving) {
         drawSpeedLines(context, place, { tick, back: runner.facing.x < 0 ? 1 : -1 });
@@ -121,6 +122,7 @@ export function ballDrawable(state, { camera }) {
   return {
     depth: ball.y,
     inGoal: ball.inGoal,
+
     draw: (context) =>
       drawGroundBall(context, { x: place.x, y: place.y, height: ball.height, travel: ball.travel }),
   };

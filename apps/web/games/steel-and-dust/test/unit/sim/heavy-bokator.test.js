@@ -33,6 +33,7 @@ function age(game) {
     particle.life--;
     KIT.particles[particle.kind]?.(particle, terrain);
   }
+
   game.particles = game.particles.filter((particle) => particle.life > 0);
   game.summons.forEach((burst) => burst.time++);
   game.summons = game.summons.filter((burst) => burst.time < fxLength(burst.sprite));
@@ -43,12 +44,15 @@ function dressTick(game, { fighter, move, time }) {
   if (time === 0) {
     KIT.windup(game, fighter, move);
   }
+
   if (time < move.startup) {
     KIT.gather(game, fighter, move, time);
   }
+
   if (time === move.startup) {
     KIT.release(game, fighter, move);
   }
+
   if (time >= move.startup && time < activeEnd(move)) {
     KIT.trail(game, fighter, move, time);
   }
@@ -64,9 +68,11 @@ function playMove(game, { fighter, move, hits = [], ticks = moveLength(move) }) 
     if (hits.includes(time)) {
       KIT.impact(game, blow(fighter, move));
     }
+
     age(game);
     most = Math.max(most, game.particles.length);
   }
+
   return most;
 }
 
@@ -82,9 +88,11 @@ function recordingPainter() {
   painter.alpha = () => painter;
   painter.rect = (x, y) => {
     painter.rects.push({ x, y, color: painter.color });
+
     return painter;
   };
   painter.line = () => painter;
+
   return painter;
 }
 
@@ -105,6 +113,7 @@ describe("the Bokator's heavy", () => {
     for (let i = 0; i < 8; i++) {
       age(game);
     }
+
     for (const mote of motes) {
       expect(Math.hypot(mote.x - 100, mote.y - 80)).toBeLessThan(3);
     }
@@ -116,6 +125,7 @@ describe("the Bokator's heavy", () => {
     for (let i = 0; i < 15; i++) {
       age(game);
     }
+
     for (const leaf of game.particles) {
       expect(leaf.y).toBeLessThanOrEqual(FLOOR);
     }
@@ -206,6 +216,7 @@ describe("the Bokator's heavy", () => {
     for (let time = move.startup; time < move.startup + FLAME_HOLD; time++) {
       dressTick(game, { fighter, move, time });
     }
+
     expect(burning(game, 'gather')).toHaveLength(1);
     dressTick(game, { fighter, move, time: move.startup + FLAME_HOLD });
     expect(burning(game, 'gather')).toEqual([]);
@@ -245,6 +256,7 @@ describe("the Bokator's heavy", () => {
     for (const particle of game.particles) {
       BOKATOR_HEAVY_RENDER.particles[particle.kind]?.(painter, particle);
     }
+
     const time = move.startup - 1;
     BOKATOR_HEAVY_RENDER.over(painter, { fighter, move, time, art: ART, tickCount: 0 });
     expect(painter.rects.some((rect) => rect.color === ART.core)).toBe(true);

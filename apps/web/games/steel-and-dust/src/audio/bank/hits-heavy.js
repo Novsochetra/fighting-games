@@ -34,6 +34,7 @@ function buildHeavy(track, pitch, size) {
   });
   boom(track, { from: 100 * tuned, to: 34, decay: 0.32 * longer, level: 1.2, drive: 2 });
   crackle(track, { start: 0, length: 0.05 * longer, count: 10, cutoff: 2200, level: 0.5 });
+
   return { drive: 2.8 };
 }
 

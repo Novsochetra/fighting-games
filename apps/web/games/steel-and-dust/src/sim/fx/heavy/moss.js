@@ -16,6 +16,7 @@ function windup(game, fighter) {
     const x = ground.x + fxBetween(game, -9, 9);
     addSpore(game, { x, y: ground.y - 1, vy: -fxBetween(game, 0.5, 0.9), life: 24 });
   }
+
   if (!fighter.airborne) {
     throwSpray(game, addLeaf, {
       at: ground,
@@ -36,6 +37,7 @@ function gather(game, fighter, move, time) {
   if (time % 3 === 0 && ticks >= 3) {
     addPulledLeaf(game, { at: mossCoreOf(fighter), ticks });
   }
+
   if (time % 2 === 1) {
     const x = fighter.x + fxBetween(game, -12, 12);
     addSpore(game, { x, y: fighter.y - 1, vy: -fxBetween(game, 0.6, 1.1), life: 20 });
@@ -61,6 +63,7 @@ function trail(game, fighter, move, time) {
   if (since % 2 !== 0 || since >= TRAIL_TICKS) {
     return;
   }
+
   const tip = bladeTipOf(fighter);
   const back = -fighter.facing;
   addLeaf(game, { ...tip, vx: back * fxBetween(game, 0.4, 1.1), vy: -fxBetween(game, 0.2, 0.8) });

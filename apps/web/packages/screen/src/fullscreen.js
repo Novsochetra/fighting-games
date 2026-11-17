@@ -16,6 +16,7 @@ export function createFullscreen({ document, screen, lockLandscape = () => false
     if (!request) {
       return;
     }
+
     try {
       const pending = request.call(root, { navigationUI: 'hide' });
       pending?.then?.(lock).catch(() => {});

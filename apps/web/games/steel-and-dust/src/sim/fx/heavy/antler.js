@@ -27,10 +27,12 @@ function shedTrail(game, fighter, move, since) {
   if (since === SHED_AT) {
     shedAntlers(game, fighter, move);
   }
+
   if (since % 2 === 1) {
     const tip = bladeTipOf(fighter);
     addWisp(game, { ...tip, vx: -fighter.facing * fxBetween(game, 0.3, 0.8), life: 12 });
   }
+
   if (charges(move) && !fighter.airborne && since % 4 === 3) {
     addHoof(game, { x: fighter.x - fighter.facing * 3, y: fighter.y });
   }
@@ -38,19 +40,23 @@ function shedTrail(game, fighter, move, since) {
 
 export const ANTLER_HEAVY_KIT = {
   sounds: { charge: 'heavyAntlerCharge', release: 'heavyAntlerRelease' },
+
   windup(game, fighter) {
     if (!fighter.airborne) {
       stamp(game, fighter, -5);
     }
   },
+
   gather(game, fighter, _move, time) {
     if (time % 2 === 0) {
       risingFlame(game, fighter);
     }
+
     if (time % 4 === 1) {
       gatherMotes(game, crownOf(fighter), { colors: ART.motes, radius: 16, life: 8, count: 1 });
     }
   },
+
   release(game, fighter, move) {
     const chest = chestOf(fighter);
     addRing(game, { ...chest, color: ART.glow });
@@ -60,12 +66,14 @@ export const ANTLER_HEAVY_KIT = {
       stamp(game, fighter, 4);
     }
   },
+
   trail(game, fighter, move, time) {
     const since = time - move.startup;
     if (since <= TRAIL_TICKS) {
       shedTrail(game, fighter, move, since);
     }
   },
+
   impact(game, { attacker, move, x, y }) {
     const light = Boolean(move.multiHit);
     addFork(game, { x: x + attacker.facing * FORK_AHEAD, y, facing: attacker.facing });
@@ -75,5 +83,6 @@ export const ANTLER_HEAVY_KIT = {
       addWisp(game, { x, y: y + fxBetween(game, -4, 4), vx, vy: -fxBetween(game, 0.6, 1.2) });
     }
   },
+
   particles: ANTLER_PARTICLE_MOVERS,
 };

@@ -6,6 +6,7 @@ export function splitRequestTarget(rawUrl) {
   if (queryStart === -1) {
     return { pathname: rawUrl, query: '' };
   }
+
   return { pathname: rawUrl.slice(0, queryStart), query: rawUrl.slice(queryStart) };
 }
 
@@ -13,9 +14,11 @@ export function toPublicSegments(rawPathname) {
   if (!rawPathname.startsWith('/')) {
     return null;
   }
+
   const parts = rawPathname.slice(1).split('/');
   const trailingSlash = parts.at(-1) === '';
   const segments = (trailingSlash ? parts.slice(0, -1) : parts).map(decodeSegment);
+
   return segments.every(isPublicSegment) ? { segments, trailingSlash } : null;
 }
 
@@ -32,9 +35,11 @@ function isPublicSegment(segment) {
   if (typeof segment !== 'string' || segment === '') {
     return false;
   }
+
   if (segment.includes('/') || segment.includes('\\') || segment.includes('\0')) {
     return false;
   }
+
   return !isHiddenName(segment);
 }
 
@@ -43,6 +48,7 @@ export function resolveStaticTarget(webRoot, rawPathname, mounts = new Map()) {
   if (!parsed) {
     return null;
   }
+
   const [first, ...rest] = parsed.segments;
   const mount = mounts.get(first);
   const root = path.resolve(mount ?? webRoot);
@@ -50,6 +56,8 @@ export function resolveStaticTarget(webRoot, rawPathname, mounts = new Map()) {
   if (filePath !== root && !filePath.startsWith(`${root}${path.sep}`)) {
     return null;
   }
+
   const canonicalPath = `/${parsed.segments.map(encodeURIComponent).join('/')}`;
+
   return { filePath, trailingSlash: parsed.trailingSlash, canonicalPath };
 }

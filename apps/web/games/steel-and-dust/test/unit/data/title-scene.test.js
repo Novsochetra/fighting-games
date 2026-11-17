@@ -20,9 +20,11 @@ function bandOf(effect) {
   if ('top' in effect) {
     return { top: effect.top + shiftY, bottom: effect.bottom + shiftY };
   }
+
   if (effect.kind === 'leaves') {
     return { top: shiftY, bottom: shiftY + VIEW_HEIGHT };
   }
+
   return { top: effect.y - FLOCK_REACH + shiftY, bottom: effect.y + FLOCK_REACH + shiftY };
 }
 

@@ -15,17 +15,20 @@ export function emitterScreenXs(emitter, { tileWidth, cameraX, drift = 0 }) {
   if (!(tileWidth > 0)) {
     return isNear(shifted) ? [Math.round(shifted)] : [];
   }
+
   const screenXs = [];
   for (let x = wrapX(shifted, tileWidth) - tileWidth; x < VIEW_WIDTH + REACH; x += tileWidth) {
     if (isNear(x)) {
       screenXs.push(Math.round(x));
     }
   }
+
   return screenXs;
 }
 
 export function emitterSpots(effect, cameraX) {
   const scroll = { tileWidth: effect.tileWidth, cameraX, drift: effect.drift };
+
   return effect.emitters.flatMap((emitter, index) =>
     emitterScreenXs(emitter, scroll).map((x) => ({ x, y: emitter.y, index })),
   );

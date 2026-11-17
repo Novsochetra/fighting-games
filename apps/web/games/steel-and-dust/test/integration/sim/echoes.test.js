@@ -21,6 +21,7 @@ function gameWithEcho() {
   raider.ai.cooldown = 999;
   const at = { x: raider.x - 20, y: raider.y, facing: 1, sprite: ['thrust', 3, 1] };
   leaveEcho(game, { ...at, target: raider });
+
   return { game, raider };
 }
 

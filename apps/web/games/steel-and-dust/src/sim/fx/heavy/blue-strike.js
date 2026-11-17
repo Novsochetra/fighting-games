@@ -25,6 +25,7 @@ export function strikeLineOf(fighter, move) {
   const back = half * (dy > 0.3 ? 0.3 : 0.6);
   const backX = center.x - dx * back;
   const shift = fighter.facing * Math.max(0, CLEAR - (backX - fighter.x) * fighter.facing);
+
   return {
     from: { x: backX + shift, y: center.y - dy * back },
     to: { x: center.x + dx * half + shift, y: center.y + dy * half },

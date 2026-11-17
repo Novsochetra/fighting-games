@@ -42,6 +42,7 @@ export function spitVenom(game, fighter, { count, gap, puddle }) {
       puddle,
     });
   }
+
   game.io.sfx('venomSpit', false, { x: fighter.x, dir: fighter.facing });
 }
 

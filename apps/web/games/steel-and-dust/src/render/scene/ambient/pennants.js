@@ -11,6 +11,7 @@ function columnAt(spot, { column, columns, effect, tick }) {
   const phase = tick * 0.12 - column * 0.5 + spot.index * 1.9;
   const height = Math.max(2, Math.round(effect.height * (1 - along * 0.4)));
   const split = Math.max(0, (along - SWALLOWTAIL) / (1 - SWALLOWTAIL));
+
   return {
     x: spot.x - (columns * COLUMN) / 2 + column * COLUMN,
     y: spot.y + Math.round(Math.sin(phase) * along * effect.flutter + along * effect.droop),
@@ -25,6 +26,7 @@ function shadeOf(tilt, [, dark, body, light]) {
   if (tilt > 0.45) {
     return light;
   }
+
   return tilt < -0.45 ? dark : body;
 }
 
@@ -39,6 +41,7 @@ function drawColumn(painter, slice, colors) {
   } else {
     painter.rect(slice.x, slice.y, COLUMN, slice.height);
   }
+
   painter.use(colors[0]).rect(slice.x, slice.y - 1, COLUMN, 1);
   painter.rect(slice.x, slice.y + slice.height, COLUMN, 1);
 }

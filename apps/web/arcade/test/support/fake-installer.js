@@ -7,6 +7,7 @@ export const DAY_MS = 24 * 60 * 60 * 1000;
 // or the installed app already, and a clock the test moves by hand.
 export function createFakeInstaller({ isIos = false, isInstalled = false, time = 1_000_000 } = {}) {
   const clock = { time };
+
   return {
     events: new EventTarget(),
     isIos,
@@ -24,6 +25,7 @@ export function offerInstall(installer, outcome = 'accepted') {
   act(() => {
     installer.events.dispatchEvent(event);
   });
+
   return event;
 }
 
