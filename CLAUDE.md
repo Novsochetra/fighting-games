@@ -20,24 +20,12 @@ changing structure.
 
 ## Coding
 
-The coding style every project of ours shares, imported here; this section adds this project's own
-rules on top of it:
-
 @docs/coding-style.md
 
-- Lint enforces the size and complexity limits: 150 lines a file, 40 lines a function, complexity
-  10, depth 3, 4 parameters. Blank lines don't count toward them (`skipBlankLines` in
-  `eslint.config.js`).
-- Where code belongs: `docs/architecture.md`, "Layout of the arcade" and "Layout of a game".
-- Lint enforces the comment rules for `/** */` and `/* */` blocks in app and package source
-  (`local/no-jsdoc-blocks` in `eslint.config.js`), for section banners (`local/no-banner-comments`)
-  and for `TODO` / `FIXME` (`no-warning-comments`).
-- A Claude Code hook (`.claude/settings.json`, `tools/claude-hooks/`) shows Claude each comment an
-  edit or a commit adds, so it deletes the what-comments before going on.
-- Prettier owns formatting (`.prettierrc.json`); the blank lines are yours.
-- Process-wide setup lives in these entry files: the server's signal and stream handlers and
-  `process.exit` in `apps/server/src/main.js`; page-wide listeners on `window` or `document` in
-  `main.tsx` or a game's `src/main.js`, or a module it calls for that (`install-input.js`, `boot/`).
+- Lint holds files to 150 lines, functions to 40 lines, complexity 10, depth 3 and 4 parameters.
+- Process-wide setup goes in the entry files: `apps/server/src/main.js` for the server's signal and
+  stream handlers and `process.exit`; `main.tsx`, a game's `src/main.js`, or a module they call for
+  it (`install-input.js`, `boot/`) for listeners on `window` or `document`.
 - Each game is independent: it loads nothing from outside its own folder but the shared packages
   (`apps/web/packages/`), and the home page loads nothing from a game
   (`apps/web/arcade/test/integration/independence.test.js` checks both). Never share a file, token
@@ -52,32 +40,20 @@ rules on top of it:
 
 ## Testing
 
-The testing rules every project of ours shares, imported here; this section says where this
-project's tests live and how to run them:
-
 @docs/testing.md
 
-- Each part keeps its tests in `test/unit/`, `test/integration/` and `test/regression/`. Integration
-  tests here cover the HTTP server, the home page against the real catalog and the game simulation
-  running many systems at once; regression tests also hold each game's recorded runs.
-- The full check is `npm run check`.
+- Tests live in `test/unit/`, `test/integration/` and `test/regression/` of each part.
 - Changing game behavior on purpose (balance, new moves) changes the recorded runs in
   `test/regression/fixtures/`: update them with `npm run test:regression -- -u` and review the diff.
 
 ## Versions
 
-The versioning rules every project of ours shares, imported here; this section says where the
-arcade's version lives, how to raise it and what its players see:
-
 @docs/versioning.md
 
-- The arcade's version is the `version` in the root `package.json`; each build adds its commit after
-  a `+` (`1.0.0+5f272d9`, see "The build" in `docs/architecture.md`).
-- `npm version patch --no-git-tag-version` for fixes, balance and tuning, art and sound redone.
-- `npm version minor --no-git-tag-version` for something new: a game, a screen, a mode, a hero, a
-  mission, a move.
-- `npm version major --no-git-tag-version` only for a change that breaks what a player keeps: their
-  saves, an installed arcade.
+- The version is the `version` in the root `package.json`; raise it with
+  `npm version <patch|minor|major> --no-git-tag-version`.
+- Here a new game, screen, mode, hero, mission or move is minor; balance and tuning are patch;
+  breaking a player's saves or an installed arcade is major.
 
 ## Layout of the arcade
 
