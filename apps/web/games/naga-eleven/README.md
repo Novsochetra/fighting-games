@@ -862,7 +862,7 @@ this game's. Every helper follows all of them.
 - **Comments only say why**, never what; no `/* */` or `/** */` blocks in source, no section
   banners, no TODO or FIXME. A hook shows you each comment you add: delete the what-comments.
 - **Names explain themselves**: no one-letter names but `x`, `y`, `i`, `j`, `_`.
-- **Blank lines**: after the setup `const`s, after a block that ends in `}` when code follows,
+- **Blank lines** (`docs/coding-style.md`): between the blocks of a function, after a block that ends in `}` when code follows,
   after an early return, before the final `return` (unless it is the only line), between an
   object's methods; never right after `{` or right before `}`.
 - **Colours**: hex only in `src/art/` (pixel-art data) and `styles/tokens.css`; components and

@@ -44,8 +44,9 @@ tools/               the project's own ESLint rules, Claude Code hook and art to
 docs/                architecture notes
 ```
 
-`docs/architecture.md` explains how the pieces fit, and `CLAUDE.md` holds the coding rules and where
-each part of the arcade goes ("Layout of the arcade").
+`docs/architecture.md` explains how the pieces fit, `docs/coding-style.md` holds the coding style
+(no file of this project in it, so other projects can reuse it), and `CLAUDE.md` imports it and adds
+this project's rules and where each part of the arcade goes ("Layout of the arcade").
 
 ## Quality checks
 
