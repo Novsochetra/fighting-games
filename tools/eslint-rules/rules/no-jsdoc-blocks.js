@@ -15,6 +15,7 @@ export const noJsdocBlocks = {
     },
     schema: [],
   },
+
   create(context) {
     return {
       Program() {

@@ -1,3 +1,4 @@
+import { blankLines } from './rules/blank-lines.js';
 import { noBannerComments } from './rules/no-banner-comments.js';
 import { noJsdocBlocks } from './rules/no-jsdoc-blocks.js';
 import { noRawHex } from './rules/no-raw-hex.js';
@@ -5,6 +6,7 @@ import { noRawHex } from './rules/no-raw-hex.js';
 export const localRules = {
   meta: { name: 'local' },
   rules: {
+    'blank-lines': blankLines,
     'no-banner-comments': noBannerComments,
     'no-jsdoc-blocks': noJsdocBlocks,
     'no-raw-hex': noRawHex,

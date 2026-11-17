@@ -47,6 +47,10 @@ const comments = {
   'local/no-banner-comments': 'error',
 };
 
+const layout = {
+  'local/blank-lines': 'error',
+};
+
 export default [
   // .claude/ holds Claude Code's own worktrees, copies of this repo it lints on its own
   { ignores: ['node_modules/', 'dist/', 'coverage/', '**/assets/**', '.claude/'] },
@@ -55,7 +59,7 @@ export default [
   {
     plugins: { local: localRules },
     languageOptions: { ecmaVersion: 'latest', sourceType: 'module', globals: globals.node },
-    rules: { ...sizeAndComplexity, ...readability, ...comments },
+    rules: { ...sizeAndComplexity, ...readability, ...comments, ...layout },
   },
   ...tseslint.configs.recommended.map((config) => ({ ...config, files: ['**/*.{ts,tsx}'] })),
   {

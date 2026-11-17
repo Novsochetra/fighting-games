@@ -15,11 +15,13 @@ export const noRawHex = {
     },
     schema: [],
   },
+
   create(context) {
     return {
       Literal(node) {
         reportIfHex(context, node, node.value);
       },
+
       TemplateElement(node) {
         reportIfHex(context, node, node.value.cooked);
       },

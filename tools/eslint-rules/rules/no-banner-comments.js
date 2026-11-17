@@ -9,6 +9,7 @@ export const noBannerComments = {
     },
     schema: [],
   },
+
   create(context) {
     return {
       Program() {
