@@ -10,8 +10,14 @@ export function canShareFiles(navigator, FileType = globalThis.File) {
   }
 }
 
+// The Download link asks CloudFront without an Origin, so its copy has no CORS header, and the
+// browser keeps it a year (immutable); skipping that cache sends no-cache, which CloudFront answers
+// without the header too. A share asks at an address of its own, which the browser has kept nothing
+// for and CloudFront answers as the same file.
+export const shareAddress = (url) => `${url}?share`;
+
 export async function fetchWallpaper(fetchFile, { url, name, type }, FileType = globalThis.File) {
-  const answer = await fetchFile(url);
+  const answer = await fetchFile(shareAddress(url));
 
   if (!answer.ok) {
     throw new Error(`${url} answered ${answer.status}`);

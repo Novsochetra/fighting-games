@@ -41,9 +41,17 @@ describe('fetchWallpaper', () => {
     const fetchFile = vi.fn(async () => new Response(new Blob(['png bytes'])));
     const file = await fetchWallpaper(fetchFile, DOWNLOAD);
 
-    expect(fetchFile).toHaveBeenCalledWith(DOWNLOAD.url);
+    expect(fetchFile).toHaveBeenCalledWith(`${DOWNLOAD.url}?share`);
     expect(file).toMatchObject({ name: 'kulen-desktop.png', type: 'image/png' });
     expect(await file.text()).toBe('png bytes');
+  });
+
+  it('asks at an address apart from the Download link, whose copy the browser keeps', async () => {
+    const fetchFile = vi.fn(async () => new Response(new Blob(['png bytes'])));
+
+    await fetchWallpaper(fetchFile, DOWNLOAD);
+
+    expect(fetchFile.mock.calls[0][0]).not.toBe(DOWNLOAD.url);
   });
 
   it('fails when the address does not send the file', async () => {

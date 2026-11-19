@@ -133,7 +133,9 @@ describe('the wallpapers page', () => {
 
     const [{ files }] = share.mock.calls[0];
     expect(files[0].name).toBe('retro-arcade-kulen-night-phone.jpg');
-    expect(fetchFile).toHaveBeenCalledWith(expect.stringMatching(/kulen-night\/phone-\w+\.jpg$/));
+    expect(fetchFile).toHaveBeenCalledWith(
+      expect.stringMatching(/kulen-night\/phone-\w+\.jpg\?share$/),
+    );
   });
 
   it('is pushed over the arcade from the card under its library', async () => {
