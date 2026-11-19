@@ -1,8 +1,6 @@
 // @vitest-environment happy-dom
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { act } from '@testing-library/react';
 import {
-  arcadeFetch,
   changed,
   homeLoaded,
   screenOf,
@@ -11,7 +9,6 @@ import {
   stopArcades,
   tap,
 } from '../../../support/arcade-harness.js';
-import { waitUntil } from '../../../support/render-arcade.tsx';
 
 const CDN = /^https:\/\/[\w.]+\.cloudfront\.net\/wallpapers\//;
 
@@ -33,22 +30,13 @@ function openTile(id) {
   return byId('wallpaper-sheet');
 }
 
-// a phone: a touch screen whose browser can share a file, and the CloudFront file it fetches
 function onAPhone() {
-  const share = vi.fn(async () => {});
-  const shared = arcadeFetch();
-  const fetchFile = vi.fn(async (url) =>
-    CDN.test(url) ? new Response(new Blob(['jpeg'])) : shared(url),
-  );
-
   vi.spyOn(window, 'matchMedia').mockImplementation((query) => ({
     matches: query === '(pointer: coarse)',
     addEventListener() {},
     removeEventListener() {},
   }));
-  Object.assign(navigator, { canShare: () => true, share });
-
-  return { share, fetchFile };
+  Object.assign(navigator, { canShare: () => true, share: vi.fn() });
 }
 
 afterEach(() => {
@@ -121,21 +109,14 @@ describe('the wallpapers page', () => {
     expect(one('.wallpaper-preview__image[data-active="false"]').getAttribute('alt')).toBe('');
   });
 
-  it('opens on the phone cut on a phone, and shares the phone file to save to Photos', async () => {
-    const { share, fetchFile } = onAPhone();
+  it('opens on the phone cut on a phone, with Download alone even where files can be shared', () => {
+    onAPhone();
 
-    openWallpapers({ fetch: fetchFile });
+    openWallpapers();
     openTile('kulen-night');
     expect(byId('wallpaper-size').textContent).toMatch(/^JPEG · 1440 × 3120/);
-
-    await act(async () => byId('wallpaper-share').click());
-    await waitUntil(() => expect(share).toHaveBeenCalledTimes(1));
-
-    const [{ files }] = share.mock.calls[0];
-    expect(files[0].name).toBe('retro-arcade-kulen-night-phone.jpg');
-    expect(fetchFile).toHaveBeenCalledWith(
-      expect.stringMatching(/kulen-night\/phone-\w+\.jpg\?share$/),
-    );
+    expect(byId('wallpaper-download').getAttribute('href')).toMatch(/kulen-night\/phone-\w+\.jpg$/);
+    expect(byId('wallpaper-share')).toBeNull();
   });
 
   it('is pushed over the arcade from the card under its library', async () => {

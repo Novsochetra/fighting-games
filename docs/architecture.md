@@ -1009,19 +1009,15 @@ and square on a phone, so the sheet never changes size as they swap: the compute
 edge to edge, and the phone's stands upright over the whole picture blurred, as a lock screen.
 Switching fades one into the other by opacity and scale alone, each once its file is in, and the
 other cut's file comes down only once a visitor switches to it
-(`test/regression/bugs/wallpaper-sheet-height.test.js`). An iPhone sets a
-wallpaper only from Photos, which a download never reaches, so a touch screen that can share files
-also gets Share (`use-wallpaper-share.ts`, `wallpaper-share.js`): it fetches the chosen file and
-hands it to the share sheet, whose Save Image puts it in Photos. The sheet opens only just after a
-tap, so a download that outlasts it keeps the file and asks for one more tap (Share now). All, Day
-and Night filter the grid (`mood`: a sun or a moon in the sky).
+(`test/regression/bugs/wallpaper-sheet-height.test.js`). All, Day and Night filter the grid
+(`mood`: a sun or a moon in the sky).
 
 **Likes and downloads.** A heart in the sheet likes a wallpaper, and the sheet and each tile say how
 many have, and how many times it was saved (`api/wallpapers/`: `wallpapers-client.js`,
 `use-wallpaper-counts.ts`). The server keeps them in Postgres (`0005_wallpapers`):
 `wallpaper_likes`, one row a visitor, keyed by the random id their browser makes at its first like
 (`randomId`, kept in `preferences`), so a like sent twice counts once and taking it back takes back
-only theirs, and `wallpaper_downloads`, a row for each Download tapped or Share that went through,
+only theirs, and `wallpaper_downloads`, a row for each Download tapped,
 with its shape. `GET /api/wallpapers` answers `{ "wallpapers": { "<id>": { "likes", "downloads" } } }`
 for each wallpaper with any; `POST /api/wallpapers/likes` takes `{ wallpaper, visitor, liked }` and
 answers the wallpaper's likes, and `POST /api/wallpapers/downloads` takes `{ wallpaper, shape }` and

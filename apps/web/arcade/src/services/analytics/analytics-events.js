@@ -22,7 +22,6 @@ export const EVENTS = {
   wallpapers: 'open_wallpapers',
   wallpaper: 'view_wallpaper',
   wallpaperDownload: 'download_wallpaper',
-  wallpaperShare: 'share_wallpaper',
   wallpaperLike: 'like_wallpaper',
   coffee: 'open_coffee_sheet',
   buyMeACoffee: 'open_buy_me_a_coffee',
