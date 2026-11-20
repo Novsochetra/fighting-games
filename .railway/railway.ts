@@ -27,11 +27,32 @@ export default defineRailway(() => {
     deploy: { drainingSeconds: 15 },
   });
 
+  // The live service (apps/live): parties and voice tickets. Its own deploys, so a push to the arcade
+  // never restarts a party night; it watches the server files it reuses too.
+  const live = service('@arcade/live', {
+    source: github('Novsochetra/fighting-games', { branch: 'main', checkSuites: false }),
+    build: {
+      buildCommand: 'NPM_CONFIG_PRODUCTION= npm prune --omit=dev',
+      watchPatterns: [
+        'apps/live/**',
+        'apps/server/src/http-responses.js',
+        'apps/server/src/security/**',
+        'package-lock.json',
+      ],
+    },
+    start: 'node apps/live/src/main.js',
+    healthcheck: '/api/health',
+    healthcheckTimeout: 60,
+    // One copy: the parties and the rate limit live in its memory.
+    replicas: { 'asia-southeast1-eqsg3a': 1 },
+    deploy: { drainingSeconds: 15 },
+  });
+
   return project('Retro Arcade', {
     // The dashboard keeps the variables, the database password among them. The CLI reads this, but
     // the SDK's types don't list it yet.
     // @ts-expect-error -- variables is missing from ProjectDefinition in the railway SDK
     variables: { managed: false },
-    resources: [arcade],
+    resources: [arcade, live],
   });
 });

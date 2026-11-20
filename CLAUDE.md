@@ -15,6 +15,7 @@ changing structure.
 | `npm run typecheck`     | TypeScript over the arcade (`tsconfig.json`)                                 |
 | `npm test`              | all Vitest projects: `unit`, `integration`, `regression`                     |
 | `npm run build`         | the arcade into `dist/`, which `npm start` and Railway serve                 |
+| `npm run live`          | the live service (parties, voice tickets) on http://localhost:8766           |
 | `npm run db:migrate`    | applies new migrations to the Postgres at `DATABASE_URL`                     |
 | `npm run storage:check` | uploads one small file to the S3 bucket and reads it back through CloudFront |
 

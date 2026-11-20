@@ -1,0 +1,9 @@
+{
+  "name": "@arcade/live",
+  "private": true,
+  "type": "module",
+  "main": "src/main.js",
+  "dependencies": {
+    "livekit-server-sdk": "2.20.1"
+  }
+}

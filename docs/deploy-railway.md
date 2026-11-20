@@ -209,6 +209,33 @@ DATABASE_URL=postgres://localhost/arcade npm run dev
 Postgres service → **Backups** → **Create backup** before a risky change, and add a **Daily** schedule.
 Restore from the same tab.
 
+## The live service
+
+`apps/live/` (see "Live service" in `docs/architecture.md`) is a second service in the same Railway
+project, from the same repo, set in `.railway/railway.ts` (`@arcade/live`): it deploys only when
+`apps/live/`, the server files it reuses or the lockfile change, starts with
+`node apps/live/src/main.js` and answers `GET /api/health`. After `railway config apply` creates it:
+
+1. Its **Variables** (Raw Editor):
+
+   ```bash
+   PORT=8766
+   LIVEKIT_URL=wss://voice.morodokangkor.com
+   LIVEKIT_API_KEY=<the key>
+   LIVEKIT_API_SECRET=<the secret>
+   ALLOWED_ORIGINS=https://morodokangkor.com,https://www.morodokangkor.com,https://khmerarcade.games
+   LIVE_GAMES=morodok-angkor
+   ```
+
+   The key and secret are the voice server's (`/etc/livekit/keys.yaml` on it: the key before the
+   `:`, the secret after). Copy them straight from there into Railway, never into a file or a chat.
+   `ROOM_PREFIX` (empty by default) keeps a test service's voice rooms apart, e.g. `test-`.
+
+2. **Settings → Networking → Generate Domain**, port `8766`. A game is told this address.
+3. Check: `https://<its address>/api/health` answers `{"ok":true,"parties":0}`.
+
+On your Mac: `LIVEKIT_URL=… LIVEKIT_API_KEY=… LIVEKIT_API_SECRET=… npm run live`.
+
 ## Rolling back
 
 **Deployments** → an earlier deployment → **⋮** → **Redeploy**, or `git revert` the commit and push.

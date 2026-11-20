@@ -23,6 +23,14 @@ apps/
                           and where each lives on disk (sourceOfAsIs)
       build-version.js    the version each build of the arcade carries (see A new build)
     test/{unit,integration}
+  live/                   the live service, a second Railway service: parties (a code shared among
+                          friends, up to 8) and voice tickets for LiveKit, for any game in its list
+                          (see Live service); it reuses the server's rate limit and responses
+    src/
+      parties/            the party book in memory: codes, checks, members
+      voice/              tickets and LiveKit rooms
+      http/, routes/      the answer to each request, CORS for the games' own sites, the routes
+    test/{unit,integration}
   web/                    everything the browser loads: the arcade, the games and the packages
     arcade/               the arcade, one React app of five screens (see One app)
       pages/              its five pages, Vite's root: index.html, and leaderboard/, supporters/,
@@ -1911,6 +1919,29 @@ tick for each piece, lower for a bigger value; the count handed over replayed as
 roneat-like wooden bars with a cart's bell; a rubber stamp; two knocks on wood for a wrong count; a
 megaphone call in each customer's own two pitches as they sit; a rubber band's twang for new
 bundles; the shutter coming down. No music track: the money is the melody.
+
+## Live service
+
+`apps/live/` lets players of any game in its list meet and talk: Morodok Angkor's New Year's Eve
+first, other games later. It is its own Railway service (`docs/deploy-railway.md`, "The live
+service"), so a push to the arcade never restarts it and a busy night never slows the arcade.
+
+- **Parties:** `POST /api/party/make` gives a 6-letter code with no look-alikes (0 / O, 1 / I / L);
+  friends `join` with it, up to 8. Make and join answer a `key` the game keeps; every later call
+  (`state`, `leave`, `remove`, `/api/voice/ticket`) sends `game`, `code`, `playerId` and that
+  `key`. A `playerId` is random, made on the device. The maker can `remove` a member, who can't come
+  back into that party; when the maker leaves, the longest-standing member takes over. Parties are
+  in memory only and forgotten after 6 hours unused. Names are checked again here.
+- **Voice:** the voice itself goes through a LiveKit server (UDP, which Railway can't carry). A
+  ticket is a token signed with the LiveKit secret, for one party's room
+  (`<prefix><game>-party-<code>`), for a microphone only (no camera, screen, data or admin), valid
+  10 minutes to join. Before each ticket the room is made with room for 8; a removed member or one
+  who leaves is taken out of it.
+- **Sites:** unlike the arcade's API it is called from other sites on purpose, so it answers CORS,
+  only to the addresses in `ALLOWED_ORIGINS`; a POST from any other page is refused. Errors are
+  `{ "error": "<word>" }` (`full`, `removed`, `no-party`, `not-member`, `not-maker`, `bad-name`,
+  `bad-code`, `bad-game`, `slow-down`…), which each game turns into its own words.
+- **Limits:** 40 calls in 10 s and 6 parties made a minute per address (the server's rate limit).
 
 ## Tests
 

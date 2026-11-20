@@ -12,6 +12,7 @@
   "scripts": {
     "dev": "node --watch-path=apps/server/src apps/server/src/main.js --dev",
     "start": "node apps/server/src/main.js",
+    "live": "node apps/live/src/main.js",
     "db:migrate": "node apps/server/src/db/migrate-cli.js",
     "storage:check": "node apps/server/src/storage/check-cli.js",
     "build": "vite build --config apps/web/arcade/vite.config.ts",
